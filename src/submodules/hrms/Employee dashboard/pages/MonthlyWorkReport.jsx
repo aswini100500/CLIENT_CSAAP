@@ -151,10 +151,10 @@ const MonthlyWorkReport = () => {
           try {
             const [employeesRes, assignmentsRes] = await Promise.all([
               axios
-                .get(`https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees`, { headers })
+                .get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`, { headers })
                 .catch(() => ({ data: [] })),
               axios
-                .get(`https://csaapnodeapi.csaap.com/api/tenant/project-assignments`, { headers })
+                .get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/project-assignments`, { headers })
                 .catch(() => ({ data: { data: [] } })),
             ]);
 

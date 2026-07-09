@@ -83,7 +83,6 @@ import IDCardMaker from "../components/Idcard";
 import VisitingCardMaker from "../components/Visitingcard";
 import ViewEmployeeDocuments from "../components/Documentview";
 import ViewTermsConditions from "../components/Termcondition";
-import ProjectAssignment from "../components/Addproject";
 import TimewiseAttendance from "../components/TimewiseAttendance";
 import MonthlyLateComingReport from "../components/LateComingReport";
 import EarlyGoingReport from "../components/EarlygoingReport";
@@ -187,7 +186,6 @@ export default function EmployeeRoutes() {
               element={<ViewEmployeeDocuments />}
             />
             <Route path="hr/termcondition" element={<ViewTermsConditions />} />
-            <Route path="hr/add-projects" element={<ProjectAssignment />} />
           </Route>
           <Route element={<RoutePermissionGuard permission="hrms.attendance" />}>
             <Route path="hr/attendanceuser" element={<AttendanceTabs />} />

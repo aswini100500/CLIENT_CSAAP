@@ -26,8 +26,8 @@ const ProjectAssignments = () => {
 
   // --- API URLS ---
   // ⚠️ IMPORTANT: Adjust these URLs to match your exact backend routes!
-  const API_ASSIGNMENTS = 'https://csaapnodeapi.csaap.com/api/tenant/project-assignments';
-  const API_EMPLOYEES = `https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees`;
+  const API_ASSIGNMENTS = `${import.meta.env.VITE_CSAAP_URL}/api/tenant/project-assignments`;
+  const API_EMPLOYEES = `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`;
   const API_PROJECTS = `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects?company_id=${company_id}`;
 
   const headers = { Authorization: `Bearer ${token}` };

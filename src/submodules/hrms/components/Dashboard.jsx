@@ -39,7 +39,6 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     jobsListed: 0,
     formsApplied: 0,
-    projects: 0,
     experience: 0,
     offerLetters: 0,
     terminationLetters: 0,
@@ -70,7 +69,6 @@ const Dashboard = () => {
 
     fetchApplicantsCount();
     fetchJobsCount();
-    fetchProjectsCount();
     fetchExperienceCertificateCount();
     fetchOfferLettersCount();
     fetchTerminationLettersCount();
@@ -196,22 +194,6 @@ const Dashboard = () => {
       }));
     } catch (error) {
       console.error("Failed to fetch jobs", error);
-    }
-  };
-  const fetchProjectsCount = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_HRMS_BASE_URL}/api/projects/company/${company_id}`,
-      );
-
-      const totalProjects = res.data.length;
-
-      setStats((prev) => ({
-        ...prev,
-        projects: totalProjects,
-      }));
-    } catch (error) {
-      console.error("Failed to fetch projects", error);
     }
   };
   const fetchExperienceCertificateCount = async () => {
@@ -396,12 +378,7 @@ const Dashboard = () => {
           value={stats.formsApplied}
           color="green"
         />
-        <StatCard
-          icon={<UserCheck size={24} />}
-          title="Projects"
-          value={stats.projects}
-          color="purple"
-        />
+
         <StatCard
           icon={<CheckCircle size={24} />}
           title="Experience"

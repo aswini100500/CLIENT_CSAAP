@@ -22,7 +22,6 @@ import IDCardMaker from "../components/Idcard";
 import VisitingCardMaker from "../components/Visitingcard";
 import ViewEmployeeDocuments from "../components/Documentview";
 import ViewTermsConditions from "../components/Termcondition";
-import ProjectAssignment from "../components/Addproject";
 import TimewiseAttendance from "../components/TimewiseAttendance";
 import EarlyGoingReport from "../components/EarlygoingReport";
 import OverTime from "../components/OverTime";
@@ -96,8 +95,6 @@ export default function AdminRoutes() {
         path="termcondition"
         element={<ViewTermsConditions />}
       />
-      <Route path="add-projects" element={<ProjectAssignment />} />
-
 
       {/* ── HRMS – Attendance & Time ─────────────────── */}
       <Route path="attendance2" element={<QRCodeGenerator />} />

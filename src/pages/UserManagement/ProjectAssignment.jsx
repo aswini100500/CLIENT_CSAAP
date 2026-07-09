@@ -21,6 +21,7 @@ const getEmployeeId = (emp) => {
 
 const ProjectAssignment = () => {
   const { token } = useAuth();
+  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
   const getAuthHeaders = () => ({ headers: { Authorization: `Bearer ${token}` } });
   // --- STATE ---
   const [employees, setEmployees] = useState([]);
@@ -57,7 +58,7 @@ const ProjectAssignment = () => {
   const branchDropdownRef = useRef(null);
 
   // Fetch Assignments using SWR
-  const assignmentsApiUrl = `https://csaapnodeapi.csaap.com/api/tenant/project-assignments`;
+  const assignmentsApiUrl = `${API_BASE_URL}/api/tenant/project-assignments`;
   const { data: assignmentsData, isLoading: isAssignmentsLoading } = useSWR(
     token ? [assignmentsApiUrl, token] : null,
     fetcher
@@ -73,7 +74,7 @@ const ProjectAssignment = () => {
           return;
         }
 
-        const response = await axios.get("https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees", {
+        const response = await axios.get(`${API_BASE_URL}/api/tenant/hrms/all-employees`, {
           headers: { Authorization: `Bearer ${csaapToken}` }
         });
 
@@ -108,7 +109,7 @@ const ProjectAssignment = () => {
           { path: "custom-projects", property_type: "custom_project" },
         ];
 
-        const TENANT_API_BASE_URL = "https://csaapnodeapi.csaap.com/api/tenant";
+        const TENANT_API_BASE_URL = `${API_BASE_URL}/api/tenant`;
 
         const results = await Promise.allSettled(
           PROJECT_SOURCES.map(async ({ path, property_type }) => {
@@ -164,7 +165,7 @@ const ProjectAssignment = () => {
           return;
         }
 
-        const response = await axios.get("https://csaapnodeapi.csaap.com/api/tenant/departments", {
+        const response = await axios.get(`${API_BASE_URL}/api/tenant/departments`, {
           headers: { Authorization: `Bearer ${csaapToken}` }
         });
 
@@ -189,7 +190,7 @@ const ProjectAssignment = () => {
         return;
       }
 
-      const response = await axios.get("https://csaapnodeapi.csaap.com/api/tenant/departments/roles", {
+      const response = await axios.get(`${API_BASE_URL}/api/tenant/departments/roles`, {
         headers: { Authorization: `Bearer ${csaapToken}` }
       });
 
@@ -219,7 +220,7 @@ const ProjectAssignment = () => {
         return;
       }
 
-      const response = await axios.get(`https://csaapnodeapi.csaap.com/api/tenant/departments/roles?department=${departmentId}`, {
+      const response = await axios.get(`${API_BASE_URL}/api/tenant/departments/roles?department=${departmentId}`, {
         headers: { Authorization: `Bearer ${csaapToken}` }
       });
 
