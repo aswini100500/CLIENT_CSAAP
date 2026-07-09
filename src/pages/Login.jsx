@@ -32,6 +32,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { setCompanyId, setcompanyName } = useCompany();
+  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
 
   const { user, token, isAuthenticated, isEmployee } = useAuth();
   const isEmployeeLogin = location.pathname.startsWith("/employee");
@@ -178,7 +179,7 @@ const Login = () => {
 
   const handleAdminLogin = async () => {
     const response = await fetch(
-      "https://csaapnodeapi.csaap.com/api/tenant/login",
+      `${API_BASE_URL}/api/tenant/login`,
       {
         method: "POST",
         headers: {
@@ -283,7 +284,7 @@ const Login = () => {
   const handleEmployeeLogin = async () => {
     const externalLoginUrl =
       import.meta.env.VITE_EMPLOYEE_LOGIN_URL ||
-      "https://csaapnodeapi.csaap.com/api/tenant/hrms/login";
+      `${API_BASE_URL}/api/tenant/hrms/login`;
 
     let data;
     try {
@@ -332,7 +333,7 @@ const Login = () => {
     if (employeeProfileId) {
       try {
         const permissionResponse = await axios.get(
-          `https://csaapnodeapi.csaap.com/api/tenant/permissions/employee-access/${encodeURIComponent(employeeProfileId)}`,
+          `${API_BASE_URL}/api/tenant/permissions/employee-access/${encodeURIComponent(employeeProfileId)}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },

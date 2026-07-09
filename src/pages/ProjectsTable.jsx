@@ -20,6 +20,7 @@ const getStatusColor = (status) => {
 
 const ProjectsTable = () => {
   const { companyId, token } = useAuth();
+  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,7 +38,7 @@ const ProjectsTable = () => {
         setError(null);
 
         const response = await fetch(
-          `https://csaapnodeapi.csaap.com/api/tenant/clprojects?company_id=${companyId}`,
+          `${API_BASE_URL}/api/tenant/clprojects?company_id=${companyId}`,
           {
             method: 'GET',
             headers: {

@@ -29,28 +29,12 @@ import {
 
 // ==================== Configuration ====================
 
-const API_BASE_URL = 'https://csaapnodeapi.csaap.com';
+const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
 const API_ENDPOINTS = {
     PROJECTS: '/api/tenant/clprojects',
     PROJECT_BY_ID: (id) => `/api/tenant/clprojects/${id}`,
     PROJECT_BY_CODE: (code) => `/api/tenant/clprojects/code/${code}`,
 };
-
-// Get user data from sessionStorage
-const getUserData = () => {
-    try {
-        const userStr = sessionStorage.getItem('user');
-        if (!userStr) return null;
-        return JSON.parse(userStr);
-    } catch (error) {
-        console.error('Error parsing user data:', error);
-        return null;
-    }
-};
-
-const user = getUserData();
-const companyId = user?.company_id || user?.tenant_id || null;
-const token = sessionStorage.getItem('token') || null;
 
 // ==================== API Service ====================
 
@@ -410,6 +394,7 @@ const StatsCard = ({ title, value, icon: Icon }) => (
 // Updated ProjectFormModal with company cache
 // Updated ProjectFormModal with API integration for client details
 const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing = false, companyId, companyCache = {} }) => {
+    const { user } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [companies, setCompanies] = useState([]);

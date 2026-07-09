@@ -11,6 +11,7 @@ import useAuth from '../hooks/useAuth';
 
 const CompanyProfilePage = () => {
   const { companyId } = useAuth();
+  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +27,7 @@ const CompanyProfilePage = () => {
 
       try {
         setLoading(true);
-        const response = await fetch(`https://csaapnodeapi.csaap.com/api/builder-companies/${companyId}`);
+        const response = await fetch(`${API_BASE_URL}/api/builder-companies/${companyId}`);
         
         if (!response.ok) {
           throw new Error(`API returned status: ${response.status}`);
@@ -97,7 +98,7 @@ const CompanyProfilePage = () => {
   };
 
   const logoUrl = companyData?.logo_path 
-    ? `https://csaapnodeapi.csaap.com/${companyData.logo_path}`
+    ? `${API_BASE_URL}/${companyData.logo_path}`
     : null;
 
   // Company name for fallback

@@ -44,6 +44,7 @@ const StatCard = ({ title, value, icon: Icon, tone, loading }) => {
 
 const DashboardHome = () => {
   const { user, token, companyId } = useAuth();
+  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
   const [stats, setStats] = useState({
     activeProjects: 0,
     totalEmployees: 0,
@@ -80,13 +81,13 @@ const DashboardHome = () => {
 
         // Fetch projects data
         const projectsResponse = await fetch(
-          `https://csaapnodeapi.csaap.com/api/tenant/clprojects?company_id=${companyId}`,
+          `${API_BASE_URL}/api/tenant/clprojects?company_id=${companyId}`,
           { method: 'GET', headers }
         );
 
         // Fetch employees data
         const employeesResponse = await fetch(
-          'https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees',
+          `${API_BASE_URL}/api/tenant/hrms/all-employees`,
           { method: 'GET', headers }
         );
 

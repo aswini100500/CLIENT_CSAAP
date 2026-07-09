@@ -44,9 +44,10 @@ const Header = ({
 
   // 3. Robust Logout functionality
   const handleLogout = async () => {
+    const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
     // 1. Call Backend API to clear HttpOnly session cookies
     try {
-      await fetch('https://csaapnodeapi.csaap.com/api/builder-companies/logout', {
+      await fetch(`${API_BASE_URL}/api/builder-companies/logout`, {
         method: 'POST',
         credentials: 'include',
       });

@@ -56,6 +56,7 @@ import { FaAddressBook } from "react-icons/fa";
 
 const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
   const { user } = useAuth();
+  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
   const tenantId = user?.tenant_id || user?.company_id || user?.id;
   // State to track expanded menus. Using an object allows multiple menus to be open.
   const [expandedMenus, setExpandedMenus] = useState({});
@@ -77,7 +78,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
 
   // Construct logo URL
   const logoUrl = companyData?.logo_path
-    ? `https://csaapnodeapi.csaap.com/${companyData.logo_path}`
+    ? `${API_BASE_URL}/${companyData.logo_path}`
     : null;
 
   const toggleMenu = (id) => {
@@ -96,7 +97,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
     // 1. Call Backend API to clear HttpOnly session cookies
     try {
       await fetch(
-        "https://csaapnodeapi.csaap.com/api/builder-companies/logout",
+        `${API_BASE_URL}/api/builder-companies/logout`,
         {
           method: "POST",
           credentials: "include",
@@ -132,7 +133,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       try {
         if (tenantId) {
           const response = await axios.get(
-            `https://csaapnodeapi.csaap.com/api/builder-companies/${tenantId}`,
+            `${API_BASE_URL}/api/builder-companies/${tenantId}`,
           );
           const result = response.data;
 

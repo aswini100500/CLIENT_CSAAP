@@ -47,6 +47,7 @@ const CompanyContext = createContext();
 
 export const CompanyProvider = ({ children }) => {
   const { user, token } = useAuth();
+  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
   const [companyId, setCompanyId] = useState(null);
   const [companyName, setcompanyName] = useState("");
   const [employees, setEmployees] = useState([]);
@@ -121,7 +122,7 @@ export const CompanyProvider = ({ children }) => {
 
   const fetchEmployeesList = async (id) => {
     try {
-      const res = await axios.get(`https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees`, {
+      const res = await axios.get(`${API_BASE_URL}/api/tenant/hrms/all-employees`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
       if (res.data && res.data.success) {
