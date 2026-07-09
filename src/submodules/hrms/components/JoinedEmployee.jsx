@@ -1553,10 +1553,10 @@ const JobJoinedList = ({ basePath }) => {
                               className="hover:bg-(--bg-subtle)/70 transition-colors duration-200"
                             >
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-body)">
-                                {index + 1}
+                               {startIndex + index + 1}
                               </td>
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-body)">
-                                {employee.employeeId || employee.id}
+                                   {employee.registered_emp_id || "NA"}
                               </td>
                               <td className="px-4 py-3 text-[14px] font-bold text-(--text-strong)">
                                 <button
@@ -1678,12 +1678,12 @@ const JobJoinedList = ({ basePath }) => {
                             >
                               {/* Serial Number */}
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-body)">
-                                {index + 1}
+                                  {startIndex + index + 1}
                               </td>
 
                               {/* Employee ID */}
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-body)">
-                                {employee.employeeId || employee.id}
+                               {employee.registered_emp_id || "NA"}
                               </td>
 
                               {/* Name */}
