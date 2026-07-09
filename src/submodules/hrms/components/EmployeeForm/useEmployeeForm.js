@@ -610,6 +610,7 @@ const useEmployeeForm = ({
               if (!seen.has(key)) {
                 seen.add(key);
                 mappedDesignations.push({
+                  id: item.id,
                   department: item.department_name,
                   designation: item.role_name,
                 });
@@ -1440,6 +1441,14 @@ const useEmployeeForm = ({
         }
       });
       submitFormData.append("designation", formData.postApplied || "");
+
+      const selectedRole = designationsList.find(
+        (d) => d.department === formData.department && d.designation === formData.postApplied
+      );
+      if (selectedRole && selectedRole.id) {
+        submitFormData.append("role_id", selectedRole.id);
+      }
+      
       submitFormData.append("ot_allowed", formData.ot_allowed ? "1" : "0");
       submitFormData.append("phone", combinedPhone);
       if (mode === "edit") {
