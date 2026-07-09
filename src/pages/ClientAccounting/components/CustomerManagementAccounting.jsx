@@ -227,15 +227,21 @@ const CustomerManagementAccounting = () => {
     try {
       const token = user?.token;
       const res = await axios.get(
-        `${import.meta.env.VITE_CRM_BASE_URL}/api/projects/options`,
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
         {
+          params: { company_id: companyId },
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       );
-      if (res.data && res.data.success) {
-        setProjects(res.data.data || []);
+      const data = res.data?.data || res.data || [];
+      if (Array.isArray(data)) {
+        const mapped = data.map(p => ({
+          project_id: p.id,
+          name: p.project_name
+        }));
+        setProjects(mapped);
       }
     } catch (err) {
       console.error("Error fetching projects options:", err);

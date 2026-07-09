@@ -419,7 +419,7 @@ const Login = () => {
 
     try {
       const res = await axios.patch(
-        "https://api.cloudsat.in/api/superadmin/employees/reset-password",
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/employees/reset-password`,
         {
           email: resetEmail,
           newPassword: resetPassword,

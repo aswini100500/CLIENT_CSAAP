@@ -59,25 +59,23 @@ const EmployeeServiceReq = () => {
   const fetchEmployees = useCallback(async () => {
     try {
       const response = await axios.get(
-        "https://api.cloudsat.in/api/superadmin/employees",
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      if (response.data.success) {
-        const empData = response.data.data;
-        setEmployees(empData);
-        const mapping = {};
-        empData.forEach((emp) => {
-          mapping[emp.id] = emp.name;
-        });
-        setEmployeeMap(mapping);
+      const empData = response.data?.data || response.data || [];
+      setEmployees(empData);
+      const mapping = {};
+      empData.forEach((emp) => {
+        mapping[emp.id || emp.employee_id] = emp.name;
+      });
+      setEmployeeMap(mapping);
 
         const uniqueDepts = [
           ...new Set(empData.map((e) => e.department).filter(Boolean)),
         ];
         setDepartmentsList(uniqueDepts);
-      }
     } catch (error) {
       console.error("Error fetching employees:", error);
     }

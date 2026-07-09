@@ -561,16 +561,20 @@ const useEmployeeForm = ({
   // ─── Fetch Projects & Employees ───
   useEffect(() => {
     const fetchProjects = async () => {
+      if (!companyId) return;
       try {
         const response = await axios.get(
-          "https://api.cloudsat.in/api/superadmin/projects",
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
           {
-            headers: { Authorization: `Bearer ${csaapToken || hrmsToken}` },
+            params: { company_id: companyId },
+            headers: {
+              Authorization: `Bearer ${csaapToken || hrmsToken}`,
+            },
           },
         );
         const data = response.data?.data || response.data || [];
         if (Array.isArray(data)) {
-          const names = data.map((p) => p.name).filter(Boolean);
+          const names = data.map((p) => p.project_name || p.name).filter(Boolean);
           setProjectsList([...new Set(names)]);
         }
       } catch (error) {

@@ -92,7 +92,7 @@ const EmployeeProfile = () => {
 
     try {
       const res = await axios.post(
-        "https://api.cloudsat.in/api/superadmin/employees/upload-profile-photo",
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/employees/upload-profile-photo`,
         formData,
         {
           headers: {
@@ -115,7 +115,7 @@ const EmployeeProfile = () => {
     setPasswordLoading(true);
     try {
       const res = await axios.patch(
-        "https://api.cloudsat.in/api/superadmin/employees/change-password",
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/change-password`,
         {
           email: profile.email,
           oldPassword: passwordData.oldPassword,

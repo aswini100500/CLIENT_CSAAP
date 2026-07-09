@@ -103,7 +103,7 @@ const LeadFormModal = ({
   const projectAnchorRef = useRef(null);
   const projectPortalDropdownRef = useRef(null);
   const [projectDropdownStyle, setProjectDropdownStyle] = useState(null);
-  const { token } = useAuth();
+  const { token, companyId } = useAuth();
 
   // Broker states and refs
   const [brokerSearch, setBrokerSearch] = useState("");
@@ -122,16 +122,24 @@ const LeadFormModal = ({
   const [unitDropdownStyle, setUnitDropdownStyle] = useState(null);
 
   const { data: projectOptions = [], isLoading: isLoadingProjects } = useQuery({
-    queryKey: ["project-options", token],
+    queryKey: ["project-options", token, companyId],
     queryFn: async () => {
-      const response = await api.get("/api/projects/options", {
+      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`, {
+        params: { company_id: companyId },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.data.data || [];
+      const projects = response.data?.data || [];
+      return projects.map((p) => ({
+        project_id: p.id,
+        composite_key: p.id,
+        name: p.project_name,
+        display_type: p.project_code || p.status || "",
+        location: p.client_company_name ? `Client: ${p.client_company_name}` : "",
+      }));
     },
-    enabled: !!token,
+    enabled: !!token && !!companyId,
   });
 
   const { data: brokerOptions = [], isLoading: isLoadingBrokers } = useQuery({

@@ -144,7 +144,7 @@ const getStatusMeta = (status) => {
 };
 
 const DailyWorkReport = ({ hideHeader = false }) => {
-  const { user, token: authToken } = useAuth();
+  const { user, token: authToken, companyId } = useAuth();
   const slug = user?.slug;
   const token = authToken;
   const employeeId = user?.employeeProfileId || user?.employee_id || user?.id;
@@ -213,11 +213,10 @@ const DailyWorkReport = ({ hideHeader = false }) => {
   // Updated fetchProjectScope to use the new project fetching logic
   useEffect(() => {
     const fetchProjectScope = async () => {
-      if (!SUPERADMIN_API_BASE || !employeeId || !token) {
+      const activeCompanyId = companyId || user?.company_id;
+      if (!activeCompanyId || !employeeId || !token) {
         setManagedProjects([]);
-
         setProjects([]);
-        console.log(projects);
         return;
       }
 
@@ -226,53 +225,36 @@ const DailyWorkReport = ({ hideHeader = false }) => {
       try {
         const headers = { Authorization: `Bearer ${token}` };
 
-        // Define the project sources matching your backend
-        const PROJECT_SOURCES = [
-          { path: "commercials", property_type: "commercial" },
-          { path: "apartments", property_type: "apartment" },
-          { path: "plottings", property_type: "plotting" },
-          { path: "duplexes", property_type: "duplex" },
-          { path: "triplexes", property_type: "triplex" },
-          { path: "custom-projects", property_type: "custom_project" },
-        ];
-
-        const TENANT_API_BASE_URL = "https://csaapnodeapi.csaap.com/api/tenant";
-
-        // Fetch all project sources in parallel
-        const results = await Promise.allSettled(
-          PROJECT_SOURCES.map(async ({ path, property_type }) => {
-            try {
-              const response = await axios.get(`${TENANT_API_BASE_URL}/${path}`, {
-                headers: {
-                  Authorization: `Bearer ${token}`
-                },
-              });
-
-              const projectsData = Array.isArray(response.data?.data) ? response.data.data : [];
-
-              // Map projects with property type
-              return projectsData.map((project) => ({
-                id: project.id,
-                name: project.name,
-                property_type: property_type,
-                display_type: project.type || property_type,
-                locality: project.locality,
-                city: project.city,
-                composite_key: `${property_type}:${project.id}`,
-                location: [project?.locality, project?.city].filter(Boolean).join(", ")
-              }));
-            } catch (error) {
-              console.error(`Error fetching ${path}:`, error);
-              return [];
-            }
-          })
+        // 1. Fetch client projects
+        const projRes = await axios.get(
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
+          {
+            params: { company_id: activeCompanyId },
+            headers,
+          }
         );
 
-        // Combine all successful results
-        const allProjects = results
-          .filter((result) => result.status === "fulfilled")
-          .flatMap((result) => result.value)
-          .filter(project => project && project.name)
+        const projectsData = Array.isArray(projRes.data?.data)
+          ? projRes.data.data
+          : Array.isArray(projRes.data)
+          ? projRes.data
+          : [];
+
+        const allProjects = projectsData
+          .map((project) => {
+            const property_type = project.project_code || "custom_project";
+            return {
+              id: project.id,
+              name: project.project_name || project.name || "Unnamed Project",
+              property_type: property_type,
+              display_type: project.project_code || property_type,
+              locality: project.locality || "",
+              city: project.city || "",
+              composite_key: `${property_type}:${project.id}`,
+              location: [project?.locality, project?.city].filter(Boolean).join(", "),
+            };
+          })
+          .filter((project) => project && project.name)
           .sort((a, b) => a.name.localeCompare(b.name));
 
         setProjects(allProjects);
@@ -280,12 +262,11 @@ const DailyWorkReport = ({ hideHeader = false }) => {
         if (allProjects.length === 0) {
           console.warn("No projects found");
           setManagedProjects([]);
-          console.log(managedProjects);
           setProjectScopeLoading(false);
           return;
         }
 
-        // Fetch employees
+        // 2. Fetch employees
         const employeesRes = await axios
           .get(`https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees`, { headers })
           .catch(() => ({ data: [] }));
@@ -301,33 +282,13 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           currentEmployee?.department || user?.department || "",
         );
 
-        // Fetch assignments for each project
-        const assignmentResponses = await Promise.all(
-          allProjects.map(async (project) => {
-            try {
-              const response = await axios.get(
-                `${SUPERADMIN_API_BASE}/api/superadmin/project-assignments/employees`,
-                {
-                  headers,
-                  params: {
-                    projectid: project.id,
-                    projectbranch: project.property_type,
-                  },
-                }
-              );
-              return {
-                project,
-                assignments: response.data?.data || [],
-              };
-            } catch (error) {
-              console.error(`Error fetching assignments for project ${project.name}:`, error);
-              return {
-                project,
-                assignments: [],
-              };
-            }
-          }),
-        );
+        // 3. Fetch assignments once
+        const assignmentsRes = await axios.get(
+          `https://csaapnodeapi.csaap.com/api/tenant/project-assignments`,
+          { headers }
+        ).catch(() => ({ data: { data: [] } }));
+
+        const allAssignments = assignmentsRes.data?.data || assignmentsRes.data || [];
 
         // Consolidate all authorized employees across projects
         const allAuthorizedEmployeeIds = new Set();
@@ -346,7 +307,14 @@ const DailyWorkReport = ({ hideHeader = false }) => {
               .filter(Boolean)
             : [];
 
-        assignmentResponses.forEach(({ project, assignments }) => {
+        allProjects.forEach((project) => {
+          // Filter assignments matching this project
+          const assignments = allAssignments.filter(
+            (a) =>
+              String(a.projectid) === String(project.id) &&
+              String(a.projectbranch || "").trim().toLowerCase() === String(project.property_type).trim().toLowerCase()
+          );
+
           const isManagerOfThisProject = assignments.some(
             (assignment) =>
               String(assignment.employeeid) === String(employeeId) &&
@@ -388,7 +356,8 @@ const DailyWorkReport = ({ hideHeader = false }) => {
 
     fetchProjectScope();
   }, [
-    SUPERADMIN_API_BASE,
+    companyId,
+    user?.company_id,
     employeeId,
     token,
     user?.department,

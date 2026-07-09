@@ -174,7 +174,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
 
       try {
         const baseUrl =
-          import.meta.env.VITE_HRMS_BASE_URL || "https://api.cloudsat.in";
+          import.meta.env.VITE_HRMS_BASE_URL || "https://csaapnodeapi.csaap.com";
         const today = getTodayKey();
         const todayUrl = companySlug
           ? `${baseUrl}/api/attendance/${companySlug}?date=${today}`
@@ -278,7 +278,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
-          `https://api.cloudsat.in/api/superadmin/employees/${employeeProfileId}`,
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/get-employee/${employeeProfileId}`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
 
@@ -304,9 +304,9 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
 
     try {
       const baseUrl =
-        import.meta.env.VITE_HRMS_BASE_URL || "https://api.cloudsat.in";
+        import.meta.env.VITE_HRMS_BASE_URL || "https://csaapnodeapi.csaap.com";
       const apiBaseUrl =
-        import.meta.env.VITE_ACCOUNTING_URL || "https://api.cloudsat.in";
+        import.meta.env.VITE_ACCOUNTING_URL || "https://csaapnodeapi.csaap.com";
 
       // 1. Fetch standard notifications
       const notifRes = await axios.get(
@@ -353,7 +353,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
       // 2. Fetch lead assignments
       try {
         const leadRes = await axios.get(
-          `${apiBaseUrl}/api/superadmin/lead-assignments/employee/${employeeProfileId}`,
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/lead-assignments/employee/${employeeProfileId}`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
 

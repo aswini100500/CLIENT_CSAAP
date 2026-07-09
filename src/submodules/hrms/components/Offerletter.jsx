@@ -347,7 +347,7 @@ const OfferLetterManagement = () => {
       let csaapEmployeeId = null;
       try {
         const cloudResponse = await axios.post(
-          `https://api.cloudsat.in/api/superadmin/employees/`,
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/add-employee`,
           cloudPayload,
           {
             headers: {

@@ -362,85 +362,7 @@
 //     return () => document.removeEventListener('mousedown', handleClickOutside);
 //   }, []);
 
-//   useEffect(() => {
-//     const fetchProjects = async () => {
-//       try {
-//         const res = await axios.get(
-//           "https://api.cloudsat.in/api/superadmin/projects"
-//         );
-//         console.log(res);
 
-//         let projectData = res.data || [];
-
-//         // ✅ Remove duplicate projects (same name)
-//         const uniqueProjects = [
-//           ...new Map(projectData.map(item => [item.name, item])).values()
-//         ];
-
-//         setProjects(uniqueProjects);
-
-//         console.log("Projects:", uniqueProjects);
-//       } catch (err) {
-//         console.error("Failed to fetch projects", err);
-//         showSnackbar("Failed to load projects", "error");
-//       }
-//     };
-
-//     fetchProjects();
-//   }, []);
-
-//   // Fetch employees
-//   useEffect(() => {
-//     const fetchEmployees = async () => {
-//       try {
-//         console.log('Fetching employees with token:', csaapToken || token);
-//         const response = await axios.get(
-//           "https://api.cloudsat.in/api/superadmin/employees/",
-//           {
-//             headers: {
-//               Authorization: `Bearer ${csaapToken || token}`,
-//             },
-//           }
-//         );
-
-//         console.log('Employees raw response:', response.data);
-
-//         let employeesData = [];
-//         if (Array.isArray(response.data)) {
-//           employeesData = response.data;
-//         } else if (response.data?.data && Array.isArray(response.data.data)) {
-//           employeesData = response.data.data;
-//         } else if (response.data?.employees && Array.isArray(response.data.employees)) {
-//           employeesData = response.data.employees;
-//         }
-
-//         const colors = [
-//           "bg-blue-500", "bg-green-500", "bg-purple-500", "bg-pink-500",
-//           "bg-orange-500", "bg-indigo-500", "bg-red-500", "bg-teal-500",
-//           "bg-yellow-500", "bg-gray-500"
-//         ];
-
-//         const employees = employeesData.map((emp, index) => ({
-//           id: emp.id,
-//           name: emp.name,
-//           role: emp.postApplied || emp.department || "Employee",
-//           email: emp.email,
-//           officeEmail: emp.officeEmail || emp.office_email,
-//           avatarColor: colors[index % colors.length],
-//         }));
-
-//         setTeamMembers(employees);
-//       } catch (error) {
-//         console.error("Error fetching employees:", error);
-//         setTeamMembers([]);
-//         showSnackbar("Failed to fetch team members", "error");
-//       }
-//     };
-
-//     if (!csaapToken && !token) return;
-
-//     fetchEmployees();
-//   }, [csaapToken, token]);
 
 //   // Filter team members based on search
 //   const filteredTeamMembers = teamMembers.filter(member =>
@@ -3465,21 +3387,36 @@ const AssignTask = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
+      const companyId = user?.company_id;
+      if (!companyId) return;
+
       try {
         const res = await axios.get(
-          "https://api.cloudsat.in/api/superadmin/projects"
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
+          {
+            params: { company_id: companyId },
+            headers: {
+              Authorization: `Bearer ${csaapToken || token}`
+            }
+          }
         );
         console.log(res);
 
-        let projectData = res.data || [];
+        let projectData = res.data?.data || res.data || [];
 
-        // ✅ Remove duplicate projects (same name)
+        // Map to format expected by the dropdown
+        const mappedProjects = projectData.map(p => ({
+          id: p.id,
+          name: p.project_name || p.name || 'Unnamed Project',
+          branch: p.project_code || p.branch || 'General'
+        }));
+
+        // Remove duplicates (same name)
         const uniqueProjects = [
-          ...new Map(projectData.map(item => [item.name, item])).values()
+          ...new Map(mappedProjects.map(item => [item.name, item])).values()
         ];
 
         setProjects(uniqueProjects);
-
         console.log("Projects:", uniqueProjects);
       } catch (err) {
         console.error("Failed to fetch projects", err);
@@ -3487,8 +3424,10 @@ const AssignTask = () => {
       }
     };
 
-    fetchProjects();
-  }, []);
+    if (user?.company_id) {
+      fetchProjects();
+    }
+  }, [user?.company_id, csaapToken, token]);
 
   // Fetch employees
   useEffect(() => {
@@ -3496,7 +3435,6 @@ const AssignTask = () => {
       try {
         console.log('Fetching employees with token:', csaapToken || token);
         const response = await axios.get(
-          // "https://api.cloudsat.in/api/superadmin/employees/",
           "https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees",
           {
             headers: {

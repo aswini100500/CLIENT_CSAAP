@@ -97,7 +97,7 @@ const Header = ({
     const fetchNotifications = async () => {
       try {
         const baseUrl =
-          import.meta.env.VITE_HRMS_BASE_URL || "https://api.cloudsat.in";
+          import.meta.env.VITE_HRMS_BASE_URL || "https://csaapnodeapi.csaap.com";
 
         const response = await axios.get(
           `${baseUrl}/api/notifications/company/${companySlug || "all"}`,

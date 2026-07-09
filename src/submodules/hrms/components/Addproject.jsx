@@ -30,16 +30,14 @@ const ProjectAssignment = () => {
         return;
       }
       const res = await axios.get(
-        "https://api.cloudsat.in/api/superadmin/employees/",
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`,
         {
           headers: {
             Authorization: `Bearer ${csaapToken}`,
           },
         },
       );
-
-      // API returns { success, data }
-      setEmployees(res.data.data || []);
+      setEmployees(res.data.data || res.data || []);
     } catch (error) {
       console.error("Error fetching employees:", error);
     }

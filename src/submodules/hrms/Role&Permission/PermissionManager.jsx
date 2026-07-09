@@ -19,8 +19,8 @@ const fetcher = (url) => axios.get(url, getAuthHeaders()).then((res) => res.data
 
 const PermissionManager = () => {
   // --- 1. SWR DATA FETCHING ---
-  const permissionsApiUrl = `${API_URL}/api/superadmin/permissions`;
-  const rolesApiUrl = `${API_URL}/api/superadmin/departments/roles`;
+  const permissionsApiUrl = `${API_URL}/api/tenant/permissions`;
+  const rolesApiUrl = `${API_URL}/api/tenant/departments/roles`;
 
   const { data: permsData, isLoading: isPermsLoading } = useSWR(permissionsApiUrl, fetcher);
   const { data: rolesData, isLoading: isRolesLoading } = useSWR(rolesApiUrl, fetcher);

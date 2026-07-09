@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../../../api";
+import axios from "axios";
 import accountingApi from "../../../accountingApi";
 import { usePermission } from "../../../../../hooks/usePermission";
 import useAuth from "../../../../../hooks/useAuth";
@@ -138,12 +139,24 @@ export default function CustomerList() {
 
   // Fetch project options to map project IDs to friendly names
   const { data: projectOptions = [] } = useQuery({
-    queryKey: ["project-options", token],
+    queryKey: ["project-options", token, companyId],
     queryFn: async () => {
-      const response = await api.get("/api/projects/options");
-      return response.data.data || [];
+      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`, {
+        params: { company_id: companyId },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const projects = response.data?.data || [];
+      return projects.map((p) => ({
+        project_id: p.id,
+        composite_key: p.id,
+        name: p.project_name,
+        display_type: p.project_code || p.status || "",
+        location: p.client_company_name ? `Client: ${p.client_company_name}` : "",
+      }));
     },
-    enabled: !!token,
+    enabled: !!token && !!companyId,
   });
 
   const projectOptionsMap = useMemo(() => {

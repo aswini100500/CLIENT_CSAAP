@@ -21,8 +21,8 @@ const fetcher = (url) => axios.get(url, getAuthHeaders()).then((res) => res.data
 
 const DepartmentRoleManager = () => {
   // --- SWR DATA FETCHING ---
-  const deptsApiUrl = `${API_URL}/api/superadmin/departments`;
-  const rolesApiUrl = `${API_URL}/api/superadmin/departments/roles`;
+  const deptsApiUrl = `${API_URL}/api/tenant/departments`;
+  const rolesApiUrl = `${API_URL}/api/tenant/departments/roles`;
 
   const { data: deptsData, isLoading: isDeptsLoading } = useSWR(deptsApiUrl, fetcher);
   const { data: rolesData, isLoading: isRolesLoading } = useSWR(rolesApiUrl, fetcher);

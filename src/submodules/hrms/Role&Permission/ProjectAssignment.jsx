@@ -26,9 +26,9 @@ const ProjectAssignments = () => {
 
   // --- API URLS ---
   // ⚠️ IMPORTANT: Adjust these URLs to match your exact backend routes!
-  const API_ASSIGNMENTS = 'https://api.cloudsat.in/api/superadmin/project-assignments';
-  const API_EMPLOYEES = `https://api.cloudsat.in/api/superadmin/employees?company_id=${company_id}`;
-  const API_PROJECTS = `https://api.cloudsat.in/api/superadmin/projects?company_id=${company_id}`;
+  const API_ASSIGNMENTS = 'https://csaapnodeapi.csaap.com/api/tenant/project-assignments';
+  const API_EMPLOYEES = `https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees`;
+  const API_PROJECTS = `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects?company_id=${company_id}`;
 
   const headers = { Authorization: `Bearer ${token}` };
 

@@ -437,7 +437,7 @@ const JobJoinedList = ({ basePath }) => {
 
       // 2️⃣ CSAAP API → Permanent
       await axios.put(
-        `https://api.cloudsat.in/api/superadmin/employees/${employee.id}`,
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/update-employee/${employee.id}`,
         {
           employeeStatus: "Permanent",
         },
@@ -526,7 +526,7 @@ const JobJoinedList = ({ basePath }) => {
         if (finalStatus === "Ex-Employee") {
           try {
             await axios.delete(
-              `https://api.cloudsat.in/api/superadmin/employees/${data.employeeId}`,
+              `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/delete-employee/${data.employeeId}`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               },
@@ -590,7 +590,7 @@ const JobJoinedList = ({ basePath }) => {
         if (finalStatus === "Ex-Employee") {
           try {
             await axios.delete(
-              `https://api.cloudsat.in/api/superadmin/employees/${terminationData.employeeId}`,
+              `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/delete-employee/${terminationData.employeeId}`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               },

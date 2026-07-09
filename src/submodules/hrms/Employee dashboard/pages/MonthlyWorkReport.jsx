@@ -58,7 +58,7 @@ const MonthlyWorkReport = () => {
     description: '',
     nextMonthPlan: ''
   });
-  const { user, token } = useAuth();
+  const { user, token, companyId } = useAuth();
   console.log(user);
 
   const slug = user?.slug;
@@ -98,109 +98,64 @@ const MonthlyWorkReport = () => {
   // ONLY THIS PART IS REPLACED - New project fetching logic
   useEffect(() => {
     const fetchProjects = async () => {
+      const activeCompanyId = companyId || user?.company_id;
       try {
         const csaapToken = token;
 
-        if (!csaapToken) {
-          console.error("No authorization token found");
+        if (!csaapToken || !activeCompanyId) {
+          console.error("No authorization token or company ID found");
           setProjectScopeLoaded(true);
           return;
         }
 
-        // Define the project sources matching your backend
-        const PROJECT_SOURCES = [
-          { path: "commercials", property_type: "commercial" },
-          { path: "apartments", property_type: "apartment" },
-          { path: "plottings", property_type: "plotting" },
-          { path: "duplexes", property_type: "duplex" },
-          { path: "triplexes", property_type: "triplex" },
-          { path: "custom-projects", property_type: "custom_project" },
-        ];
-
-        const TENANT_API_BASE_URL = "https://csaapnodeapi.csaap.com/api/tenant";
-
         setProjectScopeLoading(true);
         setProjectScopeLoaded(false);
 
-        // Fetch all project sources in parallel
-        const results = await Promise.allSettled(
-          PROJECT_SOURCES.map(async ({ path, property_type }) => {
-            const response = await axios.get(`${TENANT_API_BASE_URL}/${path}`, {
-              headers: {
-                Authorization: `Bearer ${csaapToken}`,
-              },
-            });
+        const headers = { Authorization: `Bearer ${csaapToken}` };
 
-            const projects = Array.isArray(response.data?.data)
-              ? response.data.data
-              : [];
-
-            // Map projects with property type
-            return projects.map((project) => ({
-              id: project.id,
-              name: project.name,
-              property_type: property_type,
-              display_type: project.type || property_type,
-              locality: project.locality,
-              city: project.city,
-              composite_key: `${property_type}:${project.id}`,
-              location: [project?.locality, project?.city]
-                .filter(Boolean)
-                .join(", "),
-              branch: project.branch || "main", // Add branch field for compatibility
-            }));
-          }),
+        // 1. Fetch client projects
+        const projRes = await axios.get(
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
+          {
+            params: { company_id: activeCompanyId },
+            headers,
+          }
         );
 
-        // Combine all successful results
-        const allProjects = results
-          .filter((result) => result.status === "fulfilled")
-          .flatMap((result) => result.value)
-          .filter((project) => project.name) // Only include projects with names
-          .sort((a, b) => a.name.localeCompare(b.name));
+        const projectsData = Array.isArray(projRes.data?.data)
+          ? projRes.data.data
+          : Array.isArray(projRes.data)
+          ? projRes.data
+          : [];
 
-        // Transform projects to match the expected format for employeeProjectOptions
-        const transformedProjects = allProjects.map(project => ({
-          key: getProjectKey(project.id, project.branch),
-          id: project.id,
-          name: project.name,
-          branch: project.branch,
-          role: null, // Role will be determined later from assignments if needed
-          property_type: project.property_type,
-          location: project.location
-        }));
+        const transformedProjects = projectsData
+          .map((project) => {
+            const branch = project.project_code || "custom_project";
+            return {
+              key: getProjectKey(project.id, branch),
+              id: project.id,
+              name: project.project_name || project.name || "Unnamed Project",
+              branch: branch,
+              role: null,
+              property_type: branch,
+              location: [project?.locality, project?.city].filter(Boolean).join(", "),
+            };
+          })
+          .filter((project) => project && project.name)
+          .sort((a, b) => a.name.localeCompare(b.name));
 
         setEmployeeProjectOptions(transformedProjects);
 
-        // After fetching projects, we need to still get manager assignments and employee department scope
-        // This part remains from the old logic to maintain manager approval functionality
-        if (SUPERADMIN_API_BASE && employeeId && token) {
+        // 2. Fetch assignments & employees
+        if (employeeId) {
           try {
-            const headers = { Authorization: `Bearer ${token}` };
-            const [employeesRes, assignmentResponses] = await Promise.all([
+            const [employeesRes, assignmentsRes] = await Promise.all([
               axios
                 .get(`https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees`, { headers })
                 .catch(() => ({ data: [] })),
-              Promise.all(
-                transformedProjects.map((project) =>
-                  axios
-                    .get(`${SUPERADMIN_API_BASE}/api/superadmin/project-assignments/employees`, {
-                      headers,
-                      params: {
-                        projectid: project.id,
-                        projectbranch: project.branch,
-                      },
-                    })
-                    .then((res) => ({
-                      project,
-                      assignments: res.data?.data || [],
-                    }))
-                    .catch(() => ({
-                      project,
-                      assignments: [],
-                    }))
-                )
-              ),
+              axios
+                .get(`https://csaapnodeapi.csaap.com/api/tenant/project-assignments`, { headers })
+                .catch(() => ({ data: { data: [] } })),
             ]);
 
             const managerKeys = new Set();
@@ -222,7 +177,15 @@ const MonthlyWorkReport = () => {
                   .filter(Boolean)
                 : [];
 
-            assignmentResponses.forEach(({ project, assignments }) => {
+            const allAssignments = assignmentsRes.data?.data || assignmentsRes.data || [];
+
+            transformedProjects.forEach((project) => {
+              const assignments = allAssignments.filter(
+                (a) =>
+                  String(a.projectid) === String(project.id) &&
+                  String(a.projectbranch || "").trim().toLowerCase() === String(project.branch).trim().toLowerCase()
+              );
+
               assignments.forEach((assignment) => {
                 if (isProjectManagerAssignment(assignment)) {
                   managerKeys.add(getProjectKey(project.id, project.branch));
@@ -251,7 +214,7 @@ const MonthlyWorkReport = () => {
           return activeMatch?.key || transformedProjects[0]?.key || "";
         });
 
-        if (allProjects.length === 0) {
+        if (transformedProjects.length === 0) {
           console.warn("No projects found");
         }
       } catch (err) {
@@ -266,7 +229,7 @@ const MonthlyWorkReport = () => {
     };
 
     fetchProjects();
-  }, [SUPERADMIN_API_BASE, employeeId, token, user?.department, isDepartmentReviewer, canViewAllReports]);
+  }, [companyId, user?.company_id, employeeId, token, user?.department, isDepartmentReviewer, canViewAllReports]);
 
   useEffect(() => {
     const fetchMissingNames = async () => {
