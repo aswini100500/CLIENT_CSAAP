@@ -22,10 +22,7 @@ const statusLabels = {
   PENDING: "Pending",
   NO_RESPONSE: "No response",
   CALL_BACK: "Call back",
-  INTERESTED: "Interested",
   REJECTED: "Rejected",
-  SITE_VISIT_SCHEDULED: "Site Visit Scheduled",
-  SITE_VISIT_COMPLETE: "Site Visit Complete",
   ACCEPTED: "Accepted",
   PROFILE_UPDATED: "Profile Updated",
   PROJECT_ADDED: "Project Added",
@@ -53,14 +50,8 @@ export const getStatusColor = (status) => {
       return "bg-amber-50 text-amber-700 border border-amber-200";
     case "CALL_BACK":
       return "bg-teal-50 text-teal-700 border border-teal-200";
-    case "INTERESTED":
-      return "bg-emerald-50 text-emerald-700 border border-emerald-200";
     case "REJECTED":
       return "bg-red-50 text-red-700 border border-red-200";
-    case "SITE_VISIT_SCHEDULED":
-      return "bg-indigo-50 text-indigo-700 border border-indigo-200";
-    case "SITE_VISIT_COMPLETE":
-      return "bg-violet-50 text-violet-700 border border-violet-200";
     case "ACCEPTED":
       return "bg-green-50 text-green-700 border border-green-200";
     case "PROFILE_UPDATED":
@@ -83,11 +74,8 @@ export const getStatusColor = (status) => {
 const allOutcomes = [
   { value: "NO_RESPONSE", label: "No response" },
   { value: "CALL_BACK", label: "Call back" },
-  { value: "INTERESTED", label: "Interested" },
-  { value: "REJECTED", label: "Rejected" },
-  { value: "SITE_VISIT_SCHEDULED", label: "Site Visit Scheduled" },
-  { value: "SITE_VISIT_COMPLETE", label: "Site Visit Complete" },
   { value: "ACCEPTED", label: "Accepted" },
+  { value: "REJECTED", label: "Rejected" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -96,10 +84,8 @@ const allOutcomes = [
 
 const stageOutcomeMap = {
   NEW: [],
-  ASSIGNED: ["NO_RESPONSE", "CALL_BACK", "INTERESTED", "REJECTED"],
-  FOLLOW_UP: ["NO_RESPONSE", "CALL_BACK", "INTERESTED", "REJECTED"],
-  INTERESTED: ["SITE_VISIT_SCHEDULED", "ACCEPTED"],
-  SITE_VISIT: ["SITE_VISIT_COMPLETE", "ACCEPTED"],
+  ASSIGNED: ["NO_RESPONSE", "CALL_BACK", "ACCEPTED", "REJECTED"],
+  FOLLOW_UP: ["NO_RESPONSE", "CALL_BACK", "ACCEPTED", "REJECTED"],
   REJECTED: [],
 };
 
@@ -129,12 +115,8 @@ export const formatSource = (source) =>
  * Returns the list of allowed outcomes for a given stage.
  * Forward-moving only - no going backwards in the lifecycle.
  */
-export const getOutcomesForStage = (stage, status) => {
+export const getOutcomesForStage = (stage) => {
   const s = stage?.toUpperCase();
-  const st = status?.toUpperCase();
-  if (s === "SITE_VISIT" && st === "SITE_VISIT_COMPLETE") {
-    return allOutcomes.filter((o) => o.value === "ACCEPTED");
-  }
   const allowed = stageOutcomeMap[s] || [];
   return allOutcomes.filter((o) => allowed.includes(o.value));
 };
@@ -145,24 +127,11 @@ const outcomesMap = new Map(allOutcomes.map((o) => [o.value, o.label]));
  * Returns the list of allowed outcomes based on the current active tab / view.
  * Decouples outcomes from stages.
  */
-export const getOutcomesForTab = (activeTab, status) => {
+export const getOutcomesForTab = (activeTab) => {
   const tab = activeTab?.toLowerCase();
-  const st = status?.toUpperCase();
 
-  if (tab === "assigned" || tab === "followup" || tab === "interested") {
-    if (st === "SITE_VISIT_SCHEDULED" || st === "SITE_VISIT_COMPLETE") {
-      const order = ["ACCEPTED", "REJECTED"];
-      return order.map((val) => ({ value: val, label: outcomesMap.get(val) }));
-    }
-    if (st === "INTERESTED") {
-      const order = ["SITE_VISIT_SCHEDULED", "ACCEPTED", "REJECTED"];
-      return order.map((val) => ({ value: val, label: outcomesMap.get(val) }));
-    }
-    const order = ["NO_RESPONSE", "CALL_BACK", "INTERESTED", "ACCEPTED", "REJECTED"];
-    return order.map((val) => ({ value: val, label: outcomesMap.get(val) }));
-  }
-  if (tab === "site_visit") {
-    const order = ["SITE_VISIT_COMPLETE"];
+  if (tab === "assigned" || tab === "followup") {
+    const order = ["NO_RESPONSE", "CALL_BACK", "ACCEPTED", "REJECTED"];
     return order.map((val) => ({ value: val, label: outcomesMap.get(val) }));
   }
   return [];

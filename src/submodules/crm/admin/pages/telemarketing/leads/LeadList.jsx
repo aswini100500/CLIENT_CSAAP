@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import api from "../../../../api";
 import { AlertCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -16,7 +17,6 @@ import ReportEntryModal from "./ReportEntryModal";
 import TransferLeadModal from "./TransferLeadModal";
 import CreatePaymentSlabModal from "./CreatePaymentSlabModal";
 import ViewPaymentSlabsModal from "./ViewPaymentSlabsModal";
-import ProjectSetupModal from "./ProjectSetupModal";
 import CreateProjectModal from "./CreateProjectModal";
 import CustomerProfileSetupModal from "./CustomerProfileSetupModal";
 
@@ -77,7 +77,6 @@ const LeadList = () => {
     if (activeTab === "new") return has("crm.leads.new_leads.edit") || has("crm.leads.new_leads.create");
     if (activeTab === "assigned") return has("crm.leads.assigned.edit");
     if (activeTab === "followup") return has("crm.leads.followup.edit");
-    if (activeTab === "interested") return has("crm.leads.interested.edit");
     if (activeTab === "accepted") return has("crm.leads.accepted.edit");
     if (activeTab === "rejected") return has("crm.leads.rejected.edit");
     return false;
@@ -98,10 +97,7 @@ const LeadList = () => {
     return false;
   }, [activeTab, has]);
 
-  const canProjectSetup = useMemo(() => {
-    if (activeTab === "accepted") return has("crm.leads.accepted.project.setup");
-    return false;
-  }, [activeTab, has]);
+  const canProjectSetup = false;
 
   const canCustomerProfileSetup = useMemo(() => {
     if (activeTab === "accepted") return has("crm.leads.accepted.customer.setup");
@@ -111,7 +107,6 @@ const LeadList = () => {
   const canReportEntry = useMemo(() => {
     if (activeTab === "assigned") return has("crm.leads.assigned.interaction");
     if (activeTab === "followup") return has("crm.leads.followup.interaction");
-    if (activeTab === "interested") return has("crm.leads.interested.interaction");
     return false;
   }, [activeTab, has]);
   const [showLeadForm, setShowLeadForm] = useState(false);
@@ -133,8 +128,7 @@ const LeadList = () => {
   const [paymentSlabLead, setPaymentSlabLead] = useState(null);
   const [showViewPaymentSlab, setShowViewPaymentSlab] = useState(false);
   const [viewPaymentSlabLead, setViewPaymentSlabLead] = useState(null);
-  const [showProjectSetup, setShowProjectSetup] = useState(false);
-  const [projectSetupLead, setProjectSetupLead] = useState(null);
+  // Project setup state bypassed for general erp
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [createProjectLead, setCreateProjectLead] = useState(null);
   const [showCustomerProfileSetup, setShowCustomerProfileSetup] = useState(false);
@@ -175,12 +169,24 @@ const LeadList = () => {
   });
 
   const { data: projectOptions = [] } = useQuery({
-    queryKey: ["project-options", token],
+    queryKey: ["project-options", token, companyId],
     queryFn: async () => {
-      const response = await api.get("/api/projects/options");
-      return response.data.data || [];
+      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`, {
+        params: { company_id: companyId },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const projects = response.data?.data || [];
+      return projects.map((p) => ({
+        project_id: p.id,
+        composite_key: p.id,
+        name: p.project_name,
+        display_type: p.project_code || p.status || "",
+        location: p.client_company_name ? `Client: ${p.client_company_name}` : "",
+      }));
     },
-    enabled: !!token,
+    enabled: !!token && !!companyId,
   });
 
   const projectOptionsMap = useMemo(() => {
@@ -391,22 +397,6 @@ const LeadList = () => {
       return;
     }
 
-    if (
-      reportData.outcome === "SITE_VISIT_SCHEDULED" &&
-      !reportData.siteVisitScheduledAt
-    ) {
-      alert("Schedule date and time are required for this outcome.");
-      return;
-    }
-
-    if (
-      reportData.outcome === "SITE_VISIT_SCHEDULED" &&
-      !reportData.siteVisitAssignedTo
-    ) {
-      alert("Please assign a team member for the site visit.");
-      return;
-    }
-
     logInteractionMutation.mutate({
       id: reportData.leadId,
       payload: {
@@ -414,8 +404,6 @@ const LeadList = () => {
         outcome: reportData.outcome,
         note: reportData.note,
         next_follow_up_at: reportData.nextFollowUpAt || null,
-        site_visit_scheduled_at: reportData.siteVisitScheduledAt || null,
-        site_visit_assigned_to: reportData.siteVisitAssignedTo || null,
       },
     });
   };
@@ -551,10 +539,7 @@ const LeadList = () => {
               setViewPaymentSlabLead(lead);
               setShowViewPaymentSlab(true);
             } : undefined}
-            onProjectSetup={canProjectSetup ? (lead) => {
-              setProjectSetupLead(lead);
-              setShowProjectSetup(true);
-            } : undefined}
+            onProjectSetup={undefined}
             onCreateProject={canCreateProject ? (lead) => {
               setCreateProjectLead(lead);
               setShowCreateProject(true);
@@ -687,18 +672,7 @@ const LeadList = () => {
           />
         )}
 
-        {showProjectSetup && projectSetupLead && (
-          <ProjectSetupModal
-            lead={projectSetupLead}
-            onClose={() => {
-              setShowProjectSetup(false);
-              setProjectSetupLead(null);
-            }}
-            onSaveSuccess={() => {
-              queryClient.invalidateQueries(["leads"]);
-            }}
-          />
-        )}
+        {/* Project setup modal removed for general erp */}
 
         {showCreateProject && createProjectLead && (
           <CreateProjectModal

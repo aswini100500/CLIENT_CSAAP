@@ -4,7 +4,6 @@ const tabs = [
   { key: "new", label: "New Leads" },
   { key: "assigned", label: "Assigned" },
   { key: "followup", label: "Follow-up" },
-  { key: "interested", label: "Interested" },
   { key: "accepted", label: "Accepted" },
   { key: "rejected", label: "Rejected" },
 ];
@@ -17,8 +16,7 @@ const countByTab = (leads, tabKey) => {
       return leads.filter((l) => l.stage !== "NEW").length;
     case "followup":
       return leads.filter((l) => l.stage === "FOLLOW_UP").length;
-    case "interested":
-      return leads.filter((l) => l.stage === "INTERESTED" || l.stage === "SITE_VISIT").length;
+
     case "accepted":
       return leads.filter((l) => l.stage === "ACCEPTED").length;
     case "rejected":
@@ -34,7 +32,7 @@ const LeadTabsDock = ({ activeTab, onTabChange, leads, showNewTab = true }) => {
     if (tab.key === "new") return hasAccess("crm.leads.new_leads");
     if (tab.key === "assigned") return hasAccess("crm.leads.assigned");
     if (tab.key === "followup") return hasAccess("crm.leads.followup");
-    if (tab.key === "interested") return hasAccess("crm.leads.interested");
+
     if (tab.key === "accepted") return hasAccess("crm.leads.accepted");
     if (tab.key === "rejected") return hasAccess("crm.leads.rejected");
     return true;

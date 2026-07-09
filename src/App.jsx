@@ -48,7 +48,7 @@ import IndentEntryO from "./pages/Operation/material mangement/IndentEntryO";
 
 // --- Page Imports: Stock & Inventory ---
 import EmployeeForm from "./components/EmployeeForm";
-import PABC from "./components/project/PABC";
+import ProjectsPage from "./components/projectCl/projectCl";
 import BrokerPage from "./pages/BrokerPage";
 import ContractorsPage from "./pages/ContractorPage";
 import DashboardHome from "./pages/DashboardHome";
@@ -625,7 +625,7 @@ const App = () => {
               path="/builder-erp/admin/employee-form"
               element={<EmployeeForm />}
             />
-            <Route path="/projects" element={<PABC />} />
+            <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/users/payments" element={<PaymentsPage />} />
             <Route path="/users/plans" element={<PlansPage />} />
             <Route path="/users/all-companies" element={<AllCompanies />} />

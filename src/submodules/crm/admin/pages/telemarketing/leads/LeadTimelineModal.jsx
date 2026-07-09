@@ -50,25 +50,10 @@ const outcomeConfig = {
     label: "Call back",
     color: "teal",
   },
-  INTERESTED: {
-    icon: Trophy,
-    label: "Interested",
-    color: "emerald",
-  },
   REJECTED: {
     icon: XCircle,
     label: "Rejected",
     color: "red",
-  },
-  SITE_VISIT_SCHEDULED: {
-    icon: CalendarClock,
-    label: "Site Visit Scheduled",
-    color: "indigo",
-  },
-  SITE_VISIT_COMPLETE: {
-    icon: Trophy,
-    label: "Site Visit Complete",
-    color: "rose",
   },
 };
 
@@ -245,15 +230,7 @@ const LeadTimelineModal = ({ lead, onClose }) => {
                           </div>
                         )}
 
-                        {event.site_visit_assigned_to && (
-                          <div className="flex items-center gap-1.5 mt-2 text-[12px] text-(--text-soft)">
-                            <User className="size-3 text-(--text-faint)" />
-                            Site visit assigned to:{" "}
-                            <span className="font-semibold text-(--text-strong)">
-                              {event.site_visit_assignee_name || `Employee ID: ${event.site_visit_assigned_to}`}
-                            </span>
-                          </div>
-                        )}
+
                       </div>
                     </div>
                   );

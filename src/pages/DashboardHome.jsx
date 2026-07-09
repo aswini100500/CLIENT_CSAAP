@@ -80,7 +80,7 @@ const DashboardHome = () => {
 
         // Fetch projects data
         const projectsResponse = await fetch(
-          `https://api.csaap.com/api/tenantuser/projects?subdomain=${subdomain}&slug=${subdomain}`,
+          `https://csaapnodeapi.csaap.com/api/tenant/clprojects?company_id=${companyId}`,
           { method: 'GET', headers }
         );
 
@@ -94,7 +94,7 @@ const DashboardHome = () => {
         let projects = [];
         if (projectsResponse.ok) {
           const projectsData = await projectsResponse.json();
-          projects = projectsData.projects || projectsData.data || [];
+          projects = projectsData.data || projectsData.projects || [];
         } else if (projectsResponse.status === 401) {
           console.warn('Authentication required for projects API');
         } else {
@@ -124,7 +124,7 @@ const DashboardHome = () => {
         // Calculate total revenue from projects (if budget data exists)
         let totalRevenue = 0;
         projects.forEach(project => {
-          const budget = project.price_details?.expected_price || '0';
+          const budget = project.budget || project.project_budget || project.cost || '0';
           const numericValue = parseFloat(String(budget).replace(/[^0-9.-]+/g, ''));
           if (!isNaN(numericValue)) {
             totalRevenue += numericValue;
