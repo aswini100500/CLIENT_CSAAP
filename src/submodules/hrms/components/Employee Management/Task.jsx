@@ -531,42 +531,31 @@ const Task = () => {
           return;
         }
 
-        const PROJECT_SOURCES = [
-          { path: "commercials", property_type: "commercial" },
-          { path: "apartments", property_type: "apartment" },
-          { path: "plottings", property_type: "plotting" },
-          { path: "duplexes", property_type: "duplex" },
-          { path: "triplexes", property_type: "triplex" },
-          { path: "custom-projects", property_type: "custom_project" },
-        ];
+        const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
+        const activeCompanyId = companyId || 1;
+        const response = await axios.get(`${API_BASE_URL}/api/tenant/clprojects`, {
+          params: { company_id: activeCompanyId },
+          headers: { Authorization: `Bearer ${csaapToken}` }
+        });
 
-        const TENANT_API_BASE_URL = "https://csaapnodeapi.csaap.com/api/tenant";
+        const projectsData = Array.isArray(response.data?.data)
+          ? response.data.data
+          : Array.isArray(response.data)
+          ? response.data
+          : [];
 
-        const results = await Promise.allSettled(
-          PROJECT_SOURCES.map(async ({ path, property_type }) => {
-            const response = await axios.get(`${TENANT_API_BASE_URL}/${path}`, {
-              headers: { Authorization: `Bearer ${csaapToken}` }
-            });
-
-            const projects = Array.isArray(response.data?.data) ? response.data.data : [];
-
-            return projects.map((project) => ({
-              id: project.id,
-              name: project.name,
-              property_type: property_type,
-              display_type: project.type || property_type,
-              locality: project.locality,
-              city: project.city,
-              branch: project.locality || project.city || 'Main',
-              composite_key: `${property_type}:${project.id}`,
-              location: [project?.locality, project?.city].filter(Boolean).join(", ")
-            }));
-          })
-        );
-
-        const allProjects = results
-          .filter((result) => result.status === "fulfilled")
-          .flatMap((result) => result.value)
+        const allProjects = projectsData
+          .map((project) => ({
+            id: project.id,
+            name: project.project_name || project.name || "Unnamed Project",
+            property_type: 'clproject',
+            display_type: 'Client Project',
+            locality: project.locality || '',
+            city: project.city || '',
+            branch: project.project_code || 'Main',
+            composite_key: `clproject:${project.id}`,
+            location: [project?.locality, project?.city].filter(Boolean).join(", ")
+          }))
           .filter(project => project.name)
           .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -583,7 +572,7 @@ const Task = () => {
     };
 
     fetchProjects();
-  }, [csaapToken]);
+  }, [csaapToken, companyId]);
 
   const filteredTeamMembers = teamMembers
     .filter(
