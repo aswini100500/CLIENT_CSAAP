@@ -824,7 +824,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                   console.error('Logo failed to load in expanded mode');
                   setLogoError(true);
                 }}
-                onLoad={() => {}}
               />
             ) : (
 

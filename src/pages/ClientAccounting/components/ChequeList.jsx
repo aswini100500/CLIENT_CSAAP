@@ -1023,7 +1023,6 @@ const ChequeList = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={() => {}}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   {popupMode === 'add' ? 'Add Cheque' : 'Update Cheque'}
@@ -1199,7 +1198,6 @@ const ChequeList = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={() => {}}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   Update Cheque

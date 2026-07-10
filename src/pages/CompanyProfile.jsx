@@ -204,7 +204,6 @@ const CompanyProfilePage = () => {
                         console.error('Logo failed to load in profile page');
                         setLogoError(true);
                       }}
-                      onLoad={() => {}}
                     />
                   ) : (
 

@@ -836,7 +836,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
                   console.error('Logo failed to load in expanded mode');
                   setLogoError(true);
                 }}
-                onLoad={() => {}}
               />
             ) : (
 
