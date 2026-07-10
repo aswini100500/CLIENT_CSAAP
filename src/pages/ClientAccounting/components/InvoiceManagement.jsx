@@ -4,7 +4,6 @@ import {
   HiSearch,
   HiDocumentAdd,
   HiPrinter,
-  HiDownload,
   HiEye,
   HiPencilAlt,
   HiTrash,
@@ -13,24 +12,18 @@ import {
   HiCheckCircle,
   HiXCircle,
   HiPlus,
-  HiOutlineDocumentDuplicate,
   HiCalculator,
   HiChatAlt2,
   HiShoppingCart,
-  HiDocumentText,
 } from "react-icons/hi";
 import {
   BiChevronDown,
   BiChevronUp,
   BiCalendar,
   BiSortAlt2,
-  BiBarChartAlt2,
-  BiRupee,
-  BiReceipt,
   BiPackage,
 } from "react-icons/bi";
-import { FaFileExcel, FaFilePdf, FaWarehouse } from "react-icons/fa";
-import { MdOutlineAttachMoney, MdOutlineInventory2 } from "react-icons/md";
+import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import { useCompany } from "../context/CompanyContext";
 
 const InvoiceManagement = () => {

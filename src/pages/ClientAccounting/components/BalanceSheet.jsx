@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
 import {
-  Download,
   Printer,
   RefreshCw,
   FileSpreadsheet,

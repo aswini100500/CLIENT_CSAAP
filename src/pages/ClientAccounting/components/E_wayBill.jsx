@@ -7,7 +7,6 @@ import {
   HiDocumentText,
   HiCalendar,
   HiUser,
-  HiLocationMarker,
   HiCheckCircle,
   HiEye,
   HiRefresh,

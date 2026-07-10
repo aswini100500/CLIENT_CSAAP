@@ -1,3 +1,4 @@
+import React from "react";
 import { createPortal } from "react-dom";
 import {
   X,
@@ -6,10 +7,7 @@ import {
   Mail,
   MapPin,
   CreditCard,
-  TrendingUp,
-  ExternalLink,
   FileText,
-  IndianRupee,
 } from "lucide-react";
 import { formatSource } from "../telemarketing/leads/leadUtils";
 

@@ -16,35 +16,19 @@ import {
   FaDoorOpen,
   FaRuler,
   FaLayerGroup,
-  FaFolder,
   FaMapMarkerAlt,
   FaChevronRight,
   FaChevronLeft,
-  FaHashtag,
-  FaArrowRight,
   FaParking,
   FaCheckCircle,
   FaCogs,
   FaSortAmountUp,
   FaChartLine,
   FaInfoCircle,
-  FaDatabase,
   FaCog,
-  FaShieldAlt,
-  FaSwimmingPool,
-  FaDumbbell,
-  FaLeaf,
-  FaPlug,
-  FaWifi,
-  FaBroom,
-  FaVideo,
   FaRulerCombined,
   FaPaperclip,
   FaPlusCircle,
-  FaFileInvoice,
-  FaChartPie,
-  FaSpinner,
-  FaDownload,
 } from "react-icons/fa";
 import {
   INITIAL_PRICE_DETAILS,
@@ -55,7 +39,6 @@ import {
 } from "../project/shared/initialStates";
 import projectService from "./projectService";
 import { X, Home, LayoutGrid, Building2 } from "lucide-react";
-import axios from "axios";
 import { getAuthSlug } from "../../store/authSession";
 
 const getSlug = () => getAuthSlug();

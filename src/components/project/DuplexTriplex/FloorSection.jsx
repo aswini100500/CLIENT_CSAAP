@@ -4,7 +4,6 @@ import {
   FaHome,
   FaCheckCircle,
   FaExclamationTriangle,
-  FaSave,
   FaArrowRight,
   FaInfoCircle,
   FaDraftingCompass,

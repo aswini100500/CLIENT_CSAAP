@@ -2,10 +2,6 @@ import React, { useState, useEffect } from "react";
 import BillInwardHistory from "./BillInwardHistory";
 import {
   FaCalendarAlt,
-  FaSearch,
-  FaUser,
-  FaFileAlt,
-  FaBuilding,
   FaRupeeSign,
 } from "react-icons/fa";
 import operationApi from "../../../api/operation";

@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import {
   Plus,
   Trash2,
-  Save,
   Download,
   Edit3,
   Check,
-  PlusIcon,
 } from "lucide-react";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";

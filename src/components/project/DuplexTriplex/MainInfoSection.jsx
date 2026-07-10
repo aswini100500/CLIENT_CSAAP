@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
 
@@ -7,9 +7,6 @@ import {
   FaList,
   FaHome,
   FaTrash,
-  FaChevronLeft,
-  FaChevronRight,
-  FaInfoCircle,
   FaCheck,
   FaCheckCircle,
   FaArrowRight,
@@ -17,23 +14,10 @@ import {
   FaTimes,
   FaMoneyBill,
   FaPlus,
-  FaBolt,
-  FaCogs,
   FaBuilding,
-  FaLayerGroup,
-  FaHandshake,
-  FaUserTie,
-  FaUsers,
   FaKey,
   FaStamp,
-  FaHardHat,
-  FaTools,
-  FaMoneyCheckAlt,
-  FaHandHoldingUsd,
   FaShieldAlt,
-  FaCalendarAlt,
-  FaCompass,
-  FaRulerCombined,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 

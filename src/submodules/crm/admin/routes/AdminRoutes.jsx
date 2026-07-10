@@ -1,3 +1,4 @@
+import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import ComingSoon from "../components/ComingSoon";
 import LeadList from "../pages/telemarketing/leads/LeadList";

@@ -2,17 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   TrendingUp,
-  TrendingDown,
   DollarSign,
   CreditCard,
   Banknote,
-  BarChart3,
   Calculator,
   RefreshCw,
   Download,
-  Filter,
   Calendar,
-  PieChart,
   LineChart,
   TrendingUp as TrendingUpIcon,
   TrendingDown as TrendingDownIcon,

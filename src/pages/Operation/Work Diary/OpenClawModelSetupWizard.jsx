@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import {
   FaArrowLeft,
   FaArrowRight,
-  FaBuilding,
   FaCalendarAlt,
   FaCheckCircle,
   FaHome,
   FaSearch,
   FaPlus,
   FaTrash,
-  FaExclamationTriangle,
 } from "react-icons/fa";
 import operationApi from "../../../api/operation";
 

@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import {
-  Plus,
   Trash2,
-  Download,
   Calendar,
-  Building,
-  ClipboardList,
-  Eye,
-  X,
 } from "lucide-react";
 import operationApi from "../../../api/operation";
 

@@ -5,28 +5,20 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  ClipboardClock,
-  Clock,
-  FileCheck,
   Folder,
-  Gift,
   IndianRupee,
   LayoutDashboard,
   ListChecks,
   LucideLogOut,
-  MessageSquare,
-  MessageSquareWarning,
   PieChart,
-  Settings,
   FileText,
-  UserCheck,
   UserPlus,
   Users,
   User,
   CalendarDays,
 } from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
-import { useState } from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { resetPersistedAuthState } from "../../../store/authSession";

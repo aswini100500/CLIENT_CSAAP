@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   FileText,
   Calendar,
-  IndianRupee,
   CheckCircle,
   Clock,
   XCircle,
@@ -20,9 +19,7 @@ import {
   Wallet,
   ChevronDown,
   Loader2,
-  Eye,
   Trash2,
-  Edit,
 } from "lucide-react";
 
 const Cheque = () => {

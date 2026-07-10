@@ -1,13 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Activity,
   CalendarDays,
   FileText,
   IndianRupee,
   RefreshCcw,
   Search,
   UserRound,
-  Filter,
   Eye,
   Download,
 } from "lucide-react";

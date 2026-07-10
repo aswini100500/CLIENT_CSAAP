@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import useAuth from "../../../../hooks/useAuth";
 import axios from "axios";
 import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
@@ -11,13 +10,10 @@ import {
   Calendar,
   FileText,
   Plus,
-  Sparkles,
   Download,
-  ChevronRight,
   Gift,
   Users,
   Clock,
-  TrendingUp,
   Video,
   MapPin,
   User,

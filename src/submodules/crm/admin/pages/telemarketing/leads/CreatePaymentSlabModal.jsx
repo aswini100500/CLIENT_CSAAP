@@ -1,25 +1,19 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import {
   X,
   Layers,
   IndianRupee,
-  Percent,
-  ArrowRight,
   AlertCircle,
   CheckCircle,
-  Sparkles,
   Calculator,
-  Calendar,
   Save,
   Loader2,
-  Pencil,
   Plus,
   Trash2,
 } from "lucide-react";
 import { formatStatus, getStatusColor } from "./leadUtils";
 import api from "../../../../api";
-import axios from "axios";
 
 const inputClass =
   "app-input w-full rounded-xl px-4 py-2.5 text-[13px] font-semibold text-(--text-body) focus:ring-(--brand-ring)";

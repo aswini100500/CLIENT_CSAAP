@@ -14,7 +14,6 @@ import {
   Loader2,
   Search,
   Trash2,
-  User,
   X,
   XCircle,
 } from "lucide-react";

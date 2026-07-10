@@ -1,7 +1,6 @@
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { usePermission } from "../../../../hooks/usePermission";
 import useAuth from "../../../../hooks/useAuth";
 

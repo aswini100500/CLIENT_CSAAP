@@ -1,3 +1,4 @@
+import React from "react";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import RoutePermissionGuard from "../../../components/RoutePermissionGuard";
 import useAuth from "../../../hooks/useAuth";
@@ -86,7 +87,6 @@ import TimewiseAttendance from "../components/TimewiseAttendance";
 import MonthlyLateComingReport from "../components/LateComingReport";
 import EarlyGoingReport from "../components/EarlygoingReport";
 import OverTime from "../components/OverTime";
-import LeaveReport from "../components/Leave";
 
 function EmployeeProtectedRoute() {
   const location = useLocation();

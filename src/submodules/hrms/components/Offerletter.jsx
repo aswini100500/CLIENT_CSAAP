@@ -6,7 +6,6 @@ import { usePermission } from "../../../hooks/usePermission";
 import {
   Search,
   Filter,
-  Plus,
   Download,
   Eye,
   Edit,

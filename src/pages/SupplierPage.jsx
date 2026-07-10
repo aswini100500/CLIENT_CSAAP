@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import useSWR, { mutate } from "swr";
@@ -7,22 +7,16 @@ import {
   Search,
   Plus,
   X,
-  Download,
   Eye,
   Pencil,
   Trash2,
   Phone,
   Mail,
   Building,
-  MapPin,
   FileText,
   CheckCircle,
   AlertCircle,
-  ChevronDown,
-  ChevronUp,
-  Calendar,
   IndianRupee,
-  User,
   Loader2,
 } from "lucide-react";
 

@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import {
   X,
   Layers,
-  IndianRupee,
   AlertCircle,
   AlertTriangle,
   Loader2,
@@ -20,7 +19,6 @@ import {
   isFinishedUnit,
 } from "./leadUtils";
 import operationApi from "../../../../../../api/operation";
-import api from "../../../../api";
 import accountingApi from "../../../../accountingApi";
 import axios from "axios";
 import useAuth from "../../../../../../hooks/useAuth";

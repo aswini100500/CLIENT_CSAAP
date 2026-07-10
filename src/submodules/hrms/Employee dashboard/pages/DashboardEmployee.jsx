@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
-  TrendingUp,
   Users,
-  Clock,
   Calendar,
   MoreVertical,
-  Gift,
   FileText,
   MessageSquare,
   CheckCircle,

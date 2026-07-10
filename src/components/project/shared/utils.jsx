@@ -1,3 +1,4 @@
+import React from "react";
 export const formatCurrency = (amount) => {
   if (!amount) return "-";
   return `₹${parseInt(amount).toLocaleString("en-IN")}`;

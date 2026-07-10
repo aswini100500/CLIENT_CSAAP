@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../api";
@@ -16,9 +16,6 @@ import {
   Calendar,
   Briefcase,
   FileText,
-  IndianRupee,
-  TrendingUp,
-  PieChart,
   Loader2,
 } from "lucide-react";
 import { formatSource } from "../telemarketing/leads/leadUtils";

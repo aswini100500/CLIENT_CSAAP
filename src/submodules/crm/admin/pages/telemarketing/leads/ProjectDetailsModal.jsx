@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import {
   X,
@@ -6,13 +6,11 @@ import {
   Building2,
   Layers,
   Compass,
-  FileCheck2,
   Boxes,
   Home,
   Check,
   Building,
   Info,
-  BadgeAlert,
   UserCheck,
   Percent,
 } from "lucide-react";

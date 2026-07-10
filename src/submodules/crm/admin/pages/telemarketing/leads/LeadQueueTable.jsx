@@ -16,9 +16,8 @@ import {
   Building,
   UserCog,
 } from "lucide-react";
-import { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import api from "../../../../api";
 import axios from "axios";
 import useAuth from "../../../../../../hooks/useAuth";
 
@@ -26,7 +25,6 @@ import ActionIconButton from "./ActionIconButton";
 import {
   formatStatus,
   getStatusColor,
-  LEAD_SOURCES,
   formatSource,
 } from "./leadUtils";
 

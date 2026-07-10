@@ -1,4 +1,3 @@
-import React from "react";
 
 export const DEFAULT_SALARY_BREAKDOWN_POLICY = {
   basic_rate: 0.5,

@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
 import {
   HiSearch,
-  HiDownload,
   HiPrinter,
   HiRefresh,
   HiFilter,
   HiDocumentAdd,
   HiEye,
-  HiPencilAlt,
   HiTrash,
   HiCheckCircle,
-  HiExclamationCircle,
   HiPlus,
 } from "react-icons/hi";
-import { BiChevronDown, BiChevronUp, BiCopy } from "react-icons/bi";
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";

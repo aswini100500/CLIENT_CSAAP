@@ -2,17 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
 import {
-  Banknote,
   Plus,
-  Check,
-  CreditCard,
-  Pencil,
-  Trash2,
   FileText,
   Calendar,
   TrendingUp,
   TrendingDown,
-  Eye,
   Wallet,
 } from "lucide-react";
 

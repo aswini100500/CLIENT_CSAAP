@@ -1,3 +1,4 @@
+import React from "react";
 import { usePermission } from "../../../../../../hooks/usePermission";
 
 const tabs = [

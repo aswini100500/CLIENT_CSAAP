@@ -9,8 +9,6 @@ import {
   Download,
   Upload,
   Plus,
-  Search,
-  Filter,
 } from "lucide-react";
 import StockTransferEntry from "./StockTransferEntry";
 import StockList from "./StockList";

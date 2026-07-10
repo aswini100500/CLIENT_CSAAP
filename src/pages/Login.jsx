@@ -13,7 +13,7 @@ import {
   Users,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
 import {

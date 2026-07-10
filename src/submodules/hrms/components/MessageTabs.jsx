@@ -10,11 +10,6 @@ import {
   AlertTriangle,
   Settings,
   Megaphone,
-  ArrowRight,
-  TrendingUp,
-  Clock,
-  CheckCircle2,
-  Users,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 

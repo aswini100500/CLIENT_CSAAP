@@ -1,8 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  FaHome,
-  FaCheckCircle,
   FaProjectDiagram,
   FaTimes,
 } from "react-icons/fa";

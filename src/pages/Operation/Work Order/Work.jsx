@@ -1,14 +1,6 @@
 import React, { useState } from "react";
-import {
-  FaCalendarAlt,
-  FaSearch,
-  FaCheck,
-  FaPaperPlane,
-  FaTimes,
-  FaPlus,
-  FaTrash,
-  FaEdit,
-} from "react-icons/fa";
+
+
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import CreateWorkOrder from "./CreateWorkOrder";

@@ -21,7 +21,6 @@ import {
   X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { usePermission } from "../../../../hooks/usePermission";
 import useAuth from "../../../../hooks/useAuth";
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useSWR, { mutate } from "swr";
 import client from "../api/client";
 import BrokerPageDetailsModal from "./BrokerPageDetailsModal";

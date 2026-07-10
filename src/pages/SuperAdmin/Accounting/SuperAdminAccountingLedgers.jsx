@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   CalendarDays,
-  FolderOpen,
   IndianRupee,
   RefreshCcw,
   Search,

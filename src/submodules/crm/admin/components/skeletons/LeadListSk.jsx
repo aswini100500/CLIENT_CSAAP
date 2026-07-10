@@ -1,3 +1,4 @@
+import React from "react";
 const LeadListSk = () => {
   const shimmerClass =
     "relative overflow-hidden bg-slate-200 before:absolute before:inset-0 before:w-[200%] before:-translate-x-1/2 before:animate-[shimmer_2.4s_linear_infinite] before:bg-[linear-gradient(90deg,rgba(226,232,240,0)_0%,rgba(255,255,255,0.2)_35%,rgba(255,255,255,0.55)_50%,rgba(255,255,255,0.2)_65%,rgba(226,232,240,0)_100%)]";

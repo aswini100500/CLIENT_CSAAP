@@ -12,7 +12,7 @@ import {
   CalendarClock,
   MapPin,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ActionIconButton from "./ActionIconButton";
 import { formatStatus, getStatusColor, formatSource } from "./leadUtils";
 import LeadListSk from "../../../components/skeletons/LeadListSk";

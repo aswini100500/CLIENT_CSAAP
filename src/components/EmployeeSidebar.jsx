@@ -1,18 +1,12 @@
 import {
   BookOpen,
   Calendar,
-  CalendarDays,
-  ChevronLeft,
   ChevronRight,
-  ClipboardList,
-  CreditCard,
   FileText,
   Folder,
-  FolderOpen,
   IndianRupee,
   Layers3,
   LayoutDashboard,
-  LifeBuoy,
   ListChecks,
   LogOut,
   MessageSquare,
@@ -23,12 +17,11 @@ import {
   Users,
   Wallet,
   Warehouse,
-  Wrench,
 } from "lucide-react";
 
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";

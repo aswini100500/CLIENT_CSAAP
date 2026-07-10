@@ -11,7 +11,6 @@ import {
   X,
   Loader2,
   Layers,
-  Shield,
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { hrmsPermissions } from "../../utils/hrmsPermissions";

@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Navigate,
@@ -62,8 +62,6 @@ import SupplierList from "./pages/Stock&inventory/SupplierList";
 import SupplierPage from "./pages/SupplierPage";
 
 import ClientBankActivites from "./pages/ClientAccounting/components/BankActivites";
-import ClientCheque from "./pages/ClientAccounting/components/Cheque";
-import ClientChequeRegister from "./pages/ClientAccounting/components/ChequeRegister";
 import ClientCompanyForm from "./pages/ClientAccounting/components/CompanyForm";
 import ClientContraVoucher from "./pages/ClientAccounting/components/ContraVoucher";
 import ClientCreditNote from "./pages/ClientAccounting/components/CreditNote";

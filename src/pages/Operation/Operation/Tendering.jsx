@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import {
   FaPlus,
-  FaFileAlt,
   FaDownload,
   FaShare,
   FaTimes,
-  FaCheck,
   FaCalendarAlt,
   FaClock,
   FaEdit,
   FaTrash,
   FaPaperclip,
-  FaUser,
-  FaDollarSign,
   FaListAlt,
 } from "react-icons/fa";
 import { HiDocumentText, HiCheckCircle } from "react-icons/hi";

@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { Search, User, UserPlus, X, Loader2, Check } from "lucide-react";
-import { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../../api";
 import useAuth from "../../../../../../hooks/useAuth";

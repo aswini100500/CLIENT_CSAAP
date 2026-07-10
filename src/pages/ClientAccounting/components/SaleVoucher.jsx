@@ -7,13 +7,8 @@ import useAuth from "../../../hooks/useAuth";
 
 import {
   HiTruck,
-  HiDocumentText,
-  HiUser,
-  HiLocationMarker,
-  HiCalendar,
   HiCheck,
   HiX,
-  HiChevronDown,
   HiPlus,
   HiTrash,
 } from "react-icons/hi";

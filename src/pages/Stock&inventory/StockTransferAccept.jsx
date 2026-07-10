@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { getAuthToken } from "../../store/authSession";
 import { CheckCircle, AlertCircle, X, Eye, Check, XCircle } from "lucide-react";
 

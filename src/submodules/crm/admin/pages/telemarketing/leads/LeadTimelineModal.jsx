@@ -1,3 +1,4 @@
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../../api";
 import { createPortal } from "react-dom";
@@ -5,10 +6,8 @@ import {
   CalendarClock,
   CircleDot,
   Clock,
-  MessageSquare,
   Phone,
   PhoneOff,
-  Trophy,
   User,
   X,
   XCircle,

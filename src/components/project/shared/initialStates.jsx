@@ -1,3 +1,4 @@
+import React from "react";
 export const INITIAL_PROJECT_STATE = {
   name: "",
   type: "",

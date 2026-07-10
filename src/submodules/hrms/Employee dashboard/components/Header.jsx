@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Bell,
-  ChevronDown,
   ChevronLeft,
-  Plus,
-  Search,
-  UserCircle,
   Clock,
   ClipboardList,
   HelpCircle,

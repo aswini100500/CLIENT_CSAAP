@@ -12,12 +12,9 @@ import {
   Info,
   RotateCcw,
   Search,
-  User,
-  UserCheck,
 } from "lucide-react";
 import React from "react";
 import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import useAuth from "../../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";

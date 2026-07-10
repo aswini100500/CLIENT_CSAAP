@@ -5,7 +5,6 @@ const getEmployeeName = (id) => {
 
 import React, { useState, useEffect } from "react";
 import {
-  ArrowLeft,
   FileDown,
   FileSpreadsheet,
   Printer,

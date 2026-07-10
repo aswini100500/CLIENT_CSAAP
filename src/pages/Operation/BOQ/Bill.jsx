@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import operationApi from "../../../api/operation";
 import Bill from "./BillofQuantity";
 import AttachmentPage from "./Attachment";

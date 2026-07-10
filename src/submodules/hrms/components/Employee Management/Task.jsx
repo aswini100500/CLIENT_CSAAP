@@ -46,7 +46,6 @@ import React, {
 } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import { useSelector } from "react-redux";
 import useAuth from "../../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import ToDoList from "../ToDoList/ToDoList";

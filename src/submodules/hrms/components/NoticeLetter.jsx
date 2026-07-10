@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
-  Trash2,
   Search,
   User,
   ChevronLeft,
   ChevronRight,
   FileText,
   Download,
-  Eye,
   X,
 } from "lucide-react";
 import axios from "axios";

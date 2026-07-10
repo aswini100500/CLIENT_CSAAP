@@ -5,7 +5,6 @@ import {
   Download,
   Printer,
   RefreshCw,
-  Filter,
   FilePlus,
   Eye,
   CheckCircle,
@@ -14,7 +13,6 @@ import {
   Plus,
   X,
   FileText,
-  Calendar,
   ChevronDown,
   ChevronUp,
   Receipt,
@@ -25,7 +23,6 @@ import {
   Landmark,
   Wallet,
   ArrowUpRight,
-  ArrowDownRight,
 } from "lucide-react";
 import { useCompany } from "../context/CompanyContext";
 

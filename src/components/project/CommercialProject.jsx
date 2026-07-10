@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import projectService from "./projectService";
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import {
   FaPlus,
@@ -12,20 +11,16 @@ import {
   FaRulerCombined,
   FaSpinner,
   FaInfoCircle,
-  FaEdit,
   FaStar,
   FaSave,
   FaUser,
   FaTimes,
-  FaDoorOpen,
   FaBath,
-  FaCogs,
   FaRuler,
   FaMoneyBill,
   FaUserTie,
   FaUsers,
   FaHardHat,
-  FaCog,
 } from "react-icons/fa";
 
 import {
@@ -37,7 +32,6 @@ import {
 } from "../project/shared/initialStates";
 
 import {
-  BROKER_LIST,
   FACILITIES,
   COMMERCIAL_TYPES,
 } from "../project/shared/Constants";

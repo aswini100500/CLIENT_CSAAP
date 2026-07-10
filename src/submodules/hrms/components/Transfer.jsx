@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
-  Upload,
   Download,
   Search,
-  Filter,
   ChevronDown,
   ChevronUp,
   MapPin,

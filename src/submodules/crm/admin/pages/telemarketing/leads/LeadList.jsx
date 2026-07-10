@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import api from "../../../../api";
 import { AlertCircle } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { usePermission } from "../../../../../../hooks/usePermission";
 import useAuth from "../../../../../../hooks/useAuth";
 
@@ -20,7 +20,7 @@ import CreateProjectModal from "./CreateProjectModal";
 import CustomerProfileSetupModal from "./CustomerProfileSetupModal";
 
 import LeadListSk from "../../../components/skeletons/LeadListSk";
-import { getOutcomesForStage, getOutcomesForTab } from "./leadUtils";
+import { getOutcomesForTab } from "./leadUtils";
 
 const defaultLeadForm = {
   name: "",

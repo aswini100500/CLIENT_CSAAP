@@ -1,8 +1,6 @@
-import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import {
   FaCheckCircle,
-  FaTimes,
   FaInfoCircle,
   FaArrowLeft,
 } from "react-icons/fa";

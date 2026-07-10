@@ -17,7 +17,6 @@ import {
   ChevronUp,
   LayoutGrid,
   List,
-  AlertCircle,
   AlertTriangle,
 } from "lucide-react";
 import useTodos from "./useTodos";

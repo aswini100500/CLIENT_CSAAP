@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import useAuth from "../../../hooks/useAuth";
 
 const API_URL = `${import.meta.env.VITE_HRMS_BASE_URL}`;

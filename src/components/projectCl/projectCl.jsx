@@ -19,7 +19,6 @@ import {
   Filter,
   Check,
   RefreshCw,
-  Download,
   ChevronLeft,
   ChevronRight,
   Briefcase,

@@ -1,11 +1,6 @@
-import React, { act, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  FaEye,
-  FaDownload,
   FaCheck,
-  FaFile,
-  FaUser,
-  FaCalendarAlt,
   FaSearch,
 } from "react-icons/fa";
 import Compliances from "./Compliances";
