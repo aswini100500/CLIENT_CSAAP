@@ -341,11 +341,11 @@ const App = () => {
               isAuthenticated ? (
                 <Navigate to="/dashboard" replace />
               ) : (
-                <Login />
+                <Login key="admin" />
               )
             }
           />
-          <Route path="/employee/login" element={<Login />} />
+          <Route path="/employee/login" element={<Login key="employee" />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/employee/*" element={<HRMSEmployeeRoutes />} />
           <Route path="/xyz" element={<XYZRedirect />} />
