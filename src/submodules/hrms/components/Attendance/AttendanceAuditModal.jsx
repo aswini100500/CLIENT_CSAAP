@@ -9,7 +9,7 @@ import {
   TriangleAlert,
   XCircle,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 import useAuth from "../../../../hooks/useAuth";
 import {
@@ -17,7 +17,6 @@ import {
   getAttendanceDateValue,
   parseIndiaDateTime,
 } from "../../utils/attendanceTime";
-import React from "react";
 
 const API_BASE = import.meta.env.VITE_HRMS_BASE_URL;
 

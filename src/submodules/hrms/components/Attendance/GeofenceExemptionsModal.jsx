@@ -1,8 +1,7 @@
 import axios from "axios";
 import { Edit3, Loader2, Plus, ShieldAlert, Trash2, X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import GeofenceExemptionFormModal from "./GeofenceExemptionFormModal";
-import React from "react";
 
 const API_BASE = import.meta.env.VITE_HRMS_BASE_URL;
 

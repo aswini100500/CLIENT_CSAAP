@@ -22,11 +22,7 @@ import axios from "axios";
 import useAuth from "../../../../../../hooks/useAuth";
 
 import ActionIconButton from "./ActionIconButton";
-import {
-  formatStatus,
-  getStatusColor,
-  formatSource,
-} from "./leadUtils";
+import { formatStatus, getStatusColor, formatSource } from "./leadUtils";
 
 const stageTitles = {
   new: {

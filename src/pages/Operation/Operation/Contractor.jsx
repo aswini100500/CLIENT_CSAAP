@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaCheck,
-  FaSearch,
-} from "react-icons/fa";
+import { FaCheck, FaSearch } from "react-icons/fa";
 import Compliances from "./Compliances";
 import ApprovalHistoryContractor from "./ApprovalHistoryContractor";
 import AttachementContractor from "./AttachementContractor";

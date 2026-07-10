@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  FaCar,
-  FaUsers,
-  FaSwimmingPool,
-  FaTree,
-} from "react-icons/fa";
+import { FaCar, FaUsers, FaSwimmingPool, FaTree } from "react-icons/fa";
 
 export const PROJECT_TYPES = {
   PLOTTING: "plotting",

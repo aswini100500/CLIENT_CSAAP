@@ -31,10 +31,7 @@ import {
   INITIAL_TRANSACTION_TYPE,
 } from "../project/shared/initialStates";
 
-import {
-  FACILITIES,
-  COMMERCIAL_TYPES,
-} from "../project/shared/Constants";
+import { FACILITIES, COMMERCIAL_TYPES } from "../project/shared/Constants";
 
 const CommercialProject = ({
   projectName,

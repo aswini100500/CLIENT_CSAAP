@@ -1,9 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  FaProjectDiagram,
-  FaTimes,
-} from "react-icons/fa";
+import { FaProjectDiagram, FaTimes } from "react-icons/fa";
 
 export const ProjectTabs = ({
   currentTab,

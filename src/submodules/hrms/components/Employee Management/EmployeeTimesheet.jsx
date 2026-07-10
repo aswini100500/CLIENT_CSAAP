@@ -17,14 +17,13 @@ import {
   Users,
   XCircle,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useAuth from "../../../../hooks/useAuth";
 import {
   calculateAttendanceDuration,
   getAttendanceDateValue,
   getCurrentIndiaDate,
 } from "../../utils/attendanceTime";
-import React from "react";
 
 const currentIndiaDate = getCurrentIndiaDate();
 const [currentIndiaYear, currentIndiaMonth] = currentIndiaDate

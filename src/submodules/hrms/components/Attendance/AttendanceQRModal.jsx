@@ -13,9 +13,8 @@ import {
   X,
 } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../../../hooks/useAuth";
-import React from "react";
 
 const API_BASE = import.meta.env.VITE_HRMS_BASE_URL;
 

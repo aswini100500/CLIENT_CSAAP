@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Save, X } from "lucide-react";
-import { useState } from "react";
 import { formatINR, getUiPresentDays } from "./payrollUtils";
 
 const normalizeComponentType = (component = {}) => {

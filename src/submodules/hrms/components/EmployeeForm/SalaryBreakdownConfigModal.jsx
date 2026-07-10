@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { Save, X } from "lucide-react";
-import { useMemo, useState } from "react";
 import {
   DEFAULT_SALARY_BREAKDOWN_POLICY,
   normalizeSalaryBreakdownPolicy,

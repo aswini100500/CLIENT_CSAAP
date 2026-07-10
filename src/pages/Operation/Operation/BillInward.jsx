@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import BillInwardHistory from "./BillInwardHistory";
-import {
-  FaCalendarAlt,
-  FaRupeeSign,
-} from "react-icons/fa";
+import { FaCalendarAlt, FaRupeeSign } from "react-icons/fa";
 import operationApi from "../../../api/operation";
 
 const BillInward = () => {

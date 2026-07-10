@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import {
-  Trash2,
-  Calendar,
-} from "lucide-react";
+import { Trash2, Calendar } from "lucide-react";
 import operationApi from "../../../api/operation";
 
 const DailyWorkReport = ({ projectSetup }) => {

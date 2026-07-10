@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaBriefcase,
   FaClipboardCheck,
@@ -11,7 +11,6 @@ import Attendance2 from "./pages/Attendance2";
 import AttendanceRequestsLedger from "./pages/AttendanceRequestsLedger";
 import EmployeeAttendance from "./pages/EmployeeAttendance";
 import EmployeeAttendanceReview from "./pages/EmployeeAttendanceReview";
-import React from "react";
 
 const AttendanceTabs = () => {
   const [activeTab, setActiveTab] = useState("attendance");

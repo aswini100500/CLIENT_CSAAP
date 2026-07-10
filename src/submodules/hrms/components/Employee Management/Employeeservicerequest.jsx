@@ -1,6 +1,5 @@
 import axios from "axios";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const EmployeesRequest = () => {
   const [searchTerm, setSearchTerm] = useState("");

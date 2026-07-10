@@ -5,13 +5,7 @@ import { useCompany } from "../context/CompanyContext";
 import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
-import {
-  HiTruck,
-  HiCheck,
-  HiX,
-  HiPlus,
-  HiTrash,
-} from "react-icons/hi";
+import { HiTruck, HiCheck, HiX, HiPlus, HiTrash } from "react-icons/hi";
 import { Search, UserPlus } from "lucide-react";
 import BulkImportButton from "./BulkImportButton";
 

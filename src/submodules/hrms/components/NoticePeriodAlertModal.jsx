@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  X,
-  RotateCcw,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-} from "lucide-react";
+import { X, RotateCcw, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
 const NoticePeriodAlertModal = ({
   isOpen,

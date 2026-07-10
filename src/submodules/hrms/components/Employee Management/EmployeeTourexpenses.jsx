@@ -15,8 +15,7 @@ import {
   Search,
   User,
 } from "lucide-react";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const TourOfEmployees = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(10);

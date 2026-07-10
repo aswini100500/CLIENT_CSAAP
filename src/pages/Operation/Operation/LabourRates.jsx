@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Plus,
-  Trash2,
-  Download,
-  Edit3,
-  Check,
-} from "lucide-react";
+import { Plus, Trash2, Download, Edit3, Check } from "lucide-react";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";
 import operationApi from "../../../api/operation";

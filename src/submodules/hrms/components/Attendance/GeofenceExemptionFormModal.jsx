@@ -7,8 +7,7 @@ import {
   ShieldAlert,
   X,
 } from "lucide-react";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const API_BASE = import.meta.env.VITE_HRMS_BASE_URL;
 

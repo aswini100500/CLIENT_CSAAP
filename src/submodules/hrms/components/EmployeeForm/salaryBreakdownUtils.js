@@ -1,4 +1,3 @@
-
 export const DEFAULT_SALARY_BREAKDOWN_POLICY = {
   basic_rate: 0.5,
   hra_rate: 0.5,

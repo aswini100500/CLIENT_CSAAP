@@ -5,12 +5,7 @@ import MessageToEmployee from "./Employee Management/MessageToEmployee";
 import ComplaintsManagement from "./ComplaintsManagement";
 import EmployeeServiceReq from "./EmployeeServiceReq";
 import Announcement from "./Announcement";
-import {
-  Mail,
-  AlertTriangle,
-  Settings,
-  Megaphone,
-} from "lucide-react";
+import { Mail, AlertTriangle, Settings, Megaphone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { usePermission } from "../../../hooks/usePermission";

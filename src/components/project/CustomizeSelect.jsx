@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  FaCheckCircle,
-  FaInfoCircle,
-  FaArrowLeft,
-} from "react-icons/fa";
+import { FaCheckCircle, FaInfoCircle, FaArrowLeft } from "react-icons/fa";
 
 const CustomizeSelect = ({
   onSelectType,

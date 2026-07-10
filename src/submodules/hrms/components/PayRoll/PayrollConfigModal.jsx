@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { Save, X } from "lucide-react";
-import { useState } from "react";
 
 const PayrollConfigModal = ({ config, onSave, onCancel }) => {
   const [localConfig, setLocalConfig] = useState({

@@ -2,11 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-import {
-  Download,
-  Edit,
-  Trash,
-} from "lucide-react";
+import { Download, Edit, Trash } from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
 import { usePermission } from "../../../hooks/usePermission";
 

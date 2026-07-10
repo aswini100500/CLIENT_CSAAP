@@ -17,9 +17,8 @@ import {
   X,
   XCircle,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../../../hooks/useAuth";
-import React from "react";
 
 const LeaveManagementofEmployee = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(10);

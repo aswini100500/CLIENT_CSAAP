@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
-import {
-  CreditCard,
-  CheckCircle,
-  XCircle,
-  Crown,
-} from "lucide-react";
+import { CreditCard, CheckCircle, XCircle, Crown } from "lucide-react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
