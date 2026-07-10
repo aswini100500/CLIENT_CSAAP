@@ -53,7 +53,7 @@ const LeaveManagementofEmployee = () => {
 
   const { user } = useAuth();
   const slug = user?.slug;
-  console.log(user);
+
 
   const csaapToken = user.token;
 

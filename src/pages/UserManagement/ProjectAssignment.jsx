@@ -382,7 +382,7 @@ const handleAssign = async (e) => {
           };
         }
         
-        console.log(`Sending ${assignmentMode} assignment payload:`, payload);
+
         assignmentPromises.push(axios.post(assignmentsApiUrl, payload, getAuthHeaders()));
       });
     });
@@ -400,7 +400,7 @@ const handleAssign = async (e) => {
         console.error('Error response data:', result.reason?.response?.data);
         console.error('Error status:', result.reason?.response?.status);
       } else {
-        console.log(`Assignment ${index + 1} successful:`, result.value?.data);
+
       }
     });
 

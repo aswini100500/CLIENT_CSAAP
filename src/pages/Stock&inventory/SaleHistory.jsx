@@ -83,7 +83,7 @@ const SaleHistory = () => {
 
   const handleExportExcel = () => {
 
-    console.log('Exporting to Excel');
+
     
 
 
@@ -99,14 +99,14 @@ const SaleHistory = () => {
   
   const handleExportPDF = () => {
 
-    console.log('Exporting to PDF');
+
     
 
   };
   
   const handleExportGST = () => {
 
-    console.log('Exporting GST Report');
+
   };
 
   const handleViewSale = (sale) => {

@@ -28,7 +28,7 @@ export const UserProvider = ({ children }) => {
         }
       } catch (error) {
 
-        console.log("Not authenticated:", error.response?.data?.message || error.message);
+
         setUser(null);
         setUserId(null);
       } finally {

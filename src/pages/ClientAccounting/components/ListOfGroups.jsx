@@ -71,7 +71,7 @@ const ListOfGroups = () => {
         throw new Error("No backend data");
       }
     } catch (err) {
-      console.log("Backend failed → Using localStorage/demo data");
+
 
 
       const storedGroups = JSON.parse(localStorage.getItem("tallyGroups"));

@@ -147,7 +147,7 @@ export const MainInfoSection = ({
 
 
     useEffect(() => {
-        console.log('ðŸ”¥ MainInfoSection received units:', units, 'Length:', units?.length);
+
         if (selectedUnit) {
             setBroker(selectedUnit.broker_id?.toString() || "");
             setPurchaser(selectedUnit.purchaser || "");
@@ -791,7 +791,7 @@ export const MainInfoSection = ({
                                 {units.length} Units
                             </span>
                         </div>
-                        {console.log('ðŸ”¥ Unit Registry - units array:', units, 'Length:', units?.length, 'isEditMode:', isEditMode)}
+                        {undefined}
                         <div className="bg-white border border-slate-200 rounded-xl p-3 h-125 overflow-y-auto space-y-3">
                             {units.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-slate-400 gap-3">

@@ -330,7 +330,7 @@ const SaleEntry = () => {
         }]
       };
 
-      console.log('Sending sale data:', saleData);
+
 
       const response = await api.post('/api/tenant/sales', saleData);
 
@@ -345,7 +345,7 @@ const SaleEntry = () => {
           progress: undefined,
         });
         
-        console.log('Sale created:', response.data.data);
+
 
 
         setFormData({

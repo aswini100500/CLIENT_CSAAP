@@ -297,7 +297,7 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
         companyId: companyId,
       };
 
-      console.log("Creating project from lead. Payload:", createPayload);
+
       await apiService.createProject(createPayload);
 
       await Swal.fire({

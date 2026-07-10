@@ -37,16 +37,16 @@ const LeaveManagement = () => {
   const { user } = useAuth();
   const slug = user?.slug;
   const emp_id = user?.employeeProfileId;
-  console.log(emp_id);
-  console.log(slug);
-  console.log(user);
+
+
+
 
 
   const fetchLeaves = async () => {
     try {
 
       const balanceRes = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/leaves/getRemainingLeave/${slug}/${emp_id}`);
-      console.log('Balance API Response:', balanceRes.data);
+
       const balanceData = balanceRes.data?.data;
       const source = balanceRes.data?.source;
 
@@ -54,7 +54,7 @@ const LeaveManagement = () => {
 
 
       const requestsRes = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/leaves/${slug}/${emp_id}`);
-      console.log('Requests API Response:', requestsRes.data);
+
       const requestsData = requestsRes.data?.data || [];
 
 
@@ -322,15 +322,15 @@ const LeaveManagement = () => {
         leave_days: leave_days
       };
 
-      console.log("Sending leave data:", leaveData);
-      console.log("URL:", `${import.meta.env.VITE_HRMS_BASE_URL}/api/leaves/${slug}/${user.employee_id || user.company_id}`);
+
+
 
       const res = await axios.post(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/leaves/${slug}/${user.employee_id || user.company_id}`,
         leaveData
       );
 
-      console.log("Response:", res.data);
+
 
       setFormData({
         leaveType: "",

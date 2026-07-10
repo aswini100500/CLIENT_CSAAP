@@ -112,10 +112,7 @@ const PromotionPage = () => {
   const handlePromotionSubmit = (e) => {
     e.preventDefault();
 
-    console.log({
-      employee: selectedEmployee,
-      promotionDetails: promotionForm
-    });
+
     setShowSuccessModal(true);
   };
 

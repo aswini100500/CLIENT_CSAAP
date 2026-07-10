@@ -401,13 +401,13 @@ const HolidaysList = () => {
 
   const token = authToken;
 
-  console.log("FULL USER STATE:", user);
-  console.log("Company ID:", companyId);
-  console.log("Slug:", slug);
+
+
+
 
   useEffect(() => {
     if (!companyId || !slug) {
-      console.log("Waiting for user rehydration...");
+
       return;
     }
 

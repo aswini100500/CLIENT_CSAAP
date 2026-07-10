@@ -2373,7 +2373,7 @@ const PurchaseVoucher = () => {
       const data = await res.json();
       setStates(data.data.states);
     } catch (err) {
-      console.log(err);
+
     }
   };
 
@@ -2395,7 +2395,7 @@ const PurchaseVoucher = () => {
 
       setCountries(formatted);
     } catch (err) {
-      console.log(err);
+
     }
   };
 

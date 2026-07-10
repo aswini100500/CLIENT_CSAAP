@@ -25,11 +25,11 @@ const Operator = () => {
     try {
       setLoading(true);
       const response = await operationApi.getOperators();
-      console.log(response);
+
       
       setOperators(response.data.data);
     } catch (error) {
-      console.log(error);
+
       console.error("Error fetching operators:", error);
     } finally {
       setLoading(false);
@@ -51,7 +51,7 @@ const Operator = () => {
 
     try {
       setLoading(true);
-      console.log(newOperator);
+
       
       await operationApi.createOperator(newOperator);
       setNewOperator({

@@ -18,7 +18,7 @@ export default function LeaveApplicationList() {
         const res = await axios.get(
           `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee`,
         );
-        console.log(res.data);
+
 
 
         const formatted = res.data?.data?.map((emp) => ({

@@ -98,9 +98,9 @@ export default function NoticeLetterPage() {
 const [loading, setLoading] = useState(true);
 
 const { user } = useAuth();
-    console.log("Current user:", user);
+
     const id = user?.id 
-    console.log(id);
+
     const slug=user.slug;
 
 useEffect(() => {

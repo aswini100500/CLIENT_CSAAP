@@ -586,7 +586,7 @@ setVouchers(
 );
 
     } catch (error) {
-      console.log(error);
+
       Swal.fire("Error", "Failed to fetch purchase vouchers.", "error");
     }
     setLoading(false);

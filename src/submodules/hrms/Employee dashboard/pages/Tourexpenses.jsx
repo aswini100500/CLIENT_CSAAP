@@ -530,7 +530,7 @@ const handleSaveTour = async () => {
     const res = await axios.post(`${API_BASE}/api/tours`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
-console.log(res);
+
 
     alert('Tour saved successfully!');
     setShowAddTour(false);

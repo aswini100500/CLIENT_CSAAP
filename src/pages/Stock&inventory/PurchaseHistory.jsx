@@ -177,7 +177,7 @@ const PurchaseHistory = () => {
 
   const handleView = (purchase) => {
 
-    console.log('Viewing purchase:', purchase);
+
     alert(`Viewing purchase: ${purchase.bill_no}\nSupplier: ${purchase.supplier_name}\nAmount: ${formatCurrency(purchase.net_price)}`);
   };
 

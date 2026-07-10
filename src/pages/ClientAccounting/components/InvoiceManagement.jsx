@@ -1326,7 +1326,7 @@ const InvoiceManagement = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/${companyId}`);
-      console.log(response);
+
       
       const vouchersData = response.data;
       setVouchers(vouchersData);
@@ -1366,11 +1366,11 @@ const InvoiceManagement = () => {
 
 
   const fetchVoucherItems = async (voucherId) => {
-    console.log(voucherId);
+
     
     try {
       const response = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/getItems/${voucherId}`);
-      console.log(response);
+
       
       setVoucherItems(prev => ({
         ...prev,

@@ -495,7 +495,7 @@ const MyTask = () => {
         );
       })
       .catch((err) => {
-        console.log("Error fetching mytasks:", err);
+
         showSnackbar("Failed to fetch tasks", "error");
       });
   };
@@ -517,7 +517,7 @@ const MyTask = () => {
 
   useEffect(() => {
     if (!user?.token) {
-      console.log("Token not available yet");
+
       return;
     }
 
@@ -543,19 +543,19 @@ const MyTask = () => {
 
   useEffect(() => {
     if (!helpRequests?.length) {
-      console.log("No help requests to fetch tasks for.");
+
       return;
     }
 
     const taskIds = helpRequests.map((r) => Number(r.taskId));
-    console.log("Fetching tasks by ids for help requests. Task IDs:", taskIds);
+
 
     axios
       .get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/tasks/by-ids`, {
         params: { ids: taskIds.join(",") },
       })
       .then((res) => {
-        console.log("Raw by-ids response:", res.data);
+
         const normalizedNewTasks = res.data
           .map((task) =>
             normalizeTask(
@@ -566,7 +566,7 @@ const MyTask = () => {
             ),
           )
           .filter((task) => task.canViewInMyTasks);
-        console.log("Normalized by-ids tasks:", normalizedNewTasks);
+
 
         setTasks((prev) => {
           const existingIds = prev.map((t) => t.id);
@@ -584,7 +584,7 @@ const MyTask = () => {
         });
       })
       .catch((err) => {
-        console.log("Error fetching by-ids:", err);
+
       });
   }, [helpRequests, emp_id]);
 
@@ -635,7 +635,7 @@ const MyTask = () => {
         },
       );
 
-      console.log("Employees fetched:", response.data);
+
       const employeesData = response.data.data || [];
       setEmployees(employeesData);
 
@@ -651,7 +651,7 @@ const MyTask = () => {
       return;
     }
     try {
-      console.log("Completing task:", taskId);
+
 
       const taskToComplete = tasks.find((t) => t.id === taskId);
       const updatedSubtasks = (taskToComplete?.subtasks || []).map((st) => ({
@@ -689,7 +689,7 @@ const MyTask = () => {
         }));
       }
 
-      console.log("Task marked as completed");
+
     } catch (error) {
       console.error("Error completing task:", error);
     }

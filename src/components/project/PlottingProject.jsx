@@ -4045,11 +4045,11 @@ const PlottingProject = ({
 
 
   useEffect(() => {
-    console.log("PlottingProject: selectedProject received:", selectedProject);
-    console.log("PlottingProject: initialParsedPlotsData received:", initialParsedPlotsData);
-    console.log("PlottingProject: initialParsedRevenuePlotsData received:", initialParsedRevenuePlotsData);
-    console.log("PlottingProject: initialRevenuePlots received:", initialRevenuePlots);
-    console.log("PlottingProject: initialLandArea received:", initialLandArea);
+
+
+
+
+
 
     if (selectedProject && editingProjectId) {
       const projectData = selectedProject;
@@ -4066,7 +4066,7 @@ const PlottingProject = ({
 
           if (parsedPlots.length > 0) {
             setPlots(parsedPlots);
-            console.log("Set plots from database plots_data:", parsedPlots);
+
           }
         } catch (error) {
           console.error("Error parsing plots_data:", error);
@@ -4085,7 +4085,7 @@ const PlottingProject = ({
 
           if (parsedRevenuePlots.length > 0) {
             setPlotsData(parsedRevenuePlots);
-            console.log("Set revenue plots from database revenue_plots_data:", parsedRevenuePlots);
+
           }
         } catch (error) {
           console.error("Error parsing revenue_plots_data:", error);
@@ -4095,7 +4095,7 @@ const PlottingProject = ({
 
       if (projectData.revenue_plots && revenuePlots === 0) {
         setRevenuePlots(projectData.revenue_plots);
-        console.log("Set revenue plots count from database:", projectData.revenue_plots);
+
       }
 
 
@@ -4104,7 +4104,7 @@ const PlottingProject = ({
           ...prev,
           landArea: projectData.land_area
         }));
-        console.log("Set land area from database:", projectData.land_area);
+
       }
 
 
@@ -4133,12 +4133,12 @@ const PlottingProject = ({
 
     if (initialParsedPlotsData.length > 0 && plots.length === 0) {
       setPlots(initialParsedPlotsData);
-      console.log("Set plots from initialParsedPlotsData:", initialParsedPlotsData);
+
     }
 
     if (initialParsedRevenuePlotsData.length > 0 && plotsData.length === 0) {
       setPlotsData(initialParsedRevenuePlotsData);
-      console.log("Set revenue plots from initialParsedRevenuePlotsData:", initialParsedRevenuePlotsData);
+
     }
 
   }, [selectedProject, editingProjectId, editingPlotId, initialParsedPlotsData, initialParsedRevenuePlotsData, initialRevenuePlots, initialLandArea]);
@@ -4323,7 +4323,7 @@ const PlottingProject = ({
         constructor: constructor || ""
       };
 
-      console.log("🚀 Sending plotting project:", projectData);
+
 
       if (isSubtype) {
 

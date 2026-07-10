@@ -48,7 +48,7 @@ const ExperienceCertificateManagement = () => {
   const [certificateData, setCertificateData] = useState([]);
 
   const { user } = useAuth();
-  console.log("Current user in ProjectAssignment:", user);
+
   const company_id = user.id;
   const todayLocal = new Date().toLocaleDateString("en-CA");
 
@@ -58,12 +58,12 @@ const ExperienceCertificateManagement = () => {
         const res = await axios.get(
           `${import.meta.env.VITE_HRMS_BASE_URL}/api/experience-certificates/eligible/employees/${company_id}`,
         );
-        console.log(res);
+
 
         if (res.data?.data) {
           setEligibleEmployees(res.data.data);
         }
-        console.log(eligibleEmployees);
+
       } catch (err) {
         console.error("Error fetching eligible employees:", err);
         Swal.fire("Error", "Failed to fetch eligible employees", "error");

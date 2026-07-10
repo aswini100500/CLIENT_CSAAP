@@ -428,7 +428,7 @@ const JournalVoucher = () => {
         const res = await axios.get(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`
         );
-        console.log("Ledgers response:", res.data);
+
         setLedgers(res.data.data || res.data || []);
 
 
@@ -585,7 +585,7 @@ const JournalVoucher = () => {
             payload
           );
         } catch (error) {
-          console.log("Voucher table error:", error);
+
         }
       }
 

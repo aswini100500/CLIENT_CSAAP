@@ -69,8 +69,8 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
   };
 
 
-  console.log("ProjectViewForm render - project id:", project?.id);
-  console.log(project);
+
+
 
 
 
@@ -414,16 +414,14 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       }
 
       setRevenuePlots(plotsArray || []);
-      console.log(
-        `Fetched ${plotsArray?.length || 0} revenue plots from local project controller for project ${project.id}`
-      );
+
     } catch (error) {
       console.error("Error fetching revenue plots from local controller:", error);
 
 
       if (parsedLocalPlots && parsedLocalPlots.length > 0) {
         setRevenuePlots(parsedLocalPlots);
-        console.log("Using fallback revenue plots data from project prop after API error");
+
       } else {
         setRevenuePlotsError(error.message || "Failed to fetch revenue plots");
       }

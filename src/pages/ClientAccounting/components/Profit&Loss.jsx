@@ -35,7 +35,7 @@ const ProfitLoss = () => {
         }
       );
 
-      console.log(res);
+
 
       const rawIncome = res.data.income || [];
       const rawExpenses = res.data.expenses || [];
@@ -59,7 +59,7 @@ const ProfitLoss = () => {
         }))
       );
     } catch (err) {
-      console.log(err);
+
       alert("Failed to load data");
     }
 

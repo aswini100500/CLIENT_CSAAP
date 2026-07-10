@@ -13,7 +13,7 @@ const MessageToEmployee = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
 
   const { user, token: authToken } = useAuth();
-  console.log(user);
+
 
   const token = authToken || user?.token;
 
@@ -69,7 +69,7 @@ const MessageToEmployee = () => {
             },
           },
         );
-        console.log(res);
+
 
         if (res.data.success && Array.isArray(res.data.data)) {
           const grouped = res.data.data.reduce((acc, emp) => {
@@ -233,7 +233,7 @@ const MessageToEmployee = () => {
 
   const handleSave = async () => {
     const company_id = user?.company_id || user?.id;
-    console.log("Using company_id:", company_id);
+
 
     if (!company_id) {
       alert("Company ID is missing. Please log in again.");

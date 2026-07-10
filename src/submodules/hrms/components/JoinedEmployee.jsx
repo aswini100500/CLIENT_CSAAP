@@ -101,16 +101,16 @@ const JobJoinedList = ({ basePath }) => {
   const entriesPerPage = 10;
 
   const { user, token } = useAuth();
-  console.log(user);
+
 
   const slug = user.slug;
-  console.log(slug);
+
   const id = user.id;
-  console.log(id);
+
   const company_id = user.company_id;
   const companyScopeId = user.company_id;
   const role = user.role;
-  console.log(role);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -203,7 +203,7 @@ const JobJoinedList = ({ basePath }) => {
         },
       );
 
-      console.log("FILTERED API RESPONSE:", res);
+
 
       if (res.data) {
         let employeeList = [];
@@ -531,7 +531,7 @@ const JobJoinedList = ({ basePath }) => {
                 headers: { Authorization: `Bearer ${token}` },
               },
             );
-            console.log("Deleted from Cloudsat production system");
+
           } catch (cloudErr) {
             console.error("Failed to delete from Cloudsat:", cloudErr);
           }
@@ -595,7 +595,7 @@ const JobJoinedList = ({ basePath }) => {
                 headers: { Authorization: `Bearer ${token}` },
               },
             );
-            console.log("Deleted from Cloudsat production system");
+
           } catch (cloudErr) {
             console.error("Failed to delete from Cloudsat:", cloudErr);
           }

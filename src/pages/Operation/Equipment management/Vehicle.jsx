@@ -28,7 +28,7 @@ const Vehicle = () => {
       setLoading(true);
       const response = await operationApi.getVehicles();
       setVehicles(response.data.data || []);
-      console.log(response);
+
       
     } catch (error) {
       console.error("Error fetching vehicles:", error);

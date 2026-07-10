@@ -439,7 +439,7 @@ const ApartmentProject = ({
         broker,
         constructor,
       };
-      console.log(projectData);
+
 
       if (isSubtype) {
 

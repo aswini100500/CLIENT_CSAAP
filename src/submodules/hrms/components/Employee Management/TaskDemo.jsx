@@ -169,7 +169,7 @@ const Task = () => {
   const [teamMembers, setTeamMembers] = useState([]);
 
   const { user, token: authToken } = useAuth();
-  console.log(user);
+
 
   const isSuperAdmin =
     user?.role?.toLowerCase() === "superadmin" ||
@@ -177,7 +177,7 @@ const Task = () => {
     !user?.employee_id;
   const API = `${import.meta.env.VITE_HRMS_BASE_URL}`;
   const companyId = user?.company_id;
-  console.log(companyId);
+
 
   const slug = user?.slug;
   const csaapToken = authToken;

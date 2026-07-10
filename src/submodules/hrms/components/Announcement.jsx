@@ -145,7 +145,7 @@ function Announcement() {
           },
         },
       );
-console.log("Employees fetched:", res.data);
+
       if (res.data.success) {
         const data = res.data.data || [];
         setEmployees(data);
@@ -222,7 +222,7 @@ console.log("Employees fetched:", res.data);
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/announcements?company_id=${companyId}&slug=${slug}&status=${status}`,
       );
-      console.log(res);
+
 
       if (res.data) {
         setAnnouncementsList(Array.isArray(res.data) ? res.data : []);

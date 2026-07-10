@@ -298,7 +298,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
 
   const fetchNotifications = async () => {
     if (!employeeProfileId) {
-      console.log("No employeeProfileId for notifications");
+
       return;
     }
 
@@ -516,10 +516,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              console.log(
-                "Bell clicked, opening notifications:",
-                !isNotificationOpen,
-              );
+
               setIsNotificationOpen(!isNotificationOpen);
 
               if (!isNotificationOpen && notifications.length > 0) {

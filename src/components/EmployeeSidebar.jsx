@@ -163,8 +163,8 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
   const companyLogoText = companyName.charAt(0).toUpperCase();
 
 
-  console.log("Company Data:", companyData);
-  console.log("Company Logo URL:", companyLogo);
+
+
 
   const toggleMenu = (id) => {
     setExpandedMenus((prev) => ({
@@ -824,7 +824,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                   console.error('Logo failed to load in expanded mode');
                   setLogoError(true);
                 }}
-                onLoad={() => console.log('Logo loaded successfully in expanded mode')}
+                onLoad={() => {}}
               />
             ) : (
 

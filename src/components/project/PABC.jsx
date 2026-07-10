@@ -233,7 +233,7 @@ const PABC = () => {
 
       let serverProjects = [];
       try {
-        console.log("🚀 Fetching all projects from API...");
+
 
 
         const fetchResults = await Promise.allSettled([
@@ -256,7 +256,7 @@ const PABC = () => {
 
         const processResult = (result, type, label) => {
           if (result.status === "fulfilled" && Array.isArray(result.value)) {
-            console.log(`✅ Fetched ${result.value.length} ${label}`);
+
             return result.value.map((p) => ({ ...p, source: "server", type }));
           } else {
             if (result.status === "rejected") {
@@ -284,9 +284,7 @@ const PABC = () => {
           ),
         ];
 
-        console.log(
-          `📊 Total server projects fetched: ${serverProjects.length}`,
-        );
+
       } catch (apiError) {
         console.error("Critical error in loadAllProjects API fetch:", apiError);
       }
@@ -420,16 +418,13 @@ const PABC = () => {
 
   const handleSaveProject = useCallback(
     async (projectData) => {
-      console.log("🔥 PABC handleSaveProject received:", projectData);
-      console.log("🔥 All Units:");
+
+
 
       projectData?.blocks?.forEach((block, blockIndex) => {
         block.floors?.forEach((floor, floorIndex) => {
           floor.units?.forEach((unit, unitIndex) => {
-            console.log(
-              `Block ${blockIndex} → Floor ${floorIndex} → Unit ${unitIndex}:`,
-              unit,
-            );
+
           });
         });
       });
@@ -437,7 +432,7 @@ const PABC = () => {
       {
 
       }
-      console.log("🔥 projectData.plots_data:", projectData.plots_data);
+
 
 
       if (projectType === PROJECT_TYPES.CUSTOM) {
@@ -706,7 +701,7 @@ const PABC = () => {
         }
 
 
-        console.log("🔄 Save successful. Fetching latest projects...");
+
         loadAllProjects();
       } catch (error) {
         console.error("Error saving project:", error);
@@ -779,9 +774,7 @@ const PABC = () => {
         try {
           setProjects((prev) => {
             const updated = prev.filter((p) => String(p.id) !== String(id));
-            console.log(
-              `🗑️ Local state updated. Projects: ${prev.length} -> ${updated.length}`,
-            );
+
             return updated;
           });
 
@@ -816,9 +809,7 @@ const PABC = () => {
 
           setProjects((prev) => {
             const updated = prev.filter((p) => String(p.id) !== String(id));
-            console.log(
-              `🗑️ Local state updated (retry). Projects: ${prev.length} -> ${updated.length}`,
-            );
+
             return updated;
           });
         }
@@ -899,9 +890,7 @@ const PABC = () => {
         const updated = prev.filter(
           (p) => !success.some((sId) => String(sId) === String(p.id)),
         );
-        console.log(
-          `🗑️ Bulk delete state updated. Projects: ${prev.length} -> ${updated.length}`,
-        );
+
         return updated;
       });
 
@@ -1001,12 +990,12 @@ const PABC = () => {
       }
     }
 
-    console.log("Editing project data:", projectToEdit);
-    console.log("Database fields received:");
-    console.log("- revenue_plots:", projectToEdit.revenue_plots);
-    console.log("- revenue_plots_data:", projectToEdit.revenue_plots_data);
-    console.log("- plots_data:", projectToEdit.plots_data);
-    console.log("- land_area:", projectToEdit.land_area);
+
+
+
+
+
+
 
     let updatedProject = { ...projectToEdit };
 
@@ -1019,7 +1008,7 @@ const PABC = () => {
             ? JSON.parse(updatedProject.configuration)
             : updatedProject.configuration;
         updatedProject = { ...updatedProject, ...config };
-        console.log("✅ Expanded custom project configuration:", config);
+
       } catch (e) {
         console.error("Failed to parse project configuration:", e);
       }

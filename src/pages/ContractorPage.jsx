@@ -278,9 +278,9 @@ const handleEditSubmit = async (e) => {
     }
 
 
-    console.log('Updating contractor with ID:', editingContractor.id);
+
     for (let pair of formData.entries()) {
-      console.log(pair[0] + ': ', pair[1]);
+
     }
 
     const response = await api.put(`/api/tenant/contractors/${editingContractor.id}`, formData, {

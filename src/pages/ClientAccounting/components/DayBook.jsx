@@ -1196,7 +1196,7 @@ const DayBook = () => {
         setEntries(todayEntries);
 
       } catch (err) {
-        console.log("DayBook Error:", err);
+
       }
     };
 

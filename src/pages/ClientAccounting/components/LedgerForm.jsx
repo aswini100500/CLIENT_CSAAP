@@ -90,7 +90,7 @@ const LedgerForm = () => {
           throw new Error("No backend data");
         }
       } catch (err) {
-        console.log("Backend failed → Using fallback/localStorage");
+
 
         const stored = JSON.parse(localStorage.getItem("tallyGroups"));
 
@@ -171,7 +171,7 @@ const LedgerForm = () => {
       }));
     }
   }, [id]);
-  console.log(groups);
+
 
 
   const handleSubmit = async () => {
@@ -204,7 +204,7 @@ const LedgerForm = () => {
         navigate("/accounting/client/listOfLedgers");
       } else {
 
-        console.log("Creating ledger with payload:", payload);
+
         await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`, payload);
         Swal.fire("Success!", "Ledger created successfully!", "success");
 

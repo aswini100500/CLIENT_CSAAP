@@ -106,7 +106,7 @@ const CreatePaymentSlabModal = ({
           }
         } catch (err) {
 
-          console.log("No existing payment plan found for lead", lead.id, err);
+
         }
 
         if (active) {

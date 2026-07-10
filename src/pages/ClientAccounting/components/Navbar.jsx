@@ -65,16 +65,16 @@ const Navbar = () => {
       const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${userId}`);
 
 
-      console.log('API Response:', res);
+
 
 
       const companies = res.data;
-      console.log('Companies Data:', companies);
+
 
 
       setCompanies(companies);
     } catch (err) {
-      console.log(err);
+
       console.error('Error fetching companies:', err);
     }
   };
@@ -85,7 +85,7 @@ const Navbar = () => {
 
 
   useEffect(() => {
-    console.log(selectedCompany);
+
 
     if (selectedCompanyId) {
       sessionStorage.setItem("selectedCompanyId", selectedCompanyId.toString());
@@ -159,7 +159,7 @@ const Navbar = () => {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
-  console.log(companies);
+
 
 
   const handleCompanySelect = (company) => {

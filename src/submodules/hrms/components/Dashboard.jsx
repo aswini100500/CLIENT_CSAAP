@@ -30,11 +30,11 @@ import NoticePeriodAlertModal from "./NoticePeriodAlertModal";
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  console.log(user);
+
   const slug = user?.slug;
-  console.log(slug);
+
   const company_id = user?.id;
-  console.log(company_id);
+
 
   const [stats, setStats] = useState({
     jobsListed: 0,
@@ -162,7 +162,7 @@ const Dashboard = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/ap/${company_id}`,
       );
-      console.log(res);
+
 
       const totalApplicants = res.data?.data?.length || 0;
 

@@ -310,7 +310,7 @@ const Tendering = () => {
     try {
       const res = await operationApi.getTenderWorkOrders();
 
-      console.log(res);
+
       
       const normalizedWorkOrders = (res.data.data || []).map(workOrder => ({
         ...workOrder,
@@ -334,7 +334,7 @@ const Tendering = () => {
     try {
       setLoading(true);
       const response = await operationApi.getTenders();
-      console.log("Tenders response:", response.data);
+
 
       const normalizedTenders = response.data.data.map(tender => ({
         ...tender,
@@ -584,7 +584,7 @@ const Tendering = () => {
         text: workOrderContent,
         url: window.location.href,
       })
-        .catch((error) => console.log('Error sharing:', error));
+        .catch((error) => {});
     } else {
 
       navigator.clipboard.writeText(workOrderContent)

@@ -46,7 +46,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+
     alert("Candidate details updated successfully!");
   };
 

@@ -892,7 +892,7 @@ const handlePrint = () => {
   const fetchCreditNotes = async () => {
     try {
       const res = await axios.get(`${API}/getAllCreditNotes/${companyId}`);
-      console.log(res);
+
 
       setCreditNotes(res.data.data || []);
     } catch (error) {

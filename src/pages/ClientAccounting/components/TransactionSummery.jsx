@@ -262,7 +262,7 @@ const TransactionSummery = () => {
 
         setLoading(false);
       } catch (err) {
-        console.log("Transaction Summary Error:", err);
+
         setLoading(false);
       }
     };
@@ -270,7 +270,7 @@ const TransactionSummery = () => {
     fetchData();
   }, [companyId]);
 
-  console.log(entries);
+
   
   if (loading) {
     return (

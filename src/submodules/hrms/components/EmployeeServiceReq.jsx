@@ -42,9 +42,9 @@ const EmployeeServiceReq = () => {
   const company_id = user?.company_id || user?.id;
 
 
-  console.log("Admin User:", user);
-  console.log("Slug:", slug);
-  console.log("Company ID:", company_id);
+
+
+
 
 
   const showSnackbar = (message, type = "success") => {
@@ -100,15 +100,10 @@ const EmployeeServiceReq = () => {
       );
 
       if (response.data.success) {
-        console.log("API Response Data:", response.data.data);
+
 
         response.data.data.forEach((req, index) => {
-          console.log(`Request ${index + 1}:`, {
-            id: req.id,
-            has_reply: !!req.reply_details,
-            reply_details: req.reply_details,
-            status: req.status
-          });
+
         });
         
         setRequests(response.data.data);
@@ -214,11 +209,11 @@ const EmployeeServiceReq = () => {
       return;
     }
     try {
-      console.log("=== ADMIN UPDATE DEBUG ===");
-      console.log("Request ID:", id);
-      console.log("Admin Slug:", slug);
-      console.log("New Status:", newStatus);
-      console.log("Reply Text:", reply);
+
+
+
+
+
       
       const payload = {
         slug,
@@ -226,7 +221,7 @@ const EmployeeServiceReq = () => {
         reply_details: reply || "Updated by admin",
       };
 
-      console.log("Sending payload:", payload);
+
 
       const response = await axios.put(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/update-status/${id}`,
@@ -234,7 +229,7 @@ const EmployeeServiceReq = () => {
         { headers: { Authorization: `Bearer ${token}` } },
       );
 
-      console.log("Update response:", response.data);
+
 
       if (response.data.success) {
         await fetchAllRequests();

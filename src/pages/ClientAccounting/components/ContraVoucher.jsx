@@ -894,7 +894,7 @@ const ContraVoucher = () => {
       });
 
     } catch (err) {
-      console.log("Error saving:", err);
+
 
       if (err.response && err.response.status === 409) {
         Swal.fire("Warning", "Voucher Number Already Exists!", "warning");
@@ -1054,10 +1054,7 @@ const ContraVoucher = () => {
 
               } catch (err) {
 
-                console.log(
-                  "Bank create failed",
-                  err
-                );
+
               }
             }
           };
@@ -1175,7 +1172,7 @@ const ContraVoucher = () => {
 
     } catch (error) {
 
-      console.log(error);
+
 
       Swal.fire(
         "Error",

@@ -32,7 +32,7 @@ const [employees, setEmployees] = useState([]);
 const [error, setError] = useState(null);
   const { user } = useAuth();
   const { has } = usePermission();
-  console.log("Current user:", user);
+
   useEffect(() => {
   const fetchAllData = async () => {
     try {

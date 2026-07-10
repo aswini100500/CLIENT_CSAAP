@@ -33,10 +33,10 @@ const MyRequest = () => {
   const slug = user?.slug;
 
 
-  console.log("Redux User:", user);
-  console.log("Employee ID:", employeeId);
-  console.log("Slug:", slug);
-  console.log("Company ID:", company_id);
+
+
+
+
 
   const [formData, setFormData] = useState({
     request_to: '',
@@ -90,7 +90,7 @@ const MyRequest = () => {
 
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/employee-search?employeeId=${employeeId}&company_id=${company_id}&slug=${slug}`,
       );
-      console.log("Employee API Response:", response.data.data);
+
       if (response.data.success) {
         setRequests(response.data.data);
       }

@@ -167,7 +167,7 @@ const PlansPage = () => {
     );
 
 
-    console.log('Payment successful for plan:', plan, 'Response:', response);
+
   };
 
 

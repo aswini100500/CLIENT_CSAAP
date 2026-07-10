@@ -1489,7 +1489,7 @@ const ChequeRegister = () => {
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/getAllcheque/${companyId}`
       );
       
-      console.log('Fetched cheques:', response.data);
+
       
       if (response.data.success) {
 
@@ -1501,7 +1501,7 @@ const ChequeRegister = () => {
 
           bankName: selectedAccount?.bankName || 'Unknown Bank'
         }));
-        console.log('Transformed cheques:', transformedCheques);
+
         setCheques(transformedCheques);
       } else {
         Swal.fire('Error', response.data.message || 'Failed to fetch cheques', 'error');
@@ -1529,7 +1529,7 @@ const ChequeRegister = () => {
       outOfPeriod: accountCheques.filter(c => c.status === 'out_of_period').length
     };
     
-    console.log('Updated stats:', newStats);
+
     setStats(newStats);
   };
 
@@ -1630,7 +1630,7 @@ const ChequeRegister = () => {
         amount: chequeForm.amount || "0.00"
       };
 
-      console.log('Saving cheque data:', chequeData);
+
 
       if (editingChequeId) {
 
@@ -1639,7 +1639,7 @@ const ChequeRegister = () => {
           chequeData
         );
 
-        console.log('Update response:', response.data);
+
 
         if (response.data.success) {
           Swal.fire('Success', 'Cheque updated successfully!', 'success');
@@ -1654,7 +1654,7 @@ const ChequeRegister = () => {
           chequeData
         );
 
-        console.log('Add response:', response.data);
+
 
         if (response.data.success) {
           Swal.fire('Success', 'Cheque added successfully!', 'success');
@@ -1673,7 +1673,7 @@ const ChequeRegister = () => {
   };
 
   const handleDeleteCheque = async (chequeId) => {
-    console.log(chequeId);
+
     
     const result = await Swal.fire({
       title: 'Are you sure?',
@@ -1728,7 +1728,7 @@ const ChequeRegister = () => {
           type: ''
         });
       }
-console.log(chequesToAdd);
+
 
 
       let successCount = 0;

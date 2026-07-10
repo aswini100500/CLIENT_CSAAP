@@ -28,11 +28,11 @@ const EquipmentManage = () => {
     try {
       setLoading(true);
       const response = await operationApi.getEquipments();
-      console.log(response);
+
 
       setEquipments(response.data.data);
     } catch (error) {
-      console.log("error :", error);
+
       console.error("Error fetching equipments:", error);
     } finally {
       setLoading(false);
@@ -52,7 +52,7 @@ const EquipmentManage = () => {
       alert("Please fill in all fields before adding an equipment.");
       return;
     }
-    console.log(newEquipment);
+
 
     try {
       setLoading(true);
@@ -75,7 +75,7 @@ const EquipmentManage = () => {
       });
       fetchEquipments();
     } catch (error) {
-      console.log("error :", error);
+
 
       console.error("Error adding equipment:", error);
     } finally {

@@ -9,7 +9,7 @@ const SuggestionOfEmployee = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const { user } = useAuth();
-  console.log("user company_id :", user);
+
 
   const [suggestions, setSuggestions] = useState([]);
 

@@ -35,7 +35,7 @@ const FormsApplied = ({ basePath = "/superadmin/hrms" }) => {
   const fetchApplicants = async () => {
     try {
       const res = await axios.get(`${API_URL}/ap/${id}`);
-      console.log("📦 API response:", res.data);
+
       setApplicants(res.data.data);
       setFilteredApplicants(res.data.data);
     } catch (err) {

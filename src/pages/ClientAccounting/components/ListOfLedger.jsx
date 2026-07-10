@@ -282,7 +282,7 @@ const ListOfLedger = () => {
         credit: item.credit || 0,
       }));
 
-      console.log("Fetched Ledgers from API:", formatted);
+
 
       setLedgers(formatted);
     } catch (err) {
@@ -333,11 +333,11 @@ const ListOfLedger = () => {
       const res = await axios.get(
         `${API_BASE}/getUpdateHistory/${companyId}`
       );
-      console.log(res);
+
 
       setHistory(res.data.rows || []);
     } catch (err) {
-      console.log("Error fetching history: ", err);
+
       setHistory([]);
     }
   };

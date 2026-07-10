@@ -65,11 +65,11 @@ const Employeedetailsattendance = () => {
   };
 
   const handleFileChange = (e, type) => {
-    console.log("File uploaded for:", type, e.target.files[0]);
+
   };
 
   const handleVerifyToken = () => {
-    console.log("Verifying token:", formData.telegramToken);
+
     setFormData({ ...formData, chatID: "123456789" });
   };
 

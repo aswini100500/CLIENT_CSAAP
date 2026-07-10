@@ -213,15 +213,13 @@ const BookingCancellations = () => {
 
 
       if (isBooked) {
-        console.log(
-          `Unit/Item ${unitId} is booked. Releasing and toggling booking status...`,
-        );
+
         await axios.put(
           `${import.meta.env.VITE_CSAAP_URL}/api/tenant/type/${projectType}/${projectId}/items/${unitId}/toggle-booking-status`,
           {},
           { headers },
         );
-        console.log(`Booking status successfully released for unit ${unitId}.`);
+
       }
     } catch (err) {
       console.error(

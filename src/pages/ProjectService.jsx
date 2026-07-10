@@ -4,7 +4,7 @@ import { getAuthToken } from '../store/authSession';
 
 
 const API_URL = `${import.meta.env.VITE_CRM_BASE_URL}/api/tenant`;
-console.log('API URL:', API_URL);
+
 
 
 const axiosInstance = axios.create({

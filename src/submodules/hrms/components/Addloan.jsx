@@ -31,7 +31,7 @@ const AddNewLoan = () => {
   };
 
   const handleSave = () => {
-    console.log("Loan Data:", formData);
+
     alert("Loan saved successfully!");
   };
 

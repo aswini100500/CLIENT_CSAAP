@@ -59,7 +59,7 @@ const MonthlyWorkReport = () => {
     nextMonthPlan: ''
   });
   const { user, token, companyId } = useAuth();
-  console.log(user);
+
 
   const slug = user?.slug;
   const employeeId = user?.employeeProfileId || user?.id;

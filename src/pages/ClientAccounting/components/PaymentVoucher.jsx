@@ -1521,10 +1521,7 @@ const PaymentVoucher = () => {
 
           } catch (err) {
 
-            console.log(
-              "Bank create failed",
-              err
-            );
+
           }
         }
 
@@ -1646,10 +1643,7 @@ const PaymentVoucher = () => {
 
           } catch (err) {
 
-            console.log(
-              "Ledger auto create failed",
-              err
-            );
+
           }
         }
 
@@ -1751,7 +1745,7 @@ const PaymentVoucher = () => {
 
     } catch (err) {
 
-      console.log(err);
+
 
       Swal.fire(
         "Error",

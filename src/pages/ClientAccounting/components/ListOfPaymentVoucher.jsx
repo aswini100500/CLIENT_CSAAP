@@ -196,7 +196,7 @@ const ListOfPaymentVoucher = () => {
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/all/${companyId}`
       );
 
-      console.log(res);
+
       setVouchers(res.data || []);
     } catch (error) {
       Swal.fire("Error", "Failed to fetch vouchers.", "error");

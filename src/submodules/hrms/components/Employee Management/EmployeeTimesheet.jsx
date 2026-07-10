@@ -124,7 +124,7 @@ const getStatusMeta = (status) => {
 
 const EmployeeTimesheet = () => {
   const { user } = useAuth();
-  console.log("EmployeeTimesheet mounted, current user:", user);
+
   const slug = user.slug;
 
   const [records, setRecords] = useState([]);

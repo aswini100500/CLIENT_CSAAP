@@ -19,10 +19,10 @@ const MyMessage = () => {
     setError(null);
     
     try {
-      console.log("User object:", user);
-      console.log("Employee ID:", user?.employee_id);
-      console.log("Company ID:", companyId);
-      console.log("Slug:", slug);
+
+
+
+
 
 
       if (!user?.employee_id) {
@@ -53,12 +53,12 @@ const MyMessage = () => {
         slug: slug
       };
       
-      console.log("API URL:", apiUrl);
-      console.log("Request params:", params);
+
+
 
       const res = await axios.get(apiUrl, { params });
-      console.log("Full API Response:", res);
-      console.log("Response data:", res.data);
+
+
 
 
       let messagesData = [];
@@ -73,7 +73,7 @@ const MyMessage = () => {
         messagesData = [];
       }
 
-      console.log("Extracted messages:", messagesData);
+
       setMessages(messagesData);
     } catch (err) {
       console.error("Error fetching messages:", err);
@@ -96,11 +96,7 @@ const MyMessage = () => {
     if (user?.employee_id && companyId && slug) {
       fetchMessages();
     } else {
-      console.log("Missing required data:", {
-        employee_id: user?.employee_id,
-        company_id: companyId,
-        slug: slug
-      });
+
     }
   }, [user?.employee_id, companyId, slug]);
 

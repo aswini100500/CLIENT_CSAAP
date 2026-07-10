@@ -48,12 +48,12 @@ const OfferLetterManagement = () => {
   const entriesPerPage = 5;
   const { user, token } = useAuth();
   const { has } = usePermission();
-  console.log("Current user:", user);
+
   const id = user.company_id
-  console.log(id);
+
   const company_id = user.company_id;
   const role = user.role;
-  console.log(role);
+
 
   const csaapToken = user.csaapToken;
 
@@ -120,13 +120,13 @@ const OfferLetterManagement = () => {
     setSelectedOffer(offer);
     setOfferLetterLoading(true);
     setShowViewModal(true);
-    console.log(offer);
+
 
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getOfferLetter/${offer.selected_id}`
       );
-      console.log(res);
+
 
       setOfferLetterData(res.data.data);
     } catch {
@@ -424,8 +424,8 @@ const OfferLetterManagement = () => {
 
     } catch (error) {
       console.error("LOCAL API FULL ERROR:", error.response);
-      console.log("MESSAGE:", error.response?.data?.message);
-      console.log("DATA:", error.response?.data);
+
+
 
       setToast({
         message: error.response?.data?.message || 'Failed to create employee',

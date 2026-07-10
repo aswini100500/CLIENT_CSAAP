@@ -272,7 +272,7 @@ const StockEntry = () => {
         purchase_amount: parseFloat(formData.purchase_amount) || 0
       };
 
-      console.log('Submitting stock entry data:', stockEntryData);
+
 
 
       const response = await api.post('/api/tenant/stock/entry', stockEntryData);
@@ -395,7 +395,7 @@ const StockEntry = () => {
   const handleTransferSubmit = (e) => {
     e.preventDefault();
 
-    console.log('Transfer submitted:', transferForm);
+
     showNotification('success', 'Success!', 'Stock transfer request submitted successfully!');
     setTransferForm({
       fromStore: '',

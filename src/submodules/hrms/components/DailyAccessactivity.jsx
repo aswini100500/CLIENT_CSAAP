@@ -90,7 +90,7 @@ const DailyAccessActivity = () => {
 
   const exportToExcel = () => {
     alert("Exporting MIS Punch data to Excel...");
-    console.log("Exporting reports:", filteredReports);
+
   };
 
   const closePage = () => {

@@ -593,9 +593,9 @@ const SelectedCandidate = () => {
   const [error, setError] = useState(null);
 
   const { user } = useAuth();
-    console.log("Current user:", user);
+
     const id = user.company_id
-    console.log(id);
+
     
     
 
@@ -605,8 +605,8 @@ const SelectedCandidate = () => {
 
        const response = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getSelectedCandidatesByCompany/${id}`);
 
-       console.log(response);
-       console.log("hii");
+
+
        
       const data = Array.isArray(response.data.data)
         ? response.data.data.map((c) => ({
@@ -647,7 +647,7 @@ const SelectedCandidate = () => {
 
 
   const handleSendOffer = async (candidate) => {
-    console.log(candidate);
+
     
     const confirm = await Swal.fire({
       title: "Send Offer?",
@@ -665,7 +665,7 @@ const SelectedCandidate = () => {
   { status: "offer_sent" }
 );
 
-console.log(confirm);
+
 
       Swal.fire("Offer Sent!", `Offer sent to ${candidate.name}`, "success");
       setCandidates((prev) =>

@@ -44,7 +44,7 @@ const ComplainOfEmployeeWrapper = () => {
           const srRes = await axios.get(
             `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/employee-search?employeeId=${employeeId}&company_id=${company_id}&slug=${slug}`,);
           setServiceRequestCount(srRes.data?.data?.length || 0);
-          console.log("Service Request API Response:", srRes);
+
         }
 
       } catch (error) {
@@ -165,8 +165,8 @@ const ComplainOfEmployeeContent = () => {
 
   const emp_id = user?.employeeProfileId;
 
-  console.log(user);
-  console.log(emp_id);
+
+
 
 
   const [formData, setFormData] = useState({
@@ -228,7 +228,7 @@ const ComplainOfEmployeeContent = () => {
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/employee/${emp_id}/${user.slug}`
       );
 
-      console.log(response);
+
 
       setComplains(response.data?.data || []);
 

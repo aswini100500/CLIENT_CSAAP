@@ -130,7 +130,7 @@ const projectService = {
                     Authorization: `Bearer ${getAuthToken()}`
                 }
         });
-        console.log(response);
+
         
         return response.data.data;
     },

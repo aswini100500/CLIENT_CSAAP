@@ -216,7 +216,7 @@ const Login = () => {
         headers: { Authorization: `Bearer ${cloudsatToken}` },
       }
     ).then(() => {
-      console.log("HRMS auth sync successful");
+
     }).catch((syncErr) => {
       console.warn("HRMS auth sync failed (non-fatal):", syncErr.message);
     });
@@ -236,7 +236,7 @@ const Login = () => {
         headers: { Authorization: `Bearer ${cloudsatToken}` },
       }
     ).then(() => {
-      console.log("CRM auth sync successful");
+
     }).catch((syncCrmErr) => {
       console.warn("CRM auth sync failed (non-fatal):", syncCrmErr.message);
     });

@@ -356,7 +356,7 @@ const GroupCreation = () => {
     const res = await axios.get(`${API}/all/${companyId}`);
     setGroups(res.data);
   };
-console.log(groups);
+
 
 
   useEffect(() => {
@@ -408,7 +408,7 @@ console.log(groups);
       resetForm();
       setSelectedId("");
     } catch (err) {
-      console.log(err);
+
       alert("❌ Error saving group");
     }
   };

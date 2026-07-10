@@ -24,11 +24,11 @@ const Drivers = () => {
     try {
       setLoading(true);
       const response = await operationApi.getDrivers();
-      console.log(response);
+
       
       setDrivers(response.data.data);
     } catch (error) {
-      console.log(error);
+
       console.error("Error fetching drivers:", error);
     } finally {
       setLoading(false);
@@ -46,7 +46,7 @@ const Drivers = () => {
       alert("Please fill all fields before adding a driver.");
       return;
     }
-console.log(newDriver);
+
 
     try {
       setLoading(true);

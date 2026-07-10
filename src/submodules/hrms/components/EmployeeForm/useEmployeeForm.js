@@ -433,7 +433,7 @@ const useEmployeeForm = ({
   const csaapToken = user.csaapToken || user.token;
   const companyId =
     user?.company_id || user?.id;
-  console.log("Company ID in useEmployeeForm:", companyId);
+
 
 
   const recalcFromCTC = (
@@ -539,7 +539,7 @@ const useEmployeeForm = ({
           }));
         } else {
 
-          console.log("No leave policy template found, using defaults");
+
         }
       } catch (error) {
 
@@ -547,7 +547,7 @@ const useEmployeeForm = ({
         const message = error?.response?.data?.message || "";
 
         if (status === 404 || message.toLowerCase().includes("not found")) {
-          console.log("Leave policy template not found, using default values");
+
         } else {
 
           console.error("Error fetching leave policy template:", error);
@@ -816,7 +816,7 @@ const useEmployeeForm = ({
               }));
             } else {
 
-              console.log("No leave policy found, using defaults");
+
             }
           } catch (leaveError) {
 
@@ -825,7 +825,7 @@ const useEmployeeForm = ({
 
             if (status === 404 || message.toLowerCase().includes("not found")) {
 
-              console.log("Leave policy not found for employee, using default values");
+
             } else {
 
               console.error("Error fetching leave policy:", leaveError);

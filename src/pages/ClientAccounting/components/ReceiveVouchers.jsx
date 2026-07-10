@@ -626,7 +626,7 @@ const ReceiveVouchers = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+
       if (err.response && err.response.status === 409) {
         Swal.fire("Warning", "Voucher Number Already Exists!", "warning");
       } else {

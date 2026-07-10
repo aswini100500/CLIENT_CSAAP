@@ -13,7 +13,7 @@ const ChangeHistory = () => {
     try {
       setLoading(true);
       const response = await operationApi.getProjectBudgets();
-      console.log(response);
+
       
       setBudgets(response.data || []);
     } catch (error) {

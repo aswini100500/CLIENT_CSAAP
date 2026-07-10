@@ -144,7 +144,7 @@ export const useProjectAPI = () => {
                 }
             }
 
-            console.log("Creating project:", payload);
+
 
             const response = await axios.post(API_URL, payload, {
                 headers: {
@@ -173,7 +173,7 @@ export const useProjectAPI = () => {
                 projectId = parseInt(projectId, 10);
             }
 
-            console.log("Project created with ID:", projectId);
+
             return { id: projectId, data: response.data };
 
         } catch (err) {
@@ -238,7 +238,7 @@ export const useProjectAPI = () => {
                 }
             }
 
-            console.log("Updating project:", endpoint, payload);
+
 
             const response = await axios.put(endpoint, payload, {
                 headers: {
@@ -247,7 +247,7 @@ export const useProjectAPI = () => {
                 },
             });
 
-            console.log("Project updated successfully");
+
             return response.data;
 
         } catch (err) {

@@ -171,7 +171,7 @@ const StockTransferEntry = () => {
         requested_by: requestedBy
       };
 
-      console.log('Transfer Request Data:', transferData);
+
 
 
       const response = await api.post('/api/tenant/stock/transfer/request', transferData);

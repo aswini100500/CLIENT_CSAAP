@@ -192,7 +192,7 @@ const StockTransferAccept = () => {
         requested_by: transferToAccept.requested_by || 'System'
       };
 
-      console.log('Accepting transfer:', acceptData);
+
 
 
       const response = await api.put(`/api/tenant/stock/transfer/accept/${transferId}`, acceptData);

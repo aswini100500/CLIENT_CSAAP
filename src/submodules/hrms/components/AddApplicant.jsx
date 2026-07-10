@@ -37,7 +37,7 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
 
   const { user } = useAuth();
   const company_id = user.company_id;
-  console.log(user);
+
 
   const navigate = useNavigate();
 

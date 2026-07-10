@@ -243,7 +243,7 @@ const Task = () => {
     !user?.employee_id;
   const API = `${import.meta.env.VITE_HRMS_BASE_URL}`;
   const companyId = user?.company_id;
-  console.log("User from Redux:", user);
+
   const slug = user?.slug;
   const csaapToken = authToken;
 

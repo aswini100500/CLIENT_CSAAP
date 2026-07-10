@@ -1165,8 +1165,8 @@ const DuplexTriplexProject = ({
 
   useEffect(() => {
     if (selectedProject) {
-      console.log('Edit mode activated with project:', selectedProject);
-      console.log('Selected Project keys:', Object.keys(selectedProject));
+
+
 
       setProjectId(selectedProject.id);
       setProjectName(selectedProject.name || '');
@@ -1223,7 +1223,7 @@ const DuplexTriplexProject = ({
           unitsData = typeof selectedProject.units_data === 'string'
             ? JSON.parse(selectedProject.units_data)
             : selectedProject.units_data;
-          console.log('✅ Loaded units from units_data:', unitsData);
+
         } catch (e) {
           console.error('❌ Failed to parse units_data:', e);
           unitsData = [];
@@ -1232,10 +1232,10 @@ const DuplexTriplexProject = ({
 
       else if (selectedProject.units) {
         unitsData = Array.isArray(selectedProject.units) ? selectedProject.units : [];
-        console.log('✅ Loaded units from units (legacy):', unitsData);
+
       }
 
-      console.log('🔥 Final unitsData loaded:', unitsData, 'Length:', unitsData?.length);
+
       setUnits(unitsData);
       setDeletedUnitIds([]);
       setNumUnits(unitsData.length || "");
@@ -1344,7 +1344,7 @@ const DuplexTriplexProject = ({
       if (projectData.plots) {
         setRevenuePlotsData(projectData.plots);
       }
-      console.log('Project ID stored in state:', projectData.id);
+
     }
 
     if (projectName && projectType) {
@@ -1492,7 +1492,7 @@ const DuplexTriplexProject = ({
         existingUnits = typeof existingProject.units_data === 'string'
           ? JSON.parse(existingProject.units_data)
           : existingProject.units_data;
-        console.log('✅ Loaded existing units from units_data:', existingUnits);
+
       } catch (error) {
         console.error("❌ Error parsing existing units_data:", error);
       }
@@ -1555,8 +1555,8 @@ const DuplexTriplexProject = ({
       })
     };
 
-    console.log('💾 Saving project data:', projectData);
-    console.log('💾 Final units being saved:', finalUnits);
+
+
 
     try {
       if (isSubtype) {

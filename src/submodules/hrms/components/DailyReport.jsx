@@ -33,7 +33,7 @@ export default function DailyReportsPage() {
           date: r.date,
         }));
 
-        console.log("Formatted data:", formatted);
+
         setReports(formatted);
       } catch (err) {
         console.error("Error fetching reports:", err);

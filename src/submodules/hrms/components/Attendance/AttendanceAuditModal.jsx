@@ -141,7 +141,7 @@ const emptyForm = {
 };
 
 const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
-  console.log(attendanceRecord);
+
   
   const attendanceId =
     attendanceRecord?.attendance_id ||

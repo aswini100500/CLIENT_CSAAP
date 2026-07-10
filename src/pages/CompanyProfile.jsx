@@ -39,7 +39,7 @@ const CompanyProfilePage = () => {
           setCompanyData(result.data);
           setError(null);
 
-          console.log('Logo path from API:', result.data.logo_path);
+
         } else {
           throw new Error('Invalid data structure received from API');
         }
@@ -204,7 +204,7 @@ const CompanyProfilePage = () => {
                         console.error('Logo failed to load in profile page');
                         setLogoError(true);
                       }}
-                      onLoad={() => console.log('Logo loaded successfully in profile page')}
+                      onLoad={() => {}}
                     />
                   ) : (
 

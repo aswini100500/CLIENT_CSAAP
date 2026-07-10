@@ -584,7 +584,7 @@ const PurchaseEntry = () => {
         }))
       };
 
-      console.log('Submitting purchase data:', purchaseData);
+
 
 
       const response = await api.post('/api/tenant/purchases', purchaseData);

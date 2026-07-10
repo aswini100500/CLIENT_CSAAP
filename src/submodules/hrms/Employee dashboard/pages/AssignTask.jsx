@@ -3203,11 +3203,11 @@ const AssignTask = () => {
   ];
   const { user, token: authToken } = useAuth();
   const id = user?.id;
-  console.log(id);
-  console.log(user);
+
+
   const token = authToken || user?.token;
   const csaapToken = user?.csaapToken || token;
-  console.log(token);
+
 
 
   const [showTotalTasksModal, setShowTotalTasksModal] = useState(false);
@@ -3400,7 +3400,7 @@ const AssignTask = () => {
             }
           }
         );
-        console.log(res);
+
 
         let projectData = res.data?.data || res.data || [];
 
@@ -3417,7 +3417,7 @@ const AssignTask = () => {
         ];
 
         setProjects(uniqueProjects);
-        console.log("Projects:", uniqueProjects);
+
       } catch (err) {
         console.error("Failed to fetch projects", err);
         showSnackbar("Failed to load projects", "error");
@@ -3433,7 +3433,7 @@ const AssignTask = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        console.log('Fetching employees with token:', csaapToken || token);
+
         const response = await axios.get(
           "https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees",
           {
@@ -3443,7 +3443,7 @@ const AssignTask = () => {
           }
         );
 
-        console.log('Employees raw response:', response.data);
+
 
         let employeesData = [];
         if (Array.isArray(response.data)) {
@@ -3707,15 +3707,15 @@ const AssignTask = () => {
 
   const company_id = user?.company_id;
   const slug = user?.slug;
-  console.log(slug);
 
-  console.log('Company ID:', company_id);
-  console.log('Assigned By:', assignedBy);
+
+
+
 
 
   const fetchTasks = async () => {
     if (!assignedBy) {
-      console.log('No assignedBy value');
+
       return;
     }
 
@@ -3725,7 +3725,7 @@ const AssignTask = () => {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
 
-      console.log('Tasks response:', res.data);
+
 
       let tasksData = res.data;
       if (res.data?.data) {
@@ -3874,7 +3874,7 @@ const AssignTask = () => {
       history: updatedHistory,
     };
 
-    console.log('Submitting payload:', payload);
+
 
     try {
       if (editingTask) {
@@ -3886,7 +3886,7 @@ const AssignTask = () => {
         const response = await axios.post(`${API}/api/tasks/employee-assign`, payload, {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
-        console.log('Create response:', response.data);
+
         showSnackbar('Task created successfully! Emails sent to assigned team members.', 'success');
       }
 

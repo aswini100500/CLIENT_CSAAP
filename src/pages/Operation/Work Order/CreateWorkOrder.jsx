@@ -274,7 +274,7 @@ const CreateWorkOrder = () => {
         return decoded.id || decoded.userId;
       }
     } catch (error) {
-      console.log(error);
+
       console.warn("Could not extract user ID from token");
     }
     return null;

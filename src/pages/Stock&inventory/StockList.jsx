@@ -72,9 +72,9 @@ const StockList = () => {
   const stockEntries = stockEntriesData?.success ? stockEntriesData.data || [] : [];
 
 
-  console.log('Master Data:', master);
-  console.log('Stock Entries:', stockEntries);
-  console.log('Stock Entries Data:', stockEntriesData);
+
+
+
 
 
   const filteredData = Array.isArray(stockEntries) ? stockEntries.filter(item => {

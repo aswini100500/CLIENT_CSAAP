@@ -19,9 +19,9 @@ const RecruitmentTablePage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { has } = usePermission();
-  console.log("Current user:", user);
+
   const company_id = user.company_id;
-  console.log(company_id);
+
  
 
   const [recruitmentData, setRecruitmentData] = useState([]);
@@ -57,7 +57,7 @@ const RecruitmentTablePage = () => {
 
 
   const processedData = useMemo(() => {
-    console.log("Processing recruitment data:", recruitmentData);
+
     return recruitmentData.map((item) => ({
       id: item.id,
       candidateName: item.candidate_name || item.candidateName || "N/A",
@@ -131,7 +131,7 @@ const RecruitmentTablePage = () => {
       const url = `${API_BASE}/applicant/getInterview/interview/${company_id}`;
       const response = await axios.get(url);
 
-      console.log("fetchRecruitments response:", response.data);
+
 
       let rows = [];
 
@@ -143,7 +143,7 @@ const RecruitmentTablePage = () => {
         rows = response.data.interviews;
       }
 
-      console.log("Processed rows:", rows);
+
       setRecruitmentData(rows);
 
       if (!rows.length) {
@@ -394,7 +394,7 @@ HR Team`,
       const response = await axios.get(
         `${API_BASE}/recruitments/${candidateId}`,
       );
-      console.log(response);
+
 
       setReportData(response.data);
       setIsViewReportOpen(true);
@@ -604,10 +604,7 @@ HR Team`,
 
               <tbody className="divide-y divide-gray-200">
                 {filteredAndSortedData.map((candidate) => {
-                  console.log("Rendering candidate:", candidate.candidateName, {
-                    interview_round: candidate.interview_round,
-                    completed_round: candidate.completed_round,
-                  });
+
 
                   const isAllRoundsCompleted =
                     candidate.completed_round >= candidate.interview_round;

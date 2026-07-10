@@ -212,7 +212,7 @@ const AddAttendance = () => {
             );
 
             const data = response.data?.data || null;
-            console.log("this is being called",data);
+
             
             if (data && active) {
               setEmployeeProfile({

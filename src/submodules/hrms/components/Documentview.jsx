@@ -229,7 +229,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
   const handleDownload = async (fileUrl, fileName) => {
     try {
 
-      console.log("Downloading:", fileUrl);
+
 
 
       const link = document.createElement("a");

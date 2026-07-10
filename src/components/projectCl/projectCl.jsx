@@ -764,7 +764,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
                     companyId: companyId
                 };
 
-                console.log('Create Payload:', JSON.stringify(createPayload, null, 2));
+
                 await apiService.createProject(createPayload);
             }
             onSuccess();

@@ -91,7 +91,7 @@ const EmployeeForm = () => {
             }
         });
         alert('Employee Created Successfully!');
-        console.log("Response:", response.data);
+
     } catch (error) {
         console.error("Submission Error:", error.response?.data || error.message);
         alert(error.response?.data?.error || 'Check console for SQL errors');

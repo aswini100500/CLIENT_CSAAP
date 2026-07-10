@@ -454,7 +454,7 @@ const DashboardEmployee = () => {
       
       if (response.data && response.data.success) {
         const requests = response.data.data || [];
-        console.log("Fetched service requests:", requests);
+
         setServiceRequestsCount(requests.length);
         const pendingCount = requests.filter(r => {
           const status = (r.status || '').toLowerCase();

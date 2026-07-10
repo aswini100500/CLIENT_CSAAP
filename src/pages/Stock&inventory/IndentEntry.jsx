@@ -241,7 +241,7 @@ const IndentEntry = () => {
         products: apiProducts
       };
 
-      console.log('Sending indent data:', indentData);
+
 
       const response = await api.post('/api/tenant/indents/save', indentData);
 

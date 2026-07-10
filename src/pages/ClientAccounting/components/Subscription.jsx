@@ -41,7 +41,7 @@ const Subscription = () => {
                 }
             );
 
-            console.log("Subscriptions data:", data);
+
 
             if (data.success) {
                 setMySubscriptions(data.subscriptions);
@@ -60,7 +60,7 @@ const Subscription = () => {
 
     const handleSubscribe = async (planId, planPrice) => {
         try {
-            console.log("Starting subscription for plan:", planId, "user:", userId);
+
 
 
             const { data: orderData } = await axios.post(
@@ -69,7 +69,7 @@ const Subscription = () => {
                 { withCredentials: true }
             );
 
-            console.log("Order response:", orderData);
+
 
             if (!orderData.success) {
                 Swal.fire({
@@ -124,7 +124,7 @@ const Subscription = () => {
                     : `${orderData.plan_type} Subscription`,
                 order_id: orderData.order.id,
                 handler: async function (response) {
-                    console.log("Payment successful, verifying...", response);
+
 
                     try {
 
@@ -140,7 +140,7 @@ const Subscription = () => {
                             { withCredentials: true }
                         );
 
-                        console.log("Verification response:", verifyData);
+
 
                         if (verifyData.success) {
                             await Swal.fire({

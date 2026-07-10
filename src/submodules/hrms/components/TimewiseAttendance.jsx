@@ -67,7 +67,7 @@ const [searchTerm, setSearchTerm] = useState("");
     }));
 
     setAttendanceData(formatted);
-    console.log("formatted data",formatted);
+
     
     setShowReport(true);
   } catch (err) {
