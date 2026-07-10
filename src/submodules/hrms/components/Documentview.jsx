@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 
-// Move getFileType function outside the main component to make it accessible
+
 const getFileType = (fileUrl) => {
   if (!fileUrl) return null;
 
-  // Check if it's an image URL
+
   if (
     fileUrl.includes("unsplash.com") ||
     fileUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i)
@@ -30,7 +30,7 @@ const getFileType = (fileUrl) => {
   return "unknown";
 };
 
-// Document Card Component - moved outside
+
 const DocumentCard = ({
   document,
   onPreview,
@@ -105,7 +105,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
 
   if (!employee) return null;
 
-  // Sample raw document data for testing
+
   const getSampleDocuments = () => {
     return {
       photo:
@@ -126,7 +126,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
     };
   };
 
-  // Use actual documents if available, otherwise use sample data
+
   const documents = employee.documents
     ? typeof employee.documents === "string"
       ? JSON.parse(employee.documents)
@@ -228,10 +228,10 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
 
   const handleDownload = async (fileUrl, fileName) => {
     try {
-      // For demo purposes, we'll simulate download
+
       console.log("Downloading:", fileUrl);
 
-      // Create a temporary link for download
+
       const link = document.createElement("a");
       link.href = fileUrl;
       link.download = fileName || fileUrl.split("/").pop();
@@ -240,7 +240,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
       link.click();
       document.body.removeChild(link);
 
-      // Show success message
+
       alert(`Downloading ${fileName || "file"}...`);
     } catch (error) {
       console.error("Download error:", error);
@@ -250,7 +250,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
 
   const handlePreview = (document) => {
     if (document.isMultiple) {
-      // For multiple files, preview the first one or show list
+
       if (document.files.length > 0) {
         setSelectedDocument(document);
         setPreviewUrl(document.files[0]);
@@ -351,7 +351,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
   return (
     <div className="app-modal-backdrop fixed inset-0 z-50 overflow-auto p-4 md:p-6 flex items-start justify-center">
       <div className="app-modal max-w-6xl w-full my-10 border border-(--border-strong) shadow-xl bg-(--bg-panel-strong) flex flex-col">
-        {/* Header */}
+
         <div className="flex items-center justify-between p-5 border-b border-(--border-soft) bg-(--bg-subtle)/30 rounded-t-[22px]">
           <div className="flex items-center gap-4">
             <button
@@ -372,7 +372,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
           </div>
         </div>
 
-        {/* Main Content */}
+
         <div className="p-6 bg-(--bg-panel)">
           {!hasDocuments ? (
             <div className="text-center py-12 bg-white rounded-xl border border-(--border-soft) p-8 shadow-sm">
@@ -398,7 +398,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
                     key={categoryIndex}
                     className="app-panel border border-(--border-soft) overflow-hidden shadow-sm bg-white"
                   >
-                    {/* Category Header */}
+
                     <div className="flex items-center gap-3 p-4 bg-(--bg-subtle)/40 border-b border-(--border-soft)">
                       <div className="text-(--brand) size-5 flex items-center justify-center">{category.icon}</div>
                       <h3 className="text-[14px] font-extrabold text-(--text-strong) tracking-tight">
@@ -406,7 +406,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
                       </h3>
                     </div>
 
-                    {/* Documents Grid */}
+
                     <div className="p-4 bg-white">
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {category.documents.map((doc, docIndex) => {
@@ -457,7 +457,7 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
           )}
         </div>
 
-        {/* Footer */}
+
         <div className="border-t border-(--border-soft) p-4 bg-(--bg-subtle)/35 rounded-b-[22px] flex justify-between items-center">
           <div className="text-xs text-(--text-soft) font-medium flex items-center gap-1.5">
             <span className="text-(--brand)">💡</span>
@@ -472,11 +472,11 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
         </div>
       </div>
 
-      {/* Document Preview Modal */}
+
       {selectedDocument && (
         <div className="app-modal-backdrop fixed inset-0 z-70 bg-black/50 backdrop-blur-md flex items-center justify-center p-4">
           <div className="app-modal max-w-4xl w-full max-h-[90vh] overflow-hidden border border-(--border-strong) bg-white shadow-2xl flex flex-col">
-            {/* Preview Header */}
+
             <div className="flex items-center justify-between p-4 border-b border-(--border-soft) bg-(--bg-subtle)/30 rounded-t-[22px]">
               <div className="flex items-center gap-3">
                 <div className="text-(--brand) size-5 flex items-center justify-center">
@@ -513,11 +513,11 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
               </div>
             </div>
 
-            {/* Preview Content */}
+
             <div className="p-6 max-h-[calc(90vh-120px)] overflow-auto bg-white custom-scrollbar flex-1">
               {renderPreview()}
 
-              {/* Multiple files navigation */}
+
               {selectedDocument.isMultiple &&
                 selectedDocument.files.length > 1 && (
                   <div className="mt-6 border-t border-(--border-soft) pt-4">

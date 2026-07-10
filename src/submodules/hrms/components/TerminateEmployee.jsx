@@ -3,7 +3,7 @@ import { Trash2, Search, ChevronLeft, ChevronRight, UserCheck, X } from "lucide-
 import axios from "axios";
 
 
-// Termination Form Modal Component
+
 const TerminationFormModal = ({ employee, onClose, onTerminate }) => {
   const [terminationType, setTerminationType] = useState("Terminated");
   const [date, setDate] = useState("");
@@ -141,13 +141,13 @@ export default function TerminateEmployeePage() {
 
 
 
-  // Filter employees based on search
+
   const filtered = employees.filter((e) =>
     e.name.toLowerCase().includes(search.toLowerCase()) ||
     e.designation.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Pagination logic
+
   const totalPages = Math.ceil(filtered.length / entriesToShow);
   const startIndex = (currentPage - 1) * entriesToShow;
   const endIndex = startIndex + entriesToShow;
@@ -155,10 +155,10 @@ export default function TerminateEmployeePage() {
 
   async function handleTerminate(data) {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_HRMS_BASE_URL}/api/terminate/terminate`, data); //  use your backend endpoint
+      const res = await axios.post(`${import.meta.env.VITE_HRMS_BASE_URL}/api/terminate/terminate`, data);
       const updatedEmployee = res.data.employee;
 
-      // Update state after successful termination
+
       setEmployees((prev) =>
         prev.map((emp) =>
           emp.id === updatedEmployee.id ? updatedEmployee : emp
@@ -311,7 +311,7 @@ export default function TerminateEmployeePage() {
             </table>
           </div>
 
-          {/* Pagination */}
+
           <div className="flex flex-col md:flex-row items-center justify-between mt-6 pt-6 border-t border-(--border-soft)">
             <div className="text-xs font-bold text-(--text-soft) mb-4 md:mb-0">
               Showing <span className="text-(--text-strong)">{startIndex + 1}</span> to{" "}
@@ -354,7 +354,7 @@ export default function TerminateEmployeePage() {
         </div>
       </div>
 
-      {/* Termination Form Modal */}
+
       {showTerminationForm && (
         <TerminationFormModal
           employee={showTerminationForm}

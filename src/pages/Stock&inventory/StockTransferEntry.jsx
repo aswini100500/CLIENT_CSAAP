@@ -5,15 +5,15 @@ import useAuth from '../../hooks/useAuth';
 import { getAuthToken } from '../../store/authSession';
 import { CheckCircle, AlertCircle, X } from 'lucide-react';
 
-// API base URL
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance with authorization
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -27,7 +27,7 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const StockTransferEntry = () => {
@@ -44,15 +44,15 @@ const StockTransferEntry = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [availableUnits, setAvailableUnits] = useState(['Pieces', 'Boxes', 'Packets', 'Units', 'Kg', 'Liters']);
 
-  // Notification state
+
   const [notification, setNotification] = useState({
     show: false,
-    type: '', // 'success', 'error', 'info'
+    type: '',
     title: '',
     message: ''
   });
 
-  // Show notification function
+
   const showNotification = (type, title, message) => {
     setNotification({
       show: true,
@@ -61,18 +61,18 @@ const StockTransferEntry = () => {
       message
     });
     
-    // Auto-hide after 5 seconds
+
     setTimeout(() => {
       setNotification({ show: false, type: '', title: '', message: '' });
     }, 5000);
   };
 
-  // Close notification manually
+
   const closeNotification = () => {
     setNotification({ show: false, type: '', title: '', message: '' });
   };
 
-  // Fetch master data using SWR
+
   const { data: masterData, isLoading: masterLoading } = useSWR(
     '/api/tenant/stock/master-data',
     fetcher,
@@ -82,21 +82,21 @@ const StockTransferEntry = () => {
     }
   );
 
-  // Extract data from responses
+
   const master = masterData?.success ? masterData.data : {};
   const stores = master.stores || [];
   const categories = master.categories || [];
   const products = master.products || [];
   const unitsFromApi = master.units || ['Pieces', 'Boxes', 'Packets', 'Units', 'Kg', 'Liters'];
 
-  // Update available units when data loads
+
   useEffect(() => {
     if (unitsFromApi.length > 0) {
       setAvailableUnits(unitsFromApi);
     }
   }, [unitsFromApi]);
 
-  // Get user info from auth context
+
   useEffect(() => {
     if (user) {
       const userInfo = user.name || user.email || 'System User';
@@ -104,13 +104,13 @@ const StockTransferEntry = () => {
     }
   }, [user]);
 
-  // Get products based on selected category
+
   const getProductsForCategory = () => {
     if (!category) return [];
     return products.filter(product => product.category_id == category);
   };
 
-  // Get stock entries for the selected from store to check available quantities
+
   const { data: stockEntriesData, isLoading: stockEntriesLoading } = useSWR(
     fromStore && product ? `/api/tenant/stock/entry?store_id=${fromStore}&product_id=${product}` : null,
     fetcher,
@@ -122,11 +122,11 @@ const StockTransferEntry = () => {
 
   const stockEntries = stockEntriesData?.success ? stockEntriesData.data || [] : [];
 
-  // Get available quantity for selected product in from store
+
   const getAvailableQuantity = () => {
     if (!product || !fromStore) return 0;
     
-    // Sum up all quantities for this product in the from store
+
     return stockEntries.reduce((total, entry) => total + parseFloat(entry.quantity || 0), 0);
   };
 
@@ -173,13 +173,13 @@ const StockTransferEntry = () => {
 
       console.log('Transfer Request Data:', transferData);
 
-      // Make API call to create stock transfer request
+
       const response = await api.post('/api/tenant/stock/transfer/request', transferData);
 
       if (response.data.success) {
         showNotification('success', 'Success!', 'Stock transfer request created successfully!');
         
-        // Reset form
+
         setFromStore('');
         setToStore('');
         setCategory('');
@@ -200,7 +200,7 @@ const StockTransferEntry = () => {
     }
   };
 
-  // Show loading state
+
   if (masterLoading) {
     return (
       <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
@@ -214,7 +214,7 @@ const StockTransferEntry = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      {/* Notification Component */}
+
       {notification.show && (
         <div className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
           notification.type === 'success' 
@@ -285,7 +285,7 @@ const StockTransferEntry = () => {
             value={fromStore}
             onChange={(e) => {
               setFromStore(e.target.value);
-              setProduct(''); // Reset product when store changes
+              setProduct('');
             }}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             required
@@ -320,7 +320,7 @@ const StockTransferEntry = () => {
             value={category}
             onChange={(e) => {
               setCategory(e.target.value);
-              setProduct(''); // Reset product when category changes
+              setProduct('');
             }}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           >
@@ -394,7 +394,7 @@ const StockTransferEntry = () => {
         </div>
       </div>
       
-      {/* Notes Field */}
+
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
         <textarea
@@ -409,7 +409,7 @@ const StockTransferEntry = () => {
         </p>
       </div>
 
-      {/* User Info Indicator */}
+
       <div className="mb-6 p-3 bg-gray-50 rounded-lg border border-gray-200">
         <div className="flex items-center text-sm text-gray-600">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -454,7 +454,7 @@ const StockTransferEntry = () => {
         </button>
       </div>
 
-      {/* Summary section */}
+
       {(fromStore || toStore || product || quantity) && (
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <h3 className="text-lg font-medium text-blue-800 mb-2">Request Summary</h3>

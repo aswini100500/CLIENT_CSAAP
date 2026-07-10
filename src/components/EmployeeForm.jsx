@@ -4,7 +4,7 @@ import useAuth from '../hooks/useAuth';
 
 const EmployeeForm = () => {
     const { token } = useAuth();
-    // 1. State for all text fields (Matching your Backend Controller)
+
     const [formData, setFormData] = useState({
         name: '', email: '', password: '', role: 'employee',
         postApplied: '', department: '', joinDate: '', employeeStatus: '',
@@ -21,11 +21,11 @@ const EmployeeForm = () => {
         experienceDescription: ''
     });
 
-    // 2. State for JSON Arrays (Education/Experience)
+
     const [education, setEducation] = useState([{ degree: '', year: '', institute: '' }]);
     const [experience, setExperience] = useState([{ company: '', role: '', duration: '' }]);
 
-    // 3. State for Files
+
     const [files, setFiles] = useState({});
 
     const handleInputChange = (e) => {
@@ -36,7 +36,7 @@ const EmployeeForm = () => {
         setFiles({ ...files, [e.target.name]: e.target.files[0] });
     };
 
-    // Dynamic Array Handlers
+
     const addEducation = () => setEducation([...education, { degree: '', year: '', institute: '' }]);
     const handleEducationChange = (index, field, value) => {
         const updated = [...education];
@@ -55,30 +55,30 @@ const EmployeeForm = () => {
     e.preventDefault();
     const data = new FormData();
 
-    // 1. Define fields that require special handling
+
     const dateFields = ['dob', 'marriageDate', 'joinDate', 'startDate', 'endDate', 'resignDate'];
     const integerFields = ['passingYear'];
 
-    // 2. Loop through formData and sanitize
+
     Object.keys(formData).forEach(key => {
         const value = formData[key];
 
-        // If a Date or Integer field is empty, do NOT append it to FormData
+
         if (dateFields.includes(key) || integerFields.includes(key)) {
             if (value !== "" && value !== null) {
                 data.append(key, value);
             }
         } else {
-            // Append regular text fields
+
             data.append(key, value);
         }
     });
 
-    // 3. Append JSON Arrays
+
     data.append('education', JSON.stringify(education));
     data.append('experience', JSON.stringify(experience));
 
-    // 4. Append Files
+
     Object.keys(files).forEach(key => {
         if (files[key]) data.append(key, files[key]);
     });
@@ -104,7 +104,7 @@ const EmployeeForm = () => {
                 <p className="text-gray-500">Fill in all profile and login details below.</p>
             </div>
 
-            {/* --- SECTION 1: LOGIN & CORE --- */}
+
             <section className="space-y-4">
                 <h3 className="text-lg font-semibold text-blue-600 underline">Account Credentials</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -114,7 +114,7 @@ const EmployeeForm = () => {
                 </div>
             </section>
 
-            {/* --- SECTION 2: JOB DETAILS --- */}
+
             <section className="space-y-4 bg-gray-50 p-6 rounded-md">
                 <h3 className="text-lg font-semibold text-blue-600 underline">Job Information</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -132,7 +132,7 @@ const EmployeeForm = () => {
                 </div>
             </section>
 
-            {/* --- SECTION 3: PERSONAL DETAILS --- */}
+
             <section className="space-y-4">
                 <h3 className="text-lg font-semibold text-blue-600 underline">Personal Details</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -156,7 +156,7 @@ const EmployeeForm = () => {
                 </div>
             </section>
 
-            {/* --- SECTION 4: ADDRESSES --- */}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="p-4 border rounded bg-blue-50/30">
                     <h3 className="font-bold text-gray-700 mb-3">Permanent Address</h3>
@@ -178,7 +178,7 @@ const EmployeeForm = () => {
                 </div>
             </div>
 
-            {/* --- SECTION 5: EDUCATION (JSON Array) --- */}
+
             <section className="space-y-4">
                 <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold text-blue-600">Education Background</h3>
@@ -193,7 +193,7 @@ const EmployeeForm = () => {
                 ))}
             </section>
 
-            {/* --- SECTION 6: FILE UPLOADS --- */}
+
             <section className="p-6 bg-blue-50 rounded-lg border-2 border-dashed border-blue-200">
                 <h3 className="text-lg font-semibold text-blue-700 mb-4">Documents & Assets</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -205,7 +205,7 @@ const EmployeeForm = () => {
                 </div>
             </section>
 
-            {/* --- LEGACY SPECIFICS (Education/Work) --- */}
+
             <section className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-100 p-4 rounded">
                 <div><label className="text-xs font-bold">Start Date (Prev Job)</label><input type="date" name="startDate" className="w-full p-2 border" onChange={handleInputChange} /></div>
                 <div><label className="text-xs font-bold">End Date (Prev Job)</label><input type="date" name="endDate" className="w-full p-2 border" onChange={handleInputChange} /></div>

@@ -6,14 +6,14 @@ export default function DailyAccessReport() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-5xl mx-auto bg-white rounded-md shadow-md overflow-hidden">
-        {/* Header */}
+
         <div className="bg-linear-to-r from-blue-500 to-blue-400 text-white font-semibold px-4 py-2 flex items-center space-x-2">
           <span className="text-lg">📋 Daily Access Report</span>
         </div>
 
-        {/* Content */}
+
         <div className="p-6 flex flex-wrap items-center justify-between">
-          {/* Report Date */}
+
           <div className="flex items-center space-x-3">
             <label className="font-medium text-gray-700">Report Date</label>
             <input
@@ -24,7 +24,7 @@ export default function DailyAccessReport() {
             />
           </div>
 
-          {/* Buttons */}
+
           <div className="flex space-x-3 mt-4 sm:mt-0">
             <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded text-sm shadow">
               Open & Close Gate

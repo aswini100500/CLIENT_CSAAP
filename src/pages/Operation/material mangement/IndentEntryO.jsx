@@ -8,7 +8,7 @@ const IndentEntryO = () => {
     contact: '',
     gst: ''
   });
-//indent-entry
+
   const [productForm, setProductForm] = useState({
     category: '',
     product: '',
@@ -22,7 +22,7 @@ const IndentEntryO = () => {
   const [products, setProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [loadingConfig, setLoadingConfig] = useState(false);
-  const [activeTab, setActiveTab] = useState('entry'); // 'entry' or 'history'
+  const [activeTab, setActiveTab] = useState('entry');
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
   const [newCategory, setNewCategory] = useState({
@@ -143,7 +143,7 @@ const IndentEntryO = () => {
     }
   };
 
-  // Filter products based on selected category
+
   const filteredProducts = productForm.category 
     ? products.filter(product => String(product.category_id) === String(productForm.category) || String(product.categoryId) === String(productForm.category))
     : products;
@@ -154,12 +154,12 @@ const IndentEntryO = () => {
     const { name, value } = e.target;
     
     setProductForm(prev => {
-      // If category changes, reset product selection
+
       if (name === 'category') {
         return {
           ...prev,
           category: value,
-          product: '' // Reset product when category changes
+          product: ''
         };
       }
       return {
@@ -175,7 +175,7 @@ const IndentEntryO = () => {
       return;
     }
 
-    // Find selected product and category details
+
     const selectedProduct = products.find(p => String(p.id) === String(productForm.product));
     const selectedCategory = categories.find(c => String(c.id) === String(productForm.category));
 
@@ -192,7 +192,7 @@ const IndentEntryO = () => {
 
     setProductList(prev => [...prev, newProduct]);
     
-    // Reset form
+
     setProductForm({
       category: '',
       product: '',
@@ -233,7 +233,7 @@ const IndentEntryO = () => {
       
       if (response.data.success) {
         alert(`Indent saved successfully!\nIndent Number: ${response.data.indent_number}`);
-        // Reset form
+
         setSupplier({
           id: '',
           name: '',
@@ -256,12 +256,12 @@ const IndentEntryO = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-2">
-      {/* Header */}
+
       <div className="text-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Indent Entry</h1>
       </div>
 
-      {/* Tabs */}
+
       <div className="flex justify-center mb-8">
         <div className="flex border-b border-gray-200 w-full max-w-md bg-white rounded-t-lg">
           <button
@@ -289,7 +289,7 @@ const IndentEntryO = () => {
 
       {activeTab === 'entry' ? (
         <>
-          {/* Supplier Information */}
+
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Supplier Information</h2>
         
@@ -339,7 +339,7 @@ const IndentEntryO = () => {
 
       <div className="border-t border-gray-200 my-8"></div>
 
-      {/* Product Entry Section */}
+
       <div className="mb-8">
         <div className='flex gap-2'>
       <h2 className="text-xl font-semibold text-gray-700 ">
@@ -525,7 +525,7 @@ const IndentEntryO = () => {
         </div>
       </div>
 
-      {/* Product List Table */}
+
       <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -575,7 +575,7 @@ const IndentEntryO = () => {
         </div>
       </div>
 
-      {/* Save Button */}
+
       <div className="flex justify-end space-x-4">
         <button
           onClick={() => {

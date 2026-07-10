@@ -74,7 +74,7 @@ const SuperAdminAccountingVouchers = ({ defaultType, hideHeader }) => {
   const [filters, setFilters] = useState({
     companyId: "",
     employeeId: "",
-    type: defaultType || "all_vouchers", // custom value to fetch all and filter vouchers
+    type: defaultType || "all_vouchers",
     from: "",
     to: "",
     limit: 500,
@@ -97,8 +97,8 @@ const SuperAdminAccountingVouchers = ({ defaultType, hideHeader }) => {
     setError("");
 
     try {
-      // If filtering all vouchers, we pass "all" to the backend to get everything,
-      // and we filter out ledgers and stocks in the memo.
+
+
       const apiType = filters.type === "all_vouchers" ? "all" : filters.type;
       const response = await fetchSuperAdminAccountingActivity({
         ...filters,
@@ -121,7 +121,7 @@ const SuperAdminAccountingVouchers = ({ defaultType, hideHeader }) => {
     setFilters((current) => ({ ...current, [field]: value }));
   };
 
-  // Filter vouchers from response activity list (exclude ledgers and stocks if all_vouchers selected)
+
   const vouchers = useMemo(() => {
     const rawList = data.activity || [];
     const isVoucher = (item) => item.resource_key !== "ledgers" && item.resource_key !== "stocks";
@@ -141,7 +141,7 @@ const SuperAdminAccountingVouchers = ({ defaultType, hideHeader }) => {
     return list;
   }, [data.activity, searchTerm]);
 
-  // Statistics calculation for vouchers
+
   const stats = useMemo(() => {
     const totalCount = vouchers.length;
     let totalAmount = 0;
@@ -286,7 +286,7 @@ const handleViewVoucher = (item) => {
     <div className={hideHeader ? "w-full space-y-4 p-2 bg-white" : "min-h-screen bg-slate-50 p-3 sm:p-5"}>
       <div className={hideHeader ? "space-y-4" : "mx-auto max-w-7xl space-y-5"}>
         
-        {/* Header Block */}
+
         {!hideHeader && (
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -313,7 +313,7 @@ const handleViewVoucher = (item) => {
           </div>
         )}
 
-        {/* Filtering Section - inside its own card if hidden header */}
+
         <div className={`p-5 rounded-lg border border-slate-200/80 bg-white ${hideHeader ? "shadow-sm" : "shadow-sm"}`}>
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm font-bold uppercase text-slate-500 tracking-wide">Filters</h3>
@@ -400,7 +400,7 @@ const handleViewVoucher = (item) => {
           </div>
         </div>
 
-        {/* Statistics Cards */}
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StatCard icon={FileText} label="Total Vouchers" value={stats.totalCount} tone="blue" />
           <StatCard icon={IndianRupee} label="Total Amount" value={formatAmount(stats.totalAmount)} tone="green" />
@@ -414,12 +414,12 @@ const handleViewVoucher = (item) => {
           </div>
         )}
 
-        {/* Content Panel */}
+
         <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
           <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-lg font-extrabold text-slate-900">Voucher Activities</h2>
             
-            {/* Real-time search */}
+
             <div className="relative w-full max-w-xs">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                 <Search className="h-4 w-4" />
@@ -440,7 +440,7 @@ const handleViewVoucher = (item) => {
                 <tr>
                   <th className="px-4 py-3">Voucher Type</th>
                   <th className="px-4 py-3">Narration</th>
-                  {/* <th className="px-4 py-3">Company</th> */}
+
                   <th className="px-4 py-3">Created By</th>
                   <th className="px-4 py-3">Employee ID</th>
                   <th className="px-4 py-3 text-right">Amount</th>
@@ -472,9 +472,7 @@ const handleViewVoucher = (item) => {
                           ID: #{item.record_id} {item.document_no ? `| Ref: ${item.document_no}` : ""}
                         </p>
                       </td>
-                      {/* <td className="px-4 py-3 text-slate-600">
-                        {item.company_name || `ID: ${item.company_id}`}
-                      </td> */}
+
                       <td className="px-4 py-3">
                         <p className="font-semibold text-slate-800">
                           {item.creator_name || item.creator_email || "System"}
@@ -496,7 +494,7 @@ const handleViewVoucher = (item) => {
                       <td className="px-4 py-3">
   <div className="flex items-center justify-center gap-2">
 
-    {/* View */}
+
     <button
       onClick={() => handleViewVoucher(item)}
       className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100 transition flex items-center justify-center"
@@ -505,7 +503,7 @@ const handleViewVoucher = (item) => {
       <Eye className="w-4 h-4" />
     </button>
 
-    {/* Download */}
+
     <button
       onClick={() => handleDownloadVoucher(item)}
       className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100 transition flex items-center justify-center"

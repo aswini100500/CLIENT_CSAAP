@@ -11,7 +11,7 @@ const WorkOrderHistory = () => {
   const [error, setError] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Fetch work orders from API
+
   useEffect(() => {
     fetchWorkOrders();
   }, []);
@@ -31,7 +31,7 @@ const WorkOrderHistory = () => {
     }
   };
 
-  // Filter by search term
+
   const filteredOrders = workOrders.filter(
     (order) =>
       (order.subject?.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -40,7 +40,7 @@ const WorkOrderHistory = () => {
       (order.tender?.tender_title?.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  // PDF generation for selected order
+
   const handleDownloadPDF = (order) => {
     const doc = new jsPDF();
     let y = 15;
@@ -53,7 +53,7 @@ const WorkOrderHistory = () => {
     doc.line(20, y, 190, y);
     y += 15;
 
-    // Header Info
+
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     doc.setFont(undefined, "bold");
@@ -70,7 +70,7 @@ const WorkOrderHistory = () => {
     doc.text(`Completion Date: ${order.completion_date || "-"}`, 20, y);
     y += 8;
 
-    // Tender Info
+
     if (order.tender) {
       doc.setFont(undefined, "bold");
       doc.text("TENDER INFORMATION:", 20, y);
@@ -80,14 +80,14 @@ const WorkOrderHistory = () => {
       y += 6;
     }
 
-    // Project Info
+
     if (order.project_name) {
       doc.text(`Project: ${order.project_name}`, 20, y);
       y += 6;
     }
     y += 6;
 
-    // Contractor Info
+
     if (order.contractor) {
       doc.setFont(undefined, "bold");
       doc.text("CONTRACTOR INFORMATION:", 20, y);
@@ -110,7 +110,7 @@ const WorkOrderHistory = () => {
       y += 6;
     }
 
-    // Items Table
+
     if (order.items && order.items.length > 0) {
       doc.setFont(undefined, "bold");
       doc.text("ITEMS:", 20, y);
@@ -147,7 +147,7 @@ const WorkOrderHistory = () => {
       doc.text(`Total Amount: ₹${itemTotal.toFixed(2)}`, 140, y);
     }
 
-    // Note
+
     if (order.note) {
       y += 15;
       doc.setFont(undefined, "bold");
@@ -161,7 +161,7 @@ const WorkOrderHistory = () => {
     doc.save(`work-order-${order.subject?.replace(/\s+/g, "-") || order.id}.pdf`);
   };
 
-  // View order details
+
   const handleViewDetails = (order) => {
     const itemsText = order.items
       ?.map((item, idx) => `${idx + 1}. ${item.description} - ${item.quantity} ${item.unit} @ ₹${item.rate}`)
@@ -203,7 +203,7 @@ const WorkOrderHistory = () => {
         </button>
       </div>
 
-      {/* Search Bar */}
+
       <div className="mb-6 flex items-center gap-3">
         <Search size={20} className="text-gray-500" />
         <input
@@ -215,14 +215,14 @@ const WorkOrderHistory = () => {
         />
       </div>
 
-      {/* Error Message */}
+
       {error && (
         <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300">
           {error}
         </div>
       )}
 
-      {/* Loading State */}
+
       {loading ? (
         <div className="flex justify-center items-center py-12">
           <Loader size={32} className="animate-spin text-blue-600" />
@@ -230,14 +230,14 @@ const WorkOrderHistory = () => {
         </div>
       ) : (
         <>
-          {/* Results Count */}
+
           <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
             {filteredOrders.length > 0
               ? `Showing ${filteredOrders.length} of ${workOrders.length} work orders`
               : "No work orders found"}
           </div>
 
-          {/* Work Orders Table */}
+
           <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
               <thead className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">

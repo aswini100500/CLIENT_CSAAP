@@ -58,7 +58,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
   const { user } = useAuth();
   const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
   const tenantId = user?.tenant_id || user?.company_id || user?.id;
-  // State to track expanded menus. Using an object allows multiple menus to be open.
+
   const [expandedMenus, setExpandedMenus] = useState({});
   const [hoveredItem, setHoveredItem] = useState(null);
   const [hoveredPos, setHoveredPos] = useState({ top: 0, left: 0 });
@@ -69,14 +69,14 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
   const companyData = useSelector((state) => state.companyApi.data);
   const queryClient = useQueryClient();
 
-  // Compute company name and logo from Redux state
+
   const companyName =
     companyData?.master_company_name ||
     companyData?.company_name ||
     "BuilderERP PRO";
   const companyLogoText = companyName.charAt(0).toUpperCase();
 
-  // Construct logo URL
+
   const logoUrl = companyData?.logo_path
     ? `${API_BASE_URL}/${companyData.logo_path}`
     : null;
@@ -92,9 +92,9 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
     if (onItemClick) onItemClick();
   };
 
-  // --- LOGOUT FUNCTION ---
+
   const handleLogout = async () => {
-    // 1. Call Backend API to clear HttpOnly session cookies
+
     try {
       await fetch(
         `${API_BASE_URL}/api/builder-companies/logout`,
@@ -127,7 +127,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
     navigate("/admin/login");
   };
 
-  // --- EFFECT: FETCH COMPANY DETAILS USING AXIOS ---
+
   useEffect(() => {
     const fetchCompanyData = async () => {
       try {
@@ -154,7 +154,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
     fetchCompanyData();
   }, [dispatch, tenantId]);
 
-  // --- DATA STRUCTURE (Normalized to use 'children' everywhere) ---
+
   const sidebarItems = [
     {
       id: "dashboard",
@@ -170,7 +170,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       path: "/projects",
     },
 
-    // ... USER MANAGEMENT ...
+
     {
       id: "users",
       label: "User Management",
@@ -195,12 +195,12 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           path: "/users/project-assignment",
           icon: <Target size={18} className="text-green-700" />,
         },
-        // {
-        //   id: "u_subscription",
-        //   label: "Subscription",
-        //   path: "/users/plans",
-        //   icon: <Wallet size={18} className="text-green-700" />,
-        // },
+
+
+
+
+
+
 
         {
           id: "u_user_list",
@@ -214,13 +214,13 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           path: "/users/booking-cancellations",
           icon: <AlertTriangle size={18} className="text-green-700" />,
         },
-        // { id: 'u_plan_details', label: 'User Plan Details', path: '/users/user-plan-details', icon: <FileText size={18} className="text-green-700" /> },
+
       ],
     },
 
 
 
-    // ... HRMS & PAYROLL ...
+
     {
       id: "hrms",
       label: "HRMS ",
@@ -279,7 +279,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
         },
       ],
     },
-    // ... CRM ...
+
 
     {
       id: "crm",
@@ -333,7 +333,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       ],
     },
 
-    // ... ACCOUNTING ...
+
     {
       id: "client-accounting",
       label: "Accounting",
@@ -395,7 +395,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           icon: <FileText size={16} className="text-green-700 " />,
         },
 
-        // Voucher submenu
+
         {
           id: "client-vouchers",
           label: "Vouchers",
@@ -494,7 +494,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           ],
         },
 
-        // Banking submenu
+
         {
           id: "client-banking",
           label: "Banking",
@@ -539,7 +539,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           icon: <BarChart4 size={16} className="text-green-700 " />,
         },
 
-        // Inventory submenu
+
         {
           id: "client-inventory",
           label: "Inventory Book",
@@ -582,23 +582,23 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
     },
   ];
 
-  // --- RECURSIVE RENDERER ---
+
   const renderItem = (item, level = 0) => {
     const hasChildren = item.children && item.children.length > 0;
 
-    // Skip rendering leaf nodes that don't have a path
+
     if (!hasChildren && (!item.path || item.path === "")) {
       return null;
     }
 
     const isExpanded = expandedMenus[item.id];
 
-    // Dynamic styles based on depth
+
     const paddingLeft = level === 0 ? "px-3" : "px-2";
     const textSize = level === 0 ? "text-[13px]" : "text-[12.5px]";
     const iconSize = level === 0 ? 19 : 17;
 
-    // 1. COLLAPSED VIEW
+
     if (isCollapsed) {
       const isInactiveFolder = hasChildren && !isExpanded;
       return (
@@ -606,7 +606,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           key={`${item.id}-col`}
           className={`flex flex-col items-center w-full ${isInactiveFolder ? "mb-2.5" : "mb-0.5"}`}
         >
-          {/* Main Icon Button */}
+
           <NavLink
             to={item.path || "#"}
             end={item.exact}
@@ -633,7 +633,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             {({ isActive }) => {
               const isFolderExpanded = hasChildren && isExpanded;
               const isItemActive = isActive && item.path && item.path !== "#";
-              // Stacked card shadow for inactive folders
+
               const stackShadow = isInactiveFolder
                 ? {
                   boxShadow:
@@ -678,7 +678,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             }}
           </NavLink>
 
-          {/* Expanded Children Group */}
+
           {hasChildren && isExpanded && (
             <div className="w-full flex flex-col items-center py-1.5 px-0.5 mb-1 mt-0.5 relative animate-sub-menu bg-slate-50 rounded-lg border border-slate-200/80">
               <div className="w-full flex flex-col items-center space-y-0.5">
@@ -690,7 +690,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       );
     }
 
-    // 2. EXPANDED VIEW
+
     return (
       <div key={`${item.id}-exp`} className="mb-1.5">
         {hasChildren ? (
@@ -725,7 +725,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
               />
             </button>
 
-            {/* Sub-items with a vertical connector line */}
+
             <div
               className={`transition-all duration-300 ease-out overflow-hidden ${isExpanded
                 ? "max-h-500 opacity-100 mt-1 mb-2 bg-slate-50/50 rounded-lg p-0.5"
@@ -806,7 +806,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
         }
       `}</style>
 
-      {/* Header */}
+
       {isCollapsed ? (
         <div className="h-16 flex flex-col items-center justify-center border-b border-slate-100 shrink-0 bg-white">
           <button
@@ -825,7 +825,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             onClick={handleItemClick}
             className="flex-1 flex items-center min-w-0 gap-3"
           >
-            {/* Logo Image */}
+
             {logoUrl && !logoError ? (
               <img
                 src={logoUrl}
@@ -839,7 +839,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
                 onLoad={() => console.log('Logo loaded successfully in expanded mode')}
               />
             ) : (
-              /* Fallback text logo */
+
               <div
                 className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0"
               >
@@ -858,15 +858,15 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
         </div>
       )}
 
-      {/* Navigation */}
+
       <div className="flex-1 overflow-y-auto px-3 py-4 custom-scrollbar">
         <nav className="space-y-1">
-          {/* Start the Recursive Render Loop */}
+
           {sidebarItems.map((item) => renderItem(item))}
         </nav>
       </div>
 
-      {/* Logout Button */}
+
       <div className="border-t border-slate-100 p-3 shrink-0">
         {isCollapsed ? (
           <button
@@ -903,7 +903,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
         )}
       </div>
 
-      {/* Premium White Popover Tooltip for Collapsed Mode */}
+
       {isCollapsed && hoveredItem && (
         <div
           className="fixed bg-white text-slate-800 text-[12px] font-semibold px-4 py-2.5 rounded-xl z-9999 pointer-events-none shadow-2xl border border-slate-200 animate-sidebar-tooltip-in whitespace-nowrap"
@@ -914,7 +914,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           }}
         >
           {hoveredItem.label}
-          {/* Precise Tooltip Arrow */}
+
           <div className="absolute -left-1.75 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-white border-l border-b border-slate-200 rotate-45 rounded-sm" />
         </div>
       )}

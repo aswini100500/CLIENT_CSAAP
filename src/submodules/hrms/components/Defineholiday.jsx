@@ -1,7 +1,7 @@
 import React from "react";
 
 const HolidayList = ({ holidays = [], setActiveMenu, onDeleteHoliday }) => {
-  // Safe array access with default empty array
+
   const safeHolidays = holidays || [];
 
   return (
@@ -26,7 +26,7 @@ const HolidayList = ({ holidays = [], setActiveMenu, onDeleteHoliday }) => {
           </button>
         </div>
 
-        {/* Holiday List Table */}
+
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200">
             <thead>

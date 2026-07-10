@@ -14,7 +14,7 @@ const PlansPage = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [processingPayment, setProcessingPayment] = useState(false);
 
-  // Load Razorpay Script
+
   useEffect(() => {
     const loadRazorpayScript = () => {
       return new Promise((resolve) => {
@@ -40,7 +40,7 @@ const PlansPage = () => {
     loadRazorpayScript();
   }, []);
 
-  // Read tenant company id from auth context
+
   useEffect(() => {
     if (!user) return;
     
@@ -53,7 +53,7 @@ const PlansPage = () => {
     setCompanyId(tenantId);
   }, [user]);
 
-  // Fetch Company and Plans Data
+
   useEffect(() => {
     if (!companyId) return;
 
@@ -62,16 +62,16 @@ const PlansPage = () => {
         setLoading(true);
         setError(null);
 
-        // Fetch company details
+
         const companyData = await plansService.getCompanyById(companyId);
         setCompany(companyData.data || companyData);
 
-        // Fetch available plans
+
         const plansData = await plansService.getAvailablePlans();
         const plansArray = plansData.data || plansData;
         setPlans(plansArray);
 
-        // Match company requirements with available plans
+
         const matched = matchCompanyWithPlan(companyData.data || companyData, plansArray);
         setMatchedPlan(matched);
       } catch (err) {
@@ -85,7 +85,7 @@ const PlansPage = () => {
     fetchData();
   }, [companyId]);
 
-  // Function to match company requirements with available plans
+
   const matchCompanyWithPlan = (companyData, availablePlans) => {
     if (!companyData || !availablePlans || availablePlans.length === 0) {
       return null;
@@ -95,19 +95,19 @@ const PlansPage = () => {
     const numberOfProjects = companyData.number_of_projects;
     const planDuration = companyData.plan_duration;
 
-    // Find the best matching plan based on user count, project count, and duration
+
     const matched = availablePlans.find(plan => {
       return (
         plan.user >= numberOfUsers &&
         plan.numberproject >= numberOfProjects &&
-        plan.validity >= planDuration / 2 // Allow some flexibility with duration
+        plan.validity >= planDuration / 2
       );
     });
 
     return matched || null;
   };
 
-  // Handle Razorpay Payment
+
   const handlePlanPayment = async (plan) => {
     if (!isScriptLoaded && !window.Razorpay) {
       setError('Razorpay SDK failed to load. Please check your internet connection.');
@@ -120,7 +120,7 @@ const PlansPage = () => {
     try {
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_your_key_here',
-        amount: Math.round(plan.price * 100), // Convert to paise
+        amount: Math.round(plan.price * 100),
         currency: 'INR',
         name: 'Builder ERP',
         description: plan.description,
@@ -156,21 +156,21 @@ const PlansPage = () => {
     }
   };
 
-  // Handle Successful Payment
+
   const handlePaymentSuccess = (response, plan) => {
     setProcessingPayment(false);
     setSelectedPlan(null);
     
-    // Show success message
+
     alert(
       `✓ Payment Successful!\n\nPayment ID: ${response.razorpay_payment_id}\n\nPlan: ${plan.description}\nAmount: ₹${formatPrice(plan.price)}\nValidity: ${plan.validity} days\n\nYour subscription is now active.`
     );
 
-    // Here you can make an API call to update the company's subscription status
+
     console.log('Payment successful for plan:', plan, 'Response:', response);
   };
 
-  // Handle Failed Payment
+
   const handlePaymentFailure = (error, plan) => {
     setProcessingPayment(false);
     setSelectedPlan(null);
@@ -218,7 +218,7 @@ const PlansPage = () => {
 
       {!loading && company && (
         <>
-          {/* Company Information Card */}
+
           <div className="mb-6 bg-white p-6 rounded-lg shadow-md border border-slate-200">
             <h2 className="text-xl font-semibold mb-4 text-slate-800">Company Information</h2>
             <div className="grid grid-cols-3 gap-4">
@@ -243,7 +243,7 @@ const PlansPage = () => {
             </div>
           </div>
 
-          {/* Matched Plan */}
+
           {matchedPlan && (
             <div className="mb-6 bg-linear-to-r from-green-50 to-emerald-50 p-6 rounded-lg shadow-md border-2 border-green-500">
               <h2 className="text-xl font-semibold mb-4 text-green-800">
@@ -288,7 +288,7 @@ const PlansPage = () => {
             </div>
           )}
 
-          {/* All Available Plans */}
+
           <div>
             <h2 className="text-xl font-semibold mb-4 text-slate-800">All Available Plans</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -331,7 +331,7 @@ const PlansPage = () => {
                       </div>
                     </div>
 
-                    {/* Match indicators */}
+
                     <div className="space-y-1 text-xs mb-4">
                       {plan.user >= company.number_of_users && (
                         <div className="text-green-600 flex items-center">

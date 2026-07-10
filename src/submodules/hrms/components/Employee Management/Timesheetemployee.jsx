@@ -12,7 +12,7 @@ const parseAttendanceDate = (value) => {
   return Number.isNaN(date.getTime()) ? null : date;
 };
 
-// Enhanced version with better Edit/Delete functionality
+
 const TimesheetOfEmployeesWithData = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +33,7 @@ const TimesheetOfEmployeesWithData = () => {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
 
-    return `${year}-${month}-${day}`; // Local date, not UTC
+    return `${year}-${month}-${day}`;
   };
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const TimesheetOfEmployeesWithData = () => {
     }
   };
 
-  // Edit functionality
+
   const handleEdit = (employee) => {
     setSelectedEmployee(employee);
     setEditedData(employee);
@@ -106,7 +106,7 @@ const TimesheetOfEmployeesWithData = () => {
         },
       );
 
-      // Update local state
+
       setEmployees((prev) =>
         prev.map((emp) =>
           emp.id === selectedEmployee.id
@@ -136,20 +136,20 @@ const TimesheetOfEmployeesWithData = () => {
     }));
   };
 
-  // Delete functionality
+
   const handleDelete = (employee) => {
     setSelectedEmployee(employee);
     setDeleteModalOpen(true);
   };
 
-  // Approve timesheet
+
   const handleApprove = async (employee) => {
     try {
       const response = await axios.put(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/timesheets/${employee.id}/approve`,
       );
 
-      // Update local state to reflect approved status
+
       setEmployees((prev) =>
         prev.map((emp) =>
           emp.id === employee.id
@@ -181,14 +181,14 @@ const TimesheetOfEmployeesWithData = () => {
     }
   };
 
-  // Pagination calculations
+
   const totalEntries = employees.length;
   const startIndex = (currentPage - 1) * entriesPerPage;
   const endIndex = Math.min(startIndex + entriesPerPage, totalEntries);
   const currentEntries = employees.slice(startIndex, endIndex);
   const totalPages = Math.ceil(totalEntries / entriesPerPage);
 
-  // Status badge component
+
   const StatusBadge = ({ status }) => {
     const statusConfig = {
       Present: {
@@ -220,7 +220,7 @@ const TimesheetOfEmployeesWithData = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-md">
-        {/* Header */}
+
         <div className="px-6 py-4 border-b border-gray-200">
           <h1 className="text-2xl font-bold text-gray-800">
             Employee Timesheet
@@ -230,7 +230,7 @@ const TimesheetOfEmployeesWithData = () => {
           </p>
         </div>
 
-        {/* Controls */}
+
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">Show</span>
@@ -254,7 +254,7 @@ const TimesheetOfEmployeesWithData = () => {
           </div>
         </div>
 
-        {/* Table */}
+
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -305,7 +305,7 @@ const TimesheetOfEmployeesWithData = () => {
                         <div className="text-sm font-medium text-gray-900">
                           {employee.employeeName}
                         </div>
-                        {/* <div className="text-sm text-gray-500">{employee.department}</div> */}
+
                         <div className="text-sm text-gray-500">
                           {employee.post_applied}
                         </div>
@@ -320,13 +320,7 @@ const TimesheetOfEmployeesWithData = () => {
 
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center space-x-3">
-                        {/* <button 
-                          onClick={() => handleEdit(employee)}
-                          className="text-blue-600 hover:text-blue-900 font-medium flex items-center transition-colors duration-200"
-                        >
-                          <span className="mr-1">✏️</span>
-                          Edit
-                        </button> */}
+
                         <button
                           onClick={() => handleDelete(employee)}
                           className="text-red-600 hover:text-red-900 font-medium flex items-center transition-colors duration-200"
@@ -350,7 +344,7 @@ const TimesheetOfEmployeesWithData = () => {
           </table>
         </div>
 
-        {/* Footer */}
+
         <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center">
           <div className="text-sm text-gray-600">
             Showing {currentEntries.length > 0 ? startIndex + 1 : 0} to{" "}
@@ -406,7 +400,7 @@ const TimesheetOfEmployeesWithData = () => {
         </div>
       </div>
 
-      {/* Edit Modal */}
+
       {editModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
@@ -479,7 +473,7 @@ const TimesheetOfEmployeesWithData = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+
       {deleteModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-sm w-full">

@@ -40,8 +40,8 @@ const CreatePaymentSlabModal = ({
   const [loading, setLoading] = useState(true);
   const [stages, setStages] = useState([]);
   const [totalDealValue, setTotalDealValue] = useState("");
-  const [amounts, setAmounts] = useState({}); // stageId -> amount string
-  const [percentages, setPercentages] = useState({}); // stageId -> percentage string
+  const [amounts, setAmounts] = useState({});
+  const [percentages, setPercentages] = useState({});
   const [saving, setSaving] = useState(false);
   const [validationError, setValidationError] = useState("");
   const [hasProject, setHasProject] = useState(!!lead?.project_id);
@@ -78,7 +78,7 @@ const CreatePaymentSlabModal = ({
     setPercentages(initialPercentages);
   };
 
-  // Check project, fetch existing plan, or default to a single milestone
+
   useEffect(() => {
     let active = true;
     const checkProjectAndLoadStages = async () => {
@@ -93,9 +93,9 @@ const CreatePaymentSlabModal = ({
       try {
         setLoading(true);
         setHasProject(true);
-        setHasSetup(true); // Always true, we bypass setup configuration checks
+        setHasSetup(true);
 
-        // Fetch existing payment plan if any
+
         let existingPlan = null;
         try {
           const planRes = await api.get(`/api/payments`, {
@@ -105,7 +105,7 @@ const CreatePaymentSlabModal = ({
             existingPlan = planRes.data.data;
           }
         } catch (err) {
-          // If 404, no plan exists yet
+
           console.log("No existing payment plan found for lead", lead.id, err);
         }
 
@@ -118,7 +118,7 @@ const CreatePaymentSlabModal = ({
             setOriginalData(existingPlan);
             setExistingPlanId(existingPlan.id);
             
-            // Reconstruct stages dynamically from existing payment plan slabs
+
             const planStages = existingPlan.slabs.map((matchedSlab, idx) => {
               const matchedId = matchedSlab.stage_id || `milestone_${idx}`;
               initialAmounts[matchedId] = matchedSlab.allocated_amount.toString();
@@ -134,7 +134,7 @@ const CreatePaymentSlabModal = ({
             });
             setStages(planStages);
           } else {
-            // Default single milestone for project cost
+
             const defaultId = "milestone_1";
             setStages([
               {
@@ -166,7 +166,7 @@ const CreatePaymentSlabModal = ({
     };
   }, [lead?.project_id, lead?.project_type, lead?.id, lead?.company_id]);
 
-  // Calculations
+
   const dealValueNum = parseFloat(totalDealValue) || 0;
 
   const totalAllocated = Object.values(amounts).reduce((sum, val) => {
@@ -190,7 +190,7 @@ const CreatePaymentSlabModal = ({
     ? (totalAllocated / dealValueNum) * 100 
     : 0;
 
-  // Distribute equally across stages
+
   const handleDistributeEvenly = () => {
     if (dealValueNum <= 0) {
       setValidationError("Please enter a valid Total Deal Value first.");
@@ -207,7 +207,7 @@ const CreatePaymentSlabModal = ({
       
       stages.forEach((stage, idx) => {
         if (idx === count - 1) {
-          // Last stage absorbs rounding discrepancies to balance exactly
+
           let sumPcts = 0;
           let sumAmts = 0;
           stages.slice(0, -1).forEach(() => {
@@ -227,7 +227,7 @@ const CreatePaymentSlabModal = ({
   };
 
   const handleAmountChange = (stageId, value) => {
-    // Only allow numbers and decimal
+
     if (value === "" || /^\d*\.?\d*$/.test(value)) {
       setAmounts(prev => ({
         ...prev,
@@ -252,7 +252,7 @@ const CreatePaymentSlabModal = ({
   };
 
   const handlePercentageChange = (stageId, value) => {
-    // Only allow numbers and decimal
+
     if (value === "" || /^\d*\.?\d*$/.test(value)) {
       setPercentages(prev => ({
         ...prev,
@@ -285,7 +285,7 @@ const CreatePaymentSlabModal = ({
       const updatedAmts = {};
       const updatedPcts = {};
       
-      // Auto-allocate 100% if single milestone
+
       if (stages.length === 1 && !percentages[stages[0].id] && !amounts[stages[0].id]) {
         updatedAmts[stages[0].id] = newVal;
         updatedPcts[stages[0].id] = "100";
@@ -422,7 +422,7 @@ const CreatePaymentSlabModal = ({
     }
   };
 
-  // Helper to format currency
+
   const formatINR = (val) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -431,7 +431,7 @@ const CreatePaymentSlabModal = ({
     }).format(val || 0);
   };
 
-  // Determine progress bar color
+
   const getProgressBarColor = () => {
     if (dealValueNum === 0) return "bg-slate-200";
     if (isPerfectAllocation) return "bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.3)] animate-pulse";
@@ -443,7 +443,7 @@ const CreatePaymentSlabModal = ({
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-xs">
       <div className="app-modal w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         
-        {/* Modal Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="flex items-start gap-3 min-w-0">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-sky-50 border border-sky-100 shrink-0">
@@ -477,7 +477,7 @@ const CreatePaymentSlabModal = ({
           </button>
         </div>
 
-        {/* Modal Body */}
+
         <div className="p-5 overflow-y-auto custom-scrollbar flex-1 space-y-5 bg-[#fcfdfd]">
           {loading ? (
             <div className="p-16 text-center">
@@ -511,7 +511,7 @@ const CreatePaymentSlabModal = ({
           ) : (
             isEditMode ? (
               <>
-                {/* Top Deal Parameters Panel */}
+
                 <div className="app-panel p-4 bg-white grid grid-cols-1 md:grid-cols-3 gap-4 border border-(--border-soft) relative overflow-hidden">
                   <div className="md:col-span-1">
                     <label className="modal-label mb-2 block font-extrabold text-[12px] text-(--text-soft)">
@@ -560,7 +560,7 @@ const CreatePaymentSlabModal = ({
                       </div>
                     </div>
 
-                    {/* Progress Bar & Indicators */}
+
                     <div className="mt-4 space-y-1.5">
                       <div className="flex items-center justify-between text-[11px] font-bold text-(--text-soft)">
                         <span className="flex items-center gap-1">
@@ -604,7 +604,7 @@ const CreatePaymentSlabModal = ({
                   </div>
                 )}
 
-                {/* Validation Alert */}
+
                 {validationError && (
                   <div className="bg-red-50 border border-red-200 rounded-2xl p-3.5 flex items-start gap-2.5 shake">
                     <AlertCircle className="size-4.5 text-red-500 mt-0.5 shrink-0" />
@@ -614,7 +614,7 @@ const CreatePaymentSlabModal = ({
                   </div>
                 )}
 
-                {/* Stages Split Configuration Sheet */}
+
                 <div className="app-panel overflow-hidden border border-(--border-soft) bg-white">
                   <div className="app-section-bar px-4 py-2.5 flex items-center justify-between border-b border-(--border-soft)">
                     <h4 className="app-heading flex items-center gap-1.5 text-slate-700">
@@ -687,7 +687,7 @@ const CreatePaymentSlabModal = ({
                                     );
                                   })()}
                                   
-                                  {/* Due Date Picker */}
+
                                   <div className="flex items-center gap-1 text-[11px] font-semibold text-(--text-soft)">
                                     <span className="text-slate-400">Due:</span>
                                     <input
@@ -702,10 +702,10 @@ const CreatePaymentSlabModal = ({
                               </div>
                             </div>
 
-                            {/* Right controls column: Interdependent percentage & amount inputs */}
+
                             <div className="flex items-center gap-3 shrink-0 self-end md:self-auto">
                               
-                              {/* Percentage Input */}
+
                               <div className="w-24 relative">
                                 <input
                                   type="text"
@@ -718,7 +718,7 @@ const CreatePaymentSlabModal = ({
                                 <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] font-bold">%</span>
                               </div>
 
-                              {/* Amount Input */}
+
                               <div className="w-36 relative">
                                 <IndianRupee className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-(--text-faint)" />
                                 <input
@@ -731,7 +731,7 @@ const CreatePaymentSlabModal = ({
                                 />
                               </div>
 
-                              {/* Delete button */}
+
                               {isEditMode && stages.length > 1 && !isPaid && !isPartial && (
                                 <button
                                   type="button"
@@ -752,9 +752,9 @@ const CreatePaymentSlabModal = ({
               </>
             ) : (
               <>
-                {/* Overview Cards Row */}
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Card 1: Total Deal Value */}
+
                   <div className="bg-white p-4 rounded-2xl border border-(--border-soft) shadow-2xs">
                     <span className="text-[11px] font-bold text-(--text-faint) uppercase tracking-wider block">Total Contract Value</span>
                     <span className="text-2xl font-extrabold text-(--text-strong) block mt-1">
@@ -762,7 +762,7 @@ const CreatePaymentSlabModal = ({
                     </span>
                   </div>
 
-                  {/* Card 2: Total Paid */}
+
                   <div className="bg-white p-4 rounded-2xl border border-(--border-soft) shadow-2xs">
                     <span className="text-[11px] font-bold text-(--text-faint) uppercase tracking-wider block">Total Paid</span>
                     <div className="flex items-baseline gap-1.5 mt-1">
@@ -775,7 +775,7 @@ const CreatePaymentSlabModal = ({
                     </div>
                   </div>
 
-                  {/* Card 3: Outstanding Balance */}
+
                   <div className="bg-white p-4 rounded-2xl border border-(--border-soft) shadow-2xs">
                     <span className="text-[11px] font-bold text-(--text-faint) uppercase tracking-wider block">Outstanding Balance</span>
                     <span className="text-2xl font-extrabold text-amber-600 block mt-1">
@@ -784,7 +784,7 @@ const CreatePaymentSlabModal = ({
                   </div>
                 </div>
 
-                {/* Payment Progress Bar */}
+
                 {dealValueNum > 0 && (
                   <div className="bg-white p-4 rounded-2xl border border-(--border-soft) shadow-2xs space-y-2">
                     <div className="flex items-center justify-between text-[12px] font-bold text-(--text-soft)">
@@ -800,7 +800,7 @@ const CreatePaymentSlabModal = ({
                   </div>
                 )}
 
-                {/* Milestones Summary List */}
+
                 <div className="app-panel overflow-hidden border border-(--border-soft) bg-white">
                   <div className="app-section-bar px-4 py-2.5 flex items-center justify-between border-b border-(--border-soft)">
                     <h4 className="app-heading flex items-center gap-1.5">
@@ -881,7 +881,7 @@ const CreatePaymentSlabModal = ({
           )}
         </div>
 
-        {/* Modal Footer */}
+
         <div className="px-5 py-3 border-t border-(--border-soft) flex justify-between items-center bg-white">
           <div className="text-[12px] font-bold text-(--text-soft) flex items-center gap-1.5" />
           <div className="flex items-center gap-3">

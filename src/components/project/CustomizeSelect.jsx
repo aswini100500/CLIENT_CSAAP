@@ -1,4 +1,4 @@
-// CustomizeSelect.jsx
+
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { FaCheckCircle, FaTimes, FaInfoCircle, FaArrowLeft } from "react-icons/fa";
@@ -29,7 +29,7 @@ const CustomizeSelect = ({ onSelectType, onBack,  initialSelected = [], completi
 
   const [selected, setSelected] = useState(initialSelected);
 
-  // Sync state if initialSelected changes (e.g. when changing project being edited)
+
   useEffect(() => {
     setSelected(initialSelected);
   }, [initialSelected]);

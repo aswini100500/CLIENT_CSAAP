@@ -1,111 +1,111 @@
-// import React, { useState } from "react";
 
-// const ApprovalHistoryPage = () => {
-//   // Example data structure for approval history
-//   const approved = [
-//     {
-//       approvedBy: "User A",
-//       profile: "Manager",
-//       actionInfo: "Reviewed budget",
-//       status: "Approved",
-//       dateTime: "2025-10-15 09:00 AM",
-//       remarks: "All OK",
-//       createdBy: "Admin",
-//     },
-//     // Add more entries as needed
-//   ];
 
-//   const pending = [
-//     {
-//       pendingWith: "User B",
-//       profile: "Finance",
-//       actionInfo: "Waiting for review",
-//       createdBy: "Admin",
-//     },
-//     // Add more entries as needed
-//   ];
 
-//   return (
-//     <div className="min-h-screen p-8 bg-gray-100">
-//       <h2 className="text-2xl font-semibold mb-6">Approval History</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       
-//       {/* Approved Table */}
-//       <div className="bg-white rounded shadow mb-8">
-//         <h3 className="font-medium text-lg px-4 py-2 border-b">Approved By</h3>
-//         <table className="min-w-full text-sm">
-//           <thead>
-//             <tr className="bg-gray-200">
-//               <th className="px-4 py-2">Approved By</th>
-//               <th className="px-4 py-2">Profile</th>
-//               <th className="px-4 py-2">Action Information</th>
-//               <th className="px-4 py-2">Status</th>
-//               <th className="px-4 py-2">Date Time</th>
-//               <th className="px-4 py-2">Remarks</th>
-//               <th className="px-4 py-2">Created By</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {approved.map((row, idx) => (
-//               <tr key={idx}>
-//                 <td className="border px-4 py-2">{row.approvedBy}</td>
-//                 <td className="border px-4 py-2">{row.profile}</td>
-//                 <td className="border px-4 py-2">{row.actionInfo}</td>
-//                 <td className="border px-4 py-2">{row.status}</td>
-//                 <td className="border px-4 py-2">{row.dateTime}</td>
-//                 <td className="border px-4 py-2">{row.remarks}</td>
-//                 <td className="border px-4 py-2">{row.createdBy}</td>
-//               </tr>
-//             ))}
-//             {approved.length === 0 && (
-//               <tr>
-//                 <td colSpan="7" className="py-6 text-center text-gray-400">No records found</td>
-//               </tr>
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
 
-//       {/* Pending Table */}
-//       <div className="bg-white rounded shadow">
-//         <h3 className="font-medium text-lg px-4 py-2 border-b">Pending With</h3>
-//         <table className="min-w-full text-sm">
-//           <thead>
-//             <tr className="bg-gray-200">
-//               <th className="px-4 py-2">Pending With</th>
-//               <th className="px-4 py-2">Profile</th>
-//               <th className="px-4 py-2">Action Information</th>
-//               <th className="px-4 py-2">Created By</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {pending.map((row, idx) => (
-//               <tr key={idx}>
-//                 <td className="border px-4 py-2">{row.pendingWith}</td>
-//                 <td className="border px-4 py-2">{row.profile}</td>
-//                 <td className="border px-4 py-2">{row.actionInfo}</td>
-//                 <td className="border px-4 py-2">{row.createdBy}</td>
-//               </tr>
-//             ))}
-//             {pending.length === 0 && (
-//               <tr>
-//                 <td colSpan="4" className="py-6 text-center text-gray-400">No records found</td>
-//               </tr>
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default ApprovalHistoryPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 import React, { useState } from "react";
 
 const ApprovalHistoryPage = () => {
-  // Enhanced data structure with realistic approval workflow
+
   const [approvalData, setApprovalData] = useState({
     approved: [
       {
@@ -191,7 +191,7 @@ const ApprovalHistoryPage = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Status configuration
+
   const statusConfig = {
     approved: { label: "Approved", color: "bg-green-100 text-green-800 border-green-200", icon: "✅" },
     pending: { label: "Pending", color: "bg-yellow-100 text-yellow-800 border-yellow-200", icon: "⏳" },
@@ -204,7 +204,7 @@ const ApprovalHistoryPage = () => {
     low: { label: "Low", color: "bg-blue-100 text-blue-800" }
   };
 
-  // Filter data based on active tab and search term
+
   const filteredData = {
     approved: approvalData.approved.filter(item =>
       item.approvedBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -259,13 +259,13 @@ const ApprovalHistoryPage = () => {
   return (
     <div className="min-h-screen p-6 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Approval History</h1>
           <p className="text-gray-600">Track and manage budget approval workflow</p>
         </div>
 
-        {/* Statistics Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <StatCard
             title="Total Approvals"
@@ -293,10 +293,10 @@ const ApprovalHistoryPage = () => {
           />
         </div>
 
-        {/* Controls */}
+
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center">
-            {/* Search */}
+
             <div className="flex-1 w-full lg:max-w-md">
               <div className="relative">
                 <input
@@ -312,7 +312,7 @@ const ApprovalHistoryPage = () => {
               </div>
             </div>
 
-            {/* Tabs */}
+
             <div className="flex flex-wrap gap-2">
               {[
                 { id: "all", label: "All", count: allItems.length },
@@ -336,7 +336,7 @@ const ApprovalHistoryPage = () => {
           </div>
         </div>
 
-        {/* Approval Timeline */}
+
         <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">Approval Workflow</h2>
@@ -347,14 +347,14 @@ const ApprovalHistoryPage = () => {
               <div className="space-y-4">
                 {displayData.map((item) => (
                   <div key={item.id} className="flex items-start space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                    {/* Avatar */}
+
                     <div className="shrink-0">
                       <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-lg">
                         {item.avatar}
                       </div>
                     </div>
 
-                    {/* Content */}
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2">
                         <div>
@@ -384,7 +384,7 @@ const ApprovalHistoryPage = () => {
                         <span>👤 Created by: {item.createdBy}</span>
                       </div>
 
-                      {/* Remarks */}
+
                       {item.remarks && (
                         <div className="mt-2 p-2 bg-blue-50 rounded border border-blue-200">
                           <p className="text-xs text-blue-800">
@@ -393,7 +393,7 @@ const ApprovalHistoryPage = () => {
                         </div>
                       )}
 
-                      {/* Rejection Reason */}
+
                       {item.rejectionReason && (
                         <div className="mt-2 p-2 bg-red-50 rounded border border-red-200">
                           <p className="text-xs text-red-800">
@@ -417,7 +417,7 @@ const ApprovalHistoryPage = () => {
           </div>
         </div>
 
-        {/* Additional Info */}
+
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
           <div className="flex items-start space-x-3">
             <span className="text-blue-500 text-xl">💡</span>

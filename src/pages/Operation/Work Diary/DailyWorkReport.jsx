@@ -18,7 +18,7 @@ const DailyWorkReport = ({ projectSetup }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [previewFile, setPreviewFile] = useState(null);
 
-  // Configuration for easy maintenance
+
   const getDynamicUnits = () => {
     let projectUnits = projectSetup?.units_data || [];
     if (typeof projectUnits === 'string') {
@@ -38,7 +38,7 @@ const DailyWorkReport = ({ projectSetup }) => {
   const UNITS = getDynamicUnits();
   const STAGES = getDynamicStages();
 
-  // Load initial data
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setReport((prev) => ({ ...prev, date: today }));
@@ -64,15 +64,15 @@ const DailyWorkReport = ({ projectSetup }) => {
     }
   };
 
-  // ✅ Handle form changes
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setReport({ ...report, [name]: value });
   };
 
-  // ✅ Add work to the list
+
   const handleAddWork = () => {
-    if (/* !report.unit || */ !report.work || !report.stage) {
+    if ( !report.work || !report.stage) {
       return Swal.fire("Warning", "Please fill in all fields.", "warning");
     }
 
@@ -85,7 +85,7 @@ const DailyWorkReport = ({ projectSetup }) => {
     setReport(prev => ({ ...prev, work: "", stage: "", status: "Completed" }));
   };
 
-  // ✅ Save final report
+
   const handleSaveReport = async () => {
     if (workList.length === 0) {
         return Swal.fire("Warning", "No entries to save.", "warning");
@@ -97,7 +97,7 @@ const DailyWorkReport = ({ projectSetup }) => {
             project_setup_id: projectSetup.id,
             report_date: report.date,
             work_items: JSON.stringify(workList.map(item => ({
-                task: `${item.stage}: ${item.work}`, // Removed unit
+                task: `${item.stage}: ${item.work}`,
                 progress: item.status === "Completed" ? "100%" : "In Progress"
             }))),
             summary: "Daily work summary"
@@ -107,7 +107,7 @@ const DailyWorkReport = ({ projectSetup }) => {
         setSavedReports(prev => [{ ...submissionData, id: Date.now() }, ...prev]);
         setWorkList([]);
         Swal.fire("Success", "Report saved successfully.", "success");
-        fetchDailyReports(); // Refresh
+        fetchDailyReports();
     } catch (error) {
         console.error("Error saving report:", error);
         Swal.fire("Error", "Failed to save report.", "error");
@@ -141,20 +141,7 @@ const DailyWorkReport = ({ projectSetup }) => {
                   />
                 </div>
 
-                {/* <div>
-                  <label className="block mb-2 font-medium text-gray-700 flex items-center gap-2">
-                    <Building size={16} /> Unit Name
-                  </label>
-                  <select
-                    name="unit"
-                    value={report.unit}
-                    onChange={handleChange}
-                    className="border border-gray-300 rounded-lg p-3 w-full"
-                  >
-                    <option value="">-- Select Unit --</option>
-                    {UNITS.map(unit => <option key={unit} value={unit}>{unit}</option>)}
-                  </select>
-                </div> */}
+
 
                 <div>
                   <label className="block mb-2 font-medium text-gray-700">Stage</label>
@@ -208,7 +195,7 @@ const DailyWorkReport = ({ projectSetup }) => {
                       {workList.map((item, index) => (
                         <div key={item.id} className="flex justify-between items-start p-3 bg-white border rounded-lg">
                           <div>
-                            {/* <span className="font-medium">{item.unit}</span> - */} {item.status}
+ {item.status}
                             <p className="text-sm text-gray-600">{item.work}</p>
                           </div>
                           <button onClick={() => setWorkList(workList.filter((_, i) => i !== index))} className="text-red-500">

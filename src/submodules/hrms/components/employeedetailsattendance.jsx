@@ -21,7 +21,7 @@ const Employeedetailsattendance = () => {
     chatID: "",
     address: "",
 
-    // Company Details
+
     companyName: "Cloudstat Pvt Ltd",
     branchName: "",
     department: "",
@@ -31,10 +31,10 @@ const Employeedetailsattendance = () => {
     shiftStartDate: "2025-01-01",
     resignationDate: "",
 
-    // GEO Fencing
+
     geoFencing: "",
 
-    // Shift & Policy Details
+
     shiftType: "Fixed",
     firstWeeklyOff: "Sunday",
     shiftName: "GEN",
@@ -44,10 +44,10 @@ const Employeedetailsattendance = () => {
     secondWeeklyOff: "None",
     halfDayShift: "None",
 
-    // Auto Shift
+
     isAutoShift: "GEN",
 
-    // Access Control
+
     weekTimeZone1: "",
     weekTimeZone2: "0",
     weekTimeZone3: "0",
@@ -75,7 +75,7 @@ const Employeedetailsattendance = () => {
 
   return (
     <div className="p-6 space-y-6 bg-gray-50">
-      {/* Header */}
+
       <div className="bg-white p-4 rounded-lg shadow-sm">
         <h1 className="text-2xl font-bold text-gray-800">
           Add/Edit Employee Details
@@ -97,11 +97,11 @@ const Employeedetailsattendance = () => {
         </div>
       </div>
 
-      {/* ===== Row 1: Image + Personal Details ===== */}
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Sidebar */}
+
         <div className="lg:col-span-3 space-y-6">
-          {/* Profile Upload */}
+
           <div className="bg-white shadow-sm border rounded-lg p-4 space-y-4">
             <div
               className="bg-blue-50 border-2 border-dashed border-blue-200 rounded-xl w-32 h-32 mx-auto flex items-center justify-center cursor-pointer hover:bg-blue-100 transition-colors"
@@ -128,7 +128,7 @@ const Employeedetailsattendance = () => {
             </p>
           </div>
 
-          {/* Mobile Attendance Mode */}
+
           <div className="bg-white shadow-sm border rounded-lg p-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Mobile Attendance Mode
@@ -147,7 +147,7 @@ const Employeedetailsattendance = () => {
           </div>
         </div>
 
-        {/* Personal Details */}
+
         <div className="lg:col-span-9 bg-white shadow-sm border rounded-lg p-6">
           <h3 className="text-md font-semibold text-gray-800 mb-4 border-b pb-2">
             Personal Details
@@ -206,7 +206,7 @@ const Employeedetailsattendance = () => {
               </div>
             ))}
 
-            {/* Address Field */}
+
             <div className="md:col-span-2 lg:col-span-4">
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Address
@@ -220,7 +220,7 @@ const Employeedetailsattendance = () => {
               />
             </div>
 
-            {/* Attachments */}
+
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Attachment 1 (max 100KB)
@@ -257,9 +257,9 @@ const Employeedetailsattendance = () => {
         </div>
       </div>
 
-      {/* ===== Row 2: Company / Employee / GEO Fencing ===== */}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Company Details */}
+
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
             Company Details
@@ -290,13 +290,13 @@ const Employeedetailsattendance = () => {
           </div>
         </div>
 
-        {/* Employee Details */}
+
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
             Employee Details
           </h3>
           <div className="space-y-3">
-            {/* Dept Name and Designation in one row */}
+
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -322,7 +322,7 @@ const Employeedetailsattendance = () => {
               </div>
             </div>
 
-            {/* Date of Joining and Shift Start Date in one row */}
+
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -350,7 +350,7 @@ const Employeedetailsattendance = () => {
               </div>
             </div>
 
-            {/* Office Time Policy */}
+
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
                 Office Time Policy *
@@ -363,7 +363,7 @@ const Employeedetailsattendance = () => {
               />
             </div>
 
-            {/* Resignation Date */}
+
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
                 Resignation Date
@@ -379,7 +379,7 @@ const Employeedetailsattendance = () => {
           </div>
         </div>
 
-        {/* GEO Fencing */}
+
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
             Branch Access for GEO Fencing
@@ -404,15 +404,15 @@ const Employeedetailsattendance = () => {
         </div>
       </div>
 
-      {/* ===== Row 3: Shift & Policy / Auto Shift ===== */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Shift & Policy */}
+
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
             Shift & Policy Details
           </h3>
           <div className="space-y-3">
-            {/* Shift Type and First Weekly Off in one row */}
+
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -438,7 +438,7 @@ const Employeedetailsattendance = () => {
               </div>
             </div>
 
-            {/* Shift Name and Extra Allowances in one row */}
+
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -464,7 +464,7 @@ const Employeedetailsattendance = () => {
               </div>
             </div>
 
-            {/* Second Weekly Off Days and Second WD Type in one row */}
+
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -490,7 +490,7 @@ const Employeedetailsattendance = () => {
               </div>
             </div>
 
-            {/* Second Weekly Off and Half Day Shift in one row */}
+
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -518,7 +518,7 @@ const Employeedetailsattendance = () => {
           </div>
         </div>
 
-        {/* Auto Shift */}
+
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
             Is Auto Shift
@@ -549,7 +549,7 @@ const Employeedetailsattendance = () => {
         </div>
       </div>
 
-      {/* ===== Row 4: Access Control Setting ===== */}
+
       <div className="bg-white border rounded-lg shadow-sm p-4">
         <h3 className="text-md font-semibold text-gray-800 mb-2">
           Access Control Setting
@@ -581,7 +581,7 @@ const Employeedetailsattendance = () => {
         </div>
       </div>
 
-      {/* Action Buttons */}
+
       <div className="flex justify-end space-x-4 pt-4">
         <button
           type="button"

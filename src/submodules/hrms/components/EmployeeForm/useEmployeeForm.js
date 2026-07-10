@@ -38,13 +38,13 @@ const parsePhone = (fullPhone, countryCodes) => {
   if (!fullPhone) return { phoneCode: "+91", phone: "" };
   const cleanedPhone = String(fullPhone).trim();
 
-  // Try to find if it starts with any of the country dial codes
-  // Sort country codes by dial code length descending to match longer dial codes first (e.g. +971 before +9)
+
+
   const sortedCodes = [...countryCodes].sort((a, b) => b.dial_code.length - a.dial_code.length);
   for (const c of sortedCodes) {
     if (cleanedPhone.startsWith(c.dial_code)) {
       let rawPhone = cleanedPhone.substring(c.dial_code.length).trim();
-      // Remove leading hyphens or spaces if present
+
       if (rawPhone.startsWith("-")) {
         rawPhone = rawPhone.substring(1).trim();
       }
@@ -52,7 +52,7 @@ const parsePhone = (fullPhone, countryCodes) => {
     }
   }
 
-  // If no match is found, check if it starts with "+" anyway and try to split by space
+
   if (cleanedPhone.startsWith("+")) {
     const parts = cleanedPhone.split(/\s+/);
     if (parts.length > 1) {
@@ -62,7 +62,7 @@ const parsePhone = (fullPhone, countryCodes) => {
     }
   }
 
-  // Fallback: entire phone is raw phone, default phoneCode to +91
+
   return { phoneCode: "+91", phone: cleanedPhone };
 };
 
@@ -110,7 +110,7 @@ const normalizeFileList = (value) => {
     const parsed = JSON.parse(value);
     if (Array.isArray(parsed)) return parsed;
   } catch {
-    // Stored employee documents are comma-separated filenames in older rows.
+
   }
 
   return value
@@ -232,7 +232,7 @@ const useEmployeeForm = ({
     },
   ]);
 
-  // ─── Leave Management States (add this RIGHT HERE, after formData) ───
+
   const [leaveData, setLeaveData] = useState({
     yearly_cl: "",
     yearly_el: "",
@@ -270,7 +270,7 @@ const useEmployeeForm = ({
   const [uploadProgress, setUploadProgress] = useState({});
   const [isUploading, setIsUploading] = useState(false);
 
-  // ─── Other Components (dynamic JSON array) ───
+
   const [otherComponents, setOtherComponents] = useState([]);
 
   const addOtherComponent = () => {
@@ -317,7 +317,7 @@ const useEmployeeForm = ({
     });
   };
 
-  // ─── Leave Change Handler (add this with other handlers) ───
+
   const handleLeaveChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
@@ -325,7 +325,7 @@ const useEmployeeForm = ({
     setLeaveData((prev) => {
       const updated = { ...prev, [name]: newValue };
 
-      // Auto-calculate total yearly leave
+
       if (["yearly_cl", "yearly_el", "yearly_ml"].includes(name)) {
         const cl = name === "yearly_cl" ? newValue : prev.yearly_cl;
         const el = name === "yearly_el" ? newValue : prev.yearly_el;
@@ -338,8 +338,8 @@ const useEmployeeForm = ({
     });
   };
 
-  // ─── Reset Leave Data (add this with other handlers) ───
-  // Replace the resetLeaveData function with this version that has proper defaults:
+
+
 
   const resetLeaveData = () => {
     setLeaveData({
@@ -365,7 +365,7 @@ const useEmployeeForm = ({
     });
   };
 
-  // ─── Auto Calculate & Read Only ───
+
   const [autoCalculate, setAutoCalculate] = useState(true);
   const [readOnlyFields, setReadOnlyFields] = useState(true);
   const [salaryPolicy, setSalaryPolicy] = useState(
@@ -375,7 +375,7 @@ const useEmployeeForm = ({
   const [isSalaryPolicySaving, setIsSalaryPolicySaving] = useState(false);
   const [showSalaryPolicyModal, setShowSalaryPolicyModal] = useState(false);
 
-  // ─── Salary Toggles (optional components) ───
+
   const [salaryToggles, setSalaryToggles] = useState({
     hra: true,
     epf: true,
@@ -388,15 +388,15 @@ const useEmployeeForm = ({
     useState(false);
   const salaryPolicyRef = useRef(salaryPolicy);
 
-  // ─── Projects List ───
+
   const [projectsList, setProjectsList] = useState([]);
 
 
 
-  // ─── Departments List ───
+
   const [departmentsList, setDepartmentsList] = useState([]);
 
-  // ─── Designations List ───
+
   const [designationsList, setDesignationsList] = useState([]);
 
   useEffect(() => {
@@ -406,7 +406,7 @@ const useEmployeeForm = ({
   const handleToggle = (field) => {
     setSalaryToggles((prev) => {
       const next = { ...prev, [field]: !prev[field] };
-      // Trigger full recalc with new toggles
+
       setFormData((prevData) => {
         const result = recalcFromCTC(
           prevData,
@@ -435,7 +435,7 @@ const useEmployeeForm = ({
     user?.company_id || user?.id;
   console.log("Company ID in useEmployeeForm:", companyId);
 
-  // ─── Core salary recalculation (policy-driven) ───
+
   const recalcFromCTC = (
     data,
     toggles,
@@ -491,7 +491,7 @@ const useEmployeeForm = ({
   useEffect(() => {
     if (mode !== "create") return;
 
-    // In the useEffect for create mode, update the fetchLeavePolicyTemplate function:
+
 
     const fetchLeavePolicyTemplate = async () => {
       const companySlug = user?.slug;
@@ -538,27 +538,27 @@ const useEmployeeForm = ({
             max_encashable_days: leavePolicy.max_encashable_days || "",
           }));
         } else {
-          // No template found - use defaults silently
+
           console.log("No leave policy template found, using defaults");
         }
       } catch (error) {
-        // Silently handle missing template - just use defaults
+
         const status = error?.response?.status;
         const message = error?.response?.data?.message || "";
 
         if (status === 404 || message.toLowerCase().includes("not found")) {
           console.log("Leave policy template not found, using default values");
         } else {
-          // Only log unexpected errors
+
           console.error("Error fetching leave policy template:", error);
         }
-        // Keep default values, don't show Swal error
+
       }
     };
     fetchLeavePolicyTemplate();
   }, [mode, user?.slug]);
 
-  // ─── Fetch Projects & Employees ───
+
   useEffect(() => {
     const fetchProjects = async () => {
       if (!companyId) return;
@@ -595,13 +595,13 @@ const useEmployeeForm = ({
         if (response.data?.success && Array.isArray(response.data.data)) {
           const data = response.data.data;
 
-          // Extract unique department names from department_name field
+
           const deptNames = [
             ...new Set(data.map((item) => item.department_name).filter(Boolean)),
           ];
           setDepartmentsList(deptNames);
 
-          // Extract unique role objects with department name mapping
+
           const seen = new Set();
           const mappedDesignations = [];
           data.forEach((item) => {
@@ -768,7 +768,7 @@ const useEmployeeForm = ({
           return next;
         });
 
-        // In the useEffect that fetches employee data (mode === "edit"), replace the leave policy fetching section:
+
 
         if (user?.slug) {
           try {
@@ -815,22 +815,22 @@ const useEmployeeForm = ({
                 max_encashable_days: leavePolicy.max_encashable_days || "",
               }));
             } else {
-              // Fallback: keep default values (no error)
+
               console.log("No leave policy found, using defaults");
             }
           } catch (leaveError) {
-            // Silently handle 404/not found - just use defaults without showing error
+
             const status = leaveError?.response?.status;
             const message = leaveError?.response?.data?.message || "";
 
             if (status === 404 || message.toLowerCase().includes("not found")) {
-              // Leave policy not found - that's fine, we'll use defaults
+
               console.log("Leave policy not found for employee, using default values");
             } else {
-              // Only log other unexpected errors
+
               console.error("Error fetching leave policy:", leaveError);
             }
-            // Don't show Swal error for missing leave policy
+
           }
         }
       } catch (error) {
@@ -894,7 +894,7 @@ const useEmployeeForm = ({
     }
   };
 
-  // ─── Input change handler (with CTC auto-calc) ───
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     let nextValue = type === "checkbox" ? checked : value;
@@ -904,21 +904,21 @@ const useEmployeeForm = ({
     }
 
     if (name === "phone" && typeof nextValue === "string") {
-      nextValue = nextValue.replace(/\D/g, ""); // strip non-digits
+      nextValue = nextValue.replace(/\D/g, "");
     }
 
     if (name === "department") {
       setFormData((prev) => ({
         ...prev,
         department: nextValue,
-        postApplied: "", // Reset designation when department changes
+        postApplied: "",
       }));
       return;
     }
 
     if (name === "ctc" || name === "variable_pay_annual") {
       if (autoCalculate) {
-        // Full recalc when CTC or Variable Pay changes
+
         setFormData((prev) => {
           const updated = { ...prev, [name]: nextValue };
           const derived = recalcFromCTC(
@@ -935,20 +935,20 @@ const useEmployeeForm = ({
       return;
     }
 
-    // PT and LWF: manual entry, no recalc
+
     if (name === "pt" || name === "lwf") {
       setFormData((prev) => ({ ...prev, [name]: nextValue }));
       return;
     }
 
-    // Non-salary field — just update as-is
+
     setFormData((prev) => ({
       ...prev,
       [name]: nextValue,
     }));
   };
 
-  // ─── File upload helpers ───
+
   const handleFileUpload = async (fileType, file) => {
     setIsUploading(true);
     setUploadProgress((prev) => ({ ...prev, [fileType]: 0 }));
@@ -1047,7 +1047,7 @@ const useEmployeeForm = ({
     }
   };
 
-  /* ─── Same-as-Permanent handler ─── */
+
   const handleSameAsPermanent = (checked) => {
     setSameAsPermanent(checked);
     if (checked) {
@@ -1063,7 +1063,7 @@ const useEmployeeForm = ({
     }
   };
 
-  /* ─── Salary deviation warnings ─── */
+
   const getSalaryWarnings = () => {
     const warnings = [];
     const ctc = parseFloat(formData.ctc) || 0;
@@ -1082,8 +1082,8 @@ const useEmployeeForm = ({
       .filter((comp) => comp.type === "earning")
       .reduce((sum, comp) => sum + (parseFloat(comp.amount) || 0), 0);
 
-    // ── CTC component sum check ──
-    // CTC = Basic + HRA + Special + EPF_employer + ESI_employer + Variable + Other Earnings
+
+
     const ta = parseFloat(formData.ta) || 0;
     const da = parseFloat(formData.da) || 0;
 
@@ -1102,13 +1102,13 @@ const useEmployeeForm = ({
         `CTC components don't add up — sum is ₹${componentSum.toFixed(2)} vs CTC ₹${ctc.toFixed(2)} (gap: ₹${Math.abs(componentSum - ctc).toFixed(2)}). Allowed tolerance is ₹${tolerance.toFixed(2)}.`,
       );
 
-    // ── Special Allowance negative check ──
+
     if (special < 0)
       warnings.push(
         `Employer costs exceed CTC — Special Allowance is negative (₹${special.toFixed(2)}). Reduce components or increase CTC.`,
       );
 
-    // ── Gross Annual sanity check ──
+
     const expectedGrossAnnual =
       basic + hra + ta + da + special + totalOtherEarningsAnnual;
     if (
@@ -1122,7 +1122,7 @@ const useEmployeeForm = ({
     return warnings;
   };
 
-  /* ─── Salary hard errors (block submit) ─── */
+
   const getSalaryErrors = () => {
     const errors = [];
     const ctc = parseFloat(formData.ctc) || 0;
@@ -1166,7 +1166,7 @@ const useEmployeeForm = ({
     setActiveTab(tabId);
   };
 
-  /* ─── Wizard helpers ─── */
+
   const currentTabIndex = TABS.findIndex((t) => t.id === activeTab);
   const goNext = () => {
     if (currentTabIndex < TABS.length - 1) {
@@ -1230,7 +1230,7 @@ const useEmployeeForm = ({
     }
   };
 
-  /* ─── Education helpers ─── */
+
   const addEducation = () => {
     setEducationList((prev) => [
       ...prev,
@@ -1257,7 +1257,7 @@ const useEmployeeForm = ({
     );
   };
 
-  /* ─── Experience helpers ─── */
+
   const addExperience = () => {
     setExperienceList((prev) => [
       ...prev,
@@ -1284,11 +1284,11 @@ const useEmployeeForm = ({
     );
   };
 
-  /* ─── Form submission ─── */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Guard: create flow still uses the wizard, edit flow can be saved from any tab.
+
     if (mode !== "edit" && activeTab !== "leave") {
       goNext();
       return;
@@ -1338,7 +1338,7 @@ const useEmployeeForm = ({
 
       const submitFormData = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        // Skip fields that do not belong to the employees database table
+
         if (key === "ctc") return;
         if (key === "basic") return;
         if (key === "hra") return;
@@ -1367,12 +1367,12 @@ const useEmployeeForm = ({
         if (key === "maritalStatus") return;
         if (key === "fathers_identity") return;
         if (key === "fatherName") return;
-        // Skip snake_case fields already handled by camelCase→snake_case mappings above
+
         if (key === "shift_start") return;
         if (key === "shift_end") return;
         if (key === "blood_group") return;
         if (key === "epfo_id") return;
-        if (key === "designation") return; // appended explicitly after the loop
+        if (key === "designation") return;
         if (key === "marital_status") return;
 
         if (
@@ -1433,7 +1433,7 @@ const useEmployeeForm = ({
           ];
 
           if (dateFields.includes(fieldName)) {
-            if (!val || val === "") return; // skip empty dates — DB rejects '' for DATE columns
+            if (!val || val === "") return;
             if (typeof val === "string") val = val.split("T")[0];
           }
 
@@ -1460,10 +1460,10 @@ const useEmployeeForm = ({
         year: edu.passingYear || "",
       }));
       submitFormData.append("education", JSON.stringify(educationPayload));
-      // submitFormData.append(
-      //   "other_components",
-      //   JSON.stringify(otherComponents),
-      // );
+
+
+
+
       submitFormData.append("experience", JSON.stringify(experienceList));
       if (mode !== "edit") {
         submitFormData.append("company_id", companyId);
@@ -1484,27 +1484,27 @@ const useEmployeeForm = ({
         });
       });
 
-      // if (mode === "edit") {
-      //   SINGLE_FILE_FIELDS.forEach((field) => {
-      //     const fileObj = uploadedFiles[field];
-      //     const keyName = field === "profilePhoto" ? "profile_photo" : field;
-      //     submitFormData.append(
-      //       `${keyName}_existing`,
-      //       fileObj?.existing ? fileObj.preview || fileObj.name || "" : "",
-      //     );
-      //   });
-      // 
-      //   MULTI_FILE_FIELDS.forEach((field) => {
-      //     const existingFiles = uploadedFiles[field]
-      //       .filter((fileObj) => fileObj?.existing)
-      //       .map((fileObj) => fileObj.preview || fileObj.name)
-      //       .filter(Boolean);
-      //     submitFormData.append(
-      //       `${field}_existing`,
-      //       JSON.stringify(existingFiles),
-      //     );
-      //   });
-      // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       const leavePolicyPayload = {
         employee_id: employeeId,
@@ -1648,8 +1648,8 @@ const useEmployeeForm = ({
     }
   };
 
-  /* ─── Session guard ─── */
-  // const isSessionExpired = !csaapToken;
+
+
   const isSessionExpired = [
     "employee",
     "HR Manager",
@@ -1659,7 +1659,7 @@ const useEmployeeForm = ({
     ? !user?.token
     : !csaapToken;
   return {
-    // State
+
     activeTab,
     setActiveTab: handleSetActiveTab,
     showPassword,
@@ -1687,12 +1687,12 @@ const useEmployeeForm = ({
     setShowSalaryPolicyModal,
     saveSalaryPolicy,
 
-    // ADD LEAVE STATE HERE
+
     leaveData,
     handleLeaveChange,
     resetLeaveData,
 
-    // Handlers
+
     handleInputChange,
     handleFileInput,
     removeUploadedFile,
@@ -1703,27 +1703,27 @@ const useEmployeeForm = ({
     handleConfirmEmployee,
     handleSubmit,
 
-    // Education
+
     addEducation,
     removeEducation,
     updateEducation,
 
-    // Experience
+
     addExperience,
     removeExperience,
     updateExperience,
 
-    // Other components
+
     addOtherComponent,
     updateOtherComponent,
     removeOtherComponent,
 
-    // Wizard
+
     currentTabIndex,
     goNext,
     goPrev,
 
-    // Session
+
     isSessionExpired,
     navigate,
     employeeId,

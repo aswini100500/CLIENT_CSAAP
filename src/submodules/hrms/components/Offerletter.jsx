@@ -115,7 +115,7 @@ const OfferLetterManagement = () => {
     );
   };
 
-  // View offer letter
+
   const handleView = async (offer) => {
     setSelectedOffer(offer);
     setOfferLetterLoading(true);
@@ -136,7 +136,7 @@ const OfferLetterManagement = () => {
     setOfferLetterLoading(false);
   };
 
-  // Edit offer letter
+
   const handleEdit = async (offer) => {
     if (!has("hrms.job.offer.create")) {
       Swal.fire("Access Denied", "You do not have permission to edit offer letters.", "error");
@@ -172,7 +172,7 @@ const OfferLetterManagement = () => {
   };
 
 
-  // Save edited offer letter
+
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     if (!has("hrms.job.offer.create")) {
@@ -200,7 +200,7 @@ const OfferLetterManagement = () => {
         }
       );
 
-      // update UI
+
       setCandidates((prev) =>
         prev.map((c) =>
           c.candidate_id === selectedOffer.candidate_id
@@ -221,7 +221,7 @@ const OfferLetterManagement = () => {
     }
   };
 
-  // Send offer letter
+
 
   const handleSend = async (offer) => {
     if (!has("hrms.job.offer.create")) {
@@ -306,7 +306,7 @@ const OfferLetterManagement = () => {
         return;
       }
 
-      // ✅ 1. Prepare LOCAL API payload mirroring Addemployee.jsx (using FormData)
+
       const submitFormData = new FormData();
       submitFormData.append("name", resolvedName);
       submitFormData.append("email", resolvedEmail);
@@ -327,7 +327,7 @@ const OfferLetterManagement = () => {
       submitFormData.append("password", "12345678");
       submitFormData.append("company_id", resolvedCompanyId);
 
-      // ✅ 2. Prepare CLOUD API payload (minimal, exactly mirroring Addemployee.jsx)
+
       const cloudPayload = {
         company_id: resolvedCompanyId,
         name: resolvedName,
@@ -343,7 +343,7 @@ const OfferLetterManagement = () => {
         shift_end: null
       };
 
-      // ✅ 3. Create cloud employee first so local HRMS can reuse the generated id
+
       let csaapEmployeeId = null;
       try {
         const cloudResponse = await axios.post(
@@ -383,7 +383,7 @@ const OfferLetterManagement = () => {
 
       submitFormData.append("id", csaapEmployeeId);
 
-      // ✅ 4. Create local HRMS employee with the shared employee id
+
       try {
         await axios.post(
           `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee`,
@@ -406,7 +406,7 @@ const OfferLetterManagement = () => {
         return;
       }
 
-      // ✅ 5. Update UI
+
       const updatedCandidates = candidates.map(candidate =>
         candidate.selected_id === selectedOffer.selected_id
           ? { ...candidate, status: 'accepted' }
@@ -434,17 +434,17 @@ const OfferLetterManagement = () => {
     }
   };
 
-  // Open accept confirmation modal
+
   const handleOpenAcceptModal = (offer) => {
     setSelectedOffer({
       ...offer,
-      position: offer.postApplied // ensure "Applied For" shows correctly
+      position: offer.postApplied
     });
     setShowAcceptModal(true);
   };
 
 
-  // CSV export
+
   const handleExport = () => {
     if (!has("hrms.job.offer.download")) {
       Swal.fire("Access Denied", "You do not have permission to export data.", "error");
@@ -503,19 +503,19 @@ Human Resource Manager
 hr@cloudsat.com
 `;
 
-    // Add content to PDF
+
     doc.setFont('Times', 'Normal');
     doc.setFontSize(12);
     doc.text(content, 10, 10);
 
-    // Save the PDF
+
     doc.save(`${offerLetterData.name}_Offer_Letter.pdf`);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div>
             <p className="text-gray-600 mt-1">Manage and track all offer letters</p>
@@ -530,16 +530,11 @@ hr@cloudsat.com
                 <span>Export</span>
               </button>
             )}
-            {/* <button
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Plus size={18} />
-              <span>Create New Offer</span>
-            </button> */}
+
           </div>
         </div>
 
-        {/* Filters & Search */}
+
         <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
@@ -592,7 +587,7 @@ hr@cloudsat.com
           </div>
         </div>
 
-        {/* Table */}
+
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           {loading ? (
             <div className="text-center py-10 text-gray-400">Loading candidates...</div>
@@ -684,7 +679,7 @@ hr@cloudsat.com
               </table>
             </div>
           )}
-          {/* Pagination */}
+
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between">
             <div className="text-sm text-gray-700 mb-4 sm:mb-0">
               Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
@@ -722,7 +717,7 @@ hr@cloudsat.com
           </div>
         </div>
 
-        {/* View Modal */}
+
         {showViewModal && selectedOffer && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-2xl w-full" style={{ maxHeight: '100vh', overflowY: 'auto' }}>
@@ -804,7 +799,7 @@ hr@cloudsat.com
           </div>
         )}
 
-        {/* Accept Confirmation Modal */}
+
         {showAcceptModal && selectedOffer && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-md w-full">
@@ -849,7 +844,7 @@ hr@cloudsat.com
           </div>
         )}
 
-        {/* Edit Modal */}
+
         {showEditModal && selectedOffer && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-lg w-full" style={{ maxHeight: '100vh', overflowY: 'auto' }}>
@@ -983,7 +978,7 @@ hr@cloudsat.com
           </div>
         )}
 
-        {/* Toast Notification */}
+
         {toast && <Toast message={toast.message} type={toast.type} />}
       </div>
     </div>

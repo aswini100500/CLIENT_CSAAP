@@ -62,7 +62,7 @@ const Header = ({
     setUnreadCount(0);
   };
 
-  // Close all dropdowns when another is opened
+
   const handleDropdownToggle = (type) => {
     if (type === "profile") {
       setShowProfileDropdown(!showProfileDropdown);
@@ -139,9 +139,9 @@ const Header = ({
   return (
     <header className="sticky top-0 z-10 bg-white shadow-sm dark:bg-gray-800 w-full h-16">
       <div className="flex items-center justify-between px-4 py-3 md:px-6">
-        {/* Left section - Sidebar toggle and search */}
+
         <div className="flex items-center space-x-4">
-          {/* Mobile sidebar toggle */}
+
           <button
             onClick={toggleMobileSidebar}
             className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors md:hidden"
@@ -153,9 +153,9 @@ const Header = ({
             />
           </button>
 
-          {/* Desktop sidebar toggle */}
 
-          {/* Search bar */}
+
+
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FontAwesomeIcon
@@ -173,9 +173,9 @@ const Header = ({
           </div>
         </div>
 
-        {/* Right section - Notifications and profile */}
+
         <div className="flex items-center space-x-4 md:space-x-6">
-          {/* Notifications */}
+
           <div className="relative">
             <button
               onClick={() => handleDropdownToggle("notifications")}
@@ -193,10 +193,10 @@ const Header = ({
               )}
             </button>
 
-            {/* Notifications dropdown */}
+
             {showNotifications && (
               <>
-                {/* Overlay - only for mobile */}
+
                 <div
                   className="fixed inset-0 z-20 bg-black bg-opacity-50 md:hidden"
                   onClick={() => setShowNotifications(false)}
@@ -248,7 +248,7 @@ const Header = ({
             )}
           </div>
 
-          {/* Profile dropdown */}
+
           <div className="relative">
             <button
               onClick={() => handleDropdownToggle("profile")}
@@ -271,7 +271,7 @@ const Header = ({
 
             {showProfileDropdown && (
               <>
-                {/* Overlay - only for mobile */}
+
                 <div
                   className="fixed inset-0 z-20 bg-black bg-opacity-50 md:hidden"
                   onClick={() => setShowProfileDropdown(false)}

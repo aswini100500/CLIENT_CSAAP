@@ -32,7 +32,7 @@ const [searchTerm, setSearchTerm] = useState("");
       `${import.meta.env.VITE_HRMS_BASE_URL}/api/timewise-attendance/report?month=${monthNumber}&year=${year}&search=${searchTerm}`
     );
 
-    //  Group records by emp_code
+
     const grouped = data.reduce((acc, record) => {
       const key = record.emp_code;
       if (!acc[key]) {
@@ -60,7 +60,7 @@ const [searchTerm, setSearchTerm] = useState("");
       return acc;
     }, {});
 
-    //  Convert grouped object into array
+
     const formatted = Object.values(grouped).map((emp, index) => ({
       s1: index + 1,
       ...emp,
@@ -87,7 +87,7 @@ const [searchTerm, setSearchTerm] = useState("");
 
 
 
-  //search bar filter
+
   const filteredEmployees = attendanceData.filter(
   (emp) =>
     emp.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -95,7 +95,7 @@ const [searchTerm, setSearchTerm] = useState("");
 );
 
 
-  // Calculate summary statistics
+
   const summary = {
     totalEmployees: attendanceData.length,
     totalPresent: attendanceData.reduce((total, emp) => 
@@ -110,12 +110,12 @@ const [searchTerm, setSearchTerm] = useState("");
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Monthly Attendance
         </h1>
 
-        {/* Form Section */}
+
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Monthly Attendance
@@ -171,21 +171,13 @@ const [searchTerm, setSearchTerm] = useState("");
           </form>
         </div>
 
-        {/* Report Section */}
+
         {showReport && (
           <div className="bg-white rounded-2xl shadow-lg p-6 animate-fadeIn">
 
-            {/* <div className="mb-6 flex justify-end">
-  <input
-    type="text"
-    placeholder="Search by name or emp code..."
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    className="w-full sm:w-1/3 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-  />
-</div> */}
 
-            {/* Summary Cards */}
+
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
                 <div className="flex items-center justify-between">
@@ -254,7 +246,7 @@ const [searchTerm, setSearchTerm] = useState("");
   />
 </div>
 
-   {/* Attendance Table */}
+
 <div className="overflow-x-auto">
   <table className="w-full border-collapse text-sm">
     <thead>
@@ -278,7 +270,7 @@ const [searchTerm, setSearchTerm] = useState("");
           Location
         </th>
 
-        {/* Day Headers */}
+
         {Array.from({ length: daysInMonth }, (_, i) => (
           <th
             key={i + 1}
@@ -297,7 +289,7 @@ const [searchTerm, setSearchTerm] = useState("");
       
      {filteredEmployees.map((employee) => (
   <React.Fragment key={employee.empCode}>
-    {/* Main Employee Row */}
+
     <tr className="hover:bg-gray-50">
       <td className="border border-gray-200 px-6 py-3 text-center font-medium text-gray-700">
         {employee.s1}
@@ -318,7 +310,7 @@ const [searchTerm, setSearchTerm] = useState("");
         {employee.location}
       </td>
 
-      {/* Status Day Cells */}
+
       {employee.days.slice(0, daysInMonth).map((day) => (
         <td
           key={day.day}
@@ -339,7 +331,7 @@ const [searchTerm, setSearchTerm] = useState("");
       ))}
     </tr>
 
-    {/* Time Details Rows */}
+
     {["In Time", "Out Time", "Late By", "Early By"].map((detailType) => (
       <tr key={detailType} className="hover:bg-gray-50">
         <td
@@ -368,7 +360,7 @@ const [searchTerm, setSearchTerm] = useState("");
               </table>
             </div>
 
-            {/* Legend */}
+
             <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
               <h3 className="text-sm font-medium text-gray-700 mb-3">Attendance Legend:</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -400,7 +392,7 @@ const [searchTerm, setSearchTerm] = useState("");
         )}
       </div>
 
-      {/* Add custom animation for fade-in effect */}
+
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }

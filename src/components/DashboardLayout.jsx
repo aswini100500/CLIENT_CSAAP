@@ -7,10 +7,10 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
+
       <Sidebar isOpen={isSidebarOpen} />
 
-      {/* Main Content Area */}
+
       <div className="flex-1 flex flex-col min-w-0">
         <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         

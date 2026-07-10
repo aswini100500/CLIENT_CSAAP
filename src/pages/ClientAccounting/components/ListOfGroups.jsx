@@ -16,10 +16,10 @@ const ListOfGroups = () => {
   const [loading, setLoading] = useState(true);
   const [showEmployeeActivity, setShowEmployeeActivity] = useState(false);
   
-  const { companyId, companyName } = useCompany(); // ✅ GET companyId
+  const { companyId, companyName } = useCompany();
   const API = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group`;
 
-  // ✅ Default demo groups
+
   const demoGroups = [
     {
       groupName: "Sundry Debtors",
@@ -62,7 +62,7 @@ const ListOfGroups = () => {
     if (!companyId) return;
     setLoading(true);
     try {
-      // ✅ 1. First check backend
+
       const res = await axios.get(`${API}/all/${companyId}`);
       if (res.data && res.data.length > 0) {
         setGroups(res.data);
@@ -73,13 +73,13 @@ const ListOfGroups = () => {
     } catch (err) {
       console.log("Backend failed → Using localStorage/demo data");
 
-      // ✅ 2. If backend fails → check localStorage
+
       const storedGroups = JSON.parse(localStorage.getItem("tallyGroups"));
 
       if (storedGroups && storedGroups.length > 0) {
         setGroups(storedGroups);
       } else {
-        // ✅ 3. Finally fallback → demo groups
+
         localStorage.setItem("tallyGroups", JSON.stringify(demoGroups));
         setGroups(demoGroups);
       }
@@ -115,7 +115,7 @@ const ListOfGroups = () => {
         const res = await axios.delete(`${API}/${companyId}/${id}`);
         if (res.data) {
           Swal.fire("Deleted!", "Group has been deleted.", "success");
-          fetchData(); // Refresh list
+          fetchData();
         }
       } catch (err) {
         console.error(err);
@@ -143,7 +143,7 @@ const ListOfGroups = () => {
     const doc = new jsPDF();
     const today = new Date().toLocaleDateString("en-IN");
 
-    // Header
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(15, 23, 42);
@@ -161,7 +161,7 @@ const ListOfGroups = () => {
     doc.setDrawColor(220);
     doc.line(14, 32, 195, 32);
 
-    // Table
+
     const tableData = filteredGroups.map((g, i) => [
       i + 1,
       g.groupName || "-",
@@ -193,7 +193,7 @@ const ListOfGroups = () => {
       }
     });
 
-    // Footer
+
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
@@ -232,7 +232,7 @@ const ListOfGroups = () => {
     const doc = new jsPDF();
     const today = new Date().toLocaleDateString("en-IN");
 
-    // Header
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(15, 23, 42);
@@ -250,7 +250,7 @@ const ListOfGroups = () => {
     doc.setDrawColor(220);
     doc.line(14, 32, 195, 32);
 
-    // Table
+
     const tableData = filteredGroups.map((g, i) => [
       i + 1,
       g.groupName || "-",
@@ -282,7 +282,7 @@ const ListOfGroups = () => {
       }
     });
 
-    // Footer
+
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
@@ -303,7 +303,7 @@ const ListOfGroups = () => {
     <div className="min-h-screen bg-white p-6 font-[monospace]">
       <div className="max-w-5xl mx-auto border border-gray-300 rounded-md shadow-md bg-[#fffef7]">
         
-        {/* Header */}
+
         <div className="flex flex-wrap justify-between items-center border-b border-gray-300 py-3 px-4 gap-4">
           <div className="flex items-center gap-4">
             <h2 className="text-xl font-semibold text-blue-800">List of Groups</h2>
@@ -356,7 +356,7 @@ const ListOfGroups = () => {
           </div>
         </div>
 
-        {/* Loader */}
+
         {loading ? (
           <p className="text-center text-gray-500 py-6">Loading...</p>
         ) : filteredGroups.length === 0 ? (

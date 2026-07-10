@@ -117,7 +117,7 @@ const AssignLeadModal = ({
   const modalContent = (
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
       <div className="app-modal w-full max-w-md overflow-hidden flex flex-col">
-        {/* Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="pr-4">
             <h3 className="modal-title">
@@ -137,7 +137,7 @@ const AssignLeadModal = ({
           </button>
         </div>
 
-        {/* Body */}
+
         <div className="p-5 pb-4">
           <label className="modal-label mb-2 block">
             Select Employee *
@@ -176,7 +176,7 @@ const AssignLeadModal = ({
               </div>
             </div>
 
-            {/* Dropdown Suggestions */}
+
             {showDropdown && dropdownStyle
               ? createPortal(
               <div
@@ -227,7 +227,7 @@ const AssignLeadModal = ({
               : null}
           </div>
 
-          {/* Selected Employee Preview */}
+
           {selectedEmployee && !showDropdown && (
             <div className="mt-4 app-panel overflow-hidden">
               <div className="app-section-bar px-4 py-2.5">
@@ -266,7 +266,7 @@ const AssignLeadModal = ({
           )}
         </div>
 
-        {/* Footer */}
+
         <div className="px-5 py-3 border-t border-(--border-soft) flex justify-end items-center gap-2.5 bg-white">
           <button
             onClick={onClose}

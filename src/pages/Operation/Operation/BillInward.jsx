@@ -98,7 +98,7 @@ const BillInward = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+
         <div className="bg-slate-100 rounded-lg shadow-sm border border-gray-200 mb-6">
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex ">

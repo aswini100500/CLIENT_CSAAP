@@ -74,7 +74,7 @@ export default function GSTR3B() {
 
   return (
     <div className="space-y-4 print:space-y-2">
-      {/* Header */}
+
       <div className="bg-linear-to-r from-purple-700 to-purple-500 rounded-xl p-5 text-white print:bg-purple-700">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -95,7 +95,7 @@ export default function GSTR3B() {
         </div>
       </div>
 
-      {/* Key Metric Cards */}
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
           {l:'Output Tax',    v:fmt(pay.outputCGST+pay.outputSGST+pay.outputIGST), c:'purple'},
@@ -110,7 +110,7 @@ export default function GSTR3B() {
         ))}
       </div>
 
-      {/* Tabs */}
+
       <div className="flex border-b border-gray-200 print:hidden">
         {[['summary','3B Summary'],['monthly','Month Comparison']].map(([v,l])=>(
           <button key={v} onClick={()=>setTab(v)}
@@ -119,10 +119,10 @@ export default function GSTR3B() {
         ))}
       </div>
 
-      {/* Summary Tab */}
+
       {tab==='summary'&&(
         <div className="space-y-4">
-          {/* Section 3.1 Outward */}
+
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <div className="px-4 py-3 bg-purple-50 border-b border-purple-100 flex items-center gap-2">
               <HiCalculator className="text-purple-600 w-4 h-4"/>
@@ -146,7 +146,7 @@ export default function GSTR3B() {
             </table>
           </div>
 
-          {/* Section 4 ITC */}
+
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <div className="px-4 py-3 bg-green-50 border-b border-green-100 flex items-center gap-2">
               <HiCalculator className="text-green-600 w-4 h-4"/>
@@ -171,7 +171,7 @@ export default function GSTR3B() {
             </table>
           </div>
 
-          {/* Section 6 Payment */}
+
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <div className="px-4 py-3 bg-red-50 border-b border-red-100 flex items-center gap-2">
               <HiCalculator className="text-red-600 w-4 h-4"/>
@@ -206,7 +206,7 @@ export default function GSTR3B() {
         </div>
       )}
 
-      {/* Monthly Comparison */}
+
       {tab==='monthly'&&(
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <div className="px-4 py-3 bg-gray-50 border-b">

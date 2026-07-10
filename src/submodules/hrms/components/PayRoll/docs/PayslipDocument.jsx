@@ -1,5 +1,5 @@
 import React from "react";
-/* eslint-disable react-refresh/only-export-components */
+
 
 import {
   Document,
@@ -15,7 +15,7 @@ import {
 import { saveAs } from "file-saver";
 import { getUiPresentDays } from "../payrollUtils";
 
-// Custom helper to capitalize each word in Title Case
+
 const convertToTitleCase = (str) => {
   if (!str) return "";
   return str
@@ -25,7 +25,7 @@ const convertToTitleCase = (str) => {
     .join(" ");
 };
 
-// Custom helper to translate numbers (including precise decimal places) into English words
+
 const numberToWords = (num) => {
   const amount = parseFloat(num);
   if (isNaN(amount) || amount === 0) return "zero";
@@ -61,22 +61,22 @@ const numberToWords = (num) => {
     if (n === 0) return "zero";
     let words = "";
 
-    // Crores (1,00,00,000)
+
     if (Math.floor(n / 10000000) > 0) {
       words += convertLessThanOneThousand(Math.floor(n / 10000000)) + " crore ";
       n %= 10000000;
     }
-    // Lakhs (1,00,000)
+
     if (Math.floor(n / 100000) > 0) {
       words += convertLessThanOneThousand(Math.floor(n / 100000)) + " lakh ";
       n %= 100000;
     }
-    // Thousands (1,000)
+
     if (Math.floor(n / 1000) > 0) {
       words += convertLessThanOneThousand(Math.floor(n / 1000)) + " thousand ";
       n %= 1000;
     }
-    // Hundreds, Tens & Units
+
     if (n > 0) {
       words += convertLessThanOneThousand(n);
     }
@@ -100,7 +100,7 @@ const numberToWords = (num) => {
   return result.trim();
 };
 
-// Smart value formatter matching Tracolab PDF rules
+
 const formatValue = (amount) => {
   if (amount === undefined || amount === null || amount === "") return "0.00";
   const num = parseFloat(amount);
@@ -116,7 +116,7 @@ const formatValue = (amount) => {
   return num.toFixed(2);
 };
 
-// Smart value formatter for Deductions (prints 0 as "0" instead of "0.00")
+
 const formatValueDeduction = (amount) => {
   if (amount === undefined || amount === null || amount === "") return "0";
   const num = parseFloat(amount);
@@ -132,7 +132,7 @@ const formatValueDeduction = (amount) => {
   return num.toFixed(2);
 };
 
-// Formats a date string (YYYY-MM-DD) into DD-MM-YYYY
+
 const formatDate = (dateStr) => {
   if (!dateStr) return "N/A";
   try {
@@ -150,10 +150,10 @@ const formatDate = (dateStr) => {
 const styles = StyleSheet.create({
   page: {
     padding: 20,
-    paddingBottom: 85, // Reserves space for absolute bottom footer to prevent overlap
+    paddingBottom: 85,
     fontFamily: "Helvetica",
     fontSize: 8,
-    color: "#1E293B", // Premium slate-800 text
+    color: "#1E293B",
   },
   headerContainer: {
     position: "relative",
@@ -162,9 +162,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#CBD5E1", // Soft slate-300 border
+    borderBottomColor: "#CBD5E1",
     marginBottom: 10,
-    minHeight: 68, // Accommodates larger logo nicely
+    minHeight: 68,
   },
   logoContainer: {
     position: "absolute",
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   logo: {
     width: "100%",
     height: "100%",
-    objectFit: "contain", // Absolutely prevents distortion/squeezing
+    objectFit: "contain",
   },
   headerTextContainer: {
     alignItems: "center",
@@ -186,20 +186,20 @@ const styles = StyleSheet.create({
   companyName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#002FBE", // Bold Royal Blue (matching new Cloudsat PNG)
+    color: "#002FBE",
     marginBottom: 2,
     letterSpacing: 0.5,
   },
   payslipTitle: {
     fontSize: 10,
     fontWeight: "bold",
-    color: "#000000", // Solid Black (matching new Cloudsat PNG)
+    color: "#000000",
     letterSpacing: 0.5,
   },
   gridTable: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "#CBD5E1", // Soft slate-300 borders
+    borderColor: "#CBD5E1",
     marginBottom: 15,
   },
   gridRow: {
@@ -233,10 +233,10 @@ const styles = StyleSheet.create({
   },
   cellValue: {
     flex: 1,
-    color: "#002FBE", // Corporate Royal Blue values
+    color: "#002FBE",
     fontWeight: "bold",
   },
-  // 3-Column Attendance Table styles
+
   attCell: {
     width: "33.33%",
     flexDirection: "row",
@@ -259,16 +259,16 @@ const styles = StyleSheet.create({
   },
   attValue: {
     flex: 1,
-    color: "#002FBE", // Royal Blue
+    color: "#002FBE",
     fontWeight: "bold",
   },
-  // Main Earnings & Deductions Table styles
+
   tableHeaderContainer: {
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "#CBD5E1",
-    backgroundColor: "#F8FAFC", // Clean Slate-50 Header background
-    marginBottom: 8, // Margin between table head and body
+    backgroundColor: "#F8FAFC",
+    marginBottom: 8,
   },
   earningsHeaderCol: {
     width: "55%",
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "#CBD5E1",
-    marginBottom: 15, // Balanced margin below table body
+    marginBottom: 15,
   },
   earningsCol: {
     width: "55%",
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderBottomWidth: 1,
     borderBottomColor: "#CBD5E1",
-    backgroundColor: "#F8FAFC", // Clean Slate-50 Header background
+    backgroundColor: "#F8FAFC",
   },
   tableBodyRow: {
     flexDirection: "row",
@@ -324,14 +324,14 @@ const styles = StyleSheet.create({
     fontSize: 7.5,
   },
   colBlueText: {
-    color: "#002FBE", // Royal Blue values
+    color: "#002FBE",
     fontWeight: "bold",
   },
   colBoldText: {
     fontWeight: "bold",
     color: "#1E293B",
   },
-  // Net Pay and words section
+
   netPaySection: {
     flexDirection: "row",
     width: "100%",
@@ -354,8 +354,8 @@ const styles = StyleSheet.create({
   },
   netPayBox: {
     borderWidth: 1.5,
-    borderColor: "#002FBE", // Royal Blue border
-    backgroundColor: "#EFF6FF", // Sky Blue tint background
+    borderColor: "#002FBE",
+    backgroundColor: "#EFF6FF",
     width: "100%",
     paddingVertical: 6,
     paddingHorizontal: 10,
@@ -373,16 +373,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#002FBE",
   },
-  // Disclaimer Statement kept in the main page flow
+
   statementText: {
     fontSize: 7.5,
     fontStyle: "italic",
     color: "#475569",
-    marginTop: 35, // Pushes it slightly down from the Net Payable box
+    marginTop: 35,
     textAlign: "center",
     width: "100%",
   },
-  // Footer block - Absolutely positioned at the bottom of the page
+
   footerContainer: {
     position: "absolute",
     bottom: 20,
@@ -414,7 +414,7 @@ const PayslipDocument = ({ employee, payroll }) => {
   const uiPresentDays = getUiPresentDays(payroll);
   const prorated = payroll.proratedEarnings || {};
 
-  // Formulate dynamic displaying period (3-Letter Month Abbreviation-Year, e.g. Apr-2026)
+
   const monthAbbrs = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -424,13 +424,13 @@ const PayslipDocument = ({ employee, payroll }) => {
   const monthName = monthAbbrs[monthVal - 1] || "Apr";
   const displayPeriod = `${monthName}-${yearVal}`;
 
-  // Dynamically load the logo using absolute URL relative to location context
+
   const logoUrl =
     typeof window !== "undefined"
       ? `${window.location.origin}/Cloudsat_Icon.png`
       : "/Cloudsat_Icon.png";
 
-  // Build structured Earnings List (Mapped exactly to 'Pay slip of cloudsat.png' labels)
+
   const earningsList = [
     { label: "Basic Pay", rate: payroll.basic || 0, earning: prorated.basic || payroll.basic || 0, arrears: 0 },
     { label: "D.A.", rate: payroll.da || 0, earning: prorated.da || payroll.da || 0, arrears: 0 },
@@ -456,11 +456,11 @@ const PayslipDocument = ({ employee, payroll }) => {
       }
     });
 
-  // Build structured Deductions List
+
   const epfLabel = payroll.epf > 0 ? `EPF @12%` : `EPF @0.0000%`;
   const esiLabel = payroll.esi > 0 ? `ESI @0.7500%` : `ESI @0.0000%`;
 
-  // Standard static-dynamic deductions from new PNG
+
   const deductionsList = [
     { label: epfLabel, amount: payroll.epf || 0 },
     { label: esiLabel, amount: payroll.esi || 0 },
@@ -490,10 +490,10 @@ const PayslipDocument = ({ employee, payroll }) => {
       }
     });
 
-  // Only show the actual earnings and deductions without unnecessary empty rows
+
   const maxRows = Math.max(earningsList.length, deductionsList.length);
 
-  // Totals calculations
+
   const totalRate = earningsList.reduce((acc, curr) => acc + curr.rate, 0);
   const totalEarning = earningsList.reduce((acc, curr) => acc + curr.earning, 0);
   const totalArrears = earningsList.reduce((acc, curr) => acc + curr.arrears, 0);
@@ -501,7 +501,7 @@ const PayslipDocument = ({ employee, payroll }) => {
 
   const netPay = payroll.netSalary || (totalEarning - totalDeductions);
 
-  // Mappings to represent blank Earning column when LOP is 0
+
   const hasLop = payroll.lopDays > 0 || payroll.lopDeduction > 0;
   const displayEarningVal = (rate, earning) => {
     if (!hasLop) return "";
@@ -509,14 +509,14 @@ const PayslipDocument = ({ employee, payroll }) => {
   };
   const totalEarningDisplay = hasLop ? formatValue(totalEarning) : "0.00";
 
-  // Mappings to represent exact words (Title Case + "Rupees" suffix)
+
   const netPayInWords = `(${convertToTitleCase(numberToWords(netPay))} Rupees)`;
 
-  // 3-Column Attendance details (Mapped to new 'Pay slip of cloudsat.png')
+
   const attendanceRows = [
     [
       { label: "Daily work", value: "0.00" },
-      { label: "On duty", value: formatValueDeduction(uiPresentDays || 30) }, // shows '30' or actual working days
+      { label: "On duty", value: formatValueDeduction(uiPresentDays || 30) },
       { label: "Consumed", value: "" }
     ],
     [
@@ -526,12 +526,12 @@ const PayslipDocument = ({ employee, payroll }) => {
     ],
     [
       { label: "Weekly Off", value: "0.00" },
-      { label: "Maternity Off", value: "0.00" }, // shows 'Maternity Off'
+      { label: "Maternity Off", value: "0.00" },
       { label: "CL", value: "0.00" }
     ],
     [
       { label: "Without Pay", value: formatValue(payroll.lopDays || 0) },
-      { label: "Paid Days", value: formatValueDeduction(uiPresentDays || 30) }, // shows '30' or actual paid days
+      { label: "Paid Days", value: formatValueDeduction(uiPresentDays || 30) },
       { label: "", value: "" }
     ],
     [
@@ -554,7 +554,7 @@ const PayslipDocument = ({ employee, payroll }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header Section */}
+
         <View style={styles.headerContainer}>
           <View style={styles.logoContainer}>
             <Image style={styles.logo} src={logoUrl} />
@@ -565,7 +565,7 @@ const PayslipDocument = ({ employee, payroll }) => {
           </View>
         </View>
 
-        {/* Employee Credentials Table (Department removed to align to 6 rows) */}
+
         <View style={styles.gridTable}>
           <View style={styles.gridRow}>
             <View style={styles.gridCell}>
@@ -629,7 +629,7 @@ const PayslipDocument = ({ employee, payroll }) => {
           </View>
         </View>
 
-        {/* Attendance details Grid */}
+
         <View style={styles.gridTable}>
           {attendanceRows.map((row, idx) => {
             const isLast = idx === attendanceRows.length - 1;
@@ -652,28 +652,28 @@ const PayslipDocument = ({ employee, payroll }) => {
           })}
         </View>
 
-        {/* Side-by-Side Earnings and Deductions Table */}
-        {/* Table Header */}
+
+
         <View style={styles.tableHeaderContainer}>
-          {/* Earnings Header Column */}
+
           <View style={styles.earningsHeaderCol}>
             <Text style={[styles.headerCell, { width: "35%" }]}></Text>
             <Text style={[styles.headerCell, { width: "22%", textAlign: "right" }]}>Rate</Text>
             <Text style={[styles.headerCell, { width: "22%", textAlign: "right" }]}>Earning</Text>
             <Text style={[styles.headerCell, { width: "21%", textAlign: "right" }]}>Arrears</Text>
           </View>
-          {/* Deductions Header Column */}
+
           <View style={styles.deductionsHeaderCol}>
             <Text style={[styles.headerCell, { width: "65%", paddingLeft: 8 }]}>Deductions</Text>
             <Text style={[styles.headerCell, { width: "35%" }]}></Text>
           </View>
         </View>
 
-        {/* Table Body Container */}
+
         <View style={styles.tableBodyContainer}>
-          {/* Earnings Column */}
+
           <View style={styles.earningsCol}>
-            {/* Body */}
+
             {Array.from({ length: maxRows }).map((_, idx) => {
               const item = earningsList[idx] || {};
               return (
@@ -693,7 +693,7 @@ const PayslipDocument = ({ employee, payroll }) => {
                 </View>
               );
             })}
-            {/* Total Row */}
+
             <View style={[styles.tableBodyRow, { borderBottomWidth: 0, backgroundColor: "#FFFFFF" }]}>
               <Text style={[styles.bodyCellText, styles.colBoldText, { width: "35%" }]}>Total</Text>
               <Text style={[styles.bodyCellText, styles.colBlueText, { width: "22%", textAlign: "right" }]}>
@@ -708,9 +708,9 @@ const PayslipDocument = ({ employee, payroll }) => {
             </View>
           </View>
 
-          {/* Deductions Column */}
+
           <View style={styles.deductionsCol}>
-            {/* Body */}
+
             {Array.from({ length: maxRows }).map((_, idx) => {
               const item = deductionsList[idx] || {};
               return (
@@ -724,7 +724,7 @@ const PayslipDocument = ({ employee, payroll }) => {
                 </View>
               );
             })}
-            {/* Total Row */}
+
             <View style={[styles.tableBodyRow, { borderBottomWidth: 0, backgroundColor: "#FFFFFF" }]}>
               <Text style={[styles.bodyCellText, styles.colBoldText, { width: "65%", borderLeftWidth: 1, borderLeftColor: "#CBD5E1", paddingLeft: 8 }]}>
                 Total
@@ -736,7 +736,7 @@ const PayslipDocument = ({ employee, payroll }) => {
           </View>
         </View>
 
-        {/* Net Salary Row */}
+
         <View style={styles.netPaySection}>
           <View style={styles.wordsContainer}>
             <Text style={styles.wordsText}>{netPayInWords}</Text>
@@ -749,12 +749,12 @@ const PayslipDocument = ({ employee, payroll }) => {
           </View>
         </View>
 
-        {/* Disclaimer statement kept in main flow, positioned slightly down */}
+
         <Text style={styles.statementText}>
           This is a computer generated statement, hence no signature required.
         </Text>
 
-        {/* Footer Area - Absolutely positioned at the bottom */}
+
         <View style={styles.footerContainer}>
           <Text style={styles.footerCompanyName}>CLOUDSAT PRIVATE LIMITED</Text>
           <Text style={styles.footerAddress}>
@@ -762,7 +762,7 @@ const PayslipDocument = ({ employee, payroll }) => {
           </Text>
           <Text style={styles.footerEmail}>Email : info@cloudsat.in</Text>
           
-          {/* Angled Double Stripe at Bottom */}
+
           <Svg height="15" width="555" style={{ marginTop: 8 }}>
             <Polygon points="0,0 80,0 60,15 0,15" fill="#EA580C" />
             <Polygon points="80,0 555,0 555,15 60,15" fill="#002FBE" />

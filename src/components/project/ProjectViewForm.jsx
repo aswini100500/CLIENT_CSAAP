@@ -60,7 +60,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     custom: true,
   });
 
-  // Toggle section expansion
+
   const toggleSection = (section) => {
     setExpandedSections((prev) => ({
       ...prev,
@@ -68,16 +68,16 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     }));
   };
 
-  // Render-time debug
+
   console.log("ProjectViewForm render - project id:", project?.id);
   console.log(project);
 
 
-  // --- Normalized helpers to tolerate different API shapes ---
+
   const get = (obj, ...keys) => {
     for (const k of keys) {
       if (!obj) continue;
-      // Handle nested paths like "a.b.c"
+
       if (typeof k === "string" && k.includes(".")) {
         const parts = k.split(".");
         let value = obj;
@@ -98,9 +98,9 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
   };
 
 
-  // Expand custom project configuration if available
-  // This ensures that for custom projects, we can access plots, units, blocks, etc.
-  // that might be stored inside the 'configuration' JSON object.
+
+
+
   const getEffectiveProject = () => {
     if ((project.type === "Custom" || project.type === "custom") && project.configuration) {
       try {
@@ -119,7 +119,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
   const effectiveProject = getEffectiveProject();
 
-  // ---------------- Core objects from API ----------------
+
   const price =
     get(effectiveProject, "priceDetails") ||
     get(effectiveProject, "price_details") ||
@@ -171,7 +171,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
 
 
-  // ---------------- Data Normalization for Plots/Blocks/Units ----------------
+
   const parseData = (data) => {
     if (!data) return [];
     if (Array.isArray(data)) return data;
@@ -186,19 +186,19 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     return [];
   };
 
-  // Normalize Plots (Non-revenue plots)
+
   const normalizedPlotsData = parseData(get(effectiveProject, "plots_data", "plotsData", "plots"));
 
-  // Normalize Blocks (Apartment blocks)
+
   const normalizedBlocksData = parseData(get(effectiveProject, "blocks_data", "blocksData", "blocks"));
 
-  // Normalize Units (Flat list of units)
+
   const normalizedUnitsData = parseData(get(effectiveProject, "units_data", "unitsData", "units", "unit_configuration"));
 
 
 
-  // ---------------- Property Features Normalization ----------------
-  // Property features (may not exist in API, so derive from other fields)
+
+
   const rawPf =
     get(project, "propertyFeatures") ||
     get(project, "property_features") ||
@@ -211,7 +211,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
   const td =
     get(project, "transaction_details", "transactionDetails") || transaction;
 
-  // Property Status
+
   if (!pf.propertyStatus && !pf.property_status) {
     pf.propertyStatus =
       get(rawPf, "propertyStatus", "property_status") ||
@@ -219,7 +219,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       "";
   }
 
-  // Land area fallback: try pf → project.total_land_area → project.landArea
+
   if (!pf.landArea) {
     pf.landArea =
       get(rawPf, "landArea", "land_area", "land_area_sqft") ||
@@ -229,32 +229,32 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       "";
   }
 
-  // Open sides
+
   if (!pf.openSides) {
     pf.openSides = get(rawPf, "openSides", "open_sides");
   }
 
-  // Road width
+
   if (!pf.roadWidth) {
     pf.roadWidth = get(rawPf, "roadWidth", "road_width");
   }
 
-  // Boundary wall
+
   if (!pf.boundaryWall) {
     pf.boundaryWall = get(rawPf, "boundaryWall", "boundary_wall");
   }
 
-  // Gated colony
+
   if (!pf.gatedColony) {
     pf.gatedColony = get(rawPf, "gatedColony", "gated_colony");
   }
 
-  // Outhouse
+
   if (!pf.hasOuthouse) {
     pf.hasOuthouse = get(rawPf, "hasOuthouse", "has_outhouse");
   }
 
-  // Possession status: first from pf, then from transaction_details
+
   if (!pf.possessionStatus) {
     pf.possessionStatus =
       get(rawPf, "possessionStatus", "possession_status") ||
@@ -262,7 +262,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       "";
   }
 
-  // Available from month/year: derive from transaction_details.available_from
+
   if (!pf.availableFromMonth || !pf.availableFromYear) {
     const available =
       get(rawPf, "availableFrom") ||
@@ -280,7 +280,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       "";
   }
 
-  // ---------------- Helpers ----------------
+
   const safeNumber = (v) => {
     const n = Number(String(v ?? "").replace(/[^0-9.-]+/g, ""));
     return Number.isFinite(n) ? n : 0;
@@ -313,20 +313,20 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
   const authToken = authVal || token || localStorage.getItem("authToken") || "";
   const dynamicSlug = user?.slug || "";
 
-  // ---------------- Revenue Plots (Plotting Projects) ----------------
+
   const fetchRevenuePlots = async () => {
     if (!project?.id) {
       console.warn("No project ID available for fetching revenue plots");
       return;
     }
 
-    // For custom projects, check if plotting is one of the sub-types
+
     const currentSubTypes = get(project, "subTypes", "sub_types") || [];
     const parsedSubTypes = typeof currentSubTypes === "string"
       ? JSON.parse(currentSubTypes)
       : currentSubTypes;
 
-    // Check for local plotting data as an immediate source/fallback
+
     const localPlots =
       get(effectiveProject, "revenue_plots_data") ||
       get(effectiveProject, "plotsData");
@@ -339,13 +339,13 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         parsedSubTypes.some(st => st.toLowerCase().includes("plotting"))
       ));
 
-    // If we have local plots, set them immediately as a placeholder/fallback
+
     if (parsedLocalPlots && parsedLocalPlots.length > 0) {
       setRevenuePlots(parsedLocalPlots);
     }
 
-    // If it's not a type that would likely have revenue plots in the API, we stop here
-    // but we keep the local plots if we found any above
+
+
     if (!isPlottingCompatible && (!parsedLocalPlots || parsedLocalPlots.length === 0)) {
       setRevenuePlots([]);
       return;
@@ -384,7 +384,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
       let plotsArray = [];
       if (fetchedProjectData) {
-        // Look up the configuration field if it's a custom project
+
         let targetData = fetchedProjectData;
         if (type === "custom" && fetchedProjectData.configuration) {
           try {
@@ -408,7 +408,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         plotsArray = parseData(rawPlots);
       }
 
-      // If local/detail API returned empty, but we already have local prop plots, keep them
+
       if (plotsArray.length === 0 && parsedLocalPlots && parsedLocalPlots.length > 0) {
         plotsArray = parsedLocalPlots;
       }
@@ -420,7 +420,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     } catch (error) {
       console.error("Error fetching revenue plots from local controller:", error);
 
-      // Fallback to local prop data if API fails
+
       if (parsedLocalPlots && parsedLocalPlots.length > 0) {
         setRevenuePlots(parsedLocalPlots);
         console.log("Using fallback revenue plots data from project prop after API error");
@@ -433,7 +433,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
   };
 
-  // ---------------- Floor Details (Units) ----------------
+
   const fetchFloorDetails = async (
     projectIdParam,
     unitIdParam,
@@ -487,15 +487,15 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     }
   };
 
-  // Fetch revenue plots when component mounts or project changes
+
   useEffect(() => {
     if (project?.id) {
       fetchRevenuePlots();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [project?.id, project?.type]);
 
-  // Prefetch effect for floor details (for non-plotting projects with units)
+
   useEffect(() => {
     if (!project || !project.id) return;
     if (!Array.isArray(units) || units.length === 0) return;
@@ -534,10 +534,10 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         });
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [units, project.id]);
 
-  // Function to handle document download for revenue plot
+
   const handleDownloadDocument = (plot) => {
     const documentUrl = get(plot, "plot_document", "document_url");
     const fileName = get(plot, "fileName", "file_name", "plot_document.pdf");
@@ -554,7 +554,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     }
   };
 
-  // Floor renderer component (used for duplex/apartment/others)
+
   const FloorBlock = ({
     title,
     floor = {},
@@ -649,12 +649,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-3 text-sm">
-          {/* <div className="bg-blue-50 p-2 rounded-lg">
-            <div className="text-xs text-blue-600 font-medium">Area</div>
-            <div className="text-gray-800 font-semibold">
-              {area || "N/A"} sq-ft
-            </div>
-          </div> */}
+
           <div className="bg-purple-50 p-2 rounded-lg">
             <div className="text-xs text-purple-600 font-medium">Bedrooms</div>
             <div className="text-gray-800 font-semibold">
@@ -777,7 +772,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
       <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-        {/* Header */}
+
         <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-4 z-10">
           <div className="flex justify-between items-start gap-4">
             <div className="flex-1">
@@ -833,7 +828,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             </div>
           </div>
 
-          {/* Quick Stats */}
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
             <StatCard
               icon={<FaMapMarkerAlt className="text-blue-500" />}
@@ -865,100 +860,10 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         </div>
 
         <div className="p-6 space-y-6">
-          {/* Property Features Section */}
-          {/* <CollapsibleSection
-            title="Property Features"
-            icon={<FaBuilding className="text-indigo-600" />}
-            isExpanded={expandedSections.property}
-            onToggle={() => toggleSection("property")}
-            count={Object.keys(pf).length}
-          >
-            {expandedSections.property && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <DetailCard
-                    label="Property Status"
-                    value={
-                      pf.propertyStatus ||
-                      pf.property_status ||
-                      pf.possessionStatus ||
-                      get(transaction, "possession_status", "possessionStatus")
-                    }
-                  />
-                  <DetailCard
-                    label="Land Area"
-                    value={
-                      pf.landArea ||
-                      get(pf, "land_area", "land_area_sqft") ||
-                      project.total_land_area ||
-                      project.landArea ||
-                      project.land_area
-                    }
-                    suffix="sqft"
-                  />
-                  <DetailCard label="Open Sides" value={pf.openSides} />
-                  <DetailCard
-                    label="Road Width"
-                    value={pf.roadWidth}
-                    suffix="m"
-                  />
-                  <DetailCard
-                    label="Boundary Wall"
-                    value={pf.boundaryWall}
-                  />
-                  <DetailCard
-                    label="Gated Colony"
-                    value={pf.gatedColony}
-                  />
-                  <DetailCard
-                    label="Possession Status"
-                    value={
-                      pf.possessionStatus ||
-                      get(transaction, "possession_status", "possessionStatus")
-                    }
-                  />
-                  <DetailCard
-                    label="Available From"
-                    value={
-                      (pf.availableFromMonth || "") +
-                      (pf.availableFromYear ? ` ${pf.availableFromYear}` : "")
-                    }
-                  />
-                  <DetailCard label="Outhouse" value={pf.hasOuthouse} />
-                </div>
 
-                {(() => {
-                  const rawFeatures = commercialFeatures;
-                  const features = Array.isArray(rawFeatures)
-                    ? rawFeatures
-                    : (typeof rawFeatures === 'string' ? parseData(rawFeatures) : []);
 
-                  if (features && features.length > 0) return (
-                    <div className="mt-4">
-                      <h4 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                        <FaList className="text-gray-500" />
-                        Facilities & Amenities
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {features.map((f, i) => (
-                          <span
-                            key={i}
-                            className="px-3 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 rounded-lg text-sm font-medium border border-blue-100"
-                          >
-                            {typeof f === "string"
-                              ? f
-                              : f.name || f.label || JSON.stringify(f)}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })()}
-              </div>
-            )}
-          </CollapsibleSection> */}
 
-          {/* Revenue Plots Section – mainly for plotting */}
+
           <CollapsibleSection
             title="Revenue Plots"
             icon={<FaRulerCombined className="text-green-600" />}
@@ -1035,10 +940,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                               label="Khata No"
                               value={get(rp, "khata_no", "khataNo")}
                             />
-                            {/* <DetailRow
-                              label="Plot Number"
-                              value={get(rp, "plot_number", "plotNumber")}
-                            /> */}
+
                             <DetailRow
                               label="Document"
                               value={get(rp, "fileName", "file_name", "plot_document")}
@@ -1075,111 +977,11 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             )}
           </CollapsibleSection>
 
-          {/* Additional Information Section */}
-          {/* <CollapsibleSection
-            title="Additional Information"
-            icon={<FaClipboardList className="text-purple-600" />}
-            isExpanded={expandedSections.additional}
-            onToggle={() => toggleSection("additional")}
-          >
-            {expandedSections.additional && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <DetailCard
-                  icon={<FaFileAlt />}
-                  label="Kissama"
-                  value={additional.kissama}
-                />
-                <DetailCard
-                  icon={<FaRulerCombined />}
-                  label="Boundary Type"
-                  value={additional.boundary}
-                />
-                <DetailCard
-                  icon={<FaHandshake />}
-                  label="Broker"
-                  value={additional.broker}
-                />
-                <DetailCard
-                  icon={<FaFileAlt />}
-                  label="Reference"
-                  value={project.reference || project.ref}
-                />
 
-                <DetailCard
-                  icon={<FaHardHat />}
-                  label="Constructor"
-                  value={additional.constructor}
-                />
-                <DetailCard
-                  icon={<FaUsers />}
-                  label="Staff Engaged"
-                  value={additional.staffEngaged}
-                />
-                <DetailCard
-                  icon={<FaHandshake />}
-                  label="Loan Provider"
-                  value={additional.loanProvider}
-                />
-                <DetailCard
-                  icon={<FaFileAlt />}
-                  label="Attachment"
-                  value={additional.attachment}
-                />
-              </div>
-            )}
-          </CollapsibleSection> */}
 
-          {/* Transaction Details Section */}
-          {/* <CollapsibleSection
-            title="Transaction Details"
-            icon={<FaList className="text-blue-600" />}
-            isExpanded={expandedSections.transaction}
-            onToggle={() => toggleSection("transaction")}
-          >
-            {expandedSections.transaction && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <DetailCard
-                  label="Possession Status"
-                  value={get(
-                    transaction,
-                    "possession_status",
-                    "possessionStatus",
-                    "possession"
-                  )}
-                />
-                <DetailCard
-                  label="Available From"
-                  value={(
-                    (get(transaction, "availableFrom") &&
-                      `${get(transaction, "availableFrom").month || ""} ${get(transaction, "availableFrom").year || ""
-                      }`) ||
-                    `${get(transaction, "available_from_month") ||
-                    get(transaction, "availableFromMonth") ||
-                    ""
-                    } ${get(transaction, "available_from_year") ||
-                    get(transaction, "availableFromYear") ||
-                    ""
-                    }`
-                  ).trim()}
-                />
-                <DetailCard
-                  label="Transaction Type"
-                  value={get(transaction, "type", "transaction_type")}
-                />
-                <DetailCard
-                  label="Price Negotiable"
-                  value={String(
-                    get(
-                      price,
-                      "price_negotiable",
-                      "priceNegotiable",
-                      project.price_negotiable
-                    ) ?? "N/A"
-                  )}
-                />
-              </div>
-            )}
-          {/* Plots Configuration Section (Non-revenue plots) */}
+
+
+
           {project.type !== "commercial" && (normalizedPlotsData.length > 0 ||
             project.type === "plotting") && (
               <CollapsibleSection
@@ -1241,8 +1043,8 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                           </div>
 
                           <div className="space-y-4">
-                            {/* Area & Dimensions */}
-                            {/* Area & Dimensions */}
+
+
                             <div>
                               <div className="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest">Dimensions & Area</div>
                               <div className="grid grid-cols-2 gap-3 mb-3">
@@ -1274,7 +1076,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                               </div>
                             </div>
 
-                            {/* Pricing */}
+
                             <div className="grid grid-cols-2 gap-4">
                               <DetailRow
                                 label="Exp. Price"
@@ -1286,7 +1088,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                               />
                             </div>
 
-                            {/* Features & Status */}
+
                             <div className="bg-orange-50/50 rounded-xl p-3 space-y-2 border border-orange-100">
                               <DetailRow label="Kissama" value={p.kissama} />
                               <DetailRow label="Road Width" value={get(p, "propertyFeatures.roadWidth")} suffix="ft" />
@@ -1294,7 +1096,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                               <DetailRow label="Property Status" value={get(p, "propertyFeatures.propertyStatus")} />
                               <DetailRow label="Possession" value={get(p, "propertyFeatures.possessionStatus")} />
 
-                              {/* Additional Details */}
+
                               <div className="pt-2 border-t border-orange-200 mt-2 space-y-2">
                                 <DetailRow label="Available From" value={`${get(p, "propertyFeatures.availableFromMonth") || ""} ${get(p, "propertyFeatures.availableFromYear") || ""}`.trim()} />
                                 <DetailRow label="Boundary Wall" value={get(p, "propertyFeatures.boundaryWall")} />
@@ -1306,7 +1108,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                                 )}
                               </div>
 
-                              {/* Facilities */}
+
                               {(get(p, "propertyFeatures.parking") || get(p, "propertyFeatures.garden")) && (
                                 <div className="pt-2 mt-2 border-t border-orange-200">
                                   <span className="text-xs text-gray-500 mb-1 block">Facilities:</span>
@@ -1322,7 +1124,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                               )}
                             </div>
 
-                            {/* Parties & Transaction Details */}
+
                             <div className="pt-2 border-t border-gray-100 space-y-1">
 
                               <div className="flex items-center gap-2 text-xs text-gray-600">
@@ -1364,7 +1166,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             )}
 
 
-          {/* Blocks & Floors Section (Apartment structure) */}
+
           {(normalizedBlocksData.length > 0 || (project.type || "").toLowerCase() === "apartment") && (
 
             <CollapsibleSection
@@ -1456,7 +1258,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             </CollapsibleSection>
           )}
 
-          {/* Units Section – Duplex / Triplex / Flat Units list */}
+
           {(normalizedUnitsData.length > 0 ||
             ["duplex", "triplex"].includes(project.type)) && (
               <CollapsibleSection
@@ -1545,14 +1347,14 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                               />
                             </div>
 
-                            {/* Detailed Info for Duplex/Triplex */}
+
                             {(u.mainInfo || u.propertyFeatures || u.broker || u.broker_id || u.contractor || u.open_sides || u.staff_engaged || u.loan_provider || u.possession_status || u.approval_status) && (
                               <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
                                 <h5 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
                                   <FaInfoCircle className="text-blue-500" /> Property Details
                                 </h5>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2">
-                                  {/* Main Info */}
+
                                   {u.mainInfo && (
                                     <>
                                       {u.mainInfo.facing && <DetailRow label="Facing" value={u.mainInfo.facing} />}
@@ -1565,7 +1367,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                                       {u.mainInfo.individualBoundary !== undefined && <DetailRow label="Individual Boundary" value={u.mainInfo.individualBoundary ? "Yes" : "No"} />}
                                     </>
                                   )}
-                                  {/* Property Features */}
+
                                   {u.propertyFeatures && (
                                     <>
                                       {u.propertyFeatures.bedrooms && <DetailRow label="Bedrooms" value={u.propertyFeatures.bedrooms} />}
@@ -1587,7 +1389,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                                     </>
                                   )}
                                   {u.open_sides && <DetailRow label="Open Sides" value={`${u.open_sides} Sides`} />}
-                                  {/* Transaction & Operation Details */}
+
                                   {get(u, "broker", "broker_id") && <DetailRow label="Broker" value={get(u, "broker", "broker_id")} />}
                                   {u.staff_engaged && <DetailRow label="Staff Engaged" value={u.staff_engaged} />}
                                   {u.contractor && <DetailRow label="Contractor" value={u.contractor} />}
@@ -1631,7 +1433,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                               </div>
                             )}
 
-                            {/* Floors */}
+
                             {project.type !== "commercial" && (
                               <div className="mt-4">
                                 <h5 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
@@ -1688,7 +1490,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             )}
 
 
-          {/* Custom Project Details Section */}
+
           {project.type === "custom" && (
             <CollapsibleSection
               title="Custom Project Components"
@@ -1706,7 +1508,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                         : (typeof rawSubTypes === 'string' ? parseData(rawSubTypes) : []);
 
                       return (subTypes || []).map((type, i) => {
-                        // Logic to check completion for this specific sub-type
+
                         let isComplete = false;
                         let hasData = false;
 
@@ -1780,7 +1582,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         </div>
       </div>
 
-      {/* Apartment Unit Details Modal */}
+
       {selectedApartmentUnit && (
         <div className="fixed inset-0 bg-black/60 z-60 flex items-center justify-center p-4 backdrop-blur-sm" style={{ pointerEvents: 'auto' }}>
 
@@ -1803,7 +1605,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             </div>
 
             <div className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
-              {/* Financials */}
+
               <div className="grid grid-cols-2 gap-4">
                 <PriceCard
                   label="Expected Price"
@@ -1832,7 +1634,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                 />
               </div>
 
-              {/* Room Configuration */}
+
               <div className="bg-purple-50 p-4 rounded-xl border border-purple-100">
                 <h4 className="text-sm font-semibold text-purple-800 mb-3 flex items-center gap-2">
                   <FaLayerGroup /> Room Configuration
@@ -1852,7 +1654,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                   </div>
                 </div>
 
-                {/* Individual Room Areas */}
+
                 {(() => {
                   const roomAreas = get(selectedApartmentUnit, "roomAreas") || {};
                   const bedroomAreas = roomAreas.bedrooms || [];
@@ -1895,7 +1697,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                 })()}
               </div>
 
-              {/* Area Details */}
+
               <div className="grid grid-cols-2 gap-3">
                 <DetailCard
                   label="Carpet Area"
@@ -1929,7 +1731,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                 />
               </div>
 
-              {/* Facilities */}
+
               {(() => {
                 const facilities = get(selectedApartmentUnit, "facilities") || [];
                 if (facilities.length > 0) {
@@ -1951,7 +1753,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                 return null;
               })()}
 
-              {/* Status & Ops Info */}
+
               <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
                 <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Additional Info</h4>
 
@@ -1978,7 +1780,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                   </span>
                 </div>
 
-                {/* Approval Status */}
+
                 {(() => {
                   const approvals = get(selectedApartmentUnit, "approvalStatus") || [];
                   const validApprovals = approvals.filter(a => a.authority && a.status);
@@ -2029,7 +1831,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 };
 
 
-// Enhanced UI Components
+
 function StatCard({ icon, label, value }) {
   return (
     <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
@@ -2119,7 +1921,7 @@ function PriceCard({ label, value, type = "primary" }) {
 }
 
 function DetailRow({ label, value, suffix }) {
-  // Handle boolean values
+
   let displayValue = value;
 
   if (typeof value === 'boolean') {
@@ -2184,7 +1986,7 @@ function FloorBlock({ title, floor }) {
       </h6>
 
       <div className="space-y-3">
-        {/* Room Counts */}
+
         {(floor.totalBedrooms || floor.totalBathrooms || floor.studyRoom) && (
           <div className="grid grid-cols-3 gap-2">
             {floor.totalBedrooms && (
@@ -2211,7 +2013,7 @@ function FloorBlock({ title, floor }) {
 
 
 
-        {/* Individual Bedroom Areas */}
+
         {bedroomAreas.length > 0 && (
           <div>
             <div className="text-[9px] font-bold text-gray-400 uppercase mb-1.5 tracking-wider">Bedroom Areas (sq-ft)</div>
@@ -2225,7 +2027,7 @@ function FloorBlock({ title, floor }) {
           </div>
         )}
 
-        {/* Individual Bathroom Areas */}
+
         {bathroomAreas.length > 0 && (
           <div>
             <div className="text-[9px] font-bold text-gray-400 uppercase mb-1.5 tracking-wider">Bathroom Areas (sq-ft)</div>
@@ -2239,7 +2041,7 @@ function FloorBlock({ title, floor }) {
           </div>
         )}
 
-        {/* Study Room Areas */}
+
         {studyRoomAreas.length > 0 && (
           <div>
             <div className="text-[9px] font-bold text-gray-400 uppercase mb-1.5 tracking-wider">Study Room Areas (sq-ft)</div>
@@ -2253,7 +2055,7 @@ function FloorBlock({ title, floor }) {
           </div>
         )}
 
-        {/* Living & Dining Areas */}
+
         {(floor.livingArea || floor.diningArea || kitchenArea || garageArea) && (
           <div className="grid grid-cols-2 gap-2 mt-2">
             {floor.livingArea && (
@@ -2283,7 +2085,7 @@ function FloorBlock({ title, floor }) {
           </div>
         )}
 
-        {/* Amenities */}
+
         {(floor.kitchen || floor.garage) && (
           <div className="flex gap-2 flex-wrap pt-2 border-t border-gray-100">
             {floor.kitchen && floor.kitchen !== "No" && (
@@ -2299,7 +2101,7 @@ function FloorBlock({ title, floor }) {
           </div>
         )}
 
-        {/* Additional Notes */}
+
         {floor.additionalNotes && (
           <div className="pt-2 border-t border-gray-100">
             <div className="text-[9px] font-bold text-gray-400 uppercase mb-1">Notes</div>

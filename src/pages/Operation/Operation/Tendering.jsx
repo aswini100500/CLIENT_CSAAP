@@ -1,251 +1,251 @@
-// import React from "react";
 
-// const Tendering = () => {
-//   return (
-//     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-//       <div className="max-w-4xl mx-auto">
-//         {/* Header */}
-//         <div className="mb-8">
-//           <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-//             Main Info
-//           </h1>
-//           <div className="w-20 h-1 bg-blue-500 rounded-full"></div>
-//         </div>
 
-//         {/* Main Card */}
-//         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-//           {/* Business Unit Section */}
-//           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-//             <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-//               Business Unit
-//             </h2>
 
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//               {/* Left Column */}
-//               <div className="space-y-4">
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-//                     Document Type
-//                   </label>
-//                   <div className="relative">
-//                     <select className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white appearance-none bg-white dark:bg-gray-700">
-//                       <option value="">Select Document Type</option>
-//                       <option value="contract">Contract</option>
-//                       <option value="agreement">Agreement</option>
-//                       <option value="proposal">Proposal</option>
-//                       <option value="report">Report</option>
-//                     </select>
-//                     <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-//                       <svg
-//                         className="h-4 w-4 text-gray-400"
-//                         fill="none"
-//                         stroke="currentColor"
-//                         viewBox="0 0 24 24"
-//                       >
-//                         <path
-//                           strokeLinecap="round"
-//                           strokeLinejoin="round"
-//                           strokeWidth="2"
-//                           d="M19 9l-7 7-7-7"
-//                         />
-//                       </svg>
-//                     </div>
-//                   </div>
-//                 </div>
 
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-//                     Document No
-//                   </label>
-//                   <input
-//                     type="text"
-//                     className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-//                     placeholder="Enter document number"
-//                   />
-//                 </div>
-//               </div>
 
-//               {/* Right Column */}
-//               <div>
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-//                     Subject
-//                   </label>
-//                   <textarea
-//                     rows={4}
-//                     className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
-//                     placeholder="Enter subject"
-//                   />
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
 
-//           {/* Scope of Work Section */}
-//           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-//             <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-//               Scope of Work
-//             </h2>
 
-//             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-//               <div className="md:col-span-2">
-//                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-//                   Remarks
-//                 </label>
-//                 <textarea
-//                   rows={3}
-//                   className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
-//                   placeholder="Enter remarks"
-//                 />
-//               </div>
 
-//               <div className="space-y-4">
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-//                     Commencement Date
-//                   </label>
-//                   <div className="relative">
-//                     <input
-//                       type="date"
-//                       className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-//                     />
-//                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-//                       <svg
-//                         className="h-4 w-4 text-gray-400"
-//                         fill="none"
-//                         stroke="currentColor"
-//                         viewBox="0 0 24 24"
-//                       >
-//                         <path
-//                           strokeLinecap="round"
-//                           strokeLinejoin="round"
-//                           strokeWidth="2"
-//                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-//                         />
-//                       </svg>
-//                     </div>
-//                   </div>
-//                 </div>
 
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-//                     Completion Date
-//                   </label>
-//                   <div className="relative">
-//                     <input
-//                       type="date"
-//                       className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-//                     />
-//                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-//                       <svg
-//                         className="h-4 w-4 text-gray-400"
-//                         fill="none"
-//                         stroke="currentColor"
-//                         viewBox="0 0 24 24"
-//                       >
-//                         <path
-//                           strokeLinecap="round"
-//                           strokeLinejoin="round"
-//                           strokeWidth="2"
-//                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-//                         />
-//                       </svg>
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
 
-//           {/* Financial Year Section */}
-//           <div className="p-6">
-//             <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-//               Financial Year
-//             </h2>
 
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//               <div>
-//                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-//                   Document Date
-//                 </label>
-//                 <div className="flex items-center">
-//                   <div className="relative flex-1">
-//                     <input
-//                       type="date"
-//                       className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-//                       value="2025-08-04"
-//                     />
-//                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-//                       <svg
-//                         className="h-4 w-4 text-gray-400"
-//                         fill="none"
-//                         stroke="currentColor"
-//                         viewBox="0 0 24 24"
-//                       >
-//                         <path
-//                           strokeLinecap="round"
-//                           strokeLinejoin="round"
-//                           strokeWidth="2"
-//                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-//                         />
-//                       </svg>
-//                     </div>
-//                   </div>
-//                   <span className="ml-3 px-3 py-2 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm font-medium rounded-lg">
-//                     04/08/2025
-//                   </span>
-//                 </div>
-//               </div>
 
-//               <div>
-//                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-//                   Financial Year
-//                 </label>
-//                 <div className="relative">
-//                   <select className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white appearance-none bg-white dark:bg-gray-700">
-//                     <option value="">Select Financial Year</option>
-//                     <option value="2024-2025">2024-2025</option>
-//                     <option value="2025-2026" selected>
-//                       2025-2026
-//                     </option>
-//                     <option value="2026-2027">2026-2027</option>
-//                   </select>
-//                   <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-//                     <svg
-//                       className="h-4 w-4 text-gray-400"
-//                       fill="none"
-//                       stroke="currentColor"
-//                       viewBox="0 0 24 24"
-//                     >
-//                       <path
-//                         strokeLinecap="round"
-//                         strokeLinejoin="round"
-//                         strokeWidth="2"
-//                         d="M19 9l-7 7-7-7"
-//                       />
-//                     </svg>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
 
-//         {/* Action Buttons */}
-//         <div className="flex justify-end space-x-4 mt-6">
-//           <button className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors font-medium">
-//             Cancel
-//           </button>
-//           <button className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium">
-//             Save & Continue
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default Tendering;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import React, { useState } from 'react';
 import {
@@ -309,7 +309,7 @@ const Tendering = () => {
   const fetchWorkOrders = async () => {
     try {
       const res = await operationApi.getTenderWorkOrders();
-      // Normalize work orders data
+
       console.log(res);
       
       const normalizedWorkOrders = (res.data.data || []).map(workOrder => ({
@@ -335,7 +335,7 @@ const Tendering = () => {
       setLoading(true);
       const response = await operationApi.getTenders();
       console.log("Tenders response:", response.data);
-      // Normalize applicants data
+
       const normalizedTenders = response.data.data.map(tender => ({
         ...tender,
         applicants: (tender.applicants || []).map(applicant => ({
@@ -384,7 +384,7 @@ const Tendering = () => {
         if (item.id === id) {
           const updatedItem = { ...item, [field]: value };
 
-          // Calculate amount if quantity and rate are provided
+
           if (field === 'quantity' || field === 'rate') {
             const quantity = field === 'quantity' ? value : item.quantity;
             const rate = field === 'rate' ? value : item.rate;
@@ -459,7 +459,7 @@ const Tendering = () => {
     if (currentTender.item && currentTender.start_date && currentTender.end_date) {
       try {
         setLoading(true);
-        // fields are already in snake_case in state
+
         await operationApi.createTender(currentTender);
         setCurrentTender({
           item: '',
@@ -506,7 +506,7 @@ const Tendering = () => {
         applicantId
       });
 
-      // Reset work order form
+
       setWorkOrderForm({
         subject: '',
         note: '',
@@ -586,7 +586,7 @@ const Tendering = () => {
       })
         .catch((error) => console.log('Error sharing:', error));
     } else {
-      // Fallback: copy to clipboard
+
       navigator.clipboard.writeText(workOrderContent)
         .then(() => alert('Work order copied to clipboard!'))
         .catch(() => alert('Failed to copy work order to clipboard'));
@@ -659,7 +659,7 @@ Tender Management System
     }));
   };
 
-  // Calculate total amount
+
   const totalAmount = workOrderForm.scopeOfWork.reduce((sum, item) => {
     return sum + (parseFloat(item.amount) || 0);
   }, 0);
@@ -667,13 +667,13 @@ Tender Management System
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Tender Management System</h1>
           <p className="text-gray-600">Create and manage tender applications efficiently</p>
         </div>
 
-        {/* Navigation Tabs */}
+
         <div className="bg-white rounded-xl shadow-sm mb-6">
           <div className="flex">
             <button
@@ -706,10 +706,10 @@ Tender Management System
           </div>
         </div>
 
-        {/* Create Tender Tab */}
+
         {activeTab === 'create' && (
           <div className="space-y-6">
-            {/* Tender Form */}
+
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">Create New Tender</h2>
 
@@ -769,7 +769,7 @@ Tender Management System
                 </div>
               </div>
 
-              {/* Add Applicant Section */}
+
               <div className="border-t pt-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Add Applicants</h3>
 
@@ -802,7 +802,7 @@ Tender Management System
                 </button>
               </div>
 
-              {/* Current Applicants List */}
+
               {currentTender.applicants.length > 0 && (
                 <div className="mt-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4">
@@ -828,7 +828,7 @@ Tender Management System
                 </div>
               )}
 
-              {/* Save Button */}
+
               <div className="flex justify-end mt-6">
                 <button
                   onClick={saveTender}
@@ -842,7 +842,7 @@ Tender Management System
           </div>
         )}
 
-        {/* View Tenders Tab */}
+
         {activeTab === 'view' && (
           <div className="space-y-6">
             {tenders.length === 0 ? (
@@ -863,7 +863,7 @@ Tender Management System
               <div className="grid gap-6">
                 {tenders.map((tender) => (
                   <div key={tender.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
-                    {/* Tender Header */}
+
                     <div className="p-6 border-b">
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
@@ -896,7 +896,7 @@ Tender Management System
                       </div>
                     </div>
 
-                    {/* Applicants List */}
+
                     <div className="p-6">
                       <h4 className="font-medium text-gray-700 mb-4">Applicants</h4>
                       {(!tender.applicants || tender.applicants.length === 0) ? (
@@ -949,7 +949,7 @@ Tender Management System
           </div>
         )}
 
-        {/* Work Orders Tab */}
+
         {activeTab === 'work-orders' && (
           <div className="space-y-6">
             {issuedWorkOrders.length === 0 ? (
@@ -1036,11 +1036,11 @@ Tender Management System
         )}
       </div>
 
-      {/* Work Order Modal */}
+
       {showWorkOrderModal && selectedApplicant && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
           <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[95vh] overflow-hidden flex flex-col">
-            {/* Header with Gradient */}
+
             <div className="bg-linear-to-r from-blue-600 to-purple-700 px-3 py-3 text-white">
               <div className="flex justify-between items-center">
                 <div>
@@ -1056,12 +1056,12 @@ Tender Management System
               </div>
             </div>
 
-            {/* Form Content */}
+
             <div className="flex-1 overflow-y-auto p-8 bg-gray-50">
               <div className="max-w-4xl mx-auto">
-                {/* Application Form Style */}
+
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                  {/* Section 1: Recipient Information */}
+
                   <div className="mb-8">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -1088,7 +1088,7 @@ Tender Management System
                     </div>
                   </div>
 
-                  {/* Section 2: Work Order Details */}
+
                   <div className="mb-8">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -1167,7 +1167,7 @@ Tender Management System
                     </div>
                   </div>
 
-                  {/* Section 3: Scope of Work */}
+
                   <div className="mb-8">
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-3">
@@ -1253,7 +1253,7 @@ Tender Management System
                     </div>
                   </div>
 
-                  {/* Section 4: Signature & Terms */}
+
                   <div className="mb-8 gap-2">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -1263,7 +1263,7 @@ Tender Management System
                     </div>
 
                     <div className=" gap-8">
-                      {/* Signature Upload */}
+
                       <div className="lg:col-span-1">
                         <label className="block text-sm font-medium text-gray-700 mb-3">
                           Digital Signature Upload
@@ -1286,7 +1286,7 @@ Tender Management System
                         </div>
                       </div>
 
-                      {/* Terms and Conditions */}
+
                       <div className="lg:col-span-1">
                         <label className="block text-sm font-medium text-gray-700 mb-3">
                           Terms & Conditions
@@ -1322,7 +1322,7 @@ Tender Management System
                         </div>
                       </div>
 
-                      {/* Payment Terms */}
+
                       <div className="mt-2 lg:col-span-1">
                         <label className="block font-bold text-sm  text-gray-700 mb-3">
                           Payment Terms
@@ -1360,7 +1360,7 @@ Tender Management System
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
+
                   <div className="flex justify-end gap-4 pt-6 border-t">
                     <button
                       onClick={() => setShowWorkOrderModal(false)}
@@ -1386,7 +1386,7 @@ Tender Management System
         </div>
       )}
 
-      {/* Success Modal */}
+
       {showSuccessModal && recentWorkOrder && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-md bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full">

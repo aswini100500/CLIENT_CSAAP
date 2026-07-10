@@ -5,7 +5,7 @@ export default function MonthlySalaryProcess() {
   const [searchEmp, setSearchEmp] = useState("");
   const [processType, setProcessType] = useState("monthly");
 
-  // Sample data
+
   const companies = ["Cloudsart Pvt Ltd", "TechCorp Solutions", "Global Enterprises"];
   const branches = ["DEMO", "Head Office", "North Branch", "South Branch"];
   const departments = ["DEMO", "HR", "Finance", "IT", "Sales", "Operations"];
@@ -18,15 +18,15 @@ export default function MonthlySalaryProcess() {
 
   return (
     <div className="w-full p-4 bg-gray-100 min-h-screen">
-      {/* Header */}
+
       <div className="bg-blue-600 text-white font-semibold p-3 rounded flex items-center">
         <span className="mr-2 text-lg">🧾</span> Monthly Salary Process
       </div>
 
-      {/* Box */}
+
       <div className="bg-white shadow-lg p-6 mt-4 rounded-lg">
 
-        {/* Radio Row */}
+
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div className="flex gap-6 font-medium text-gray-700">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -63,37 +63,37 @@ export default function MonthlySalaryProcess() {
           </div>
         </div>
 
-        {/* Selection Text */}
+
         <p className="font-semibold text-blue-600 mb-4 text-base border-l-4 border-blue-500 pl-2">Selection By</p>
 
-        {/* Columns */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
 
-          {/* Company */}
+
           <SelectionCard
             title="Company"
             options={companies}
           />
 
-          {/* Branch */}
+
           <SelectionCard
             title="Branch"
             options={branches}
           />
 
-          {/* Department */}
+
           <SelectionCard
             title="Department"
             options={departments}
           />
 
-          {/* Designation */}
+
           <SelectionCard
             title="Designation"
             options={designations}
           />
 
-          {/* Employee */}
+
           <div className="space-y-2">
             <div className="font-semibold text-gray-700 mb-2">Employee</div>
 
@@ -123,7 +123,7 @@ export default function MonthlySalaryProcess() {
           </div>
         </div>
 
-        {/* Buttons */}
+
         <div className="flex justify-center gap-4 mt-8">
           <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-2.5 rounded font-medium transition-colors duration-200">
             Process
@@ -138,7 +138,7 @@ export default function MonthlySalaryProcess() {
   );
 }
 
-/* ------------ reusable components ----------- */
+
 
 function SelectionCard({ title, options }) {
   const [searchTerm, setSearchTerm] = useState("");

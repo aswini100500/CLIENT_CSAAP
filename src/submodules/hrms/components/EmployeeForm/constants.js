@@ -1,4 +1,4 @@
-// ─── Tab definitions ───
+
 export const TABS = [
   { id: "basic", label: "Basic Information" },
   { id: "address", label: "Address" },
@@ -9,7 +9,7 @@ export const TABS = [
   { id: "leave", label: "Assign Leave" },
 ];
 
-// ─── Basic Information field config ───
+
 export const BASIC_INFO_FIELDS = [
   {
     label: "Name",
@@ -127,7 +127,7 @@ export const BASIC_INFO_FIELDS = [
   },
 ];
 
-// ─── Bank Details field config ───
+
 export const BANK_DETAILS_FIELDS = [
   {
     label: "Bank Name",
@@ -157,7 +157,7 @@ export const BANK_DETAILS_FIELDS = [
   },
 ];
 
-// ─── Salary Breakdown field config ───
+
 export const SALARY_FIELDS = [
   {
     label: "CTC (Annual)",
@@ -255,7 +255,7 @@ export const SALARY_FIELDS = [
   { label: "Effective From", name: "effective_from", type: "date" },
 ];
 
-// ─── Personal Details field config ───
+
 export const PERSONAL_DETAILS_FIELDS = [
   { label: "Date of Birth", name: "dob", type: "date" },
   {
@@ -280,7 +280,7 @@ export const PERSONAL_DETAILS_FIELDS = [
   },
 ];
 
-// ─── Education entry field config ───
+
 export const EDUCATION_FIELDS = [
   {
     name: "course",
@@ -304,7 +304,7 @@ export const EDUCATION_FIELDS = [
   },
 ];
 
-// ─── Experience entry field config ───
+
 export const EXPERIENCE_FIELDS = [
   {
     name: "jobTitle",
@@ -320,7 +320,7 @@ export const EXPERIENCE_FIELDS = [
   { name: "endDate", label: "End Date", type: "date" },
 ];
 
-// ─── File upload configuration ───
+
 export const FILE_UPLOAD_CONFIG = [
   {
     type: "cv",
@@ -380,9 +380,9 @@ export const FILE_UPLOAD_CONFIG = [
   },
 ];
 
-// ─── Leave Assignment field config ───
+
 export const LEAVE_ASSIGNMENT_FIELDS = [
-  // Yearly Leave Allocation Section
+
   {
     section: "Yearly Leave Allocation",
     description: "Set annual leave quotas for the employee",
@@ -428,7 +428,7 @@ export const LEAVE_ASSIGNMENT_FIELDS = [
     ],
   },
 
-  // Monthly Leave Allocation Section
+
   {
     section: "Monthly Leave Allocation",
     description: "Set monthly leave quotas for the employee",
@@ -466,12 +466,12 @@ export const LEAVE_ASSIGNMENT_FIELDS = [
     ],
   },
 
-  // Carry Forward Configuration
+
   {
     section: "Carry Forward Rules",
     description: "Configure monthly and yearly leave carry forward limits",
     fields: [
-      // Monthly Carry Forward
+
       {
         label: "Monthly Carry Forward - CL",
         name: "monthly_carry_forward_cl",
@@ -503,7 +503,7 @@ export const LEAVE_ASSIGNMENT_FIELDS = [
           "Maximum Medical Leave that can be carried forward to the next month",
       },
 
-      // Yearly Carry Forward
+
       {
         label: "Yearly Carry Forward - CL",
         name: "yearly_carry_forward_cl",
@@ -552,7 +552,7 @@ export const LEAVE_ASSIGNMENT_FIELDS = [
   },
 ];
 
-// Helper function to calculate total yearly leave
+
 export const calculateTotalYearlyLeave = (cl, el, ml = 0) => {
   return (parseInt(cl) || 0) + (parseInt(el) || 0) + (parseInt(ml) || 0);
 };

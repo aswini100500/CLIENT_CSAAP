@@ -20,13 +20,13 @@ const BookingCancellations = () => {
   const token = user?.token;
   const companyId = user?.company_id || user?.tenant_id;
 
-  // State
+
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("pending_admin"); // "pending_admin" | "approved" | "rejected" | "all"
+  const [statusFilter, setStatusFilter] = useState("pending_admin");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Modal State
+
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const [deductionPercentage, setDeductionPercentage] = useState("0");
@@ -94,7 +94,7 @@ const BookingCancellations = () => {
       if (res.data && res.data.success) {
         toast.success("Cancellation approved and booking terminated.");
 
-        // Operations inventory sync
+
         const responseData = res.data.data;
         if (responseData && responseData.project_id && responseData.unit_id) {
           await syncUnitInventory(
@@ -186,7 +186,7 @@ const BookingCancellations = () => {
     }
   };
 
-  // Sync unit booking status back to Available
+
   const syncUnitInventory = async (compositeProjectId, unitId) => {
     let projectType = "apartment";
     let projectId = compositeProjectId;
@@ -202,16 +202,16 @@ const BookingCancellations = () => {
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      // 1. Get current booking status of project items
+
       const bookingRes = await axios.get(
         `${import.meta.env.VITE_CSAAP_URL}/api/tenant/type/${projectType}/${projectId}/booking-status`,
         { headers },
       );
 
-      // Helper check logic matching checkIfBooked
+
       const isBooked = checkIfUnitBooked(bookingRes.data, unitId);
 
-      // 2. Toggle booking status back to Available (if currently booked)
+
       if (isBooked) {
         console.log(
           `Unit/Item ${unitId} is booked. Releasing and toggling booking status...`,
@@ -260,7 +260,7 @@ const BookingCancellations = () => {
     return false;
   };
 
-  // Calculations
+
   const calculatedDeduction = selectedRequest
     ? Math.round(
         Number(selectedRequest.verified_paid_amount) *
@@ -275,7 +275,7 @@ const BookingCancellations = () => {
       ) / 100
     : 0;
 
-  // Filter requests locally by status and search query
+
   const filteredRequests = requests.filter((r) => {
     const matchesStatus = r.overall_status === statusFilter;
     const matchesSearch =
@@ -285,7 +285,7 @@ const BookingCancellations = () => {
     return matchesStatus && matchesSearch;
   });
 
-  // Calculate tab counts
+
   const pendingCount = requests.filter(
     (r) => r.overall_status === "pending_admin",
   ).length;
@@ -302,7 +302,7 @@ const BookingCancellations = () => {
 
       <div className="app-shell p-4 space-y-6">
         <div className="max-w-7xl mx-auto space-y-6">
-          {/* Page Header */}
+
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h1 className="app-title">Booking Cancellation</h1>
@@ -313,7 +313,7 @@ const BookingCancellations = () => {
             </div>
           </div>
 
-          {/* Sticky Queue tabs dock */}
+
           <div className="sticky top-0 z-20 -mx-4 px-4 py-3 border-b border-(--border-soft) flex justify-between items-center bg-slate-50/50 backdrop-blur-md">
             <div className="flex items-center gap-2 overflow-x-auto">
               <button
@@ -400,7 +400,7 @@ const BookingCancellations = () => {
             </div>
           </div>
 
-          {/* Search panel */}
+
           <div className="app-panel p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
             <div className="relative max-w-md w-full">
               <input
@@ -414,7 +414,7 @@ const BookingCancellations = () => {
             </div>
           </div>
 
-          {/* Requests Queue Table */}
+
           <div className="app-panel overflow-hidden shadow-sm">
             <div className="app-section-bar px-4 py-3 flex items-center justify-between">
               <h3 className="app-heading">
@@ -548,13 +548,13 @@ const BookingCancellations = () => {
         </div>
       </div>
 
-      {/* Admin Approval / Rejection Modal */}
+
       {showApprovalModal &&
         selectedRequest &&
         createPortal(
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-md">
             <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
-              {/* Modal Header */}
+
               <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
                 <div className="flex items-start gap-3 min-w-0">
                   <div className="size-11 rounded-2xl flex items-center justify-center bg-(--brand-soft) border border-(--border-soft) shrink-0">
@@ -576,9 +576,9 @@ const BookingCancellations = () => {
                 </button>
               </div>
 
-              {/* Modal Body */}
+
               <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-[#f8faf8]/40">
-                {/* Context Panel */}
+
                 <div className="app-panel-muted p-4 space-y-2.5 text-xs text-(--text-body)">
                   <div className="flex justify-between">
                     <span className="font-semibold text-(--text-soft)">
@@ -638,7 +638,7 @@ const BookingCancellations = () => {
                   )}
                 </div>
 
-                {/* Deduction Percentage Form */}
+
                 <div className="space-y-2.5">
                   <label className="modal-label block uppercase tracking-wider">
                     Admin Settlement Calculations
@@ -660,7 +660,7 @@ const BookingCancellations = () => {
                     />
                   </div>
 
-                  {/* Calculation Cards */}
+
                   <div className="grid grid-cols-2 gap-3.5 pt-1.5">
                     <div className="bg-rose-50/50 border border-rose-100 p-3.5 rounded-xl">
                       <p className="text-[10px] text-rose-500 font-bold uppercase tracking-wider">
@@ -681,7 +681,7 @@ const BookingCancellations = () => {
                   </div>
                 </div>
 
-                {/* Notes Form */}
+
                 <div className="space-y-1.5">
                   <label className="modal-label block uppercase tracking-wider">
                     Admin Action Notes / Reason
@@ -695,7 +695,7 @@ const BookingCancellations = () => {
                 </div>
               </div>
 
-              {/* Modal Actions */}
+
               <div className="px-5 py-4 border-t border-(--border-soft) bg-white flex items-center justify-end gap-3">
                 <button
                   onClick={handleReject}

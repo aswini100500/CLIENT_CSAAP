@@ -97,13 +97,13 @@ const PromotionPage = () => {
       [name]: value
     }));
 
-    // Auto-fill salary range when position is selected
+
     if (name === "newPosition") {
       const selectedPos = promotionPositions.find(pos => pos.value === value);
       if (selectedPos) {
         setPromotionForm(prev => ({
           ...prev,
-          newSalary: selectedPos.salaryRange.split(" - ")[0] // Take the lower range
+          newSalary: selectedPos.salaryRange.split(" - ")[0]
         }));
       }
     }
@@ -111,7 +111,7 @@ const PromotionPage = () => {
 
   const handlePromotionSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
+
     console.log({
       employee: selectedEmployee,
       promotionDetails: promotionForm
@@ -156,7 +156,7 @@ const PromotionPage = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Success Modal */}
+
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
@@ -202,7 +202,7 @@ const PromotionPage = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Employee Selection Section */}
+
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">Select Employee</h3>
               <div className="space-y-4">
@@ -262,7 +262,7 @@ const PromotionPage = () => {
               </div>
             </div>
 
-            {/* Promotion Form Section */}
+
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
                 {selectedEmployee ? `Promote ${selectedEmployee.name}` : 'Promotion Details'}
@@ -436,7 +436,7 @@ const PromotionPage = () => {
             </div>
           </div>
 
-          {/* Promotion Guidelines */}
+
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Promotion Guidelines</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

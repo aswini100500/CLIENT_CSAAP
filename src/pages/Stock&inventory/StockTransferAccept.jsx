@@ -4,15 +4,15 @@ import useSWR, { mutate } from 'swr';
 import { getAuthToken } from '../../store/authSession';
 import { CheckCircle, AlertCircle, X, Eye, Check, XCircle } from 'lucide-react';
 
-// API base URL
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance with authorization
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -26,7 +26,7 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const StockTransferAccept = () => {
@@ -38,15 +38,15 @@ const StockTransferAccept = () => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Notification state
+
   const [notification, setNotification] = useState({
     show: false,
-    type: '', // 'success', 'error', 'info'
+    type: '',
     title: '',
     message: ''
   });
 
-  // Show notification function
+
   const showNotification = (type, title, message) => {
     setNotification({
       show: true,
@@ -55,20 +55,20 @@ const StockTransferAccept = () => {
       message
     });
     
-    // Auto-hide after 5 seconds
+
     setTimeout(() => {
       setNotification({ show: false, type: '', title: '', message: '' });
     }, 5000);
   };
 
-  // Close notification manually
+
   const closeNotification = () => {
     setNotification({ show: false, type: '', title: '', message: '' });
   };
 
-  // Fetch pending transfer requests
+
   const { data: pendingTransfersData, isLoading: pendingLoading, mutate: mutatePending } = useSWR(
-    '/api/tenant/stock/transfer/pending', // Assuming this endpoint exists
+    '/api/tenant/stock/transfer/pending',
     fetcher,
     {
       revalidateOnFocus: true,
@@ -76,9 +76,9 @@ const StockTransferAccept = () => {
     }
   );
 
-  // Fetch transfer history
+
   const { data: transferHistoryData, isLoading: historyLoading, mutate: mutateHistory } = useSWR(
-    '/api/tenant/stock/transfer/history', // Assuming this endpoint exists
+    '/api/tenant/stock/transfer/history',
     fetcher,
     {
       revalidateOnFocus: true,
@@ -86,7 +86,7 @@ const StockTransferAccept = () => {
     }
   );
 
-  // Fetch master data for store/product names
+
   const { data: masterData } = useSWR(
     '/api/tenant/stock/master-data',
     fetcher,
@@ -95,7 +95,7 @@ const StockTransferAccept = () => {
     }
   );
 
-  // Extract data - FIXED THE SYNTAX ERROR HERE
+
   const pendingTransfers = pendingTransfersData?.success ? pendingTransfersData.data || [] : [];
   const transferHistory = transferHistoryData?.success ? transferHistoryData.data || [] : [];
   
@@ -104,10 +104,10 @@ const StockTransferAccept = () => {
   const products = master.products || [];
   const categories = master.categories || [];
 
-  // Combine pending transfers and history for display
+
   const allTransfers = [...pendingTransfers, ...transferHistory];
 
-  // Filter transfers based on search term
+
   const filteredTransfers = allTransfers.filter(transfer => {
     const fromStoreName = stores.find(store => store.id === transfer.from_store_id)?.name || '';
     const toStoreName = stores.find(store => store.id === transfer.to_store_id)?.name || '';
@@ -122,7 +122,7 @@ const StockTransferAccept = () => {
     );
   });
 
-  // Helper functions
+
   const getStoreName = (storeId) => {
     const store = stores.find(s => s.id === storeId);
     return store ? store.name : `Store ${storeId}`;
@@ -140,12 +140,12 @@ const StockTransferAccept = () => {
     return category ? category.name : '—';
   };
 
-  // Pagination
+
   const totalPages = Math.ceil(filteredTransfers.length / entriesToShow);
   const startIndex = (currentPage - 1) * entriesToShow;
   const paginatedTransfers = filteredTransfers.slice(startIndex, startIndex + entriesToShow);
 
-  // Format date
+
   const formatDate = (dateString) => {
     if (!dateString) return '—';
     try {
@@ -161,13 +161,13 @@ const StockTransferAccept = () => {
     }
   };
 
-  // Handle view details
+
   const handleViewDetails = (transfer) => {
     setSelectedTransfer(transfer);
     setShowDetailsModal(true);
   };
 
-  // Handle accept transfer
+
   const handleAcceptTransfer = async (transferId) => {
     if (!transferId) {
       showNotification('error', 'Error', 'Invalid transfer ID');
@@ -176,13 +176,13 @@ const StockTransferAccept = () => {
 
     setIsProcessing(true);
     try {
-      // Find the transfer to accept
+
       const transferToAccept = allTransfers.find(t => t.id === transferId);
       if (!transferToAccept) {
         throw new Error('Transfer not found');
       }
 
-      // Prepare data for acceptance
+
       const acceptData = {
         from_store_id: transferToAccept.from_store_id,
         to_store_id: transferToAccept.to_store_id,
@@ -194,17 +194,17 @@ const StockTransferAccept = () => {
 
       console.log('Accepting transfer:', acceptData);
 
-      // Call accept API
+
       const response = await api.put(`/api/tenant/stock/transfer/accept/${transferId}`, acceptData);
 
       if (response.data.success) {
         showNotification('success', 'Success!', 'Transfer accepted successfully!');
         
-        // Revalidate data
+
         mutatePending();
         mutateHistory();
         
-        // Close details modal if open
+
         if (showDetailsModal) {
           setShowDetailsModal(false);
         }
@@ -220,7 +220,7 @@ const StockTransferAccept = () => {
     }
   };
 
-  // Handle reject transfer
+
   const handleRejectTransfer = async (transferId) => {
     if (!transferId) {
       showNotification('error', 'Error', 'Invalid transfer ID');
@@ -229,19 +229,19 @@ const StockTransferAccept = () => {
 
     setIsProcessing(true);
     try {
-      // Assuming you have a reject endpoint
+
       const response = await api.put(`/api/tenant/stock/transfer/reject/${transferId}`, {
-        rejected_by: 'Manager' // You might want to get this from token
+        rejected_by: 'Manager'
       });
 
       if (response.data.success) {
         showNotification('success', 'Success!', 'Transfer rejected successfully!');
         
-        // Revalidate data
+
         mutatePending();
         mutateHistory();
         
-        // Close details modal if open
+
         if (showDetailsModal) {
           setShowDetailsModal(false);
         }
@@ -257,7 +257,7 @@ const StockTransferAccept = () => {
     }
   };
 
-  // Show loading state
+
   if (pendingLoading || historyLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -273,7 +273,7 @@ const StockTransferAccept = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Notification Component */}
+
       {notification.show && (
         <div className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
           notification.type === 'success' 
@@ -329,13 +329,13 @@ const StockTransferAccept = () => {
       )}
 
       <div className="bg-white rounded-lg shadow-md">
-        {/* Header */}
+
         <div className="px-6 py-4 border-b border-gray-200">
           <h1 className="text-2xl font-bold text-gray-800">Accept Transfer</h1>
           <p className="text-gray-600 mt-1">Manage and accept stock transfers</p>
         </div>
 
-        {/* Controls */}
+
         <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
             <div className="flex items-center space-x-4">
@@ -375,7 +375,7 @@ const StockTransferAccept = () => {
           </div>
         </div>
 
-        {/* Table */}
+
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -487,7 +487,7 @@ const StockTransferAccept = () => {
           </table>
         </div>
 
-        {/* Pagination */}
+
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-sm text-gray-700">
@@ -525,7 +525,7 @@ const StockTransferAccept = () => {
         </div>
       </div>
 
-      {/* Details Modal */}
+
       {showDetailsModal && selectedTransfer && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">

@@ -23,7 +23,7 @@ const PermissionManager = () => {
   const { token } = useAuth();
   const getAuthHeaders = () => ({ headers: { Authorization: `Bearer ${token}` } });
 
-  // --- 1. SWR DATA FETCHING ---
+
   const permissionsApiUrl = `${API_URL}/api/tenant/permissions`;
   const rolesApiUrl = `${API_URL}/api/tenant/departments/roles`;
 
@@ -33,27 +33,27 @@ const PermissionManager = () => {
   const permissions = permsData?.data || EMPTY_ARRAY;
   const roles = rolesData?.data || EMPTY_ARRAY;
 
-  // --- 2. COMPONENT STATE ---
-  // Master Permission Form State
+
+
   const [formData, setFormData] = useState({ module: '', action: '', code: '', description: '' });
   const [editingPermId, setEditingPermId] = useState(null);
 
-  // Role Assignment State
+
   const [selectedRoleId, setSelectedRoleId] = useState('');
   const [selectedModule, setSelectedModule] = useState('All');
   const [assignedCodes, setAssignedCodes] = useState([]);
 
-  // Search States
+
   const [masterSearch, setMasterSearch] = useState('');
   const [matrixSearch, setMatrixSearch] = useState('');
 
-  // Loading/Action States
+
   const [isSubmittingPerm, setIsSubmittingPerm] = useState(false);
   const [isLoadingRolePerms, setIsLoadingRolePerms] = useState(false);
   const [isSavingRolePerms, setIsSavingRolePerms] = useState(false);
 
-  // --- 3. DERIVED DATA (useMemo) ---
-  // Group permissions by Module for cleaner UI
+
+
   const groupedPermissions = React.useMemo(() => {
     return permissions.reduce((acc, perm) => {
       if (!acc[perm.module]) acc[perm.module] = [];
@@ -62,7 +62,7 @@ const PermissionManager = () => {
     }, {});
   }, [permissions]);
 
-  // Filtered grouped permissions for Master Directory
+
   const filteredMasterPermissions = React.useMemo(() => {
     if (!masterSearch) return groupedPermissions;
     const search = masterSearch.toLowerCase();
@@ -77,7 +77,7 @@ const PermissionManager = () => {
     }, {});
   }, [groupedPermissions, masterSearch]);
 
-  // Filtered permissions for the Matrix
+
   const filteredMatrixPermissions = React.useMemo(() => {
     const activeModules = Object.keys(groupedPermissions).filter(module =>
       selectedModule === 'All' || module === selectedModule
@@ -102,8 +102,8 @@ const PermissionManager = () => {
     }, {});
   }, [groupedPermissions, matrixSearch, selectedModule]);
 
-  // --- 4. SIDE EFFECTS (useEffect) ---
-  // Auto-generate 'code' when module or action changes
+
+
   React.useEffect(() => {
     if (!editingPermId && formData.module && formData.action) {
       const generated = `${formData.module.toLowerCase()}.${formData.action.toLowerCase()}`;
@@ -111,7 +111,7 @@ const PermissionManager = () => {
     }
   }, [formData.module, formData.action, editingPermId]);
 
-  // Fetch permissions for a specific role when selected
+
   React.useEffect(() => {
     if (!selectedRoleId) return;
     setSelectedModule('All');
@@ -131,9 +131,9 @@ const PermissionManager = () => {
     fetchRolePerms();
   }, [selectedRoleId, permissionsApiUrl]);
 
-  // ==========================================
-  // MASTER PERMISSION HANDLERS
-  // ==========================================
+
+
+
   const handlePermSubmit = async (e) => {
     e.preventDefault();
     if (!formData.module || !formData.action) {
@@ -144,7 +144,7 @@ const PermissionManager = () => {
     const toastId = toast.loading(editingPermId ? "Updating permission..." : "Adding permission...");
 
     try {
-      // Send only the fields expected by the API
+
       const payload = {
         module: formData.module,
         action: formData.action,
@@ -215,9 +215,9 @@ const PermissionManager = () => {
     }
   };
 
-  // ==========================================
-  // ROLE ASSIGNMENT HANDLERS
-  // ==========================================
+
+
+
   const handleToggleCode = (code) => {
     setAssignedCodes(prev =>
       prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]
@@ -256,7 +256,7 @@ const PermissionManager = () => {
     <div className="p-6 lg:p-10 bg-[#FDFDFF] min-h-screen relative font-sans">
       <Toaster position="top-center" toastOptions={{ style: { borderRadius: '1rem', background: '#333', color: '#fff', fontWeight: 'bold', fontSize: '14px' } }} />
 
-      {/* Header */}
+
       <div className="mb-8">
         <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
           <Key className="text-indigo-600" size={32} />
@@ -269,12 +269,12 @@ const PermissionManager = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        {/* ========================================== */}
-        {/* LEFT COLUMN: MASTER PERMISSIONS            */}
-        {/* ========================================== */}
+
+
+
         <div className="lg:col-span-4 flex flex-col gap-6">
 
-          {/* Permission Form */}
+
           <div className="bg-white rounded-4xl shadow-sm border border-slate-100 p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -354,7 +354,7 @@ const PermissionManager = () => {
             </form>
           </div>
 
-          {/* Master List (Read-Only View) */}
+
           <div className="bg-white rounded-4xl shadow-sm border border-slate-100 overflow-hidden flex-1">
             <div className="p-5 border-b border-slate-50 bg-slate-50/50 space-y-3">
               <div className="flex items-center justify-between">
@@ -409,12 +409,12 @@ const PermissionManager = () => {
           </div>
         </div>
 
-        {/* ========================================== */}
-        {/* RIGHT COLUMN: ROLE ASSIGNMENT MATRIX       */}
-        {/* ========================================== */}
+
+
+
         <div className="lg:col-span-8 bg-white rounded-4xl shadow-sm border border-slate-100 flex flex-col h-full min-h-150">
 
-          {/* Header & Role Selector */}
+
           <div className="p-6 sm:p-8 border-b border-slate-50 flex flex-col gap-6 bg-slate-50/30 rounded-t-4xl">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
@@ -423,7 +423,7 @@ const PermissionManager = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                {/* Role Selector */}
+
                 <div className="w-full sm:w-64">
                   <select
                     value={selectedRoleId}
@@ -442,7 +442,7 @@ const PermissionManager = () => {
                   </select>
                 </div>
 
-                {/* Module Selector */}
+
                 <div className="w-full sm:w-48">
                   <select
                     value={selectedModule}
@@ -459,7 +459,7 @@ const PermissionManager = () => {
               </div>
             </div>
 
-            {/* Matrix Search Bar */}
+
             <div className={`relative transition-all ${selectedRoleId ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input
@@ -472,7 +472,7 @@ const PermissionManager = () => {
             </div>
           </div>
 
-          {/* Matrix Content */}
+
           <div className="p-6 sm:p-8 flex-1 overflow-y-auto bg-slate-50/10">
             {!selectedRoleId ? (
               <div className="h-full flex flex-col items-center justify-center text-slate-400 opacity-50 pt-10">
@@ -531,7 +531,7 @@ const PermissionManager = () => {
             )}
           </div>
 
-          {/* Footer Actions */}
+
           <div className="p-6 border-t border-slate-100 bg-white rounded-b-4xl flex justify-end items-center gap-4">
             <span className="text-xs font-bold text-slate-400">
               {assignedCodes.length} permissions granted

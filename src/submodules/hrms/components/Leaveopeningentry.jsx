@@ -46,7 +46,7 @@ export default function LeaveOpeningEntry() {
       emp.branch.toLowerCase().includes(search.toLowerCase()),
   );
 
-  // ✅ Updated function using SweetAlert2
+
   const handleAddBalance = () => {
     if (selectedEmployee && cl > 0) {
       const emp = employees.find((e) => e.name === selectedEmployee);
@@ -57,7 +57,7 @@ export default function LeaveOpeningEntry() {
           icon: "success",
           confirmButtonColor: "#16a34a",
         });
-        // You can also update backend or state here
+
       }
     } else {
       Swal.fire({
@@ -91,15 +91,15 @@ export default function LeaveOpeningEntry() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Header */}
+
       <div className="bg-blue-600 text-white px-4 py-3 flex items-center font-semibold text-lg">
         <span className="mr-2">📋</span> Leave Opening Entry
       </div>
 
-      {/* Filters */}
+
       <div className="bg-white shadow p-4 rounded-md m-4 border">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-          {/* Select Employee */}
+
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
               Select Employee
@@ -118,7 +118,7 @@ export default function LeaveOpeningEntry() {
             </select>
           </div>
 
-          {/* Search */}
+
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
               Search
@@ -132,7 +132,7 @@ export default function LeaveOpeningEntry() {
             />
           </div>
 
-          {/* Leave List */}
+
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
               Leave Type
@@ -150,7 +150,7 @@ export default function LeaveOpeningEntry() {
             </select>
           </div>
 
-          {/* Clear All Leave Balance */}
+
           <div className="flex justify-end">
             <button
               onClick={handleClearAllBalance}
@@ -162,7 +162,7 @@ export default function LeaveOpeningEntry() {
         </div>
       </div>
 
-      {/* Year & CL */}
+
       <div className="bg-white shadow p-4 rounded-md m-4 border">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
@@ -192,7 +192,7 @@ export default function LeaveOpeningEntry() {
         </div>
       </div>
 
-      {/* Table */}
+
       <div className="bg-white shadow rounded-md m-4 border overflow-x-auto">
         <table className="w-full text-sm border border-gray-200">
           <thead className="bg-blue-500 text-white">

@@ -14,7 +14,7 @@ import {
   FaLayerGroup,
   FaMapMarkerAlt,
   FaPen,
-  FaPlus, // Add this
+  FaPlus,
   FaSquare,
   FaSync,
   FaTable,
@@ -33,7 +33,7 @@ import * as XLSX from "xlsx";
 import projectService from "./projectService";
 import useAuth from "../../hooks/useAuth";
 
-// Shared imports
+
 import { getProjectOverallStatus } from "./shared/utils";
 import CustomizeSelect from "./CustomizeSelect";
 import {
@@ -43,7 +43,7 @@ import {
   PROJECT_TYPES,
 } from "./shared/Constants";
 
-// Create constants object for DuplexTriplexProject
+
 const DUPLEX_TRIPLEX_CONSTANTS = {
   FACILITIES: FACILITIES || [],
   FACING_OPTIONS: FACING_OPTIONS || [
@@ -77,7 +77,7 @@ const PABC = () => {
     lastSynced: null,
   });
 
-  // Plot Editing Overview state
+
   const [showPlotEditingOverview, setShowPlotEditingOverview] = useState(false);
   const [selectedProjectForEditing, setSelectedProjectForEditing] =
     useState(null);
@@ -97,7 +97,7 @@ const PABC = () => {
     }
     return status || "-";
   };
-  // Project Form State
+
   const [projectName, setProjectName] = useState("");
   const [projectType, setProjectType] = useState("");
   const [city, setCity] = useState("");
@@ -106,13 +106,13 @@ const PABC = () => {
   const [commercialSubType, setCommercialSubType] = useState("");
   const [editingProjectId, setEditingProjectId] = useState(null);
 
-  // Additional state for Duplex/Triplex projects
+
   const [landArea, setLandArea] = useState("");
   const [revenuePlots, setRevenuePlots] = useState("");
   const [addRevenuePlotNumber, setAddRevenuePlotNumber] = useState("");
   const [attachment, setAttachment] = useState(null);
-  const [parsedPlotsData, setParsedPlotsData] = useState([]); // Store parsed plots_data
-  const [parsedRevenuePlotsData, setParsedRevenuePlotsData] = useState([]); // Store parsed revenue_plots_data
+  const [parsedPlotsData, setParsedPlotsData] = useState([]);
+  const [parsedRevenuePlotsData, setParsedRevenuePlotsData] = useState([]);
 
   const [selectedCustomTypes, setSelectedCustomTypes] = useState([]);
   const [currentCustomType, setCurrentCustomType] = useState("");
@@ -122,32 +122,32 @@ const PABC = () => {
   const [unitOverviewProject, setUnitOverviewProject] = useState(null);
   const [unitOverviewUnits, setUnitOverviewUnits] = useState([]);
 
-  // Apartment Editing Overview
+
   const [showApartmentOverview, setShowApartmentOverview] = useState(false);
   const [apartmentOverviewProject, setApartmentOverviewProject] =
     useState(null);
   const [apartmentOverviewBlocks, setApartmentOverviewBlocks] = useState([]);
 
-  // commercial
+
   const [showCommercialEditingOverview, setShowCommercialEditingOverview] =
     useState(false);
   const [commercialOverviewProject, setCommercialOverviewProject] =
     useState(null);
   const [commercialOverviewUnits, setCommercialOverviewUnits] = useState([]);
 
-  // Multi-select state
+
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  // custom editing overview
+
   const [showCustomEditingOverview, setShowCustomEditingOverview] =
     useState(false);
   const [customOverviewProject, setCustomOverviewProject] = useState(null);
   const [customOverviewData, setCustomOverviewData] = useState({});
 
-  // Add this useEffect to reset showUnitOverview
+
   useEffect(() => {
     if (showForm && editingProjectId) {
-      // Check if this is a duplex/triplex project with units
+
       const project = projects.find((p) => p.id === editingProjectId);
       if (
         (project?.type === "duplex" || project?.type === "triplex") &&
@@ -159,7 +159,7 @@ const PABC = () => {
               ? JSON.parse(project.units_data)
               : project.units_data;
           if (units && units.length > 0) {
-            // Check if we should show unit overview
+
             const shouldShow =
               window.location.hash === "#unit-overview" ||
               localStorage.getItem(`show_unit_overview_${editingProjectId}`);
@@ -175,7 +175,7 @@ const PABC = () => {
     }
   }, [showForm, editingProjectId, projects]);
 
-  // Load projects from localStorage on mount AND from API
+
   useEffect(() => {
     loadAllProjects();
   }, []);
@@ -213,12 +213,12 @@ const PABC = () => {
     setShowApartmentOverview(true);
   };
 
-  // Function to load projects from both localStorage and API
+
   const loadAllProjects = async () => {
     try {
       setApiLoading(true);
 
-      // Load from localStorage first
+
       const savedProjects = localStorage.getItem("local_projects");
       let localProjects = [];
 
@@ -230,12 +230,12 @@ const PABC = () => {
         }
       }
 
-      // Try to load from API
+
       let serverProjects = [];
       try {
         console.log("🚀 Fetching all projects from API...");
 
-        // Fetch each project type with individual error handling to prevent one failure from breaking everything
+
         const fetchResults = await Promise.allSettled([
           projectService.getAllApartments(),
           projectService.getAllCommercials(),
@@ -291,10 +291,10 @@ const PABC = () => {
         console.error("Critical error in loadAllProjects API fetch:", apiError);
       }
 
-      // Merge local and server projects
+
       const allProjects = [...serverProjects];
 
-      // Add local projects that don't exist on server
+
       localProjects.forEach((localProject) => {
         const existsOnServer = allProjects.some(
           (serverProject) => serverProject.id === localProject.id,
@@ -304,7 +304,7 @@ const PABC = () => {
         }
       });
 
-      // 🔥 SORT PROJECTS: newest → oldest
+
       allProjects.sort((a, b) => {
         const dateA = new Date(a.created_at || a.createdAt || 0);
         const dateB = new Date(b.created_at || b.createdAt || 0);
@@ -313,7 +313,7 @@ const PABC = () => {
 
       setProjects(allProjects);
 
-      // Update sync status
+
       setSyncStatus({
         local: localProjects.length,
         server: serverProjects.length,
@@ -327,54 +327,54 @@ const PABC = () => {
     }
   };
 
-  //   const openEditingOverview = (project) => {
-  //   let items = [];
-  //   let type = project.type;
 
-  //   try {
-  //     if (type === "plotting") {
-  //       items = typeof project.plots_data === "string"
-  //         ? JSON.parse(project.plots_data)
-  //         : project.plots_data || [];
-  //     }
 
-  //     if (type === "duplex" || type === "triplex") {
-  //       items = typeof project.units_data === "string"
-  //         ? JSON.parse(project.units_data)
-  //         : project.units_data || [];
-  //     }
 
-  //     if (type === "apartment") {
-  //       items = typeof project.blocks_data === "string"
-  //         ? JSON.parse(project.blocks_data)
-  //         : project.blocks_data || [];
-  //     }
-  //   } catch (e) {
-  //     console.error("Failed to parse overview data", e);
-  //   }
 
-  //   setEditingOverview({
-  //     open: true,
-  //     type,
-  //     project,
-  //     items
-  //   });
-  // };
 
-  // Save projects to localStorage whenever state changes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
-    // Filter only local projects (not from server)
+
     const localProjects = projects.filter(
       (p) => p.source === "local" || !p.source,
     );
     if (localProjects.length > 0) {
       localStorage.setItem("local_projects", JSON.stringify(localProjects));
     } else {
-      localStorage.removeItem("local_projects"); // 🔥 REQUIRED
+      localStorage.removeItem("local_projects");
     }
   }, [projects]);
 
-  // Clear editing plot flag when closing form
+
   useEffect(() => {
     if (!showForm && editingPlotId) {
       setEditingPlotId(null);
@@ -435,11 +435,11 @@ const PABC = () => {
       });
 
       {
-        /* Apartment Unit Details Modal */
+
       }
       console.log("🔥 projectData.plots_data:", projectData.plots_data);
 
-      // Force custom type if we are in custom project mode to prevent subtypes from overwriting it
+
       if (projectType === PROJECT_TYPES.CUSTOM) {
         projectData.type = PROJECT_TYPES.CUSTOM;
       }
@@ -450,7 +450,7 @@ const PABC = () => {
         let savedProject;
 
         if (projectData.id) {
-          // When editing, preserve units from the existing project if not included in projectData
+
           let mergedData = { ...projectData };
 
           if (editingProjectId) {
@@ -458,10 +458,10 @@ const PABC = () => {
               (p) => p.id === editingProjectId,
             );
 
-            // Handle units_data (new database field name)
+
             if (existingProject?.units_data) {
               let existingUnits = existingProject.units_data;
-              // Parse if it's a JSON string
+
               if (typeof existingUnits === "string") {
                 try {
                   existingUnits = JSON.parse(existingUnits);
@@ -474,7 +474,7 @@ const PABC = () => {
               if (Array.isArray(existingUnits) && existingUnits.length > 0) {
                 let incomingUnits =
                   projectData.units_data || projectData.units || [];
-                // Parse if it's a JSON string
+
                 if (typeof incomingUnits === "string") {
                   try {
                     incomingUnits = JSON.parse(incomingUnits);
@@ -484,12 +484,12 @@ const PABC = () => {
                 }
 
                 if (Array.isArray(incomingUnits)) {
-                  // Merge: keep existing units, update those that are in incoming
+
                   const mergedUnits = existingUnits.map((u) => {
                     const updated = incomingUnits.find((iu) => iu.id === u.id);
                     return updated ? { ...u, ...updated } : u;
                   });
-                  // Add any new incoming units not in existing
+
                   incomingUnits.forEach((iu) => {
                     if (!mergedUnits.find((u) => u.id === iu.id)) {
                       mergedUnits.push(iu);
@@ -499,7 +499,7 @@ const PABC = () => {
                 }
               }
             }
-            // Fallback for old units field
+
             else if (existingProject?.units?.length) {
               const incomingUnits = projectData.units || [];
 
@@ -515,7 +515,7 @@ const PABC = () => {
           savedProject = {
             ...mergedData,
             updatedAt: new Date().toISOString(),
-            // Ensure source is set correctly
+
             source:
               mergedData.source ||
               (editingProjectId
@@ -525,11 +525,11 @@ const PABC = () => {
           };
 
           if (editingProjectId) {
-            // Check if it's a server project to use the update API
+
             if (savedProject.source === "server") {
               try {
                 if (savedProject.type === PROJECT_TYPES.CUSTOM) {
-                  // Gather all sub-project specific data into configuration
+
                   const subProjectKeys = [
                     "plots",
                     "plots_data",
@@ -606,9 +606,9 @@ const PABC = () => {
             alert("Project saved successfully!");
           }
         } else {
-          // Fallback for cases where ID is missing (should not happen with new child components)
+
           try {
-            // Try to save to server first
+
             let serverResponse;
             switch (projectData.type) {
               case "apartment":
@@ -631,7 +631,7 @@ const PABC = () => {
                   await projectService.createTriplex(projectData);
                 break;
               case PROJECT_TYPES.CUSTOM:
-                // Gather all sub-project specific data into configuration
+
                 const subProjectKeysForCreate = [
                   "plots",
                   "plots_data",
@@ -689,7 +689,7 @@ const PABC = () => {
               "Server not available or custom project:",
               serverError,
             );
-            // Save locally if server fails or is custom
+
             savedProject = {
               ...projectData,
               id:
@@ -705,7 +705,7 @@ const PABC = () => {
           }
         }
 
-        // Re-fetch projects to sync everything from the server instantly
+
         console.log("🔄 Save successful. Fetching latest projects...");
         loadAllProjects();
       } catch (error) {
@@ -791,7 +791,7 @@ const PABC = () => {
             setShowPlotEditingOverview(false);
           }
 
-          // Remove from selected projects if present
+
           setSelectedProjects((prev) => prev.filter((pId) => pId !== id));
 
           await Swal.fire({
@@ -894,7 +894,7 @@ const PABC = () => {
     if (result.isConfirmed) {
       const { success, failed } = result.value;
 
-      // Remove successful deletions from state
+
       setProjects((prev) => {
         const updated = prev.filter(
           (p) => !success.some((sId) => String(sId) === String(p.id)),
@@ -905,7 +905,7 @@ const PABC = () => {
         return updated;
       });
 
-      // Clear selections
+
       setSelectedProjects([]);
       setSelectAll(false);
 
@@ -1010,8 +1010,8 @@ const PABC = () => {
 
     let updatedProject = { ...projectToEdit };
 
-    // For custom projects, spread configuration back into the project object
-    // so that sub-components can find their data (plots, units, etc.)
+
+
     if (updatedProject.type === PROJECT_TYPES.CUSTOM && updatedProject.configuration) {
       try {
         const config =
@@ -1025,7 +1025,7 @@ const PABC = () => {
       }
     }
 
-    // 🔥 FIX: preserve existing units when editing
+
     if (updatedProject.units && Array.isArray(updatedProject.units)) {
       updatedProject = {
         ...updatedProject,
@@ -1040,14 +1040,14 @@ const PABC = () => {
     setLocality(updatedProject.locality || "");
     setLandZone(updatedProject.land_zone || "");
 
-    // Set land area from database field
+
     setLandArea(updatedProject.land_area || updatedProject.landArea || "");
 
-    // Set revenue plots from database field
+
     const revPlots = updatedProject.revenue_plots || updatedProject.revenuePlots || 0;
     setRevenuePlots(revPlots);
 
-    // Parse plots_data from database (main plots array)
+
     let parsedPlots = [];
     const plotsToParse = updatedProject.plots_data || updatedProject.plots;
     if (plotsToParse) {
@@ -1064,7 +1064,7 @@ const PABC = () => {
     }
     setParsedPlotsData(parsedPlots);
 
-    // Parse revenue_plots_data from database (revenue plots array)
+
     let parsedRevenuePlots = [];
     const revPlotsToParse =
       updatedProject.revenue_plots_data ||
@@ -1087,13 +1087,13 @@ const PABC = () => {
     setAddRevenuePlotNumber(updatedProject.addRevenuePlotNumber || "");
     setAttachment(updatedProject.attachment || null);
 
-    // Set plot ID if provided (for editing specific plot)
+
     if (plotId) {
       setEditingPlotId(plotId);
     }
 
     if (updatedProject.type === PROJECT_TYPES.CUSTOM) {
-      // Ensure configuration is expanded if not already
+
       if (updatedProject.configuration && !updatedProject.subTypes && !updatedProject.sub_types) {
         try {
           const config =
@@ -1129,15 +1129,15 @@ const PABC = () => {
       setShowCustomizeSelect(false);
     }
 
-    // Apartment: open directly in units tab and load existing data
+
     if (updatedProject.type === PROJECT_TYPES.APARTMENT) {
-      setSelectedProject(updatedProject); // Pass full project to ApartmentProject
-      setOpenInOverview(true); // Ensures ApartmentProject opens in units tab
+      setSelectedProject(updatedProject);
+      setOpenInOverview(true);
       setShowForm(true);
       return;
     }
 
-    setSelectedProject(updatedProject); // Set selectedProject for other project types
+    setSelectedProject(updatedProject);
     setOpenInOverview(true);
     setShowForm(true);
   }, []);
@@ -1168,7 +1168,7 @@ const PABC = () => {
   };
 
   const handleCustomizeTypeSelect = (payload) => {
-    // payload = { projectType, customTypes, status }
+
 
     const typesArray = Array.isArray(payload.customTypes)
       ? payload.customTypes
@@ -1193,11 +1193,11 @@ const PABC = () => {
     );
   };
 
-  // Open Plot Editing Overview for a project
+
   const openPlotEditingOverview = (project) => {
     setSelectedProjectForEditing(project);
 
-    // Get all plots from the project
+
     let projectPlots = [];
     if (project.plots_data) {
       try {
@@ -1258,7 +1258,7 @@ const PABC = () => {
   const openCustomEditingOverview = (project) => {
     setCustomOverviewProject(project);
 
-    // Expand configuration first if needed
+
     let expandedProject = { ...project };
     if (project.configuration) {
       try {
@@ -1332,7 +1332,7 @@ const PABC = () => {
     setShowCustomEditingOverview(true);
   };
 
-  // Navigate to edit a specific plot from overview
+
   const navigateToPlotEditFromOverview = (plotId) => {
     if (!selectedProjectForEditing) return;
 
@@ -1340,13 +1340,13 @@ const PABC = () => {
     editProject(selectedProjectForEditing, plotId);
   };
 
-  // Complete editing for all plots in a project
+
   const completeAllPlotEditing = () => {
     if (!selectedProjectForEditing) return;
 
     const updatedProjects = projects.map((project) => {
       if (project.id === selectedProjectForEditing.id) {
-        // Parse existing plots
+
         let existingPlots = [];
         if (project.plots_data) {
           try {
@@ -1361,7 +1361,7 @@ const PABC = () => {
           }
         }
 
-        // Mark all plots as not being edited
+
         const updatedPlots = existingPlots.map((plot) => ({
           ...plot,
           isBeingEdited: false,
@@ -1464,14 +1464,14 @@ const PABC = () => {
     alert("All apartment editing completed!");
   };
 
-  // Render Plot Editing Overview
+
   const renderPlotEditingOverview = () => {
     if (!selectedProjectForEditing) return null;
 
     const project = selectedProjectForEditing;
     const projectPlots = editingPlots;
 
-    // Calculate statistics
+
     const stats = {
       total: projectPlots.length,
       beingEdited: projectPlots.filter((p) => p.isBeingEdited).length,
@@ -1484,7 +1484,7 @@ const PABC = () => {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-          {/* Header */}
+
           <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-6 z-10">
             <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
@@ -1503,7 +1503,7 @@ const PABC = () => {
                   </div>
                 </div>
 
-                {/* Stats Cards */}
+
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
                   <div className="bg-gray-50 rounded-xl p-3">
                     <div className="text-2xl font-bold text-gray-900">
@@ -1558,7 +1558,7 @@ const PABC = () => {
           </div>
 
           <div className="p-6">
-            {/* Plots Table */}
+
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -1766,7 +1766,7 @@ const PABC = () => {
               )}
             </div>
 
-            {/* Action Buttons */}
+
             <div className="mt-6 flex justify-between items-center">
               <div className="text-sm text-gray-500">
                 Showing {projectPlots.length} plot(s)
@@ -1813,7 +1813,7 @@ const PABC = () => {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-          {/* HEADER */}
+
           <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-6 z-10">
             <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
@@ -1831,7 +1831,7 @@ const PABC = () => {
                   </div>
                 </div>
 
-                {/* Stats Cards */}
+
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
                   <div className="bg-gray-50 rounded-xl p-3">
                     <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
@@ -1875,7 +1875,7 @@ const PABC = () => {
             </div>
           </div>
 
-          {/* TABLE */}
+
           <div className="p-6">
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
@@ -1982,7 +1982,7 @@ const PABC = () => {
     const project = apartmentOverviewProject;
     const blocks = apartmentOverviewBlocks;
 
-    // Calculate statistics
+
     const allUnits = blocks.flatMap((block) => {
       let units = [];
       if (block.units_data) {
@@ -2013,7 +2013,7 @@ const PABC = () => {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-          {/* Header */}
+
           <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-6 z-10">
             <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
@@ -2032,7 +2032,7 @@ const PABC = () => {
                   </div>
                 </div>
 
-                {/* Stats Cards */}
+
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mt-6">
                   <div className="bg-gray-50 rounded-xl p-3">
                     <div className="text-2xl font-bold text-gray-900">
@@ -2093,12 +2093,12 @@ const PABC = () => {
           </div>
 
           <div className="p-6">
-            {/* Blocks & Units Grid */}
+
             <div className="space-y-6">
               {blocks.map((block) => {
                 let blockUnits = [];
 
-                // Extract units from block
+
                 if (block.units_data) {
                   try {
                     blockUnits =
@@ -2133,7 +2133,7 @@ const PABC = () => {
                     key={block.id}
                     className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm"
                   >
-                    {/* Block Header */}
+
                     <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
@@ -2165,7 +2165,7 @@ const PABC = () => {
                       </div>
                     </div>
 
-                    {/* Units Grid */}
+
                     <div className="p-6">
                       {blockUnits.length === 0 ? (
                         <div className="text-center py-8">
@@ -2239,7 +2239,7 @@ const PABC = () => {
                                 </span>
                               </div>
 
-                              {/* Unit Details */}
+
                               <div className="space-y-2">
                                 {(unit.area ||
                                   unit.area_details?.carpet_area) && (
@@ -2283,7 +2283,7 @@ const PABC = () => {
               })}
             </div>
 
-            {/* Action Buttons */}
+
             <div className="mt-6 flex justify-between items-center pt-6 border-t border-gray-200">
               <div className="text-sm text-gray-500">
                 Showing {stats.totalUnits} unit(s) across {stats.totalBlocks}{" "}
@@ -2331,7 +2331,7 @@ const PABC = () => {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-          {/* HEADER */}
+
           <div className="sticky top-0 bg-white border-b p-6 z-10">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">
@@ -2342,17 +2342,11 @@ const PABC = () => {
               </button>
             </div>
 
-            {/* STATS */}
-            {/* <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
-            <Stat label="Total Units" value={stats.total} />
-            <Stat label="Being Edited" value={stats.beingEdited} color="blue" />
-            <Stat label="Saved" value={stats.saved} color="emerald" />
-            <Stat label="Not Edited" value={stats.notEdited} color="amber" />
-            <Stat label="Complete" value={stats.complete} color="purple" />
-          </div> */}
+
+
           </div>
 
-          {/* TABLE */}
+
           <div className="p-6">
             <table className="w-full">
               <thead className="bg-gray-50">
@@ -2428,7 +2422,7 @@ const PABC = () => {
     const project = customOverviewProject;
     const customTypes = project.custom_selected_types || [];
 
-    // Calculate overall statistics
+
     const totalItems = Object.values(customOverviewData).reduce(
       (sum, type) => sum + type.count,
       0,
@@ -2441,7 +2435,7 @@ const PABC = () => {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-          {/* Header */}
+
           <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-6 z-10">
             <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
@@ -2460,7 +2454,7 @@ const PABC = () => {
                   </div>
                 </div>
 
-                {/* Stats Cards */}
+
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                   <div className="bg-gray-50 rounded-xl p-3">
                     <div className="text-2xl font-bold text-gray-900">
@@ -2503,7 +2497,7 @@ const PABC = () => {
           </div>
 
           <div className="p-6">
-            {/* Instructions */}
+
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
               <div className="flex items-start gap-3">
                 <FaExclamationCircle className="text-blue-600 mt-1 shrink-0" />
@@ -2528,7 +2522,7 @@ const PABC = () => {
               </div>
             </div>
 
-            {/* Types Grid */}
+
             <div className="space-y-6">
               {customTypes.map((type) => {
                 const typeData = customOverviewData[type] || {
@@ -2547,11 +2541,11 @@ const PABC = () => {
                     className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm cursor-pointer hover:shadow-md transition"
                     onClick={() => {
                       setShowCustomEditingOverview(false);
-                      editProject(project); // 🔥 loads everything correctly
-                      setCurrentCustomType(type); // switch to clicked subtype
+                      editProject(project);
+                      setCurrentCustomType(type);
                     }}
                   >
-                    {/* Type Header */}
+
                     <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
@@ -2572,7 +2566,7 @@ const PABC = () => {
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
-                          {/* Progress Bar */}
+
                           <div className="flex items-center gap-2 min-w-37.5">
                             <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                               <div
@@ -2588,7 +2582,7 @@ const PABC = () => {
                       </div>
                     </div>
 
-                    {/* Items List */}
+
                     <div className="p-6">
                       {typeData.items.length === 0 ? (
                         <div className="text-center py-8">
@@ -2654,7 +2648,7 @@ const PABC = () => {
               })}
             </div>
 
-            {/* Action Buttons */}
+
             <div className="mt-6 flex justify-between items-center pt-6 border-t border-gray-200">
               <div className="text-sm text-gray-500">
                 {totalItems} total items across {customTypes.length} type(s)
@@ -2685,76 +2679,76 @@ const PABC = () => {
     );
   };
 
-  //   const renderEditingOverview = () => {
-  //   if (!editingOverview.open) return null;
 
-  //   const { project, type, items } = editingOverview;
 
-  //   return (
-  //     <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-start p-6 overflow-y-auto">
-  //       <div className="bg-white w-full max-w-6xl rounded-xl shadow-xl">
 
-  //         {/* Header */}
-  //         <div className="flex justify-between items-center p-6 border-b">
-  //           <h2 className="text-xl font-bold">
-  //             {type.toUpperCase()} Editing Overview — {project.name}
-  //           </h2>
-  //           <button onClick={() => setEditingOverview({ open: false })}>
-  //             <FaTimes />
-  //           </button>
-  //         </div>
 
-  //         {/* Body */}
-  //         <div className="p-6 space-y-4">
 
-  //           {items.map(item => {
-  //             const isEditing = item.isBeingEdited;
-  //             const isSaved = item.lastSaved;
 
-  //             return (
-  //               <div
-  //                 key={item.id}
-  //                 className={`p-4 rounded-lg flex justify-between items-center
-  //                   ${isEditing
-  //                     ? "bg-blue-50"
-  //                     : isSaved
-  //                       ? "bg-emerald-50"
-  //                       : "bg-slate-100 opacity-70 italic blur-[0.4px]"
-  //                   }`}
-  //               >
-  //                 <div>
-  //                   <div className="font-semibold">
-  //                     {item.name || item.unitNo || item.blockName}
-  //                   </div>
-  //                   <div className="text-xs text-slate-500">
-  //                     {isEditing ? "Being edited" : isSaved ? "Saved" : "Not edited"}
-  //                   </div>
-  //                 </div>
 
-  //                 <button
-  //                   className="px-3 py-1 text-sm bg-indigo-600 text-white rounded"
-  //                   onClick={() => {
-  //                     setEditingOverview({ open: false });
-  //                     editProject(project, item.id);
-  //                   }}
-  //                 >
-  //                   Edit
-  //                 </button>
-  //               </div>
-  //             );
-  //           })}
 
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const renderProjectForm = () => {
     if (showCustomizeSelect) {
       return (
         <div className="p-8">
-          {/* <CustomProject */}
+
           <CustomizeSelect
             initialSelected={selectedCustomTypes}
             onBack={() => setShowCustomizeSelect(false)}
@@ -2822,7 +2816,7 @@ const PABC = () => {
       ? projects.find((p) => p.id === editingProjectId)
       : null;
 
-    // Expand configuration for custom projects so nested data is available to sub-components
+
     if (
       selectedProjectVal &&
       selectedProjectVal.type === PROJECT_TYPES.CUSTOM &&
@@ -2880,7 +2874,7 @@ const PABC = () => {
         : [],
       showUnitOverviewOnLoad: !!editingProjectId,
 
-      // ✅ ADD THIS (THIS IS ALL YOU NEED)
+
       onClose: () => {
         resetForm();
         setShowForm(false);
@@ -2888,19 +2882,19 @@ const PABC = () => {
       },
     };
 
-    // Pass all parsed data to PlottingProject
+
     const plottingProps = {
       ...commonProps,
       editingPlotId,
       selectedProject: selectedProjectVal,
-      // Pass parsed database data
+
       initialLandArea: landArea,
       initialRevenuePlots: revenuePlots,
-      initialParsedPlotsData: parsedPlotsData, // Main plots array
-      initialParsedRevenuePlotsData: parsedRevenuePlotsData, // Revenue plots array
+      initialParsedPlotsData: parsedPlotsData,
+      initialParsedRevenuePlotsData: parsedRevenuePlotsData,
       initialTab: editingProjectId ? "plots" : "project-info",
 
-      // ✅ ADD THIS
+
       onClose: () => {
         resetForm();
         setShowForm(false);
@@ -2914,22 +2908,8 @@ const PABC = () => {
     ) {
       return (
         <div className="relative space-y-4 p-6">
-          {/* ❌ Close Custom Editing */}
-          {/* <button
-            onClick={() => {
-              resetForm();
-              setShowForm(false);
-            }}
-            className="absolute top-4 right-4 z-50
-                 w-10 h-10 rounded-full
-                 bg-white shadow-md
-                 flex items-center justify-center
-                 text-slate-500 hover:text-rose-600
-                 hover:bg-rose-50 transition"
-            title="Back to Project List"
-          >
-            <FaTimes size={18} />
-          </button> */}
+
+
           <div className="flex gap-2 flex-wrap">
             {selectedCustomTypes.map((type) => (
               <button
@@ -2946,7 +2926,7 @@ const PABC = () => {
           </div>
           <div className="p-4 border border-gray-100 rounded-xl bg-gray-50/50">
             {(() => {
-              // In custom projects, we pass the expanded selectedProjectVal to the sub-component
+
               const subtypeProject = selectedProjectVal;
 
               if (currentCustomType === "plotting") {
@@ -3164,7 +3144,7 @@ const PABC = () => {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {projects.map((project) => {
-                      // Parse plots_data to get plot information
+
                       let projectPlots = [];
                       let totalPlots = 0;
                       let editingPlotsCount = 0;
@@ -3266,241 +3246,7 @@ const PABC = () => {
                                 );
                               })()}
                             </td>
-                            {/* <td className="px-6 py-4">
-  {(() => {
-    // DUPLEX/TRIPLEX
-    if (project.type === "duplex" || project.type === "triplex") {
-      let units = [];
-      if (project.units_data) {
-        try {
-          units = typeof project.units_data === "string"
-            ? JSON.parse(project.units_data)
-            : project.units_data;
-        } catch (e) {
-          units = [];
-        }
-      }
-      
-      const total = units.length;
-      const completed = units.filter(u => u.isComplete === true).length;
-      const draft = total - completed;
-      
-      return total > 0 ? (
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {total} unit(s)
-          </span>
-          {completed > 0 && (
-            <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
-              {completed} completed
-            </span>
-          )}
-          {draft > 0 && (
-            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
-              {draft} draft
-            </span>
-          )}
-        </div>
-      ) : (
-        <span className="text-sm text-slate-400">No units</span>
-      );
-    }
-    
-    // PLOTTING
-    else if (project.type === "plotting") {
-      let plots = [];
-      if (project.plots_data) {
-        try {
-          plots = typeof project.plots_data === "string"
-            ? JSON.parse(project.plots_data)
-            : project.plots_data;
-        } catch (e) {
-          plots = [];
-        }
-      }
-      
-      const total = plots.length;
-      const completed = plots.filter(p => p.isComplete === true).length;
-      const draft = total - completed;
-      
-      return total > 0 ? (
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {total} plot(s)
-          </span>
-          {completed > 0 && (
-            <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
-              {completed} completed
-            </span>
-          )}
-          {draft > 0 && (
-            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
-              {draft} draft
-            </span>
-          )}
-        </div>
-      ) : (
-        <span className="text-sm text-slate-400">No plots</span>
-      );
-    }
-    
-    // APARTMENT
-    else if (project.type === "apartment") {
-      let allUnits = [];
-      if (project.blocks_data) {
-        try {
-          const blocks = typeof project.blocks_data === "string"
-            ? JSON.parse(project.blocks_data)
-            : project.blocks_data;
-          
-          blocks.forEach(block => {
-            block.floors?.forEach(floor => {
-              floor.units?.forEach(unit => {
-                allUnits.push(unit);
-              });
-            });
-          });
-        } catch (e) {
-          allUnits = [];
-        }
-      }
-      
-      const total = allUnits.length;
-      const completed = allUnits.filter(u => u.isComplete === true).length;
-      const draft = total - completed;
-      
-      return total > 0 ? (
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {total} unit(s)
-          </span>
-          {completed > 0 && (
-            <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
-              {completed} completed
-            </span>
-          )}
-          {draft > 0 && (
-            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
-              {draft} draft
-            </span>
-          )}
-        </div>
-      ) : (
-        <span className="text-sm text-slate-400">No units</span>
-      );
-    }
-    
-    // COMMERCIAL
-    else if (project.type === "commercial") {
-      let units = [];
-      if (project.units_data) {
-        try {
-          units = typeof project.units_data === "string"
-            ? JSON.parse(project.units_data)
-            : project.units_data;
-        } catch (e) {
-          units = [];
-        }
-      }
-      
-      const total = units.length;
-      const completed = units.filter(u => u.isComplete === true).length;
-      const draft = total - completed;
-      
-      return total > 0 ? (
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {total} unit(s)
-          </span>
-          {completed > 0 && (
-            <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
-              {completed} completed
-            </span>
-          )}
-          {draft > 0 && (
-            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
-              {draft} draft
-            </span>
-          )}
-        </div>
-      ) : (
-        <span className="text-sm text-slate-400">No units</span>
-      );
-    }
-    
-    // CUSTOM
-    else if (project.type === "custom") {
-      let totalItems = 0;
-      let completedItems = 0;
-      
-      // Check plots_data
-      if (project.plots_data) {
-        try {
-          const plots = typeof project.plots_data === "string"
-            ? JSON.parse(project.plots_data)
-            : project.plots_data;
-          totalItems += plots.length;
-          completedItems += plots.filter(p => p.isComplete === true).length;
-        } catch (e) {}
-      }
-      
-      // Check units_data
-      if (project.units_data) {
-        try {
-          const units = typeof project.units_data === "string"
-            ? JSON.parse(project.units_data)
-            : project.units_data;
-          totalItems += units.length;
-          completedItems += units.filter(u => u.isComplete === true).length;
-        } catch (e) {}
-      }
-      
-      // Check blocks_data
-      if (project.blocks_data) {
-        try {
-          const blocks = typeof project.blocks_data === "string"
-            ? JSON.parse(project.blocks_data)
-            : project.blocks_data;
-          
-          blocks.forEach(block => {
-            block.floors?.forEach(floor => {
-              floor.units?.forEach(unit => {
-                totalItems++;
-                if (unit.isComplete === true) completedItems++;
-              });
-            });
-          });
-        } catch (e) {}
-      }
-      
-      const draft = totalItems - completedItems;
-      
-      return totalItems > 0 ? (
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {totalItems} item(s)
-          </span>
-          {completedItems > 0 && (
-            <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
-              {completedItems} completed
-            </span>
-          )}
-          {draft > 0 && (
-            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
-              {draft} draft
-            </span>
-          )}
-        </div>
-      ) : (
-        <span className="text-sm text-slate-400">No items</span>
-      );
-    }
-    
-    else {
-      return <span className="text-sm text-slate-400">-</span>;
-    }
-  })()}
-</td> */}
+
                             <td className="px-6 py-4 text-slate-500 text-sm">
                               {formatDate(
                                 project.created_at || project.createdAt,
@@ -3508,7 +3254,7 @@ const PABC = () => {
                             </td>
                             <td className="px-6 py-4 text-right">
                               <div className="flex items-center justify-end gap-2">
-                                {/* Unit Editing Overview button for duplex/triplex projects */}
+
                                 {(project.type === "duplex" ||
                                   project.type === "triplex") &&
                                   (() => {
@@ -3538,14 +3284,14 @@ const PABC = () => {
                                     ) : null;
                                   })()}
 
-                                {/* Apartment Block & Unit Editing Overview */}
+
                                 {project.type === "apartment" && (
                                   <button
                                     onClick={() => {
-                                      // Open apartment project
+
                                       openApartmentEditingOverview(project);
 
-                                      // Trigger block & unit overview inside ApartmentProject
+
                                       setTimeout(() => {
                                         window.dispatchEvent(
                                           new CustomEvent(
@@ -3561,7 +3307,7 @@ const PABC = () => {
                                   </button>
                                 )}
 
-                                {/* Commercial Editing Overview */}
+
                                 {project.type === "commercial" && (
                                   <button
                                     onClick={() =>
@@ -3574,7 +3320,7 @@ const PABC = () => {
                                   </button>
                                 )}
 
-                                {/* Plot Editing Overview button for plotting projects */}
+
                                 {project.type === "plotting" && (
                                   <button
                                     onClick={() =>
@@ -3587,7 +3333,7 @@ const PABC = () => {
                                   </button>
                                 )}
 
-                                {/* Custom Project Editing Overview */}
+
                                 {project.type === "custom" && (
                                   <button
                                     onClick={() =>
@@ -3600,34 +3346,10 @@ const PABC = () => {
                                   </button>
                                 )}
 
-                                {/* Apartment Block & Unit Editing Overview */}
-                                {/* {project.type === "apartment" && (
-  <button
-    onClick={() => {
-      // 1️⃣ Open Apartment project normally
-      setEditingProjectId(project.id);
-      setProjectType("apartment");
 
-      // 2️⃣ Trigger Block & Unit overview INSIDE ApartmentProject
-      setTimeout(() => {
-        window.dispatchEvent(
-          new CustomEvent("OPEN_BLOCK_UNIT_OVERVIEW")
-        );
-      }, 100);
-    }}
-    className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg"
-    title="Block & Unit Editing Overview"
-  >
-    <FaTable />
-  </button>
-)} */}
 
-                                {/* <button
-  onClick={() => openEditingOverview(project)}
-  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
->
-  <FaEdit />
-</button> */}
+
+
 
                                 <button
                                   onClick={() => handleViewProject(project)}
@@ -3645,7 +3367,7 @@ const PABC = () => {
                                   <FaEdit />
                                 </button>
 
-                                {/* Delete Project button */}
+
                                 <button
                                   onClick={() => deleteProject(project.id)}
                                   className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
@@ -3654,7 +3376,7 @@ const PABC = () => {
                                   <FaTrash />
                                 </button>
 
-                                {/* Expand/Collapse button */}
+
                                 <button
                                   onClick={() =>
                                     toggleProjectExpansion(project.id)
@@ -3693,7 +3415,7 @@ const PABC = () => {
                                   </div>
 
                                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                    {/* Basic Information Column */}
+
                                     <div className="space-y-4">
                                       <div className="flex items-center gap-3 mb-3">
                                         <div className="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
@@ -3753,7 +3475,7 @@ const PABC = () => {
                                       </div>
                                     </div>
 
-                                    {/* Location Information Column */}
+
                                     <div className="space-y-4">
                                       <div className="flex items-center gap-3 mb-3">
                                         <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
@@ -3801,7 +3523,7 @@ const PABC = () => {
                                     </div>
                                   </div>
 
-                                  {/* Project Type Specific Details */}
+
                                   <div className="mt-6 pt-6 border-t border-slate-200">
                                     <div className="flex items-center gap-3 mb-4">
                                       <div className="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
@@ -3835,7 +3557,7 @@ const PABC = () => {
                                       </div>
                                     </div>
 
-                                    {/* Plotting Project Details */}
+
                                     {project.type === "plotting" && (
                                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
@@ -3881,7 +3603,7 @@ const PABC = () => {
                                       </div>
                                     )}
 
-                                    {/* Duplex/Triplex Project Details */}
+
                                     {(project.type === "duplex" ||
                                       project.type === "triplex") && (
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -3972,7 +3694,7 @@ const PABC = () => {
                                         </div>
                                       )}
 
-                                    {/* Apartment Project Details */}
+
                                     {project.type === "apartment" && (
                                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
@@ -3998,7 +3720,7 @@ const PABC = () => {
                                       </div>
                                     )}
 
-                                    {/* Commercial Project Details */}
+
                                     {project.type === "commercial" && (
                                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
@@ -4033,7 +3755,7 @@ const PABC = () => {
                                       </div>
                                     )}
 
-                                    {/* Custom Project Details */}
+
                                     {project.type === "custom" && (
                                       <div className="space-y-3">
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -4066,7 +3788,7 @@ const PABC = () => {
                                     )}
                                   </div>
 
-                                  {/* Data Summary */}
+
                                   <div className="mt-6 pt-6 border-t border-slate-200">
                                     <div className="flex items-center justify-between">
                                       <div>
@@ -4116,7 +3838,7 @@ const PABC = () => {
             <div className="">
               {!projectType && !showCustomizeSelect ? (
                 <div className="max-w-2xl mx-auto p-8 relative">
-                  {/* ❌ Close Button */}
+
                   <button
                     onClick={() => {
                       resetForm();
@@ -4199,7 +3921,7 @@ const PABC = () => {
         )}
 
         {showPlotEditingOverview && renderPlotEditingOverview()}
-        {/* {editingOverview.open && renderEditingOverview()} */}
+
         {showUnitEditingOverview && renderUnitEditingOverview()}
         {showApartmentOverview && renderApartmentEditingOverview()}
         {showCommercialEditingOverview && renderCommercialEditingOverview()}

@@ -254,7 +254,7 @@ const ReciptVouchersList = () => {
       }
     };
 
-    // Header
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(15, 23, 42);
@@ -274,7 +274,7 @@ const ReciptVouchersList = () => {
     doc.setDrawColor(220);
     doc.line(14, headerBottomY, 195, headerBottomY);
 
-    // Totals
+
     const totalAmount = filteredVouchers.reduce((acc, v) => acc + Number(v.totalDebit || v.amount || 0), 0);
 
     doc.setFontSize(10);
@@ -285,7 +285,7 @@ const ReciptVouchersList = () => {
     doc.setFont("helvetica", "bold");
     doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, { align: "right" });
 
-    // Table
+
     const tableData = filteredVouchers.map((v, i) => [
       i + 1,
       formatDate(v.date),
@@ -324,7 +324,7 @@ const ReciptVouchersList = () => {
       }
     });
 
-    // Footer
+
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
@@ -356,7 +356,7 @@ const ReciptVouchersList = () => {
     generatePDF(true);
   };
 
-  // FIXED FILTER — now matches your API fields
+
   const filteredVouchers = vouchers.filter((v) => {
     if (loggedInRole === "employee") {
       if (v.employee_id != loggedInEmployeeId || v.role?.toLowerCase() !== 'employee') return false;
@@ -383,19 +383,19 @@ const ReciptVouchersList = () => {
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-[monospace]">
-      {/* Top Header */}
+
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
 
-          {/* Left - Title */}
+
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Receipt Vouchers
           </h1>
 
-          {/* Right - Search + Buttons */}
+
           <div className="flex items-center gap-2.5 flex-wrap">
 
-            {/* Search */}
+
             <div className="relative">
               <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -407,7 +407,7 @@ const ReciptVouchersList = () => {
               />
             </div>
 
-            {/* Buttons */}
+
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
@@ -429,7 +429,7 @@ const ReciptVouchersList = () => {
                 <Printer size={14} /> Print
               </button>
 
-              {/* Export Dropdown */}
+
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -483,7 +483,7 @@ const ReciptVouchersList = () => {
         </div>
       </div>
 
-      {/* Table Section */}
+
       <div className="max-w-6xl mx-auto mt-6 bg-white shadow rounded-lg border border-gray-300">
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
@@ -519,7 +519,7 @@ const ReciptVouchersList = () => {
                     <td className="px-4 py-2">{ledgerMap[voucher.customer] || voucher.customer}</td>
                     <td className="px-4 py-2">{getReceiptInto(voucher.receiptAccountId)}</td>
 
-                    {/* Show debit or credit */}
+
                     <td className="px-4 py-2 text-right">
                       {(voucher.totalDebit || voucher.amount || 0).toString()}
                     </td>
@@ -576,7 +576,7 @@ const ReciptVouchersList = () => {
         </div>
       </div>
 
-      {/* ── Receive Voucher Detail Modal ── */}
+
       {selectedVoucher && (
         <ReceiveVoucherDetailModal
           voucher={selectedVoucher}

@@ -65,33 +65,33 @@ const DashboardHome = () => {
         setLoading(true);
         setError(null);
 
-        // Headers with authentication
+
         const headers = {
           'Content-Type': 'application/json',
         };
 
-        // Add authorization if token exists
+
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;
-          // Or if using API key:
-          // headers['x-api-key'] = token;
+
+
         }
 
         const subdomain = user?.slug || user?.company_slug || '';
 
-        // Fetch projects data
+
         const projectsResponse = await fetch(
           `${API_BASE_URL}/api/tenant/clprojects?company_id=${companyId}`,
           { method: 'GET', headers }
         );
 
-        // Fetch employees data
+
         const employeesResponse = await fetch(
           `${API_BASE_URL}/api/tenant/hrms/all-employees`,
           { method: 'GET', headers }
         );
 
-        // Process projects data
+
         let projects = [];
         if (projectsResponse.ok) {
           const projectsData = await projectsResponse.json();
@@ -102,7 +102,7 @@ const DashboardHome = () => {
           console.warn(`Projects API error: ${projectsResponse.status}`);
         }
 
-        // Process employees data
+
         let employees = [];
         if (employeesResponse.ok) {
           const employeesData = await employeesResponse.json();
@@ -115,14 +115,14 @@ const DashboardHome = () => {
           console.warn(`Employees API error: ${employeesResponse.status}`);
         }
 
-        // Calculate statistics
+
         const activeProjects = projects.filter(
           p => p.status?.toLowerCase() !== 'completed' && p.status?.toLowerCase() !== 'cancelled'
         ).length;
 
         const totalEmployees = employees.length;
 
-        // Calculate total revenue from projects (if budget data exists)
+
         let totalRevenue = 0;
         projects.forEach(project => {
           const budget = project.budget || project.project_budget || project.cost || '0';
@@ -149,13 +149,13 @@ const DashboardHome = () => {
     fetchDashboardData();
   }, [companyId, token, user]);
 
-  // Determine if we should show stats or error
+
   const showError = error && !loading;
 
   return (
     <div className="crm-module-root">
       <div className="space-y-6">
-        {/* Page Heading */}
+
         <div>
           <h1 className="app-title max-w-3xl">Superadmin Overview</h1>
           <p className="app-subtitle mt-1">
@@ -163,7 +163,7 @@ const DashboardHome = () => {
           </p>
         </div>
 
-        {/* Error State */}
+
         {showError && (
           <div className="bg-rose-50 border border-rose-100 text-rose-800 p-4 rounded-2xl flex items-start gap-3">
             <AlertCircle className="size-5 text-rose-600 mt-0.5 shrink-0" />
@@ -180,7 +180,7 @@ const DashboardHome = () => {
           </div>
         )}
 
-        {/* Quick Stats Grid */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <StatCard
             title="Active Projects"
@@ -205,7 +205,7 @@ const DashboardHome = () => {
           />
         </div>
 
-        {/* Recent Projects Table */}
+
         <div className="mt-8">
           <ProjectsTable />
         </div>

@@ -10,7 +10,7 @@ import useAuth from '../../hooks/useAuth';
 
 const API_URL = import.meta.env.VITE_CSAAP_URL?.replace(/\/$/, '');
 
-// --- API HELPER ---
+
 const fetcher = ([url, token]) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } }).then((res) => res.data);
 
 const getRoleName = (role) => role.role_name || role.name || '';
@@ -21,7 +21,7 @@ const DepartmentRoleManager = () => {
   const { token } = useAuth();
   const getAuthHeaders = () => ({ headers: { Authorization: `Bearer ${token}` } });
 
-  // --- SWR DATA FETCHING ---
+
   const deptsApiUrl = `${API_URL}/api/tenant/departments`;
   const rolesApiUrl = `${API_URL}/api/tenant/departments/roles`;
 
@@ -31,20 +31,20 @@ const DepartmentRoleManager = () => {
   const departments = deptsData?.data || [];
   const roles = rolesData?.data || [];
 
-  // --- DEPARTMENT STATE ---
+
   const [deptName, setDeptName] = useState('');
   const [editingDeptId, setEditingDeptId] = useState(null);
   const [isSubmittingDept, setIsSubmittingDept] = useState(false);
 
-  // --- ROLE STATE ---
+
   const [roleName, setRoleName] = useState('');
-  const [selectedDeptId, setSelectedDeptId] = useState(''); // Empty string = Global Role
+  const [selectedDeptId, setSelectedDeptId] = useState('');
   const [editingRoleId, setEditingRoleId] = useState(null);
   const [isSubmittingRole, setIsSubmittingRole] = useState(false);
 
-  // ==========================================
-  // DEPARTMENT HANDLERS
-  // ==========================================
+
+
+
   const handleDeptSubmit = async (e) => {
     e.preventDefault();
     if (!deptName.trim()) return toast.error("Department name is required.");
@@ -64,7 +64,7 @@ const DepartmentRoleManager = () => {
       setDeptName('');
       setEditingDeptId(null);
       mutate(deptsApiUrl);
-      mutate(rolesApiUrl); // Refresh roles too, in case department names changed in the view
+      mutate(rolesApiUrl);
     } catch (error) {
       if (error.response?.status === 409) {
         toast.error("This department already exists.", { id: toastId });
@@ -94,15 +94,15 @@ const DepartmentRoleManager = () => {
       await axios.delete(`${deptsApiUrl}/${id}`, getAuthHeaders());
       toast.success("Department deleted.", { id: toastId });
       mutate(deptsApiUrl);
-      mutate(rolesApiUrl); // Refresh roles because cascading delete removes them
+      mutate(rolesApiUrl);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete department.", { id: toastId });
     }
   };
 
-  // ==========================================
-  // ROLE HANDLERS
-  // ==========================================
+
+
+
   const handleRoleSubmit = async (e) => {
     e.preventDefault();
     if (!roleName.trim()) return toast.error("Role name is required.");
@@ -112,11 +112,11 @@ const DepartmentRoleManager = () => {
 
     try {
       if (editingRoleId) {
-        // Backend PUT updates the role name
+
         await axios.put(`${rolesApiUrl}/${editingRoleId}`, { role_name: roleName }, getAuthHeaders());
         toast.success("Role updated successfully!", { id: toastId });
       } else {
-        // Send null for global roles when no department is selected
+
         const payload = { 
           department_id: selectedDeptId === '' ? null : selectedDeptId,
           role_name: roleName
@@ -164,7 +164,7 @@ const DepartmentRoleManager = () => {
     <div className="p-6 lg:p-10 bg-[#FDFDFF] min-h-screen relative font-sans">
       <Toaster position="top-center" toastOptions={{ style: { borderRadius: '1rem', background: '#333', color: '#fff', fontWeight: 'bold', fontSize: '14px' }}} />
 
-      {/* Header */}
+
       <div className="mb-8">
         <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
           <Building2 className="text-blue-600" size={32} />
@@ -177,12 +177,12 @@ const DepartmentRoleManager = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        {/* ========================================== */}
-        {/* LEFT COLUMN: DEPARTMENTS                   */}
-        {/* ========================================== */}
+
+
+
         <div className="flex flex-col gap-6">
           
-          {/* Department Form */}
+
           <div className="bg-white rounded-4xl shadow-sm border border-slate-100 p-6 sm:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
@@ -228,7 +228,7 @@ const DepartmentRoleManager = () => {
             </form>
           </div>
 
-          {/* Department List */}
+
           <div className="bg-white rounded-4xl shadow-sm border border-slate-100 overflow-hidden flex-1">
             <div className="p-6 border-b border-slate-50 bg-slate-50/50">
               <h2 className="text-sm font-black text-slate-800 tracking-tight">Active Departments</h2>
@@ -260,12 +260,12 @@ const DepartmentRoleManager = () => {
 
         </div>
 
-        {/* ========================================== */}
-        {/* RIGHT COLUMN: ROLES                        */}
-        {/* ========================================== */}
+
+
+
         <div className="flex flex-col gap-6">
           
-          {/* Role Form */}
+
           <div className="bg-white rounded-4xl shadow-sm border border-slate-100 p-6 sm:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
@@ -278,7 +278,7 @@ const DepartmentRoleManager = () => {
 
             <form onSubmit={handleRoleSubmit} className="space-y-4">
               
-              {/* Only show Department selector if we are ADDING a new role */}
+
               {!editingRoleId && (
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Assign to Department</label>
@@ -329,7 +329,7 @@ const DepartmentRoleManager = () => {
             </form>
           </div>
 
-          {/* Roles List */}
+
           <div className="bg-white rounded-4xl shadow-sm border border-slate-100 overflow-hidden flex-1">
             <div className="p-6 border-b border-slate-50 bg-slate-50/50 flex justify-between items-center">
               <h2 className="text-sm font-black text-slate-800 tracking-tight">Active Roles</h2>

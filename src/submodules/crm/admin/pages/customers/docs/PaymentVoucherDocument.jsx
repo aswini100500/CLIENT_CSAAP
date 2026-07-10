@@ -1,5 +1,5 @@
 import React from "react";
-/* eslint-disable react-refresh/only-export-components */
+
 
 import {
   Document,
@@ -101,16 +101,16 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
     fontFamily: "Helvetica",
     fontSize: 8.5,
-    color: "#334155", // slate-700
+    color: "#334155",
   },
-  // Header
+
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
     paddingBottom: 8,
     borderBottomWidth: 1.5,
-    borderBottomColor: "#10b981", // Emerald accent line
+    borderBottomColor: "#10b981",
     marginBottom: 15,
   },
   headerLeft: {
@@ -119,12 +119,12 @@ const styles = StyleSheet.create({
   companyName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#0f172a", // slate-900
+    color: "#0f172a",
     letterSpacing: 0.5,
   },
   companySubtitle: {
     fontSize: 7,
-    color: "#64748b", // slate-500
+    color: "#64748b",
     textTransform: "uppercase",
     letterSpacing: 0.5,
     marginTop: 1,
@@ -135,18 +135,18 @@ const styles = StyleSheet.create({
   voucherTitle: {
     fontSize: 11,
     fontWeight: "bold",
-    color: "#10b981", // Emerald
+    color: "#10b981",
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },
-  // Sleek Info Layout
+
   infoGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: "#e2e8f0", // slate-200
+    borderColor: "#e2e8f0",
     paddingVertical: 8,
     marginBottom: 15,
   },
@@ -158,18 +158,18 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     fontWeight: "bold",
-    color: "#64748b", // slate-500
+    color: "#64748b",
     fontSize: 8,
     width: "40%",
   },
   infoValue: {
     fontWeight: "bold",
-    color: "#0f172a", // slate-900
+    color: "#0f172a",
     fontSize: 8,
     width: "60%",
     textAlign: "left",
   },
-  // Section Title
+
   sectionTitle: {
     fontSize: 9,
     fontWeight: "bold",
@@ -178,16 +178,16 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
-  // Table Styling
+
   table: {
     width: "100%",
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: "#cbd5e1", // slate-300
+    borderColor: "#cbd5e1",
   },
   tableHeaderRow: {
     flexDirection: "row",
-    backgroundColor: "#f8fafc", // slate-50
+    backgroundColor: "#f8fafc",
     borderBottomWidth: 1,
     borderBottomColor: "#cbd5e1",
     paddingVertical: 4,
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9", // slate-100
+    borderBottomColor: "#f1f5f9",
     paddingVertical: 4,
     paddingHorizontal: 6,
   },
@@ -208,19 +208,19 @@ const styles = StyleSheet.create({
   thCell: {
     fontWeight: "bold",
     fontSize: 8,
-    color: "#475569", // slate-600
+    color: "#475569",
     textTransform: "uppercase",
   },
   tdCell: {
     fontSize: 8.5,
-    color: "#334155", // slate-700
+    color: "#334155",
   },
   tdCellBold: {
     fontSize: 8.5,
-    color: "#0f172a", // slate-900
+    color: "#0f172a",
     fontWeight: "bold",
   },
-  // Total & Words Callout
+
   totalSection: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
   totalBox: {
     borderLeftWidth: 3,
-    borderLeftColor: "#10b981", // Emerald accent
+    borderLeftColor: "#10b981",
     backgroundColor: "#f8fafc",
     paddingVertical: 6,
     paddingHorizontal: 10,
@@ -267,12 +267,12 @@ const styles = StyleSheet.create({
   totalVal: {
     fontSize: 11,
     fontWeight: "bold",
-    color: "#10b981", // Emerald
+    color: "#10b981",
   },
-  // Footer
+
   statementText: {
     fontSize: 7,
-    color: "#94a3b8", // slate-400
+    color: "#94a3b8",
     textAlign: "center",
     width: "100%",
     marginTop: 20,
@@ -303,7 +303,7 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header */}
+
         <View style={styles.headerContainer}>
           <View style={styles.headerLeft}>
             <Text style={styles.companyName}>
@@ -316,7 +316,7 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
           </View>
         </View>
 
-        {/* Payment Info Grid */}
+
         <View style={styles.infoGrid}>
           <View style={styles.infoCol}>
             <Text style={styles.infoLabel}>Voucher No.</Text>
@@ -360,7 +360,7 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
           ) : null}
         </View>
 
-        {/* Slab Allocation Breakdown */}
+
         <Text style={styles.sectionTitle}>Slab-wise Allocation</Text>
         <View style={styles.table}>
           <View style={styles.tableHeaderRow}>
@@ -391,7 +391,7 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
           })}
         </View>
 
-        {/* Total Section */}
+
         <View style={styles.totalSection}>
           <View style={styles.wordsContainer}>
             <Text style={styles.wordsLabel}>Amount in Words</Text>
@@ -407,12 +407,12 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
           </View>
         </View>
 
-        {/* Disclaimer */}
+
         <Text style={styles.statementText}>
           This is a computer generated payment voucher, hence no signature is required.
         </Text>
 
-        {/* Footer */}
+
         <View style={styles.footerContainer}>
           <Text style={styles.footerCompany}>
             {(companyName || "Company").toUpperCase()}

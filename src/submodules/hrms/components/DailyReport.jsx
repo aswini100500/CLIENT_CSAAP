@@ -50,14 +50,14 @@ export default function DailyReportsPage() {
       r.department.toLowerCase().includes(search.toLowerCase()),
   );
 
-  // Pagination logic
+
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentData = filtered.slice(startIndex, startIndex + itemsPerPage);
   const startEntry = startIndex + 1;
   const endEntry = Math.min(startIndex + itemsPerPage, filtered.length);
 
-  // Summary statistics
+
   const summary = {
     totalEmployees: filtered.length,
     present: filtered.filter((r) => r.attendance === "Present").length,
@@ -67,14 +67,14 @@ export default function DailyReportsPage() {
     totalEarlyGoing: filtered.reduce((sum, r) => sum + r.earlyGoing, 0),
   };
 
-  // Handle checkbox change
+
   const handleCheckboxChange = (id) => {
     setSelectedEmployees((prev) =>
       prev.includes(id) ? prev.filter((empId) => empId !== id) : [...prev, id],
     );
   };
 
-  // Handle select all checkboxes
+
   const handleSelectAll = () => {
     if (selectedEmployees.length === currentData.length) {
       setSelectedEmployees([]);
@@ -83,7 +83,7 @@ export default function DailyReportsPage() {
     }
   };
 
-  // Export logic
+
   const handleExport = (format) => {
     const dataToExport =
       selectedEmployees.length > 0
@@ -134,14 +134,14 @@ export default function DailyReportsPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Daily Attendance Reports
         </h1>
 
-        {/* Main Card */}
+
         <div className="bg-white rounded-2xl shadow-lg p-6">
-          {/* Header Section */}
+
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
             <div>
               <h2 className="text-xl font-semibold text-gray-800 mb-2">
@@ -173,7 +173,7 @@ export default function DailyReportsPage() {
             </button>
           </div>
 
-          {/* Summary Cards */}
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
               <p className="text-xs font-medium text-blue-700">
@@ -215,7 +215,7 @@ export default function DailyReportsPage() {
             </div>
           </div>
 
-          {/* Actions Bar */}
+
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div className="flex gap-3">
               <button
@@ -272,7 +272,7 @@ export default function DailyReportsPage() {
             </div>
           </div>
 
-          {/* Reports Table */}
+
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
@@ -426,7 +426,7 @@ export default function DailyReportsPage() {
             </table>
           </div>
 
-          {/* Pagination */}
+
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
             <div className="text-sm text-gray-600">
               Showing {startEntry} to {endEntry} of {filtered.length} entries

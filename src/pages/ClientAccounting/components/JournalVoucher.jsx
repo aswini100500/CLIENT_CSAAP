@@ -1,308 +1,308 @@
-// import React, { useState } from "react";
-
-// const JournalVoucher = () => {
-//   const [rows, setRows] = useState([
-//     { particulars: "", debit: "", credit: "" },
-//   ]);
-
-//   const addRow = () => {
-//     setRows([...rows, { particulars: "", debit: "", credit: "" }]);
-//   };
-
-//   const updateRow = (index, field, value) => {
-//     const updated = [...rows];
-//     updated[index][field] = value;
-//     setRows(updated);
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-white p-4 font-[monospace]">
-
-//       {/* Title */}
-//       <h1 className="text-center text-xl text-blue-700 font-bold mb-4">
-//         Journal Voucher
-//       </h1>
-
-//       <div className="max-w-4xl mx-auto border border-black rounded-md">
-
-//         {/* Header */}
-//         <div className="flex justify-between border-b border-black p-2 text-sm">
-//           <div>Voucher Type: <span className="font-semibold">Journal</span></div>
-//           <div>Date: <span className="font-semibold">{new Date().toLocaleDateString()}</span></div>
-//         </div>
-
-//         {/* Voucher Table */}
-//         <div className="p-2 overflow-auto max-h-[60vh]">
-
-//           {/* Column Titles */}
-//           <div className="grid grid-cols-12 border-b border-black text-sm font-semibold">
-//             <div className="col-span-6 p-1 border-r border-black">Particulars</div>
-//             <div className="col-span-3 p-1 border-r border-black text-right">Debit</div>
-//             <div className="col-span-3 p-1 text-right">Credit</div>
-//           </div>
-
-//           {/* Voucher Rows */}
-//           {rows.map((row, index) => (
-//             <div key={index} className="grid grid-cols-12 border-b border-gray-400 text-sm">
-
-//               {/* Particulars */}
-//               <input
-//                 type="text"
-//                 className="col-span-6 p-1 border-r border-gray-400 focus:outline-none"
-//                 placeholder="Enter ledger..."
-//                 value={row.particulars}
-//                 onChange={(e) => updateRow(index, "particulars", e.target.value)}
-//               />
-
-//               {/* Debit */}
-//               <input
-//                 type="number"
-//                 className="col-span-3 p-1 border-r border-gray-400 text-right focus:outline-none"
-//                 placeholder="0.00"
-//                 value={row.debit}
-//                 onChange={(e) => updateRow(index, "debit", e.target.value)}
-//               />
-
-//               {/* Credit */}
-//               <input
-//                 type="number"
-//                 className="col-span-3 p-1 text-right focus:outline-none"
-//                 placeholder="0.00"
-//                 value={row.credit}
-//                 onChange={(e) => updateRow(index, "credit", e.target.value)}
-//               />
-//             </div>
-//           ))}
-
-//           {/* Add Row Button */}
-//           <button
-//             className="w-full text-left p-2 text-blue-700 hover:bg-blue-100"
-//             onClick={addRow}
-//           >
-//             + Add Entry
-//           </button>
-//         </div>
-
-//         {/* Totals */}
-//         <div className="grid grid-cols-12 border-t border-black text-sm font-semibold">
-//           <div className="col-span-6 p-2 border-r border-black">Total</div>
-//           <div className="col-span-3 p-2 border-r border-black text-right">
-//             {rows.reduce((sum, r) => sum + Number(r.debit || 0), 0).toFixed(2)}
-//           </div>
-//           <div className="col-span-3 p-2 text-right">
-//             {rows.reduce((sum, r) => sum + Number(r.credit || 0), 0).toFixed(2)}
-//           </div>
-//         </div>
-
-//       </div>
-
-//       {/* Buttons */}
-//       <div className="flex justify-center gap-6 mt-6">
-//         <button className="bg-green-600 text-white px-6 py-2 rounded-sm hover:bg-green-700">
-//           Yes (Save)
-//         </button>
-//         <button className="bg-red-600 text-white px-6 py-2 rounded-sm hover:bg-red-700">
-//           No (Cancel)
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default JournalVoucher;
 
 
-// import React, { useState } from "react";
-// import axios from "axios";
-// import { useCompany } from "../context/CompanyContext";
 
-// const JournalVoucher = () => {
-//   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-//   const [narration, setNarration] = useState("");
-//   const [rows, setRows] = useState([{ particulars: "", debit: "", credit: "" }]);
-//   const [loading, setLoading] = useState(false);
-//   const [message, setMessage] = useState("");
 
-//   const {companyId} = useCompany();
 
-//   const addRow = () => {
-//     setRows([...rows, { particulars: "", debit: "", credit: "" }]);
-//   };
 
-//   const updateRow = (index, field, value) => {
-//     const updated = [...rows];
-//     updated[index][field] = value;
-//     setRows(updated);
-//   };
 
-//   const totalDebit = rows.reduce((sum, r) => sum + Number(r.debit || 0), 0);
-//   const totalCredit = rows.reduce((sum, r) => sum + Number(r.credit || 0), 0);
 
-//   const saveVoucher = async () => {
-//     if (totalDebit !== totalCredit) {
-//       setMessage("❌ Debit and Credit must be equal");
-//       return;
-//     }
 
-//     if (rows.some(r => !r.particulars)) {
-//       setMessage("❌ Please fill all particulars");
-//       return;
-//     }
 
-//     const payload = {
-//       date,
-//       narration,
-//       transactions: rows,
-//     };
 
-//     try {
-//       setLoading(true);
-//       setMessage("");
 
-//       const res = await axios.post(
-//         `http://localhost:3000/api/v1/journal-voucher/create/${companyId}`,
-//         payload
-//       );
 
-//       setMessage(" Voucher Saved Successfully!");
 
-//       // Reset fields
-//       setNarration("");
-//       setRows([{ particulars: "", debit: "", credit: "" }]);
 
-//     } catch (error) {
-//       console.error(error);
-//       setMessage("❌ Error saving voucher");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
 
-//   return (
-//     <div className="min-h-screen bg-white p-4 font-[monospace]">
-//       {/* Title */}
-//       <h1 className="text-center text-xl text-blue-700 font-bold mb-4">
-//         Journal Voucher
-//       </h1>
 
-//       {/* Status Message */}
-//       {message && (
-//         <div className="text-center text-red-600 font-semibold mb-2">
-//           {message}
-//         </div>
-//       )}
 
-//       <div className="max-w-4xl mx-auto border border-black rounded-md">
-//         {/* Header */}
-//         <div className="flex justify-between border-b border-black p-2 text-sm">
-//           <div>
-//             Voucher Type: <span className="font-semibold">Journal</span>
-//           </div>
 
-//           {/* Editable Date */}
-//           <div className="flex items-center gap-2">
-//             Date:
-//             <input
-//               type="date"
-//               className="border px-2 py-1"
-//               value={date}
-//               onChange={(e) => setDate(e.target.value)}
-//             />
-//           </div>
-//         </div>
 
-//         {/* Narration */}
-//         <div className="border-b border-black p-2">
-//           <input
-//             type="text"
-//             className="w-full p-2 border border-gray-400"
-//             placeholder="Enter narration..."
-//             value={narration}
-//             onChange={(e) => setNarration(e.target.value)}
-//           />
-//         </div>
 
-//         {/* Voucher Table */}
-//         <div className="p-2 overflow-auto max-h-[60vh]">
-//           {/* Column Titles */}
-//           <div className="grid grid-cols-12 border-b border-black text-sm font-semibold">
-//             <div className="col-span-6 p-1 border-r border-black">Particulars</div>
-//             <div className="col-span-3 p-1 border-r border-black text-right">Debit</div>
-//             <div className="col-span-3 p-1 text-right">Credit</div>
-//           </div>
 
-//           {/* Rows */}
-//           {rows.map((row, index) => (
-//             <div key={index} className="grid grid-cols-12 border-b border-gray-400 text-sm">
-//               <input
-//                 type="text"
-//                 className="col-span-6 p-1 border-r border-gray-400 focus:outline-none"
-//                 placeholder="Enter ledger..."
-//                 value={row.particulars}
-//                 onChange={(e) => updateRow(index, "particulars", e.target.value)}
-//               />
 
-//               <input
-//                 type="number"
-//                 className="col-span-3 p-1 border-r border-gray-400 text-right focus:outline-none"
-//                 placeholder="0.00"
-//                 value={row.debit}
-//                 onChange={(e) => updateRow(index, "debit", e.target.value)}
-//               />
 
-//               <input
-//                 type="number"
-//                 className="col-span-3 p-1 text-right focus:outline-none"
-//                 placeholder="0.00"
-//                 value={row.credit}
-//                 onChange={(e) => updateRow(index, "credit", e.target.value)}
-//               />
-//             </div>
-//           ))}
 
-//           {/* Add Row */}
-//           <button
-//             className="w-full text-left p-2 text-blue-700 hover:bg-blue-100"
-//             onClick={addRow}
-//           >
-//             + Add Entry
-//           </button>
-//         </div>
 
-//         {/* Totals */}
-//         <div className="grid grid-cols-12 border-t border-black text-sm font-semibold">
-//           <div className="col-span-6 p-2 border-r border-black">Total</div>
-//           <div className="col-span-3 p-2 border-r border-black text-right">
-//             {totalDebit.toFixed(2)}
-//           </div>
-//           <div className="col-span-3 p-2 text-right">
-//             {totalCredit.toFixed(2)}
-//           </div>
-//         </div>
-//       </div>
 
-//       {/* Buttons */}
-//       <div className="flex justify-center gap-6 mt-6">
-//         <button
-//           onClick={saveVoucher}
-//           disabled={loading}
-//           className="bg-green-600 text-white px-6 py-2 rounded-sm hover:bg-green-700 disabled:bg-gray-400"
-//         >
-//           {loading ? "Saving..." : "Yes (Save)"}
-//         </button>
 
-//         <button
-//           className="bg-red-600 text-white px-6 py-2 rounded-sm hover:bg-red-700"
-//           onClick={() => window.history.back()}
-//         >
-//           No (Cancel)
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default JournalVoucher;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -316,7 +316,7 @@ import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import { Search, UserPlus } from "lucide-react";
 
-// --- Internal Searchable Select Component ---
+
 const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew, disabled = false, }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -420,7 +420,7 @@ const JournalVoucher = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // ⚡ Fetch Ledgers on Load
+
   useEffect(() => {
     if (!companyId) return;
     (async () => {
@@ -431,7 +431,7 @@ const JournalVoucher = () => {
         console.log("Ledgers response:", res.data);
         setLedgers(res.data.data || res.data || []);
 
-        // --- RESTORE STATE IF RETURNING FROM LEDGER CREATION ---
+
         const savedState = sessionStorage.getItem("journalVoucherState");
         if (savedState) {
           const state = JSON.parse(savedState);
@@ -455,7 +455,7 @@ const JournalVoucher = () => {
     })();
   }, [companyId]);
 
-  // Fetch Voucher for Edit/View
+
   useEffect(() => {
     if (id) {
       const fetchVoucher = async () => {
@@ -485,7 +485,7 @@ const JournalVoucher = () => {
       };
       fetchVoucher();
     } else if (companyId) {
-      // Auto-fetch next voucher number for new voucher
+
       axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/journal`)
         .then(res => setVoucherNo(res.data.nextNumber))
         .catch(err => console.error(err));
@@ -499,7 +499,7 @@ const JournalVoucher = () => {
   const updateRow = (index, field, value) => {
     const updated = [...rows];
 
-    // Prevent both debit & credit entry at same time
+
     if (field === "debit" && value) updated[index].credit = "";
     if (field === "credit" && value) updated[index].debit = "";
 
@@ -533,10 +533,10 @@ const JournalVoucher = () => {
   const totalCredit = rows.reduce((sum, r) => sum + Number(r.credit || 0), 0);
 
   const saveVoucher = async () => {
-    // if (totalDebit !== totalCredit) {
-    //   setMessage("❌ Debit and Credit must be equal");
-    //   return;
-    // }
+
+
+
+
 
     if (rows.some((r) => !r.ledgerId)) {
       setMessage("❌ Please select all ledgers");
@@ -606,13 +606,13 @@ const JournalVoucher = () => {
   };
 
 
-  // Bulk Import Handler
+
   const handleBulkImport = async (data) => {
     try {
       const grouped = {};
 
       data.forEach(row => {
-        // Excel: VoucherNo, Date, Narration, Particulars (Ledger), Debit, Credit
+
         const voucherNo = row.VoucherNo || "Unknown";
         if (!grouped[voucherNo]) {
           grouped[voucherNo] = {
@@ -641,15 +641,15 @@ const JournalVoucher = () => {
         });
 
         return {
-          voucherNo: v.voucherNo, // Although backend might generate auto? Backend bulk uses items.
-          // Wait, Journal usually needs balanced items.
+          voucherNo: v.voucherNo,
+
           date: v.date,
           narration: v.narration,
           items
         };
       });
 
-      // Validations
+
       const missingLedgers = vouchers.flatMap(v => v.items.filter(i => !i.ledgerId).map(i => i.ledgerName));
       const uniqueMissing = [...new Set(missingLedgers)];
 
@@ -714,14 +714,14 @@ const JournalVoucher = () => {
         }
       }
 
-      // Check again
+
       const invalidItems = vouchers.flatMap(v => v.items.filter(i => !i.ledgerId).map(i => i.ledgerName));
       if (invalidItems.length > 0) {
         Swal.fire("Error", `Ledgers not found: ${[...new Set(invalidItems)].join(", ")}`, "error");
         return;
       }
 
-      // Balance Check? Journal must be balanced.
+
       const unbalanced = vouchers.filter(v => {
         const totalDr = v.items.reduce((s, i) => s + i.debit, 0);
         const totalCr = v.items.reduce((s, i) => s + i.credit, 0);
@@ -765,7 +765,7 @@ const JournalVoucher = () => {
       )}
 
       <div className="max-w-4xl mx-auto border border-black rounded-md">
-        {/* Header */}
+
         <div className="flex justify-between border-b border-black p-2 text-sm">
           <div>
             Voucher Type: <span className="font-semibold">Journal</span>
@@ -797,7 +797,7 @@ const JournalVoucher = () => {
           </div>
         </div>
 
-        {/* Narration */}
+
         <div className="border-b border-black p-2">
           <input
             type="text"
@@ -809,7 +809,7 @@ const JournalVoucher = () => {
           />
         </div>
 
-        {/* Table */}
+
         <div className="p-2 overflow-visible">
           <div className="grid grid-cols-12 border-b border-black text-sm font-semibold">
             <div className="col-span-6 p-1 border-r border-black">
@@ -826,7 +826,7 @@ const JournalVoucher = () => {
               key={index}
               className="grid grid-cols-12 border-b border-gray-400 text-sm relative hover:z-50 focus-within:z-50 bg-white"
             >
-              {/* Ledger Select */}
+
               <div className="col-span-6 p-1 border-r border-gray-400">
                 <SearchableLedgerSelect
                   ledgers={ledgers}
@@ -837,7 +837,7 @@ const JournalVoucher = () => {
                 />
               </div>
 
-              {/* Debit */}
+
               <input
                 type="number"
                 className="col-span-3 p-1 border-r border-gray-400 text-right focus:outline-none bg-transparent"
@@ -847,7 +847,7 @@ const JournalVoucher = () => {
                 disabled={isViewMode}
               />
 
-              {/* Credit */}
+
               <input
                 type="number"
                 className="col-span-3 p-1 text-right focus:outline-none bg-transparent"
@@ -869,7 +869,7 @@ const JournalVoucher = () => {
           )}
         </div>
 
-        {/* Totals */}
+
         <div className="grid grid-cols-12 border-t border-black text-sm font-semibold">
           <div className="col-span-6 p-2 border-r border-black">Total</div>
           <div className="col-span-3 p-2 border-r border-black text-right">
@@ -881,7 +881,7 @@ const JournalVoucher = () => {
         </div>
       </div>
 
-      {/* Buttons */}
+
       <div className="flex justify-center gap-6 mt-6">
         {!isViewMode && (
           <button

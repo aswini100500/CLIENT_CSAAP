@@ -4,15 +4,15 @@ import useSWR, { mutate } from 'swr';
 import { getAuthToken } from '../../store/authSession';
 import { Search, Filter, Download, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 
-// API base URL
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance with authorization
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -26,12 +26,12 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const PurchaseLedger = () => {
 
-  // State for filters
+
   const [selectedSupplier, setSelectedSupplier] = useState('');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
@@ -39,7 +39,7 @@ const PurchaseLedger = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  // Fetch suppliers from API
+
   const { data: suppliersData, isLoading: suppliersLoading } = useSWR(
     '/api/tenant/supplier',
     fetcher,
@@ -49,7 +49,7 @@ const PurchaseLedger = () => {
     }
   );
 
-  // Build API URL with filters
+
   const buildApiUrl = () => {
     let url = '/api/tenant/purchases/ledger';
     const params = [];
@@ -65,7 +65,7 @@ const PurchaseLedger = () => {
     return url;
   };
 
-  // Fetch ledger data from API
+
   const { data: ledgerData, error, isLoading } = useSWR(
     buildApiUrl(),
     fetcher,
@@ -77,11 +77,11 @@ const PurchaseLedger = () => {
     }
   );
 
-  // Extract data from SWR responses
+
   const suppliers = suppliersData?.success ? suppliersData.data : [];
   const ledgerEntries = ledgerData?.success ? ledgerData.data : [];
 
-  // Filter data based on search term (client-side)
+
   const filteredData = ledgerEntries.filter(entry => {
     if (!searchTerm) return true;
     
@@ -93,17 +93,17 @@ const PurchaseLedger = () => {
     );
   });
 
-  // Calculate pagination
+
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentEntries = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
-  // Calculate totals
+
   const totalDebit = filteredData.reduce((sum, entry) => sum + parseFloat(entry.debit || 0), 0);
   const totalCredit = filteredData.reduce((sum, entry) => sum + parseFloat(entry.credit || 0), 0);
   const totalBalance = filteredData.reduce((sum, entry) => sum + parseFloat(entry.balance || 0), 0);
 
-  // Format date
+
   const formatDate = (dateString) => {
     if (!dateString) return '—';
     const date = new Date(dateString);
@@ -114,7 +114,7 @@ const PurchaseLedger = () => {
     });
   };
 
-  // Format currency
+
   const formatCurrency = (amount) => {
     if (!amount && amount !== 0) return "—";
     return new Intl.NumberFormat("en-IN", {
@@ -124,13 +124,13 @@ const PurchaseLedger = () => {
     }).format(amount);
   };
 
-  // Handle filter apply
+
   const handleApplyFilters = () => {
     mutate(buildApiUrl());
     setCurrentPage(1);
   };
 
-  // Handle reset filters
+
   const handleResetFilters = () => {
     setSelectedSupplier('');
     setFromDate('');
@@ -140,7 +140,7 @@ const PurchaseLedger = () => {
     mutate('/api/tenant/purchases/ledger');
   };
 
-  // Handle download CSV
+
   const handleDownloadCSV = () => {
     if (filteredData.length === 0) {
       alert('No data to download');
@@ -181,7 +181,7 @@ const PurchaseLedger = () => {
     document.body.removeChild(link);
   };
 
-  // Generate date options
+
   const generateDateOptions = () => {
     const today = new Date();
     const lastWeek = new Date(today);
@@ -256,7 +256,7 @@ const PurchaseLedger = () => {
           )}
         </div>
         
-        {/* Filters Section */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Select Supplier</label>
@@ -328,7 +328,7 @@ const PurchaseLedger = () => {
           </div>
         </div>
 
-        {/* Quick Date Filters */}
+
         <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => {
@@ -368,7 +368,7 @@ const PurchaseLedger = () => {
           </button>
         </div>
         
-        {/* Summary Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
             <div className="flex items-center">
@@ -412,7 +412,7 @@ const PurchaseLedger = () => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-700">Purchase Ledger Details</h2>
           
-          {/* Search Box and Items Per Page */}
+
           <div className="flex items-center space-x-4">
             <div className="relative">
               <input 
@@ -444,7 +444,7 @@ const PurchaseLedger = () => {
           </div>
         </div>
         
-        {/* Ledger Table */}
+
         <div className="overflow-x-auto border border-gray-200 rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-100">
@@ -523,7 +523,7 @@ const PurchaseLedger = () => {
           </table>
         </div>
         
-        {/* Pagination */}
+
         {currentEntries.length > 0 && (
           <div className="flex items-center justify-between mt-4">
             <div className="text-sm text-gray-700">
@@ -539,7 +539,7 @@ const PurchaseLedger = () => {
                 Previous
               </button>
               
-              {/* Page numbers */}
+
               <div className="flex space-x-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNum;
@@ -597,7 +597,7 @@ const PurchaseLedger = () => {
           </div>
         )}
         
-        {/* Summary Section */}
+
         {currentEntries.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6 pt-4 border-t border-gray-200">
             <div className="bg-blue-50 p-4 rounded-lg">

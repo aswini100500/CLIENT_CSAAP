@@ -46,7 +46,7 @@ const TaskTabs = () => {
 
   return (
     <div className="w-full font-sans">
-      {/* ── Tabs Navigation ──────────────────────────────── */}
+
       <div className="mb-6 flex justify-center">
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
           {tabs.map((tab) => {
@@ -88,7 +88,7 @@ const TaskTabs = () => {
         </div>
       </div>
 
-      {/* ── Content Area ─────────────────────────────────── */}
+
       <div className="w-full">
         <AnimatePresence mode="wait">
           <motion.div
@@ -98,7 +98,7 @@ const TaskTabs = () => {
             exit={{ opacity: 0, y: -10 }}
             transition={{
               duration: 0.3,
-              ease: [0.4, 0, 0.2, 1], // Custom cubic-bezier for smoother feel
+              ease: [0.4, 0, 0.2, 1],
             }}
             className="w-full"
           >

@@ -3,15 +3,15 @@ import axios from 'axios';
 import useSWR from 'swr';
 import { getAuthToken } from '../../store/authSession';
 
-// API base URL
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance with authorization
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -25,12 +25,12 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const StockList = () => {
 
-  // State for search and pagination
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showBarcodeModal, setShowBarcodeModal] = useState(false);
@@ -40,7 +40,7 @@ const StockList = () => {
   const [damageReason, setDamageReason] = useState('');
   const entriesPerPage = 10;
 
-  // Fetch master data
+
   const { data: masterData, isLoading: masterLoading } = useSWR(
     '/api/tenant/stock/master-data',
     fetcher,
@@ -50,7 +50,7 @@ const StockList = () => {
     }
   );
 
-  // Fetch stock entries data
+
   const { data: stockEntriesData, isLoading: stockEntriesLoading, error } = useSWR(
     '/api/tenant/stock/entry',
     fetcher,
@@ -60,7 +60,7 @@ const StockList = () => {
     }
   );
 
-  // Extract data from responses
+
   const master = masterData?.success ? masterData.data : {};
   const stores = master.stores || [];
   const categories = master.categories || [];
@@ -68,15 +68,15 @@ const StockList = () => {
   const racks = master.racks || [];
   const units = master.units || [];
 
-  // Stock entries data
+
   const stockEntries = stockEntriesData?.success ? stockEntriesData.data || [] : [];
 
-  // Debug: Log the data to check what's being received
+
   console.log('Master Data:', master);
   console.log('Stock Entries:', stockEntries);
   console.log('Stock Entries Data:', stockEntriesData);
 
-  // Filter data based on search term
+
   const filteredData = Array.isArray(stockEntries) ? stockEntries.filter(item => {
     if (!item) return false;
     
@@ -94,24 +94,24 @@ const StockList = () => {
     );
   }) : [];
 
-  // Calculate pagination
+
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
   const currentEntries = filteredData.slice(startIndex, startIndex + entriesPerPage);
 
-  // Helper function to get store name by ID
+
   const getStoreName = (storeId) => {
     const store = stores.find(s => s.id === storeId);
     return store ? store.name : '—';
   };
 
-  // Helper function to get product name by ID
+
   const getProductName = (productId) => {
     const product = products.find(p => p.id === productId);
     return product ? product.name : '—';
   };
 
-  // Helper function to get category name by product ID
+
   const getCategoryName = (productId) => {
     const product = products.find(p => p.id === productId);
     if (!product) return '—';
@@ -120,7 +120,7 @@ const StockList = () => {
     return category ? category.name : '—';
   };
 
-  // Handle barcode action
+
   const handleBarcode = (item) => {
     setSelectedItem({
       ...item,
@@ -131,7 +131,7 @@ const StockList = () => {
     setShowBarcodeModal(true);
   };
 
-  // Handle damage entry action
+
   const handleDamageEntry = (item) => {
     setSelectedItem({
       ...item,
@@ -143,7 +143,7 @@ const StockList = () => {
     setShowDamageModal(true);
   };
 
-  // Handle damage submission
+
   const handleDamageSubmit = async () => {
     if (!selectedItem || damageQuantity <= 0 || !damageReason) {
       alert('Please enter valid damage quantity and reason.');
@@ -172,12 +172,12 @@ const StockList = () => {
     }
   };
 
-  // Print barcode
+
   const handlePrintBarcode = () => {
     window.print();
   };
 
-  // Export to CSV
+
   const handleExportCSV = () => {
     if (filteredData.length === 0) {
       alert('No data to export.');
@@ -213,7 +213,7 @@ const StockList = () => {
     URL.revokeObjectURL(url);
   };
 
-  // Calculate total stock value
+
   const calculateTotalValue = () => {
     return filteredData.reduce((sum, item) => {
       const purchaseAmount = parseFloat(item.purchase_amount || 0);
@@ -222,12 +222,12 @@ const StockList = () => {
     }, 0);
   };
 
-  // Count low stock items
+
   const countLowStockItems = () => {
     return filteredData.filter(item => parseFloat(item.quantity || 0) < 10).length;
   };
 
-  // Show loading state
+
   if (masterLoading || stockEntriesLoading) {
     return (
       <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
@@ -239,7 +239,7 @@ const StockList = () => {
     );
   }
 
-  // Show error state for stock entries
+
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
@@ -270,14 +270,14 @@ const StockList = () => {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Stock List</h1>
         
-        {/* Debug Info - Remove in production */}
+
         <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4 mb-4">
           <p className="text-sm text-yellow-800">
             Debug Info: Loaded {stores.length} stores, {products.length} products, and {stockEntries.length} stock entries.
           </p>
         </div>
         
-        {/* Search Box */}
+
         <div className="bg-white rounded-lg shadow-md p-4 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div className="mb-4 sm:mb-0">
@@ -309,7 +309,7 @@ const StockList = () => {
           </div>
         </div>
         
-        {/* Stock Table */}
+
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           {stockEntries.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
@@ -390,7 +390,7 @@ const StockList = () => {
                 </table>
               </div>
               
-              {/* Pagination */}
+
               <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 sm:px-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                   <div className="text-sm text-gray-700 mb-4 sm:mb-0">
@@ -407,7 +407,7 @@ const StockList = () => {
                       Previous
                     </button>
                     
-                    {/* Page numbers */}
+
                     {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                       let pageNum;
                       if (totalPages <= 5) {
@@ -451,7 +451,7 @@ const StockList = () => {
           )}
         </div>
         
-        {/* Summary Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
           <div className="bg-white rounded-lg shadow-md p-4">
             <h3 className="text-lg font-semibold text-gray-700">Total Products</h3>
@@ -472,7 +472,7 @@ const StockList = () => {
         </div>
       </div>
 
-      {/* Barcode Modal */}
+
       {showBarcodeModal && selectedItem && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
@@ -481,7 +481,7 @@ const StockList = () => {
               <div className="bg-white p-4 border border-gray-300 rounded-md mb-4 flex justify-center">
                 <div className="text-center">
                   <div className="mb-2">
-                    {/* Simulated barcode - in a real app, you would use a barcode library */}
+
                     <div className="bg-white p-2 inline-block">
                       <div className="h-12 bg-black w-1 inline-block mx-px"></div>
                       <div className="h-12 bg-black w-1 inline-block mx-px"></div>
@@ -522,7 +522,7 @@ const StockList = () => {
         </div>
       )}
 
-      {/* Damage Entry Modal */}
+
       {showDamageModal && selectedItem && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">

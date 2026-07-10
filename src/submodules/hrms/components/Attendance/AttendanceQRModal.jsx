@@ -19,7 +19,7 @@ import React from "react";
 
 const API_BASE = import.meta.env.VITE_HRMS_BASE_URL;
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+
 function safeParse(value) {
   if (!value) return null;
   try {
@@ -156,7 +156,7 @@ const AttendanceQRModal = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -165,14 +165,14 @@ const AttendanceQRModal = ({ isOpen, onClose }) => {
             className="absolute inset-0"
           />
 
-          {/* Modal Content */}
+
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="app-modal relative w-full max-w-lg overflow-hidden"
           >
-            {/* Header */}
+
             <div className="flex items-center justify-between border-b border-(--border-soft) bg-white px-8 py-6">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-(--border-soft) bg-(--brand-soft) text-(--brand)">
@@ -216,7 +216,7 @@ const AttendanceQRModal = ({ isOpen, onClose }) => {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {/* QR Display */}
+
                   <div className="flex flex-col items-center">
                     <div className="relative rounded-2xl border border-(--border-soft) bg-white p-6 shadow-sm">
                       <QRCodeCanvas
@@ -260,7 +260,7 @@ const AttendanceQRModal = ({ isOpen, onClose }) => {
                     </div>
                   </div>
 
-                  {/* Info Cards */}
+
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-100">
                       <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">

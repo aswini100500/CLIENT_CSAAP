@@ -17,7 +17,7 @@ import {
   Percent,
 } from "lucide-react";
 
-// Safe JSON parser
+
 const safeJsonParse = (val, fallback = null) => {
   if (!val) return fallback;
   if (typeof val === "object") return val;
@@ -28,7 +28,7 @@ const safeJsonParse = (val, fallback = null) => {
   }
 };
 
-// Format Currency
+
 const formatPrice = (val) => {
   if (val === undefined || val === null) return "NA";
   const num = Number(val);
@@ -40,7 +40,7 @@ const formatPrice = (val) => {
   }).format(num);
 };
 
-// Get Status Badge Styling
+
 const getStatusBadge = (status) => {
   const normalized = String(status || "").toLowerCase().trim();
   if (normalized === "available" || normalized === "approved") {
@@ -55,7 +55,7 @@ const getStatusBadge = (status) => {
   return "bg-slate-50 text-slate-500 border border-slate-100";
 };
 
-// Compact inline detail row
+
 const CompactDetailRow = ({ label, value, icon: IconComponent }) => (
   <div className="flex items-center justify-between gap-4 py-2 border-b border-slate-100 last:border-0">
     <div className="flex items-center gap-2">
@@ -71,7 +71,7 @@ const CompactDetailRow = ({ label, value, icon: IconComponent }) => (
 const ProjectDetailsModal = ({ project, onClose }) => {
   if (!project) return null;
 
-  // Determine Project Type - normalizing to standardize plotting, apartment, duplex, commercial
+
   const rawType = project.type || "";
   const normalizedType = rawType.toLowerCase().trim();
   const isPlotting = normalizedType.includes("plot");
@@ -79,7 +79,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
   const isDuplex = normalizedType.includes("duplex") || normalizedType.includes("villa") || normalizedType.includes("home");
   const isCommercial = normalizedType.includes("commercial") || normalizedType.includes("office") || normalizedType.includes("park");
 
-  // Local tabs based on project type
+
   let tabs = [];
   if (isPlotting) {
     tabs = [
@@ -103,7 +103,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
       { id: "plots", label: "Plots Inventory" },
     ];
   } else {
-    // Fallback/Generic tabs
+
     tabs = [
       { id: "details", label: "Specifications" }
     ];
@@ -111,7 +111,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
 
   const [activeTab, setActiveTab] = useState(tabs[0]?.id || "details");
 
-  // Parse arrays/objects safely
+
   const plotsData = safeJsonParse(project.plots_data) || [];
   const revenuePlotsData = safeJsonParse(project.revenue_plots_data) || [];
   const blocksData = safeJsonParse(project.blocks_data) || [];
@@ -120,10 +120,10 @@ const ProjectDetailsModal = ({ project, onClose }) => {
   const facilities = safeJsonParse(project.facilities) || {};
   const customFacilities = safeJsonParse(project.custom_facilities) || [];
 
-  // Render specifications tab content depending on project type
+
   const renderTabContent = () => {
     switch (activeTab) {
-      // ── PLOT DATA TABLE ──
+
       case "plots": {
         const data = plotsData;
         return (
@@ -164,7 +164,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
         );
       }
 
-      // ── REVENUE PLOTS TABLE ──
+
       case "revenue":
       case "revenue_plots": {
         const data = revenuePlotsData;
@@ -206,7 +206,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
         );
       }
 
-      // ── APARTMENT BLOCKS SPEC ──
+
       case "blocks": {
         const data = blocksData;
         return (
@@ -243,7 +243,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
         );
       }
 
-      // ── APPROVAL STATUS ──
+
       case "approvals": {
         const data = approvalStatusJson;
         return (
@@ -276,7 +276,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
         );
       }
 
-      // ── DUPLEX / COMMERCIAL UNITS TABLE ──
+
       case "units": {
         const data = unitsData;
         return (
@@ -321,12 +321,12 @@ const ProjectDetailsModal = ({ project, onClose }) => {
         );
       }
 
-      // ── DUPLEX FACILITIES ──
+
       case "facilities": {
         const facilityKeys = Object.keys(facilities);
         return (
           <div className="space-y-4">
-            {/* Standard Checklist */}
+
             <div className="app-panel p-4 bg-white border border-(--border-soft)">
               <h5 className="text-[12px] font-bold text-(--text-soft) uppercase tracking-wider mb-3">Project Conveniences</h5>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -354,7 +354,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
               </div>
             </div>
 
-            {/* Custom Amenities */}
+
             <div className="app-panel p-4 bg-white border border-(--border-soft)">
               <h5 className="text-[12px] font-bold text-(--text-soft) uppercase tracking-wider mb-2.5">Premium Additions</h5>
               {customFacilities.length > 0 ? (
@@ -377,7 +377,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
         );
       }
 
-      // ── GENERIC FALLBACK ──
+
       default: {
         return (
           <div className="p-5 border border-(--border-soft) bg-white rounded-2xl">
@@ -399,7 +399,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
   const modalContent = (
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
       <div className="app-modal w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-        {/* ── Header ── */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="flex items-start gap-3.5 min-w-0 pr-4">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-(--brand-soft) border border-(--border-soft) shrink-0">
@@ -434,9 +434,9 @@ const ProjectDetailsModal = ({ project, onClose }) => {
           </button>
         </div>
 
-        {/* ── Body ── */}
+
         <div className="p-5 overflow-y-auto custom-scrollbar space-y-5 bg-(--bg-app)">
-          {/* Quick Info Cards Section */}
+
           <div className="app-panel p-4 bg-white">
             <h4 className="app-heading mb-3 flex items-center gap-1.5">
               <Boxes className="size-4.5 text-(--brand) shrink-0" />
@@ -483,10 +483,10 @@ const ProjectDetailsModal = ({ project, onClose }) => {
             </div>
           </div>
 
-          {/* Dynamic Tabs Block */}
+
           {tabs.length > 0 && (
             <div className="space-y-4">
-              {/* Tab Selector Buttons */}
+
               <div className="flex gap-2 border-b border-(--border-soft) pb-1 scrollbar-none overflow-x-auto">
                 {tabs.map((tab) => {
                   const active = activeTab === tab.id;
@@ -505,7 +505,7 @@ const ProjectDetailsModal = ({ project, onClose }) => {
                 })}
               </div>
 
-              {/* Tab Frame Content */}
+
               <div className="">
                 {renderTabContent()}
               </div>

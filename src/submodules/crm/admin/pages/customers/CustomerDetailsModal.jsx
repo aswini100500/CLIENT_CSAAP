@@ -41,7 +41,7 @@ const CustomerDetailsModal = ({
   return createPortal(
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
       <div className="app-modal w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
-        {/* Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex items-center justify-between shrink-0">
           <div className="flex items-start gap-3.5 min-w-0 pr-4">
             <div className="size-11 rounded-2xl bg-(--brand-soft) border border-(--border-soft) flex items-center justify-center shrink-0">
@@ -64,9 +64,9 @@ const CustomerDetailsModal = ({
           </button>
         </div>
 
-        {/* Body */}
+
         <div className="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar">
-          {/* Contact Info */}
+
           <div className="space-y-3">
             <div className="flex items-center gap-2.5 text-(--text-body)">
               <Phone className="size-4 text-(--text-faint) shrink-0" />
@@ -94,7 +94,7 @@ const CustomerDetailsModal = ({
             )}
           </div>
 
-          {/* Project */}
+
           {projectName && projectName !== "—" && (
             <div className="app-panel p-3">
               <div className="flex items-center gap-2.5">
@@ -113,7 +113,7 @@ const CustomerDetailsModal = ({
             </div>
           )}
 
-          {/* Payment Summary */}
+
           <div className="space-y-3">
             <h4 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5">
               Payment Summary
@@ -146,7 +146,7 @@ const CustomerDetailsModal = ({
               </div>
             </div>
 
-            {/* Progress Bar */}
+
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold text-(--text-soft)">
@@ -173,7 +173,7 @@ const CustomerDetailsModal = ({
             </div>
           </div>
 
-          {/* Status */}
+
           <div className="flex items-center justify-between">
             <span className="text-[12px] font-bold text-(--text-soft)">
               Status
@@ -192,7 +192,7 @@ const CustomerDetailsModal = ({
           </div>
         </div>
 
-        {/* Footer Actions */}
+
         <div className="px-5 py-3.5 border-t border-(--border-soft) flex items-center justify-end gap-2 shrink-0">
           {onViewProfile && (
             <button

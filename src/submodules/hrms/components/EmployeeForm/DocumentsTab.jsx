@@ -103,7 +103,7 @@ const DocumentsTab = ({
 
           <p className="text-xs text-(--text-soft) mb-4">{config.description}</p>
 
-          {/* File Input */}
+
           <div className="mb-3">
             <label className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-(--border-strong) rounded-xl hover:border-(--brand) hover:bg-white text-(--text-soft) hover:text-(--brand) cursor-pointer transition-all duration-200 bg-white">
               <Upload size={16} />
@@ -119,7 +119,7 @@ const DocumentsTab = ({
             </label>
           </div>
 
-          {/* Upload Progress */}
+
           {uploadProgress[config.type] > 0 && (
             <div className="w-full bg-gray-100 rounded-full h-1.5 mb-3 overflow-hidden">
               <div
@@ -129,7 +129,7 @@ const DocumentsTab = ({
             </div>
           )}
 
-          {/* Uploaded Files Display */}
+
           <div className="space-y-2">
             {config.type === "educationalCertificates" ||
             config.type === "termandconditionCertificates"
@@ -151,7 +151,7 @@ const DocumentsTab = ({
       ))}
     </div>
 
-    {/* Upload Status */}
+
     {isUploading && (
       <div className="mt-4 p-3 bg-emerald-50/50 border border-emerald-200 rounded-xl">
         <p className="text-sm font-semibold text-emerald-800 text-center flex items-center justify-center gap-2">

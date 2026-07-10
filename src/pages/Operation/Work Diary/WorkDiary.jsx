@@ -66,7 +66,7 @@ const WorkDiary = () => {
     { id: "tools", label: "Tools & Plants" },
      { id: "workprogress", label: "Daily Work Report" },
     { id: "stages", label: "Stage Passing" },
-    // { id: "rawmaterial", label: "Raw Materials" },
+
   ];
 
   const handleProjectSelect = (proj, setup) => {
@@ -76,7 +76,7 @@ const WorkDiary = () => {
 
   const handleSetupUpdated = (proj, setup) => {
     handleProjectSelect(proj, setup);
-    fetchMasterData(); // Refresh dropdown list
+    fetchMasterData();
   };
 
   return (

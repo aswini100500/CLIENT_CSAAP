@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const AdvancePayment = () => {
-  // State for form inputs
+
   const [formData, setFormData] = useState({
     advanceAmount: "",
     duration: "",
@@ -9,7 +9,7 @@ const AdvancePayment = () => {
     paymentDate: "",
   });
 
-  // State for advance records
+
   const [advanceRecords, setAdvanceRecords] = useState([
     {
       id: 1,
@@ -31,13 +31,13 @@ const AdvancePayment = () => {
     },
   ]);
 
-  // State for search functionality
+
   const [searchTerm, setSearchTerm] = useState("");
 
-  // State for entries per page
+
   const [entriesPerPage, setEntriesPerPage] = useState(10);
 
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -46,11 +46,11 @@ const AdvancePayment = () => {
     });
   };
 
-  // Handle form submission
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Create a new advance record
+
     const newRecord = {
       id: Date.now(),
       advanceAmount: parseFloat(formData.advanceAmount).toLocaleString(
@@ -67,10 +67,10 @@ const AdvancePayment = () => {
       amountPending: formData.advanceAmount,
     };
 
-    // Add to records
+
     setAdvanceRecords([...advanceRecords, newRecord]);
 
-    // Reset form
+
     setFormData({
       advanceAmount: "",
       duration: "",
@@ -81,7 +81,7 @@ const AdvancePayment = () => {
     alert("Advance payment saved successfully!");
   };
 
-  // Filter records based on search term
+
   const filteredRecords = advanceRecords.filter(
     (record) =>
       record.advanceAmount.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -89,7 +89,7 @@ const AdvancePayment = () => {
       record.duration.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // Toggle clearance status
+
   const toggleClearance = (id) => {
     setAdvanceRecords(
       advanceRecords.map((record) =>
@@ -104,7 +104,7 @@ const AdvancePayment = () => {
     );
   };
 
-  // Delete record
+
   const deleteRecord = (id) => {
     if (window.confirm("Are you sure you want to delete this record?")) {
       setAdvanceRecords(advanceRecords.filter((record) => record.id !== id));
@@ -114,7 +114,7 @@ const AdvancePayment = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <header className="mb-6">
           <h2 className="text-2xl md:text-2xl font-bold text-gray-800">
             Advance Payment Management
@@ -124,7 +124,7 @@ const AdvancePayment = () => {
           </p>
         </header>
 
-        {/* Top Section - Advance Payment Form */}
+
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
           <div className="flex items-center mb-6">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mr-3">
@@ -149,9 +149,9 @@ const AdvancePayment = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Left Column - Advance Amount & Duration */}
+
               <div className="space-y-5">
-                {/* Advance Amount */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Advance Amount
@@ -174,7 +174,7 @@ const AdvancePayment = () => {
                   </div>
                 </div>
 
-                {/* Duration */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Duration
@@ -191,9 +191,9 @@ const AdvancePayment = () => {
                 </div>
               </div>
 
-              {/* Right Column - Mode of Payment & Payment Date */}
+
               <div className="space-y-5">
-                {/* Mode of Payment */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Mode of Payment
@@ -213,7 +213,7 @@ const AdvancePayment = () => {
                   </select>
                 </div>
 
-                {/* Payment Date */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Payment Date
@@ -230,7 +230,7 @@ const AdvancePayment = () => {
               </div>
             </div>
 
-            {/* Save Button */}
+
             <div className="mt-6 pt-4 border-t border-gray-200">
               <button
                 type="submit"
@@ -255,7 +255,7 @@ const AdvancePayment = () => {
           </form>
         </div>
 
-        {/* Bottom Section - Advance Details Table */}
+
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center mb-6">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mr-3">
@@ -278,7 +278,7 @@ const AdvancePayment = () => {
             </h2>
           </div>
 
-          {/* Table Controls */}
+
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
             <div className="flex items-center">
               <span className="text-sm text-gray-700 mr-2">Show</span>
@@ -321,7 +321,7 @@ const AdvancePayment = () => {
             </div>
           </div>
 
-          {/* Table */}
+
           <div className="overflow-x-auto rounded-md border border-gray-200">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -465,7 +465,7 @@ const AdvancePayment = () => {
             </table>
           </div>
 
-          {/* Table Footer */}
+
           <div className="flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-700">
             <div>
               Showing{" "}

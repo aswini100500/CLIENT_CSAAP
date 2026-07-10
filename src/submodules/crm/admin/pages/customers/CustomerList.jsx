@@ -47,23 +47,23 @@ export default function CustomerList() {
   const { user, companyId, token } = useAuth();
   const queryClient = useQueryClient();
 
-  // Filter and search states
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSource, setSelectedSource] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
-  // Tabs state
+
   const [activeTab, setActiveTab] = useState("active");
 
-  // Create wizard visibility state
+
   const [showCreateWizard, setShowCreateWizard] = useState(false);
 
-  // Customer Details Modal States
+
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [viewingCustomer, setViewingCustomer] = useState(null);
 
-  // Cancellation Request Modal States
+
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancellingCustomer, setCancellingCustomer] = useState(null);
   const [cancelReason, setCancelReason] = useState("");
@@ -114,14 +114,14 @@ export default function CustomerList() {
     }
   };
 
-  // Entrance transition state
+
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setVisible(true);
   }, []);
 
-  // Fetch customers from real API
+
   const {
     data: customers = [],
     isLoading,
@@ -137,7 +137,7 @@ export default function CustomerList() {
     enabled: !!companyId,
   });
 
-  // Fetch project options to map project IDs to friendly names
+
   const { data: projectOptions = [] } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
@@ -169,12 +169,12 @@ export default function CustomerList() {
     return map;
   }, [projectOptions]);
 
-  // --- TABS SPLIT COUNTS ---
+
   const activeCount = useMemo(() => customers.filter(c => c.status !== "pending" && c.status !== "cancelled").length, [customers]);
   const pendingCount = useMemo(() => customers.filter(c => c.status === "pending").length, [customers]);
   const cancelledCount = useMemo(() => customers.filter(c => c.status === "cancelled").length, [customers]);
 
-  // --- DYNAMIC CALCULATED METRICS ---
+
   const metrics = useMemo(() => {
     const tabCustomers = customers.filter(c => {
       if (activeTab === "active") return c.status !== "pending" && c.status !== "cancelled";
@@ -198,7 +198,7 @@ export default function CustomerList() {
     return { total, totalDealValue, totalCollected, collectionRate };
   }, [customers, activeTab]);
 
-  // Unique filter options
+
   const uniqueSources = useMemo(() => {
     const sources = [
       ...new Set(customers.map((c) => c.source).filter(Boolean)),
@@ -206,10 +206,10 @@ export default function CustomerList() {
     return sources.map((s) => ({ value: s, label: formatSource(s) || s }));
   }, [customers]);
 
-  // --- DYNAMIC FILTER LOGIC ---
+
   const filteredCustomers = useMemo(() => {
     return customers.filter((c) => {
-      // Tab filter
+
       if (activeTab === "active" && (c.status === "pending" || c.status === "cancelled")) return false;
       if (activeTab === "pending" && c.status !== "pending") return false;
       if (activeTab === "cancelled" && c.status !== "cancelled") return false;
@@ -231,7 +231,7 @@ export default function CustomerList() {
     });
   }, [customers, activeTab, searchTerm, selectedSource, selectedStatus]);
 
-  // --- EXPORTS ---
+
   const handleExportCSV = () => {
     if (filteredCustomers.length === 0) {
       alert("No customer data to export!");
@@ -283,7 +283,7 @@ export default function CustomerList() {
             : "opacity-0 translate-y-2"
         }`}
       >
-        {/* Page Header */}
+
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="app-title">Customers</h1>
@@ -321,10 +321,10 @@ export default function CustomerList() {
           </div>
         </div>
 
-        {/* Sticky tabs dock */}
+
         <div className="sticky top-0 z-20 -mx-4 px-4 py-3 border-b border-(--border-soft) flex justify-between items-center bg-slate-50/50 backdrop-blur-md">
           <div className="flex items-center gap-2 overflow-x-auto">
-            {/* Active Customers Tab */}
+
             <button
               onClick={() => setActiveTab("active")}
               className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-bold tracking-[-0.02em] whitespace-nowrap transition-all cursor-pointer ${
@@ -348,7 +348,7 @@ export default function CustomerList() {
               </span>
             </button>
 
-            {/* Pending Customers Tab */}
+
             <button
               onClick={() => setActiveTab("pending")}
               className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-bold tracking-[-0.02em] whitespace-nowrap transition-all cursor-pointer ${
@@ -372,7 +372,7 @@ export default function CustomerList() {
               </span>
             </button>
 
-            {/* Cancelled Bookings Tab */}
+
             <button
               onClick={() => setActiveTab("cancelled")}
               className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-bold tracking-[-0.02em] whitespace-nowrap transition-all cursor-pointer ${
@@ -398,7 +398,7 @@ export default function CustomerList() {
           </div>
         </div>
 
-        {/* --- KPI STAT CARDS --- */}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="app-panel p-4">
             <div className="flex items-start justify-between gap-3">
@@ -481,16 +481,16 @@ export default function CustomerList() {
           </div>
         </div>
 
-        {/* --- SEARCH & FILTERS --- */}
+
         <div className="app-panel overflow-hidden shadow-sm">
           <div className="app-section-bar px-4 py-3 flex flex-wrap items-center justify-between gap-4">
             <h3 className="app-heading">
               Customers ({filteredCustomers.length})
             </h3>
 
-            {/* Quick Actions */}
+
             <div className="flex items-center gap-2">
-              {/* Search */}
+
               <div className="relative">
                 <input
                   type="text"
@@ -510,7 +510,7 @@ export default function CustomerList() {
                 )}
               </div>
 
-              {/* Filter Toggle */}
+
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`app-icon-button p-2 border ${
@@ -525,7 +525,7 @@ export default function CustomerList() {
             </div>
           </div>
 
-          {/* Filter Bar */}
+
           {showFilters && (
             <div className="bg-white/50 p-4 border-b border-(--border-soft) grid grid-cols-1 sm:grid-cols-3 gap-4 animate-sub-menu">
               <div>
@@ -575,7 +575,7 @@ export default function CustomerList() {
             </div>
           )}
 
-          {/* --- MAIN TABLE --- */}
+
           {isLoading ? (
             <div className="p-12 text-center text-slate-500">
               <div className="animate-spin rounded-full size-8 border-b-2 border-emerald-600 mx-auto mb-3" />
@@ -697,7 +697,7 @@ export default function CustomerList() {
                           setShowDetailsModal(true);
                         }}
                       >
-                        {/* Customer Identity */}
+
                         <td className="px-4 py-3.5">
                           <div className="flex items-center gap-3">
                             <div className="size-8 rounded-xl bg-(--brand-soft) border border-(--border-soft) flex items-center justify-center shrink-0">
@@ -724,7 +724,7 @@ export default function CustomerList() {
                           </div>
                         </td>
 
-                        {/* Project */}
+
                         <td className="px-4 py-3.5">
                           {customer.project_id ? (
                             <span className="text-[13px] font-semibold text-(--text-body)">
@@ -738,7 +738,7 @@ export default function CustomerList() {
                           )}
                         </td>
 
-                        {/* Source */}
+
                         <td className="px-4 py-3.5">
                           {customer.source ? (
                             <span className="inline-block text-[11px] font-bold text-(--text-soft) bg-(--bg-subtle) px-2 py-0.5 rounded-md border border-(--border-soft)">
@@ -749,21 +749,21 @@ export default function CustomerList() {
                           )}
                         </td>
 
-                        {/* Deal Value */}
+
                         <td className="px-4 py-3.5 text-right">
                           <span className="text-[13px] font-semibold text-(--text-body)">
                             {formatINR(dealVal)}
                           </span>
                         </td>
 
-                        {/* Paid */}
+
                         <td className="px-4 py-3.5 text-right">
                           <span className="text-[13px] font-bold text-emerald-700">
                             {formatINR(paidVal)}
                           </span>
                         </td>
 
-                        {/* Progress */}
+
                         <td className="px-4 py-3.5 text-center">
                           <div className="flex items-center justify-center gap-2">
                             <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
@@ -786,7 +786,7 @@ export default function CustomerList() {
                           </div>
                         </td>
 
-                        {/* Status */}
+
                         <td className="px-4 py-3.5 text-center">
                           <span
                             className={`inline-block text-[11px] font-bold px-2 py-0.5 rounded border capitalize ${
@@ -801,7 +801,7 @@ export default function CustomerList() {
                           </span>
                         </td>
 
-                        {/* Actions */}
+
                         <td
                           className="px-4 py-3.5 text-right"
                           onClick={(e) => e.stopPropagation()}
@@ -866,7 +866,7 @@ export default function CustomerList() {
           )}
         </div>
 
-        {/* Customer Details Modal */}
+
         {showDetailsModal && viewingCustomer && (
           <CustomerDetailsModal
             customer={viewingCustomer}
@@ -884,12 +884,12 @@ export default function CustomerList() {
           />
         )}
 
-        {/* Cancellation Request Modal */}
+
         {showCancelModal && cancellingCustomer && createPortal(
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-md">
             <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
               
-              {/* Modal Header */}
+
               <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
                 <div className="flex items-start gap-3 min-w-0">
                   <div className="size-11 rounded-2xl flex items-center justify-center bg-rose-50 border border-rose-100 shrink-0">
@@ -916,7 +916,7 @@ export default function CustomerList() {
               </div>
 
               <form onSubmit={submitCancellation} className="flex flex-col min-h-0 overflow-hidden">
-                {/* Modal Body */}
+
                 <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-[#f8faf8]/40">
                   <div className="app-panel-muted p-4 space-y-2.5 text-xs text-(--text-body)">
                     <div className="flex justify-between">
@@ -945,7 +945,7 @@ export default function CustomerList() {
                   </div>
                 </div>
 
-                {/* Modal Footer */}
+
                 <div className="px-5 py-4 border-t border-(--border-soft) bg-white flex items-center justify-end gap-3">
                   <button
                     type="button"
@@ -972,12 +972,12 @@ export default function CustomerList() {
           document.body
         )}
 
-        {/* Create Customer Wizard */}
+
         {showCreateWizard && (
           <CreateCustomerWizard
             onClose={() => setShowCreateWizard(false)}
             onSaveSuccess={() => {
-              // Refetch is handled by query client invalidation in mutation
+
             }}
           />
         )}

@@ -29,11 +29,11 @@ const LeaveManagementofEmployee = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
 
-  // Date range filter states
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  // Modal states
+
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showRejectReasonModal, setShowRejectReasonModal] = useState(false);
   const [showLeaveReasonModal, setShowLeaveReasonModal] = useState(false);
@@ -46,7 +46,7 @@ const LeaveManagementofEmployee = () => {
     fetchLeaveRequests();
   }, []);
 
-  // Reset page when filters change
+
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, statusFilter, startDate, endDate, entriesPerPage]);
@@ -57,50 +57,50 @@ const LeaveManagementofEmployee = () => {
 
   const csaapToken = user.token;
 
-  // const fetchLeaveRequests = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/leaves/${slug}`);
-  //     const leavesArray = res.data?.data || [];
 
-  //     const formatted = leavesArray.map(leave => ({
-  //       ...leave,
-  //       employeeName: leave.employee_name || "-",
-  //       fromDate: leave.start_date
-  //         ? new Date(leave.start_date).toLocaleDateString("en-GB", {
-  //             day: '2-digit',
-  //             month: 'short',
-  //             year: 'numeric'
-  //           })
-  //         : "",
-  //       fromDateRaw: leave.start_date || null, // for date filtering
-  //       toDate: leave.end_date
-  //         ? new Date(leave.end_date).toLocaleDateString("en-GB", {
-  //             day: '2-digit',
-  //             month: 'short',
-  //             year: 'numeric'
-  //           })
-  //         : "",
-  //       toDateRaw: leave.end_date || null,
-  //       days: leave.leave_days || 0,
-  //       leaveType: leave.leave_type || "-",
-  //       reason: leave.reason || "-",
-  //       status: leave.status || "-",
-  //       rejectReason: leave.reject_reason || null,
-  //     }));
 
-  //     setLeaveRequests(formatted);
-  //   } catch (error) {
-  //     console.error("Error fetching leaves:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const fetchLeaveRequests = async () => {
     setLoading(true);
     try {
-      // 🔹 1. Fetch employees (with token)
+
       const empRes = await axios.get(
         "https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees",
         {
@@ -112,23 +112,23 @@ const LeaveManagementofEmployee = () => {
 
       const employees = empRes.data?.data || [];
 
-      // 🔹 Create ID → Name map
+
       const employeeMap = {};
       employees.forEach((emp) => {
         employeeMap[emp.id] = emp.name;
       });
 
-      // 🔹 2. Fetch leave requests
+
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/leaves/${slug}`,
       );
 
       const leavesArray = res.data?.data || [];
 
-      // 🔹 3. Map employee_id → name
+
       const formatted = leavesArray.map((leave) => ({
         ...leave,
-        employeeName: employeeMap[leave.employee_id] || "Unknown", // 👈 IMPORTANT
+        employeeName: employeeMap[leave.employee_id] || "Unknown",
         fromDate: leave.start_date
           ? new Date(leave.start_date).toLocaleDateString("en-GB", {
               day: "2-digit",
@@ -241,7 +241,7 @@ const LeaveManagementofEmployee = () => {
     setEndDate("");
   };
 
-  // Helper: Check if leave falls within date range (based on fromDateRaw)
+
   const matchesDateRange = (leave) => {
     if (!startDate && !endDate) return true;
 
@@ -254,7 +254,7 @@ const LeaveManagementofEmployee = () => {
     return compareStart && compareEnd;
   };
 
-  // Filter and pagination logic (includes date range)
+
   const filteredLeaves = leaveRequests.filter((leave) => {
     const matchesSearch =
       leave.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -276,7 +276,7 @@ const LeaveManagementofEmployee = () => {
     startIndex + entriesPerPage,
   );
 
-  // Status badge component
+
   const StatusBadge = ({ status }) => {
     const getStatusConfig = () => {
       switch (status?.toLowerCase()) {
@@ -361,7 +361,7 @@ const LeaveManagementofEmployee = () => {
   return (
     <div className="app-shell min-h-[calc(100vh-80px)] font-sans p-3 md:p-4">
       <div className="mx-auto max-w-6xl space-y-3">
-        {/* Statistics Cards */}
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           <StatCard
             icon={CalendarDays}
@@ -404,11 +404,11 @@ const LeaveManagementofEmployee = () => {
           />
         </div>
 
-        {/* Toolbar - Sync with other pages */}
+
         <div className="app-panel p-4">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-wrap items-center gap-3">
-              {/* Entries per page select */}
+
               <div className="relative flex items-center rounded-xl border border-(--border-soft) bg-white px-3 transition-all focus-within:border-(--brand) focus-within:ring-4 focus-within:ring-(--brand-ring)">
                 <span className="text-[13px] font-medium text-(--text-soft) mr-2">Show</span>
                 <select
@@ -424,7 +424,7 @@ const LeaveManagementofEmployee = () => {
                 <ChevronDown className="absolute right-3 h-4 w-4 pointer-events-none text-(--text-faint)" />
               </div>
 
-              {/* Status Filter */}
+
               <div className="relative flex items-center rounded-xl border border-(--border-soft) bg-white px-3 transition-all focus-within:border-(--brand) focus-within:ring-4 focus-within:ring-(--brand-ring)">
                 <Filter className="w-4 h-4 text-(--text-faint) mr-2" />
                 <select
@@ -441,9 +441,9 @@ const LeaveManagementofEmployee = () => {
               </div>
             </div>
 
-            {/* Date Range & Search */}
+
             <div className="flex flex-wrap items-center gap-3">
-              {/* Date Range Filter */}
+
               <div className="flex flex-wrap items-center gap-2 bg-(--bg-subtle)/70 p-1.5 rounded-xl border border-(--border-soft)">
                 <div className="flex items-center gap-1.5 px-2">
                   <Calendar className="w-4 h-4 text-(--text-faint)" />
@@ -479,7 +479,7 @@ const LeaveManagementofEmployee = () => {
                 )}
               </div>
 
-              {/* Search */}
+
               <div className="relative min-w-64">
                 <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input
@@ -493,7 +493,7 @@ const LeaveManagementofEmployee = () => {
             </div>
           </div>
 
-          {/* Active date filter indicator */}
+
           {(startDate || endDate) && (
             <div className="mt-3 pt-2 border-t border-(--border-soft)">
               <div className="flex flex-wrap items-center gap-2">
@@ -515,7 +515,7 @@ const LeaveManagementofEmployee = () => {
           )}
         </div>
 
-        {/* Table - Synced to other ledger designs */}
+
         <div className="app-panel overflow-hidden">
           <div className="overflow-x-auto">
                 <table className="min-w-full border-separate border-spacing-0">
@@ -607,7 +607,7 @@ const LeaveManagementofEmployee = () => {
                           </td>
                           <td className="px-5 py-3.5 align-middle">
                             <div className="flex items-center justify-center gap-1.5">
-                              {/* View Full Leave Reason Button */}
+
                               <button
                                 onClick={() => handleViewLeaveReason(leave)}
                                 className="p-1.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"
@@ -664,7 +664,7 @@ const LeaveManagementofEmployee = () => {
                 </table>
               </div>
 
-              {/* Pagination */}
+
               <div className="app-section-bar px-6 py-4 border-t border-(--border-soft)">
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                   <div className="text-[13px] font-medium text-(--text-soft)">
@@ -705,11 +705,11 @@ const LeaveManagementofEmployee = () => {
         </div>
       </div>
 
-      {/* Reject Reason Input Modal */}
+
       {showRejectModal && selectedLeave && (
         <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="app-modal w-full max-w-md overflow-hidden flex flex-col">
-            {/* Compact Header */}
+
             <div className="flex items-center justify-between px-5 py-3 border-b border-(--border-soft) bg-white z-10 shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl border border-red-200 bg-red-50 flex items-center justify-center text-red-600 font-bold text-sm shrink-0">
@@ -736,7 +736,7 @@ const LeaveManagementofEmployee = () => {
               </button>
             </div>
 
-            {/* Dense Body */}
+
             <div className="px-5 py-4 overflow-y-auto space-y-3 bg-(--bg-subtle)/45 flex-1 custom-scrollbar">
               <div className="app-panel p-4 bg-white border border-(--border-soft)">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 block">
@@ -753,7 +753,7 @@ const LeaveManagementofEmployee = () => {
               </div>
             </div>
 
-            {/* Footer */}
+
             <div className="px-5 py-3 border-t border-(--border-soft) bg-white flex justify-end gap-3 shrink-0">
               <button
                 onClick={() => {
@@ -784,11 +784,11 @@ const LeaveManagementofEmployee = () => {
         </div>
       )}
 
-      {/* View Leave Reason Modal */}
+
       {showLeaveReasonModal && selectedLeave && (
         <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="app-modal w-full max-w-md overflow-hidden flex flex-col">
-            {/* Compact Header */}
+
             <div className="flex items-center justify-between px-5 py-3 border-b border-(--border-soft) bg-white z-10 shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl border border-emerald-200 bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-sm shrink-0">
@@ -814,7 +814,7 @@ const LeaveManagementofEmployee = () => {
               </button>
             </div>
 
-            {/* Dense Body */}
+
             <div className="px-5 py-4 overflow-y-auto space-y-3 bg-(--bg-subtle)/45 flex-1 custom-scrollbar">
               <div className="app-panel px-4 py-3 border border-emerald-100 bg-white">
                 <p className="text-sm font-medium text-slate-700 whitespace-pre-wrap leading-snug">
@@ -823,7 +823,7 @@ const LeaveManagementofEmployee = () => {
               </div>
             </div>
 
-            {/* Footer */}
+
             <div className="px-5 py-3 border-t border-(--border-soft) bg-white flex justify-end shrink-0">
               <button
                 onClick={() => {
@@ -839,11 +839,11 @@ const LeaveManagementofEmployee = () => {
         </div>
       )}
 
-      {/* View Rejection Reason Modal */}
+
       {showRejectReasonModal && selectedLeave && (
         <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="app-modal w-full max-w-md overflow-hidden flex flex-col">
-            {/* Compact Header */}
+
             <div className="flex items-center justify-between px-5 py-3 border-b border-(--border-soft) bg-white z-10 shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl border border-rose-200 bg-rose-50 flex items-center justify-center text-rose-600 font-bold text-sm shrink-0">
@@ -869,7 +869,7 @@ const LeaveManagementofEmployee = () => {
               </button>
             </div>
 
-            {/* Dense Body */}
+
             <div className="px-5 py-4 overflow-y-auto space-y-3 bg-(--bg-subtle)/45 flex-1 custom-scrollbar">
               <div className="app-panel px-4 py-3 border border-rose-100 bg-white">
                 <p className="text-sm font-medium text-slate-700 whitespace-pre-wrap leading-snug">
@@ -878,7 +878,7 @@ const LeaveManagementofEmployee = () => {
               </div>
             </div>
 
-            {/* Footer */}
+
             <div className="px-5 py-3 border-t border-(--border-soft) bg-white flex justify-end shrink-0">
               <button
                 onClick={() => {

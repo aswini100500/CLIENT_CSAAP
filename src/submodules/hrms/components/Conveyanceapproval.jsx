@@ -8,7 +8,7 @@ export default function ConveyanceList() {
   const [conveyanceData, setConveyanceData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
-  // Raw data - employees
+
   const employees = [
     {
       id: "1",
@@ -47,7 +47,7 @@ export default function ConveyanceList() {
     },
   ];
 
-  // Raw data - conveyance records
+
   const rawConveyanceData = [
     {
       id: 1,
@@ -191,7 +191,7 @@ export default function ConveyanceList() {
     },
   ];
 
-  // Initialize with all data
+
   useEffect(() => {
     setConveyanceData(rawConveyanceData);
     setFilteredData(rawConveyanceData);
@@ -200,12 +200,12 @@ export default function ConveyanceList() {
   const handleShowData = () => {
     let filtered = rawConveyanceData;
 
-    // Filter by employee
+
     if (employee) {
       filtered = filtered.filter((item) => item.employeeId === employee);
     }
 
-    // Filter by date range
+
     if (fromDate) {
       filtered = filtered.filter((item) => item.conveyanceDate >= fromDate);
     }
@@ -215,7 +215,7 @@ export default function ConveyanceList() {
     }
 
     setFilteredData(filtered);
-    setSelectedRows(new Set()); // Clear selections when filters change
+    setSelectedRows(new Set());
   };
 
   const handleRowSelect = (id) => {
@@ -324,16 +324,16 @@ export default function ConveyanceList() {
 
   return (
     <div className="w-full p-4 bg-gray-50 min-h-screen">
-      {/* Header */}
+
       <header className="bg-blue-600 text-white font-semibold p-4 rounded-lg flex items-center shadow-sm">
         <span className="mr-3 text-xl">📋</span>
         Conveyance List of Employee
       </header>
 
-      {/* Filters Section */}
+
       <section className="bg-white shadow-sm p-6 mt-4 rounded-lg border">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-end">
-          {/* Employee Select */}
+
           <div>
             <label className="block text-gray-700 font-medium mb-2 text-sm">
               Select Employee
@@ -352,7 +352,7 @@ export default function ConveyanceList() {
             </select>
           </div>
 
-          {/* From Date */}
+
           <div>
             <label className="block text-gray-700 font-medium mb-2 text-sm">
               From Date
@@ -365,7 +365,7 @@ export default function ConveyanceList() {
             />
           </div>
 
-          {/* To Date */}
+
           <div>
             <label className="block text-gray-700 font-medium mb-2 text-sm">
               To Date
@@ -379,7 +379,7 @@ export default function ConveyanceList() {
             />
           </div>
 
-          {/* Show Button */}
+
           <div className="lg:col-span-2 flex items-end gap-2">
             <button
               className={`flex-1 px-6 py-2.5 rounded-lg font-medium transition-colors ${
@@ -406,7 +406,7 @@ export default function ConveyanceList() {
           </div>
         </div>
 
-        {/* Summary Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
             <div className="text-blue-600 text-sm font-medium">
@@ -447,7 +447,7 @@ export default function ConveyanceList() {
           </div>
         </div>
 
-        {/* Table Section */}
+
         <div className="mt-6 overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
@@ -556,7 +556,7 @@ export default function ConveyanceList() {
           </table>
         </div>
 
-        {/* Totals and Actions */}
+
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
           <div className="flex flex-wrap gap-2">
             <button

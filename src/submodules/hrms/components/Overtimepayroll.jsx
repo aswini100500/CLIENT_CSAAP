@@ -9,7 +9,7 @@ export default function OTBonusList() {
 
   return (
     <div className="w-full bg-[#f3f3f3] min-h-screen p-3">
-      {/* Top Bar */}
+
       <div className="bg-linear-to-r from-[#ff7c00] to-[#ff5000] text-white px-4 py-2 rounded-t-md flex justify-between items-center shadow">
         <div className="flex items-center gap-2 font-semibold text-sm">
           <Menu size={14} /> Bonus List
@@ -19,10 +19,10 @@ export default function OTBonusList() {
         </div>
       </div>
 
-      {/* Filter Section */}
+
       <div className="bg-white border border-gray-200 rounded-b-md shadow p-3 flex flex-wrap items-center gap-3">
 
-        {/* Search Employee */}
+
         <div className="flex items-center border rounded-sm bg-white w-50">
           <input
             type="text"
@@ -34,7 +34,7 @@ export default function OTBonusList() {
           <Search size={14} className="mx-2 text-gray-500" />
         </div>
 
-        {/* Status */}
+
         <select
           className="border rounded-sm px-2 py-1.5 text-sm bg-white w-40"
           value={status}
@@ -45,7 +45,7 @@ export default function OTBonusList() {
           <option>Rejected</option>
         </select>
 
-        {/* From */}
+
         <div className="flex items-center text-sm">
           <span className="mr-1">From:</span>
           <input
@@ -56,7 +56,7 @@ export default function OTBonusList() {
           />
         </div>
 
-        {/* To */}
+
         <div className="flex items-center text-sm">
           <span className="mr-1">To:</span>
           <input
@@ -67,17 +67,17 @@ export default function OTBonusList() {
           />
         </div>
 
-        {/* View Button */}
+
         <button className="flex items-center gap-2 bg-[#34a853] hover:bg-[#2f944b] text-white text-xs px-4 py-1.75 rounded-sm font-semibold">
           <Eye size={13} /> VIEW
         </button>
 
-        {/* No record text */}
+
         <span className="text-red-600 text-xs font-semibold">
           No Record Found.
         </span>
 
-        {/* Add New Bonus */}
+
         <button className="ml-auto flex items-center gap-2 bg-[#34a853] hover:bg-[#2f944b] text-white text-xs px-4 py-1.75 rounded-sm font-semibold">
           <Plus size={13} /> ADD NEW BONUS
         </button>

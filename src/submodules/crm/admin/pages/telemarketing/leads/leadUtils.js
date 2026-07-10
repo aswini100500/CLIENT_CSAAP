@@ -14,9 +14,9 @@ export const getInitialsColor = (initials) => {
   return colors[index];
 };
 
-// ---------------------------------------------------------------------------
-// Human-readable labels
-// ---------------------------------------------------------------------------
+
+
+
 const statusLabels = {
   NEW: "New",
   PENDING: "Pending",
@@ -35,9 +35,9 @@ export const formatStatus = (status) =>
 
 
 
-// ---------------------------------------------------------------------------
-// Status chip colors
-// ---------------------------------------------------------------------------
+
+
+
 
 export const getStatusColor = (status) => {
   const s = status?.toUpperCase();
@@ -67,9 +67,9 @@ export const getStatusColor = (status) => {
   }
 };
 
-// ---------------------------------------------------------------------------
-// All outcomes with labels (used for dropdowns)
-// ---------------------------------------------------------------------------
+
+
+
 
 const allOutcomes = [
   { value: "NO_RESPONSE", label: "No response" },
@@ -78,9 +78,9 @@ const allOutcomes = [
   { value: "REJECTED", label: "Rejected" },
 ];
 
-// ---------------------------------------------------------------------------
-// Smart outcome suggestions - forward-only based on current stage
-// ---------------------------------------------------------------------------
+
+
+
 
 const stageOutcomeMap = {
   NEW: [],
@@ -89,9 +89,9 @@ const stageOutcomeMap = {
   REJECTED: [],
 };
 
-// ---------------------------------------------------------------------------
-// Lead Sources
-// ---------------------------------------------------------------------------
+
+
+
 
 export const LEAD_SOURCES = [
   { value: "WEBSITE", label: "Website" },
@@ -111,10 +111,7 @@ const sourceLabels = Object.fromEntries(
 export const formatSource = (source) =>
   sourceLabels[source?.toUpperCase()] || source || "";
 
-/**
- * Returns the list of allowed outcomes for a given stage.
- * Forward-moving only - no going backwards in the lifecycle.
- */
+
 export const getOutcomesForStage = (stage) => {
   const s = stage?.toUpperCase();
   const allowed = stageOutcomeMap[s] || [];
@@ -123,10 +120,7 @@ export const getOutcomesForStage = (stage) => {
 
 const outcomesMap = new Map(allOutcomes.map((o) => [o.value, o.label]));
 
-/**
- * Returns the list of allowed outcomes based on the current active tab / view.
- * Decouples outcomes from stages.
- */
+
 export const getOutcomesForTab = (activeTab) => {
   const tab = activeTab?.toLowerCase();
 
@@ -137,19 +131,14 @@ export const getOutcomesForTab = (activeTab) => {
   return [];
 };
 
-/**
- * Extracts the possession/property status from a raw unit/plot object.
- * Uses the same fallback chain as the project shared utils.
- * @param {Object} item - Raw unit or plot object from the Tenant API.
- * @returns {string} Possession status string (e.g. "Pending", "In Progress", "Ready to Move", "Completed").
- */
+
 export const getPossessionStatus = (item) => {
   if (!item) return "Pending";
   let s = item.possessionStatus || item.possession_status;
   if (!s && item.propertyFeatures) {
     let features = item.propertyFeatures;
     if (typeof features === "string") {
-      try { features = JSON.parse(features); } catch (e) { /* ignore */ }
+      try { features = JSON.parse(features); } catch (e) { }
     }
     s = features?.possessionStatus;
   }
@@ -159,30 +148,18 @@ export const getPossessionStatus = (item) => {
   return s || "Pending";
 };
 
-/**
- * Returns true if a normalized unit object represents a finished/ready-to-move unit.
- * @param {{ possession_status?: string }} unit - A normalized unit from normalizeUnits().
- * @returns {boolean}
- */
+
 export const isFinishedUnit = (unit) => {
   if (!unit?.possession_status) return false;
   const s = unit.possession_status.toLowerCase().trim();
   return s === "ready to move" || s === "completed";
 };
 
-/**
- * Normalizes the raw unit dump returned from the Tenant/Operations API
- * based on the project type and the actual SQL storage shapes.
- * Can accept either the raw configuration dump or the full project details object.
- * 
- * @param {Array|Object|string} rawDump - The raw JSON data or project details object.
- * @param {string} projectType - The project type (apartment, plotting, commercial, duplex, triplex, custom).
- * @returns {Array} Standardized units array: [{ unit_id, unit_name, possession_status }]
- */
+
 export const normalizeUnits = (rawDump, projectType) => {
   if (!rawDump) return [];
 
-  // Parse if string
+
   let data = rawDump;
   if (typeof rawDump === "string") {
     try {
@@ -193,7 +170,7 @@ export const normalizeUnits = (rawDump, projectType) => {
     }
   }
 
-  // If data is a project details object, extract the appropriate inventory field
+
   if (data && typeof data === "object" && !Array.isArray(data)) {
     if (data.blocks_data !== undefined) {
       data = data.blocks_data;
@@ -205,7 +182,7 @@ export const normalizeUnits = (rawDump, projectType) => {
       data = data.configuration;
     }
 
-    // Parse again if the extracted field is a string
+
     if (typeof data === "string") {
       try {
         data = JSON.parse(data);
@@ -221,7 +198,7 @@ export const normalizeUnits = (rawDump, projectType) => {
 
   switch (type) {
     case "apartment": {
-      // Dump is blocks_data array. Structure: Blocks -> Floors -> Units
+
       if (Array.isArray(data)) {
         data.forEach((block) => {
           (block.floors || []).forEach((floor) => {
@@ -241,7 +218,7 @@ export const normalizeUnits = (rawDump, projectType) => {
     }
 
     case "duplex": {
-      // Dump is units_data array. Structure: Flat list of duplex units
+
       if (Array.isArray(data)) {
         data.forEach((unit) => {
           const uId = String(unit.id || unit.unit_no || "");
@@ -258,7 +235,7 @@ export const normalizeUnits = (rawDump, projectType) => {
 
     case "triplex":
     case "commercial": {
-      // Dump is units_data array. Structure: Flat list of units
+
       if (Array.isArray(data)) {
         data.forEach((unit) => {
           const uId = String(unit.id || unit.unit_no || "");
@@ -274,7 +251,7 @@ export const normalizeUnits = (rawDump, projectType) => {
     }
 
     case "plotting": {
-      // Dump is plots_data array. Structure: Flat list of plots
+
       if (Array.isArray(data)) {
         data.forEach((plot) => {
           const pId = String(plot.id || plot.plot_no || "");
@@ -291,7 +268,7 @@ export const normalizeUnits = (rawDump, projectType) => {
 
     case "custom":
     case "custom_project": {
-      // Dump is configuration JSON object. Structure: { plots: [...] }
+
       if (data && Array.isArray(data.plots)) {
         data.plots.forEach((plot) => {
           const pId = String(plot.id || plot.plot_no || "");
@@ -311,6 +288,6 @@ export const normalizeUnits = (rawDump, projectType) => {
       break;
   }
 
-  // Filter out any entries with empty/undefined unit_id
+
   return normalized.filter((item) => item.unit_id && item.unit_id.trim() !== "");
 };

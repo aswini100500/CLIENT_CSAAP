@@ -21,10 +21,10 @@ const CompanyPaymentSetup = () => {
         setLoading(true);
         setError('');
         
-        // Fetch company details
+
         const companyRes = await axios.get(`https://csaapnodeapi.csaap.com/api/builder-companies/${id}`);
         
-        // Using same unwrap logic as other places if needed, but standard axios:
+
         const payload = companyRes.data;
         let companyData = null;
         if (payload && payload.data) {
@@ -42,7 +42,7 @@ const CompanyPaymentSetup = () => {
         
         setCompany(companyData);
 
-        // Fetch existing project price if set
+
         try {
           const priceRes = await axios.get(`https://csaapnodeapi.csaap.com/api/master/user-service-prices/company/${id}`);
           if (priceRes.data?.success && Array.isArray(priceRes.data.data) && priceRes.data.data.length > 0) {
@@ -145,7 +145,7 @@ const CompanyPaymentSetup = () => {
           </div>
         )}
 
-        {/* Company Profile Card */}
+
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
           <div className="border-b border-slate-100 bg-slate-50/50 px-6 py-4 flex items-center gap-3">
             <div className="bg-blue-100 p-2 rounded-lg">
@@ -202,7 +202,7 @@ const CompanyPaymentSetup = () => {
           </div>
         </div>
 
-        {/* Pricing Setup Card */}
+
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
           <div className="border-b border-slate-100 bg-slate-50/50 px-6 py-4 flex items-center gap-3">
             <div className="bg-emerald-100 p-2 rounded-lg">

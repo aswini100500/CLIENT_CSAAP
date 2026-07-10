@@ -3,14 +3,14 @@ import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 import { getAuthToken } from '../../store/authSession';
 
-// Configure axios instance
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'http://localhost:3000';
 
 const api = axios.create({
   baseURL: API_BASE_URL
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -24,7 +24,7 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const SaleHistory = () => {
@@ -40,17 +40,17 @@ const SaleHistory = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  // Construct API URL with filters
+
   const getApiUrl = () => {
     const baseUrl = '/api/tenant/sales';
     
-    // If month and year are selected, you might want to filter by date
-    // This depends on your backend API structure
-    // For now, we'll fetch all sales and filter client-side
+
+
+
     return baseUrl;
   };
 
-  // Use SWR to fetch sales data
+
   const { data, error, isLoading: swrLoading } = useSWR(getApiUrl(), fetcher, {
     revalidateOnFocus: false,
     shouldRetryOnError: false
@@ -63,7 +63,7 @@ const SaleHistory = () => {
   
   const years = ['2023', '2024', '2025', '2026'];
 
-  // Filter data by month and year
+
   const filteredData = React.useMemo(() => {
     if (!data?.data) return [];
     
@@ -77,35 +77,35 @@ const SaleHistory = () => {
   }, [data, month, year]);
 
   const handleSearch = () => {
-    // Revalidate the SWR cache
+
     mutate(getApiUrl());
   };
 
   const handleExportExcel = () => {
-    // Export to Excel functionality
+
     console.log('Exporting to Excel');
     
-    // In a real implementation, you would make an API call to export data
-    // api.get('/api/tenant/sales/export/excel', { responseType: 'blob' })
-    //   .then(response => {
-    //     const url = window.URL.createObjectURL(new Blob([response.data]));
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.setAttribute('download', `sales-${month}-${year}.xlsx`);
-    //     document.body.appendChild(link);
-    //     link.click();
-    //   });
+
+
+
+
+
+
+
+
+
+
   };
   
   const handleExportPDF = () => {
-    // Export to PDF functionality
+
     console.log('Exporting to PDF');
     
-    // Similar to Excel export
+
   };
   
   const handleExportGST = () => {
-    // Export GST report functionality
+
     console.log('Exporting GST Report');
   };
 
@@ -136,7 +136,7 @@ const SaleHistory = () => {
     try {
       await api.patch(`/api/tenant/sales/${selectedSale.id}`, editData);
       
-      // Update local data immediately
+
       mutate(getApiUrl(), (currentData) => {
         if (!currentData?.data) return currentData;
         
@@ -169,7 +169,7 @@ const SaleHistory = () => {
     try {
       await api.delete(`/api/tenant/sales/${saleId}`);
       
-      // Update local data immediately
+
       mutate(getApiUrl(), (currentData) => {
         if (!currentData?.data) return currentData;
         
@@ -227,16 +227,16 @@ const SaleHistory = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Sale History</h1>
           <p className="text-gray-600 mt-2">View and manage your sales records</p>
         </div>
 
-        {/* Filters and Search */}
+
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-            {/* Month Selector */}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Month
@@ -252,7 +252,7 @@ const SaleHistory = () => {
               </select>
             </div>
 
-            {/* Year Selector */}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Year
@@ -268,7 +268,7 @@ const SaleHistory = () => {
               </select>
             </div>
 
-            {/* Search Button */}
+
             <div>
               <button
                 onClick={handleSearch}
@@ -281,7 +281,7 @@ const SaleHistory = () => {
           </div>
         </div>
 
-        {/* Export Buttons Section */}
+
         <div className="bg-white rounded-lg shadow-md p-4 mb-4">
           <div className="flex flex-wrap items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900 mb-2 md:mb-0">
@@ -322,7 +322,7 @@ const SaleHistory = () => {
           </div>
         </div>
 
-        {/* Sale History Table */}
+
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -432,7 +432,7 @@ const SaleHistory = () => {
             </table>
           </div>
 
-          {/* Table Footer */}
+
           <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
             <div className="flex-1 flex justify-between items-center">
               <div>
@@ -460,7 +460,7 @@ const SaleHistory = () => {
           </div>
         </div>
 
-        {/* Sale Details Modal */}
+
         {selectedSale && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">

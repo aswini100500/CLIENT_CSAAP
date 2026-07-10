@@ -7,8 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 const ForgotPassword = () => {
   const navigate = useNavigate();
 
-  // State
-  const [step, setStep] = useState(1); // 1 = Email, 2 = OTP & New Password
+
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -76,7 +76,7 @@ const ForgotPassword = () => {
   return (
     <div className="min-h-screen w-full bg-[#f4f7f4] flex items-center justify-center p-4 md:p-8 font-body relative overflow-hidden">
       
-      {/* Premium Ambient Background (Light Green / Emerald) */}
+
       <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
         <motion.div
           animate={{ x: [0, 50, -20, 0], y: [0, -40, 30, 0], scale: [1, 1.1, 0.9, 1] }}
@@ -90,7 +90,7 @@ const ForgotPassword = () => {
         />
       </div>
 
-      {/* Glassmorphic Container (Dual Pane) */}
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -98,11 +98,11 @@ const ForgotPassword = () => {
         className="relative z-10 w-full max-w-5xl min-h-150 grid grid-cols-1 lg:grid-cols-2 rounded-3xl bg-white shadow-[0_32px_64px_-12px_rgba(16,185,129,0.08)] border border-white/60 overflow-hidden"
       >
         
-        {/* Left Pane - Abstract Visuals */}
+
         <div className="hidden lg:flex relative bg-emerald-900 overflow-hidden flex-col justify-between p-12 text-white">
           <div className="absolute inset-0 bg-linear-to-br from-emerald-800 to-emerald-950 z-0"></div>
           
-          {/* Animated geometric overlays */}
+
           <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
           
           <motion.div
@@ -136,7 +136,7 @@ const ForgotPassword = () => {
           </div>
         </div>
 
-        {/* Right Pane - The Form */}
+
         <div className="relative z-10 flex flex-col p-8 sm:p-12 lg:p-16 justify-center bg-white">
           <Link
             to="/admin/login"

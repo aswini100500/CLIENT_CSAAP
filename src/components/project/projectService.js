@@ -6,7 +6,7 @@ const API_URL = `${import.meta.env.VITE_CSAAP_URL}/api/tenant`;
 const getSlug = () => getAuthSlug();
 
 const projectService = {
-    // --- APARTMENT APIS ---
+
     createApartment: async (projectData) => {
         const response = await axios.post(`${API_URL}/apartments`, projectData,{
                 params: { slug: getSlug(), subdomain: getSlug() },
@@ -57,7 +57,7 @@ const projectService = {
         return response.data.data;
     },
 
-    // --- COMMERCIAL APIS ---
+
     createCommercial: async (projectData) => {
         const response = await axios.post(
             `${API_URL}/commercials`,
@@ -112,7 +112,7 @@ const projectService = {
         return response.data.data;
     },
 
-    // --- PLOTTING APIS ---
+
     createPlotting: async (projectData) => {
         const response = await axios.post(`${API_URL}/plottings`, projectData ,{
                 params: { slug: getSlug(), subdomain: getSlug() },
@@ -165,7 +165,7 @@ const projectService = {
         return response.data.data;
     },
 
-    // --- DUPLEX APIS ---
+
     createDuplex: async (projectData) => {
         const response = await axios.post(`${API_URL}/duplexes`, projectData ,{
                 params: { slug: getSlug(), subdomain: getSlug() },
@@ -216,7 +216,7 @@ const projectService = {
         return response.data.data;
     },
 
-    // --- TRIPLEX APIS ---
+
     createTriplex: async (projectData) => {
         const response = await axios.post(`${API_URL}/triplexes`, projectData ,{
                 params: { slug: getSlug(), subdomain: getSlug() },
@@ -267,7 +267,7 @@ const projectService = {
         return response.data.data;
     },
 
-    // --- CUSTOM PROJECT APIS ---
+
     createCustomProject: async (projectData) => {
         const response = await axios.post(
             `${API_URL}/custom-projects`,
@@ -348,7 +348,7 @@ const projectService = {
         return response.data.data;
     },
 
-    // --- SHARED APIS ---
+
     getAllBrokers: async () => {
         const response = await axios.get(`${API_URL}/broker`, {
             params: { slug: getSlug(), subdomain: getSlug() },
@@ -369,7 +369,7 @@ const projectService = {
         return response.data.data;
     },
 
-    // --- UNIFIED PROJECT APIS ---
+
     getAllProjects: async () => {
         const response = await axios.get(`${API_URL}/all-types`, {
             params: { slug: getSlug(), subdomain: getSlug() },

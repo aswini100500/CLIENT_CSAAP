@@ -101,7 +101,7 @@ const ToDoList = () => {
   const companyId = user.company_id;
   const companySlug = user.slug || "";
   const createdBy = user.user_id;
-  const [viewMode, setViewMode] = useState("list"); // 'list' | 'grid'
+  const [viewMode, setViewMode] = useState("list");
   const [expandedTodos, setExpandedTodos] = useState(new Set());
 
   const toggleExpand = (id) => {
@@ -269,7 +269,7 @@ const ToDoList = () => {
 
   return (
     <div className="crm-module-root w-full space-y-6">
-      {/* Header Panel */}
+
       <div className="app-panel p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h3 className="app-heading">{visibleTitle}</h3>
@@ -302,7 +302,7 @@ const ToDoList = () => {
         </div>
       </div>
 
-      {/* Stats KPI Cards */}
+
       <div className="app-grid-4">
         <StatCard
           label="Total"
@@ -330,7 +330,7 @@ const ToDoList = () => {
         />
       </div>
 
-      {/* Filters Form Panel */}
+
       <div className="app-panel p-4">
         <div className="grid gap-3 lg:grid-cols-[1.5fr_repeat(4,minmax(0,1fr))]">
           <label className="relative block">
@@ -467,7 +467,7 @@ const ToDoList = () => {
                     {group.items.length > 1 ? "s" : ""}
                   </p>
                 </div>
-                {/* View toggle */}
+
                 <div className="flex items-center gap-0.5 rounded-lg border border-(--border-soft) bg-white p-0.5 shadow-2xs">
                   <button
                     type="button"
@@ -510,16 +510,16 @@ const ToDoList = () => {
                         key={todo.id}
                         className={`group transition-colors ${todo.status === "completed" ? "opacity-75" : ""}`}
                       >
-                        {/* Main row */}
+
                         <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-(--bg-subtle)/30 transition-colors">
-                          {/* Serial number */}
+
                           <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-slate-100 to-slate-200/60 border border-slate-300/50 shadow-xs shadow-slate-100 select-none">
                             <span className="text-[10px] font-bold tabular-nums text-slate-600">
                               {serialIndex}
                             </span>
                           </div>
 
-                          {/* Complete toggle */}
+
                           <button
                             type="button"
                             onClick={() => flipTodoStatus(todo.id)}
@@ -537,7 +537,7 @@ const ToDoList = () => {
                             )}
                           </button>
 
-                          {/* Title + badges */}
+
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
                               <span
@@ -557,7 +557,7 @@ const ToDoList = () => {
                               </span>
                             </div>
 
-                            {/* Second line: description · due date · subtask progress */}
+
                             <div className="mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5">
                               {hasDescription && (
                                 <p className="truncate text-xs text-(--text-soft) max-w-xs">
@@ -608,7 +608,7 @@ const ToDoList = () => {
                             </div>
                           </div>
 
-                          {/* Actions — revealed on hover */}
+
                           <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
                             <button
                               type="button"
@@ -637,10 +637,10 @@ const ToDoList = () => {
                           </div>
                         </div>
 
-                        {/* Expandable subtasks panel */}
+
                         {hasSubtasks && isExpanded && (
                           <div className="mx-4 mb-3 overflow-hidden rounded-xl border border-(--border-soft) bg-(--bg-subtle)/20">
-                            {/* Subtask header */}
+
                             <div className="flex items-center justify-between border-b border-(--border-soft) px-3 py-1.5">
                               <span className="text-[10px] font-extrabold uppercase tracking-wider text-(--text-soft)">
                                 Subtasks
@@ -653,7 +653,7 @@ const ToDoList = () => {
                                 {" "}of {todo.subtasks.length} done
                               </span>
                             </div>
-                            {/* Subtask rows */}
+
                             <div className="divide-y divide-(--border-soft)/50 bg-white">
                               {todo.subtasks.map((subtask, index) => (
                                 <button
@@ -693,7 +693,7 @@ const ToDoList = () => {
                     );
                   }
 
-                  {/* Grid card */}
+
                   return (
                     <div
                       key={todo.id}

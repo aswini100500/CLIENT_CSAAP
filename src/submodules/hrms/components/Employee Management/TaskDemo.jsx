@@ -110,7 +110,7 @@ const Task = () => {
     useState(false);
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
-  // Table filtering states
+
   const [tableSearchTerm, setTableSearchTerm] = useState("");
   const [tableDateFilter, setTableDateFilter] = useState("");
   const [tableProjectFilter, setTableProjectFilter] = useState("");
@@ -150,7 +150,7 @@ const Task = () => {
   const progressPct =
     totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
-  // Pagination states
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [extensionApprovalDeadline, setExtensionApprovalDeadline] =
@@ -203,7 +203,7 @@ const Task = () => {
     [getEmployeeNameById],
   );
 
-  // Reset to first page when filters change
+
   useEffect(() => {
     setCurrentPage(1);
   }, [
@@ -248,17 +248,17 @@ const Task = () => {
     "Transferred",
   ];
 
-  // Show snackbar notification
+
   const showSnackbar = (message, type = "info") => {
     setSnackbar({ open: true, message, type });
 
-    // Auto hide after 5 seconds
+
     setTimeout(() => {
       setSnackbar((prev) => ({ ...prev, open: false }));
     }, 5000);
   };
 
-  // Helper functions for assignees
+
   const toggleAssignee = (id) => {
     setFormData((prev) => ({
       ...prev,
@@ -266,7 +266,7 @@ const Task = () => {
         ? prev.assignedTo.filter((assignedId) => assignedId !== id)
         : [...prev.assignedTo, id],
     }));
-    setShowAssigneesDropdown(false); // Close dropdown after selection
+    setShowAssigneesDropdown(false);
   };
 
   const selectAllAssignees = () => {
@@ -274,7 +274,7 @@ const Task = () => {
       ...prev,
       assignedTo: teamMembers.map((m) => m.id),
     }));
-    setShowAssigneesDropdown(false); // Close dropdown after selection
+    setShowAssigneesDropdown(false);
   };
 
   const clearAllAssignees = () => {
@@ -282,7 +282,7 @@ const Task = () => {
       ...prev,
       assignedTo: [],
     }));
-    setShowAssigneesDropdown(false); // Close dropdown after clearing
+    setShowAssigneesDropdown(false);
   };
 
   const removeAssignee = (id) => {
@@ -292,7 +292,7 @@ const Task = () => {
     }));
   };
 
-  // Subtask functions
+
   const addSubtask = () => {
     setFormData((prev) => ({
       ...prev,
@@ -314,7 +314,7 @@ const Task = () => {
   };
 
   const handleSubtaskToggle = async (taskId, subtaskId) => {
-    // Implementation for toggling subtask completion
+
     const task = tasks.find((t) => t.id === taskId);
     if (task) {
       const updatedSubtasks = task.subtasks.map((st) =>
@@ -442,7 +442,7 @@ const Task = () => {
 
     fetchEmployees();
   }, []);
-  // Update the fetchProjects function in your Task component
+
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -538,7 +538,7 @@ const Task = () => {
           ? t.subtasks
           : JSON.parse(t.subtasks || "[]"),
 
-        // ✅ ADD THIS
+
         history: Array.isArray(t.history)
           ? t.history
           : JSON.parse(t.history || "[]"),
@@ -659,7 +659,7 @@ const Task = () => {
 
   const handleStatusChange = async (taskId, newStatus) => {
     try {
-      // await axios.put(`${API}/api/tasks/${taskId}/status`, { status: newStatus });
+
       const task = tasks.find((t) => t.id === taskId);
 
       let updatedHistory = [...(task.history || [])];
@@ -691,7 +691,7 @@ const Task = () => {
     }
   };
 
-  // HANDLE SUBMIT FUNCTION
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isProcessing) return;
@@ -728,7 +728,7 @@ const Task = () => {
       })
       .filter((email) => email && email.trim() !== "");
 
-    // ✅ ADD HERE (BEFORE payload)
+
     const uniqueTo = [...new Set(formData.assignedTo)];
     const filteredSubtasks = formData.subtasks.filter(
       (st) => st.name && st.name.trim() !== "",
@@ -961,7 +961,7 @@ const Task = () => {
 
   const truncateWords = (str, num = 3) => {
     if (!str) return "";
-    // Strip HTML tags for truncation
+
     const plainText = str.replace(/<[^>]*>/g, " ");
     const words = plainText.trim().split(/\s+/).filter(Boolean);
     if (words.length <= num) return plainText.trim();
@@ -983,12 +983,12 @@ const Task = () => {
     },
   ];
 
-  // Derived state: filtered tasks for the main table
+
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
-      // 0. Sub-tab Filter removed
 
-      // 1. Stat Card Filter
+
+
       if (activeStatFilter === "Approved" && task.status !== "Approved")
         return false;
       if (activeStatFilter === "Completed" && task.status !== "Completed")
@@ -1019,7 +1019,7 @@ const Task = () => {
       )
         return false;
 
-      // 2. Text Search Filter
+
       if (tableSearchTerm) {
         const search = tableSearchTerm.toLowerCase();
         const taskTitle = (task.task || task.title || "").toLowerCase();
@@ -1028,7 +1028,7 @@ const Task = () => {
         const priority = (task.priority || "").toLowerCase();
         const status = (task.status || "").toLowerCase();
 
-        // Search across all assignedTo member names
+
         const assignedToNames = (
           Array.isArray(task.assignedTo) ? task.assignedTo : []
         )
@@ -1047,7 +1047,7 @@ const Task = () => {
         }
       }
 
-      // 3. Date Filter
+
       if (tableDateFilter) {
         if (!task.assignedDate) return false;
         const d = new Date(task.assignedDate);
@@ -1059,12 +1059,12 @@ const Task = () => {
         if (taskDate !== tableDateFilter) return false;
       }
 
-      // 4. Project Filter
+
       if (tableProjectFilter && task.project !== tableProjectFilter) {
         return false;
       }
 
-      // 5. Assign By Filter
+
       if (
         tableAssignByFilter &&
         String(task.assignedBy) !== String(tableAssignByFilter)
@@ -1072,12 +1072,12 @@ const Task = () => {
         return false;
       }
 
-      // 6. Status Filter
+
       if (tableStatusFilter && task.status !== tableStatusFilter) {
         return false;
       }
 
-      // 7. Deadline Filter
+
       if (tableDeadlineFilter) {
         if (!task.deadlineDate) return false;
         const d = new Date(task.deadlineDate);
@@ -1104,7 +1104,7 @@ const Task = () => {
     getEmployeeNameById,
   ]);
 
-  // Pagination calculations
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredTasks.slice(indexOfFirstItem, indexOfLastItem);
@@ -1193,7 +1193,7 @@ const Task = () => {
             >
               {activeTab === "task" ? (
                 <>
-                  {/* Stats Cards - Interactive Filtering */}
+
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
                     {[
                       {
@@ -1282,7 +1282,7 @@ const Task = () => {
                     ))}
                   </div>
 
-                  {/* Tasks Table with filtering bar */}
+
                   <div className="app-panel overflow-hidden border border-(--border-soft)">
                     <div className="app-section-bar px-4 py-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
@@ -1296,7 +1296,7 @@ const Task = () => {
                       </div>
 
                       <div className="flex items-center gap-2 sm:ml-auto w-full sm:w-auto">
-                        {/* Search — always visible */}
+
                         <div className="relative flex-1 sm:w-80">
                           <input
                             type="text"
@@ -1310,7 +1310,7 @@ const Task = () => {
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                         </div>
 
-                        {/* Filter Toggle Button */}
+
                         <button
                           onClick={() => setShowFilterPanel((prev) => !prev)}
                           className={`flex items-center gap-1.5 px-3 py-2 text-xs border rounded-xl transition-colors whitespace-nowrap cursor-pointer ${showFilterPanel ||
@@ -1343,7 +1343,7 @@ const Task = () => {
                             )}
                         </button>
 
-                        {/* Reset Button */}
+
                         {(tableSearchTerm ||
                           tableDateFilter ||
                           tableDeadlineFilter ||
@@ -1372,10 +1372,10 @@ const Task = () => {
 
                     <div className="px-4 sm:px-6 py-4 border-b border-(--border-soft) bg-slate-50/20">
                       <div className="flex flex-col gap-3">
-                        {/* Row 2: Collapsible Filter Panel */}
+
                         {showFilterPanel && (
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 p-4 border border-(--border-soft) rounded-xl bg-slate-50/50" style={{ gap: '0.75rem' }}>
-                            {/* Date Filter */}
+
                             <div>
                               <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">
                                 Date Assigned
@@ -1393,7 +1393,7 @@ const Task = () => {
                               </div>
                             </div>
 
-                            {/* Deadline Filter */}
+
                             <div>
                               <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">
                                 Deadline Date
@@ -1411,8 +1411,8 @@ const Task = () => {
                               </div>
                             </div>
 
-                            {/* Project Filter */}
-                            {/* Project Filter in filter panel */}
+
+
                             <div>
                               <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">
                                 Project
@@ -1435,7 +1435,7 @@ const Task = () => {
                               </div>
                             </div>
 
-                            {/* Assigned By Filter */}
+
                             <div>
                               <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">
                                 Assigned By
@@ -1472,7 +1472,7 @@ const Task = () => {
                               </div>
                             </div>
 
-                            {/* Status Filter */}
+
                             <div>
                               <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">
                                 Status
@@ -1501,7 +1501,7 @@ const Task = () => {
                           </div>
                         )}
 
-                        {/* Row 3: Active Filter Tags */}
+
                         {(tableSearchTerm ||
                           tableDateFilter ||
                           tableDeadlineFilter ||
@@ -1627,7 +1627,7 @@ const Task = () => {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-(--border-soft)">
-                          {/* Fixed JSX structure for conditional rendering */}
+
                           {filteredTasks.length === 0 ? (
                             <tr>
                               <td
@@ -1659,7 +1659,7 @@ const Task = () => {
                                   key={task.id}
                                   className="hover:bg-(--bg-subtle)/50 transition-colors duration-200 border-b border-(--border-soft) last:border-b-0"
                                 >
-                                  {/* ...existing code for each row... */}
+
                                   <td className="px-3 py-3">
                                     <div className="max-w-45 sm:max-w-60">
                                       <div className="flex items-center gap-2">
@@ -1676,11 +1676,7 @@ const Task = () => {
                                             h.action,
                                           ),
                                         )}
-                                        {/* && (
-                                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-amber-100 text-amber-800 border border-amber-200 whitespace-nowrap">
-                                              Transferred
-                                            </span>
-                                          )} */}
+
                                       </div>
                                       <div className="flex flex-wrap items-center gap-1.5 mt-1">
                                         <span
@@ -1864,40 +1860,12 @@ const Task = () => {
                                                         true,
                                                       );
                                                     }}
-                                                    // className="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 transition-colors duration-200 ring-1 ring-rose-300"
+
                                                     title="Review Cannot Complete Request"
                                                   >
-                                                    {/* <AlertTriangle className="w-3.5 h-3.5" /> */}
+
                                                   </button>
-                                                  {/* <button
-                                                    onClick={() => {
-                                                      setSelectedCannotCompleteTask(
-                                                        task,
-                                                      );
-                                                      setCannotCompleteReassignTo(
-                                                        "",
-                                                      );
-                                                      setShowCannotCompleteApproveModal(
-                                                        true,
-                                                      );
-                                                    }}
-                                                    className="px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors duration-200 ring-1 ring-emerald-300 text-[10px] font-semibold"
-                                                    title="Reassign Task"
-                                                  >
-                                                    Reassign
-                                                  </button>
-                                                  <button
-                                                    onClick={() =>
-                                                      handleCannotCompleteAction(
-                                                        task.id,
-                                                        "Reject",
-                                                      )
-                                                    }
-                                                    className="px-2.5 py-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 transition-colors duration-200 ring-1 ring-rose-300 text-[10px] font-semibold"
-                                                    title="Reject Cannot Complete Request"
-                                                  >
-                                                    Reject
-                                                  </button> */}
+
                                                 </>
                                               )}
                                             {task.status === "Transfer Pending" &&
@@ -1954,7 +1922,7 @@ const Task = () => {
                         </tbody>
                       </table>
 
-                      {/* Pagination */}
+
                       {filteredTasks.length > 0 && (
                         <div className="px-4 py-3.5 border-t border-(--border-soft) bg-slate-50/10 flex flex-col sm:flex-row justify-between items-center gap-3">
                           <div className="text-xs text-(--text-soft) font-medium">
@@ -2051,7 +2019,7 @@ const Task = () => {
           </AnimatePresence>
         </div>
 
-        {/* Form Modal */}
+
         {isFormOpen && (
           <div className="fixed inset-0 app-modal-backdrop flex items-center justify-center p-4 z-50">
             <div className="app-modal w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col bg-white">
@@ -2075,10 +2043,10 @@ const Task = () => {
               </div>
               <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
                 <div className="p-6 space-y-5 flex-1">
-                  {/* Previously Assigned Info + History (visible only when reassigning) */}
+
                   {editingTask && (
                     <div className="space-y-4">
-                      {/* Task History */}
+
                       {editingTask.history && editingTask.history.length > 0 && (
                         <div className="app-panel overflow-hidden">
                           <div className="app-section-bar px-4 py-2.5 flex items-center gap-2">
@@ -2159,7 +2127,7 @@ const Task = () => {
                       )}
                     </div>
                   )}
-                  {/* Task Description */}
+
                   <div>
                     <label className="modal-label block mb-1.5" htmlFor="task">
                       Task Description <span className="text-rose-500">*</span>
@@ -2179,7 +2147,7 @@ const Task = () => {
                     </div>
                   </div>
 
-                  {/* Project and Deadline */}
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="modal-label block mb-1.5" htmlFor="project">
@@ -2223,7 +2191,7 @@ const Task = () => {
                     </div>
                   </div>
 
-                  {/* Priority and Multi-Select Assignees */}
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="modal-label block mb-1.5" htmlFor="priority">
@@ -2400,7 +2368,7 @@ const Task = () => {
                     </div>
                   </div>
 
-                  {/* Remark */}
+
                   <div>
                     <label className="modal-label block mb-1.5" htmlFor="remark">
                       Additional Remark
@@ -2416,7 +2384,7 @@ const Task = () => {
                     />
                   </div>
 
-                  {/* Subtasks */}
+
                   <div className="app-panel-muted p-4">
                     <div className="flex justify-between items-center mb-3">
                       <div>
@@ -2470,7 +2438,7 @@ const Task = () => {
                   </div>
                 </div>
 
-                {/* Form Actions */}
+
                 <div className="sticky bottom-0 bg-white border-t border-(--border-soft) px-6 py-4 flex justify-end gap-3 z-10">
                   <button
                     type="button"
@@ -2502,12 +2470,12 @@ const Task = () => {
           </div>
         )}
 
-        {/* ── helpers ──────────────────────────────────────────── */}
+
 
         {viewingTask && (
           <div className="app-modal-backdrop fixed inset-0 flex items-start justify-center p-5 z-50 overflow-y-auto">
             <div className="app-modal w-full max-w-2xl my-auto flex flex-col overflow-hidden">
-              {/* ── Header ─────────────────────────────────────────── */}
+
               <div className="sticky top-0 bg-white border-b border-(--border-soft) px-5 py-4 flex justify-between items-center z-10">
                 <div>
                   <h3 className="modal-title">Task details</h3>
@@ -2524,7 +2492,7 @@ const Task = () => {
               </div>
 
               <div className="px-5 py-5 flex flex-col gap-3">
-                {/* ── Identity ────────────────────────────────────────── */}
+
                 <div className="app-panel p-4">
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -2564,7 +2532,7 @@ const Task = () => {
                   </div>
                 </div>
 
-                {/* ── Subtasks (collapsible) ──────────────────────────── */}
+
                 {viewingTask.subtasks?.length > 0 && (
                   <div className="app-panel overflow-hidden">
                     <div
@@ -2634,7 +2602,7 @@ const Task = () => {
                   </div>
                 )}
 
-                {/* ── Info grid ───────────────────────────────────────── */}
+
                 <div className="grid grid-cols-2 gap-3">
                   <div className="app-panel overflow-hidden">
                     <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-(--border-soft) bg-slate-50/50">
@@ -2713,7 +2681,7 @@ const Task = () => {
                   </div>
                 </div>
 
-                {/* ── Remark ───────────────────────────────────────────── */}
+
                 {viewingTask.remark && (
                   <div className="app-panel overflow-hidden">
                     <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-(--border-soft) bg-slate-50/50">
@@ -2733,7 +2701,7 @@ const Task = () => {
                   </div>
                 )}
 
-                {/* ── Status reason ────────────────────────────────────── */}
+
                 {getStatusReasonDetails(viewingTask) && (
                   <div className="app-panel overflow-hidden">
                     <div className="px-3.5 py-2.5 border-b border-(--border-soft) bg-slate-50/50">
@@ -2749,7 +2717,7 @@ const Task = () => {
                   </div>
                 )}
 
-                {/* ── Extension pending ────────────────────────────────── */}
+
                 {viewingTask.status === "Extension Pending" && (
                   <div className="app-panel border-amber-200 overflow-hidden">
                     <div className="flex items-center gap-2 px-3.5 py-2.5 bg-amber-50/50 border-b border-amber-100">
@@ -2832,7 +2800,7 @@ const Task = () => {
                   </div>
                 )}
 
-                {/* ── Transfer pending ─────────────────────────────────── */}
+
                 {viewingTask.status === "Transfer Pending" && (
                   <div className="app-panel border-purple-200 overflow-hidden">
                     <div className="flex items-center gap-2 px-3.5 py-2.5 bg-purple-50/50 border-b border-purple-100">
@@ -2885,7 +2853,7 @@ const Task = () => {
                   </div>
                 )}
 
-                {/* ── History (collapsible) ────────────────────────────── */}
+
                 {viewingTask.history?.length > 0 && (
                   <div className="app-panel overflow-hidden">
                     <div
@@ -3051,7 +3019,7 @@ const Task = () => {
           </div>
         )}
 
-        {/* Snackbar Notification */}
+
         {snackbar.open && (
           <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 animate-slideUp">
             <div
@@ -3076,7 +3044,7 @@ const Task = () => {
           </div>
         )}
 
-        {/* Simple Message Box with History */}
+
         {showChat && (
           <div className="fixed bottom-4 right-4 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
             <div className="bg-linear-to-r from-purple-600 to-purple-700 p-3 text-white rounded-t-lg flex justify-between items-center">
@@ -3122,11 +3090,11 @@ const Task = () => {
           </div>
         )}
 
-        {/* ── Extension Approval Modal (SuperAdmin Side) ── */}
+
         {showExtensionApproveModal && selectedExtensionTask && (
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-100">
             <div className="app-modal w-full max-w-md overflow-hidden">
-              {/* Header */}
+
               <div className="px-6 py-5 border-b border-(--border-soft) flex justify-between items-start bg-slate-50/50">
                 <div>
                   <h3 className="modal-title flex items-center gap-2">
@@ -3150,9 +3118,9 @@ const Task = () => {
                 </button>
               </div>
 
-              {/* Body */}
+
               <div className="px-6 py-5 space-y-4 bg-white">
-                {/* Task Details Summary */}
+
                 <div className="app-panel p-4 space-y-3">
                   <div className="space-y-1">
                     <p className="text-[10px] text-(--text-soft) font-bold uppercase tracking-wider">
@@ -3210,7 +3178,7 @@ const Task = () => {
                   )}
                 </div>
 
-                {/* Approval Action */}
+
                 <div className="space-y-2">
                   <label className="modal-label block">
                     Approve with Deadline <span className="text-rose-500">*</span>
@@ -3233,7 +3201,7 @@ const Task = () => {
                 </div>
               </div>
 
-              {/* Footer */}
+
               <div className="px-6 py-4 border-t border-(--border-soft) bg-slate-50/50 flex gap-3 justify-end items-center">
                 <button
                   onClick={() =>
@@ -3264,7 +3232,7 @@ const Task = () => {
         {showTransferApproveModal && selectedTransferTask && (
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-100">
             <div className="app-modal w-full max-w-md overflow-hidden">
-              {/* Header */}
+
               <div className="px-6 py-5 border-b border-(--border-soft) flex justify-between items-start bg-slate-50/50">
                 <div>
                   <h3 className="modal-title flex items-center gap-2">
@@ -3287,7 +3255,7 @@ const Task = () => {
                 </button>
               </div>
 
-              {/* Body */}
+
               <div className="px-6 py-5 space-y-4 bg-white">
                 <div className="app-panel p-4 space-y-3">
                   <div className="space-y-1">
@@ -3333,7 +3301,7 @@ const Task = () => {
                 </div>
               </div>
 
-              {/* Footer */}
+
               <div className="px-6 py-4 border-t border-(--border-soft) bg-slate-50/50 flex gap-3 justify-end items-center">
                 <button
                   onClick={() =>
@@ -3359,7 +3327,7 @@ const Task = () => {
         {showCannotCompleteApproveModal && selectedCannotCompleteTask && (
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-100">
             <div className="app-modal w-full max-w-md overflow-hidden">
-              {/* Header */}
+
               <div className="px-6 py-5 border-b border-(--border-soft) flex justify-between items-start bg-slate-50/50">
                 <div>
                   <h3 className="modal-title flex items-center gap-2">
@@ -3383,7 +3351,7 @@ const Task = () => {
                 </button>
               </div>
 
-              {/* Body */}
+
               <div className="px-6 py-5 space-y-4 bg-white">
                 <div className="app-panel p-4 space-y-3">
                   <div className="space-y-1">
@@ -3447,7 +3415,7 @@ const Task = () => {
                 </div>
               </div>
 
-              {/* Footer */}
+
               <div className="px-6 py-4 border-t border-(--border-soft) bg-slate-50/50 flex gap-3 justify-end items-center">
                 <button
                   onClick={() =>

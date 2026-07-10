@@ -22,7 +22,7 @@ const ProjectBudgetTabs = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto mt-6 bg-white shadow rounded-md">
-      {/* Tabs Header */}
+
       <div className="flex border-b border-gray-300 bg-gray-100">
         {tabs.map((tab) => (
           <button
@@ -40,7 +40,7 @@ const ProjectBudgetTabs = () => {
         ))}
       </div>
 
-      {/* Active Tab Content */}
+
       <div className="p-6">{activeContent}</div>
     </div>
   );

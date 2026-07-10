@@ -7,10 +7,10 @@ const RawMaterial = ({ projectSetup }) => {
   const [equipmentList, setEquipmentList] = useState([]);
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [type, setType] = useState("store"); // 'store' or 'own'
+  const [type, setType] = useState("store");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Load initial data
+
   useEffect(() => {
     if (projectSetup) {
       fetchEquipment();
@@ -33,7 +33,7 @@ const RawMaterial = ({ projectSetup }) => {
     }
   };
 
-  // Add equipment
+
   const addEquipment = async () => {
     if (!name.trim() || !quantity) {
       return Swal.fire("Warning", "Please fill in all fields.", "warning");
@@ -46,7 +46,7 @@ const RawMaterial = ({ projectSetup }) => {
         item_name: name,
         quantity: quantity,
         source_type: type,
-        unit: "Nos" // Default unit
+        unit: "Nos"
       };
       
       await operationApi.createRawMaterial(submissionData);
@@ -63,9 +63,9 @@ const RawMaterial = ({ projectSetup }) => {
     }
   };
 
-  // Remove equipment
+
   const removeEquipment = async (id) => {
-    // Note: For now, just local remove as we don't have individual delete API in the list
+
     setEquipmentList(prev => prev.filter(eq => eq.id !== id));
   };
 
@@ -75,7 +75,7 @@ const RawMaterial = ({ projectSetup }) => {
         <FaWarehouse className="text-blue-600" /> Equipment & Raw Materials
       </h2>
 
-      {/* Input Section */}
+
       <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
         <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2 mb-4">
           <FaPlus size={16} /> Add New Entry
@@ -123,7 +123,7 @@ const RawMaterial = ({ projectSetup }) => {
         </div>
       </div>
 
-      {/* Equipment Table */}
+
       {equipmentList.length > 0 ? (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <table className="w-full text-left border-collapse">

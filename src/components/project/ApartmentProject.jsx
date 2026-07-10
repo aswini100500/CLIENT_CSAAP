@@ -60,7 +60,7 @@ import { getAuthSlug } from "../../store/authSession";
 
 const getSlug = () => getAuthSlug();
 
-// Function to convert floor number to floor name
+
 const getFloorName = (floorNumber, floorType = "residential") => {
   const residentialNames = [
     "Ground Floor",
@@ -127,7 +127,7 @@ const ApartmentProject = ({
   onClose,
   openInUnitsTab = false,
 }) => {
-  // State management
+
   const [blocks, setBlocks] = useState([]);
   const [totalUnits, setTotalUnits] = useState(0);
   const [units, setUnits] = useState([]);
@@ -138,7 +138,7 @@ const ApartmentProject = ({
   );
   const [areaDetails, setAreaDetails] = useState(INITIAL_AREA_DETAILS);
   const [broker, setBroker] = useState("");
-  // Purchaser removed
+
   const [constructor, setConstructor] = useState("");
   const [approvalStatus, setApprovalStatus] = useState(INITIAL_APPROVAL_STATUS);
   const [transactionType, setTransactionType] = useState(
@@ -167,7 +167,7 @@ const ApartmentProject = ({
   const [expandedBlocks, setExpandedBlocks] = useState({});
   const [expandedFloors, setExpandedFloors] = useState({});
 
-  // Manual input states
+
   const [manualBlockCount, setManualBlockCount] = useState(0);
   const [manualResidentialFloors, setManualResidentialFloors] = useState({});
   const [manualParkingFloors, setManualParkingFloors] = useState({});
@@ -187,12 +187,12 @@ const ApartmentProject = ({
   const [loadingBrokers, setLoadingBrokers] = useState(false);
   const [loadingContractors, setLoadingContractors] = useState(false);
 
-  // Load existing project data
+
   useEffect(() => {
     if (selectedProject && editingProjectId) {
       let parsedBlocks = [];
 
-      // ✅ 1. Load blocks from DB column `blocks_data`
+
       if (selectedProject.blocks_data) {
         try {
           parsedBlocks =
@@ -204,7 +204,7 @@ const ApartmentProject = ({
         }
       }
 
-      // ✅ 2. Extract ALL units from blocks → floors → units
+
       const extractedUnits = [];
       parsedBlocks.forEach((block) => {
         block.floors?.forEach((floor) => {
@@ -214,13 +214,13 @@ const ApartmentProject = ({
         });
       });
 
-      // ✅ 3. Set state
+
       setBlocks(parsedBlocks);
       setUnits(extractedUnits);
       setTotalUnits(selectedProject.total_units || extractedUnits.length);
       setLandArea(selectedProject.land_area || 0);
     }
-    // ✅ 4. Load revenue plots
+
     if (selectedProject?.revenue_plots_data) {
       try {
         const parsedPlots =
@@ -239,7 +239,7 @@ const ApartmentProject = ({
     }
   }, [selectedProject, editingProjectId]);
 
-  // Handle revenue plots count change
+
   const handleRevenuePlotsCountChange = (newCount) => {
     setRevenuePlotsCount(newCount);
     if (newCount > 0) {
@@ -320,7 +320,7 @@ const ApartmentProject = ({
     }
   }, [editingProjectId, selectedProject, openInUnitsTab]);
 
-  // Toggle block expansion
+
   const toggleBlockExpansion = (blockId) => {
     setExpandedBlocks((prev) => ({
       ...prev,
@@ -328,7 +328,7 @@ const ApartmentProject = ({
     }));
   };
 
-  // Toggle floor expansion
+
   const toggleFloorExpansion = (blockId, floorId) => {
     setExpandedFloors((prev) => ({
       ...prev,
@@ -336,7 +336,7 @@ const ApartmentProject = ({
     }));
   };
 
-  // Save project handler
+
   const handleSaveProject = async () => {
     if (!projectName || !projectType) {
       alert("Please enter project name and type");
@@ -346,7 +346,7 @@ const ApartmentProject = ({
     setIsSaving(true);
 
     try {
-      // ✅ Merge current unit state if a unit is selected
+
       let finalBlocks = blocks.map((block) => {
         const updatedFloors = block.floors.map((floor) => {
           const updatedUnits = floor.units.map((unit) => {
@@ -382,7 +382,7 @@ const ApartmentProject = ({
       });
 
       if (selectedUnit) {
-        // Also update the local units state for UI consistency immediately
+
         setBlocks(finalBlocks);
         setUnits((prev) =>
           prev.map((u) => {
@@ -442,8 +442,8 @@ const ApartmentProject = ({
       console.log(projectData);
 
       if (isSubtype) {
-        // If it's a subtype of a custom project, skip internal server save
-        // and let PABC's handleSaveProject take care of it.
+
+
         onSaveProject?.({ ...projectData, id: projectId });
         setSuccessMessage("Project saved successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -452,14 +452,14 @@ const ApartmentProject = ({
       }
 
       if (projectId) {
-        // Update existing project
+
         await projectService.updateApartment(projectId, projectData);
         alert("Apartment project updated successfully!");
         if (onSaveProject) {
           onSaveProject({ ...projectData, id: projectId });
         }
       } else {
-        // Create new project
+
         const response = await projectService.createApartment(projectData);
         setProjectId(response.id);
         alert(`Apartment project created successfully with ID: ${response.id}`);
@@ -508,12 +508,12 @@ const ApartmentProject = ({
   }, []);
 
   const renderBlockUnitOverview = () => {
-    const blocks = normalizeBlocks(apartmentBlocks); // whatever state holds blocks
+    const blocks = normalizeBlocks(apartmentBlocks);
     const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
 
     return (
       <div className="space-y-6">
-        {/* Header */}
+
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowBlockUnitOverview(false)}
@@ -530,7 +530,7 @@ const ApartmentProject = ({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* LEFT: Blocks list */}
+
           <div className="space-y-3">
             {blocks.map((block) => (
               <div
@@ -551,7 +551,7 @@ const ApartmentProject = ({
             ))}
           </div>
 
-          {/* RIGHT: Units table */}
+
           <div className="lg:col-span-2">
             {!selectedBlock ? (
               <div className="bg-white p-8 rounded-2xl border text-center text-slate-500">
@@ -607,7 +607,7 @@ const ApartmentProject = ({
                           <button
                             onClick={() => {
                               setShowBlockUnitOverview(false);
-                              editUnit(unit.id); // your existing unit edit logic
+                              editUnit(unit.id);
                             }}
                             className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl"
                           >
@@ -626,9 +626,9 @@ const ApartmentProject = ({
     );
   };
 
-  // Removed conflicting useEffect for room areas
 
-  // Room area handlers
+
+
   const handleRoomAreaChange = (roomType, index, value) => {
     setRoomAreas((prev) => {
       const currentArray = [...(prev[roomType] || [])];
@@ -654,16 +654,16 @@ const ApartmentProject = ({
   const calculateTotalBathroomArea = () => calculateTotalRoomArea("bathrooms");
   const calculateTotalBalconyArea = () => calculateTotalRoomArea("balconies");
 
-  // Generate unique ID
+
   const generateId = () => Date.now() + Math.floor(Math.random() * 1000);
 
-  // Start editing a name/type
+
   const startEditing = (type, id, currentValue) => {
     setEditingName(`${type}-${id}`);
     setEditingValue(currentValue);
   };
 
-  // Save edited name/type
+
   const saveEditing = (type, id) => {
     const [entityType, entityId] = type.split("-");
     switch (entityType) {
@@ -693,13 +693,13 @@ const ApartmentProject = ({
     setEditingValue("");
   };
 
-  // Cancel editing
+
   const cancelEditing = () => {
     setEditingName(null);
     setEditingValue("");
   };
 
-  // Handle key press for editing
+
   const handleKeyPress = (e, type, id) => {
     if (e.key === "Enter") {
       saveEditing(type, id);
@@ -708,7 +708,7 @@ const ApartmentProject = ({
     }
   };
 
-  // Add multiple blocks manually
+
   const addMultipleBlocks = () => {
     if (manualBlockCount <= 0) {
       alert("Please enter a valid number of blocks");
@@ -744,7 +744,7 @@ const ApartmentProject = ({
     alert(`Added ${manualBlockCount} blocks successfully!`);
   };
 
-  // Add floors to block
+
   const addFloorsToBlock = (blockId) => {
     const residentialCount = manualResidentialFloors[blockId] || 0;
     const parkingCount = manualParkingFloors[blockId] || 0;
@@ -759,7 +759,7 @@ const ApartmentProject = ({
 
     const newFloors = [];
 
-    // Add residential floors
+
     for (let i = 1; i <= residentialCount; i++) {
       const floorNumber =
         block.floors.filter((f) => f.floorType === "residential").length + i;
@@ -779,7 +779,7 @@ const ApartmentProject = ({
       newFloors.push(newFloor);
     }
 
-    // Add parking floors
+
     for (let i = 1; i <= parkingCount; i++) {
       const floorNumber =
         block.floors.filter((f) => f.floorType === "parking").length + i;
@@ -826,10 +826,10 @@ const ApartmentProject = ({
     );
   };
 
-  // Add these BHK options at the top of the component
+
   const BHK_OPTIONS = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK", "6BHK", "7BHK"];
 
-  // Updated addMultipleUnitsToFloor function to include proper roomType
+
   const addMultipleUnitsToFloor = (blockId, floorId) => {
     const unitCount = manualUnitCounts[`${blockId}-${floorId}`] || 0;
     if (unitCount <= 0) {
@@ -873,10 +873,10 @@ const ApartmentProject = ({
         name: unitPrefix,
         unitNumber: unitNumber,
         unitType: "1BHK",
-        roomType: "1BHK", // Default value
+        roomType: "1BHK",
         propertyFeatures: {
           ...INITIAL_PROPERTY_FEATURES,
-          bedrooms: 0, // Default to 0
+          bedrooms: 0,
           bathrooms: 0,
           balcony: 0,
         },
@@ -924,7 +924,7 @@ const ApartmentProject = ({
     alert(`Added ${newUnits.length} units to ${floor.floorName} successfully!`);
   };
 
-  // Update block details
+
   const updateBlock = (blockId, field, value) => {
     const updatedBlocks = blocks.map((block) =>
       block.id === blockId ? { ...block, [field]: value } : block,
@@ -932,7 +932,7 @@ const ApartmentProject = ({
     setBlocks(updatedBlocks);
   };
 
-  // Update floor details
+
   const updateFloor = (blockId, floorId, field, value) => {
     const updatedBlocks = blocks.map((block) => {
       if (block.id === blockId) {
@@ -946,7 +946,7 @@ const ApartmentProject = ({
     setBlocks(updatedBlocks);
   };
 
-  // Update unit details
+
   const updateUnit = (unitId, field, value) => {
     const updatedUnits = units.map((unit) =>
       unit.id === unitId ? { ...unit, [field]: value } : unit,
@@ -965,7 +965,7 @@ const ApartmentProject = ({
     setBlocks(updatedBlocks);
   };
 
-  // Remove block
+
   const removeBlock = (blockId) => {
     if (
       window.confirm(
@@ -989,7 +989,7 @@ const ApartmentProject = ({
     }
   };
 
-  // Remove floor
+
   const removeFloor = (blockId, floorId) => {
     if (
       window.confirm(
@@ -1035,7 +1035,7 @@ const ApartmentProject = ({
     }
   };
 
-  // Remove unit
+
   const removeUnit = (unitId) => {
     if (window.confirm("Are you sure you want to remove this unit?")) {
       const unitToRemove = units.find((u) => u.id === unitId);
@@ -1076,7 +1076,7 @@ const ApartmentProject = ({
     }
   };
 
-  // Handle inline unit name change
+
   const handleUnitNameChange = (unitId, newName) => {
     setUnits((prev) =>
       prev.map((u) => {
@@ -1103,7 +1103,7 @@ const ApartmentProject = ({
     }
   };
 
-  // Handle inline unit BHK type change
+
   const handleUnitTypeChange = (unitId, newType) => {
     const bhkNumber = parseInt(newType.charAt(0)) || 1;
 
@@ -1168,9 +1168,9 @@ const ApartmentProject = ({
     }
   };
 
-  // Handle unit click
+
   const handleUnitClick = (unit) => {
-    // ✅ Save current unit changes if there's a selected unit
+
     if (selectedUnit) {
       const updatedUnit = {
         ...selectedUnit,
@@ -1214,19 +1214,19 @@ const ApartmentProject = ({
       );
     }
 
-    // ✅ Switch to new unit
+
     setSelectedUnit(unit);
     setPropertyFeatures(unit.propertyFeatures || INITIAL_PROPERTY_FEATURES);
     setAreaDetails(unit.areaDetails || INITIAL_AREA_DETAILS);
     setPriceDetails(unit.priceDetails || INITIAL_PRICE_DETAILS);
     setBroker(unit.broker || "");
-    // Purchaser removed
+
     setConstructor(unit.constructor || "");
     setStaffEngaged(unit.staffEngaged || "");
     setLoanProvider(unit.loanProvider || "");
     setLoan(unit.loan || "");
 
-    // Ensure facilities are objects {id, name} as the UI expects them
+
     const formattedFacilities = (unit.facilities || []).map((f, i) =>
       typeof f === "string" ? { id: Date.now() + i, name: f } : f,
     );
@@ -1235,11 +1235,11 @@ const ApartmentProject = ({
     setApprovalStatus(unit.approvalStatus || INITIAL_APPROVAL_STATUS);
     setTransactionType(unit.transactionType || INITIAL_TRANSACTION_TYPE);
 
-    // Load Room Areas
+
     if (unit.roomAreas) {
       setRoomAreas(unit.roomAreas);
     } else {
-      // Reset if not present
+
       setRoomAreas({
         bedrooms: [],
         bathrooms: [],
@@ -1248,7 +1248,7 @@ const ApartmentProject = ({
     }
   };
 
-  // Render room area inputs
+
   const renderRoomAreaInputs = () => {
     const beds = propertyFeatures.bedrooms || 0;
     const baths = propertyFeatures.bathrooms || 0;
@@ -1256,7 +1256,7 @@ const ApartmentProject = ({
 
     return (
       <div className="space-y-3.5 mt-3">
-        {/* Bedroom Areas */}
+
         {beds > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-3">
@@ -1291,7 +1291,7 @@ const ApartmentProject = ({
           </div>
         )}
 
-        {/* Bathroom Areas */}
+
         {baths > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-3">
@@ -1326,7 +1326,7 @@ const ApartmentProject = ({
           </div>
         )}
 
-        {/* Balcony Areas */}
+
         {balcs > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-3">
@@ -1364,7 +1364,7 @@ const ApartmentProject = ({
     );
   };
 
-  // Navigation Tabs Component
+
   const NavigationTabs = () => {
     const tabs = [
       { id: "project-info", label: "Project info", icon: Home },
@@ -1408,7 +1408,7 @@ const ApartmentProject = ({
     );
   };
 
-  // Statistics Card
+
   const StatisticsCard = ({ icon, label, value, color }) => (
     <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3">
@@ -1431,7 +1431,7 @@ const ApartmentProject = ({
 
   const renderProjectInfo = () => (
     <div className="space-y-4">
-      {/* Success Message */}
+
       {successMessage && (
         <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-lg px-3.5 py-2.5 text-sm text-emerald-800">
           <FaCheckCircle className="text-emerald-500 w-4 h-4 shrink-0" />
@@ -1439,7 +1439,7 @@ const ApartmentProject = ({
         </div>
       )}
 
-      {/* Stats */}
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
         <StatisticsCard
           icon={<FaLayerGroup className="h-4 w-4 text-emerald-600" />}
@@ -1471,9 +1471,9 @@ const ApartmentProject = ({
         />
       </div>
 
-      {/* Info Cards */}
+
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-2.5">
-        {/* Project Info */}
+
         <div className="bg-white border border-slate-200 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-7 h-7 rounded-[7px] bg-emerald-50 flex items-center justify-center">
@@ -1519,7 +1519,7 @@ const ApartmentProject = ({
           </div>
         </div>
 
-        {/* Location */}
+
         <div className="bg-white border border-slate-200 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-7 h-7 rounded-[7px] bg-blue-50 flex items-center justify-center">
@@ -1566,7 +1566,7 @@ const ApartmentProject = ({
         </div>
       </div>
 
-      {/* Revenue Plots */}
+
       <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
           <div className="flex items-center gap-2">
@@ -1717,7 +1717,7 @@ const ApartmentProject = ({
         )}
       </div>
 
-      {/* Footer */}
+
       <div className="flex justify-end pt-1">
         <button
           onClick={() => setActiveTab("blocks")}
@@ -1768,7 +1768,7 @@ const ApartmentProject = ({
               </button>
             </div>
 
-            {/* Units preview */}
+
             <div className="mt-2 grid grid-cols-2 md:grid-cols-6 gap-1">
               {block.floors
                 .flatMap((f) => f.units)
@@ -1795,11 +1795,11 @@ const ApartmentProject = ({
     </div>
   );
 
-  // Blocks Management Section
+
 
   const renderBlocks = () => (
     <div className="space-y-4">
-      {/* Add blocks bar */}
+
       <div className="flex items-center justify-between gap-4 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
         <div>
           <div className="flex items-center gap-2 text-[13px] font-medium text-slate-800">
@@ -1831,7 +1831,7 @@ const ApartmentProject = ({
         </div>
       </div>
 
-      {/* Blocks list */}
+
       <div className="space-y-2">
         {blocks.length === 0 ? (
           <div className="py-12 flex flex-col items-center gap-2 border border-dashed border-slate-200 rounded-xl text-slate-400">
@@ -1875,7 +1875,7 @@ const ApartmentProject = ({
         )}
       </div>
 
-      {/* Footer nav */}
+
       <div className="flex items-center justify-between pt-1">
         <button
           onClick={() => setActiveTab("project-info")}
@@ -1895,10 +1895,10 @@ const ApartmentProject = ({
     </div>
   );
 
-  // Enhanced Units Section
+
   const renderUnits = () => (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      {/* Units List */}
+
       <div className="lg:col-span-1 bg-white border border-slate-200 rounded-xl p-4 flex flex-col h-[calc(100vh-10rem)] min-h-125">
         <div className="flex items-center justify-between mb-3 shrink-0">
           <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 uppercase tracking-wide">
@@ -2039,7 +2039,7 @@ const ApartmentProject = ({
         </div>
       </div>
 
-      {/* Unit Details */}
+
       <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-4 flex flex-col h-[calc(100vh-10rem)] min-h-125 overflow-y-auto">
         {selectedUnit ? (
           <div className="space-y-4">
@@ -2066,7 +2066,7 @@ const ApartmentProject = ({
               </div>
             </div>
 
-            {/* Room Configuration */}
+
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaLayerGroup}>
                 Room Configuration
@@ -2088,7 +2088,7 @@ const ApartmentProject = ({
                         ...propertyFeatures,
                         bedrooms: val,
                       });
-                      // Resize room areas
+
                       const newAreas = Array(Number(val) || 0)
                         .fill("")
                         .map((_, i) => roomAreas.bedrooms[i] || "");
@@ -2113,7 +2113,7 @@ const ApartmentProject = ({
                         ...propertyFeatures,
                         bathrooms: val,
                       });
-                      // Resize room areas
+
                       const newAreas = Array(Number(val) || 0)
                         .fill("")
                         .map((_, i) => roomAreas.bathrooms[i] || "");
@@ -2141,7 +2141,7 @@ const ApartmentProject = ({
                         ...propertyFeatures,
                         balcony: val,
                       });
-                      // Resize room areas
+
                       const newAreas = Array(Number(val) || 0)
                         .fill("")
                         .map((_, i) => roomAreas.balconies[i] || "");
@@ -2175,11 +2175,11 @@ const ApartmentProject = ({
                 </div>
               </div>
 
-              {/* Room Area Inputs */}
+
               {renderRoomAreaInputs()}
             </div>
 
-            {/* Area Details Section */}
+
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaRuler}>Area Details</SectionTitle>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -2321,11 +2321,11 @@ const ApartmentProject = ({
               </div>
             </div>
 
-            {/* Facilities Section */}
+
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaCogs}>Facilities</SectionTitle>
 
-              {/* Facilities pills */}
+
               {facilities.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-2.5">
                   {(showAllFacilities
@@ -2354,7 +2354,7 @@ const ApartmentProject = ({
                 </div>
               )}
 
-              {/* Show more / less */}
+
               {facilities.length > 6 && (
                 <button
                   onClick={() => setShowAllFacilities((v) => !v)}
@@ -2366,7 +2366,7 @@ const ApartmentProject = ({
                 </button>
               )}
 
-              {/* Add facility */}
+
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -2380,7 +2380,7 @@ const ApartmentProject = ({
                     const value = newFacility.trim();
                     if (!value) return;
 
-                    // prevent duplicates
+
                     if (
                       facilities.some((f) => {
                         const fName = typeof f === "string" ? f : f.name || "";
@@ -2405,14 +2405,14 @@ const ApartmentProject = ({
               </div>
             </div>
 
-            {/* Additional Information Section */}
+
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaInfoCircle}>
                 Additional Information
               </SectionTitle>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {/* Possession Status */}
+
                 <div className="col-span-full">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide mb-2 block">
                     Possession Status
@@ -2440,7 +2440,7 @@ const ApartmentProject = ({
                   </div>
                 </div>
 
-                {/* Broker */}
+
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide">
                     Broker
@@ -2462,7 +2462,7 @@ const ApartmentProject = ({
                   </select>
                 </div>
 
-                {/* Contractor */}
+
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide">
                     Contractor
@@ -2486,7 +2486,7 @@ const ApartmentProject = ({
                   </select>
                 </div>
 
-                {/* Staff Engaged */}
+
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide">
                     Staff Engaged
@@ -2500,7 +2500,7 @@ const ApartmentProject = ({
                   />
                 </div>
 
-                {/* Loan Provided */}
+
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide">
                     Loan Available
@@ -2536,7 +2536,7 @@ const ApartmentProject = ({
                 )}
               </div>
 
-              {/* Approval Status */}
+
               <div className="mt-4 pt-4 border-t border-slate-200/60">
                 <label className="text-[11px] font-medium text-slate-400 uppercase tracking-wide block mb-2.5">
                   Approval Status
@@ -2603,7 +2603,7 @@ const ApartmentProject = ({
               </div>
             </div>
 
-            {/* Price Details Section */}
+
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaCog}>Price Details</SectionTitle>
               <div className="grid grid-cols-2 gap-3">
@@ -2642,7 +2642,7 @@ const ApartmentProject = ({
               </div>
             </div>
 
-            {/* Action Buttons */}
+
             <div className="flex gap-3 pt-2">
               <button
                 onClick={handleSaveProject}
@@ -2724,7 +2724,7 @@ const ApartmentProject = ({
         )}
       </div>
 
-      {/* Navigation Buttons */}
+
       <div className="lg:col-span-3 flex items-center justify-between pt-3 mt-1 border-t border-slate-200/60">
         <button
           onClick={() => setActiveTab("blocks")}
@@ -2742,12 +2742,12 @@ const ApartmentProject = ({
     </div>
   );
 
-  // Enhanced Details Panel
 
-  // Main render with tab navigation
+
+
   return (
     <div className="bg-linear-to-br from-gray-50 to-gray-100 p-2 md:p-4 font-sans relative">
-      {/* ❌ CLOSE BUTTON */}
+
       {onClose && (
         <button
           onClick={onClose}
@@ -2762,7 +2762,7 @@ const ApartmentProject = ({
         </button>
       )}
       <div className="max-w-7xl mx-auto space-y-4 mt-4 ">
-        {/* Navigation Tabs */}
+
         <NavigationTabs />
 
         {activeTab === "project-info" && renderProjectInfo()}
@@ -2779,45 +2779,14 @@ const ApartmentProject = ({
 
         {activeTab === "units" && renderUnits()}
 
-        {/* Footer Actions */}
-        {/* <div className="sticky bottom-4 bg-white/90 backdrop-blur-md p-3 rounded-xl border border-slate-200/80 shadow-lg z-50">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-100">
-                <FaBuilding className="text-slate-400 w-3.5 h-3.5" />
-                <span><strong className="font-semibold text-slate-800">{units.length}</strong> units</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-100">
-                <FaLayerGroup className="text-slate-400 w-3.5 h-3.5" />
-                <span><strong className="font-semibold text-slate-800">{blocks.reduce((sum, b) => sum + (b.capacity || 0), 0)}</strong> capacity</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleSaveProject}
-                disabled={isSaving}
-                className="flex items-center gap-1.5 px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-lg transition-colors font-medium text-[13px] bg-white shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <FaSave className="w-3.5 h-3.5 text-slate-400" />
-                Save Draft
-              </button>
-              <button
-                onClick={handleSaveProject}
-                disabled={isSaving}
-                className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors font-medium text-[13px] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <FaCheckCircle className="w-3.5 h-3.5 text-white/90" />
-                {isSaving ? "Completing..." : "Complete Project"}
-              </button>
-            </div>
-          </div>
-        </div> */}
+
+
       </div>
     </div>
   );
 };
 
-// ─── Reusable block and floor components defined outside component to prevent focus loss ───
+
 
 const Pill = ({ children, color = "green" }) => {
   const colors = {
@@ -3009,7 +2978,7 @@ const FloorCard = ({
 
   return (
     <div className="border border-slate-200 rounded-xl overflow-hidden">
-      {/* Floor header */}
+
       <div
         onClick={() => toggleFloorExpansion(block.id, floor.id)}
         className={`flex items-center justify-between px-3 py-2 cursor-pointer transition-colors
@@ -3089,7 +3058,7 @@ const FloorCard = ({
         </div>
       </div>
 
-      {/* Floor body */}
+
       {isExpanded && (
         <div className="p-3 space-y-3 bg-white">
           <div className="flex items-center justify-between">
@@ -3182,7 +3151,7 @@ const BlockCard = ({
 
   return (
     <div className="border border-slate-200 rounded-xl overflow-hidden bg-white">
-      {/* Block header */}
+
       <div
         onClick={() => toggleBlockExpansion(block.id)}
         className={`flex items-center justify-between px-3.5 py-2.5 cursor-pointer transition-colors
@@ -3237,10 +3206,10 @@ const BlockCard = ({
         />
       </div>
 
-      {/* Block body */}
+
       {isExpanded && (
         <div className="p-4 space-y-4">
-          {/* Config panel */}
+
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
             <SectionTitle icon={FaCogs}>Block configuration</SectionTitle>
             <div className="grid grid-cols-3 gap-2 mb-4">
@@ -3323,7 +3292,7 @@ const BlockCard = ({
             </div>
           </div>
 
-          {/* Floors */}
+
           <div className="space-y-2">
             <div className="flex items-center gap-1.5 text-[12px] font-medium text-slate-500">
               <FaChartLine className="w-3.5 h-3.5 text-blue-500" />

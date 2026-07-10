@@ -50,7 +50,7 @@ const monthNames = [
 
 const statusOptions = ["all", "Pending", "Approved", "Rejected"];
 
-// Locked to the established design language: Rings over shadows, heavy rounding.
+
 const panelClass =
   "bg-white rounded-3xl shadow-sm ring-1 ring-slate-200 overflow-hidden transition-all hover:shadow-md";
 
@@ -114,7 +114,7 @@ const groupRecordsByDate = (records) => {
     .sort((a, b) => b.date.localeCompare(a.date));
 };
 
-// Pastel backgrounds + matching text + matching soft border
+
 const getStatusMeta = (status) => {
   if (status === "Approved") {
     return {
@@ -459,7 +459,7 @@ const EmployeeMispunch = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] bg-transparent font-sans p-3 md:p-4">
       <div className="mx-auto max-w-7xl space-y-3">
-        {/* Stats Cards */}
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           <div className="bg-white p-3 rounded-2xl shadow-sm ring-1 ring-slate-200 flex items-center gap-3 transition-all hover:shadow-md">
             <div className="bg-indigo-50 p-2 rounded-full ring-1 ring-indigo-100 shrink-0">
@@ -515,7 +515,7 @@ const EmployeeMispunch = () => {
           </div>
         </div>
 
-        {/* Toolbar */}
+
         <div className={`${panelClass} p-4`}>
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex flex-wrap items-center gap-3">
@@ -612,7 +612,7 @@ const EmployeeMispunch = () => {
           )}
         </div>
 
-        {/* Ledger */}
+
         <div className={panelClass}>
           <div className="flex flex-col gap-2 border-b border-slate-100 bg-white px-5 py-3 md:flex-row md:items-center md:justify-between sticky top-0 z-10">
             <div className="flex items-center gap-2.5">
@@ -650,7 +650,7 @@ const EmployeeMispunch = () => {
             </div>
           </div>
 
-          {/* Bulk Action Bar */}
+
           {selectedCount > 0 && (
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-indigo-100 bg-indigo-50/50 px-5 py-2.5">
               <div className="flex items-center gap-2">
@@ -709,7 +709,7 @@ const EmployeeMispunch = () => {
 
                   return (
                     <div key={group.date} className="space-y-2">
-                      {/* Date Group Header */}
+
                       <div className="bg-white px-3 py-2.5 rounded-xl ring-1 ring-slate-200 flex items-center gap-3 transition-all hover:shadow-md">
                         <input
                           type="checkbox"
@@ -754,7 +754,7 @@ const EmployeeMispunch = () => {
                         </button>
                       </div>
 
-                      {/* Date Group Items */}
+
                       {isOpen && (
                         <div className="pl-4 md:pl-8 space-y-1.5">
                           {group.records.map((record) => (
@@ -872,7 +872,7 @@ const EmployeeMispunch = () => {
             )}
           </div>
 
-          {/* Pagination */}
+
           {groupedRecords.length > itemsPerPage && (
             <div className="flex items-center justify-between border-t border-slate-100 bg-white px-5 py-3">
               <p className="text-xs font-bold text-slate-500">
@@ -902,11 +902,11 @@ const EmployeeMispunch = () => {
           )}
         </div>
 
-        {/* Detail Modal */}
+
         {showDetails && selectedRecord && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
             <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl ring-1 ring-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
-              {/* Compact Header */}
+
               <div className="flex items-center justify-between px-5 py-3 border-b border-slate-100 bg-white z-10 shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-linear-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-indigo-700 font-bold text-sm ring-1 ring-indigo-200/50 shrink-0">
@@ -929,12 +929,12 @@ const EmployeeMispunch = () => {
                 </button>
               </div>
 
-              {/* Dense Body */}
+
               <div className="px-5 py-4 overflow-y-auto space-y-3 bg-slate-50/50 flex-1">
-                {/* Key-value grid */}
+
                 <div className="bg-white rounded-xl ring-1 ring-slate-200 overflow-hidden">
                   <div className="grid grid-cols-2 sm:grid-cols-3">
-                    {/* Punch-In */}
+
                     <div className="px-4 py-3 border-b border-slate-100 sm:border-r">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
                         Punch-In
@@ -943,7 +943,7 @@ const EmployeeMispunch = () => {
                         {formatTimeOnly(selectedRecord.mispunchTime)}
                       </p>
                     </div>
-                    {/* Leave Time */}
+
                     <div className="px-4 py-3 border-b border-slate-100 sm:border-r">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
                         Leave Time
@@ -952,7 +952,7 @@ const EmployeeMispunch = () => {
                         {formatTimeOnly(selectedRecord.leaveTime)}
                       </p>
                     </div>
-                    {/* Duration */}
+
                     <div className="px-4 py-3 border-b border-slate-100 col-span-2 sm:col-span-1">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
                         Duration
@@ -961,7 +961,7 @@ const EmployeeMispunch = () => {
                         {selectedRecord.totalHoursLabel}
                       </p>
                     </div>
-                    {/* Shift */}
+
                     <div className="px-4 py-3 border-b border-slate-100 sm:border-r">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
                         Shift
@@ -970,7 +970,7 @@ const EmployeeMispunch = () => {
                         {selectedRecord.shiftName}
                       </p>
                     </div>
-                    {/* Shift Timing */}
+
                     <div className="px-4 py-3 border-b border-slate-100 sm:border-r">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
                         Shift Timing
@@ -981,7 +981,7 @@ const EmployeeMispunch = () => {
                           : "—"}
                       </p>
                     </div>
-                    {/* Logged Date */}
+
                     <div className="px-4 py-3 border-b border-slate-100 col-span-2 sm:col-span-1">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
                         Logged Date
@@ -993,7 +993,7 @@ const EmployeeMispunch = () => {
                   </div>
                 </div>
 
-                {/* Status + Flags strip */}
+
                 <div className="bg-white rounded-xl ring-1 ring-slate-200 px-4 py-3 flex flex-wrap items-center gap-2">
                   {renderStatusBadge(selectedRecord.status)}
                   {renderFlagBadge("Late", selectedRecord.isLate)}
@@ -1001,7 +1001,7 @@ const EmployeeMispunch = () => {
                   {renderFlagBadge("Early Leave", selectedRecord.isEarlyLeave)}
                 </div>
 
-                {/* Reason */}
+
                 <div className="bg-white rounded-xl ring-1 ring-slate-200 px-4 py-3">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
                     Reason
@@ -1011,7 +1011,7 @@ const EmployeeMispunch = () => {
                   </p>
                 </div>
 
-                {/* Location (conditional) */}
+
                 {selectedRecord.latitude && selectedRecord.longitude && (
                   <div className="bg-white rounded-xl ring-1 ring-slate-200 px-4 py-3 flex items-center gap-2">
                     <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
@@ -1026,7 +1026,7 @@ const EmployeeMispunch = () => {
                 )}
               </div>
 
-              {/* Compact Footer */}
+
               <div className="border-t border-slate-100 bg-white px-5 py-2.5 flex items-center justify-end gap-1.5 shrink-0">
                 {selectedRecord.status !== "Approved" && (
                   <button

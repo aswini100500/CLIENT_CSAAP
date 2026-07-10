@@ -66,7 +66,7 @@ const SuggestionOfEmployee = () => {
     setShowAddForm(false);
   };
 
-  // Filter and pagination
+
   const filteredSuggestions = suggestions.filter(
     (suggestion) =>
       suggestion.suggestion.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -113,7 +113,7 @@ const SuggestionOfEmployee = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header Section */}
+
         <div className="mb-8">
           <div className="flex justify-between items-center">
             <div>
@@ -151,7 +151,7 @@ const SuggestionOfEmployee = () => {
           </div>
         </div>
 
-        {/* Add Suggestion Form */}
+
         {showAddForm && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
             <div className="flex justify-between items-center mb-6">
@@ -217,10 +217,10 @@ const SuggestionOfEmployee = () => {
           </div>
         )}
 
-        {/* Suggestions List */}
+
         {!showAddForm && (
           <div className="space-y-6">
-            {/* Search and Filter Section */}
+
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div className="flex items-center gap-4">
@@ -270,16 +270,16 @@ const SuggestionOfEmployee = () => {
               </div>
             </div>
 
-            {/* Suggestions Table */}
+
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-              {/* Table Header */}
+
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                 <h3 className="text-lg font-semibold text-gray-800">
                   All Suggestions
                 </h3>
               </div>
 
-              {/* Table Content */}
+
               <div className="overflow-x-auto">
                 <table className="min-w-full">
                   <thead className="bg-gray-50">
@@ -378,7 +378,7 @@ const SuggestionOfEmployee = () => {
                 </table>
               </div>
 
-              {/* Table Footer */}
+
               {paginatedSuggestions.length > 0 && (
                 <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
                   <div className="flex flex-col sm:flex-row justify-between items-center gap-4">

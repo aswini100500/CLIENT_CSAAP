@@ -66,7 +66,7 @@ const AttendanceRequestsLedger = () => {
 
   useEffect(() => {
     fetchRequests();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [user?.slug, user?.company_id, user?.id, statusFilter]);
 
   const filteredRequests = useMemo(() => {

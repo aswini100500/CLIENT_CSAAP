@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import useAuth from "../../../../../../hooks/useAuth";
 import { store } from "../../../../../../store/store";
 
-// ==================== Configuration & API ====================
+
 
 const API_BASE_URL = "https://csaapnodeapi.csaap.com";
 const API_ENDPOINTS = {
@@ -90,13 +90,13 @@ const apiService = {
   },
 };
 
-// ==================== Constants ====================
+
 
 const STATUS_OPTIONS = ["Planning", "Active", "On Hold", "Completed", "Cancelled"];
 const PRIORITY_OPTIONS = ["Low", "Medium", "High", "Critical"];
 const ENVIRONMENT_OPTIONS = ["Development", "Staging", "Production", "Testing"];
 
-// ==================== Inline Modal & Helpers ====================
+
 
 const Modal = ({ isOpen, onClose, title, children, size = "max-w-2xl", onSubmit, footer }) => {
   if (!isOpen) return null;
@@ -158,7 +158,7 @@ const ErrorAlert = ({ message }) => (
   </div>
 );
 
-// ==================== Main Component ====================
+
 
 const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
   const { user, companyId } = useAuth();
@@ -193,7 +193,7 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
 
   const [locations, setLocations] = useState([{ location_name: "" }]);
 
-  // Prefill values when lead changes
+
   useEffect(() => {
     if (lead) {
       const initialSlug = user?.slug || generateSlug(lead.name || "client");
@@ -208,7 +208,7 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
         website: "",
       });
 
-      // Try to construct a reasonably unique default project code
+
       const shortId = lead.id ? String(lead.id).slice(-4).toUpperCase() : Math.random().toString(36).substr(2, 4).toUpperCase();
       setProject({
         project_name: lead.name ? `${lead.name} Project` : "",
@@ -356,7 +356,7 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
       <div className="space-y-6">
         {error && <ErrorAlert message={error} />}
 
-        {/* Client Information Section */}
+
         <div>
           <h3 className="text-[16px] font-bold text-[#042f2e] mb-3">Client Information</h3>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -418,7 +418,7 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
           </div>
         </div>
 
-        {/* Project Details Section */}
+
         <div>
           <h3 className="text-[16px] font-bold text-[#042f2e] mb-3">Project Details</h3>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -538,7 +538,7 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
           </div>
         </div>
 
-        {/* Project Locations Section */}
+
         <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-[16px] font-bold text-[#042f2e]">Project Locations</h3>

@@ -70,7 +70,7 @@ export default function GSTR1() {
   const sum = (k) => filtered.reduce((s,v)=>s+parseFloat(v[k]||0),0);
   const toggle = k => setCol(p=>({...p,[k]:!p[k]}));
 
-  // Group for table
+
   const grouped = {};
   filtered.forEach(v => {
     const mi = indMonth(v.date);
@@ -79,13 +79,13 @@ export default function GSTR1() {
   });
   const groups = Object.entries(grouped).sort((a,b)=>parseInt(a)-parseInt(b));
 
-  // Export JSON
+
   const exportJSON = () => {
     const blob = new Blob([JSON.stringify(filtered,null,2)],{type:'application/json'});
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a'); a.href=url; a.download='GSTR1.json'; a.click();
   };
-  // Export CSV
+
   const exportCSV = () => {
     const cols = ['invoiceNo','date','customer','gstin','placeOfSupply','invoiceType','subtotal','cgst','sgst','igst','gst_amount','grand_total'];
     const rows = [cols.join(','), ...filtered.map(v=>cols.map(c=>`"${v[c]||''}"`).join(','))];
@@ -100,7 +100,7 @@ export default function GSTR1() {
   return (
     <div className="space-y-4 print:space-y-2">
 
-      {/* Header */}
+
       <div className="bg-linear-to-r from-green-700 to-green-500 rounded-xl p-5 text-white print:bg-green-700">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -126,7 +126,7 @@ export default function GSTR1() {
         </div>
       </div>
 
-      {/* Summary Cards */}
+
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {[
           {l:'Invoices',  v:filtered.length,    c:'gray',   num:true},
@@ -142,7 +142,7 @@ export default function GSTR1() {
         ))}
       </div>
 
-      {/* Tabs */}
+
       <div className="flex border-b border-gray-200 overflow-x-auto print:hidden">
         {TABS.map(t=>(
           <button key={t} onClick={()=>setTab(t)}
@@ -157,7 +157,7 @@ export default function GSTR1() {
         ))}
       </div>
 
-      {/* Search */}
+
       {!['HSN Summary','Document Summary'].includes(tab) && (
         <div className="relative print:hidden">
           <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"/>
@@ -167,7 +167,7 @@ export default function GSTR1() {
         </div>
       )}
 
-      {/* HSN Summary Tab */}
+
       {tab==='HSN Summary' && (
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <div className="px-4 py-3 bg-gray-50 border-b">
@@ -201,7 +201,7 @@ export default function GSTR1() {
         </div>
       )}
 
-      {/* Document Summary Tab */}
+
       {tab==='Document Summary' && docSum && (
         <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
           <h3 className="font-semibold text-gray-700 text-sm uppercase tracking-wide">Document Summary</h3>
@@ -223,7 +223,7 @@ export default function GSTR1() {
         </div>
       )}
 
-      {/* Invoice Table (All / B2B / B2CL / B2CS) */}
+
       {!['HSN Summary','Document Summary'].includes(tab) && (
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <div className="overflow-x-auto">

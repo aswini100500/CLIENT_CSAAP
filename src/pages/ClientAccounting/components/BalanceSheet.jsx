@@ -46,7 +46,7 @@ const BalanceSheet = () => {
     return `Rs. ${formatted}`;
   };
 
-  // Helper to group by Group Name
+
   const groupByGroup = (list) => {
     const groups = {};
     list.forEach(item => {
@@ -169,16 +169,16 @@ const BalanceSheet = () => {
     });
   }
 
-  // Helper to Render Side (Liabilities or Assets)
+
   const RenderSide = ({ title, groups, total }) => {
     return (
       <div className="flex-1 border border-gray-300 min-h-150 flex flex-col bg-white">
-        {/* Title */}
+
         <div className="bg-blue-800 text-white text-center py-2 font-bold uppercase tracking-wider border-b border-blue-900">
           {title}
         </div>
 
-        {/* Content */}
+
         <div className="p-4 grow space-y-4">
           {Object.keys(groups).sort().map(groupName => {
             const groupTotal = groups[groupName].reduce((sum, item) => sum + (title === "Liabilities" ? (item.closingCredit - item.closingDebit) : (item.closingDebit - item.closingCredit)), 0);
@@ -207,7 +207,7 @@ const BalanceSheet = () => {
           })}
         </div>
 
-        {/* Total */}
+
         <div className="bg-gray-100 p-3 border-t border-gray-300 flex justify-between font-bold text-gray-900 text-lg">
           <span>Total</span>
           <span>{formatCurrency(total)}</span>
@@ -225,12 +225,12 @@ const BalanceSheet = () => {
   }
 
   const { totalAssets, totalLiabilities } = balanceData.totals;
-  const isBalanced = Math.abs(totalAssets - totalLiabilities) < 5; // Tolerance for float errors
+  const isBalanced = Math.abs(totalAssets - totalLiabilities) < 5;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 font-mono print:bg-white print:p-0">
 
-      {/* Header */}
+
       <div className="mb-6 flex justify-between items-center print:hidden">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Balance Sheet</h1>
@@ -265,14 +265,14 @@ const BalanceSheet = () => {
         </div>
       </div>
 
-      {/* Print Header */}
+
       <div className="hidden print:block text-center mb-6">
         <h1 className="text-2xl font-bold uppercase">{companyName}</h1>
         <h2 className="text-xl font-bold uppercase mt-1">Balance Sheet</h2>
         <p className="text-sm mt-1">As on {new Date().toLocaleDateString()}</p>
       </div>
 
-      {/* Tally Style Layout: Left (Liabilities) | Right (Assets) - Screen ONLY */}
+
       <div className="flex flex-col md:flex-row gap-0 md:gap-4 shadow-lg print:hidden">
         <RenderSide
           title="Liabilities"
@@ -286,7 +286,7 @@ const BalanceSheet = () => {
         />
       </div>
 
-      {/* Tally Style Unified Table - Print ONLY */}
+
       <div className="hidden print:block w-full">
         <table className="w-full text-sm border-collapse border border-gray-300">
           <thead>
@@ -326,7 +326,7 @@ const BalanceSheet = () => {
         </table>
       </div>
 
-      {/* Difference Alert */}
+
       {!isBalanced && (
         <div className="mt-4 p-4 bg-red-100 text-red-800 border-l-4 border-red-500 rounded font-bold text-center print:border-red-500">
           DIFFERENCE IN OPENING BALANCES: {formatCurrency(Math.abs(totalAssets - totalLiabilities))}

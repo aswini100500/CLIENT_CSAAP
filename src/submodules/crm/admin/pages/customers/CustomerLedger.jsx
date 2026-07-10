@@ -60,7 +60,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => setVisible(true), []);
 
-  // Fetch customer details
+
   const {
     data: customer,
     isLoading: loadingCustomer,
@@ -75,7 +75,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
     enabled: !!customerId && !!companyId,
   });
 
-  // Fetch payment plan and slabs
+
   const { data: paymentPlan, isLoading: loadingPlan } = useQuery({
     queryKey: ["payment-plan-customer", customer?.ledger_id, customer?.lead_id, companyId],
     queryFn: async () => {
@@ -96,7 +96,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
     enabled: (!!customer?.ledger_id || !!customer?.lead_id) && !!companyId,
   });
 
-  // Fetch payment history
+
   const { data: paymentHistory = [], isLoading: loadingHistory } = useQuery({
     queryKey: ["payment-history", paymentPlan?.id, companyId],
     queryFn: async () => {
@@ -109,28 +109,28 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
     enabled: !!paymentPlan?.id && !!companyId,
   });
 
-  // Merge overflow payments into their parent using parent_payment_id
-  // Backend sets parent_payment_id on overflow records pointing to the original payment.
+
+
   const mergedPayments = useMemo(() => {
     if (!paymentHistory || paymentHistory.length === 0) return [];
 
-    // Build a map of parent records and attach overflow children to them
-    const parentMap = new Map(); // parentId -> merged record
-    const standaloneList = [];   // records with no parent_payment_id and not a parent themselves
 
-    // First pass: identify all parent IDs referenced by overflow records
+    const parentMap = new Map();
+    const standaloneList = [];
+
+
     const referencedParentIds = new Set(
       paymentHistory
         .filter((tx) => tx.parent_payment_id)
         .map((tx) => Number(tx.parent_payment_id))
     );
 
-    // Second pass: build merged records
+
     for (const tx of paymentHistory) {
       const txId = Number(tx.id);
 
       if (tx.parent_payment_id) {
-        // This is an overflow record — attach to its parent
+
         const pid = Number(tx.parent_payment_id);
         if (!parentMap.has(pid)) {
           parentMap.set(pid, {
@@ -146,7 +146,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
         group.slabNames.push(tx.stage_name);
         group.segments.push({ ...tx, isOverflow: true });
       } else if (referencedParentIds.has(txId)) {
-        // This is a parent record (has overflow children pointing to it)
+
         if (!parentMap.has(txId)) {
           parentMap.set(txId, {
             totalAmount: 0,
@@ -157,12 +157,12 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           });
         }
         const group = parentMap.get(txId);
-        // Prepend parent info (parent should appear first in the slab list)
+
         group.totalAmount += Number(tx.amount) || 0;
         group.slabNames.unshift(tx.stage_name);
         group.segments.unshift({ ...tx, isOverflow: false });
         group.cleanNote = tx.note || "";
-        // Spread parent fields as the base of the merged record
+
         Object.assign(group, {
           ...tx,
           totalAmount: group.totalAmount,
@@ -172,7 +172,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           isMerged: group.segments.length > 1,
         });
       } else {
-        // Standalone record — no overflow involved
+
         standaloneList.push({
           ...tx,
           totalAmount: Number(tx.amount) || 0,
@@ -184,7 +184,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
       }
     }
 
-    // Combine parents and standalones, sort by id DESC (most recent first)
+
     const all = [...parentMap.values(), ...standaloneList];
     all.sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
     return all;
@@ -259,7 +259,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
         }`}
       >
-        {/* Header */}
+
         <div className="flex items-center gap-3">
           <button
             onClick={() => {
@@ -279,7 +279,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           </div>
         </div>
 
-        {/* Summary Cards */}
+
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div className="app-panel p-4 flex items-center justify-between gap-3">
             <div>
@@ -351,7 +351,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           </div>
         </div>
 
-        {/* Payment Slabs */}
+
         {paymentPlan?.slabs && paymentPlan.slabs.length > 0 && (
           <div className="app-panel overflow-hidden">
             <div className="app-section-bar px-4 py-3">
@@ -461,7 +461,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           </div>
         )}
 
-        {/* Payment History */}
+
         <div className="app-panel overflow-hidden">
           <div className="app-section-bar px-4 py-3">
             <h3 className="app-heading">

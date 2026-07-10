@@ -108,7 +108,7 @@ export default function EmployeeRoutes() {
         <Route element={<Layout />}>
           <Route index element={<Navigate to="dashboard" replace />} />
 
-          {/* ── Base Employee Portal routes (Accessible based on employee self-service permissions) ── */}
+
           <Route element={<RoutePermissionGuard permission="hrms.self_service.dashboard" />}>
             <Route path="dashboard" element={<DashboardEmployee />} />
           </Route>
@@ -152,7 +152,7 @@ export default function EmployeeRoutes() {
             <Route path="archived-tasks" element={<ArchivedTasks />} />
           </Route>
 
-          {/* ── HRMS Module Admin/HR Routes ── */}
+
           <Route element={<RoutePermissionGuard permission="hrms.dashboard" />}>
             <Route path="hr/dashboard" element={<Dashboard />} />
           </Route>
@@ -223,7 +223,7 @@ export default function EmployeeRoutes() {
             <Route path="hr/calendar" element={<CalendarTabs />} />
           </Route>
 
-          {/* ── Accounting Module Admin Routes ── */}
+
           <Route>
             <Route path="hr/accounting/client/dashboard" element={<ClientDashboard />} />
           </Route>
@@ -291,7 +291,7 @@ export default function EmployeeRoutes() {
             <Route path="hr/accounting/client/stockGroupSummery" element={<ClientStockGroupSummary />} />
           </Route>
 
-          {/* ── CRM Module Admin Routes ── */}
+
           <Route element={<RoutePermissionGuard permission="crm.upload" />}>
             <Route
               path="crm/csv-upload-tab"

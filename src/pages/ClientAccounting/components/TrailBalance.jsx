@@ -23,7 +23,7 @@ const TrialBalance = () => {
     try {
       setLoading(true);
 
-      // Fetch Trial Balance + Profit & Loss in parallel
+
       const [tbRes, plRes] = await Promise.all([
         axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/trial-balance/get-Trail-balance/${companyId}`),
         axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/profit-loss/${companyId}`).catch(() => null)
@@ -49,7 +49,7 @@ const TrialBalance = () => {
         const rawIncome   = plRes.data.income   || [];
         const rawExpenses = plRes.data.expenses || [];
 
-        // API returns { ledgerName, amount } — use .amount directly
+
         const totalIncome   = rawIncome.reduce((s, i) => s + (Number(i.amount) || 0), 0);
         const totalExpenses = rawExpenses.reduce((s, e) => s + (Number(e.amount) || 0), 0);
         const netProfit     = totalIncome - totalExpenses;
@@ -70,7 +70,7 @@ const TrialBalance = () => {
     const traverseGroup = (group, depth) => {
       const indent = "  ".repeat(depth);
 
-      // Add Group Header
+
       exportData.push({
         Particulars: `${indent}${group.groupName.toUpperCase()}`,
         "Opening Balance": "",
@@ -79,12 +79,12 @@ const TrialBalance = () => {
         "Closing Balance": ""
       });
 
-      // Traverse subGroups
+
       if (group.subGroups) {
         Object.values(group.subGroups).forEach(subG => traverseGroup(subG, depth + 1));
       }
 
-      // Add Ledgers
+
       if (group.ledgers) {
         group.ledgers.forEach(l => {
           exportData.push({
@@ -102,7 +102,7 @@ const TrialBalance = () => {
       traverseGroup(group, 0);
     });
 
-    // Summary
+
     exportData.push({});
     exportData.push({
       Particulars: "GRAND TOTAL",
@@ -208,14 +208,14 @@ const TrialBalance = () => {
 
   const { groupWise, summary } = data;
 
-  // ── Profit & Loss from P&L API (exact same as P&L report) ─────────────────
+
   const netProfit   = plData.netProfit || 0;
-  // Profit → Credit side | Loss → Debit side
+
   const plDebit     = netProfit < 0 ? Math.abs(netProfit) : 0;
   const plCredit    = netProfit > 0 ? netProfit : 0;
   const hasPL       = Math.abs(netProfit) > 0.005;
 
-  // ── Tally-style totals + difference ───────────────────────────────────────
+
   const totalDebit  = (summary?.totalDebit  || 0) + plDebit;
   const totalCredit = (summary?.totalCredit || 0) + plCredit;
   const rawDiff     = totalDebit - totalCredit;
@@ -223,15 +223,15 @@ const TrialBalance = () => {
   const diffDebit   = rawDiff < 0 ? Math.abs(rawDiff) : 0;
   const diffCredit  = rawDiff > 0 ? Math.abs(rawDiff) : 0;
   const grandTotal  = Math.max(totalDebit, totalCredit);
-  // ──────────────────────────────────────────────────────────────────────────
+
 
   const GroupNode = ({ group, depth = 0 }) => {
     const isExpanded = expandedGroups[group.groupName];
-    const paddingLeft = depth * 1.5 + 0.5; // rem units
+    const paddingLeft = depth * 1.5 + 0.5;
 
     return (
       <div key={group.groupName}>
-        {/* Group Row */}
+
         <div
           className="grid grid-cols-12 bg-gray-50 p-2 hover:bg-gray-100 cursor-pointer transition-colors border-b border-gray-100"
           onClick={() => toggleGroup(group.groupName)}
@@ -254,15 +254,15 @@ const TrialBalance = () => {
           <div className="col-span-2 text-right text-gray-500 pr-4">-</div>
         </div>
 
-        {/* Children (SubGroups and Ledgers) */}
+
         {isExpanded && (
           <div className="bg-white">
-            {/* Render SubGroups */}
+
             {group.subGroups && Object.values(group.subGroups).map(subG => (
               <GroupNode key={subG.groupName} group={subG} depth={depth + 1} />
             ))}
 
-            {/* Render Ledgers */}
+
             {group.ledgers && group.ledgers.map((ledger) => (
               <div
                 key={ledger.ledgerId}
@@ -316,7 +316,7 @@ const TrialBalance = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 font-mono text-sm print:bg-white print:p-0">
-      {/* Header */}
+
       <div className="flex justify-between items-center mb-6 print:hidden">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Trial Balance</h1>
@@ -344,17 +344,17 @@ const TrialBalance = () => {
         </div>
       </div>
 
-      {/* Print Header */}
+
       <div className="hidden print:block text-center mb-6">
         <h1 className="text-xl font-bold">{companyName}</h1>
         <h2 className="text-lg">Trial Balance</h2>
         <p className="text-sm">As on {new Date().toLocaleDateString()}</p>
       </div>
 
-      {/* Table Container */}
+
       <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200 print:shadow-none print:border-none">
 
-        {/* Table Header */}
+
         <div className="grid grid-cols-12 bg-blue-100 text-blue-900 font-bold p-3 border-b border-blue-200">
           <div className="col-span-4 pl-4">Particulars</div>
           <div className="col-span-2 text-right">Opening Balance</div>
@@ -363,13 +363,13 @@ const TrialBalance = () => {
           <div className="col-span-2 text-right pr-4">Closing Balance</div>
         </div>
 
-        {/* Content */}
+
         <div className="divide-y divide-gray-100">
           {groupWise && Object.values(groupWise).map((group) => (
             <GroupNode key={group.groupName} group={group} depth={0} />
           ))}
 
-          {/* ── PROFIT & LOSS ROW — like Tally ── */}
+
           {hasPL && (
             <div className="grid grid-cols-12 p-2 border-b border-gray-100 hover:bg-gray-50 text-gray-700">
               <div className="col-span-4 pl-4">Profit &amp; Loss</div>
@@ -384,7 +384,7 @@ const TrialBalance = () => {
             </div>
           )}
 
-          {/* ── DIFFERENCE IN OPENING BALANCES — italic, last row, like Tally ── */}
+
           {hasDiff && (
             <div className="grid grid-cols-12 p-2 border-b border-gray-100 hover:bg-gray-50 italic text-gray-500">
               <div className="col-span-4 pl-4 font-bold text-gray-700">Difference in opening balances</div>
@@ -400,7 +400,7 @@ const TrialBalance = () => {
           )}
         </div>
 
-        {/* Footer / Grand Total — always equal on both sides like Tally */}
+
         <div className="grid grid-cols-12 bg-blue-100 text-blue-900 font-bold p-3 border-t border-blue-200">
           <div className="col-span-4 pl-4">Grand Total</div>
           <div className="col-span-2 text-right">-</div>

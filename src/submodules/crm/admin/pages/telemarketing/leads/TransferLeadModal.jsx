@@ -36,7 +36,7 @@ const TransferLeadModal = ({
   });
 
   const filteredEmployees = useMemo(() => {
-    // Filter out the currently assigned user if possible
+
     const list = employees.filter(emp => emp.user_id !== lead.assigned_to);
     
     if (!search.trim()) return list;
@@ -120,7 +120,7 @@ const TransferLeadModal = ({
   const modalContent = (
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
       <div className="app-modal w-full max-w-md overflow-hidden flex flex-col">
-        {/* Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="pr-4">
             <h3 className="modal-title">
@@ -140,9 +140,9 @@ const TransferLeadModal = ({
           </button>
         </div>
 
-        {/* Body */}
+
         <div className="p-5 pb-4">
-          {/* Current Assignee Info */}
+
           <div className="mb-5 p-3.5 bg-(--bg-subtle) border border-(--border-soft) rounded-2xl flex items-center gap-3">
             <div className="size-9 rounded-xl bg-white border border-(--border-soft) flex items-center justify-center shrink-0">
                {lead.assignee?.profile_photo ? (
@@ -204,7 +204,7 @@ const TransferLeadModal = ({
               </div>
             </div>
 
-            {/* Dropdown Suggestions */}
+
             {showDropdown && dropdownStyle
               ? createPortal(
               <div
@@ -255,7 +255,7 @@ const TransferLeadModal = ({
               : null}
           </div>
 
-          {/* Selected Employee Preview */}
+
           {selectedEmployee && !showDropdown && (
             <div className="mt-4 app-panel overflow-hidden">
               <div className="app-section-bar px-4 py-2.5">
@@ -294,7 +294,7 @@ const TransferLeadModal = ({
           )}
         </div>
 
-        {/* Footer */}
+
         <div className="px-5 py-3 border-t border-(--border-soft) flex justify-end items-center gap-2.5 bg-white">
           <button
             onClick={onClose}

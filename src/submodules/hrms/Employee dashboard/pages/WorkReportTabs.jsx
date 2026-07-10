@@ -7,7 +7,7 @@ export default function WorkReportTabs() {
 
   return (
     <div className="bg-[#f8fafc] min-h-screen">
-      {/* Page Header */}
+
       <div className="bg-white border-b border-gray-200 pt-8 pb-4 rounded-2xl shadow-sm">
         <div className="max-w-450  px-2 sm:px-4 lg:px-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -21,7 +21,7 @@ export default function WorkReportTabs() {
             </div>
           </div>
 
-          {/* Sticky Tabs */}
+
           <div className="flex space-x-8">
             <button
               onClick={() => setActiveTab("daily")}

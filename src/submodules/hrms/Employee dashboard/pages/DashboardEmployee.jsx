@@ -77,7 +77,7 @@ const DashboardEmployee = () => {
   const isAdminOrHR =
     roleLabel.includes("admin") || roleLabel.includes("hr");
 
-  // Get auth token
+
   const getAuthToken = () => {
     return token;
   };
@@ -248,7 +248,7 @@ const DashboardEmployee = () => {
     }
   };
 
-  // FIXED: Fetch Tasks from API
+
   const fetchTasks = async () => {
     if (!employeeId || !companyId || !companySlug) {
       console.warn("Missing required data for tasks fetch:", { employeeId, companyId, companySlug });
@@ -277,7 +277,7 @@ const DashboardEmployee = () => {
         const tasks = response.data.data || [];
         setTotalTasks(tasks.length);
         
-        // Calculate completed tasks - check for various status formats
+
         const completed = tasks.filter(task => {
           const status = (task.status || '').toLowerCase();
           return status === 'completed' || 
@@ -287,7 +287,7 @@ const DashboardEmployee = () => {
         }).length;
         setCompletedTasks(completed);
         
-        // Calculate pending tasks
+
         const pending = tasks.filter(task => {
           const status = (task.status || '').toLowerCase();
           return status !== 'completed' && 
@@ -304,7 +304,7 @@ const DashboardEmployee = () => {
       }
     } catch (err) {
       console.error("Error fetching tasks:", err);
-      // Don't show error to user, just set defaults
+
       setTotalTasks(0);
       setCompletedTasks(0);
       setPendingTasks(0);
@@ -313,7 +313,7 @@ const DashboardEmployee = () => {
     }
   };
 
-  // FIXED: Fetch Messages from API
+
   const fetchMessages = async () => {
     if (!employeeId || !companyId || !companySlug) {
       console.warn("Missing required data for messages fetch:", { employeeId, companyId, companySlug });
@@ -338,7 +338,7 @@ const DashboardEmployee = () => {
         }
       );
       
-      // Handle different response structures
+
       let messages = [];
       if (response.data) {
         if (Array.isArray(response.data)) {
@@ -360,7 +360,7 @@ const DashboardEmployee = () => {
     }
   };
 
-  // FIXED: Fetch Present Days from Attendance API
+
   const fetchPresentDays = async () => {
     if (!employeeId || !companySlug) {
       console.warn("Missing required data for attendance fetch:", { employeeId, companySlug });
@@ -386,13 +386,13 @@ const DashboardEmployee = () => {
       if (response.data && response.data.success) {
         const attendanceData = response.data.data || [];
         
-        // Filter attendance records for current month
+
         const currentMonthRecords = attendanceData.filter(record => {
           const recordDate = new Date(record.date || record.attendance_date);
           return recordDate.getMonth() + 1 === currentMonth;
         });
         
-        // Count present days based on multiple possible status indicators
+
         const presents = currentMonthRecords.filter(record => {
           const status = (record.status || '').toLowerCase();
           const isPresent = record.isPresent === true;
@@ -408,13 +408,13 @@ const DashboardEmployee = () => {
         
         setMyPresentDays(presents);
         
-        // Calculate total working days in month (excluding Sundays)
+
         const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
         let workingDays = 0;
         for (let i = 1; i <= daysInMonth; i++) {
           const date = new Date(currentYear, currentMonth - 1, i);
           const dayOfWeek = date.getDay();
-          // Exclude Sundays (day 0)
+
           if (dayOfWeek !== 0) {
             workingDays++;
           }
@@ -432,7 +432,7 @@ const DashboardEmployee = () => {
     }
   };
   
-  // FIXED: Fetch service requests count
+
   const fetchServiceRequests = async () => {
     if (!companySlug || !employeeId) {
       console.warn("Missing required data for service requests fetch:", { companySlug, employeeId });
@@ -442,7 +442,7 @@ const DashboardEmployee = () => {
     try {
       const token = getAuthToken();
       const response = await axios.get(
-        // `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/${companySlug}/${employeeId}`,
+
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/employee-search?employeeId=${employeeId}&company_id=${company_id}&slug=${slug}`,
         { 
           headers: { 
@@ -473,11 +473,11 @@ const DashboardEmployee = () => {
     }
   };
 
-  // Fetch all dashboard data with proper error handling
+
   useEffect(() => {
     const loadDashboardData = async () => {
       if (employeeId && companyId && companySlug) {
-        // Use Promise.allSettled to prevent one failure from blocking others
+
         await Promise.allSettled([
           fetchTasks(),
           fetchMessages(),
@@ -490,7 +490,7 @@ const DashboardEmployee = () => {
     loadDashboardData();
   }, [employeeId, companyId, companySlug]);
 
-  // Refresh data periodically (every 5 minutes)
+
   useEffect(() => {
     if (!employeeId || !companyId || !companySlug) return;
     
@@ -499,12 +499,12 @@ const DashboardEmployee = () => {
       fetchMessages();
       fetchPresentDays();
       fetchServiceRequests();
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 5 * 60 * 1000);
     
     return () => clearInterval(interval);
   }, [employeeId, companyId, companySlug]);
 
-  // FIXED: Fetch attendance with better error handling
+
   useEffect(() => {
     const fetchAttendance = async () => {
       setLoading(true);
@@ -521,11 +521,11 @@ const DashboardEmployee = () => {
         const baseUrl = import.meta.env.VITE_HRMS_BASE_URL;
         const today = getTodayKey();
         
-        // Try multiple endpoints
+
         let attendanceRes = null;
         let data = [];
         
-        // Try primary endpoint first
+
         try {
           if (companySlug) {
             attendanceRes = await axios.get(`${baseUrl}/api/attendance/${companySlug}?date=${today}`);
@@ -537,7 +537,7 @@ const DashboardEmployee = () => {
           console.warn("Primary attendance endpoint failed:", err.message);
         }
         
-        // If primary failed, try employee-specific endpoint
+
         if (!data.length && companySlug) {
           try {
             attendanceRes = await axios.get(`${baseUrl}/api/attendance/company/${companySlug}/employee/${employeeId}`);
@@ -549,7 +549,7 @@ const DashboardEmployee = () => {
           }
         }
         
-        // Last resort: timesheet endpoint
+
         if (!data.length) {
           try {
             attendanceRes = await axios.get(`${baseUrl}/api/attendance/timesheet/${employeeId}`);
@@ -619,7 +619,7 @@ const DashboardEmployee = () => {
     fetchAttendance();
   }, [companySlug, employeeId]);
 
-  // FIXED: Fetch holidays with better error handling
+
   useEffect(() => {
     const fetchUpcomingHolidays = async () => {
       try {
@@ -673,7 +673,7 @@ const DashboardEmployee = () => {
     }
   }, [user]);
 
-  // Timer effect remains the same
+
   useEffect(() => {
     if (!punchIn) return;
 
@@ -703,18 +703,18 @@ const DashboardEmployee = () => {
     return () => clearInterval(interval);
   }, [punchIn, leaveTime]);
 
-  // Get initials for avatar
+
   const getInitials = (name) => {
     if (!name) return "NA";
     return name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'NA';
   };
 
-  // Calculate attendance summary
+
   const presentCount = teamMembers.filter(member => member.present).length;
   const totalMembers = teamMembers.length;
   const attendancePercentage = totalMembers > 0 ? Math.round((presentCount / totalMembers) * 100) : 0;
 
-  // Refresh handler for manual refresh
+
   const handleRefreshData = async () => {
     Swal.fire({
       title: 'Refreshing...',
@@ -797,7 +797,7 @@ const DashboardEmployee = () => {
     <div className="space-y-6" style={{ animation: 'fadeIn 0.4s ease-in-out' }}>
       <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
       
-      {/* Refresh Button */}
+
       <div className="flex justify-end">
         <button
           onClick={handleRefreshData}
@@ -822,7 +822,7 @@ const DashboardEmployee = () => {
         <p className="text-slate-500 mt-1 font-medium text-sm">Welcome back, here's what's happening today.</p>
       </div>
 
-      {/* Stats Grid - Updated with real data */}
+
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {stats.map((stat, index) => (
           <button
@@ -830,7 +830,7 @@ const DashboardEmployee = () => {
             onClick={stat.onClick}
             className="w-full text-left relative bg-white rounded-xl border border-slate-100 overflow-hidden p-3 sm:p-4 hover:border-slate-200 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md group"
           >
-            {/* Accent bar */}
+
             <div className={`absolute top-0 inset-x-0 h-0.5 ${stat.accentColor} group-hover:opacity-80 transition-opacity`} />
 
             <div className="flex items-start justify-between">
@@ -850,7 +850,7 @@ const DashboardEmployee = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Team Attendance Widget */}
+
         <div className="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
           <div className="flex items-center justify-between mb-3">
             <div>
@@ -864,7 +864,7 @@ const DashboardEmployee = () => {
             </button>
           </div>
 
-          {/* Progress Bar */}
+
           <div className="mb-4">
             <div className="flex justify-between items-center mb-1.5">
               <span className="text-[11px] font-medium text-slate-500">Today's attendance</span>
@@ -878,7 +878,7 @@ const DashboardEmployee = () => {
             </div>
           </div>
 
-          {/* Team Members List */}
+
           <div className="overflow-y-auto pr-1 custom-scrollbar max-h-72">
             <div className="space-y-1.5">
               {loading ? (
@@ -926,7 +926,7 @@ const DashboardEmployee = () => {
           </div>
         </div>
 
-        {/* Calendar Widget */}
+
         <div className="bg-white border border-slate-100 rounded-2xl p-4 sm:p-5 flex flex-col">
           <div className="flex items-start justify-between mb-4 shrink-0">
             <div>
@@ -947,7 +947,7 @@ const DashboardEmployee = () => {
             </div>
           </div>
 
-          {/* Mini Calendar */}
+
           <div className="flex-1" style={{ minHeight: '410px' }}>
             <BigCalendar
               localizer={localizer}
@@ -978,7 +978,7 @@ const DashboardEmployee = () => {
             />
           </div>
 
-          {/* Upcoming Holidays List */}
+
           {holidays.length > 0 && (
             <div className="mt-4 pt-3 border-t border-slate-100">
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Upcoming</p>
@@ -998,7 +998,7 @@ const DashboardEmployee = () => {
         </div>
       </div>
 
-      {/* Custom scrollbar styles */}
+
       <style>{`
         /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar {

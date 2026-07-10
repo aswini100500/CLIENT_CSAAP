@@ -98,7 +98,7 @@ export const MainInfoSection = ({
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
-    // const [units, setUnits] = useState([]);
+
 
     const [brokerListState, setBrokerListState] = useState([]);
     const [contractorList, setContractorsList] = useState([]);
@@ -502,9 +502,9 @@ export const MainInfoSection = ({
         <div className="bg-linear-to-br from-slate-50 to-white rounded-2xl border border-slate-200 overflow-hidden">
 
 
-            {/* Main Content */}
+
             <div className="p-2 space-y-2">
-                {/* Success Message */}
+
                 <AnimatePresence mode="wait">
                     {success && (
                         <motion.div
@@ -521,7 +521,7 @@ export const MainInfoSection = ({
                     )}
                 </AnimatePresence>
 
-                {/* Selected Unit Banner */}
+
                 {selectedUnit && (
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
@@ -566,7 +566,7 @@ export const MainInfoSection = ({
                     </motion.div>
                 )}
 
-                {/* Parameter Matrix */}
+
                 <div className="bg-white p-6 rounded-xl border border-slate-300 space-y-4 mb-6">
                     <div className="flex items-center gap-3">
                         <div className="w-1 h-4 bg-linear-to-b from-indigo-500 to-indigo-600 rounded-full" />
@@ -616,7 +616,7 @@ export const MainInfoSection = ({
                             </div>
                         ))}
 
-                        {/* Individual Boundary */}
+
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-slate-700">Individual Boundary</label>
                             <div className="flex gap-2">
@@ -641,11 +641,11 @@ export const MainInfoSection = ({
                     </div>
                 </div>
 
-                {/* Main Grid */}
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Left Column - 2/3 width */}
+
                     <div className="lg:col-span-2 space-y-4">
-                        {/* Unit Configuration Card */}
+
                         <div className="bg-white p-6 rounded-xl border border-slate-300 space-y-4">
                             <div className="flex items-center gap-3">
                                 <div className="w-1 h-4 bg-linear-to-b from-indigo-500 to-indigo-600 rounded-full" />
@@ -716,7 +716,7 @@ export const MainInfoSection = ({
                             </div>
                         </div>
 
-                        {/* Amenities Card */}
+
                         <div className="bg-white p-6 rounded-xl border border-slate-200 space-y-4">
                             <div className="flex items-center gap-3">
                                 <div className="w-1 h-4 bg-linear-to-b from-amber-400 to-amber-500 rounded-full" />
@@ -737,7 +737,7 @@ export const MainInfoSection = ({
                                     ))}
                                 </div>
 
-                                {/* Custom Facilities */}
+
                                 <div className="bg-linear-to-r from-amber-50 to-white p-4 rounded-lg border border-amber-100">
                                     <label className="text-sm font-semibold text-slate-700 mb-2 block">Add Custom Facility</label>
                                     <div className="flex gap-2">
@@ -759,7 +759,7 @@ export const MainInfoSection = ({
                                     </div>
                                 </div>
 
-                                {/* Custom Facilities Display */}
+
                                 {customFacilities.length > 0 && (
                                     <div className="flex flex-wrap gap-2 pt-1">
                                         {customFacilities.map((f, i) => (
@@ -782,7 +782,7 @@ export const MainInfoSection = ({
                         </div>
                     </div>
 
-                    {/* Right Column - Unit Registry */}
+
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">
                             <div className="w-1 h-4 bg-linear-to-b from-indigo-400 to-indigo-500 rounded-full" />
@@ -812,11 +812,9 @@ export const MainInfoSection = ({
                                             ? "bg-linear-to-r from-indigo-50 to-white border-indigo-400 shadow"
                                             : "bg-white border-slate-100 hover:border-indigo-200"}`}
                                     >
-                                        {/* {selectedUnit?.id === unit.id && (
-                                            <div className="absolute top-0 left-0" />
-                                        )} */}
+
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {/* LEFT: Unit header */}
+
                                             <div>
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-3">
@@ -858,7 +856,7 @@ export const MainInfoSection = ({
                                                 </div>
                                             </div>
 
-                                            {/* RIGHT: Editable area */}
+
                                             <div className="border-l border-slate-100 pl-4">
                                                 <EditableArea unit={unit} />
                                             </div>
@@ -871,7 +869,7 @@ export const MainInfoSection = ({
                     </div>
                 </div>
 
-                {/* Unit Specification Section - Only shown when unit is selected */}
+
                 {selectedUnit && (
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
@@ -885,14 +883,14 @@ export const MainInfoSection = ({
                             </div>
                         </div>
 
-                        {/* 3-column: Operations & Statutory | Transaction Details | Price Details */}
+
                         <section>
                             <div className="bg-white border border-slate-100 rounded-xl p-6">
 
-                                {/* Three columns side by side */}
+
                                 <div className="grid grid-cols-1 lg:grid-cols-[70%_30%] gap-6 items-start">
 
-                                    {/* â”€â”€ Left Column: Operations & Statutory + Transaction Details â”€â”€ */}
+
                                     <div className="space-y-6">
                                         <div>
                                             <div className="flex items-center gap-2 mb-4">
@@ -1023,9 +1021,9 @@ export const MainInfoSection = ({
                                                     ))}
                                                 </div>
                                             </div>
-                                        </div>{/* end Operations & Statutory */}
+                                        </div>
 
-                                        {/* Left column wrapper start */}
+
                                         <div className="space-y-6">
                                             <div className="bg-white ">
                                                 <div className="flex items-center gap-2 mb-4">
@@ -1142,10 +1140,10 @@ export const MainInfoSection = ({
                                                     </div>
                                                 ))}
                                             </div>
-                                        </div>{/* end Transaction Details */}
-                                    </div>{/* end Left Column */}
+                                        </div>
+                                    </div>
 
-                                    {/* â”€â”€ Col 3: Price Details â”€â”€ */}
+
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-2 mb-4">
                                             <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-amber-400">
@@ -1189,11 +1187,11 @@ export const MainInfoSection = ({
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>{/* end Col 3 */}
+                                    </div>
 
-                                </div>{/* end 3-col grid */}
+                                </div>
 
-                                {/* Approval Status Matrix - full width below */}
+
                                 <div className="mt-8 pt-8 border-t border-slate-100 space-y-4">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
@@ -1248,9 +1246,9 @@ export const MainInfoSection = ({
                                             </div>
                                         ))}
                                     </div>
-                                </div>{/* end Approval Status Matrix */}
+                                </div>
 
-                            </div>{/* end white card */}
+                            </div>
                         </section>
 
                         <div>

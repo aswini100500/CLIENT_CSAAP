@@ -47,7 +47,7 @@ const BankActivities = () => {
   const loggedInRole = role?.toLowerCase() || "admin";
   const loggedInEmployeeId = authUser?.employee_id || null;
 
-  // Form states
+
   const [newAccount, setNewAccount] = useState({
     accountName: '',
     bankName: '',
@@ -71,7 +71,7 @@ const BankActivities = () => {
     balanceAfterType: 'Dr'
   });
 
-  // Format currency for display
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -87,7 +87,7 @@ const BankActivities = () => {
     return formatCurrency(absVal) + suffix;
   };
 
-  // Fetch bank accounts
+
   const fetchBankAccounts = async () => {
     try {
       setLoading(true);
@@ -110,7 +110,7 @@ const BankActivities = () => {
     }
   };
 
-  // Fetch transactions for selected account (supports optional single-date voucher filter)
+
   const fetchTransactions = async (accountId, voucherDate = '') => {
     try {
       setLoading(true);
@@ -135,13 +135,13 @@ const BankActivities = () => {
     }
   };
 
-  // Fetch all groups for the Account Type dropdown
+
   const fetchGroups = async () => {
     try {
       const { data } = await axios.get(
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`
       );
-      // Normalise: API may return array, { groups: [] }, or { data: [] }
+
       const list = Array.isArray(data)
         ? data
         : Array.isArray(data?.groups)
@@ -501,7 +501,7 @@ const BankActivities = () => {
     });
 
     return transactionsWithBalances.filter(t => {
-      // Use voucher date field (not createdAt) for date-based filtering
+
       const tDate = new Date((t.date || t.createdAt || '').split('T')[0]);
       if (startDate && new Date(startDate) > tDate) return false;
       if (endDate && new Date(endDate) < tDate) return false;
@@ -514,7 +514,7 @@ const BankActivities = () => {
     const filteredTxns = getFilteredTransactionsWithBalances();
 
     filteredTxns.forEach(transaction => {
-      // Group by voucher date (transaction.date), not by system createdAt
+
       const date = (transaction.date || transaction.createdAt || '').split('T')[0];
       if (!grouped[date]) {
         grouped[date] = [];
@@ -534,7 +534,7 @@ const BankActivities = () => {
     if (!selectedAccount) return;
     const filteredTxns = getFilteredTransactionsWithBalances();
 
-    // Reverse so older is at top, like standard bank statement
+
     const chronologicalTxns = [...filteredTxns].reverse();
 
     const openingRowDate = startDate
@@ -684,7 +684,7 @@ const BankActivities = () => {
   return (
     <>
       <div className="space-y-6">
-        {/* Header */}
+
         <div className="bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
@@ -728,7 +728,7 @@ const BankActivities = () => {
           </div>
         </div>
 
-        {/* Add/Edit Bank Account Modal */}
+
         {showAddAccount && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -746,7 +746,7 @@ const BankActivities = () => {
 
               <form onSubmit={handleAccountSubmit} className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Account Name */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Account Name *</label>
                     <input
@@ -759,7 +759,7 @@ const BankActivities = () => {
                     />
                   </div>
 
-                  {/* Bank Name */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Bank Name *</label>
                     <input
@@ -772,7 +772,7 @@ const BankActivities = () => {
                     />
                   </div>
 
-                  {/* Account Number */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Account Number *</label>
                     <input
@@ -785,7 +785,7 @@ const BankActivities = () => {
                     />
                   </div>
 
-                  {/* IFSC Code */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">IFSC Code *</label>
                     <input
@@ -798,7 +798,7 @@ const BankActivities = () => {
                     />
                   </div>
 
-                  {/* Branch Name */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Branch Name</label>
                     <input
@@ -810,7 +810,7 @@ const BankActivities = () => {
                     />
                   </div>
 
-                  {/* Account Type */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
                     <select
@@ -831,7 +831,7 @@ const BankActivities = () => {
                     </select>
                   </div>
 
-                  {/* Opening Date */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Opening Date</label>
                     <input
@@ -844,7 +844,7 @@ const BankActivities = () => {
 
                   {isEditingAccount ? (
                     <>
-                      {/* Opening Balance (Editable) */}
+
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Opening Balance</label>
                         <div className="flex gap-2">
@@ -868,7 +868,7 @@ const BankActivities = () => {
                         </div>
                       </div>
 
-                      {/* Current Balance (Editable) */}
+
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Current Balance</label>
                         <div className="flex gap-2">
@@ -894,7 +894,7 @@ const BankActivities = () => {
                     </>
                   ) : (
                     <div>
-                      {/* Opening Balance (Creation) */}
+
                       <label className="block text-sm font-medium text-gray-700 mb-2">Opening Balance</label>
                       <div className="flex gap-2">
                         <input
@@ -919,7 +919,7 @@ const BankActivities = () => {
                   )}
                 </div>
 
-                {/* Form Actions */}
+
                 <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                   <button
                     type="button"
@@ -941,7 +941,7 @@ const BankActivities = () => {
           </div>
         )}
 
-        {/* Add/Edit Transaction Modal */}
+
         {showAddTransaction && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -959,7 +959,7 @@ const BankActivities = () => {
 
               <form onSubmit={handleTransactionSubmit} className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Date */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Date *</label>
                     <input
@@ -971,7 +971,7 @@ const BankActivities = () => {
                     />
                   </div>
 
-                  {/* Transaction Type */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Transaction Type *</label>
                     <select
@@ -984,7 +984,7 @@ const BankActivities = () => {
                     </select>
                   </div>
 
-                  {/* Amount */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Amount (₹) *</label>
                     <input
@@ -999,7 +999,7 @@ const BankActivities = () => {
                     />
                   </div>
 
-                  {/* Category */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                     <select
@@ -1022,7 +1022,7 @@ const BankActivities = () => {
                     </select>
                   </div>
 
-                  {/* Description */}
+
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
                     <input
@@ -1035,7 +1035,7 @@ const BankActivities = () => {
                     />
                   </div>
 
-                  {/* Reference Number */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Reference Number</label>
                     <input
@@ -1047,7 +1047,7 @@ const BankActivities = () => {
                     />
                   </div>
 
-                  {/* Balance After */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Balance After Transaction</label>
                     <div className="flex gap-2">
@@ -1072,7 +1072,7 @@ const BankActivities = () => {
                   </div>
                 </div>
 
-                {/* Form Actions */}
+
                 <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                   <button
                     type="button"
@@ -1095,7 +1095,7 @@ const BankActivities = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Bank Accounts */}
+
           <div className="lg:col-span-1">
             <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
@@ -1176,11 +1176,11 @@ const BankActivities = () => {
             </div>
           </div>
 
-          {/* Right Column - Transactions */}
+
           <div className="lg:col-span-2">
             {selectedAccount ? (
               <div className="space-y-6">
-                {/* Selected Account Header */}
+
                 <div className="bg-linear-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
@@ -1214,7 +1214,7 @@ const BankActivities = () => {
                   </div>
                 </div>
 
-                {/* Transactions by Day */}
+
                 {loading ? (
                   <div className="flex justify-center items-center h-32">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
@@ -1239,7 +1239,7 @@ const BankActivities = () => {
 
                       return (
                         <div key={dayGroup.date} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                          {/* Day Header */}
+
                           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center">
@@ -1262,7 +1262,7 @@ const BankActivities = () => {
                             </div>
                           </div>
 
-                          {/* Transactions List */}
+
                           <div className="divide-y divide-gray-200">
                             {dayGroup.transactions.map((transaction) => (
                               <div key={`${transaction.source}-${transaction.id}`} className="p-4 hover:bg-gray-50">
@@ -1353,7 +1353,7 @@ const BankActivities = () => {
         </div>
       </div>
 
-      {/* Statement Download Modal */}
+
       {showStatementModal && (
         <div className="fixed inset-0 bg-black/50 back bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col">
@@ -1370,7 +1370,7 @@ const BankActivities = () => {
             </div>
 
             <div className="p-6 flex-1 flex flex-col space-y-6">
-              {/* Filters & Export Options */}
+
               <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-wrap gap-4 items-center justify-between">
                 <div className="flex gap-4 items-center">
                   <div>
@@ -1418,7 +1418,7 @@ const BankActivities = () => {
                 </div>
               </div>
 
-              {/* Transactions Table Preview */}
+
               <div className="bg-white border border-gray-200 rounded-xl overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">

@@ -13,12 +13,12 @@ export const UserProvider = ({ children }) => {
 
   const API_BASE_URL = import.meta.env.VITE_ACCOUNTING_URL || "http://localhost:5000";
 
-  // Verify authentication on mount by calling /auth/me
+
   useEffect(() => {
     const verifyAuth = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/v1/auth/me`, {
-          withCredentials: true, // Send cookie with request
+          withCredentials: true,
         });
 
         if (response.data.success && response.data.user) {
@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
           setUserId(userData.id);
         }
       } catch (error) {
-        // If auth fails, user remains null (not logged in)
+
         console.log("Not authenticated:", error.response?.data?.message || error.message);
         setUser(null);
         setUserId(null);
@@ -39,7 +39,7 @@ export const UserProvider = ({ children }) => {
     verifyAuth();
   }, []);
 
-  // Check subscription status when user is loaded
+
   useEffect(() => {
     if (userId) {
       checkSubscriptionStatus();
@@ -101,7 +101,7 @@ export const UserProvider = ({ children }) => {
       }}
     >
       {!loadingAuth && children}
-      {/* DO NOT RENDER APP UNTIL USER LOADED */}
+
     </UserContext.Provider >
   );
 };

@@ -288,7 +288,7 @@ const ListOfJournalVoucher = () => {
   const loggedInRole = role?.toLowerCase() || "admin";
   const loggedInEmployeeId = user?.employee_id || null;
 
-  // Safe search handling (Prevents includes undefined error)
+
   const filtered = vouchers.filter((v) => {
     if (loggedInRole === "employee") {
       if (v.employee_id != loggedInEmployeeId || v.role?.toLowerCase() !== 'employee') return false;
@@ -307,18 +307,18 @@ const ListOfJournalVoucher = () => {
   return (
     <div className="p-4 bg-white font-[monospace] min-h-screen">
 
-      {/* Header */}
+
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
-          {/* Left - Title */}
+
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Journal Vouchers
           </h1>
 
-          {/* Right - Search + Buttons */}
+
           <div className="flex items-center gap-2.5 flex-wrap">
 
-            {/* Search */}
+
             <div className="relative">
               <Search
                 size={15}
@@ -333,7 +333,7 @@ const ListOfJournalVoucher = () => {
               />
             </div>
 
-            {/* Buttons */}
+
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
@@ -355,7 +355,7 @@ const ListOfJournalVoucher = () => {
                 <Printer size={14} /> Print
               </button>
 
-              {/* Export Dropdown */}
+
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -409,10 +409,10 @@ const ListOfJournalVoucher = () => {
           </div>
         </div>
       </div>
-      {/* Table */}
+
       <div className="mx-auto border border-black rounded-md">
 
-        {/* Header Row */}
+
         <div className="grid grid-cols-12 bg-gray-200 border-b border-black text-sm font-semibold">
           <div className="col-span-1 p-2 border-r border-black">Voucher ID</div>
           <div className="col-span-2 p-2 border-r border-black">Date</div>
@@ -423,7 +423,7 @@ const ListOfJournalVoucher = () => {
           <div className={`${showEmployeeActivity ? 'col-span-2' : 'col-span-4'} p-2 text-center`}>Actions</div>
         </div>
 
-        {/* Voucher List */}
+
         {filtered.length === 0 ? (
           <div className="text-center p-4 text-gray-500">No vouchers found</div>
         ) : (
@@ -504,7 +504,7 @@ const ListOfJournalVoucher = () => {
             className="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
+
             <div className="bg-[#005AB3] px-5 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center">
@@ -530,7 +530,7 @@ const ListOfJournalVoucher = () => {
               </div>
             </div>
 
-            {/* Meta row */}
+
             <div className="grid grid-cols-3 divide-x divide-gray-200 border-b border-gray-200 bg-gray-50">
               {[
                 ["Date", new Date(modalData.voucher?.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })],
@@ -544,14 +544,14 @@ const ListOfJournalVoucher = () => {
               ))}
             </div>
 
-            {/* Narration */}
+
             {modalData.voucher?.narration && (
               <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-200 text-sm text-gray-500 flex items-center gap-2">
                 <span>📝</span> {modalData.voucher.narration}
               </div>
             )}
 
-            {/* Transactions table */}
+
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -596,7 +596,7 @@ const ListOfJournalVoucher = () => {
               </table>
             </div>
 
-            {/* Summary strip */}
+
             <div className="grid grid-cols-3 divide-x divide-gray-200 border-t border-gray-200">
               {[
                 ["Total debit", modalData.voucher?.totalDebit, "text-red-600"],
@@ -612,7 +612,7 @@ const ListOfJournalVoucher = () => {
               ))}
             </div>
 
-            {/* Footer */}
+
             <div className="px-5 py-3 border-t border-gray-200 flex items-center justify-between">
               <span className="text-xs text-gray-400">
                 Created {new Date(modalData.voucher?.createdAt || modalData.voucher?.date).toLocaleString("en-IN")}

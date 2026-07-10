@@ -28,14 +28,14 @@ const CashActivities = () => {
   const [newTransaction, setNewTransaction] = useState({
     date: new Date().toISOString().split('T')[0],
     description: '',
-    transactionType: 'credit', // credit = incoming cash (Receipt), debit = outgoing cash (Payment)
+    transactionType: 'credit',
     amount: 0,
     category: '',
     referenceNumber: '',
     balanceAfter: 0
   });
 
-  // Format currency for display
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -44,7 +44,7 @@ const CashActivities = () => {
     }).format(amount || 0);
   };
 
-  // Fetch Cash Ledgers (under Cash-in-hand group)
+
   const fetchCashAccounts = async () => {
     try {
       setLoading(true);
@@ -52,7 +52,7 @@ const CashActivities = () => {
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`
       );
       
-      // Filter ledgers that are under "Cash-in-hand" group
+
       const cashLedgers = (data || []).filter(ledger => 
         (ledger.underGroup || "").toLowerCase().includes("cash-in-hand") ||
         (ledger.under || "").toLowerCase().includes("cash-in-hand") ||
@@ -67,22 +67,22 @@ const CashActivities = () => {
         formattedBalance: formatCurrency(parseFloat(account.closingBalance || account.openingBalance) || 0)
       }));
 
-      // Check if there are any transactions with literal 'cash' ID
-      // If so, and we don't have a ledger named 'Cash', we should show it or merge it.
-      // For now, let's just ensure if no accounts are found, we provide a default one
+
+
+
       if (formattedAccounts.length === 0) {
         formattedAccounts.push({
           id: 'cash',
           accountName: 'Default Cash',
           underGroup: 'Cash-in-hand',
-          currentBalance: 0, // We could fetch this from backend
+          currentBalance: 0,
           formattedBalance: formatCurrency(0)
         });
       }
 
       setCashAccounts(formattedAccounts);
       
-      // Select first account by default if none selected
+
       if (formattedAccounts.length > 0 && !selectedAccount) {
         setSelectedAccount(formattedAccounts[0]);
       }
@@ -93,7 +93,7 @@ const CashActivities = () => {
     }
   };
 
-  // Fetch transactions for selected cash ledger
+
   const fetchTransactions = async (ledgerId) => {
     try {
       setLoading(true);
@@ -103,16 +103,16 @@ const CashActivities = () => {
       
       if (data.success) {
         const formattedTransactions = data.transactions.map(transaction => {
-            // In voucher_transactions: 
-            // debit > 0 means money came in (Receipt/Contra) -> Incoming
-            // credit > 0 means money went out (Payment/Contra) -> Outgoing
-            // NOTE: For Cash ledger, Debit is Increase, Credit is Decrease.
+
+
+
+
             const isIncoming = (parseFloat(transaction.debit) || 0) > 0;
             const amount = isIncoming ? parseFloat(transaction.debit) : parseFloat(transaction.credit);
 
             return {
                 ...transaction,
-                transactionType: isIncoming ? 'credit' : 'debit', // Using 'credit' as label for incoming to match BankActivities CSS
+                transactionType: isIncoming ? 'credit' : 'debit',
                 amount: amount,
                 formattedAmount: formatCurrency(amount),
                 description: transaction.narration || `${transaction.voucherType} Voucher`
@@ -162,14 +162,14 @@ const CashActivities = () => {
     setShowAddTransaction(true);
   };
 
-  // Simplified submit - in a real app, this would create a Payment or Receipt Voucher
+
   const handleTransactionSubmit = async (e) => {
     e.preventDefault();
     alert("In this demo, manual cash entries should be done via Payment or Receipt Vouchers for full accounting integrity.");
     setShowAddTransaction(false);
   };
 
-  // Helper functions for UI
+
   const groupTransactionsByDay = () => {
     const groups = {};
     transactions.forEach(t => {
@@ -213,7 +213,7 @@ const CashActivities = () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
-      {/* Header */}
+
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div className="flex items-center space-x-4">
           <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-200">
@@ -226,7 +226,7 @@ const CashActivities = () => {
         </div>
       </div>
 
-      {/* Stats Overview */}
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between mb-4">
@@ -269,7 +269,7 @@ const CashActivities = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Cash Ledgers */}
+
         <div className="lg:col-span-1">
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50/50">
@@ -315,11 +315,11 @@ const CashActivities = () => {
           </div>
         </div>
 
-        {/* Right Column - Transactions */}
+
         <div className="lg:col-span-2">
           {selectedAccount ? (
             <div className="space-y-6">
-              {/* Selected Account Header */}
+
               <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm overflow-hidden relative">
                 <div className="absolute top-0 right-0 p-8 opacity-5">
                    <Wallet className="w-32 h-32" />
@@ -345,7 +345,7 @@ const CashActivities = () => {
                 </div>
               </div>
 
-              {/* Transactions List */}
+
               {loading ? (
                 <div className="flex justify-center p-12">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -363,7 +363,7 @@ const CashActivities = () => {
                     
                     return (
                       <div key={dayGroup.date} className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-                        {/* Day Header */}
+
                         <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
                           <div className="flex flex-wrap items-center justify-between gap-4">
                             <div className="flex items-center">
@@ -383,7 +383,7 @@ const CashActivities = () => {
                           </div>
                         </div>
                         
-                        {/* Transactions List */}
+
                         <div className="divide-y divide-gray-50">
                           {dayGroup.transactions.map((transaction) => (
                             <div key={transaction.id} className="p-6 hover:bg-gray-50 transition-colors">
@@ -432,7 +432,7 @@ const CashActivities = () => {
         </div>
       </div>
 
-      {/* Transaction Form Modal (Simplified) */}
+
       {showAddTransaction && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">

@@ -10,7 +10,7 @@ import { saveAs } from "file-saver";
 import { formatINR } from "../payrollUtils";
 import React from "react";
 
-// Fix for default PDF fonts choking on Unicode currency symbols (₹) and narrow spaces
+
 const safeFormat = (amount) => {
   if (amount === undefined || amount === null) return "0";
   const formatted = formatINR(amount);
@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
     color: "#9ca3af",
   },
 
-  // Table
+
   table: {
     width: "100%",
   },
-  // Group Headers
+
   groupHeader: {
     flexDirection: "row",
     backgroundColor: "#f3f4f6",
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     paddingLeft: 2,
   },
 
-  // Total Row
+
   totalRow: {
     flexDirection: "row",
     backgroundColor: "#e5e7eb",
@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
 
-  // Column Widths (Total 100%)
-  colId: { width: "3%" },
-  colName: { width: "12%" }, // Name + Dept
-  colAttendance: { width: "3.5%" }, // Days Worked
-  colLop: { width: "2.5%" }, // LOP Days
 
-  // Earnings Group
+  colId: { width: "3%" },
+  colName: { width: "12%" },
+  colAttendance: { width: "3.5%" },
+  colLop: { width: "2.5%" },
+
+
   colFixedGross: { width: "6.5%", textAlign: "right" },
   colEarnedBasic: { width: "5%", textAlign: "right" },
   colEarnedHra: { width: "4%", textAlign: "right" },
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   colOT: { width: "4%", textAlign: "right" },
   colTotalGross: { width: "7%", textAlign: "right", fontWeight: "bold" },
 
-  // Deductions Group
+
   colEpf: { width: "5%", textAlign: "right" },
   colEsi: { width: "4.5%", textAlign: "right" },
   colPt: { width: "4%", textAlign: "right" },
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     color: "#111827",
   },
 
-  // Summary
+
   summarySection: {
     marginTop: 15,
     flexDirection: "row",
@@ -246,7 +246,7 @@ const PayrollReportDocument = ({
 
   const periodLabel = month && year ? `${monthNames[month - 1]} ${year}` : "";
 
-  // Totals for Grand Total row
+
   let gtFixedGross = 0;
   let gtGrossEarned = 0;
   let gtDeductions = 0;
@@ -295,7 +295,7 @@ const PayrollReportDocument = ({
     const special =
       p.proratedEarnings?.specialAllowance || p.specialAllowance || 0;
 
-    // Summing for Grand Total
+
     gtFixedGross += p.monthlyCTC || 0;
     gtGrossEarned += p.gross || 0;
     gtDeductions += p.totalDeductions || 0;
@@ -343,7 +343,7 @@ const PayrollReportDocument = ({
   return (
     <Document title={`Payroll Register - ${periodLabel}`}>
       <Page size="A4" orientation="landscape" style={styles.page}>
-        {/* Header */}
+
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <Text style={styles.title}>Payroll Register</Text>
@@ -358,9 +358,9 @@ const PayrollReportDocument = ({
           </View>
         </View>
 
-        {/* Table Container */}
+
         <View style={styles.table}>
-          {/* Group Header Labels */}
+
           <View style={styles.groupHeader}>
             <View style={{ width: "21%" }}>
               <Text style={styles.groupHeaderText}>Employee Info</Text>
@@ -376,7 +376,7 @@ const PayrollReportDocument = ({
             </View>
           </View>
 
-          {/* Table Header Row */}
+
           <View style={styles.tableHeader}>
             <Text style={[styles.headerText, styles.colId]}>ID</Text>
             <Text
@@ -420,7 +420,7 @@ const PayrollReportDocument = ({
             <Text style={[styles.headerText, styles.colNet]}>Net Pay</Text>
           </View>
 
-          {/* Table Rows */}
+
           {rows.map((row, idx) => (
             <View
               key={idx}
@@ -506,7 +506,7 @@ const PayrollReportDocument = ({
             </View>
           ))}
 
-          {/* Grand Total Row */}
+
           {rows.length > 0 && (
             <View style={styles.totalRow}>
               <Text style={[styles.colId]}></Text>
@@ -593,7 +593,7 @@ const PayrollReportDocument = ({
           )}
         </View>
 
-        {/* Summary Card */}
+
         <View style={styles.summarySection}>
           <View style={styles.summaryCard}>
             <Text

@@ -51,7 +51,7 @@ const SuperAdminAccountingStocks = ({ hideHeader }) => {
   const [filters, setFilters] = useState({
     companyId: "",
     employeeId: "",
-    type: "stocks", // Fetch only stock
+    type: "stocks",
     from: "",
     to: "",
     limit: 500,
@@ -92,7 +92,7 @@ const SuperAdminAccountingStocks = ({ hideHeader }) => {
     setFilters((current) => ({ ...current, [field]: value }));
   };
 
-  // Local filtering based on search
+
   const stocks = useMemo(() => {
     let list = data.activity || [];
 
@@ -109,7 +109,7 @@ const SuperAdminAccountingStocks = ({ hideHeader }) => {
     return list;
   }, [data.activity, searchTerm]);
 
-  // Statistics calculation for stocks
+
   const stats = useMemo(() => {
     const totalCount = stocks.length;
     let totalOpeningBalance = 0;
@@ -130,7 +130,7 @@ const SuperAdminAccountingStocks = ({ hideHeader }) => {
     <div className={hideHeader ? "w-full space-y-4 p-2 bg-white" : "min-h-screen bg-slate-50 p-3 sm:p-5"}>
       <div className={hideHeader ? "space-y-4" : "mx-auto max-w-7xl space-y-5"}>
         
-        {/* Header Block */}
+
         {!hideHeader && (
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -157,7 +157,7 @@ const SuperAdminAccountingStocks = ({ hideHeader }) => {
           </div>
         )}
 
-        {/* Filtering Section */}
+
         <div className="p-5 rounded-lg border border-slate-200/80 bg-white shadow-sm">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-xs font-bold uppercase text-slate-500 tracking-wide">Filters</h3>
@@ -225,7 +225,7 @@ const SuperAdminAccountingStocks = ({ hideHeader }) => {
           </div>
         </div>
 
-        {/* Statistics Cards */}
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <StatCard icon={Warehouse} label="Total Stock Items" value={stats.totalCount} tone="blue" />
           <StatCard icon={Boxes} label="Cumulative Opening Balance Value" value={stats.totalOpeningBalance.toLocaleString("en-IN")} tone="green" />
@@ -238,12 +238,12 @@ const SuperAdminAccountingStocks = ({ hideHeader }) => {
           </div>
         )}
 
-        {/* Content Panel */}
+
         <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
           <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-lg font-extrabold text-slate-900">Stock Inventory Records</h2>
             
-            {/* Real-time search */}
+
             <div className="relative w-full max-w-xs">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                 <Search className="h-4 w-4" />

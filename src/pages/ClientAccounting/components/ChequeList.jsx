@@ -47,14 +47,14 @@ const ChequeList = () => {
     totalAmount: 0
   });
 
-  // Popup states
+
   const [showChequePopup, setShowChequePopup] = useState(false);
   const [showViewPopup, setShowViewPopup] = useState(false);
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [selectedCheque, setSelectedCheque] = useState(null);
-  const [popupMode, setPopupMode] = useState(''); // 'view', 'edit', 'add'
+  const [popupMode, setPopupMode] = useState('');
 
-  // Fetch cheques from API
+
   const fetchCheques = async () => {
     if (!companyId) return;
     
@@ -62,7 +62,7 @@ const ChequeList = () => {
     try {
       let url = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${companyId}/all`;
       
-      // Build query parameters
+
       const params = new URLSearchParams();
       if (statusFilter !== 'all') params.append('status', statusFilter);
       if (typeFilter !== 'all') params.append('type', typeFilter);
@@ -88,7 +88,7 @@ const ChequeList = () => {
     }
   };
 
-  // Calculate statistics
+
   const calculateStats = (data) => {
     const stats = {
       total: data.length,
@@ -133,28 +133,28 @@ const ChequeList = () => {
     fetchCheques();
   };
 
-  // Open view popup
+
   const handleViewCheque = (cheque) => {
     setSelectedCheque(cheque);
     setPopupMode('view');
     setShowViewPopup(true);
   };
 
-  // Open edit popup
+
   const handleEditCheque = (cheque) => {
     setSelectedCheque(cheque);
     setPopupMode('edit');
     setShowEditPopup(true);
   };
 
-  // Open add popup
+
   const handleAddCheque = () => {
     setSelectedCheque(null);
     setPopupMode('add');
     setShowChequePopup(true);
   };
 
-  // Close all popups
+
   const closePopups = () => {
     setShowChequePopup(false);
     setShowViewPopup(false);
@@ -162,7 +162,7 @@ const ChequeList = () => {
     setSelectedCheque(null);
   };
 
-  // Handle form submission (add/edit)
+
   const handleFormSubmit = async (formData) => {
     try {
       const url = popupMode === 'add' 
@@ -183,7 +183,7 @@ const ChequeList = () => {
         });
         
         closePopups();
-        fetchCheques(); // Refresh the list
+        fetchCheques();
       }
     } catch (error) {
       console.error('Error saving cheque:', error);
@@ -342,7 +342,7 @@ const ChequeList = () => {
     }).format(amount || 0);
   };
 
-  // Pagination
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentCheques = cheques.slice(indexOfFirstItem, indexOfLastItem);
@@ -364,7 +364,7 @@ const ChequeList = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -401,9 +401,9 @@ const ChequeList = () => {
           </div>
         </div>
 
-        {/* Statistics Cards */}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
-          {/* Total Cheques */}
+
           <div className="bg-white rounded-xl p-4 shadow border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
@@ -417,7 +417,7 @@ const ChequeList = () => {
             <p className="text-xs text-gray-500 mt-2">All cheque transactions</p>
           </div>
           
-          {/* Pending */}
+
           <div className="bg-white rounded-xl p-4 shadow border border-yellow-200">
             <div className="flex items-center justify-between">
               <div>
@@ -431,7 +431,7 @@ const ChequeList = () => {
             <p className="text-xs text-gray-500 mt-2">Awaiting clearance</p>
           </div>
           
-          {/* Cleared */}
+
           <div className="bg-white rounded-xl p-4 shadow border border-green-200">
             <div className="flex items-center justify-between">
               <div>
@@ -445,7 +445,7 @@ const ChequeList = () => {
             <p className="text-xs text-gray-500 mt-2">Successfully processed</p>
           </div>
           
-          {/* Bounced */}
+
           <div className="bg-white rounded-xl p-4 shadow border border-red-200">
             <div className="flex items-center justify-between">
               <div>
@@ -459,7 +459,7 @@ const ChequeList = () => {
             <p className="text-xs text-gray-500 mt-2">Returned cheques</p>
           </div>
           
-          {/* Cancelled */}
+
           <div className="bg-white rounded-xl p-4 shadow border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
@@ -473,7 +473,7 @@ const ChequeList = () => {
             <p className="text-xs text-gray-500 mt-2">Voided cheques</p>
           </div>
           
-          {/* Total Amount */}
+
           <div className="bg-white rounded-xl p-4 shadow border border-indigo-200">
             <div className="flex items-center justify-between">
               <div>
@@ -490,7 +490,7 @@ const ChequeList = () => {
           </div>
         </div>
 
-        {/* Search and Filters */}
+
         <div className="bg-white rounded-xl shadow border border-gray-200 p-4 mb-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <form onSubmit={handleSearch} className="flex-1">
@@ -532,10 +532,10 @@ const ChequeList = () => {
             </div>
           </div>
           
-          {/* Filter Options */}
+
           {showFilters && (
             <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Status Filter */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Status
@@ -553,7 +553,7 @@ const ChequeList = () => {
                 </select>
               </div>
               
-              {/* Type Filter */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Cheque Type
@@ -569,7 +569,7 @@ const ChequeList = () => {
                 </select>
               </div>
               
-              {/* Date Filter */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Cheque Date
@@ -585,7 +585,7 @@ const ChequeList = () => {
           )}
         </div>
 
-        {/* Cheque List Table */}
+
         <div className="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <div>
@@ -744,7 +744,7 @@ const ChequeList = () => {
                             <div className="text-xs text-gray-500">
                               Last updated: {formatDate(cheque.updatedAt)}
                             </div>
-                            {/* Quick Status Change */}
+
                             <div className="flex flex-wrap gap-1 mt-2">
                               {['pending', 'cleared', 'bounced', 'cancelled']
                                 .filter(status => status !== cheque.status)
@@ -803,7 +803,7 @@ const ChequeList = () => {
                 </table>
               </div>
 
-              {/* Pagination */}
+
               {totalPages > 1 && (
                 <div className="px-6 py-4 border-t border-gray-200">
                   <div className="flex items-center justify-between">
@@ -871,7 +871,7 @@ const ChequeList = () => {
           )}
         </div>
 
-        {/* Summary */}
+
         <div className="mt-6 bg-white rounded-xl shadow border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Summary</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -990,7 +990,7 @@ const ChequeList = () => {
         </div>
       </div>
 
-      {/* Add/Edit Cheque Popup */}
+
       {showChequePopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -1007,7 +1007,7 @@ const ChequeList = () => {
             </div>
             
             <div className="p-6">
-              {/* Add your cheque form here */}
+
               <div className="text-center py-8">
                 <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-600">
@@ -1023,7 +1023,7 @@ const ChequeList = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={() => {/* Handle form submission */}}
+                  onClick={() => {}}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   {popupMode === 'add' ? 'Add Cheque' : 'Update Cheque'}
@@ -1034,7 +1034,7 @@ const ChequeList = () => {
         </div>
       )}
 
-      {/* View Cheque Popup */}
+
       {showViewPopup && selectedCheque && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -1050,7 +1050,7 @@ const ChequeList = () => {
             
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Cheque Details */}
+
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-gray-700 mb-4">Cheque Information</h3>
                   <div className="space-y-3">
@@ -1073,7 +1073,7 @@ const ChequeList = () => {
                   </div>
                 </div>
 
-                {/* Status & Dates */}
+
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-gray-700 mb-4">Status & Dates</h3>
                   <div className="space-y-3">
@@ -1104,7 +1104,7 @@ const ChequeList = () => {
                   </div>
                 </div>
 
-                {/* Bank Details */}
+
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-gray-700 mb-4">Bank Details</h3>
                   <div className="space-y-3">
@@ -1123,7 +1123,7 @@ const ChequeList = () => {
                   </div>
                 </div>
 
-                {/* Payee Details */}
+
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-gray-700 mb-4">Payee Details</h3>
                   <div className="space-y-3">
@@ -1168,7 +1168,7 @@ const ChequeList = () => {
         </div>
       )}
 
-      {/* Edit Cheque Popup (reuses same component as Add) */}
+
       {showEditPopup && selectedCheque && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -1183,7 +1183,7 @@ const ChequeList = () => {
             </div>
             
             <div className="p-6">
-              {/* Edit form will be here */}
+
               <div className="text-center py-8">
                 <Edit className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-600">
@@ -1199,7 +1199,7 @@ const ChequeList = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={() => {/* Handle update */}}
+                  onClick={() => {}}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   Update Cheque

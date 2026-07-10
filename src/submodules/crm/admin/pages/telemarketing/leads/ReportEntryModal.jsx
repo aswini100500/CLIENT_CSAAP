@@ -308,7 +308,7 @@ const ReportEntryModal = ({
                       </div>
                     </div>
 
-                    {/* Dropdown Suggestions */}
+
                     {showDropdown && dropdownStyle
                       ? createPortal(
                       <div
@@ -359,7 +359,7 @@ const ReportEntryModal = ({
                       : null}
                   </div>
 
-                  {/* Selected Employee Preview */}
+
                   {selectedEmployee && !showDropdown && (
                     <div className="mt-4 app-panel overflow-hidden">
                       <div className="app-section-bar px-4 py-2.5">

@@ -4,7 +4,7 @@ import { Plus, Edit2, Trash2, X, Shield } from 'lucide-react';
 import useAuth from '../../../hooks/useAuth';
 
 const ProjectAssignments = () => {
-  // --- STATE ---
+
   const [assignments, setAssignments] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -13,26 +13,26 @@ const ProjectAssignments = () => {
   const [loading, setLoading] = useState(false);
   const [editId, setEditId] = useState(null);
 
-  // Form State
+
   const [formData, setFormData] = useState({
     employeeid: '',
     project_id: '',
     project_role: ''
   });
 
-  // Auth/Token Extraction via useAuth hook
+
   const { user, token, companyId } = useAuth();
   const company_id = companyId || 1; 
 
-  // --- API URLS ---
-  // ⚠️ IMPORTANT: Adjust these URLs to match your exact backend routes!
+
+
   const API_ASSIGNMENTS = `${import.meta.env.VITE_CSAAP_URL}/api/tenant/project-assignments`;
   const API_EMPLOYEES = `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`;
   const API_PROJECTS = `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects?company_id=${company_id}`;
 
   const headers = { Authorization: `Bearer ${token}` };
 
-  // --- FETCH DATA ---
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -40,11 +40,11 @@ const ProjectAssignments = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetch Assignments, Employees, and Projects simultaneously
+
       const [assignRes, empRes, projRes] = await Promise.all([
         axios.get(API_ASSIGNMENTS, { headers }),
         axios.get(API_EMPLOYEES, { headers }),
-        axios.get(API_PROJECTS, { headers }).catch(() => ({ data: { data: [] } })) // Fallback if projects API isn't ready
+        axios.get(API_PROJECTS, { headers }).catch(() => ({ data: { data: [] } }))
       ]);
 
       setAssignments(assignRes.data.data || []);
@@ -57,7 +57,7 @@ const ProjectAssignments = () => {
     }
   };
 
-  // --- HANDLERS ---
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -82,21 +82,21 @@ const ProjectAssignments = () => {
     setEditId(null);
   };
 
-  // --- CRUD OPERATIONS ---
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (editId) {
-        // UPDATE
+
         await axios.put(`${API_ASSIGNMENTS}/${editId}`, formData, { headers });
         alert("Assignment updated successfully!");
       } else {
-        // CREATE
+
         await axios.post(API_ASSIGNMENTS, formData, { headers });
         alert("Employee assigned to project successfully!");
       }
       closeModal();
-      fetchData(); // Refresh the list
+      fetchData();
     } catch (error) {
       console.error("Error saving assignment:", error);
       alert("Failed to save assignment. Please try again.");
@@ -107,7 +107,7 @@ const ProjectAssignments = () => {
     if (window.confirm("Are you sure you want to remove this employee from the project?")) {
       try {
         await axios.delete(`${API_ASSIGNMENTS}/${id}`, { headers });
-        fetchData(); // Refresh the list
+        fetchData();
       } catch (error) {
         console.error("Error deleting assignment:", error);
         alert("Failed to delete assignment.");
@@ -117,7 +117,7 @@ const ProjectAssignments = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      {/* Header */}
+
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 flex items-center">
@@ -134,7 +134,7 @@ const ProjectAssignments = () => {
         </button>
       </div>
 
-      {/* Main Table Card */}
+
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         {loading ? (
           <div className="p-10 text-center text-gray-500">Loading assignments...</div>
@@ -153,7 +153,7 @@ const ProjectAssignments = () => {
                 {assignments.length > 0 ? assignments.map((assign) => (
                   <tr key={assign.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                     <td className="p-4 font-medium text-gray-800">
-                      {/* Finds the employee name based on ID */}
+
                       {employees.find(e => e.id === assign.employeeid)?.name || `Employee ID: ${assign.employeeid}`}
                     </td>
                     <td className="p-4 text-gray-600">
@@ -184,7 +184,7 @@ const ProjectAssignments = () => {
         )}
       </div>
 
-      {/* CREATE / EDIT MODAL */}
+
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
@@ -198,7 +198,7 @@ const ProjectAssignments = () => {
             </div>
             
             <form onSubmit={handleSubmit} className="p-5 space-y-4">
-              {/* Employee Select */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Select Employee</label>
                 <select 
@@ -215,7 +215,7 @@ const ProjectAssignments = () => {
                 </select>
               </div>
 
-              {/* Project Select */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Select Project</label>
                 <select 
@@ -232,7 +232,7 @@ const ProjectAssignments = () => {
                 </select>
               </div>
 
-              {/* Role Input */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Project Role</label>
                 <input 
@@ -246,7 +246,7 @@ const ProjectAssignments = () => {
                 />
               </div>
 
-              {/* Submit Buttons */}
+
               <div className="pt-4 flex justify-end space-x-3 border-t border-gray-100">
                 <button 
                   type="button" 

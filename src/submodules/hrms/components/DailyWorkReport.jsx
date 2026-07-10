@@ -210,7 +210,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
     };
   };
 
-  // Updated fetchProjectScope to use the new project fetching logic
+
   useEffect(() => {
     const fetchProjectScope = async () => {
       const activeCompanyId = companyId || user?.company_id;
@@ -225,7 +225,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
       try {
         const headers = { Authorization: `Bearer ${token}` };
 
-        // 1. Fetch client projects
+
         const projRes = await axios.get(
           `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
           {
@@ -266,14 +266,14 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           return;
         }
 
-        // 2. Fetch employees
+
         const employeesRes = await axios
           .get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`, { headers })
           .catch(() => ({ data: [] }));
 
         const employees = employeesRes.data?.data || employeesRes.data || [];
 
-        // Find current employee
+
         const currentEmployee = employees.find(
           (employee) =>
             String(getEmployeeRecordId(employee)) === String(employeeId),
@@ -282,7 +282,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           currentEmployee?.department || user?.department || "",
         );
 
-        // 3. Fetch assignments once
+
         const assignmentsRes = await axios.get(
           `${import.meta.env.VITE_CSAAP_URL}/api/tenant/project-assignments`,
           { headers }
@@ -290,7 +290,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
 
         const allAssignments = assignmentsRes.data?.data || assignmentsRes.data || [];
 
-        // Consolidate all authorized employees across projects
+
         const allAuthorizedEmployeeIds = new Set();
         const consolidatedDepts = {};
         const nextManagedProjects = [];
@@ -308,7 +308,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
             : [];
 
         allProjects.forEach((project) => {
-          // Filter assignments matching this project
+
           const assignments = allAssignments.filter(
             (a) =>
               String(a.projectid) === String(project.id) &&
@@ -405,7 +405,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
   const filteredRecords = useMemo(() => {
     let nextRecords = [...records];
 
-    // Filter by project if selected, otherwise show consolidated managed employees
+
     if (selectedProjectKey) {
       const selectedProject = managedProjects.find(
         (p) => p.key === selectedProjectKey,
@@ -417,13 +417,13 @@ const DailyWorkReport = ({ hideHeader = false }) => {
         );
       }
     } else {
-      // Show all employees from all managed projects
+
       const allManagedIds = new Set();
       managedProjects.forEach((p) =>
         p.employeeIds.forEach((id) => allManagedIds.add(id)),
       );
 
-      // Only filter if we've actually loaded some projects or if we're certain there are none
+
       const allDepartmentIds = new Set(departmentEmployeeIds);
       const allowedEmployeeIds = new Set(allManagedIds);
       allDepartmentIds.forEach((id) => allowedEmployeeIds.add(id));
@@ -439,7 +439,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           allowedEmployeeIds.has(String(item.employeeId)),
         );
       }
-      // If the user can view all reports or scope is still loading, don't filter the records list yet.
+
     }
 
     if (selectedDepartment !== "all") {
@@ -548,7 +548,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
     if (isAdmin) return true;
     if (departmentEmployeeIds.includes(String(record.employeeId))) return true;
 
-    // Check if employee is in any of the managed projects
+
     return managedProjects.some((p) =>
       p.employeeIds.includes(String(record.employeeId)),
     );
@@ -739,7 +739,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
 
   return (
     <div className="space-y-4 font-sans bg-transparent">
-      {/* Stats Cards */}
+
       {!hideHeader && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-(--border-soft) shadow-[0_2px_8px_rgba(0,166,81,0.02)] flex items-center gap-4 transition-all hover:shadow-md">
@@ -797,7 +797,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
         </div>
       )}
 
-      {/* Toolbar */}
+
       <div className={`${panelClass} p-4`}>
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-wrap items-center gap-3">
@@ -941,7 +941,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
         )}
       </div>
 
-      {/* Ledger */}
+
       <div className={panelClass}>
         <div className="flex flex-col gap-2 border-b border-(--border-soft) bg-white px-5 py-3 md:flex-row md:items-center md:justify-between sticky top-0 z-10">
           <div className="flex items-center gap-2.5">
@@ -979,7 +979,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           </div>
         </div>
 
-        {/* Bulk Action Bar */}
+
         {selectedCount > 0 && (
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-(--border-strong) bg-(--brand-soft)/40 px-5 py-2.5 animate-in slide-in-from-top duration-200">
             <div className="flex items-center gap-2">
@@ -1216,7 +1216,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
         </div>
       </div>
 
-      {/* Pagination */}
+
       <div className="flex items-center justify-between bg-white px-5 py-3 rounded-2xl border border-(--border-soft) shadow-[0_2px_8px_rgba(0,166,81,0.02)]">
         <div className="flex items-center gap-2">
           <button
@@ -1249,7 +1249,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
         </div>
       </div>
 
-      {/* Details Modal */}
+
       {showDetails && selectedRecord && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md p-4">
           <div className="w-full max-w-2xl bg-white rounded-2xl border border-(--border-soft) shadow-[0_8px_32px_rgba(0,166,81,0.08)] overflow-hidden animate-in fade-in zoom-in duration-200">

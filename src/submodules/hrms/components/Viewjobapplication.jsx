@@ -23,11 +23,11 @@ import useAuth from "../../../hooks/useAuth";
 
 const API_URL = `${import.meta.env.VITE_HRMS_BASE_URL}`;
 
-// Move getFileType function outside the main component to make it accessible
+
 const getFileType = (fileUrl) => {
   if (!fileUrl) return null;
 
-  // Check if it's an image URL
+
   if (fileUrl.includes('unsplash.com') || fileUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
     return 'image';
   } else if (fileUrl.match(/\.pdf$/i) || fileUrl.includes('pdf')) {
@@ -38,7 +38,7 @@ const getFileType = (fileUrl) => {
   return 'unknown';
 };
 
-// Document Card Component
+
 const DocumentCard = ({ document, onPreview, onDownload, showLabel, getFileName }) => {
   const fileType = document.file ? getFileType(document.file) : '';
   const fileName = getFileName ? getFileName(document.file, document.type) : 'document';
@@ -126,7 +126,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
 
         const currentMonth = new Date().toISOString().slice(0, 7);
 
-        // Daily reports
+
         const dailyRes = await axios.get(
           `${API_URL}/api/attendance/${slug}?month=${currentMonth}`
         );
@@ -138,7 +138,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
           setDailyWorkReports(filtered);
         }
 
-        // Monthly reports
+
         const monthlyRes = await axios.get(
           `${API_URL}/api/monthly-reports/${slug}/employee/${employeeId}`
         );
@@ -180,7 +180,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
     setViewTitle("");
   };
 
-  // Parse documents from database
+
   const parseDocuments = () => {
     try {
       if (!employee) return {};
@@ -315,7 +315,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
         gender: employee.gender,
     aadharNo: employee.aadharNo,
     panNo: employee.panNo,
-    // company: employee.company,
+
     postApplied: employee.postApplied,
     storeAssign: employee.storeAssign,
     employeeStatus: employee.employeeStatus,
@@ -464,7 +464,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 overflow-auto p-4 md:p-6 app-modal-backdrop">
       <div className="app-modal max-w-6xl w-full mx-auto my-10 p-0! overflow-hidden flex flex-col">
-        {/* Header */}
+
         <div className="flex items-center gap-4 p-6 border-b border-(--border-soft) bg-linear-to-r from-white to-(--bg-subtle)">
           <button
             onClick={onClose}
@@ -479,7 +479,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
           </div>
         </div>
 
-        {/* Tabs */}
+
         <div className="border-b border-(--border-soft)">
           <nav className="flex overflow-x-auto">
             {[
@@ -504,7 +504,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
           </nav>
         </div>
 
-        {/* Content Sections */}
+
         <div className="max-h-[70vh] overflow-y-auto custom-scrollbar">
           {activeSection === "basic" && (
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -582,7 +582,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
             </div>
             )}
 
-          {/* REDESIGNED MONTHLY REPORT SECTION */}
+
           {activeSection === "monthly" && (
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
@@ -610,7 +610,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {monthlyReports.map((report, i) => (
                     <div key={i} className="group app-panel border border-(--border-soft) rounded-xl hover:shadow-lg hover:border-(--brand)/30 transition-all duration-200 overflow-hidden">
-                      {/* Month Header with Status */}
+
                       <div className="relative">
                         <div className="absolute top-0 right-0 m-3">
                           <span className={`px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 shadow-sm capitalize ${report.status?.toLowerCase() === "approved" ? "bg-green-100 text-green-700 border border-green-200" :
@@ -639,7 +639,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
                         </div>
                       </div>
 
-                      {/* Description Section */}
+
                       <div className="p-5">
                         <div className="mb-3">
                           <div className="flex items-center gap-2 text-sm font-medium text-(--text-strong) mb-2">
@@ -666,7 +666,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
                           </div>
                         </div>
 
-                        {/* Metadata Footer */}
+
                         <div className="flex items-center justify-between pt-2 text-xs text-(--text-soft) border-t border-(--border-soft) mt-2">
                           <span>Report ID: {report.id || '—'}</span>
                           <div className="flex items-center gap-1">
@@ -683,13 +683,13 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
           )}
         </div>
 
-        {/* Footer */}
+
         <div className="border-t border-(--border-soft) p-6 bg-(--bg-subtle) flex justify-end">
           <button onClick={onClose} className="app-btn-secondary px-6 cursor-pointer">Close</button>
         </div>
       </div>
 
-      {/* Preview Modal */}
+
       {selectedDocument && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 app-modal-backdrop">
           <div className="app-modal max-w-4xl w-full p-0! overflow-hidden" onClick={(e) => e.stopPropagation()}>
@@ -707,7 +707,7 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
       {viewText && (
         <div className="fixed inset-0 z-70 flex items-center justify-center p-4 app-modal-backdrop">
           <div className="app-modal max-w-2xl w-full p-0! overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            {/* Header */}
+
             <div className="flex items-center justify-between p-4 border-b border-(--border-soft)">
               <h3 className="modal-title">{viewTitle}</h3>
               <button
@@ -718,12 +718,12 @@ const ViewJobApplication = ({ employeeId, employeeData, onClose }) => {
               </button>
             </div>
 
-            {/* Content */}
+
             <div className="p-6 overflow-y-auto max-h-[60vh] text-sm text-(--text-strong) whitespace-pre-wrap custom-scrollbar">
               {viewText}
             </div>
 
-            {/* Footer */}
+
             <div className="border-t border-(--border-soft) p-4 flex justify-end bg-(--bg-subtle)">
               <button
                 onClick={closeViewText}

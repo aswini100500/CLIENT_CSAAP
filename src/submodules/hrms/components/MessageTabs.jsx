@@ -24,7 +24,7 @@ const MessageTabs = () => {
   const { user } = useAuth();
   const { hasAccess } = usePermission();
   
-  // Calculate default active tab based on allowed permissions
+
   const [activeTab, setActiveTab] = useState(() => {
     if (hasAccess("hrms.message")) return "message-to-employee";
     if (hasAccess("hrms.message.complaints")) return "complaints";
@@ -50,10 +50,10 @@ const MessageTabs = () => {
     if (!user?.slug) return;
     try {
       const [msgRes, compRes, servRes, annRes] = await Promise.all([
-        // axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/messages/${user.slug}`),
+
         axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/messages/company/all?company_id=${user.company_id}&slug=${user.slug}`),
         axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/`),
-        // axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/${user.slug}`),
+
         axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/company-search?company_id=${user.company_id}&slug=${user.slug}`),
         axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/announcements?company_id=${user.company_id}&slug=${user.slug}&status=active`)
       ]);
@@ -70,7 +70,7 @@ const MessageTabs = () => {
         announcements: anns.length
       });
 
-      // Calculate "New/Pending" notifications based on persistent "Last Checked" timestamps
+
       const getLastChecked = (key) => localStorage.getItem(`hrms_last_checked_${key}`) || '1970-01-01';
       
       const newNotifications = {
@@ -80,7 +80,7 @@ const MessageTabs = () => {
         announcements: anns.filter(a => a.created_at > getLastChecked('announcements')).length
       };
 
-      // Clear active tab's notification count in current state
+
       const tabToKey = {
         "message-to-employee": "messages",
         "complaints": "complaints",
@@ -107,7 +107,7 @@ const MessageTabs = () => {
 
     if (keyToClear) {
       setNotifications(prev => ({ ...prev, [keyToClear]: 0 }));
-      // Persist the "last checked" timestamp
+
       localStorage.setItem(`hrms_last_checked_${keyToClear}`, new Date().toISOString());
     }
   };
@@ -173,7 +173,7 @@ const MessageTabs = () => {
 
   return (
     <div className="w-full min-h-screen bg-[#f8fafc] p-4 lg:p-6 font-sans">
-      {/* ── Tabs Navigation ──────────────────────────────── */}
+
       <div className="flex justify-start mb-8">
         <nav className="flex p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm">
           {tabs.map((tab) => {
@@ -188,7 +188,7 @@ const MessageTabs = () => {
                   ${isActive ? "text-white" : "text-slate-500 hover:text-slate-800"}
                 `}
               >
-                {/* Sliding Background */}
+
                 {isActive && (
                   <motion.div
                     layoutId="activeTabBackground"
@@ -202,7 +202,7 @@ const MessageTabs = () => {
                 </span>
                 <span className="relative z-10">{tab.label}</span>
 
-                {/* Notification Badge */}
+
                 {tab.notification > 0 && (
                   <span className="relative z-10 ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
                     {tab.notification}
@@ -214,9 +214,9 @@ const MessageTabs = () => {
         </nav>
       </div>
 
-      {/* ── Content Area ─────────────────────────────────── */}
+
       <div className="w-full bg-white rounded-4xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden">
-        {/* Animated Component Container */}
+
         <div className="w-full min-h-150 relative">
           <AnimatePresence mode="wait">
             <motion.div

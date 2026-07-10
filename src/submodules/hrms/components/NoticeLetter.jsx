@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import { Trash2, Search, User, ChevronLeft, ChevronRight, FileText, Download, Eye, X } from "lucide-react";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
-// Notice Form Modal Component
+
 const NoticeFormModal = ({ employee, onClose }) => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -16,8 +16,8 @@ const handleSubmit = async (e) => {
   try {
     await axios.post(`${import.meta.env.VITE_HRMS_BASE_URL}/api/noticeletters/add`, {
 employeeId: employee.id,
-      // designation: employee.designation,
-      // department: employee.department,
+
+
       fromDate,
       toDate,
       remark,
@@ -25,7 +25,7 @@ employeeId: employee.id,
 
     alert("Notice added successfully!");
     onClose();
-    // window.location.reload();
+
   } catch (err) {
     console.error("Failed to add notice:", err);
     alert("Failed to add notice.");
@@ -132,16 +132,16 @@ useEffect(() => {
   };
 
   fetchNotices();
-}, [id]); // ✅ IMPORTANT
+}, [id]);
 
 
 
-  // Filter employees based on search
-// const filtered = employees.filter((e) =>
-//   e.employeeName.toLowerCase().includes(search.toLowerCase()) ||
-//   e.designation.toLowerCase().includes(search.toLowerCase()) ||
-//   e.department.toLowerCase().includes(search.toLowerCase())
-// );
+
+
+
+
+
+
 
 const filtered = Array.isArray(employees)
   ? employees.filter((e) =>
@@ -158,7 +158,7 @@ const filtered = Array.isArray(employees)
   : [];
 
 
-  // Pagination logic
+
   const totalPages = Math.ceil(filtered.length / entriesToShow);
   const startIndex = (currentPage - 1) * entriesToShow;
   const endIndex = startIndex + entriesToShow;
@@ -177,12 +177,12 @@ const filtered = Array.isArray(employees)
     }
   }
 
-  // Function to handle view details
+
   const handleViewDetails = (employee) => {
     setSelectedEmployee(employee);
   };
 
-  // Function to handle download
+
 const handleDownload = (employee) => {
   const employeeData = `
 Employee: ${employee.name}
@@ -337,7 +337,7 @@ a.download = `notice_${employee.name.replace(/\s+/g, "_")}.txt`;
             </table>
           </div>
 
-          {/* Pagination */}
+
           <div className="flex flex-col md:flex-row items-center justify-between mt-6 pt-6 border-t border-gray-200">
             <div className="text-sm text-gray-700 mb-4 md:mb-0">
               Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
@@ -380,12 +380,12 @@ a.download = `notice_${employee.name.replace(/\s+/g, "_")}.txt`;
         </div>
       </div>
 
-      {/* Employee Details Modal */}
+
       {selectedEmployee && (
         <EmployeeDetailsModal employee={selectedEmployee} onClose={() => setSelectedEmployee(null)} />
       )}
 
-      {/* Notice Form Modal */}
+
       {showNoticeForm && (
         <NoticeFormModal employee={showNoticeForm} onClose={() => setShowNoticeForm(null)} />
       )}
@@ -393,7 +393,7 @@ a.download = `notice_${employee.name.replace(/\s+/g, "_")}.txt`;
   );
 }
 
-// Employee Details Modal Component (unchanged)
+
 const EmployeeDetailsModal = ({ employee, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>

@@ -74,7 +74,7 @@ export default function Gstr2B() {
 
   return (
     <div className="space-y-4">
-      {/* Header */}
+
       <div className="bg-linear-to-r from-indigo-700 to-indigo-500 rounded-xl p-5 text-white">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -95,7 +95,7 @@ export default function Gstr2B() {
         </div>
       </div>
 
-      {/* Summary Cards */}
+
       {summary && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
@@ -112,7 +112,7 @@ export default function Gstr2B() {
         </div>
       )}
 
-      {/* Tabs */}
+
       <div className="flex border-b border-gray-200 overflow-x-auto">
         {TABS.map(t=>(
           <button key={t} onClick={()=>setTab(t)}
@@ -122,7 +122,7 @@ export default function Gstr2B() {
         ))}
       </div>
 
-      {/* Search */}
+
       <div className="relative">
         <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"/>
         <input value={search} onChange={e=>setSearch(e.target.value)}
@@ -130,7 +130,7 @@ export default function Gstr2B() {
           className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
       </div>
 
-      {/* Supplier-wise Tab */}
+
       {tab==='Supplier-wise' && (
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <div className="px-4 py-3 bg-gray-50 border-b">
@@ -165,7 +165,7 @@ export default function Gstr2B() {
         </div>
       )}
 
-      {/* Invoice Table */}
+
       {tab!=='Supplier-wise' && (
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <div className="overflow-x-auto">

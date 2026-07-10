@@ -47,7 +47,7 @@ const Reports = () => {
     { id: 5, name: "Robert Brown" },
   ];
 
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -63,12 +63,12 @@ const Reports = () => {
     });
   };
 
-  // Submit form (Add or Update)
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (isEdit && editingReportId) {
-      // Update existing report
+
       setReports(
         reports.map((report) =>
           report.id === editingReportId
@@ -85,7 +85,7 @@ const Reports = () => {
         )
       );
     } else {
-      // Add new report
+
       const newReport = {
         id: reports.length + 1,
         reportName: formData.reportName,
@@ -99,7 +99,7 @@ const Reports = () => {
       setReports([...reports, newReport]);
     }
 
-    // Reset form
+
     setFormData({
       engineer: "",
       reportName: "",
@@ -116,7 +116,7 @@ const Reports = () => {
   };
 
   const handleEdit = (report) => {
-    // Pre-fill form with existing data
+
     const engineerObj = engineers.find((eng) => eng.name === report.engineer);
     setFormData({
       engineer: engineerObj ? engineerObj.id.toString() : "",
@@ -142,7 +142,7 @@ const Reports = () => {
 
   return (
     <div className="flex min-h-screen w-full bg-gray-100">
-      {/* Main content */}
+
       <div className="flex-1 p-7">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Reports</h2>
@@ -171,7 +171,7 @@ const Reports = () => {
           </button>
         </div>
 
-        {/* Reports Table */}
+
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
@@ -203,7 +203,7 @@ const Reports = () => {
                     </td>
                     <td className="px-4 py-2 flex space-x-2 ">
                       <button
-                        // onClick={() => handleDelete(report.id)}
+
                         className="text-red-600 hover:text-red-900 cursor-pointer"
                         title="Delete"
                       >
@@ -225,7 +225,7 @@ const Reports = () => {
         </div>
       </div>
 
-      {/* Form Modal */}
+
       {isFormOpen && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md relative">
@@ -241,7 +241,7 @@ const Reports = () => {
               </button>
             </div>
             <form onSubmit={handleSubmit} className="px-6 py-4">
-              {/* Engineer */}
+
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-2">
                   Select Engineer
@@ -261,7 +261,7 @@ const Reports = () => {
                   ))}
                 </select>
               </div>
-              {/* Report Name */}
+
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-2">
                   Report Name
@@ -275,7 +275,7 @@ const Reports = () => {
                   required
                 />
               </div>
-              {/* Description */}
+
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-2">
                   Description
@@ -289,7 +289,7 @@ const Reports = () => {
                   required
                 />
               </div>
-              {/* File Upload */}
+
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2">
                   Upload File
@@ -300,7 +300,7 @@ const Reports = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
-              {/* Buttons */}
+
               <div className="flex justify-end space-x-3">
                 <button
                   type="button"

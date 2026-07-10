@@ -122,7 +122,7 @@ const DailyAccessActivity = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="mb-3 lg:mb-0">
@@ -134,7 +134,7 @@ const DailyAccessActivity = () => {
               </p>
             </div>
 
-            {/* Date Selector */}
+
             <div className="flex items-center space-x-3">
               <label
                 htmlFor="date"
@@ -153,10 +153,10 @@ const DailyAccessActivity = () => {
           </div>
         </div>
 
-        {/* Filters */}
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            {/* Department Filter */}
+
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Department
@@ -179,7 +179,7 @@ const DailyAccessActivity = () => {
               </select>
             </div>
 
-            {/* Status Filter */}
+
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Status
@@ -200,7 +200,7 @@ const DailyAccessActivity = () => {
               </select>
             </div>
 
-            {/* Punch Type Filter */}
+
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Punch Type
@@ -223,7 +223,7 @@ const DailyAccessActivity = () => {
               </select>
             </div>
 
-            {/* Action Buttons */}
+
             <div className="flex items-end space-x-2">
               <button
                 onClick={exportToExcel}
@@ -268,7 +268,7 @@ const DailyAccessActivity = () => {
           </div>
         </div>
 
-        {/* Reports Table */}
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -356,7 +356,7 @@ const DailyAccessActivity = () => {
           </div>
         </div>
 
-        {/* Summary Stats */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mt-4">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3">
             <div className="flex items-center">

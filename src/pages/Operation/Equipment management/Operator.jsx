@@ -36,7 +36,7 @@ const Operator = () => {
     }
   };
 
-  // Add new operator
+
   const handleAddOperator = async () => {
     if (
       !newOperator.name ||
@@ -70,14 +70,14 @@ const Operator = () => {
     }
   };
 
-  // Edit operator
+
   const handleEdit = (id) => {
     const operator = operators.find((o) => o.id === id);
     setNewOperator(operator);
     setEditingId(id);
   };
 
-  // Update operator
+
   const handleUpdate = async () => {
     try {
       setLoading(true);
@@ -99,7 +99,7 @@ const Operator = () => {
     }
   };
 
-  // Delete operator
+
   const handleDelete = async (id) => {
     try {
       setLoading(true);
@@ -114,7 +114,7 @@ const Operator = () => {
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-md border border-gray-200">
-      {/* Header */}
+
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-blue-700 flex items-center gap-2">
           <UserCog className="w-6 h-6 text-blue-600" />
@@ -122,7 +122,7 @@ const Operator = () => {
         </h2>
       </div>
 
-      {/* Add/Edit Form */}
+
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
         <input
           type="text"
@@ -178,7 +178,7 @@ const Operator = () => {
         </button>
       </div>
 
-      {/* Table */}
+
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
           <thead className="bg-blue-50">

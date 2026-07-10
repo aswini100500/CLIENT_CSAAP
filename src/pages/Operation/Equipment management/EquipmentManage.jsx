@@ -39,7 +39,7 @@ const EquipmentManage = () => {
     }
   };
 
-  // Add New Equipment
+
   const handleAddEquipment = async () => {
     if (
       !newEquipment.name ||
@@ -83,7 +83,7 @@ const EquipmentManage = () => {
     }
   };
 
-  // Delete Equipment
+
   const handleDelete = async (id) => {
     try {
       setLoading(true);
@@ -96,14 +96,14 @@ const EquipmentManage = () => {
     }
   };
 
-  // Edit Equipment
+
   const handleEdit = (id) => {
     const equipment = equipments.find((v) => v.id === id);
     setNewEquipment(equipment);
     setEditingId(id);
   };
 
-  // Update Equipment
+
   const handleUpdate = async () => {
     try {
       setLoading(true);
@@ -135,7 +135,7 @@ const EquipmentManage = () => {
 
   return (
     <div className="p-5 bg-white rounded-xl shadow-md border border-gray-200">
-      {/* Form Section */}
+
       <div className="grid grid-cols-1 md:grid-cols-8 gap-4 mb-6">
         <input
           type="text"
@@ -179,7 +179,7 @@ const EquipmentManage = () => {
           className="border border-gray-300 rounded-lg p-2 text-sm"
         />
 
-        {/* Fuel Type Dropdown */}
+
         <select
           value={newEquipment.fuel_type}
           onChange={(e) =>
@@ -211,7 +211,7 @@ const EquipmentManage = () => {
         </button>
       </div>
 
-      {/* Table */}
+
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
           <thead className="bg-blue-50">

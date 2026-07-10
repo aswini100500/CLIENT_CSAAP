@@ -23,7 +23,7 @@ const OutFlow = () => {
     );
   };
 
-  // Update quantity
+
   const updateQuantity = (code, newQty) => {
     setData((prev) =>
       prev.map((item) =>
@@ -34,7 +34,7 @@ const OutFlow = () => {
     );
   };
 
-  // Compute total dynamically based on quantity
+
   const totalOutflow = data.reduce(
     (sum, item) => sum + (item.amount * (item.quantity || 0)),
     0
@@ -73,7 +73,7 @@ const OutFlow = () => {
                 <td className="px-3 py-2">{row.group}</td>
                 <td className="px-3 py-2">{row.head}</td>
 
-                {/* Quantity Input */}
+
                 <td className="px-3 py-2 text-center">
                   <input
                     type="number"
@@ -85,7 +85,7 @@ const OutFlow = () => {
                   />
                 </td>
 
-                {/* Computed Total */}
+
                 <td className="px-3 py-2 text-right">
                   {(row.amount * (row.quantity || 0)).toLocaleString("en-IN", {
                     style: "currency",
@@ -98,7 +98,7 @@ const OutFlow = () => {
         </table>
       </div>
 
-      {/* Footer */}
+
       <div className="flex items-center justify-between px-4 py-3 bg-gray-100 border-t">
         <div className="text-sm text-gray-600">
           Outflow Amount:{" "}

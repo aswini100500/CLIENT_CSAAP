@@ -92,7 +92,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
     const selectedProj = projectsList.find(p => p.uid === selectedProjectUid);
     let currentUnits = [];
     if (selectedProj) {
-        // Map units from project data (some have units_data, some have units)
+
         currentUnits = selectedProj.units_data || selectedProj.units || [];
         if (typeof currentUnits === 'string') {
             try { currentUnits = JSON.parse(currentUnits); } catch (e) { currentUnits = []; }
@@ -103,7 +103,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
     }
     setPlans({});
 
-    // Check if project setup already exists for this project
+
     try {
         if (!selectedProj) return;
         const setupsRes = await operationApi.getProjectSetups();
@@ -251,7 +251,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
     setStages(prev => prev.map(s => s.id === id ? { ...s, [field]: value } : s));
   };
 
-  // Sub-stage handlers
+
   const addSubStage = (stageId) => {
     const newSub = { id: generateUUID(), name: `Sub-stage `, description: "", status: "planned" };
     setStages(prev => prev.map(s => s.id === stageId ? { ...s, subStages: [...(s.subStages || []), newSub] } : s));
@@ -272,7 +272,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      {/* Header */}
+
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center justify-center gap-2">
           <FaBuilding className="text-blue-600" />
@@ -286,7 +286,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
         )}
       </div>
 
-      {/* Project & Contractor Selection */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -363,7 +363,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
         </div>
       </div>
 
-      {/* Timeline */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -391,7 +391,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
         </div>
       </div>
 
-      {/* Units Section */}
+
       {units.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -471,8 +471,8 @@ const ProjectSetup = ({ onProjectSelect }) => {
         </div>
       )}
 
-      {/* Submit Section */}
-      {/* Project Stages & Timeline */}
+
+
       <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-xl border border-gray-200 dark:border-gray-600 mt-6">
         <div className="flex items-center justify-between mb-6">
           <label className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
@@ -509,7 +509,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
                     value={stage.description}
                     onChange={(e) => updateStage(stage.id, 'description', e.target.value)}
                   />
-                  {/* Sub-stages */}
+
                   <div className="mt-3">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Sub-stages</label>
                     <div className="space-y-2 mt-2">
@@ -555,13 +555,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
                       className="border border-gray-300 dark:border-gray-600 rounded-lg p-2"
                     />
                   </div>
-                  {/* <input
-                    type="text"
-                    placeholder="Budget (optional)"
-                    value={stage.budget}
-                    onChange={(e) => updateStage(stage.id, 'budget', e.target.value)}
-                    className="border border-gray-300 dark:border-gray-600 rounded-lg p-2 w-full"
-                  /> */}
+
                   <button
                     onClick={() => removeStage(stage.id)}
                     disabled={stages.length === 1}
@@ -576,7 +570,7 @@ const ProjectSetup = ({ onProjectSelect }) => {
         </div>
       </div>
 
-      {/* Submit Section */}
+
       <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-600 mt-6">
         <div className="text-sm">
           {!project || !contractor ? (

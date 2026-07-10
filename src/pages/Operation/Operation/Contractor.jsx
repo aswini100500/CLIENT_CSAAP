@@ -46,7 +46,7 @@ const Contractor = () => {
     "Compliances"
   ];
 
-  // Sample data for the posting info table from the image
+
   const postingInfoData = [
     {
       id: 1,
@@ -106,7 +106,7 @@ const Contractor = () => {
     },
   ];
 
-  // Sample data for attachment tab
+
   const attachmentData = [
     {
       id: 1,
@@ -118,7 +118,7 @@ const Contractor = () => {
     },
   ];
 
-  // Sample data for document chain viewer
+
   const documentChainData = [
     {
       id: 1,
@@ -177,7 +177,7 @@ const Contractor = () => {
     setFormData((prevState) => {
       const newState = { ...prevState, [name]: value };
       
-      // If contractor is selected, we might want to store both ID and Name if backend needs it
+
       if (name === "contractor_id") {
         const selected = contractors.find(c => c.id === parseInt(value));
         if (selected) {
@@ -195,7 +195,7 @@ const Contractor = () => {
       setLoading(true);
       const payload = new FormData();
       
-      // Mapping frontend state to backend expected fields
+
       const mapping = {
         businessUnit: "business_unit",
         documentType: "document_type",
@@ -259,7 +259,7 @@ const Contractor = () => {
     setClearanceFile(null);
   };
 
-  // Sample data for other tabs
+
   const approvalHistory = [
     {
       id: 1,
@@ -275,7 +275,7 @@ const Contractor = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
@@ -287,7 +287,7 @@ const Contractor = () => {
         </div>
       </div>
 
-      {/* Navigation Tabs */}
+
       <div className="bg-gray-200">
         <div className="max-w-7xl mx-auto">
           <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
@@ -308,7 +308,7 @@ const Contractor = () => {
         </div>
       </div>
 
-      {/* Main Content */}
+
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-6">
@@ -321,12 +321,12 @@ const Contractor = () => {
               </div>
             </div>
 
-            {/* Main Info Tab Content */}
+
             {activeTab === "Main Info" && (
               <form onSubmit={handleSubmit}>
-                {/* First Row - Business Unit, Document Type, Document No */}
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                  {/* Business Unit */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Business Unit <span className="text-red-500">*</span>
@@ -345,7 +345,7 @@ const Contractor = () => {
                     </select>
                   </div>
 
-                  {/* Document Type */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Document Type <span className="text-red-500">*</span>
@@ -364,7 +364,7 @@ const Contractor = () => {
                     </select>
                   </div>
 
-                  {/* Document No */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Document No <span className="text-red-500">*</span>
@@ -381,9 +381,9 @@ const Contractor = () => {
                   </div>
                 </div>
 
-                {/* Second Row - Contractor Name, Work Order No, Work Order Amount */}
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                  {/* Contractor Name */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Contractor Name <span className="text-red-500">*</span>
@@ -402,7 +402,7 @@ const Contractor = () => {
                     </select>
                   </div>
 
-                  {/* Work Order No */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Work Order No
@@ -417,7 +417,7 @@ const Contractor = () => {
                     />
                   </div>
 
-                  {/* Work Order Amount */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Work Order Amount
@@ -439,9 +439,9 @@ const Contractor = () => {
                   </div>
                 </div>
 
-                {/* Third Row - Invoice Number, Bill Amount, Billing Type */}
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                  {/* Invoice Number */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Invoice Number
@@ -456,7 +456,7 @@ const Contractor = () => {
                     />
                   </div>
 
-                  {/* Bill Amount */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Bill Amount
@@ -477,7 +477,7 @@ const Contractor = () => {
                     </div>
                   </div>
 
-                  {/* Billing Type */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Billing Type
@@ -497,9 +497,9 @@ const Contractor = () => {
                   </div>
                 </div>
 
-                {/* Fourth Row - Period From, Narration */}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  {/* Period From */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Period From
@@ -512,7 +512,7 @@ const Contractor = () => {
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
-                  {/* Period To */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Period To
@@ -527,12 +527,12 @@ const Contractor = () => {
                   </div>
                 </div>
 
-                {/* Divider */}
+
                 <div className="border-t border-gray-200 my-8"></div>
 
-                {/* Fifth Row - Financial Year, Document Date */}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  {/* Financial Year */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Financial Year <span className="text-red-500">*</span>
@@ -551,7 +551,7 @@ const Contractor = () => {
                     </select>
                   </div>
 
-                  {/* Document Date */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Document Date <span className="text-red-500">*</span>
@@ -567,12 +567,12 @@ const Contractor = () => {
                   </div>
                 </div>
 
-                {/* Divider */}
+
                 <div className="border-t border-gray-200 my-8"></div>
 
-                {/* Sixth Row - Parent Contractor, Bill Inward */}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  {/* Parent Contractor */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Parent Contractor
@@ -590,7 +590,7 @@ const Contractor = () => {
                     </select>
                   </div>
 
-                  {/* Bill Inward */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Bill Inward
@@ -611,12 +611,12 @@ const Contractor = () => {
                   </div>
                 </div>
 
-                {/* Divider */}
+
                 <div className="border-t border-gray-200 my-8"></div>
 
-                {/* Seventh Row - Invoice Date, Due Date, Period To */}
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                  {/* Invoice Date */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Invoice Date
@@ -630,7 +630,7 @@ const Contractor = () => {
                     />
                   </div>
 
-                  {/* Due Date */}
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Due Date
@@ -644,21 +644,10 @@ const Contractor = () => {
                     />
                   </div>
 
-                  {/* Period To */}
-                  {/* <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Period To
-                    </label>
-                    <input
-                      type="date"
-                      name="periodTo"
-                      value={formData.periodTo}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div> */}
+
+
                 </div>
-                {/* Narration */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Narration
@@ -685,7 +674,7 @@ const Contractor = () => {
                   />
                 </div>
 
-                {/* Action Buttons */}
+
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-8 border-t border-gray-200">
                   <div className="text-sm text-gray-500">
                     <span className="text-red-500">*</span> indicates required

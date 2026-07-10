@@ -10,7 +10,7 @@ const fetcher = (url) => client.get(url).then((res) => res.data.brokers || res.d
 const Brokers = () => {
   const API_ENDPOINT = '/api/tenant/broker';
 
-  // --- UI STATE ---
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,11 +18,11 @@ const Brokers = () => {
   const [contentVisible, setContentVisible] = useState(false);
   const [activeDetailsBroker, setActiveDetailsBroker] = useState(null);
 
-  // Notification (Toast) State
+
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  // --- Page Reveal Animation ---
+
   useEffect(() => {
     const revealTimer = setTimeout(() => {
       setContentVisible(true);
@@ -30,14 +30,14 @@ const Brokers = () => {
     return () => clearTimeout(revealTimer);
   }, []);
 
-  // --- SWR Hook with URL Parameter Logic ---
+
   const swrKey = searchTerm.trim()
     ? `${API_ENDPOINT}/search/${searchTerm}`
     : API_ENDPOINT;
 
   const { data: brokers = [], error, isLoading } = useSWR(swrKey, fetcher);
 
-  // Form State
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -47,7 +47,7 @@ const Brokers = () => {
     commission: ''
   });
 
-  // --- ACTIONS ---
+
   const triggerToast = (msg) => {
     setToastMessage(msg);
     setShowToast(true);
@@ -117,7 +117,7 @@ const Brokers = () => {
           : 'opacity-0 blur-sm translate-y-2'
       }`}
     >
-      {/* --- PREMIUM TOAST --- */}
+
       {showToast && (
         <div className="fixed top-20 right-8 z-50 transform transition-all duration-300 flex items-center gap-3 bg-white border border-(--border-strong) shadow-(--shadow-float) px-4 py-3 rounded-xl animate-in fade-in slide-in-from-top-4">
           <div className="bg-(--brand-soft) rounded-lg p-1.5 border border-(--border-soft)">
@@ -131,7 +131,7 @@ const Brokers = () => {
       )}
 
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* --- HEADER --- */}
+
         <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="app-title">Brokers</h1>
@@ -158,7 +158,7 @@ const Brokers = () => {
           </div>
         </header>
 
-        {/* --- MAIN DATA CONTAINER --- */}
+
         <div className="app-panel overflow-hidden">
           <div className="app-section-bar px-4 py-3 flex items-center justify-between">
             <h3 className="app-heading">All Brokers ({isLoading ? '...' : brokers.length})</h3>
@@ -268,7 +268,7 @@ const Brokers = () => {
         </div>
       </div>
 
-      {/* --- ADD/EDIT MODAL --- */}
+
       {showAddForm && createPortal(
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
           <div className="app-modal w-full max-w-xl rounded-2xl overflow-hidden shadow-2xl flex flex-col">

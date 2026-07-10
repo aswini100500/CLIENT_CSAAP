@@ -66,7 +66,7 @@ const ProjectSetupModal = ({
   const [validationError, setValidationError] = useState("");
   const [existingSetupId, setExistingSetupId] = useState(null);
 
-  // Core setup states
+
   const [selectedProject, setSelectedProject] = useState(null);
   const [projectSearchTerm, setProjectSearchTerm] = useState("");
   const [showProjectDropdown, setShowProjectDropdown] = useState(false);
@@ -81,7 +81,7 @@ const ProjectSetupModal = ({
     { id: generateUUID(), name: "Stage 1", description: "", start: "", end: "", status: "planned", budget: "", subStages: [] }
   ]);
 
-  // Lists loaded from backend
+
   const [projectsList, setProjectsList] = useState([]);
   const [contractorsList, setContractorsList] = useState([]);
 
@@ -142,7 +142,7 @@ const ProjectSetupModal = ({
         const contractors = getArrayData(contractorsRes);
         setContractorsList(contractors);
 
-        // Auto-select project matching lead's project_id
+
         const parsedLeadProjUid = parseLeadProjectId(lead.project_id);
         const matchedProj = allProjects.find(p => p.uid === parsedLeadProjUid || String(p.id) === String(lead.project_id));
         
@@ -155,7 +155,7 @@ const ProjectSetupModal = ({
           }
           setUnits(currentUnits);
 
-          // Check if setup already exists for this project
+
           try {
             const setupsRes = await operationApi.getProjectSetups();
             const setups = getArrayData(setupsRes);
@@ -221,7 +221,7 @@ const ProjectSetupModal = ({
     setUnits(currentUnits);
     setValidationError("");
 
-    // Check if setup already exists for this project
+
     try {
       const setupsRes = await operationApi.getProjectSetups();
       const setups = getArrayData(setupsRes);
@@ -258,7 +258,7 @@ const ProjectSetupModal = ({
         }));
         setStages(formattedStages);
       } else {
-        // Reset states for fresh setup
+
         setExistingSetupId(null);
         setContractor("");
         setContractorSearchTerm("");
@@ -445,7 +445,7 @@ const ProjectSetupModal = ({
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-xs">
       <div className="app-modal w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         
-        {/* Modal Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="flex items-start gap-3 min-w-0">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-100 shrink-0">
@@ -467,7 +467,7 @@ const ProjectSetupModal = ({
           </button>
         </div>
 
-        {/* Modal Body */}
+
         <div className="p-5 overflow-y-auto custom-scrollbar flex-1 space-y-6 bg-[#fcfdfd]">
           {loading ? (
             <div className="p-16 text-center">
@@ -476,9 +476,9 @@ const ProjectSetupModal = ({
             </div>
           ) : (
             <>
-              {/* Top Section: Project & Contractor & Timeline */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {/* Left Column: Premium Project Detail Panel */}
+
                 <div className="space-y-4">
                   {selectedProject ? (
                     <div className="bg-emerald-50/50 border border-emerald-100/60 rounded-2xl p-4 flex items-start justify-between gap-3.5 relative overflow-hidden">
@@ -577,7 +577,7 @@ const ProjectSetupModal = ({
                     </div>
                   )}
 
-                  {/* Timeline Dates Container */}
+
                   {selectedProject && (
                     <div className="app-panel p-4 bg-white space-y-3.5">
                       <span className="text-[11.5px] font-extrabold text-(--text-faint) uppercase tracking-wider block">Project Timeline Dates</span>
@@ -615,7 +615,7 @@ const ProjectSetupModal = ({
                   )}
                 </div>
 
-                {/* Right Column: Contractor Select Autocomplete */}
+
                 {selectedProject ? (
                   <div className="app-panel p-4 bg-white flex flex-col justify-between relative" style={{ overflow: 'visible' }}>
                     <div className="space-y-3">
@@ -675,7 +675,7 @@ const ProjectSetupModal = ({
                       </div>
                     </div>
 
-                    {/* Selected Contractor Badge preview */}
+
                     {contractor && (
                       <div className="mt-4 p-3 bg-slate-50 border border-slate-200/50 rounded-xl flex items-center gap-3">
                         <div className="size-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
@@ -705,7 +705,7 @@ const ProjectSetupModal = ({
                 )}
               </div>
 
-              {/* Validation Alert */}
+
               {validationError && (
                 <div className="bg-red-50 border border-red-200 rounded-2xl p-3.5 flex items-start gap-2.5 shake">
                   <AlertTriangle className="size-4.5 text-red-500 mt-0.5 shrink-0" />
@@ -713,7 +713,7 @@ const ProjectSetupModal = ({
                 </div>
               )}
 
-              {/* Units & Unit Plans Section */}
+
               {selectedProject && units.length > 0 && (
                 <div className="app-panel overflow-hidden border border-(--border-soft) bg-white">
                   <div className="app-section-bar px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-(--border-soft)">
@@ -799,7 +799,7 @@ const ProjectSetupModal = ({
                 </div>
               )}
 
-              {/* Project Stages & Timeline Section */}
+
               {selectedProject && (
                 <div className="app-panel overflow-hidden border border-(--border-soft) bg-white">
                 <div className="app-section-bar px-4 py-3.5 flex items-center justify-between border-b border-(--border-soft)">
@@ -824,7 +824,7 @@ const ProjectSetupModal = ({
                     <div key={stage.id} className="bg-white border border-slate-200/60 rounded-xl p-4 shadow-xs relative hover:border-slate-300 transition-colors">
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         
-                        {/* Stage details */}
+
                         <div className="flex-1 space-y-3">
                           <div className="flex items-center gap-2">
                             <span className="size-5 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-[10.5px] font-bold text-emerald-700">
@@ -847,7 +847,7 @@ const ProjectSetupModal = ({
                             className={`${inputClass} font-medium py-2 placeholder-slate-400 bg-slate-50/30 resize-none`}
                           />
 
-                          {/* Nested Sub-stages */}
+
                           <div className="pt-2 border-t border-slate-100">
                             <span className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wide block mb-2">Sub-milestones</span>
                             
@@ -882,7 +882,7 @@ const ProjectSetupModal = ({
                           </div>
                         </div>
 
-                        {/* Dates & Actions Column */}
+
                         <div className="flex flex-col items-end gap-3 shrink-0">
                           <div className="flex gap-2">
                             <div>
@@ -926,7 +926,7 @@ const ProjectSetupModal = ({
           )}
         </div>
 
-        {/* Modal Footer */}
+
         <div className="px-5 py-3 border-t border-(--border-soft) flex justify-between items-center bg-white">
           <div className="text-[12.5px] font-medium text-(--text-faint)">
           </div>

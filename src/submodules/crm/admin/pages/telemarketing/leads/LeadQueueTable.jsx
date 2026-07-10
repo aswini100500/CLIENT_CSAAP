@@ -104,7 +104,7 @@ const LeadQueueTable = ({
 
   const { token, companyId } = useAuth();
 
-  // Fetch project options to map project IDs to friendly names
+
   const { data: projectOptions = [] } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
@@ -136,16 +136,16 @@ const LeadQueueTable = ({
     return map;
   }, [projectOptions]);
 
-  // Reset filters when activeTab changes
+
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+
     setSelectedProject("");
     setSelectedSource("");
     setSelectedStatus("");
     setSelectedAssignee("");
   }, [activeTab]);
 
-  // Dynamically extract unique options present in the current active stage's leads
+
   const stageLeads = useMemo(() => filterByTab(leads, activeTab), [leads, activeTab]);
 
   const uniqueProjects = useMemo(() => {
@@ -299,7 +299,7 @@ const LeadQueueTable = ({
 
       <div className="app-panel p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          {/* Left section: Search bar */}
+
           <div className="flex-1 min-w-0">
             <label className="app-label block mb-1.5 font-bold tracking-wide">
               Search Leads
@@ -316,9 +316,9 @@ const LeadQueueTable = ({
             </div>
           </div>
 
-          {/* Right section: Filters controls */}
+
           <div className="flex flex-wrap items-center gap-3 shrink-0">
-            {/* Project Filter */}
+
             <div className="w-full sm:w-44">
               <label className="app-label block mb-1.5">
                 Project
@@ -354,7 +354,7 @@ const LeadQueueTable = ({
               </div>
             </div>
 
-            {/* Source Filter */}
+
             <div className="w-full sm:w-36">
               <label className="app-label block mb-1.5">
                 Source
@@ -390,7 +390,7 @@ const LeadQueueTable = ({
               </div>
             </div>
 
-            {/* Status Filter */}
+
             <div className="w-full sm:w-36">
               <label className="app-label block mb-1.5">
                 Status
@@ -426,7 +426,7 @@ const LeadQueueTable = ({
               </div>
             </div>
 
-            {/* Assignee Filter - only shown when relevant (e.g. stage is not NEW) */}
+
             {activeTab !== "new" && showAssignee && (
               <div className="w-full sm:w-40">
                 <label className="app-label block mb-1.5">
@@ -464,7 +464,7 @@ const LeadQueueTable = ({
               </div>
             )}
 
-            {/* Clear Filters Button */}
+
             {hasActiveFilters && (
               <div className="w-full sm:w-auto self-end pt-1 lg:pt-0">
                 <button

@@ -3,17 +3,17 @@ import React from "react";
 const AllLogs = () => {
   return (
     <div className="p-4 bg-white">
-      {/* Main Title */}
+
       <h1 className="text-2xl font-bold mb-4 text-gray-900">All Logs</h1>
 
-      {/* Content Section */}
+
       <div className="border border-gray-300">
-        {/* Section Header */}
+
         <div className="bg-gray-200 px-4 py-2 border-b border-gray-300">
           <h2 className="font-semibold text-gray-900">All Logs</h2>
         </div>
 
-        {/* Controls */}
+
         <div className="px-4 py-3 border-b border-gray-300 bg-gray-100 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-700">Show</span>
@@ -32,7 +32,7 @@ const AllLogs = () => {
           </div>
         </div>
 
-        {/* Table */}
+
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead>
@@ -62,7 +62,7 @@ const AllLogs = () => {
           </table>
         </div>
 
-        {/* Footer */}
+
         <div className="px-4 py-3 bg-gray-100 border-t border-gray-300 flex justify-between items-center">
           <span className="text-sm text-gray-700">
             Showing 1 to 1 of 1 entries

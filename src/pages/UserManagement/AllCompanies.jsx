@@ -32,7 +32,7 @@ const AllCompanies = () => {
   }, []);
 
   const handleSetPayment = (company) => {
-    // Store both forms of ID just in case
+
     const sessionData = {
       tenant_id: company.id,
       company_id: company.id,
@@ -42,7 +42,7 @@ const AllCompanies = () => {
     sessionStorage.setItem('viewingCompany', JSON.stringify(sessionData));
     sessionStorage.setItem('company_id', company.id);
     
-    // Navigate to the user plan details page
+
     navigate(`/users/company-payment/${company.id}`);
   };
 

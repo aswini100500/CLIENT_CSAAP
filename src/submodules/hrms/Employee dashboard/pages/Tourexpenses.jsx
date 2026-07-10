@@ -1,429 +1,429 @@
-// import { useState } from 'react';
 
-// const MyTour = () => {
-//   const [showAddTour, setShowAddTour] = useState(false);
-//   const [expenses, setExpenses] = useState([]);
-//   const [tourData, setTourData] = useState({
-//     tourTo: '',
-//     fromDate: '',
-//     toDate: '',
-//     expensesDate: '',
-//     amount: '',
-//     billFile: null
-//   });
 
-//   const handleAddExpense = () => {
-//     const newExpense = {
-//       id: Date.now(),
-//       date: tourData.expensesDate || new Date().toISOString().split('T')[0],
-//       details: '',
-//       amount: '',
-//       image: null
-//     };
-//     setExpenses([...expenses, newExpense]);
-//   };
 
-//   const handleDeleteExpense = (id) => {
-//     setExpenses(expenses.filter(expense => expense.id !== id));
-//   };
 
-//   const handleExpenseChange = (id, field, value) => {
-//     setExpenses(expenses.map(expense => 
-//       expense.id === id ? { ...expense, [field]: value } : expense
-//     ));
-//   };
 
-//   const handleSaveTour = () => {
-//     // Validate and save tour data
-//     if (!tourData.tourTo || !tourData.fromDate || !tourData.toDate) {
-//       alert('Please fill in all required fields');
-//       return;
-//     }
-//     console.log('Tour data:', tourData);
-//     console.log('Expenses:', expenses);
-//     // Add your save logic here
-//   };
 
-//   const handleInputChange = (field, value) => {
-//     setTourData(prev => ({ ...prev, [field]: value }));
-//   };
 
-//   const handleFileChange = (e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       setTourData(prev => ({ ...prev, billFile: file }));
-//     }
-//   };
 
-//   const handleExpenseFileChange = (id, e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       handleExpenseChange(id, 'image', file);
-//     }
-//   };
 
-//   return (
-//     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-6">
-//       {/* Main Tour Dashboard */}
-//       {!showAddTour ? (
-//         <div className="bg-white rounded-xl shadow-lg p-6 max-w-7xl mx-auto">
-//           {/* Header */}
-//           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
-//             <div>
-//               <h1 className="text-3xl font-bold text-gray-800 mb-2">My Tour Dashboard</h1>
-//               <p className="text-gray-600">Manage your tour applications and expenses</p>
-//             </div>
-//             <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-//               <button className="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-//                 <span>📥</span>
-//                 Download CSV Format
-//               </button>
-//               <button className="px-5 py-2.5 border-2 border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-200 flex items-center justify-center gap-2">
-//                 <span>📤</span>
-//                 Upload CSV File
-//               </button>
-//               <button 
-//                 onClick={() => setShowAddTour(true)}
-//                 className="px-5 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-//               >
-//                 <span>➕</span>
-//                 Add New Tour
-//               </button>
-//             </div>
-//           </div>
 
-//           {/* Stats Cards */}
-//           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-//             <div className="bg-blue-50 rounded-xl p-4 border-l-4 border-blue-500">
-//               <div className="text-blue-600 font-semibold">Total Tours</div>
-//               <div className="text-2xl font-bold text-gray-800">0</div>
-//             </div>
-//             <div className="bg-green-50 rounded-xl p-4 border-l-4 border-green-500">
-//               <div className="text-green-600 font-semibold">Approved</div>
-//               <div className="text-2xl font-bold text-gray-800">0</div>
-//             </div>
-//             <div className="bg-yellow-50 rounded-xl p-4 border-l-4 border-yellow-500">
-//               <div className="text-yellow-600 font-semibold">Pending</div>
-//               <div className="text-2xl font-bold text-gray-800">0</div>
-//             </div>
-//             <div className="bg-red-50 rounded-xl p-4 border-l-4 border-red-500">
-//               <div className="text-red-600 font-semibold">Rejected</div>
-//               <div className="text-2xl font-bold text-gray-800">0</div>
-//             </div>
-//           </div>
 
-//           {/* Table Controls */}
-//           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-//             <div className="flex items-center gap-3">
-//               <span className="text-sm text-gray-600 whitespace-nowrap">Show</span>
-//               <select className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-//                 <option>10</option>
-//                 <option>25</option>
-//                 <option>50</option>
-//                 <option>100</option>
-//               </select>
-//               <span className="text-sm text-gray-600 whitespace-nowrap">entries</span>
-//             </div>
-//             <div className="relative w-full sm:w-64">
-//               <input
-//                 type="text"
-//                 placeholder="Search tours..."
-//                 className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-//               />
-//               <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-//                 🔍
-//               </div>
-//             </div>
-//           </div>
 
-//           {/* Table */}
-//           <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-//             <table className="w-full">
-//               <thead>
-//                 <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-//                   <th className="px-6 py-4 text-left font-semibold text-gray-700">#</th>
-//                   <th className="px-6 py-4 text-left font-semibold text-gray-700">
-//                     <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
-//                       Tour To
-//                       <span className="text-blue-500">▲</span>
-//                     </span>
-//                   </th>
-//                   <th className="px-6 py-4 text-left font-semibold text-gray-700">From Date</th>
-//                   <th className="px-6 py-4 text-left font-semibold text-gray-700">To Date</th>
-//                   <th className="px-6 py-4 text-left font-semibold text-gray-700">Status</th>
-//                   <th className="px-6 py-4 text-left font-semibold text-gray-700">Entry Date</th>
-//                   <th className="px-6 py-4 text-left font-semibold text-gray-700">Actions</th>
-//                 </tr>
-//               </thead>
-//               <tbody className="bg-white">
-//                 <tr>
-//                   <td colSpan="7" className="px-6 py-12 text-center">
-//                     <div className="flex flex-col items-center justify-center text-gray-400">
-//                       <div className="text-4xl mb-3">📊</div>
-//                       <div className="text-lg font-medium mb-1">No tours found</div>
-//                       <div className="text-sm">Get started by creating your first tour</div>
-//                       <button 
-//                         onClick={() => setShowAddTour(true)}
-//                         className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-//                       >
-//                         Create Tour
-//                       </button>
-//                     </div>
-//                   </td>
-//                 </tr>
-//               </tbody>
-//             </table>
-//           </div>
 
-//           {/* Table Footer */}
-//           <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4 text-sm text-gray-600">
-//             <div>Showing 0 to 0 of 0 entries</div>
-//             <div className="flex gap-2">
-//               <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors flex items-center gap-1" disabled>
-//                 <span>←</span> Previous
-//               </button>
-//               <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors flex items-center gap-1" disabled>
-//                 Next <span>→</span>
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       ) : (
-//         /* Add Tour Form */
-//         <div className="bg-white rounded-xl shadow-lg p-6 max-w-6xl mx-auto">
-//           <div className="max-w-4xl mx-auto">
-//             {/* Header */}
-//             <div className="mb-8">
-//               <div className="flex items-center gap-3 mb-2">
-//                 <button 
-//                   onClick={() => setShowAddTour(false)}
-//                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-//                 >
-//                   ←
-//                 </button>
-//                 <h1 className="text-3xl font-bold text-gray-800">Create New Tour</h1>
-//               </div>
-//               <p className="text-gray-600 ml-11">Fill in the details below to create a new tour application</p>
-//             </div>
 
-//             {/* Form Grid */}
-//             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-//               {/* Left Column */}
-//               <div className="space-y-6">
-//                 <div>
-//                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-//                     Tour Destination <span className="text-red-500">*</span>
-//                   </label>
-//                   <input
-//                     type="text"
-//                     value={tourData.tourTo}
-//                     onChange={(e) => handleInputChange('tourTo', e.target.value)}
-//                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-//                     placeholder="Enter destination"
-//                   />
-//                 </div>
 
-//                 <div className="grid grid-cols-2 gap-4">
-//                   <div>
-//                     <label className="block text-sm font-semibold text-gray-700 mb-3">
-//                       From Date <span className="text-red-500">*</span>
-//                     </label>
-//                     <input
-//                       type="date"
-//                       value={tourData.fromDate}
-//                       onChange={(e) => handleInputChange('fromDate', e.target.value)}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-//                     />
-//                   </div>
-//                   <div>
-//                     <label className="block text-sm font-semibold text-gray-700 mb-3">
-//                       To Date <span className="text-red-500">*</span>
-//                     </label>
-//                     <input
-//                       type="date"
-//                       value={tourData.toDate}
-//                       onChange={(e) => handleInputChange('toDate', e.target.value)}
-//                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
 
-//               {/* Right Column */}
-//               <div className="space-y-6">
-//                 <div>
-//                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-//                     Expenses Date
-//                   </label>
-//                   <input
-//                     type="date"
-//                     value={tourData.expensesDate}
-//                     onChange={(e) => handleInputChange('expensesDate', e.target.value)}
-//                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-//                   />
-//                 </div>
 
-//                 <div>
-//                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-//                     Total Amount
-//                   </label>
-//                   <div className="relative">
-//                     <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
-//                     <input
-//                       type="number"
-//                       value={tourData.amount}
-//                       onChange={(e) => handleInputChange('amount', e.target.value)}
-//                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-//                       placeholder="0.00"
-//                     />
-//                   </div>
-//                 </div>
 
-//                 <div>
-//                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-//                     Bill Upload
-//                   </label>
-//                   <div className="flex items-center gap-4">
-//                     <label className="px-5 py-3 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex items-center gap-2">
-//                       <span>📎</span>
-//                       Choose File
-//                       <input
-//                         type="file"
-//                         className="hidden"
-//                         onChange={handleFileChange}
-//                         accept=".pdf,.jpg,.jpeg,.png"
-//                       />
-//                     </label>
-//                     <span className="text-gray-500 text-sm">
-//                       {tourData.billFile ? tourData.billFile.name : 'No file chosen'}
-//                     </span>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
 
-//             {/* Expenses Section */}
-//             <div className="mb-8">
-//               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-//                 <div>
-//                   <h3 className="text-xl font-semibold text-gray-800 mb-1">Expenses Details</h3>
-//                   <p className="text-gray-600 text-sm">Add individual expense items for this tour</p>
-//                 </div>
-//                 <button
-//                   onClick={handleAddExpense}
-//                   className="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2 whitespace-nowrap"
-//                 >
-//                   <span>💸</span>
-//                   Add Expense Item
-//                 </button>
-//               </div>
 
-//               {/* Expenses Table */}
-//               {expenses.length > 0 && (
-//                 <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-//                   <table className="w-full">
-//                     <thead>
-//                       <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-//                         <th className="px-6 py-4 text-left font-semibold text-gray-700">Date</th>
-//                         <th className="px-6 py-4 text-left font-semibold text-gray-700">Details</th>
-//                         <th className="px-6 py-4 text-left font-semibold text-gray-700">Amount</th>
-//                         <th className="px-6 py-4 text-left font-semibold text-gray-700">Receipt</th>
-//                         <th className="px-6 py-4 text-left font-semibold text-gray-700">Action</th>
-//                       </tr>
-//                     </thead>
-//                     <tbody className="bg-white">
-//                       {expenses.map((expense) => (
-//                         <tr key={expense.id} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-//                           <td className="px-6 py-4">
-//                             <input
-//                               type="date"
-//                               value={expense.date}
-//                               onChange={(e) => handleExpenseChange(expense.id, 'date', e.target.value)}
-//                               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
-//                             />
-//                           </td>
-//                           <td className="px-6 py-4">
-//                             <input
-//                               type="text"
-//                               value={expense.details}
-//                               onChange={(e) => handleExpenseChange(expense.id, 'details', e.target.value)}
-//                               placeholder="Expense description"
-//                               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
-//                             />
-//                           </td>
-//                           <td className="px-6 py-4">
-//                             <div className="relative">
-//                               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">₹</span>
-//                               <input
-//                                 type="number"
-//                                 value={expense.amount}
-//                                 onChange={(e) => handleExpenseChange(expense.id, 'amount', e.target.value)}
-//                                 placeholder="0.00"
-//                                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
-//                               />
-//                             </div>
-//                           </td>
-//                           <td className="px-6 py-4">
-//                             <label className="flex items-center gap-2 text-sm text-blue-600 cursor-pointer hover:text-blue-800">
-//                               <span>📎</span>
-//                               Attach
-//                               <input
-//                                 type="file"
-//                                 className="hidden"
-//                                 onChange={(e) => handleExpenseFileChange(expense.id, e)}
-//                                 accept=".pdf,.jpg,.jpeg,.png"
-//                               />
-//                             </label>
-//                           </td>
-//                           <td className="px-6 py-4">
-//                             <button
-//                               onClick={() => handleDeleteExpense(expense.id)}
-//                               className="text-red-600 hover:text-red-800 transition-colors flex items-center gap-1 text-sm"
-//                             >
-//                               <span>🗑️</span>
-//                               Delete
-//                             </button>
-//                           </td>
-//                         </tr>
-//                       ))}
-//                     </tbody>
-//                   </table>
-//                 </div>
-//               )}
 
-//               {expenses.length === 0 && (
-//                 <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
-//                   <div className="text-4xl mb-3">💸</div>
-//                   <div className="text-gray-500 mb-2">No expenses added yet</div>
-//                   <div className="text-sm text-gray-400">Click "Add Expense Item" to get started</div>
-//                 </div>
-//               )}
-//             </div>
 
-//             {/* Action Buttons */}
-//             <div className="flex flex-col sm:flex-row justify-end gap-4 pt-6 border-t border-gray-200">
-//               <button
-//                 onClick={() => setShowAddTour(false)}
-//                 className="px-8 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-200 font-medium"
-//               >
-//                 Cancel
-//               </button>
-//               <button
-//                 onClick={handleSaveTour}
-//                 className="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-md hover:shadow-lg font-medium flex items-center gap-2"
-//               >
-//                 <span>💾</span>
-//                 Save Tour Application
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
 
-// export default MyTour;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -435,7 +435,7 @@ const MyTour = () => {
   const [tours, setTours] = useState([]);
 
   const { user } = useAuth();
-  // Fetch tours (extracted so we can call after creating a tour)
+
   const fetchTours = async () => {
     const API_BASE = import.meta.env.VITE_HRMS_BASE_URL || `${import.meta.env.VITE_HRMS_BASE_URL}`;
     try {
@@ -486,7 +486,7 @@ const MyTour = () => {
 
  
 const handleSaveTour = async () => {
-  // Basic validation
+
   if (!tourData.tourTo || !tourData.fromDate || !tourData.toDate) {
     alert('Please fill in Tour Destination, From Date and To Date');
     return;
@@ -495,11 +495,11 @@ const handleSaveTour = async () => {
   const formData = new FormData();
   const API_BASE = import.meta.env.VITE_HRMS_BASE_URL || `${import.meta.env.VITE_HRMS_BASE_URL}`;
 
-  // IDs
+
   formData.append('user_id', user.company_id);
   formData.append('company_id', user?.company_id ?? user?.id);
 
-  // Send both camelCase and snake_case so backend accepts either
+
   formData.append('tourTo', tourData.tourTo);
   formData.append('tour_to', tourData.tourTo);
 
@@ -511,10 +511,10 @@ const handleSaveTour = async () => {
 
   formData.append('amount', tourData.amount || 0);
 
-  // File
+
   if (tourData.billFile) formData.append('bill_file', tourData.billFile);
 
-  // Expenses (append both date and expense_date for safety)
+
   expenses.forEach((exp, index) => {
     formData.append(`expenses[${index}][date]`, exp.date);
     formData.append(`expenses[${index}][expense_date]`, exp.date);
@@ -534,7 +534,7 @@ console.log(res);
 
     alert('Tour saved successfully!');
     setShowAddTour(false);
-    // refresh list
+
     try { await fetchTours(); } catch (e) { console.warn('refresh failed', e); }
   } catch (err) {
     console.error('Error saving tour', err);
@@ -564,10 +564,10 @@ console.log(res);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-4 md:p-6">
-      {/* Main Tour Dashboard */}
+
       {!showAddTour ? (
         <div className="bg-white rounded-xl shadow-lg p-6 max-w-7xl mx-auto">
-          {/* Header */}
+
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">My Tour Dashboard</h1>
@@ -592,7 +592,7 @@ console.log(res);
             </div>
           </div>
 
-          {/* Stats Cards */}
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-blue-50 rounded-xl p-4 border-l-4 border-blue-500">
               <div className="text-blue-600 font-semibold">Total Tours</div>
@@ -612,7 +612,7 @@ console.log(res);
             </div>
           </div>
 
-          {/* Table Controls */}
+
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-600 whitespace-nowrap">Show</span>
@@ -636,8 +636,8 @@ console.log(res);
             </div>
           </div>
 
-          {/* Table */}
-        {/* Table */}
+
+
 <div className="overflow-hidden rounded-xl border border-gray-200 shadow-lg">
   <table className="w-full">
     <thead>
@@ -805,7 +805,7 @@ console.log(res);
   </table>
 </div>
 
-{/* Table Footer - Updated */}
+
 <div className="flex flex-col sm:flex-row justify-between items-center mt-8 gap-4">
   <div className="text-sm text-gray-600">
     Showing <span className="font-semibold text-gray-900">{tours.length}</span> of{' '}
@@ -835,10 +835,10 @@ console.log(res);
 </div>
         </div>
       ) : (
-        /* Add Tour Form */
+
         <div className="bg-white rounded-xl shadow-lg p-6 max-w-6xl mx-auto">
           <div className="max-w-4xl mx-auto">
-            {/* Header */}
+
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-2">
                 <button 
@@ -852,9 +852,9 @@ console.log(res);
               <p className="text-gray-600 ml-11">Fill in the details below to create a new tour application</p>
             </div>
 
-            {/* Form Grid */}
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              {/* Left Column */}
+
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -895,7 +895,7 @@ console.log(res);
                 </div>
               </div>
 
-              {/* Right Column */}
+
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -948,7 +948,7 @@ console.log(res);
               </div>
             </div>
 
-            {/* Expenses Section */}
+
             <div className="mb-8">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div>
@@ -964,7 +964,7 @@ console.log(res);
                 </button>
               </div>
 
-              {/* Expenses Table */}
+
               {expenses.length > 0 && (
                 <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
                   <table className="w-full">
@@ -1046,7 +1046,7 @@ console.log(res);
               )}
             </div>
 
-            {/* Action Buttons */}
+
             <div className="flex flex-col sm:flex-row justify-end gap-4 pt-6 border-t border-gray-200">
               <button
                 onClick={() => setShowAddTour(false)}

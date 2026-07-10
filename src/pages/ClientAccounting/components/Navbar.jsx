@@ -35,18 +35,18 @@ const Navbar = () => {
   const { setCompanyId } = useCompany();
   const { setcompanyName } = useCompany()
   const [selectedCompanyId, setSelectedCompanyId] = useState(() => {
-    // Restore from sessionStorage on mount
+
     const saved = sessionStorage.getItem("selectedCompanyId");
     return saved ? parseInt(saved, 10) : null;
   });
   const { userId, user, setUserId, setUser, logout } = useUser();
   const [selectedCompanyName, setSelectedCompanyName] = useState()
 
-  // Logout handler
+
   const handleLogout = async () => {
     await logout();
 
-    // Clear session storage (optional if logout() generally handles it, but context updates are key)
+
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("user");
@@ -55,23 +55,23 @@ const Navbar = () => {
     setCompanyId(null);
     setShowUserMenu(false);
 
-    // Redirect to login
+
     navigate("/login");
   };
 
   const getCompanies = async () => {
     try {
-      // Make the API request
+
       const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${userId}`);
 
-      // Log the response data for debugging
+
       console.log('API Response:', res);
 
-      // Assuming the company data is in res.data
+
       const companies = res.data;
       console.log('Companies Data:', companies);
 
-      // Update the state with companies
+
       setCompanies(companies);
     } catch (err) {
       console.log(err);
@@ -83,7 +83,7 @@ const Navbar = () => {
     getCompanies();
   }, []);
 
-  // Sync selectedCompanyId to sessionStorage
+
   useEffect(() => {
     console.log(selectedCompany);
 
@@ -97,32 +97,32 @@ const Navbar = () => {
     }
   }, [selectedCompanyId, setCompanyId]);
 
-  // Derive selectedCompany name from selectedCompanyId
+
   const selectedCompany = selectedCompanyId
     ? companies.find((c) => c.id === selectedCompanyId)?.name || ""
     : "";
 
 
-  // //  Debounced Search
-  // useEffect(() => {
-  //   if (!searchQuery.trim()) {
-  //     setFilteredCompanies([]);
-  //     return;
-  //   }
-  //   const timer = setTimeout(() => {
-  //     const filtered = companies.filter(
-  //       (c) =>
-  //         c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //         c.gst.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //         c.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //         c.admin_phone.toLowerCase().includes(searchQuery.toLowerCase())
-  //     );
-  //     setFilteredCompanies(filtered);
-  //   }, 300);
 
-  //   return () => clearTimeout(timer);
-  // }, [searchQuery]);
-  // ✅ Debounced Search (Fix: added companies as dependency)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredCompanies([]);
@@ -140,10 +140,10 @@ const Navbar = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, companies]);  // ✅ fixed
+  }, [searchQuery, companies]);
 
 
-  // Close dropdowns on outside click
+
   useEffect(() => {
     const handler = (e) => {
       if (!dropdownRef.current?.contains(e.target)) {
@@ -178,7 +178,7 @@ const Navbar = () => {
   return (
     <div className="navbar no-print w-full lg:w-[82vw] ml-auto bg-linear-to-r from-blue-800 to-blue-900 text-white shadow-lg rounded-bl-xl sticky top-0 z-50">
 
-      {/* ✅ Mobile Top Header */}
+
       <div className="lg:hidden flex justify-between items-center px-4 py-3">
         <h1 className="text-lg font-bold truncate">Cloudsat Pvt Ltd</h1>
         <button
@@ -189,12 +189,12 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* ✅ Navbar Container responsive */}
+
       <div
         className={`px-4 py-3 space-y-4 lg:space-y-0 
         ${mobileMenuOpen ? "block" : "hidden lg:flex lg:items-center lg:justify-between"}`}
       >
-        {/* ✅ Brand */}
+
         <div className="flex items-center gap-3">
           <div className="bg-white/10 p-2 rounded-xl">
             <Building2 size={30} className="text-blue-200" />
@@ -207,7 +207,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* ✅ Company Selector */}
+
         <div className="relative max-w-full sm:max-w-xs w-full" ref={dropdownRef}>
           <div
             onClick={() => setShowCompanyDropdown(!showCompanyDropdown)}
@@ -260,7 +260,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* ✅ Search */}
+
         <div className="relative max-w-full sm:max-w-xs w-full" ref={searchRef}>
           <Search size={18} className="absolute left-3 top-3 text-blue-300" />
 
@@ -304,7 +304,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* ✅ User Info with Logout */}
+
         <div className="relative" ref={userMenuRef}>
           <div
             onClick={() => setShowUserMenu(!showUserMenu)}
@@ -330,7 +330,7 @@ const Navbar = () => {
             />
           </div>
 
-          {/* User Dropdown Menu */}
+
           {showUserMenu && (
             <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border z-50 overflow-hidden">
               <div className="p-4 bg-linear-to-r from-blue-600 to-purple-600 text-white">
@@ -352,7 +352,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* ✅ Bottom Active Company Bar */}
+
       {selectedCompany && (
         <div className="bg-green-700/20 border-t border-green-600/40 px-4 py-2">
           <div className="flex justify-between items-center text-sm">

@@ -20,7 +20,7 @@ import Gstr2B from './Gstr2B';
 const StatutoryReports = () => {
   const [activeModule, setActiveModule] = useState('dashboard');
 
-  /* ================= MODULE CONFIG ================= */
+
   const modules = [
     {
       id: 'track-gst',
@@ -64,7 +64,7 @@ const StatutoryReports = () => {
       component: <E_wayBill />,
     },
 
-    /* 🔥 EXTERNAL GST PORTAL */
+
     {
       id: 'gst-portal',
       title: 'Open GST Portal',
@@ -76,12 +76,12 @@ const StatutoryReports = () => {
     },
   ];
 
-  /* ================= DASHBOARD RENDER ================= */
+
   const renderModuleContent = () => {
     if (activeModule === 'dashboard') {
       return (
         <div className="space-y-6">
-          {/* Header */}
+
           <div className="bg-white rounded-xl p-6 border">
             <h1 className="text-2xl font-bold text-gray-800">
               Statutory Reports Dashboard
@@ -91,7 +91,7 @@ const StatutoryReports = () => {
             </p>
           </div>
 
-          {/* Modules Grid */}
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {modules.map((module) => (
               <button
@@ -128,7 +128,7 @@ const StatutoryReports = () => {
       );
     }
 
-    /* ================= MODULE VIEW ================= */
+
     const module = modules.find((m) => m.id === activeModule);
 
     return (

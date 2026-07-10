@@ -20,11 +20,11 @@ const [overtimeData,setOvertimeData]=useState([]);
 
 
   useEffect(() => {
-    // Reset state on component mount (refresh)
+
     setMonth("");
     setYear("");
     setShowReport(false);
-  }, []); // Empty dependency array ensures this runs only on mount
+  }, []);
 
   function handleSubmit(e) {
   e.preventDefault();
@@ -32,7 +32,7 @@ const [overtimeData,setOvertimeData]=useState([]);
     alert("Please select both month and year");
     return;
   }
-  fetchOvertimeReport(); // 🔹 Call the API
+  fetchOvertimeReport();
 }
 
 
@@ -43,7 +43,7 @@ const [overtimeData,setOvertimeData]=useState([]);
 
   const daysInMonth = getDaysInMonth();
 
-  // Calculate summary statistics
+
   const summary = {
     totalEmployees: overtimeData.length,
     totalOvertimeDays: overtimeData.reduce((total, emp) => 
@@ -60,8 +60,8 @@ const [overtimeData,setOvertimeData]=useState([]);
  const fetchOvertimeReport = async () => {
   try {
     const res = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/overtime?month=${month}&year=${year}`);
-    setOvertimeData(res.data.data || []); //  Save API response to state
-    setShowReport(true); // 🔹 Show report after data is loaded
+    setOvertimeData(res.data.data || []);
+    setShowReport(true);
   } catch (err) {
     console.error("Error fetching overtime report", err);
     alert("Failed to load overtime report");
@@ -71,12 +71,12 @@ const [overtimeData,setOvertimeData]=useState([]);
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Monthly Overtime Report
         </h1>
 
-        {/* Form Section */}
+
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Filter Overtime Report
@@ -132,10 +132,10 @@ const [overtimeData,setOvertimeData]=useState([]);
           </form>
         </div>
 
-        {/* Report Section */}
+
         {showReport && (
           <div className="bg-white rounded-2xl shadow-lg p-6 animate-fadeIn">
-            {/* Overtime Table */}
+
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm">
                 <thead>
@@ -158,7 +158,7 @@ const [overtimeData,setOvertimeData]=useState([]);
                     <th className="border border-gray-200 px-6 py-4 font-medium text-gray-700">
                       Location
                     </th>
-                    {/* Day Headers */}
+
                     {Array.from({ length: daysInMonth }, (_, i) => (
                       <th
                         key={i + 1}
@@ -193,7 +193,7 @@ const [overtimeData,setOvertimeData]=useState([]);
                       <td className="border border-gray-200 px-6 py-3 text-gray-600">
                         {employee.location}
                       </td>
-                      {/* Day Cells */}
+
                       {employee.days.slice(0, daysInMonth).map((day) => (
                         <td
                           key={day.day}
@@ -217,7 +217,7 @@ const [overtimeData,setOvertimeData]=useState([]);
         )}
       </div>
 
-      {/* Add custom animation for fade-in effect */}
+
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }

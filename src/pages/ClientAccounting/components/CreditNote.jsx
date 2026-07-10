@@ -104,7 +104,7 @@ const CreditNote = () => {
         const ledgerRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`);
         setLedgers(ledgerRes.data || []);
 
-        // --- RESTORE STATE IF RETURNING FROM STOCK CREATION ---
+
         const savedState = sessionStorage.getItem("creditNoteState");
         if (savedState) {
           const state = JSON.parse(savedState);
@@ -285,10 +285,10 @@ const CreditNote = () => {
               if (pdfRes.data.success) {
                 const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}${pdfRes.data.pdfPath}`;
                 
-                // View in new tab
+
                 window.open(pdfUrl, "_blank");
                 
-                // Force download
+
                 fetch(pdfUrl)
                   .then(response => response.blob())
                   .then(blob => {
@@ -324,12 +324,12 @@ const CreditNote = () => {
   return (
     <div className="bg-[#f7f7f5] min-h-screen p-6 md:p-10 pb-20">
 
-      {/* ── Header ── */}
+
       <div className="flex items-end justify-between mb-7 pb-5 border-b-[1.5px] border-[#e2e2dc]">
         <h1 className="font-serif text-[30px] text-[#0f1117] m-0 leading-[1.15]">Credit Note</h1>
       </div>
 
-      {/* ── Voucher Details ── */}
+
       <div className="bg-white border border-[#e2e2dc] rounded-[10px] shadow-sm p-6 mb-5">
         <p className="text-[12px] font-semibold tracking-widest uppercase text-[#5c6070] mb-4.5 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-[#e2e2dc]">
           Voucher Details
@@ -366,7 +366,7 @@ const CreditNote = () => {
         </div>
       </div>
 
-      {/* ── Party / Dispatch Tabs ── */}
+
       <div className="bg-white border border-[#e2e2dc] rounded-[10px] shadow-sm p-6 mb-5">
         <div className="flex gap-1 mb-5">
           <button className={`px-3.5 py-1.5 rounded-full text-[12.5px] font-medium cursor-pointer border-[1.5px] transition-all ${activeTab === "party" ? "bg-[#1a56db] text-white border-[#1a56db]" : "bg-transparent text-[#5c6070] border-[#e2e2dc]"}`} onClick={() => setActiveTab("party")}>Party Details</button>
@@ -466,7 +466,7 @@ const CreditNote = () => {
               </div>
             </div>
 
-            {/* Consignee Section */}
+
             <div className="mt-6 pt-6 border-t border-dashed border-[#e2e2dc]">
               <div className="flex justify-between items-center mb-4">
                 <h4 className="text-[11px] font-bold uppercase tracking-widest text-[#5c6070] m-0">Consignee (Ship To)</h4>
@@ -501,7 +501,7 @@ const CreditNote = () => {
         )}
       </div>
 
-      {/* ── Item Details ── */}
+
       <div className="bg-white border border-[#e2e2dc] rounded-[10px] shadow-sm p-6 mb-5">
         <p className="text-[12px] font-semibold tracking-widest uppercase text-[#5c6070] mb-4.5 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-[#e2e2dc]">
           Item Details
@@ -559,7 +559,7 @@ const CreditNote = () => {
         <button className="bg-[#1a56db] text-white px-5 py-2 text-[13.5px] font-semibold rounded-md mt-4 hover:opacity-88 transition-opacity" onClick={addRow}>+ Add Item</button>
       </div>
 
-      {/* ── Tax & Totals ── */}
+
       <div className="bg-white border border-[#e2e2dc] rounded-[10px] shadow-sm p-6 mb-5">
         <p className="text-[12px] font-semibold tracking-widest uppercase text-[#5c6070] mb-4.5 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-[#e2e2dc]">
           Tax & Totals
@@ -603,7 +603,7 @@ const CreditNote = () => {
         </div>
       </div>
 
-      {/* ── Narration ── */}
+
       <div className="bg-white border border-[#e2e2dc] rounded-[10px] shadow-sm p-6 mb-5">
         <p className="text-[12px] font-semibold tracking-widest uppercase text-[#5c6070] mb-4.5 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-[#e2e2dc]">
           Narration

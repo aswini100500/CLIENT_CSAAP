@@ -55,7 +55,7 @@ const BarcodeSale = () => {
 
       setProducts([...products, newProduct]);
       
-      // Clear product fields only
+
       setFormData(prev => ({
         ...prev,
         product: '',
@@ -94,14 +94,14 @@ const BarcodeSale = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Barcode Sale</h1>
         </div>
 
-        {/* Main Card */}
+
         <div className="bg-white rounded-lg border border-gray-300">
-          {/* From Store Section */}
+
           <div className="p-4 border-b border-gray-300">
             <div className="flex items-center gap-2">
               <span className="text-gray-700 font-medium">From Store</span>
@@ -118,7 +118,7 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-          {/* Customer Information */}
+
           <div className="p-4 border-b border-gray-300">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
@@ -157,7 +157,7 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-          {/* Barcode Input */}
+
           <div className="p-4 border-b border-gray-300">
             <h3 className="text-sm font-medium text-gray-600 mb-2">Barcode</h3>
             <div className="max-w-xs">
@@ -172,13 +172,13 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-          {/* Product Input Section */}
+
           <div className="p-4 border-b border-gray-300">
             <h3 className="text-sm font-medium text-gray-600 mb-3">
               Product List (Enter Product details and press "Add Product To List" to add product)
             </h3>
             
-            {/* Product Input Row */}
+
             <div className="grid grid-cols-6 gap-2 mb-3 text-xs font-medium text-gray-600">
               <div>Product</div>
               <div>Batch</div>
@@ -237,7 +237,7 @@ const BarcodeSale = () => {
               </button>
             </div>
 
-            {/* Tax Inputs */}
+
             <div className="grid grid-cols-4 gap-3 max-w-md">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">CGST</label>
@@ -281,7 +281,7 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-          {/* Products List Table */}
+
           {products.length > 0 && (
             <div className="p-4 border-b border-gray-300">
               <div className="overflow-x-auto">
@@ -328,7 +328,7 @@ const BarcodeSale = () => {
             </div>
           )}
 
-          {/* Totals Section */}
+
           <div className="p-4 border-b border-gray-300">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
               <div>
@@ -358,7 +358,7 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-          {/* Discount and Net Price */}
+
           <div className="p-4 border-b border-gray-300">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
               <div>
@@ -381,7 +381,7 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-          {/* GST Options */}
+
           <div className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl">
               <div>
@@ -440,7 +440,7 @@ const BarcodeSale = () => {
               </div>
             </div>
 
-            {/* Sale Button */}
+
             <div className="text-center mt-6">
               <button className="bg-green-500 text-white px-8 py-2 rounded-md hover:bg-green-600 font-medium">
                 Sale

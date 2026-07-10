@@ -21,7 +21,7 @@ import {
   FileCheck
 } from "lucide-react";
 
-// Helper to check if a specific unit is booked from tenant booking status endpoint response
+
 const checkIfBooked = (responseData, targetItemId) => {
   if (!responseData) return false;
   
@@ -77,13 +77,13 @@ const CustomerManagementAccounting = () => {
   const { user } = useAuth();
   const { companyId } = useCompany();
 
-  // State
+
   const [globalLoading, setGlobalLoading] = useState(true);
   const [globalError, setGlobalError] = useState(null);
   const [leads, setLeads] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [activeSubTab, setActiveSubTab] = useState("customers"); // "customers" | "leads" | "cancellations"
+  const [activeSubTab, setActiveSubTab] = useState("customers");
   const [visible, setVisible] = useState(false);
   const [cancellationRequests, setCancellationRequests] = useState([]);
   const [loadingCancellations, setLoadingCancellations] = useState(false);
@@ -93,22 +93,22 @@ const CustomerManagementAccounting = () => {
   const [verifyNotes, setVerifyNotes] = useState("");
   const [verifyingRequest, setVerifyingRequest] = useState(false);
 
-  // Search & Filters
+
   const [globalSearch, setGlobalSearch] = useState("");
   const [projectFilter, setProjectFilter] = useState("");
   const [unitFilter, setUnitFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
-  // Payment modal states
+
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedCustomerForPayment, setSelectedCustomerForPayment] = useState(null);
   const [activePaymentPlan, setActivePaymentPlan] = useState(null);
   const [loadingPaymentPlan, setLoadingPaymentPlan] = useState(false);
 
-  // Ledger state
+
   const [selectedCustomerIdForLedger, setSelectedCustomerIdForLedger] = useState(null);
 
-  // Stats
+
   const [stats, setStats] = useState({
     activeCount: 0,
     pendingCount: 0,
@@ -158,7 +158,7 @@ const CustomerManagementAccounting = () => {
     }
   };
 
-  // Fetch all leads & customers globally
+
   const fetchGlobalData = async () => {
     if (!companyId) return;
     setGlobalLoading(true);
@@ -186,7 +186,7 @@ const CustomerManagementAccounting = () => {
         setLeads(fetchedLeads);
         setCustomers(fetchedCustomers);
 
-        // Compute metrics
+
         const activeCusts = fetchedCustomers.filter(
           (c) => c.status === "active" || c.status === "completed",
         );
@@ -221,7 +221,7 @@ const CustomerManagementAccounting = () => {
     }
   };
 
-  // Fetch project options for filters
+
   const fetchProjects = async () => {
     if (!companyId) return;
     try {
@@ -304,7 +304,7 @@ const CustomerManagementAccounting = () => {
     }
   };
 
-  // Load initial data
+
   useEffect(() => {
     if (companyId) {
       fetchGlobalData();
@@ -317,12 +317,12 @@ const CustomerManagementAccounting = () => {
     setVisible(true);
   }, []);
 
-  // Reset unit filter when project filter changes
+
   useEffect(() => {
     setUnitFilter("");
   }, [projectFilter]);
 
-  // Open the record payment modal
+
   const handleOpenPayment = async (record) => {
     const planId = record.ledger_id;
     if (!planId) {
@@ -351,13 +351,13 @@ const CustomerManagementAccounting = () => {
     }
   };
 
-  // Callback on successful payment submit
+
   const handlePaymentSuccess = async () => {
     fetchGlobalData();
 
     if (selectedCustomerForPayment) {
       const record = selectedCustomerForPayment;
-      // First payment check: if no customer status exists (lead), status is pending, or total_paid is 0
+
       const isFirstPayment = !record.status || record.status === 'pending' || Number(record.total_paid || 0) === 0;
 
       if (isFirstPayment) {
@@ -375,7 +375,7 @@ const CustomerManagementAccounting = () => {
             const token = user?.token;
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-            // 1. Get current booking status of project items
+
             const bookingRes = await axios.get(
               `${import.meta.env.VITE_CSAAP_URL}/api/tenant/type/${projectType}/${projectId}/booking-status`,
               { headers }
@@ -383,7 +383,7 @@ const CustomerManagementAccounting = () => {
 
             const isAlreadyBooked = checkIfBooked(bookingRes.data, itemId);
 
-            // 2. Toggle booking status if not already booked
+
             if (!isAlreadyBooked) {
               console.log(`Unit/Item ${itemId} is not booked. Toggling booking status...`);
               await axios.put(
@@ -407,7 +407,7 @@ const CustomerManagementAccounting = () => {
     setActivePaymentPlan(null);
   };
 
-  // Memoize slabs list for the payment modal
+
   const preparedSlabs = useMemo(() => {
     if (!activePaymentPlan || !activePaymentPlan.slabs) return [];
     return activePaymentPlan.slabs.map(s => ({
@@ -420,7 +420,7 @@ const CustomerManagementAccounting = () => {
     }));
   }, [activePaymentPlan]);
 
-  // Extract available units for the selected project from current customers and leads
+
   const availableUnitsForSelectedProject = useMemo(() => {
     if (!projectFilter) return [];
 
@@ -451,7 +451,7 @@ const CustomerManagementAccounting = () => {
       );
   }, [projectFilter, customers, leads]);
 
-  // Filters for global listings
+
   const getFilteredCustomers = () => {
     return customers.filter((c) => {
       const matchesSearch =
@@ -505,7 +505,7 @@ const CustomerManagementAccounting = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto space-y-6">
-          {/* Header */}
+
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="app-title flex items-center gap-2">
@@ -531,7 +531,7 @@ const CustomerManagementAccounting = () => {
             </div>
           </div>
 
-          {/* Global Error Banner */}
+
           {globalError && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-3 text-sm">
               <AlertCircle size={20} className="shrink-0" />
@@ -539,7 +539,7 @@ const CustomerManagementAccounting = () => {
             </div>
           )}
 
-          {/* Stats Dashboard */}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <div className="app-panel p-4">
               <div className="flex items-start justify-between gap-3">
@@ -625,10 +625,10 @@ const CustomerManagementAccounting = () => {
             </div>
           </div>
 
-        {/* Sticky Queue Tabs */}
+
         <div className="sticky top-0 z-20 -mx-4 px-4 py-3 border-b border-(--border-soft) flex justify-between items-center bg-[#f8faf8]/80 backdrop-blur-md">
           <div className="flex items-center gap-2 overflow-x-auto custom-none">
-            {/* Bookings Tab */}
+
             <button
               onClick={() => setActiveSubTab("customers")}
               className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-bold tracking-[-0.02em] whitespace-nowrap transition-all cursor-pointer ${
@@ -652,7 +652,7 @@ const CustomerManagementAccounting = () => {
               </span>
             </button>
 
-            {/* Leads Tab */}
+
             <button
               onClick={() => setActiveSubTab("leads")}
               className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-bold tracking-[-0.02em] whitespace-nowrap transition-all cursor-pointer ${
@@ -676,7 +676,7 @@ const CustomerManagementAccounting = () => {
               </span>
             </button>
 
-            {/* Cancellations Tab */}
+
             <button
               onClick={() => setActiveSubTab("cancellations")}
               className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-bold tracking-[-0.02em] whitespace-nowrap transition-all cursor-pointer ${
@@ -702,9 +702,9 @@ const CustomerManagementAccounting = () => {
           </div>
         </div>
 
-        {/* Global Leads & Bookings View Panel */}
+
         <div className="app-panel overflow-hidden">
-          {/* Filters Bar */}
+
           <div className="p-4 bg-slate-50/30 border-b border-(--border-soft) flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="relative max-w-sm w-full">
               <input
@@ -761,7 +761,7 @@ const CustomerManagementAccounting = () => {
             </div>
           </div>
 
-          {/* Global Content */}
+
           {globalLoading ? (
             <div className="flex flex-col items-center justify-center py-16 gap-3">
               <RefreshCw className="animate-spin text-green-600" size={32} />
@@ -770,7 +770,7 @@ const CustomerManagementAccounting = () => {
               </span>
             </div>
           ) : activeSubTab === "cancellations" ? (
-            /* Cancellations Table */
+
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-(--border-soft) text-left border-collapse">
                 <thead className="bg-(--bg-subtle)/30">
@@ -861,7 +861,7 @@ const CustomerManagementAccounting = () => {
               </table>
             </div>
           ) : activeSubTab === "customers" ? (
-            /* Customers / Bookings Table */
+
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-(--border-soft) text-left border-collapse">
                 <thead className="bg-(--bg-subtle)/30">
@@ -997,7 +997,7 @@ const CustomerManagementAccounting = () => {
               </table>
             </div>
           ) : (
-            /* Leads Table */
+
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-(--border-soft) text-left border-collapse">
                 <thead className="bg-(--bg-subtle)/30">
@@ -1104,7 +1104,7 @@ const CustomerManagementAccounting = () => {
         </div>
       </div>
 
-      {/* Render the payment portal modal */}
+
       {showPaymentModal && selectedCustomerForPayment && activePaymentPlan && (
         <RecordPaymentModal
           lead={selectedCustomerForPayment}
@@ -1119,12 +1119,12 @@ const CustomerManagementAccounting = () => {
         />
       )}
 
-      {/* Accountant Verification Modal */}
+
       {showVerifyModal && selectedRequestForVerify && createPortal(
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-md">
           <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
             
-            {/* Header */}
+
             <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
               <div className="flex items-start gap-3 min-w-0">
                 <div className="size-11 rounded-2xl flex items-center justify-center bg-(--brand-soft) border border-(--border-soft) shrink-0">

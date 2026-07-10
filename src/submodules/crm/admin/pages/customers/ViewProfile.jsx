@@ -44,7 +44,7 @@ export default function ViewProfile() {
   const [visible, setVisible] = useState(false);
   useEffect(() => setVisible(true), []);
 
-  // Fetch customer details
+
   const {
     data: customer,
     isLoading,
@@ -60,7 +60,7 @@ export default function ViewProfile() {
     enabled: !!customerId && !!companyId,
   });
 
-  // Fetch project options
+
   const { data: projectOptions = [] } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
@@ -88,7 +88,7 @@ export default function ViewProfile() {
     return p?.name || customer.project_id;
   }, [customer, projectOptions]);
 
-  // Fetch payment slabs if payment plan exists
+
   const { data: paymentPlan } = useQuery({
     queryKey: ["payment-plan-customer", customer?.ledger_id, customer?.lead_id, companyId],
     queryFn: async () => {
@@ -153,7 +153,7 @@ export default function ViewProfile() {
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
         }`}
       >
-        {/* Header Nav */}
+
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/crm/customers")}
@@ -168,9 +168,9 @@ export default function ViewProfile() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column — Contact + Profile Details */}
+
           <div className="lg:col-span-2 space-y-5">
-            {/* Contact Info Card */}
+
             <div className="app-panel p-5 space-y-4">
               <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5">
                 Contact Information
@@ -199,7 +199,7 @@ export default function ViewProfile() {
               </div>
             </div>
 
-            {/* Profile Details Card */}
+
             <div className="app-panel p-5 space-y-4">
               <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5">
                 Profile Details
@@ -255,7 +255,7 @@ export default function ViewProfile() {
               </div>
             </div>
 
-            {/* Nominee Details Card */}
+
             {(customer.nominee_name ||
               customer.nominee_relation ||
               customer.nominee_phone) && (
@@ -283,7 +283,7 @@ export default function ViewProfile() {
               </div>
             )}
 
-            {/* Notes */}
+
             {customer.profile_notes && (
               <div className="app-panel p-5">
                 <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5 mb-3">
@@ -296,9 +296,9 @@ export default function ViewProfile() {
             )}
           </div>
 
-          {/* Right Column — Payment Summary + Slabs */}
+
           <div className="space-y-5">
-            {/* Payment Summary Card */}
+
             <div className="app-panel p-5 space-y-4">
               <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5">
                 Payment Summary
@@ -333,7 +333,7 @@ export default function ViewProfile() {
                 />
               </div>
 
-              {/* Progress Bar */}
+
               <div className="space-y-1.5 pt-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-(--text-soft)">
@@ -359,7 +359,7 @@ export default function ViewProfile() {
                 </div>
               </div>
 
-              {/* View Ledger Button */}
+
               {canViewLedger && (
                 <button
                   onClick={() =>
@@ -373,7 +373,7 @@ export default function ViewProfile() {
               )}
             </div>
 
-            {/* Payment Slabs */}
+
             {paymentPlan?.slabs && paymentPlan.slabs.length > 0 && (
               <div className="app-panel p-5 space-y-3">
                 <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5">
@@ -438,7 +438,7 @@ export default function ViewProfile() {
               </div>
             )}
 
-            {/* Status Card */}
+
             <div className="app-panel p-5">
               <div className="flex items-center justify-between">
                 <span className="text-[12px] font-bold text-(--text-soft)">
@@ -464,7 +464,7 @@ export default function ViewProfile() {
   );
 }
 
-// Reusable info row component
+
 function InfoRow({ icon: Icon, label, value }) {
   return (
     <div className="flex items-start gap-2.5">
@@ -481,7 +481,7 @@ function InfoRow({ icon: Icon, label, value }) {
   );
 }
 
-// Reusable summary row
+
 function SummaryRow({ label, value, color }) {
   return (
     <div className="flex items-center justify-between">

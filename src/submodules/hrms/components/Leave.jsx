@@ -64,7 +64,7 @@ export default function LeaveReport() {
         };
       }
 
-      // Fill leave data for that day
+
       grouped[record.empCode].days[day - 1] = {
         day,
         leaveType: record.leaveType || "",
@@ -87,15 +87,15 @@ export default function LeaveReport() {
       setLoading(true);
       setShowReport(true);
 
-      // Convert month name to number (1-12)
+
       const monthNumber = months.indexOf(month) + 1;
 
-      //  Fetch from backend
+
       const { data } = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/leave-report/report?month=${monthNumber}&year=${year}`,
       );
 
-      // Group the raw data into per-employee rows
+
       const grouped = groupByEmployee(data);
       setLeaveData(grouped);
       setCurrentPage(1);
@@ -114,14 +114,14 @@ export default function LeaveReport() {
 
   const daysInMonth = getDaysInMonth();
 
-  // Pagination logic
+
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
   const startEntry = startIndex + 1;
   const endEntry = Math.min(startIndex + itemsPerPage, filteredData.length);
 
-  // Calculate summary statistics
+
   const summary = {
     totalEmployees: filteredData.length,
     totalLeaves: filteredData.reduce(
@@ -226,12 +226,12 @@ export default function LeaveReport() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Monthly Leave Report
         </h1>
 
-        {/* Form Section */}
+
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Leave Report
@@ -287,10 +287,10 @@ export default function LeaveReport() {
           </form>
         </div>
 
-        {/* Report Section */}
+
         {showReport && (
           <div className="bg-white rounded-2xl shadow-lg p-6 animate-fadeIn">
-            {/* Summary Cards */}
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                 <div className="flex items-center justify-between">
@@ -345,7 +345,7 @@ export default function LeaveReport() {
               </div>
             </div>
 
-            {/* Actions Bar */}
+
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div className="flex gap-3">
                 <button
@@ -403,7 +403,7 @@ export default function LeaveReport() {
               </div>
             </div>
 
-            {/* Leave Table */}
+
             <div className="overflow-x-auto mb-6">
               <table className="w-full border-collapse text-sm">
                 <thead>
@@ -427,7 +427,7 @@ export default function LeaveReport() {
                       Location
                     </th>
 
-                    {/* Day Headers */}
+
                     {Array.from({ length: daysInMonth }, (_, i) => (
                       <th
                         key={i + 1}
@@ -463,7 +463,7 @@ export default function LeaveReport() {
                         {employee.location}
                       </td>
 
-                      {/* Day Cells */}
+
                       {employee.days.slice(0, daysInMonth).map((day) => (
                         <td
                           key={day.day}
@@ -484,7 +484,7 @@ export default function LeaveReport() {
               </table>
             </div>
 
-            {/* Pagination */}
+
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="text-sm text-gray-600">
                 Showing {startEntry} to {endEntry} of {filteredData.length}{" "}
@@ -533,7 +533,7 @@ export default function LeaveReport() {
               </div>
             </div>
 
-            {/* Legend */}
+
             <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
               <h3 className="text-sm font-medium text-gray-700 mb-3">
                 Leave Legend:
@@ -574,7 +574,7 @@ export default function LeaveReport() {
         )}
       </div>
 
-      {/* Add custom animation for fade-in effect */}
+
       <style jsx>{`
         @keyframes fadeIn {
           from {

@@ -55,7 +55,7 @@ const LedgerForm = () => {
     }
     setLedger((prev) => ({ ...prev, [key]: finalValue }));
 
-    // Validation
+
     if (key === "pan") {
       const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
       setErrors((prev) => ({
@@ -75,7 +75,7 @@ const LedgerForm = () => {
   const handleBankChange = (key, value) =>
     setBankDetails((prev) => ({ ...prev, [key]: value }));
 
-  // ✅ FETCH GROUPS FIXED
+
   useEffect(() => {
     if (!companyId) return;
 
@@ -108,7 +108,7 @@ const LedgerForm = () => {
     fetchGroups();
   }, [companyId]);
 
-  // ✅ FETCH LEDGER DATA IF EDIT MODE
+
   useEffect(() => {
     if (!id || !companyId) return;
 
@@ -159,7 +159,7 @@ const LedgerForm = () => {
     fetchLedger();
   }, [id, companyId]);
 
-  // ✅ PRE-FILL FROM QUERY PARAMS
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const name = params.get("name");
@@ -173,7 +173,7 @@ const LedgerForm = () => {
   }, [id]);
   console.log(groups);
 
-  // ✅ SUBMIT LEDGER
+
   const handleSubmit = async () => {
     if (!ledger.name || !ledger.under) {
       Swal.fire("Error", "Name & Under Group are required!", "error");
@@ -198,13 +198,13 @@ const LedgerForm = () => {
 
     try {
       if (id) {
-        // UPDATE
+
         await axios.put(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/update/${companyId}/${id}`, payload);
         Swal.fire("Success!", "Ledger updated successfully!", "success");
         navigate("/accounting/client/listOfLedgers");
       } else {
-        // CREATE
-        console.log("Creating ledger with payload:", payload); // ⭐ Debugging log
+
+        console.log("Creating ledger with payload:", payload);
         await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`, payload);
         Swal.fire("Success!", "Ledger created successfully!", "success");
 
@@ -256,7 +256,7 @@ const LedgerForm = () => {
           {id ? "Ledger Alteration" : "Ledger Creation"}
         </h2>
 
-        {/* Basic Info */}
+
         <div className="grid grid-cols-2 gap-6 border-b pb-4">
           <div>
             <label className="block text-sm mb-1">Name :</label>
@@ -300,7 +300,7 @@ const LedgerForm = () => {
           </div>
         </div>
 
-        {/* Under Group */}
+
         <div className="mt-3 border-b pb-4">
           <label className="block text-sm mb-1">Under :</label>
 
@@ -327,7 +327,7 @@ const LedgerForm = () => {
           )}
         </div>
 
-        {/* Mailing */}
+
         <div className="grid grid-cols-2 mt-4 gap-6 border-b pb-4">
           <div>
             <h3 className="font-semibold text-blue-700 mb-2">Mailing Details</h3>
@@ -414,7 +414,7 @@ const LedgerForm = () => {
           </div>
         </div>
 
-        {/* Beneficiary */}
+
         <div className="mt-4 border-b pb-4">
           <h3 className="font-semibold text-blue-700 mb-2">
             Beneficiary Details
@@ -436,7 +436,7 @@ const LedgerForm = () => {
           </div>
         </div>
 
-        {/* Tax */}
+
         <div className="mt-4">
           <h3 className="font-semibold text-blue-700 mb-2">
             Tax Registration Details
@@ -498,7 +498,7 @@ const LedgerForm = () => {
           </div>
         </div>
 
-        {/* Buttons */}
+
         <div className="mt-6 flex justify-center gap-4">
           <button
             onClick={handleSubmit}
@@ -531,7 +531,7 @@ const LedgerForm = () => {
         </div>
       </div>
 
-      {/* Bank Popup */}
+
       {showBankPopup && (
         <div className="fixed inset-0 backdrop-blur bg-black/30 flex items-center justify-center z-50">
           <div className="bg-white rounded-md shadow-xl w-100 p-6 border border-gray-300">

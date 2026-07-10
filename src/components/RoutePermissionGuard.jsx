@@ -3,10 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import { usePermission } from "../hooks/usePermission";
 
-/**
- * RoutePermissionGuard protects entire react-router route subtrees.
- * If the user does not possess the required permission, they are redirected.
- */
+
 const RoutePermissionGuard = ({ permission, redirectTo = "/employee/dashboard" }) => {
   const { hasAccess } = usePermission();
 

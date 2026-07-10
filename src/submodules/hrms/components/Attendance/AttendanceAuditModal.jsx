@@ -368,7 +368,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
     setForm((current) => {
       const next = { ...current, [name]: value };
 
-      // If punch-out is cleared, also clear timesheet details
+
       if (name === "punchOutTime" && (!value || value === "N/A")) {
         next.timesheetDetails = "";
       }

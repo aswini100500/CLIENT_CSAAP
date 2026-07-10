@@ -2,12 +2,12 @@ import { List } from "lucide-react";
 import React from "react";
 
 export default function EmployeeRejoining() {
-  const employees = []; // currently empty like your screenshot
+  const employees = [];
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="bg-white shadow-md rounded-md overflow-hidden border">
-        {/* Header */}
+
         <div className="bg-blue-600 text-white px-4 py-2 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <List className="w-4 h-4" />
@@ -16,7 +16,7 @@ export default function EmployeeRejoining() {
             </h2>
           </div>
 
-          {/* Search Box */}
+
           <input
             type="text"
             placeholder="Search"
@@ -24,7 +24,7 @@ export default function EmployeeRejoining() {
           />
         </div>
 
-        {/* Table Section */}
+
         <div className="overflow-x-auto">
           {employees.length === 0 ? (
             <div className="p-4 text-gray-500 text-sm">There is no record</div>
@@ -60,12 +60,12 @@ export default function EmployeeRejoining() {
           )}
         </div>
 
-        {/* Blue Bar - Transfer To */}
+
         <div className="bg-blue-600 text-white text-center font-medium py-2">
           Transfer To
         </div>
 
-        {/* Transfer Form */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 bg-white">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -104,7 +104,7 @@ export default function EmployeeRejoining() {
           </div>
         </div>
 
-        {/* Buttons */}
+
         <div className="flex justify-center gap-3 py-4 bg-white border-t">
           <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded text-sm">
             Move

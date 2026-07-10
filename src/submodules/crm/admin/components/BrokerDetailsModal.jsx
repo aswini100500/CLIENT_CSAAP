@@ -47,7 +47,7 @@ export default function BrokerDetailsModal({ broker, onClose }) {
   return createPortal(
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 animate-in fade-in duration-300">
       <div className="app-modal w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl flex flex-col bg-white border border-(--border-soft)">
-        {/* Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex items-center justify-between bg-white">
           <div className="flex items-center gap-3">
             <div className="size-10 rounded-xl flex items-center justify-center shrink-0 bg-(--brand-soft) border border-(--border-soft) text-(--brand)">
@@ -67,7 +67,7 @@ export default function BrokerDetailsModal({ broker, onClose }) {
           </button>
         </div>
 
-        {/* Body */}
+
         <div className="p-5 overflow-y-auto custom-scrollbar flex-1 min-h-75">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
@@ -82,7 +82,7 @@ export default function BrokerDetailsModal({ broker, onClose }) {
             </div>
           ) : (
             <>
-              {/* Tabs */}
+
               <div className="flex border-b border-(--border-soft) mb-4 gap-2">
                 <button
                   type="button"
@@ -112,7 +112,7 @@ export default function BrokerDetailsModal({ broker, onClose }) {
                 </button>
               </div>
 
-              {/* Data Table */}
+
               <div className="border border-(--border-soft) rounded-2xl overflow-hidden">
                 <div className="overflow-x-auto max-h-80 custom-scrollbar">
                   {activeTab === "leads" ? (

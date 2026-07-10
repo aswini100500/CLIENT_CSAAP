@@ -19,7 +19,7 @@ const ListOFContraVoucher = () => {
   const [vouchers, setVouchers] = useState([]);
   const [showEmployeeActivity, setShowEmployeeActivity] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
-  const [selectedVoucher, setSelectedVoucher] = useState(null); // ← add here
+  const [selectedVoucher, setSelectedVoucher] = useState(null);
   const [companyDetails, setCompanyDetails] = useState(null);
   const { companyId, companyName, employees } = useCompany();
 
@@ -53,9 +53,9 @@ const ListOFContraVoucher = () => {
   const loggedInRole = role?.toLowerCase() || "admin";
   const loggedInEmployeeId = user?.employee_id || null;
 
-  // 🔍 FILTER (search by from/to account or amount)
+
   const filteredVouchers = vouchers.filter((v) => {
-    // Check Employee Activity
+
     if (loggedInRole === "employee") {
       if (v.employee_id != loggedInEmployeeId || v.role?.toLowerCase() !== 'employee') return false;
     } else {
@@ -69,7 +69,7 @@ const ListOFContraVoucher = () => {
 
     const query = searchQuery.toLowerCase();
 
-    // Check if any transaction matches the query
+
     const hasMatchingTransaction = v.transactions?.some(t => {
       const fromAcc = (t.fromAccountName || t.fromAccount || "").toString().toLowerCase();
       const toAcc = (t.toAccountName || t.toAccount || "").toString().toLowerCase();
@@ -83,7 +83,7 @@ const ListOFContraVoucher = () => {
     return hasMatchingTransaction || voucherNoStr.includes(query) || (v.transactions?.length === 0 && query === "");
   });
 
-  // 🧮 Total amount
+
   const totalAmount = filteredVouchers.reduce((acc, v) => {
     const amt = parseFloat(v.transactions?.[0]?.amount || 0);
     return acc + amt;
@@ -101,7 +101,7 @@ const ListOFContraVoucher = () => {
   const generatePDF = (shouldPrint = false) => {
     const doc = new jsPDF();
     const company = (companyDetails?.name || companyName || "Company").toUpperCase();
-    // const companyAddress = getCompanyLocation() || filteredVouchers[0]?.companyLocation || "";
+
     const today = new Date().toLocaleDateString("en-IN");
 
     const formatAmount = (amount) => {
@@ -126,7 +126,7 @@ const ListOFContraVoucher = () => {
       }
     };
 
-    // Header
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(15, 23, 42);
@@ -138,13 +138,13 @@ const ListOFContraVoucher = () => {
     doc.text("Contra Voucher Report", 14, 26);
 
     let headerBottomY = 32;
-    // if (companyAddress) {
-    //   const addressLines = doc.splitTextToSize(`Address: ${companyAddress}`, 120);
-    //   doc.setFontSize(8);
-    //   doc.setTextColor(90);
-    //   doc.text(addressLines, 14, 31);
-    //   headerBottomY = 32 + addressLines.length * 4;
-    // }
+
+
+
+
+
+
+
 
     doc.setFontSize(8);
     doc.setTextColor(120);
@@ -153,7 +153,7 @@ const ListOFContraVoucher = () => {
     doc.setDrawColor(220);
     doc.line(14, headerBottomY, 195, headerBottomY);
 
-    // Totals
+
     const totalAmount = filteredVouchers.reduce((acc, v) => acc + (Number(v.transactions?.[0]?.amount || 0)), 0);
     doc.setFontSize(10);
     doc.setTextColor(40);
@@ -163,7 +163,7 @@ const ListOFContraVoucher = () => {
     doc.setFont("helvetica", "bold");
     doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, { align: "right" });
 
-    // Table
+
     const tableData = filteredVouchers.map((v, i) => {
       const t = v.transactions?.[0] || {};
       return [
@@ -207,7 +207,7 @@ const ListOFContraVoucher = () => {
       }
     });
 
-    // Footer
+
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
@@ -242,7 +242,7 @@ const ListOFContraVoucher = () => {
   const handleExportExcel = () => {
     if (filteredVouchers.length === 0) return;
     const company = companyDetails?.name || companyName || filteredVouchers[0]?.companyName || "Company";
-    // const address = getCompanyLocation() || filteredVouchers[0]?.companyLocation || "-";
+
     const today = new Date().toLocaleDateString("en-IN");
     const exportData = [];
 
@@ -271,7 +271,7 @@ const ListOFContraVoucher = () => {
 
     const headerRows = [
       [`Company Name: ${company}`],
-      // [`Address: ${address}`],
+
       [`Report: Contra Vouchers`],
       [`Generated On: ${today}`],
       [],
@@ -332,20 +332,20 @@ const ListOFContraVoucher = () => {
 
   return (
     <div className="p-2 bg-gray-50 min-h-screen font-[Inter]">
-      {/* Header */}
-      {/* Header */}
+
+
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
 
-          {/* Left - Title */}
+
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Contra Vouchers
           </h1>
 
-          {/* Right - Search + Buttons */}
+
           <div className="flex items-center gap-2.5 flex-wrap">
 
-            {/* Search */}
+
             <div className="relative">
               <Search
                 size={15}
@@ -360,7 +360,7 @@ const ListOFContraVoucher = () => {
               />
             </div>
 
-            {/* Buttons */}
+
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
@@ -384,7 +384,7 @@ const ListOFContraVoucher = () => {
                 <Printer size={14} /> Print
               </button>
 
-              {/* Export Dropdown */}
+
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -440,7 +440,7 @@ const ListOFContraVoucher = () => {
 
 
 
-      {/* Table */}
+
       <div className="mt-6 bg-white rounded-xl shadow-md overflow-x-auto [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
         <table className="w-full border-collapse min-w-max">
           <thead className="bg-blue-100 text-gray-800">
@@ -515,7 +515,7 @@ const ListOFContraVoucher = () => {
                         <button
                           onClick={() => {
                             const url = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/contra-voucher/download/${v.id}`;
-                            // Force download instead of view
+
                             fetch(url)
                               .then(response => response.blob())
                               .then(blob => {
@@ -554,7 +554,7 @@ const ListOFContraVoucher = () => {
         </table>
       </div>
 
-      {/* Summary Footer */}
+
       <div className="max-w-7xl mx-auto mt-4 bg-[#E6EEF8] p-4 rounded-lg flex justify-between items-center shadow-inner border border-blue-200">
         <div className="flex items-center gap-2 text-blue-800 font-bold">
           <FileText size={20} />
@@ -565,7 +565,7 @@ const ListOFContraVoucher = () => {
         </div>
       </div>
 
-      {/* ← ADD THIS RIGHT HERE */}
+
       {selectedVoucher && (
         <ContraVoucherDetailModal
           voucher={selectedVoucher}

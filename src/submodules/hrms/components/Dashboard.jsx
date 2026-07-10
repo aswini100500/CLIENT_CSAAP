@@ -93,7 +93,7 @@ const Dashboard = () => {
       const alerts = res.data?.data || [];
       setNoticeAlerts(alerts);
 
-      // Automatically open modal if new alerts are found
+
       if (alerts.length > 0 && alerts.length !== lastAlertCount) {
         setIsNoticeModalOpen(true);
         setLastAlertCount(alerts.length);
@@ -110,7 +110,7 @@ const Dashboard = () => {
       let extraDays = customExtraDays || 0;
 
       if (action === "extend" && !customExtraDays) {
-        // Fallback for cases where it's called without customExtraDays (e.g. from dashboard list)
+
         const input = window.prompt(
           `Enter extension days for ${item.name}`,
           "7",
@@ -319,7 +319,7 @@ const Dashboard = () => {
     }
   };
 
-  // Example chart data
+
   const attendancePercentage =
     stats.totalEmployees > 0
       ? Math.round((stats.attendanceCount / stats.totalEmployees) * 100)
@@ -334,7 +334,7 @@ const Dashboard = () => {
 
   const overtimeData = [
     { name: "Overtime", value: stats.overtimeHours },
-    { name: "Regular", value: 160 - stats.overtimeHours }, // assuming 160 working hours
+    { name: "Regular", value: 160 - stats.overtimeHours },
   ];
 
   return (
@@ -354,17 +354,10 @@ const Dashboard = () => {
             Monitor HR operations and jump straight into task assignment.
           </p>
         </div>
-        {/* <button
-          type="button"
-          onClick={() => navigate("/superadmin/hrms/task")}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-green-700"
-        >
-          Assign Task
-          <ArrowRight size={16} />
-        </button> */}
+
       </div>
 
-      {/* Top Stats Cards */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
           icon={<Briefcase size={24} />}
@@ -455,14 +448,7 @@ const Dashboard = () => {
               tasks.
             </p>
           </div>
-          {/* <button
-            type="button"
-            onClick={() => navigate("/superadmin/hrms/task")}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-green-200 bg-green-50 px-5 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-100"
-          >
-            Manage Tasks
-            <ArrowRight size={16} />
-          </button> */}
+
         </div>
       </div>
 
@@ -559,7 +545,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Charts Section */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-4 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-2">Attendance Overview</h2>
@@ -606,41 +592,13 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Table Example */}
-      {/* <div className="mt-6 bg-white rounded-lg shadow overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Employee</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Project</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Attendance</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Overtime</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Leaves</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            <tr>
-              <td className="px-6 py-4">John Doe</td>
-              <td className="px-6 py-4">Project A</td>
-              <td className="px-6 py-4">96%</td>
-              <td className="px-6 py-4">8</td>
-              <td className="px-6 py-4">2</td>
-            </tr>
-            <tr>
-              <td className="px-6 py-4">Jane Smith</td>
-              <td className="px-6 py-4">Project B</td>
-              <td className="px-6 py-4">92%</td>
-              <td className="px-6 py-4">5</td>
-              <td className="px-6 py-4">1</td>
-            </tr>
-          </tbody>
-        </table>
-      </div> */}
+
+
     </div>
   );
 };
 
-// Card Component
+
 const colorMap = {
   blue: "bg-blue-100 text-blue-600",
   green: "bg-green-100 text-green-600",

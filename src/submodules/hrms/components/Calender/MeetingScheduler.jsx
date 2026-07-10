@@ -44,14 +44,14 @@ const MeetingScheduler = () => {
     type: "success",
   });
 
-  // Get user from Redux
+
   const { user, token: authToken } = useAuth();
   const { has } = usePermission();
   const token = authToken;
   const companyId = user?.company_id;
   const slug = user?.slug;
 
-  // Form state for new meeting
+
   const [newMeeting, setNewMeeting] = useState({
     title: "",
     description: "",
@@ -72,12 +72,12 @@ const MeetingScheduler = () => {
     notes: "",
   });
 
-  // Employees list
+
   const [employees, setEmployees] = useState([]);
   const [searchEmployee, setSearchEmployee] = useState("");
   const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
 
-  // Fetch employees and meetings
+
   useEffect(() => {
     if (companyId && slug) {
       fetchEmployees();
@@ -95,7 +95,7 @@ const MeetingScheduler = () => {
         },
       );
 
-      // ✅ FIX HERE
+
       setEmployees(
         Array.isArray(response.data)
           ? response.data
@@ -135,7 +135,7 @@ const MeetingScheduler = () => {
     if (!newMeeting.attendees.some((a) => a.id === employee.id)) {
       setNewMeeting((prev) => ({
         ...prev,
-        attendees: [...prev.attendees, employee.id], // Store only IDs
+        attendees: [...prev.attendees, employee.id],
       }));
     }
     setShowEmployeeDropdown(false);
@@ -308,7 +308,7 @@ const MeetingScheduler = () => {
     setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 3000);
   };
 
-  // Filter meetings with null checks
+
   const filteredMeetings = (Array.isArray(meetings) ? meetings : []).filter(
     (meeting) => {
       if (!meeting) return false;
@@ -399,7 +399,7 @@ const MeetingScheduler = () => {
   const formatTime = (timeString) => {
     if (!timeString) return "--:--";
     try {
-      return timeString.substring(0, 5); // HH:MM format
+      return timeString.substring(0, 5);
     } catch (error) {
       return "--:--";
     }
@@ -412,7 +412,7 @@ const MeetingScheduler = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
-      {/* Snackbar */}
+
       {snackbar.open && (
         <div
           className={`fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slideIn ${
@@ -428,7 +428,7 @@ const MeetingScheduler = () => {
         </div>
       )}
 
-      {/* Header */}
+
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -454,7 +454,7 @@ const MeetingScheduler = () => {
           </button>
         </div>
 
-        {/* Filters */}
+
         <div className="bg-white rounded-xl shadow-lg p-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
@@ -522,7 +522,7 @@ const MeetingScheduler = () => {
           </div>
         </div>
 
-        {/* Meetings Grid */}
+
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <Loader2 className="animate-spin text-emerald-600" size={40} />
@@ -534,7 +534,7 @@ const MeetingScheduler = () => {
                 key={meeting?.id}
                 className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
               >
-                {/* Meeting Header */}
+
                 <div className="p-4 border-b border-gray-100 bg-linear-to-r from-emerald-50 to-indigo-50">
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
@@ -553,7 +553,7 @@ const MeetingScheduler = () => {
                   </div>
                 </div>
 
-                {/* Meeting Details */}
+
                 <div className="p-4 space-y-3">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Calendar size={16} />
@@ -599,7 +599,7 @@ const MeetingScheduler = () => {
                     </div>
                   )}
 
-                  {/* Priority Badge */}
+
                   <div className="flex items-center justify-between pt-2">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(meeting?.priority)}`}
@@ -608,7 +608,7 @@ const MeetingScheduler = () => {
                         "No Priority"}
                     </span>
 
-                    {/* Action Buttons */}
+
                     <div className="flex gap-2">
                       <button
                         onClick={() => {
@@ -649,7 +649,7 @@ const MeetingScheduler = () => {
           </div>
         )}
 
-        {/* Empty State */}
+
         {!loading && filteredMeetings.length === 0 && (
           <div className="text-center py-12 bg-white rounded-xl shadow-lg">
             <CalendarDays className="mx-auto h-16 w-16 text-gray-400 mb-4" />
@@ -676,7 +676,7 @@ const MeetingScheduler = () => {
         )}
       </div>
 
-      {/* Add Meeting Modal */}
+
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
@@ -696,7 +696,7 @@ const MeetingScheduler = () => {
             </div>
 
             <form onSubmit={handleCreateMeeting} className="p-6 space-y-6">
-              {/* Basic Information */}
+
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Basic Information
@@ -732,7 +732,7 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-              {/* Date & Time */}
+
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Date & Time
@@ -786,7 +786,7 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-              {/* Meeting Mode */}
+
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Meeting Mode
@@ -828,7 +828,7 @@ const MeetingScheduler = () => {
                 )}
               </div>
 
-              {/* Priority */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Priority
@@ -845,7 +845,7 @@ const MeetingScheduler = () => {
                 </select>
               </div>
 
-              {/* Attendees */}
+
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Attendees
@@ -870,7 +870,7 @@ const MeetingScheduler = () => {
                     />
                   </div>
 
-                  {/* Employee Dropdown */}
+
                   {showEmployeeDropdown && searchEmployee && (
                     <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                       {employees
@@ -916,7 +916,7 @@ const MeetingScheduler = () => {
                   )}
                 </div>
 
-                {/* Selected Attendees */}
+
                 {newMeeting.attendees.length > 0 && (
                   <div className="mt-3 space-y-2">
                     <p className="text-sm font-medium text-gray-700">
@@ -951,7 +951,7 @@ const MeetingScheduler = () => {
                 )}
               </div>
 
-              {/* Additional Notes */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Additional Notes
@@ -966,7 +966,7 @@ const MeetingScheduler = () => {
                 />
               </div>
 
-              {/* Reminder Checkbox */}
+
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -982,7 +982,7 @@ const MeetingScheduler = () => {
                 </label>
               </div>
 
-              {/* Recurring Checkbox */}
+
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -1001,7 +1001,7 @@ const MeetingScheduler = () => {
                 </label>
               </div>
 
-              {/* Recurring Pattern */}
+
               {newMeeting.recurring && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1021,7 +1021,7 @@ const MeetingScheduler = () => {
                 </div>
               )}
 
-              {/* Form Actions */}
+
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <button
                   type="submit"
@@ -1045,7 +1045,7 @@ const MeetingScheduler = () => {
         </div>
       )}
 
-      {/* Meeting Details Modal */}
+
       {showDetailsModal && selectedMeeting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full">
@@ -1060,7 +1060,7 @@ const MeetingScheduler = () => {
             </div>
 
             <div className="p-6 space-y-6">
-              {/* Meeting Title */}
+
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">
                   {selectedMeeting?.title || "Untitled Meeting"}
@@ -1076,14 +1076,14 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-              {/* Description */}
+
               {selectedMeeting?.description && (
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-gray-700">{selectedMeeting.description}</p>
                 </div>
               )}
 
-              {/* Details Grid */}
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-600">
@@ -1167,7 +1167,7 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-              {/* Attendees List */}
+
               <div>
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <Users size={18} />
@@ -1211,7 +1211,7 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-              {/* Notes */}
+
               {selectedMeeting?.notes && (
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-2">
@@ -1223,7 +1223,7 @@ const MeetingScheduler = () => {
                 </div>
               )}
 
-              {/* Action Buttons */}
+
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <button
                   onClick={() => {
@@ -1262,7 +1262,7 @@ const MeetingScheduler = () => {
         </div>
       )}
 
-      {/* Edit Meeting Modal */}
+
       {showEditModal && selectedMeeting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
@@ -1280,7 +1280,7 @@ const MeetingScheduler = () => {
             </div>
 
             <form onSubmit={handleUpdateMeeting} className="p-6 space-y-6">
-              {/* Basic Information */}
+
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Basic Information
@@ -1322,7 +1322,7 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-              {/* Date & Time */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1393,7 +1393,7 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-              {/* Meeting Mode */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Mode
@@ -1414,7 +1414,7 @@ const MeetingScheduler = () => {
                 </select>
               </div>
 
-              {/* Location/Meeting Link */}
+
               {selectedMeeting.mode === "online" ? (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1451,7 +1451,7 @@ const MeetingScheduler = () => {
                 </div>
               )}
 
-              {/* Priority */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Priority
@@ -1472,7 +1472,7 @@ const MeetingScheduler = () => {
                 </select>
               </div>
 
-              {/* Notes */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Notes
@@ -1490,7 +1490,7 @@ const MeetingScheduler = () => {
                 />
               </div>
 
-              {/* Form Actions */}
+
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <button
                   type="submit"
@@ -1514,7 +1514,7 @@ const MeetingScheduler = () => {
         </div>
       )}
 
-      {/* Animation Styles */}
+
       <style jsx>{`
         @keyframes slideIn {
           from {

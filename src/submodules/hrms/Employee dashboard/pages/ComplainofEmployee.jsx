@@ -31,7 +31,7 @@ const ComplainOfEmployeeWrapper = () => {
 
         if (!slug) return;
 
-        // complaints
+
         if (emp_id && showComplaints) {
           const compRes = await axios.get(
             `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/employee/${emp_id}/${slug}`
@@ -39,7 +39,7 @@ const ComplainOfEmployeeWrapper = () => {
           setComplaintCount(compRes.data?.data?.length || 0);
         }
 
-        // service request
+
         if (employeeId && showServiceRequests) {
           const srRes = await axios.get(
             `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/employee-search?employeeId=${employeeId}&company_id=${company_id}&slug=${slug}`,);
@@ -57,7 +57,7 @@ const ComplainOfEmployeeWrapper = () => {
 
   useEffect(() => {
     const handleRefresh = () => {
-      // Re-trigger fetch counts if refreshCounts event is fired
+
       const triggerFetch = async () => {
         try {
           const company_id = user?.company_id;
@@ -90,7 +90,7 @@ const ComplainOfEmployeeWrapper = () => {
     };
   }, [user, showComplaints, showServiceRequests]);
 
-  // If the user has both tabs, show the header tab selection bar. Otherwise, skip it.
+
   const showTabBar = showComplaints && showServiceRequests;
 
   return (
@@ -191,14 +191,14 @@ const ComplainOfEmployeeContent = () => {
     try {
       const payload = {
         employee_id: emp_id,
-        slug: user.slug,   // ✅ add this
+        slug: user.slug,
         complain: formData.complainDetails
       };
 
-      // POST to backend
+
       await axios.post(`${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints`, payload);
 
-      // Refresh complaints from backend
+
       fetchComplaints();
 
       setFormData({ complainDetails: "" });
@@ -211,7 +211,7 @@ const ComplainOfEmployeeContent = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/${id}`);
-      fetchComplaints(); // refresh list
+      fetchComplaints();
     } catch (error) {
       console.error("Error deleting complaint:", error);
     }
@@ -250,7 +250,7 @@ const ComplainOfEmployeeContent = () => {
     setShowAddForm(false);
   };
 
-  // Filter and pagination
+
   const filteredComplains = complains.filter(complain =>
     complain.complain.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -263,7 +263,7 @@ const ComplainOfEmployeeContent = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
 
-        {/* Header Section */}
+
         <div className="mb-8">
           <div className="flex justify-between items-center">
             <div>
@@ -289,7 +289,7 @@ const ComplainOfEmployeeContent = () => {
           </div>
         </div>
 
-        {/* Add Complain Form */}
+
         {showAddForm && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
             <div className="flex justify-between items-center mb-6">
@@ -339,11 +339,11 @@ const ComplainOfEmployeeContent = () => {
           </div>
         )}
 
-        {/* Complains List */}
+
         {!showAddForm && (
           <div className="space-y-6">
 
-            {/* Search and Filter Section */}
+
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div className="flex items-center gap-4">
@@ -386,15 +386,15 @@ const ComplainOfEmployeeContent = () => {
               </div>
             </div>
 
-            {/* Complaints Table */}
+
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
 
-              {/* Table Header */}
+
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                 <h3 className="text-lg font-semibold text-gray-800">All Complaints</h3>
               </div>
 
-              {/* Table Content */}
+
               <div className="overflow-x-auto">
                 <table className="min-w-full">
                   <thead className="bg-gray-50">
@@ -434,12 +434,7 @@ const ComplainOfEmployeeContent = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center gap-3">
-                              {/* <button className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors">
-                                View
-                              </button>
-                              <button className="text-green-600 hover:text-green-800 text-sm font-medium transition-colors">
-                                Edit
-                              </button> */}
+
                               <button
                                 onClick={() => handleDelete(complain.id)}
                                 className="text-red-600 hover:text-red-800 text-sm font-medium transition-colors"
@@ -468,7 +463,7 @@ const ComplainOfEmployeeContent = () => {
                 </table>
               </div>
 
-              {/* Table Footer */}
+
               {paginatedComplains.length > 0 && (
                 <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
                   <div className="flex flex-col sm:flex-row justify-between items-center gap-4">

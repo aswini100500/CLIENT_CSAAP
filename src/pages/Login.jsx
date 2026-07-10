@@ -37,7 +37,7 @@ const Login = () => {
   const { user, token, isAuthenticated, isEmployee } = useAuth();
   const isEmployeeLogin = location.pathname.startsWith("/employee");
 
-  // Dynamic branding color palette matching company green standard from EmployeeSidebar
+
   const theme = isEmployeeLogin
     ? {
       primary: "green",
@@ -52,13 +52,13 @@ const Login = () => {
       buttonShadow: "shadow-[0_12px_24px_-4px_rgba(16,185,129,0.2)]",
       buttonHoverShadow: "hover:shadow-[0_12px_32px_-4px_rgba(16,185,129,0.3)]",
       pingBorder: "border-green-600/10",
-      // Ambient background
+
       ambientOrb1: "bg-linear-to-br from-green-500/20 via-emerald-400/15 to-white/10 blur-[130px]",
       ambientOrb2: "bg-linear-to-tr from-emerald-400/15 via-green-300/15 to-white/10 blur-[120px]",
       driftOrb1: "bg-linear-to-br from-green-400/15 via-emerald-300/15 to-white/10 blur-[130px]",
       driftOrb2: "bg-linear-to-tr from-emerald-300/10 via-green-200/15 to-white/10 blur-[130px]",
       cardShadow: "shadow-[0_24px_60px_rgba(0,0,0,0.035),0_12px_24px_rgba(16,185,129,0.01)]",
-      // Parallax blobs & plates
+
       morphBlob1: "bg-linear-to-br from-green-500/60 via-emerald-400/50 to-white/40 blur-[60px]",
       morphBlob2: "bg-linear-to-tr from-emerald-400/50 via-green-300/40 to-white/30 blur-[50px]",
       ambientLightGlow: "bg-green-500/10",
@@ -95,13 +95,13 @@ const Login = () => {
       buttonShadow: "shadow-[0_12px_24px_-4px_rgba(37,99,235,0.2)]",
       buttonHoverShadow: "hover:shadow-[0_12px_32px_-4px_rgba(37,99,235,0.3)]",
       pingBorder: "border-blue-600/10",
-      // Ambient background
+
       ambientOrb1: "bg-linear-to-br from-blue-500/20 via-blue-400/15 to-white/10 blur-[130px]",
       ambientOrb2: "bg-linear-to-tr from-blue-400/15 via-blue-300/15 to-white/10 blur-[120px]",
       driftOrb1: "bg-linear-to-br from-blue-400/15 via-blue-300/15 to-white/10 blur-[130px]",
       driftOrb2: "bg-linear-to-tr from-blue-300/10 via-blue-200/15 to-white/10 blur-[130px]",
       cardShadow: "shadow-[0_24px_60px_rgba(0,0,0,0.035),0_12px_24px_rgba(37,99,235,0.01)]",
-      // Parallax blobs & plates
+
       morphBlob1: "bg-linear-to-br from-blue-500/60 via-blue-400/50 to-white/40 blur-[60px]",
       morphBlob2: "bg-linear-to-tr from-blue-400/50 via-blue-300/40 to-white/30 blur-[50px]",
       ambientLightGlow: "bg-blue-500/10",
@@ -202,7 +202,7 @@ const Login = () => {
     const cloudsatToken = data.token;
     const resolvedSlug = data.user?.slug || data.user?.company || currentSlug;
 
-    // ── HRMS & CRM Async Sync (Non-Blocking) ──
+
     axios.post(
       `${import.meta.env.VITE_HRMS_BASE_URL}/api/v1/auth/sync`,
       {
@@ -449,7 +449,7 @@ const Login = () => {
   if (showLoader) {
     return (
       <div className="login-page-wrapper bg-[#eaeef3] min-h-screen w-full flex items-center justify-center p-6 relative overflow-hidden font-body">
-        {/* Glowing brand blur background with premium framer-motion movement */}
+
         <motion.div
           animate={{
             x: [0, 40, -30, 0],
@@ -506,7 +506,7 @@ const Login = () => {
     );
   }
 
-  // Animation variants
+
   const formContainerVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: {
@@ -532,7 +532,7 @@ const Login = () => {
 
   return (
     <div className="login-page-wrapper bg-[#eaeef3] min-h-screen w-full flex items-center justify-center p-4 md:p-8 lg:p-0 relative overflow-hidden font-body">
-      {/* Drifting Ambient Background Orbs */}
+
       <motion.div
         animate={{
           x: [0, 80, -40, 0],
@@ -560,9 +560,9 @@ const Login = () => {
         className={`absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full ${theme.driftOrb2} pointer-events-none z-0`}
       />
 
-      {/* Outer Card Portal */}
+
       <div className={`relative z-10 w-full max-w-230 min-h-145 grid grid-cols-1 lg:grid-cols-12 rounded-2xl bg-white p-3 border border-slate-100/60 gap-5 ${theme.cardShadow}`}>
-        {/* Left Side: Elegant Light Card with vibrant Blob Blurs (3D Interactive Parallax Container) */}
+
         <div
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHoveredCard(true)}
@@ -572,9 +572,9 @@ const Login = () => {
           }}
           className="relative hidden lg:flex lg:col-span-5 rounded-xl bg-slate-50 border border-slate-100/60 overflow-hidden flex-col justify-between p-8 group select-none"
         >
-          {/* Advanced Liquid Morphing and Overlapping Blobs with Glassmorphism overlay */}
+
           <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-            {/* Morphing Blob 1 (Shades of Blue/Green and White) */}
+
             <motion.div
               animate={{
                 borderRadius: [
@@ -594,7 +594,7 @@ const Login = () => {
               className={`absolute top-[-20%] right-[-20%] w-[140%] h-[120%] opacity-85 ${theme.morphBlob1}`}
             />
 
-            {/* Morphing Blob 2 (Shades of Blue/Green and White) */}
+
             <motion.div
               animate={{
                 borderRadius: [
@@ -614,17 +614,17 @@ const Login = () => {
               className={`absolute bottom-[-30%] left-[-30%] w-[130%] h-[110%] opacity-75 ${theme.morphBlob2}`}
             />
 
-            {/* Soft highlight orb in center */}
+
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full bg-white/10 blur-2xl" />
 
-            {/* Subtle Glassmorphic Overlay for depth */}
+
             <div className="absolute inset-0 bg-white/3 backdrop-blur-[1px]" />
 
-            {/* Very subtle futuristic grid pattern overlay */}
+
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-size-[24px_24px] mask-[radial-gradient(ellipse_at_center,transparent_20%,black_80%)]" />
           </div>
 
-          {/* Logo element */}
+
           <div className="relative z-10 flex items-center gap-3">
             <div className={`flex h-10 w-10 items-center justify-center rounded-lg shadow-sm ${theme.logoBg}`}>
               <Building2 className="h-5 w-5 text-white stroke-2" />
@@ -639,15 +639,15 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Purely Decorative Overlapping Glass Plates (3D Parallax & Spring Physics) */}
+
           <div
             style={{ perspective: 1000 }}
             className="relative z-10 my-auto w-full h-56 flex items-center justify-center pointer-events-none"
           >
-            {/* Soft backing ambient light glow */}
+
             <div className={`absolute w-48 h-48 rounded-full blur-3xl ${theme.ambientLightGlow}`} />
 
-            {/* Decorative Plate 1 (Back, Subtle 3D Leaning Left, Scaled Up) */}
+
             <motion.div
               animate={{
                 y: [-6, 6, -6],
@@ -671,17 +671,17 @@ const Login = () => {
               }}
               className="absolute w-60 h-36 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/15 shadow-[0_8px_32px_rgba(37,99,235,0.02)] -translate-y-4"
             >
-              {/* Internal dense blueprint gridlines (high density) */}
+
               <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-size-[12px_12px] rounded-2xl" />
 
-              {/* Architectural Concentric Blueprint Rings */}
+
               <div className={`absolute top-4 left-4 w-16 h-16 rounded-full border flex items-center justify-center ${theme.plate1RingBorderBg}`}>
                 <div className={`w-10 h-10 rounded-full border border-dashed flex items-center justify-center ${theme.plate1DashedRing}`}>
                   <div className={`w-4 h-4 rounded-full border ${theme.plate1Dot}`} />
                 </div>
               </div>
 
-              {/* Engineering Horizontal Measurement Scale (Dense Tick Marks) */}
+
               <div className="absolute top-4 right-4 flex gap-1 items-start opacity-40">
                 {[...Array(12)].map((_, i) => (
                   <div
@@ -691,18 +691,18 @@ const Login = () => {
                 ))}
               </div>
 
-              {/* Faint technical coordinate nodes & labels */}
+
               <div className={`absolute bottom-4 left-4 flex flex-col gap-0.5 font-mono text-[6px] uppercase tracking-widest font-bold ${theme.plate1Coord}`}>
                 <span>COORD // X-84.9</span>
                 <span>MESH // SYS-29</span>
               </div>
 
-              {/* Abstract Blueprint Diagonal Axis */}
+
               <div className={`absolute right-4 bottom-4 w-20 h-px transform -rotate-12 bg-linear-to-r ${theme.plate1Axis1} to-transparent`} />
               <div className={`absolute right-8 bottom-6 w-16 h-px transform -rotate-12 bg-linear-to-r ${theme.plate1Axis2} to-transparent`} />
             </motion.div>
 
-            {/* Decorative Plate 2 (Front, Subtle 3D Leaning Right, Scaled Up) */}
+
             <motion.div
               animate={{
                 y: [6, -6, 6],
@@ -726,11 +726,11 @@ const Login = () => {
               }}
               className="absolute w-52 h-32 rounded-2xl bg-white/15 backdrop-blur-[14px] border border-white/25 shadow-[0_20px_45px_rgba(37,99,235,0.05)] translate-y-4"
             >
-              {/* Glossy sheen highlight sweep & abstract shapes */}
+
               <div className="absolute inset-0 bg-linear-to-tr from-white/0 via-white/10 to-white/25 rounded-2xl pointer-events-none" />
               <div className="absolute inset-0 border border-white/10 rounded-2xl" />
 
-              {/* Top Section: Technical Metadata Labels & Dial */}
+
               <div className="absolute top-3.5 left-4 right-4 flex items-center justify-between">
                 <div className={`flex flex-col gap-0.5 font-mono text-[7px] uppercase tracking-wider font-extrabold ${theme.plate2Telemetry}`}>
                   <span>SYSTEM TELEMETRY</span>
@@ -738,7 +738,7 @@ const Login = () => {
                     FLOW STATE: ACTIVE
                   </span>
                 </div>
-                {/* Micro circular progress dial */}
+
                 <div className="relative h-6 w-6 flex items-center justify-center">
                   <svg className="absolute w-6 h-6 transform -rotate-90">
                     <circle
@@ -760,7 +760,7 @@ const Login = () => {
                 </div>
               </div>
 
-              {/* Middle Section: Micro Signal Wave / Spline Connector Nodes */}
+
               <div className="absolute top-12 left-4 right-4 flex items-center gap-1 opacity-60">
                 <div className={`w-1.5 h-1.5 rounded-full ${theme.plate2NodeBg}`} />
                 <div className={`h-px flex-1 bg-linear-to-r ${theme.plate2Spline} to-transparent`} />
@@ -769,7 +769,7 @@ const Login = () => {
                 <div className={`w-1 h-1 rounded-full ${theme.plate2SplineNode2}`} />
               </div>
 
-              {/* Bottom Section: High-Density 15-Bar Equalizer Chart */}
+
               <div className="absolute bottom-3.5 left-4 right-4 flex items-end gap-0.5 h-10">
                 {[
                   30, 55, 40, 75, 90, 60, 45, 80, 95, 70, 50, 65, 85, 40, 60,
@@ -784,7 +784,7 @@ const Login = () => {
             </motion.div>
           </div>
 
-          {/* Text Lockup at the bottom with absolute contrast */}
+
           <div className="relative z-10 max-w-xs mt-auto">
             <span className={`font-extrabold text-[10px] uppercase tracking-[0.2em] block mb-2 ${theme.textPrimaryDark}`}>
               Enterprise Resource Planning
@@ -797,18 +797,18 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Right Side: Clean Workspace Form */}
+
         <div className="lg:col-span-7 flex flex-col justify-between p-5 md:p-6 lg:py-7 lg:px-9">
-          {/* Form Content */}
+
           <div className="my-auto max-w-97.5 w-full mx-auto">
-            {/* Elegant visual distinction badge showing portal access type */}
+
             <div className="flex items-center gap-2 mb-3">
               <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider border ${isEmployeeLogin ? 'bg-green-50 text-green-700 border-green-200/50' : 'bg-blue-50 text-blue-700 border-blue-200/50'}`}>
                 {isEmployeeLogin ? "Employee Access" : "Admin Access"}
               </span>
             </div>
 
-            {/* Context-Specific Brand Icon Container */}
+
             <div className={`mb-4 inline-flex h-9 w-9 items-center justify-center rounded-md border ${theme.bgLight} ${theme.borderLight}`}>
               {isEmployeeLogin ? (
                 <Users className={`h-4.5 w-4.5 ${theme.textPrimary} stroke-[1.8]`} />
@@ -817,7 +817,7 @@ const Login = () => {
               )}
             </div>
 
-            {/* Portal Header */}
+
             <div className="mb-5">
               <h2 className="font-display text-2xl font-extrabold text-slate-900 tracking-tight">
                 {isEmployeeLogin
@@ -835,7 +835,7 @@ const Login = () => {
               </p>
             </div>
 
-            {/* Error notifications */}
+
             <AnimatePresence mode="wait">
               {error && (
                 <motion.div
@@ -864,7 +864,7 @@ const Login = () => {
                 animate="visible"
                 className="space-y-4.5"
               >
-                {/* Company Slug */}
+
                 {isEmployeeLogin && !isForgotMode && (
                   <motion.div variants={itemVariants} className="space-y-1">
                     <label className="text-xs font-semibold text-slate-700 block ml-0.5">
@@ -883,7 +883,7 @@ const Login = () => {
                   </motion.div>
                 )}
 
-                {/* Email Address */}
+
                 <motion.div variants={itemVariants} className="space-y-1">
                   <label className="text-xs font-semibold text-slate-700 block ml-0.5">
                     {isEmployeeLogin ? "Your email" : "Email Address"}
@@ -910,7 +910,7 @@ const Login = () => {
                   </div>
                 </motion.div>
 
-                {/* Password Input */}
+
                 <motion.div variants={itemVariants} className="space-y-1">
                   <div className="flex justify-between items-center px-0.5">
                     <label className="text-xs font-semibold text-slate-700 block">
@@ -973,7 +973,7 @@ const Login = () => {
                 </motion.div>
               </motion.div>
 
-              {/* Submit Button with Brand Green/Blue dynamic effects */}
+
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -1014,7 +1014,7 @@ const Login = () => {
             </form>
           </div>
 
-          {/* Secure disclaimer footer */}
+
           <div className="mt-8 flex items-center justify-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             <ShieldCheck className="h-4 w-4 text-slate-400" />
             <span>Secure Enterprise Connection</span>

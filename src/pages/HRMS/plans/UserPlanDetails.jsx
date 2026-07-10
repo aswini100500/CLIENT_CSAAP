@@ -108,7 +108,7 @@ const UserPlanDetails = () => {
   const [processingPayment, setProcessingPayment] = useState(false);
   const [projectPrice, setProjectPrice] = useState(0);
 
-  // Get company data from Redux
+
   const companyData = useSelector(state => state.companyApi.data);
 
   const requiredServiceIds = useMemo(
@@ -201,7 +201,7 @@ const UserPlanDetails = () => {
         const companyData = unwrapApiData(companyResponse);
         const servicesData = unwrapApiData(servicesResponse);
 
-        // Fetch custom project price
+
         try {
           const priceRes = await axios.get(`${API_BASE_URL}/api/master/user-service-prices/company/${companyId}`);
           if (priceRes.data?.success && Array.isArray(priceRes.data.data) && priceRes.data.data.length > 0) {
@@ -229,21 +229,21 @@ const UserPlanDetails = () => {
     fetchPlanDetails();
   }, [companyId]);
 
-  // ==========================================
-  // PAYMENT SUCCESS HANDLER (UPDATED)
-  // ==========================================
+
+
+
   const handlePaymentSuccess = async (response) => {
     try {
-      // ✅ STEP 1: Validate Razorpay response
+
       if (!response.razorpay_payment_id || !response.razorpay_order_id || !response.razorpay_signature) {
         throw new Error('Invalid Razorpay response - missing required fields');
       }
 
-      // ✅ STEP 2: Default Payment Info (Removed the failing GET request)
+
       const paymentMethod = 'Razorpay';
       const bankName = null;
 
-      // ✅ STEP 3: Get company and user details
+
       const adminPhoneValue =
         companyData?.admin_phone ||
         companyData?.adminPhone ||
@@ -263,7 +263,7 @@ const UserPlanDetails = () => {
         user?.contactNumber ||
         null;
 
-      // ✅ STEP 4: Prepare payment data
+
       const paymentData = {
         razorpayOrderId: response.razorpay_order_id,
         razorpayPaymentId: response.razorpay_payment_id,
@@ -302,7 +302,7 @@ const UserPlanDetails = () => {
         }
       };
 
-      // ✅ STEP 5: Create payment record on backend
+
       const apiResponse = await axios.post(`${API_BASE_URL}/api/master/payments`, paymentData, {
         headers: {
           'Content-Type': 'application/json',
@@ -312,9 +312,9 @@ const UserPlanDetails = () => {
       });
 
       if (apiResponse.data?.success) {
-        // Success
+
         alert(`Payment Successful! 🎉\n\nPayment ID: ${response.razorpay_payment_id}\nAmount: ${formatMoney(costs.grandTotal)}\n\nPayment record saved successfully.`);
-        // window.location.reload(); 
+
       } else {
         const errorMsg = apiResponse.data?.message || 'Payment record could not be saved.';
         alert(`Payment Successful, but saving failed!\n\nPayment ID: ${response.razorpay_payment_id}\n\n⚠️ Warning: ${errorMsg}`);
@@ -342,9 +342,9 @@ const UserPlanDetails = () => {
     alert(`Payment Failed\n\n${userMessage}\n\nPlease try again or contact support if the problem persists.`);
   };
 
-  // ==========================================
-  // PAYMENT INITIALIZATION (UPDATED)
-  // ==========================================
+
+
+
   const handlePayment = async () => {
     if (!VITE_RAZORPAY_KEY_ID) {
       setError("Razorpay key id is missing. Please set VITE_RAZORPAY_KEY_ID in the frontend .env file.");
@@ -375,7 +375,7 @@ const UserPlanDetails = () => {
     setError("");
 
     try {
-      // ✅ STEP 1: CREATE THE ORDER ON THE BACKEND FIRST
+
       const orderResponse = await axios.post(
         `${API_BASE_URL}/api/master/payments/create-order`, 
         { amount: costs.grandTotal }, 
@@ -386,17 +386,17 @@ const UserPlanDetails = () => {
         throw new Error("Failed to generate order ID from server.");
       }
 
-      // ✅ STEP 2: EXTRACT THE ORDER ID
+
       const orderId = orderResponse.data.order.id;
 
-      // ✅ STEP 3: INITIALIZE RAZORPAY WITH THE ORDER ID
+
       const options = {
         key: VITE_RAZORPAY_KEY_ID,
-        amount: Math.round(costs.grandTotal * 100), // paise
+        amount: Math.round(costs.grandTotal * 100),
         currency: "INR",
         name: "Builder ERP",
         description: `Plan services payment for ${company?.master_company_name || company?.company_name || "company"}`,
-        order_id: orderId, // 🟢 CRITICAL FIX: Passing the generated order ID
+        order_id: orderId,
         prefill: {
           name: company?.master_company_name || company?.company_name || "",
           email: company?.email || company?.company_email || "",

@@ -71,7 +71,7 @@ const SuperAdminAccountingActivity = () => {
     type: "all",
     from: "",
     to: "",
-    limit: 100, // smaller limit for fast overview dashboard load
+    limit: 100,
   });
   const [data, setData] = useState({
     resources: [],
@@ -174,7 +174,7 @@ const SuperAdminAccountingActivity = () => {
     <div id="activity-dashboard-content" className="min-h-screen bg-slate-50 p-3 sm:p-5">
       <div className="mx-auto max-w-7xl space-y-5">
         
-        {/* Executive Header Block */}
+
         <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
@@ -268,7 +268,7 @@ const SuperAdminAccountingActivity = () => {
           </div>
         </div>
 
-        {/* Global Statistics */}
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StatCard icon={Activity} label="Total Records Created" value={data.summary?.totalRecords || 0} tone="green" />
           <StatCard icon={IndianRupee} label="Tracked Vouchers Value" value={formatAmount(data.summary?.totalAmount)} tone="blue" />
@@ -276,10 +276,10 @@ const SuperAdminAccountingActivity = () => {
           <StatCard icon={TrendingUp} label="Most Active Type" value={topResource} tone="slate" />
         </div>
 
-        {/* Dedicated Quick Navigation Modules */}
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           
-          {/* Vouchers Link */}
+
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md">
             <div className="flex items-center justify-between">
               <div className="rounded-lg bg-blue-50 p-2.5 text-blue-700">
@@ -302,7 +302,7 @@ const SuperAdminAccountingActivity = () => {
             </Link>
           </div>
 
-          {/* Ledgers Link */}
+
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md">
             <div className="flex items-center justify-between">
               <div className="rounded-lg bg-green-50 p-2.5 text-green-700">
@@ -325,7 +325,7 @@ const SuperAdminAccountingActivity = () => {
             </Link>
           </div>
 
-          {/* Stocks Link */}
+
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md">
             <div className="flex items-center justify-between">
               <div className="rounded-lg bg-amber-50 p-2.5 text-amber-700">
@@ -356,10 +356,10 @@ const SuperAdminAccountingActivity = () => {
           </div>
         )}
 
-        {/* Dashboard Panels */}
+
         <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_320px]">
           
-          {/* Recent activities overview */}
+
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
               <h2 className="text-lg font-extrabold text-slate-900">Recent Employee Activities</h2>
@@ -429,7 +429,7 @@ const SuperAdminAccountingActivity = () => {
             </div>
           </div>
 
-          {/* Employee Contributors Sidebar */}
+
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="text-lg font-extrabold text-slate-900">Top Employee Contributors</h2>
             <p className="text-xs text-slate-500 mt-0.5">Ranked by count of accounting records created.</p>

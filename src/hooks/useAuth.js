@@ -1,8 +1,6 @@
 import { useSelector } from "react-redux";
 
-/**
- * Custom hook to consume the unified authentication state.
- */
+
 export const useAuth = () => {
   const auth = useSelector((state) => state.user);
 

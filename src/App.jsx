@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Route, Routes, useSearchParams, useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 
-// --- Context & State ---
+
 import { CompanyProvider } from "./pages/ClientAccounting/context/CompanyContext";
 import { UserProvider } from "./pages/ClientAccounting/context/UserContext";
 import {
@@ -19,11 +19,11 @@ import {
 } from "./store/slices/userSlice";
 import { setSuperAdmin } from "./submodules/hrms/redux/slices/superAdminSlice";
 
-// --- Layout Components ---
+
 import AdminLayout from "./components/AdminLayout";
 
 
-// --- Page Imports: Operations & Construction ---
+
 import Bill from "./pages/Operation/BOQ/Bill";
 import Drivers from "./pages/Operation/Equipment management/Drivers";
 import EquipmentManage from "./pages/Operation/Equipment management/EquipmentManage";
@@ -46,7 +46,7 @@ import WorkDiary from "./pages/Operation/Work Diary/WorkDiary";
 import Work from "./pages/Operation/Work Order/Work";
 import IndentEntryO from "./pages/Operation/material mangement/IndentEntryO";
 
-// --- Page Imports: Stock & Inventory ---
+
 import EmployeeForm from "./components/EmployeeForm";
 import ProjectsPage from "./components/projectCl/projectCl";
 import BrokerPage from "./pages/BrokerPage";
@@ -60,7 +60,7 @@ import StockEntry from "./pages/Stock&inventory/StockEntry";
 import SupplierList from "./pages/Stock&inventory/SupplierList";
 import SupplierPage from "./pages/SupplierPage";
 
-// --- Page Imports: Client Accounting ---
+
 import ClientBankActivites from "./pages/ClientAccounting/components/BankActivites";
 import ClientCheque from "./pages/ClientAccounting/components/Cheque";
 import ClientChequeRegister from "./pages/ClientAccounting/components/ChequeRegister";
@@ -103,13 +103,13 @@ import UserPlanDetails from "./pages/HRMS/plans/UserPlanDetails";
 import ContactUs from "./pages/ContactUs";
 
 
-// --- Page Imports: CRM (Core) ---
+
 
 import AdminRoutes from "./submodules/crm/admin/routes/AdminRoutes";
 import HRMSAdminRoutes from "./submodules/hrms/routes/AdminRoutes";
 import HRMSEmployeeRoutes from "./submodules/hrms/routes/EmployeeRoutes";
 
-// --- Page Imports: Admin & User Management ---
+
 
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -204,17 +204,17 @@ const App = () => {
         return;
       }
 
-      // Skip CSAAP tenant verify flow for employee routes, as employees use separate authentication
+
       if (window.location.pathname.startsWith("/employee")) {
         setIsVerifying(false);
         return;
       }
 
-      // ── Localhost-only workarounds (cross-origin cookie verify doesn't work on localhost) ──
-      // In production (VITE_LOCAL_AUTH absent/false), skip these and let the
-      // cookie-based /api/tenant/verify handle everything — including CSAAP auto-login.
+
+
+
       if (isLocalAuth) {
-        // Trust the persisted Redux auth session during local development.
+
         const existingToken = getAuthToken();
         const existingUser = getAuthUser();
         if (existingToken && existingUser) {
@@ -334,7 +334,7 @@ const App = () => {
     <UserProvider>
       <CompanyProvider>
         <Routes>
-          {/* Public Routes */}
+
           <Route
             path="/admin/login"
             element={
@@ -350,7 +350,7 @@ const App = () => {
           <Route path="/employee/*" element={<HRMSEmployeeRoutes />} />
           <Route path="/xyz" element={<XYZRedirect />} />
           <Route path="/xyz/:company_id" element={<XYZRedirect />} />
-          {/* Admin Protected Routes */}
+
 
           <Route
             element={
@@ -370,7 +370,7 @@ const App = () => {
             <Route path="/crm/*" element={<AdminRoutes />} />
             <Route path="/hrms/*" element={<HRMSAdminRoutes />} />
 
-            {/* Operations & Construction */}
+
             <Route path="/project-budget" element={<ProjectBudgetTabs />} />
             <Route path="/bill" element={<Bill />} />
             <Route path="/bill-inward" element={<BillInward />} />
@@ -399,7 +399,7 @@ const App = () => {
               element={<ChangeHistoryContractor />}
             />
 
-            {/* Client Accounting */}
+
             <Route
               path="/accounting/client/dashboard"
               element={<ClientDashboard />}
@@ -593,7 +593,7 @@ const App = () => {
               element={<StockNamesList />}
             />
 
-            {/* Stock & Builder ERP */}
+
             <Route path="/brokers" element={<BrokerPage />} />
             <Route path="/suppliers" element={<SupplierPage />} />
             <Route path="/contractors" element={<ContractorsPage />} />
@@ -656,7 +656,7 @@ const App = () => {
               element={<BookingCancellations />}
             />
 
-            {/* SuperAdmin Accounting */}
+
             <Route
               path="/superadmin/accounting/superadmin/activity"
               element={<SuperAdminAccountingActivity />}
@@ -687,7 +687,7 @@ const App = () => {
 
 
 
-          {/* Fallback */}
+
           <Route
             path="*"
             element={

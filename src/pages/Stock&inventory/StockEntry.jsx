@@ -6,15 +6,15 @@ import { CheckCircle, AlertCircle, X, Download, Upload, Plus, Search, Filter } f
 import StockTransferEntry from './StockTransferEntry';
 import StockList from './StockList';
 
-// API base URL
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance with authorization
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -28,15 +28,15 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const StockEntry = () => {
 
-  // State for active tab
+
   const [activeTab, setActiveTab] = useState('stockEntry');
 
-  // Notification state
+
   const [notification, setNotification] = useState({
     show: false,
     type: '',
@@ -44,7 +44,7 @@ const StockEntry = () => {
     title: ''
   });
 
-  // Show notification function
+
   const showNotification = (type, title, message) => {
     setNotification({
       show: true,
@@ -53,13 +53,13 @@ const StockEntry = () => {
       message
     });
     
-    // Auto-hide after 3 seconds
+
     setTimeout(() => {
       setNotification({ show: false, type: '', message: '', title: '' });
     }, 3000);
   };
 
-  // Fetch stores from API
+
   const { data: storesData, isLoading: storesLoading } = useSWR(
     '/api/tenant/stores',
     fetcher,
@@ -69,7 +69,7 @@ const StockEntry = () => {
     }
   );
 
-  // Fetch categories from API
+
   const { data: categoriesData, isLoading: categoriesLoading } = useSWR(
     '/api/tenant/categories',
     fetcher,
@@ -79,7 +79,7 @@ const StockEntry = () => {
     }
   );
 
-  // Fetch products from API
+
   const { data: productsData, isLoading: productsLoading } = useSWR(
     '/api/tenant/products',
     fetcher,
@@ -89,22 +89,22 @@ const StockEntry = () => {
     }
   );
 
-  // Fetch stock entries
-  // const { data: stockEntriesData, isLoading: stockEntriesLoading, mutate: mutateStockEntries } = useSWR(
-  //   '/api/tenant/stock/entry',
-  //   fetcher,
-  //   {
-  //     revalidateOnFocus: true,
-  //     revalidateOnReconnect: true,
-  //   }
-  // );
 
-  // Extract data from SWR responses
+
+
+
+
+
+
+
+
+
+
   const stores = storesData?.success ? storesData.data : [];
   const categories = categoriesData?.success ? categoriesData.data : [];
   const products = productsData?.success ? productsData.data : [];
 
-  // State for form
+
   const [formData, setFormData] = useState({
     store_id: '',
     category_id: '',
@@ -119,7 +119,7 @@ const StockEntry = () => {
     purchase_amount: ''
   });
 
-  // State for transfer form
+
   const [transferForm, setTransferForm] = useState({
     fromStore: '',
     toStore: '',
@@ -128,7 +128,7 @@ const StockEntry = () => {
     notes: ''
   });
 
-  // State for adding new items
+
   const [showAddStore, setShowAddStore] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -152,34 +152,34 @@ const StockEntry = () => {
   });
   const [newRack, setNewRack] = useState('');
 
-  // State for CSV upload
+
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [csvFile, setCsvFile] = useState(null);
 
-  // State for search and pagination
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const entriesPerPage = 10;
 
   const units = ['Pieces', 'Boxes', 'Packets', 'Units', 'Bags', 'Kg', 'Liters'];
 
-  // State for racks (initially empty, will be populated from API or user input)
+
   const [racks, setRacks] = useState([]);
 
-  // State for submission loading
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Filter products based on selected category
+
   const filteredProducts = formData.category_id 
     ? products.filter(product => product.category_id == formData.category_id)
     : products;
 
-  // API Functions
+
   const createStore = async () => {
     try {
       const response = await api.post('/api/tenant/stores', newStore);
       if (response.data.success) {
-        // Revalidate stores cache
+
         mutate('/api/tenant/stores');
         setFormData({
           ...formData,
@@ -207,7 +207,7 @@ const StockEntry = () => {
     try {
       const response = await api.post('/api/tenant/categories', newCategory);
       if (response.data.success) {
-        // Revalidate categories cache
+
         mutate('/api/tenant/categories');
         setFormData({
           ...formData,
@@ -228,7 +228,7 @@ const StockEntry = () => {
     try {
       const response = await api.post('/api/tenant/products', newProduct);
       if (response.data.success) {
-        // Revalidate products cache
+
         mutate('/api/tenant/products');
         setFormData({
           ...formData,
@@ -245,12 +245,12 @@ const StockEntry = () => {
     }
   };
 
-  // Create stock entry using new API
+
   const createStockEntry = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Validate form
+
     if (!formData.store_id || !formData.category_id || !formData.product_id || !formData.quantity || !formData.units) {
       showNotification('error', 'Validation Error', 'Please fill all required fields.');
       setIsSubmitting(false);
@@ -258,7 +258,7 @@ const StockEntry = () => {
     }
 
     try {
-      // Prepare API request data
+
       const stockEntryData = {
         store_id: formData.store_id,
         product_id: formData.product_id,
@@ -274,13 +274,13 @@ const StockEntry = () => {
 
       console.log('Submitting stock entry data:', stockEntryData);
 
-      // Call the stock entry API
+
       const response = await api.post('/api/tenant/stock/entry', stockEntryData);
       
       if (response.data.success) {
         showNotification('success', 'Success!', 'Stock entry created successfully!');
         
-        // Reset form
+
         setFormData({
           store_id: '',
           category_id: '',
@@ -295,10 +295,10 @@ const StockEntry = () => {
           purchase_amount: ''
         });
         
-        // Revalidate stock entries cache
+
         mutateStockEntries();
         
-        // Add new rack to racks list if not already present
+
         if (formData.rack && !racks.includes(formData.rack)) {
           setRacks([...racks, formData.rack]);
         }
@@ -315,25 +315,25 @@ const StockEntry = () => {
     }
   };
 
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    // For numeric fields, keep as string but allow only numbers
+
     if (['mrp', 'sale_price', 'quantity', 'purchase_amount'].includes(name)) {
-      // Allow only numbers and decimal points
+
       const numericValue = value.replace(/[^0-9.]/g, '');
       setFormData({
         ...formData,
         [name]: numericValue
       });
     } else {
-      // If category changes, reset product_id
+
       if (name === 'category_id') {
         setFormData({
           ...formData,
           [name]: value,
-          product_id: '' // Reset product when category changes
+          product_id: ''
         });
       } else {
         setFormData({
@@ -344,7 +344,7 @@ const StockEntry = () => {
     }
   };
 
-  // Handle transfer form input changes
+
   const handleTransferInputChange = (e) => {
     const { name, value } = e.target;
     setTransferForm({
@@ -353,7 +353,7 @@ const StockEntry = () => {
     });
   };
 
-  // Handle new store input changes
+
   const handleNewStoreChange = (e) => {
     const { name, value } = e.target;
     setNewStore({
@@ -362,7 +362,7 @@ const StockEntry = () => {
     });
   };
 
-  // Handle new category input changes
+
   const handleNewCategoryChange = (e) => {
     const { name, value } = e.target;
     setNewCategory({
@@ -371,7 +371,7 @@ const StockEntry = () => {
     });
   };
 
-  // Handle new product input changes
+
   const handleNewProductChange = (e) => {
     const { name, value } = e.target;
     setNewProduct({
@@ -380,7 +380,7 @@ const StockEntry = () => {
     });
   };
 
-  // Add new rack
+
   const handleAddRack = () => {
     if (newRack.trim() && !racks.includes(newRack.trim())) {
       setRacks([...racks, newRack.trim()]);
@@ -391,10 +391,10 @@ const StockEntry = () => {
     }
   };
 
-  // Handle transfer form submission
+
   const handleTransferSubmit = (e) => {
     e.preventDefault();
-    // Implementation for stock transfer
+
     console.log('Transfer submitted:', transferForm);
     showNotification('success', 'Success!', 'Stock transfer request submitted successfully!');
     setTransferForm({
@@ -406,17 +406,17 @@ const StockEntry = () => {
     });
   };
 
-  // Handle transfer acceptance
+
   const handleAcceptTransfer = (transferId) => {
     showNotification('success', 'Transfer Accepted', `Transfer #${transferId} accepted successfully!`);
   };
 
-  // Handle transfer rejection
+
   const handleRejectTransfer = (transferId) => {
     showNotification('info', 'Transfer Rejected', `Transfer #${transferId} rejected!`);
   };
 
-  // Download CSV template
+
   const downloadCSVTemplate = () => {
     const headers = ['Store ID', 'Category ID', 'Product ID', 'Batch', 'Rack', 'MRP', 'Sale Price', 'Quantity', 'Units', 'HSN Code', 'Purchase Amount'];
     const exampleData = [
@@ -442,7 +442,7 @@ const StockEntry = () => {
     showNotification('success', 'Template Downloaded', 'CSV template downloaded successfully!');
   };
 
-  // Handle CSV file upload
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -450,7 +450,7 @@ const StockEntry = () => {
     }
   };
 
-  // Process uploaded CSV
+
   const processCSVUpload = async () => {
     if (!csvFile) {
       showNotification('error', 'Error', 'Please select a CSV file first.');
@@ -464,7 +464,7 @@ const StockEntry = () => {
         const lines = csvText.split('\n');
         const headers = lines[0].split(',');
         
-        // Skip header row and process each line
+
         for (let i = 1; i < lines.length; i++) {
           if (lines[i].trim() === '') continue;
           
@@ -483,7 +483,7 @@ const StockEntry = () => {
             purchase_amount: parseFloat(values[10]) || 0
           };
           
-          // Create stock entry for each row
+
           try {
             await api.post('/api/tenant/stock/entry', stockEntry);
           } catch (error) {
@@ -495,7 +495,7 @@ const StockEntry = () => {
         setShowUploadForm(false);
         setCsvFile(null);
         
-        // Revalidate stock entries cache
+
         mutateStockEntries();
       };
       reader.readAsText(csvFile);
@@ -505,10 +505,10 @@ const StockEntry = () => {
     }
   };
 
-  // Render Stock Entry Tab
+
   const renderStockEntry = () => (
     <div>
-      {/* Notification Component */}
+
       {notification.show && (
         <div className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
           notification.type === 'success' 
@@ -563,7 +563,7 @@ const StockEntry = () => {
         </div>
       )}
 
-      {/* CSV Actions Buttons */}
+
       <div className="mb-6 flex flex-wrap gap-4">
         <button 
           onClick={downloadCSVTemplate}
@@ -581,7 +581,7 @@ const StockEntry = () => {
         </button>
       </div>
 
-      {/* CSV Upload Form */}
+
       {showUploadForm && (
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h3 className="text-lg font-semibold mb-4">Upload CSV File</h3>
@@ -617,11 +617,11 @@ const StockEntry = () => {
         </div>
       )}
       
-      {/* Stock Entry Form */}
+
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Stock Entry</h2>
         <form onSubmit={createStockEntry} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Store Field with Add Button */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Store *</label>
             {!showAddStore ? (
@@ -724,7 +724,7 @@ const StockEntry = () => {
             )}
           </div>
           
-          {/* Category Field with Add Button */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
             {!showAddCategory ? (
@@ -794,7 +794,7 @@ const StockEntry = () => {
             )}
           </div>
           
-          {/* Product Field with Add Button */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Product *</label>
             {!showAddProduct ? (
@@ -880,7 +880,7 @@ const StockEntry = () => {
             )}
           </div>
           
-          {/* Batch Field */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Batch *</label>
             <input 
@@ -894,7 +894,7 @@ const StockEntry = () => {
             />
           </div>
 
-          {/* HSN Code Field */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">HSN Code</label>
             <input 
@@ -907,7 +907,7 @@ const StockEntry = () => {
             />
           </div>
           
-          {/* Rack Field */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Rack</label>
             {!showAddRack ? (
@@ -965,7 +965,7 @@ const StockEntry = () => {
             )}
           </div>
           
-          {/* MRP Field */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">MRP (₹)</label>
             <input 
@@ -980,7 +980,7 @@ const StockEntry = () => {
             />
           </div>
           
-          {/* Sale Price Field */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Sale Price (₹)</label>
             <input 
@@ -995,7 +995,7 @@ const StockEntry = () => {
             />
           </div>
 
-          {/* Purchase Amount Field */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Purchase Amount (₹)</label>
             <input 
@@ -1010,7 +1010,7 @@ const StockEntry = () => {
             />
           </div>
           
-          {/* Quantity Field */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Quantity *</label>
             <input 
@@ -1026,7 +1026,7 @@ const StockEntry = () => {
             />
           </div>
           
-          {/* Units Field */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Units *</label>
             <select 
@@ -1043,7 +1043,7 @@ const StockEntry = () => {
             </select>
           </div>
           
-          {/* Submit Button */}
+
           <div className="md:col-span-2 lg:col-span-3 flex justify-end mt-4">
             <button 
               type="submit"
@@ -1065,7 +1065,7 @@ const StockEntry = () => {
     </div>
   );
 
-  // Render Stock Transfer Accept Tab
+
   const renderStockTransferAccept = () => (
     <div className="bg-white rounded-lg shadow-md p-6">
       <h2 className="text-xl font-semibold text-gray-700 mb-4">Request Stock Transfer</h2>
@@ -1154,7 +1154,7 @@ const StockEntry = () => {
     </div>
   );
 
-  // Show loading state if any data is loading
+
   if (storesLoading || categoriesLoading || productsLoading) {
     return (
       <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
@@ -1171,7 +1171,7 @@ const StockEntry = () => {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Stock Management</h1>
         
-        {/* Tab Navigation */}
+
         <div className="mb-6 border-b border-gray-200">
           <nav className="-mb-px flex space-x-8">
             <button
@@ -1217,7 +1217,7 @@ const StockEntry = () => {
           </nav>
         </div>
 
-        {/* Tab Content */}
+
         {activeTab === 'stockEntry' && renderStockEntry()}
         {activeTab === 'stockList' && <StockList />}
         {activeTab === 'stockTransferHistory' && <StockTransferEntry />}

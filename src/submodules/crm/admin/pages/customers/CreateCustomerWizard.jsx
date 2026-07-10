@@ -65,7 +65,7 @@ const getArrayData = (res) => {
   return [];
 };
 
-// Fetch project stages from the Work Diary API
+
 const fetchProjectStages = async (
   projectId,
   projectType = "apartment",
@@ -116,7 +116,7 @@ const fetchProjectStages = async (
     console.warn("Failed fetching project stages from API:", err.message);
   }
 
-  // Fallback to a single stage if fetch fails
+
   return [
     {
       id: "stage_1",
@@ -137,7 +137,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
   const [loading, setLoading] = useState(false);
   const [validationError, setValidationError] = useState("");
 
-  // Step 1: Personal & Profile Form State
+
   const [personalForm, setPersonalForm] = useState({
     name: "",
     phone: "",
@@ -160,7 +160,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
   });
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
-  // Broker states and refs
+
   const [brokerSearch, setBrokerSearch] = useState("");
   const [showBrokerDropdown, setShowBrokerDropdown] = useState(false);
   const brokerDropdownRef = useRef(null);
@@ -273,7 +273,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     };
   }, [showBrokerDropdown]);
 
-  // Step 2: Project & Unit Selection State
+
   const [projectsList, setProjectsList] = useState([]);
   const [projectSearchTerm, setProjectSearchTerm] = useState("");
   const [showProjectDropdown, setShowProjectDropdown] = useState(false);
@@ -287,7 +287,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
   const [hasSetup, setHasSetup] = useState(true);
   const [isFinished, setIsFinished] = useState(false);
 
-  // Step 3: Payment Slab Allocation State
+
   const [stages, setStages] = useState([]);
   const [totalDealValue, setTotalDealValue] = useState("");
   const [amounts, setAmounts] = useState({});
@@ -295,7 +295,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
   const [bookingAmount, setBookingAmount] = useState("");
   const [bookingPercentage, setBookingPercentage] = useState("");
 
-  // Load Projects on mount
+
   useEffect(() => {
     let active = true;
     const fetchProjects = async () => {
@@ -365,7 +365,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     };
   }, []);
 
-  // Handle Project Selection
+
   const handleProjectSelect = async (project) => {
     setSelectedProject(project);
     setProjectSearchTerm(project.name || project.project_name || "");
@@ -374,7 +374,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     setUnitSearchTerm("");
     setValidationError("");
 
-    // Fetch units for the selected project
+
     let units = [];
     const pType = normalizeProjectTypeKey(project.type);
     const pId = project.id;
@@ -399,7 +399,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     }
   };
 
-  // Handle Unit Selection and Verification Gate
+
   const handleUnitSelect = async (unit) => {
     setSelectedUnit(unit);
     setUnitSearchTerm(unit.unit_name || "");
@@ -410,7 +410,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     setIsFinished(unitIsFinished);
 
     if (unitIsFinished) {
-      // Finished units bypass setup check and have a single balance slab
+
       setHasSetup(true);
       setStages([
         {
@@ -425,7 +425,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
       setAmounts({ balance_payment: "" });
       setPercentages({ balance_payment: "" });
     } else {
-      // Ongoing units need a project setup check
+
       try {
         setLoading(true);
         const setupsRes = await operationApi.getProjectSetups();
@@ -452,7 +452,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
         );
         setStages(stagesList);
 
-        // Reset slabs states
+
         setBookingAmount("");
         setBookingPercentage("");
         const initialSlabs = {};
@@ -470,7 +470,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     }
   };
 
-  // Slabs Calculation Helpers
+
   const dealValueNum = parseFloat(totalDealValue) || 0;
 
   const totalAllocated =
@@ -637,7 +637,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Next Step Validation
+
   const handleNextStep = () => {
     setValidationError("");
     if (step === 1) {
@@ -665,7 +665,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     }
   };
 
-  // Mutation to Submit Direct Customer
+
   const mutation = useMutation({
     mutationFn: async (formData) => {
       return api.post("/api/customers/create-direct", formData, {
@@ -728,12 +728,12 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     formData.append("total_deal_value", dealValueNum);
     formData.append("slabs", JSON.stringify(slabs));
 
-    // Append profile parameters
+
     Object.keys(personalForm).forEach((key) => {
       formData.append(key, personalForm[key]);
     });
 
-    // Append documents
+
     uploadedFiles.forEach((file) => {
       formData.append("files", file);
     });
@@ -780,7 +780,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
       <div
         className={`app-modal w-full max-w-3xl max-h-[90vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-(--border-soft) ${step === 2 ? "overflow-visible" : "overflow-hidden"}`}
       >
-        {/* Modal Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-center bg-white rounded-t-2xl shrink-0">
           <div className="flex items-center gap-3">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-100 shrink-0">
@@ -803,7 +803,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
           </button>
         </div>
 
-        {/* Steps Progress bar */}
+
         <div className="px-5 py-3 border-b border-(--border-soft) bg-slate-50/50 flex items-center shrink-0">
           {[1, 2, 3].map((num) => (
             <div
@@ -837,7 +837,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
           ))}
         </div>
 
-        {/* Modal Body */}
+
         <div
           className={`flex-1 p-5 space-y-5 custom-scrollbar ${step === 2 ? "overflow-visible" : "overflow-y-auto"}`}
         >
@@ -857,10 +857,10 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
             </div>
           ) : (
             <>
-              {/* STEP 1: PERSONAL & PROFILE */}
+
               {step === 1 && (
                 <div className="space-y-6">
-                  {/* Basic Info */}
+
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <User className="size-4 text-(--brand)" />
@@ -925,7 +925,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-                  {/* Address */}
+
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <MapPin className="size-4 text-blue-600" />
@@ -1002,7 +1002,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-                  {/* Identity & Personal */}
+
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <CreditCard className="size-4 text-emerald-600" />
@@ -1103,7 +1103,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-                  {/* Broker Information */}
+
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <Briefcase className="size-4 text-amber-600" />
@@ -1216,7 +1216,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-                  {/* Nominee */}
+
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <Heart className="size-4 text-rose-500" />
@@ -1287,7 +1287,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-                  {/* Files & Documents */}
+
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <Upload className="size-4 text-sky-600" />
@@ -1346,10 +1346,10 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                 </div>
               )}
 
-              {/* STEP 2: PROJECT & UNIT */}
+
               {step === 2 && (
                 <div className="space-y-6">
-                  {/* Project Selector */}
+
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <Building className="size-4 text-(--brand)" />
@@ -1419,7 +1419,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-                  {/* Unit Selector */}
+
                   {selectedProject && (
                     <div className="space-y-4 animate-sub-menu">
                       <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
@@ -1495,7 +1495,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                         </div>
                       </div>
 
-                      {/* Info Alert showing selection status */}
+
                       {selectedUnit && (
                         <div className="p-3.5 bg-slate-50 border border-(--border-soft) rounded-2xl flex items-start justify-between gap-3 text-xs animate-sub-menu">
                           <div>
@@ -1524,10 +1524,10 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                 </div>
               )}
 
-              {/* STEP 3: PAYMENT SLABS */}
+
               {step === 3 && (
                 <div className="space-y-6 animate-sub-menu">
-                  {/* Deal Value Section */}
+
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <IndianRupee className="size-4 text-(--brand)" />
@@ -1571,7 +1571,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-                  {/* Slab Allocation Status/Progress */}
+
                   {dealValueNum > 0 && (
                     <div className="app-panel p-4 space-y-3.5 bg-slate-50/50 rounded-2xl border border-(--border-soft) animate-sub-menu">
                       <div className="flex items-center justify-between text-xs font-bold text-(--text-strong)">
@@ -1582,7 +1582,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                         <span>Remaining: {formatINR(remainingBalance)}</span>
                       </div>
 
-                      {/* Custom Progress Bar */}
+
                       <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-300 ${
@@ -1627,7 +1627,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   )}
 
-                  {/* Slabs Allocation Row Inputs */}
+
                   {dealValueNum > 0 && (
                     <div className="space-y-4">
                       <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
@@ -1638,7 +1638,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                       </div>
 
                       <div className="space-y-3.5">
-                        {/* Booking Amount Slab */}
+
                         <div className="app-panel p-4 bg-white rounded-2xl border border-(--border-soft) hover:border-(--border-strong) transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
                           <div className="min-w-0">
                             <span className="text-[13px] font-extrabold text-(--text-strong)">
@@ -1650,7 +1650,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                           </div>
 
                           <div className="flex items-center gap-3 shrink-0">
-                            {/* Percentage input */}
+
                             <div className="relative w-28">
                               <input
                                 type="text"
@@ -1666,7 +1666,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
 
                             <ArrowRight className="size-3.5 text-slate-300" />
 
-                            {/* Amount input */}
+
                             <div className="relative w-36">
                               <input
                                 type="text"
@@ -1682,7 +1682,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                           </div>
                         </div>
 
-                        {/* Milestone Stages */}
+
                         {stages.map((stage) => (
                           <div
                             key={stage.id}
@@ -1700,7 +1700,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                             </div>
 
                             <div className="flex items-center gap-3 shrink-0">
-                              {/* Percentage input */}
+
                               <div className="relative w-28">
                                 <input
                                   type="text"
@@ -1719,7 +1719,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
 
                               <ArrowRight className="size-3.5 text-slate-300" />
 
-                              {/* Amount input */}
+
                               <div className="relative w-36">
                                 <input
                                   type="text"
@@ -1744,7 +1744,7 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
           )}
         </div>
 
-        {/* Modal Footer */}
+
         <div className="px-5 py-4 border-t border-(--border-soft) flex items-center justify-between bg-white rounded-b-2xl shrink-0">
           <div>
             {step > 1 && (

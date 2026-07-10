@@ -74,7 +74,7 @@ const MonthlyWorkReport = () => {
     normalizedRole.includes("manager");
   const canViewAllReports = isAdmin || isHrManager;
 
-  // ✅ Check if the user is an admin or manager
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterMonth, setFilterMonth] = useState("");
   const [filterYear, setFilterYear] = useState("");
@@ -95,7 +95,7 @@ const MonthlyWorkReport = () => {
   const canUseAdminReportView =
     canViewAllReports || isProjectApprovalManager || hasDepartmentReportScope;
 
-  // ONLY THIS PART IS REPLACED - New project fetching logic
+
   useEffect(() => {
     const fetchProjects = async () => {
       const activeCompanyId = companyId || user?.company_id;
@@ -113,7 +113,7 @@ const MonthlyWorkReport = () => {
 
         const headers = { Authorization: `Bearer ${csaapToken}` };
 
-        // 1. Fetch client projects
+
         const projRes = await axios.get(
           `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
           {
@@ -146,7 +146,7 @@ const MonthlyWorkReport = () => {
 
         setEmployeeProjectOptions(transformedProjects);
 
-        // 2. Fetch assignments & employees
+
         if (employeeId) {
           try {
             const [employeesRes, assignmentsRes] = await Promise.all([
@@ -233,7 +233,7 @@ const MonthlyWorkReport = () => {
 
   useEffect(() => {
     const fetchMissingNames = async () => {
-      // Check for various ID and Name fields
+
       const missingNameIds = [...new Set(reports
         .filter(r => {
           const id = r.employee_id || r.employeeId;
@@ -285,7 +285,7 @@ const MonthlyWorkReport = () => {
     const fetchReports = async () => {
       if (!slug || !employeeId) return;
       try {
-        // ✅ Fetch all reports for admins/managers, otherwise fetch only for that employee
+
         const endpoint = canUseAdminReportView
           ? `${API_BASE}/api/monthly-reports/${slug}/admin/all`
           : `${API_BASE}/api/monthly-reports/${slug}/employee/${employeeId}`;
@@ -414,7 +414,7 @@ const MonthlyWorkReport = () => {
 
       resetForm();
 
-      // refresh list
+
       const refreshEndpoint = canUseAdminReportView
         ? `${API_BASE}/api/monthly-reports/${slug}/admin/all`
         : `${API_BASE}/api/monthly-reports/${slug}/employee/${employeeId}`;
@@ -468,7 +468,7 @@ const MonthlyWorkReport = () => {
     const reportProjectBranch = report.project_branch || report.projectbranch;
     const reportProjectKey = getProjectKey(reportProjectId, reportProjectBranch);
 
-    // ✅ Check if the current user is the assigned project manager for this specific project
+
     const isDirectProjectManager = managedProjectKeys.includes(reportProjectKey);
 
     if (reportProjectId && !isDirectProjectManager) {
@@ -481,7 +481,7 @@ const MonthlyWorkReport = () => {
       return;
     }
 
-    // ✅ Fallback to the employee's assigned project manager if no project is specified in the report
+
     if (!reportProjectId && report?.projectManager && user?.name !== report.projectManager) {
       Swal.fire({
         icon: "error",
@@ -615,7 +615,7 @@ const MonthlyWorkReport = () => {
     rejected: scopedReports.filter(r => r.status === 'rejected').length
   };
 
-  // ✅ Filter reports by search term, month, and year
+
   const displayedReports = scopedReports.filter(r => {
     const id = r.employee_id || r.employeeId;
     const name = r.name || r.employee_name || r.emp_name || (id ? employeeMap[id]?.name : "") || "";
@@ -717,7 +717,7 @@ const MonthlyWorkReport = () => {
 
   return (
     <div className="space-y-4 font-sans bg-transparent">
-      {/* Header */}
+
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-3">
           {canUseAdminReportView && (
@@ -774,7 +774,7 @@ const MonthlyWorkReport = () => {
         </div>
       </div>
 
-      {/* Monthly Reports */}
+
       <AnimatePresence mode="wait">
         <motion.div
           key="monthly"
@@ -784,7 +784,7 @@ const MonthlyWorkReport = () => {
           transition={{ duration: 0.3 }}
         >
           <div className="bg-white rounded-2xl border border-(--border-soft) shadow-[0_4px_20px_-4px_rgba(0,166,81,0.05)] overflow-hidden p-6 space-y-6">
-              {/* Statistics Cards */}
+
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-white p-4 rounded-xl border border-(--border-soft) shadow-[0_2px_8px_rgba(0,166,81,0.02)] flex items-center gap-4 transition-all hover:shadow-md">
                   <div className="bg-(--brand-soft) p-2.5 rounded-xl border border-(--border-strong) shrink-0">
@@ -827,7 +827,7 @@ const MonthlyWorkReport = () => {
                 </div>
               </div>
 
-              {/* Add/Edit Form Modal */}
+
               {showForm && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4">
                   <div className="bg-white rounded-2xl border border-(--border-soft) shadow-[0_8px_32px_rgba(0,166,81,0.08)] max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -930,7 +930,7 @@ const MonthlyWorkReport = () => {
                 </div>
               )}
 
-              {/* Monthly Reports Table */}
+
               <div className="bg-white rounded-xl border border-(--border-soft) overflow-hidden shadow-sm">
                 <table className="min-w-full divide-y divide-(--border-soft)">
                   <thead className="bg-(--bg-app)">
@@ -1018,7 +1018,7 @@ const MonthlyWorkReport = () => {
                                   <Eye size={16} />
                                 </button>
 
-                                {/* Manager/Admin Review Actions */}
+
                                 {canUseAdminReportView && (
                                   <>
                                     <button
@@ -1048,7 +1048,7 @@ const MonthlyWorkReport = () => {
                                   </>
                                 )}
 
-                                {/* Personal Edit/Delete Actions */}
+
                                 {(String(report.employee_id || report.employeeId) === String(employeeId) || !canUseAdminReportView) && (
                                   <>
                                     <button
@@ -1089,7 +1089,7 @@ const MonthlyWorkReport = () => {
                              </td>
                           </tr>
 
-                          {/* Expanded Row Details */}
+
                           {expandedRows[report.id] && (
                             <tr className="bg-(--bg-app)/60">
                               <td colSpan={canUseAdminReportView ? 6 : 5} className="px-6 py-4">

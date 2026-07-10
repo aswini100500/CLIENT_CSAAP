@@ -41,9 +41,9 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import { usePermission } from "../../../hooks/usePermission";
 
-// Helper for formatting date for schedule
 
-// Helper for formatting date for schedule
+
+
 const formatDateForInput = (dateString) => {
   try {
     const d = new Date(dateString);
@@ -77,7 +77,7 @@ function Announcement() {
   const [selectedHoliday, setSelectedHoliday] = useState(null);
   const [announcementsList, setAnnouncementsList] = useState([]);
   const [loadingAnnouncements, setLoadingAnnouncements] = useState(false);
-  const [historyFilter, setHistoryFilter] = useState("active"); // 'active' | 'draft'
+  const [historyFilter, setHistoryFilter] = useState("active");
   const [generalForm, setGeneralForm] = useState({
     title: "",
     description: "",
@@ -98,7 +98,7 @@ function Announcement() {
   const { has } = usePermission();
   const companyId = user?.company_id || user?.id;
   const slug = user?.slug || user?.subdomain;
-  // Track latest state for unmount save
+
   const latestStateRef = React.useRef({
     generalForm,
     holidayTitle,
@@ -150,7 +150,7 @@ console.log("Employees fetched:", res.data);
         const data = res.data.data || [];
         setEmployees(data);
 
-        // Group by department
+
         const grouped = data.reduce((acc, emp) => {
           const dept = emp.department || emp.postApplied || "Other";
           acc[dept] = (acc[dept] || 0) + 1;
@@ -176,7 +176,7 @@ console.log("Employees fetched:", res.data);
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/holiday?company_id=${companyId}&slug=${slug}`,
       );
       if (res.data) {
-        // Map API data to include icons and colors for UI
+
         const holidayIcons = [
           PartyPopper,
           Flag,
@@ -335,7 +335,7 @@ console.log("Employees fetched:", res.data);
 
   useEffect(() => {
     return () => {
-      // Save on unmount if there's unsaved content
+
       const state = latestStateRef.current;
       const title =
         state.activeTab === "holiday"
@@ -348,7 +348,7 @@ console.log("Employees fetched:", res.data);
   }, []);
 
   const handleTabChange = (tab) => {
-    // Save current work before switching
+
     const title = activeTab === "holiday" ? holidayTitle : generalForm.title;
     if (title.trim()) {
       autoSaveDraft();
@@ -420,7 +420,7 @@ console.log("Employees fetched:", res.data);
         description: generalForm.description,
         company_id: companyId,
         slug,
-        status: "active", // 🔥 publish
+        status: "active",
         priority: generalForm.priority,
         sender_id: senderId,
         created_by: senderId,
@@ -528,7 +528,7 @@ console.log("Employees fetched:", res.data);
         company_id: companyId,
         slug,
         status: "active",
-        priority: "high", // Holidays are usually high priority
+        priority: "high",
         sender_id: senderId,
         created_by: senderId,
         scheduled_at: `${holidayScheduleDate} ${holidayScheduleTime}`,
@@ -547,7 +547,7 @@ console.log("Employees fetched:", res.data);
       setSelectedHoliday(null);
       setHolidayTitle("");
       setHolidayDescription("");
-      setSelectedEmployees([]); // Reset selection
+      setSelectedEmployees([]);
     } catch (err) {
       console.error("Holiday publishing failed:", err);
       const errorMessage =
@@ -627,7 +627,7 @@ console.log("Employees fetched:", res.data);
 
   return (
     <div className="font-sans">
-      {/* Header - Simplified */}
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Announcements</h2>
@@ -662,7 +662,7 @@ console.log("Employees fetched:", res.data);
       </div>
 
       <div className="space-y-8">
-        {/* Toggle Buttons - Simplified */}
+
         <div className="flex gap-2 p-1 bg-gray-100/80 rounded-xl w-fit">
           <button
             onClick={() => handleTabChange("general")}
@@ -699,13 +699,13 @@ console.log("Employees fetched:", res.data);
           </button>
         </div>
 
-        {/* Main Content Card */}
+
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-3xl">
-          {/* General Tab Content */}
+
           {activeTab === "general" && (
             <div className="p-6 md:p-8 lg:p-10">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {/* LEFT PANEL - Form */}
+
                 <div className="space-y-7">
                   <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-100">
                     <div className="p-1.5 bg-emerald-50 rounded-lg">
@@ -817,7 +817,7 @@ console.log("Employees fetched:", res.data);
                       Send To
                     </label>
                     <div className="space-y-4">
-                      {/* All Employees & Departments */}
+
                       <div className="flex flex-wrap gap-2">
                         <button
                           onClick={toggleSelectAll}
@@ -873,7 +873,7 @@ console.log("Employees fetched:", res.data);
                         })}
                       </div>
 
-                      {/* Employee List Search & Selection */}
+
                       <div className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4">
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
@@ -1017,7 +1017,7 @@ console.log("Employees fetched:", res.data);
                   </div>
                 </div>
 
-                {/* RIGHT PANEL - Preview */}
+
                 <div className="bg-linear-to-br from-gray-50 to-white rounded-2xl p-6 border border-gray-200 shadow-inner sticky top-24">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2">
@@ -1130,11 +1130,11 @@ console.log("Employees fetched:", res.data);
             </div>
           )}
 
-          {/* HOLIDAY TAB */}
+
           {activeTab === "holiday" && (
             <div className="p-6 md:p-8 lg:p-10">
               {selectedHoliday === null ? (
-                /* HOLIDAY LIST VIEW */
+
                 <div>
                   <div className="mb-8 flex items-center justify-between">
                     <div>
@@ -1213,7 +1213,7 @@ console.log("Employees fetched:", res.data);
                   </div>
                 </div>
               ) : (
-                /* HOLIDAY ANNOUNCEMENT FORM */
+
                 <div className="animate-fadeIn">
                   <button
                     onClick={backToHolidayList}
@@ -1326,7 +1326,7 @@ console.log("Employees fetched:", res.data);
                           Send To
                         </label>
                         <div className="space-y-4">
-                          {/* All Employees & Departments */}
+
                           <div className="flex flex-wrap gap-2">
                             <button
                               onClick={toggleSelectAll}
@@ -1384,7 +1384,7 @@ console.log("Employees fetched:", res.data);
                             )}
                           </div>
 
-                          {/* Employee List Search & Selection */}
+
                           <div className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4">
                             <div className="flex items-center justify-between mb-3">
                               <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
@@ -1554,7 +1554,7 @@ console.log("Employees fetched:", res.data);
             </div>
           )}
 
-          {/* HISTORY TAB */}
+
           {activeTab === "history" && (
             <div className="p-6 md:p-8 lg:p-10">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
@@ -1694,7 +1694,7 @@ console.log("Employees fetched:", res.data);
           )}
         </div>
 
-        {/* Footer */}
+
         <div className="text-center text-xs text-gray-400 mt-8 flex items-center justify-center gap-3">
           <div className="flex items-center gap-1">
             <CheckCircle className="h-3 w-3" />

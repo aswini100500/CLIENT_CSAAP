@@ -63,7 +63,7 @@ export default function EmployeePolicyDetails() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-7xl mx-auto bg-white rounded-lg shadow border border-gray-200">
-        {/* Header */}
+
         <div className="bg-blue-500 text-white py-3 px-6 flex items-center rounded-t-lg">
           <svg
             className="w-5 h-5 mr-2"
@@ -82,7 +82,7 @@ export default function EmployeePolicyDetails() {
         </div>
 
         <div className="p-6 space-y-6">
-          {/* Top Row */}
+
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -145,9 +145,9 @@ export default function EmployeePolicyDetails() {
             </div>
           </div>
 
-          {/* Late & Early Rules */}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Late Coming Rule */}
+
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-medium text-gray-900">Late Coming Rule</h3>
@@ -212,7 +212,7 @@ export default function EmployeePolicyDetails() {
               </div>
             </div>
 
-            {/* Early Going Rule */}
+
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-medium text-gray-900">Early Going Rule</h3>
@@ -278,7 +278,7 @@ export default function EmployeePolicyDetails() {
             </div>
           </div>
 
-          {/* Other Employee Policy Details */}
+
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div className="flex flex-wrap items-center justify-between mb-4">
               <h3 className="font-medium text-blue-900">
@@ -437,7 +437,7 @@ export default function EmployeePolicyDetails() {
             </div>
           </div>
 
-          {/* Action Buttons */}
+
           <div className="flex justify-center gap-4 pt-6">
             <button
               onClick={handleSave}

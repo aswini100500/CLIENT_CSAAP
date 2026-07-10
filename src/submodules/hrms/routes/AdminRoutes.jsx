@@ -96,7 +96,7 @@ export default function AdminRoutes() {
         element={<ViewTermsConditions />}
       />
 
-      {/* ── HRMS – Attendance & Time ─────────────────── */}
+
       <Route path="attendance2" element={<QRCodeGenerator />} />
       <Route
         path="attendanceuser"
@@ -116,14 +116,14 @@ export default function AdminRoutes() {
       />
       <Route path="overtime" element={<OverTime />} />
 
-      {/* ── HRMS – Leave ─────────────────────────────── */}
+
       <Route path="leave-report" element={<LeaveReport />} />
 
-      {/* ── HRMS – Payroll & Finance ─────────────────── */}
+
       <Route path="payments" element={<Payment />} />
       <Route path="add-payment" element={<AdvancePayment />} />
 
-      {/* ── HRMS – Recruitment ───────────────────────── */}
+
       <Route path="job" element={<JobTabs basePath="/hrms" />} />
       <Route path="job-posting" element={<JobPosting />} />
       <Route
@@ -150,16 +150,13 @@ export default function AdminRoutes() {
         path="interview-detail"
         element={<RecruitmentTablePage />}
       />
-      {/* <Route
-        path="joined-employee"
-        element={<JobJoinedList basePath="/hrms" />}
-      /> */}
+
       <Route
         path="formApplied"
         element={<FormsApplied basePath="/hrms" />}
       />
 
-      {/* ── HRMS – Letters & Certificates ────────────── */}
+
       <Route
         path="offer-letter"
         element={<OfferLetterManagement />}
@@ -174,63 +171,14 @@ export default function AdminRoutes() {
         element={<ExperienceCertificateManagement />}
       />
 
-      {/* ── HRMS – Reports & History ─────────────────── */}
+
       <Route path="reports" element={<Reports />} />
                 <Route path="history" element={<History />} />
 
-      {/* ── HRMS – Employee Self-Service (Mgmt views) ── */}
-      {/* <Route path="my-message" element={<MyMessage />} />
-              <Route
-                path="hrms/message"
-                element={<MessageTabs />}
-              />
-              <Route path="hrms/my-timesheet" element={<MyTimesheet />} />
-              <Route
-                path="hrms/timesheet-of-employee"
-                element={<TimesheetOfEmployeesWithData />}
-              />
-              <Route
-                path="hrms/emp-timesheet"
-                element={<EmployeeTimesheet />}
-              />
-              <Route
-                path="hrms/monthly-timesheet"
-                element={<MonthlyTimesheet />}
-              />
-              <Route
-                path="hrms/employee-monthly-report"
-                element={<MonthlyWorkReport />}
-              />
-              <Route path="hrms/my-leave" element={<LeaveManagement />} />
-              <Route
-                path="hrms/leave-of-employee"
-                element={<Leaveofallemployee />}
-              />
-              <Route path="hrms/my-complain" element={<ComplainOfEmployee />} />
-              <Route
-                path="hrms/suggestion"
-                element={<SuggestionOfEmployee />}
-              />
-              <Route path="hrms/my-tour-expenses" element={<MyTour />} />
-              <Route
-                path="hrms/employee-tour-expenses"
-                element={<EmployeeTourexpenses />}
-              />
-              <Route
-                path="hrms/my-service-requests"
-                element={<Myservicerequest />}
-              />
-              <Route
-                path="hrms/emp-servicerequest"
-                element={<EmployeeServiceReq />}
-              />
-              <Route
-                path="hrms/employee-service-requests"
-                element={<Employeeservicerequest />}
-              />
-              <Route path="hrms/all-logs" element={<AllLogs />} /> */}
 
-      {/* ── HRMS – Misc Admin ────────────────────────── */}
+
+
+
       <Route
                 path="hrms/complaints"
                 element={<ComplaintsManagement />}
@@ -240,10 +188,7 @@ export default function AdminRoutes() {
                 element={<CalendarTabs />}
               />
               <Route path="hrms/holiday-list" element={<HolidaysList />} />
-              {/* <Route
-                path="hrms/schedule-meeting"
-                element={<MeetingScheduler />}
-              /> */}
+
 
 
 

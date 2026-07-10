@@ -7,12 +7,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance
+
 const api = axios.create({
   baseURL: API_BASE_URL
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -26,10 +26,10 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
-// POST fetcher for history endpoint
+
 const postFetcher = (url) => api.get(url).then(res => res.data);
 
 const IndentHistory = () => {
@@ -43,7 +43,7 @@ const IndentHistory = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [status, setStatus] = useState('draft');
 
-  // Fetch indent history using SWR
+
   const { data: historyData, error, isLoading } = useSWR(
     '/api/tenant/indents/history',
     postFetcher,
@@ -53,11 +53,11 @@ const IndentHistory = () => {
     }
   );
 
-  // Get indents from data or empty array
+
   const indents = historyData?.success ? historyData.data?.indents || [] : [];
   const pagination = historyData?.success ? historyData.data?.pagination || {} : {};
 
-  // Filter indents based on search term
+
   const filteredIndents = indents.filter(indent =>
     indent.supplier_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     indent.indent_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -65,7 +65,7 @@ const IndentHistory = () => {
     indent.supplier_contact?.includes(searchTerm)
   );
 
-  // Pagination logic
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentIndents = filteredIndents.slice(indexOfFirstItem, indexOfLastItem);
@@ -88,7 +88,7 @@ const IndentHistory = () => {
   };
 
   const exportToExcel = () => {
-    // In a real app, this would generate and download an Excel file
+
     toast.info('Export feature coming soon!', {
       position: "top-right",
       autoClose: 3000,
@@ -96,7 +96,7 @@ const IndentHistory = () => {
   };
 
   const exportToPDF = () => {
-    // In a real app, this would generate and download a PDF file
+
     toast.info('Export feature coming soon!', {
       position: "top-right",
       autoClose: 3000,
@@ -104,7 +104,7 @@ const IndentHistory = () => {
   };
 
   const viewIndent = (indent) => {
-    // Show indent details
+
     setSelectedIndent(indent);
     toast.info(`Viewing indent ${indent.indent_number}`, {
       position: "top-right",
@@ -113,7 +113,7 @@ const IndentHistory = () => {
   };
 
   const editIndent = (indent) => {
-    // Navigate to edit page or show edit modal
+
     toast.info(`Edit feature for ${indent.indent_number} coming soon!`, {
       position: "top-right",
       autoClose: 3000,
@@ -146,7 +146,7 @@ const IndentHistory = () => {
           autoClose: 3000,
         });
         
-        // Invalidate SWR cache to refresh data
+
         mutate('/api/tenant/indents/history');
         
         setShowStatusModal(false);
@@ -178,7 +178,7 @@ const IndentHistory = () => {
           autoClose: 3000,
         });
         
-        // Invalidate SWR cache to refresh data
+
         mutate('/api/tenant/indents/history');
         
         setShowDeleteModal(false);
@@ -232,7 +232,7 @@ const IndentHistory = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      {/* Toast Notification Container */}
+
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -247,10 +247,10 @@ const IndentHistory = () => {
       />
 
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
        
 
-        {/* Export Buttons and Search */}
+
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="flex gap-3">
@@ -292,7 +292,7 @@ const IndentHistory = () => {
           </div>
         </div>
 
-        {/* Indent History Table */}
+
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {isLoading ? (
             <div className="text-center py-16">
@@ -418,7 +418,7 @@ const IndentHistory = () => {
                 </table>
               </div>
 
-              {/* Pagination */}
+
               <div className="bg-gray-50 px-4 py-3 border-t border-gray-200">
                 <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
                   <div className="text-sm text-gray-700">
@@ -447,7 +447,7 @@ const IndentHistory = () => {
                       Previous
                     </button>
 
-                    {/* Page Numbers */}
+
                     <div className="flex space-x-1">
                       {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                         <button
@@ -483,7 +483,7 @@ const IndentHistory = () => {
         </div>
       </div>
 
-      {/* Status Update Modal */}
+
       {showStatusModal && selectedIndent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
@@ -541,7 +541,7 @@ const IndentHistory = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+
       {showDeleteModal && selectedIndent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">

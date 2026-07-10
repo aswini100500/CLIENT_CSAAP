@@ -26,7 +26,7 @@ const LeaveManagement = () => {
     pendingLeaves: 0,
     approvedLeaves: 0,
     rejectedLeaves: 0,
-    // Per-type breakdown
+
     types: {
       CL: { carryForward: 0, monthlyCredit: 0, monthlyRemaining: 0, totalAvailable: 0, yearlyUsed: 0, yearlyRemaining: 0 },
       EL: { carryForward: 0, monthlyCredit: 0, monthlyRemaining: 0, totalAvailable: 0, yearlyUsed: 0, yearlyRemaining: 0 },
@@ -41,10 +41,10 @@ const LeaveManagement = () => {
   console.log(slug);
   console.log(user);
 
-  // Fetch leaves and calculate summary
+
   const fetchLeaves = async () => {
     try {
-      // 1. Fetch Leave Balance/Policy
+
       const balanceRes = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/leaves/getRemainingLeave/${slug}/${emp_id}`);
       console.log('Balance API Response:', balanceRes.data);
       const balanceData = balanceRes.data?.data;
@@ -52,12 +52,12 @@ const LeaveManagement = () => {
 
       setLeaveBalance(balanceData);
 
-      // 2. Fetch Leave Requests
+
       const requestsRes = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/leaves/${slug}/${emp_id}`);
       console.log('Requests API Response:', requestsRes.data);
       const requestsData = requestsRes.data?.data || [];
 
-      // 3. Process Requests
+
       const formattedLeaves = requestsData.map(leave => ({
         ...leave,
         appliedDate: leave.appliedDate || (leave.created_at
@@ -77,7 +77,7 @@ const LeaveManagement = () => {
 
       setLeaveRequests(formattedLeaves);
 
-      // 4. Calculate Summary - per-type breakdown
+
       let totalVal = 0;
       let takenVal = 0;
       let remainingVal = 0;
@@ -90,7 +90,7 @@ const LeaveManagement = () => {
 
       if (balanceData) {
         if (source === 'policy') {
-          // Fresh policy, no balance record yet
+
           totalVal = parseFloat(balanceData.yearly_CL || 0) +
             parseFloat(balanceData.yearly_EL || 0) +
             parseFloat(balanceData.yearly_ML || 0);
@@ -104,7 +104,7 @@ const LeaveManagement = () => {
             types[t].yearlyRemaining = parseFloat(balanceData[`yearly_${t}`] || 0);
           });
         } else {
-          // source is 'balance'
+
           ['CL', 'EL', 'ML'].forEach(t => {
             const cf = parseFloat(balanceData[`carried_forward_${t}`] || 0);
             const monthlyRem = parseFloat(balanceData[`monthly_remaining_${t}`] || 0);
@@ -153,48 +153,48 @@ const LeaveManagement = () => {
     }
   }, [slug, emp_id]);
 
-  // Calculate leave summary function
-  // const calculateLeaveSummary = (leaves) => {
-  //   // Get total annual leaves from user profile or set default (e.g., 24 days per year)
-  //   const totalAnnualLeaves = user?.total_annual_leaves || 24; // Default to 24 if not set
 
-  //   // Calculate leaves taken (approved leaves only)
-  //   const leavesTaken = leaves
-  //     .filter(leave => leave.status?.toLowerCase() === 'approved')
-  //     .reduce((total, leave) => total + (leave.leave_days || 0), 0);
 
-  //   // Calculate pending leaves
-  //   const pendingLeaves = leaves
-  //     .filter(leave => leave.status?.toLowerCase() === 'pending')
-  //     .reduce((total, leave) => total + (leave.leave_days || 0), 0);
 
-  //   // Calculate approved leaves count
-  //   const approvedLeaves = leaves
-  //     .filter(leave => leave.status?.toLowerCase() === 'approved')
-  //     .length;
 
-  //   // Calculate rejected leaves count
-  //   const rejectedLeaves = leaves
-  //     .filter(leave => leave.status?.toLowerCase() === 'rejected')
-  //     .length;
 
-  //   // Calculate remaining leaves
-  //   const remainingLeaves = totalAnnualLeaves - leavesTaken;
 
-  //   setLeaveSummary({
-  //     totalAnnualLeaves,
-  //     leavesTaken,
-  //     remainingLeaves: remainingLeaves < 0 ? 0 : remainingLeaves, // Don't show negative
-  //     pendingLeaves,
-  //     approvedLeaves,
-  //     rejectedLeaves
-  //   });
-  // };
 
-  // Update summary when leave requests change
-  // useEffect(() => {
-  //   calculateLeaveSummary(leaveRequests);
-  // }, [leaveRequests]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const [formData, setFormData] = useState({
     leaveType: "",
@@ -226,7 +226,7 @@ const LeaveManagement = () => {
     "Half Day"
   ];
 
-  // Form handling functions
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -345,7 +345,7 @@ const LeaveManagement = () => {
 
       Swal.fire('Success', 'Leave request submitted successfully', 'success');
 
-      // Re-fetch data instead of full page reload
+
       fetchLeaves();
     } catch (err) {
       console.error("Error submitting leave:", err);
@@ -355,7 +355,7 @@ const LeaveManagement = () => {
     }
   };
 
-  // Edit Leave
+
   const handleEdit = (leave) => {
     setSelectedLeave(leave);
     setEditFormData({
@@ -407,7 +407,7 @@ const LeaveManagement = () => {
     }
   };
 
-  // Delete Leave
+
   const handleDelete = (leave) => {
     setSelectedLeave(leave);
     setDeleteModalOpen(true);
@@ -459,7 +459,7 @@ const LeaveManagement = () => {
     setEditErrors({});
   };
 
-  // Filter and pagination
+
   const filteredLeaves = leaveRequests.filter((leave) => {
     const type = leave.leaveType ? leave.leaveType.toLowerCase() : "";
     const reason = leave.reason ? leave.reason.toLowerCase() : "";
@@ -496,7 +496,7 @@ const LeaveManagement = () => {
     }
   };
 
-  // Progress bar component
+
   const ProgressBar = ({ value, max, color }) => {
     const percentage = (value / max) * 100;
     return (
@@ -512,7 +512,7 @@ const LeaveManagement = () => {
   return (
     <div className="">
       <div className=" mx-auto p-4 md:p-6">
-        {/* Header */}
+
         <div className=" p-6 mb-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -555,12 +555,12 @@ const LeaveManagement = () => {
           </div>
         </div>
 
-        {/* Leave Summary Section */}
+
         {!showAddForm && (
           <>
-            {/* Overall Summary Cards */}
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-              {/* Total Annual Leaves */}
+
               <div className="bg-white rounded-2xl shadow-sm p-3 border border-blue-200">
                 <div className="flex items-start gap-3">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
@@ -574,7 +574,7 @@ const LeaveManagement = () => {
                 </div>
               </div>
 
-              {/* Leaves Taken */}
+
               <div className="bg-white rounded-2xl shadow-sm p-3 border border-emerald-200">
                 <div className="flex items-start gap-3">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
@@ -587,7 +587,7 @@ const LeaveManagement = () => {
                 </div>
               </div>
 
-              {/* Remaining Leaves */}
+
               <div className="bg-white rounded-2xl shadow-sm p-3 border border-amber-200">
                 <div className="flex items-start gap-3">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
@@ -600,7 +600,7 @@ const LeaveManagement = () => {
                 </div>
               </div>
 
-              {/* Pending Leaves */}
+
               <div className="bg-white rounded-2xl shadow-sm p-3 border border-purple-200">
                 <div className="flex items-start gap-3">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-purple-50 text-purple-600">
@@ -618,7 +618,7 @@ const LeaveManagement = () => {
               </div>
             </div>
 
-            {/* Per-Type Leave Breakdown – Carried Forward + This Month = Total */}
+
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
               <h2 className="text-base font-semibold text-gray-800 mb-4">Monthly Leave Breakdown</h2>
               <div className="overflow-x-auto">
@@ -658,7 +658,7 @@ const LeaveManagement = () => {
                         </tr>
                       );
                     })}
-                    {/* Totals Row */}
+
                     <tr className="bg-gray-50 font-semibold">
                       <td className="px-4 py-3 text-sm text-gray-800">Total</td>
                       <td className="px-4 py-3 text-center text-sm text-amber-700">
@@ -686,10 +686,10 @@ const LeaveManagement = () => {
           </>
         )}
 
-        {/* Add Leave Form */}
+
         {showAddForm && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            {/* Display leave balance warning if applicable */}
+
             {leaveSummary.remainingLeaves > 0 && leaveSummary.remainingLeaves < 5 && (
               <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p className="text-sm text-yellow-800 flex items-center">
@@ -710,7 +710,7 @@ const LeaveManagement = () => {
 
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Left Column */}
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -778,7 +778,7 @@ const LeaveManagement = () => {
                   </div>
                 </div>
 
-                {/* Right Column */}
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -836,7 +836,7 @@ const LeaveManagement = () => {
                     </p>
                   </div>
 
-                  {/* Leave Balance Info */}
+
                   <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
                     <p className="text-sm font-medium text-gray-700">Leave Balance</p>
                     <div className="flex justify-between items-center mt-2">
@@ -855,7 +855,7 @@ const LeaveManagement = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
+
               <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
                 <button
                   type="button"
@@ -878,10 +878,10 @@ const LeaveManagement = () => {
           </div>
         )}
 
-        {/* Leaves List */}
+
         {!showAddForm && (
           <>
-            {/* Controls */}
+
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="flex items-center gap-2">
@@ -918,7 +918,7 @@ const LeaveManagement = () => {
               </div>
             </div>
 
-            {/* Table */}
+
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="min-w-full">
@@ -1001,7 +1001,7 @@ const LeaveManagement = () => {
                 </table>
               </div>
 
-              {/* Table Footer */}
+
               <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                   <div className="text-sm text-gray-700">

@@ -27,10 +27,10 @@ export default function VisitingCardMaker() {
 
   return (
     <div className="p-8 flex flex-col md:flex-row gap-8 max-w-6xl mx-auto min-h-screen">
-      {/* Card Preview */}
+
      
 
-      {/* Input Form */}
+
       <div className="w-full md:w-1/2 grid grid-cols-1 gap-3 bg-gray-50 p-8 rounded-2xl shadow-xl">
         <div className="flex flex-col">
           <label className="text-sm font-semibold mb-1">Full Name</label>
@@ -91,22 +91,22 @@ export default function VisitingCardMaker() {
           ref={cardRef}
           className="relative w-100 h-55 rounded-2xl shadow-2xl overflow-hidden font-sans"
         >
-          {/* Background image from public folder */}
+
           <img
             src="/visitingcard.png"
             alt="Visiting Card Background"
             className="absolute w-full h-full object-cover"
           />
 
-          {/* Overlay for text */}
+
           <div className="absolute inset-0 bg-black/30 flex flex-col justify-center items-center text-white p-4">
             <h2 className="text-2xl font-bold">{name}</h2>
-            {/* <p className="text-sm">{role}</p> */}
+
             <p className="mt-2 text-sm font-semibold">{company}</p>
 
-            {/* Divider */}
 
-            {/* Contact Info */}
+
+
             <div className="text-xs space-y-1 text-center">
               <p>{phone}</p>
               <p>{email}</p>

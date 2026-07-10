@@ -14,7 +14,7 @@ const SubscriptionModal = ({ isOpen, onClose }) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-fadeIn">
-                {/* Header */}
+
                 <div className="bg-linear-to-r from-blue-500 to-blue-600 p-6 relative">
                     <button
                         onClick={onClose}
@@ -31,7 +31,7 @@ const SubscriptionModal = ({ isOpen, onClose }) => {
                     </div>
                 </div>
 
-                {/* Content */}
+
                 <div className="p-6">
                     <p className="text-gray-700 text-lg mb-6">
                         This feature is only available to subscribed users. Subscribe now to get full access to all features!
@@ -59,7 +59,7 @@ const SubscriptionModal = ({ isOpen, onClose }) => {
                         </ul>
                     </div>
 
-                    {/* Actions */}
+
                     <div className="flex gap-3">
                         <button
                             onClick={onClose}

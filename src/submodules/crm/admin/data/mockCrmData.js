@@ -1,18 +1,9 @@
-/**
- * mockCrmData.js
- * 
- * A robust, self-contained client-side database using browser localStorage.
- * It hydrates standard mock collections on first load and provides
- * async Promise-based simulated API endpoints.
- * 
- * Perfect for rich, stateful, and interactive prototypes.
- * Easily replace these methods with axios/fetch calls when migrating to production APIs.
- */
 
-// --- DELAY HELPER ---
+
+
 const delay = (ms = 150) => new Promise(resolve => setTimeout(resolve, ms));
 
-// --- SCHEMAS AND INITIAL SEEDS ---
+
 const INITIAL_PROJECTS = [
   {
     id: 1,
@@ -86,8 +77,8 @@ const INITIAL_CUSTOMERS = [
     brokerId: 1,
     createdAt: "2026-01-15",
     lastContact: "2026-05-20",
-    totalValue: 8500000, // Negotiated Price
-    originalPrice: 8500000, // Original Price
+    totalValue: 8500000,
+    originalPrice: 8500000,
     tags: ["VIP", "Enterprise", "IT"],
     website: "www.abccorp.com",
     address: "123 Tech Park, Sector 62",
@@ -135,7 +126,7 @@ const INITIAL_CUSTOMERS = [
     createdAt: "2026-03-05",
     lastContact: "2026-05-28",
     totalValue: 18000000,
-    originalPrice: 19500000, // 15 Lakhs discount!
+    originalPrice: 19500000,
     tags: ["High Budget", "Doctor"],
     website: "",
     address: "B-501, Green Meadows, DLF Phase 3",
@@ -162,7 +153,7 @@ const INITIAL_CUSTOMERS = [
       { id: 4, name: "Superstructure", startDate: "2026-07-01", endDate: "2026-11-30", progress: 0, status: "pending", description: "Villa double height frame construction", budget: "5850000", paymentPercentage: "30.00", paymentSteps: [] },
       { id: 5, name: "Finishing", startDate: "2026-12-01", endDate: "2027-02-28", progress: 0, status: "pending", description: "Italian marble fittings & lighting layout", budget: "1950000", paymentPercentage: "10.00", paymentSteps: [] },
       { id: 6, name: "Handover", startDate: "2027-03-01", endDate: "2027-04-30", progress: 0, status: "pending", description: "Possession keys, landscaping & security integration", budget: "-525000", paymentPercentage: "-2.69", paymentSteps: [{ id: 105, description: "Final Handover Payment (Discount Applied)", amount: "-525000.00", percentage: "-2.69", date: "" }] }
-      // Handover budget is adjusted to balance out the 15 Lakh discount (1.95Cr total stages - 1.80Cr negotiated). Note: handled in steppers dynamically!
+
     ]
   }
 ];
@@ -196,7 +187,7 @@ const INITIAL_TRANSACTIONS = [
   { id: 5, sl: 2, customerId: 2, transactionDate: "2026-03-15", transactionType: "Payment", remark: "Allotment confirmation - Recvd.", accountNo: "ICICI A/C ***0819", debitAmount: 0, creditAmount: 2900000, balance: 3900000 }
 ];
 
-// --- DB HYDRATION ---
+
 const getStorageItem = (key, defaultVal) => {
   const data = localStorage.getItem(`builder_crm_${key}`);
   if (!data) {
@@ -210,7 +201,7 @@ const setStorageItem = (key, val) => {
   localStorage.setItem(`builder_crm_${key}`, JSON.stringify(val));
 };
 
-// Initialize LocalStorage Data
+
 const initDB = () => {
   getStorageItem("projects", INITIAL_PROJECTS);
   getStorageItem("brokers", INITIAL_BROKERS);
@@ -223,27 +214,27 @@ const initDB = () => {
 };
 initDB();
 
-// --- EXPOSED DATABASE SERVICE METHODS (PROMISE BASE) ---
+
 export const mockCrmData = {
-  // Projects & Locations
+
   getProjects: async () => {
     await delay();
     return getStorageItem("projects", INITIAL_PROJECTS);
   },
 
-  // Brokers
+
   getBrokers: async () => {
     await delay();
     return getStorageItem("brokers", INITIAL_BROKERS);
   },
 
-  // Sales Staff
+
   getStaff: async () => {
     await delay();
     return getStorageItem("staff", INITIAL_STAFF);
   },
 
-  // Customers CRUD
+
   getCustomers: async () => {
     await delay();
     return getStorageItem("customers", INITIAL_CUSTOMERS);
@@ -259,10 +250,10 @@ export const mockCrmData = {
     await delay(250);
     const customers = getStorageItem("customers", INITIAL_CUSTOMERS);
     
-    // Auto-increment ID
+
     const newId = customers.length > 0 ? Math.max(...customers.map(c => c.id)) + 1 : 1;
     
-    // Resolve project/unit/block details
+
     const projects = getStorageItem("projects", INITIAL_PROJECTS);
     const projId = parseInt(customerData.projectId);
     const blockId = parseInt(customerData.blockId);
@@ -297,13 +288,13 @@ export const mockCrmData = {
       projectStages: customerData.projectStages || []
     };
     
-    // Update unit status to "sold" in projects db
+
     if (selectedUnit) {
       selectedUnit.status = "sold";
       setStorageItem("projects", projects);
     }
     
-    // Insert into ledger transaction table initial balance entries
+
     const transactions = getStorageItem("transactions", INITIAL_TRANSACTIONS);
     const transactionId = transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1;
     const initialDebit = {
@@ -335,24 +326,24 @@ export const mockCrmData = {
     const originalCustomer = customers[index];
     const projects = getStorageItem("projects", INITIAL_PROJECTS);
     
-    // If unit changed, release the old one and book the new one
+
     const oldUnitId = originalCustomer.unitId;
     const newUnitId = parseInt(updatedData.unitId);
     
     if (oldUnitId !== newUnitId) {
-      // Release old unit
+
       projects.forEach(p => {
         const oldUnit = p.units?.find(u => u.id === oldUnitId);
         if (oldUnit) oldUnit.status = "available";
       });
-      // Book new unit
+
       const targetProj = projects.find(p => p.id === parseInt(updatedData.projectId));
       const newUnit = targetProj?.units?.find(u => u.id === newUnitId);
       if (newUnit) newUnit.status = "sold";
       setStorageItem("projects", projects);
     }
     
-    // Resolve project/unit/block details
+
     const projId = parseInt(updatedData.projectId);
     const blockId = parseInt(updatedData.blockId);
     const selectedProject = projects.find(p => p.id === projId);
@@ -394,7 +385,7 @@ export const mockCrmData = {
     
     const customer = customers[index];
     
-    // Release projects unit
+
     const projects = getStorageItem("projects", INITIAL_PROJECTS);
     projects.forEach(p => {
       const u = p.units?.find(unit => unit.id === customer.unitId);
@@ -402,11 +393,11 @@ export const mockCrmData = {
     });
     setStorageItem("projects", projects);
     
-    // Delete customer
+
     customers.splice(index, 1);
     setStorageItem("customers", customers);
     
-    // Clean up payments, interactions, ledger, documents
+
     const payments = getStorageItem("payments", INITIAL_PAYMENTS).filter(p => p.customerId !== parseInt(id));
     setStorageItem("payments", payments);
     
@@ -422,7 +413,7 @@ export const mockCrmData = {
     return true;
   },
 
-  // Project Stages Stepper (Stage setups)
+
   saveProjectStages: async (customerId, stages) => {
     await delay(200);
     const customers = getStorageItem("customers", INITIAL_CUSTOMERS);
@@ -435,7 +426,7 @@ export const mockCrmData = {
     throw new Error("Customer not found");
   },
 
-  // Interactions (Meetings/Calls/Notes)
+
   getInteractions: async (customerId) => {
     await delay();
     const interactions = getStorageItem("interactions", INITIAL_INTERACTIONS);
@@ -457,7 +448,7 @@ export const mockCrmData = {
     return newInteraction;
   },
 
-  // Documents Upload Mocking
+
   getDocuments: async (customerId) => {
     await delay();
     const docs = getStorageItem("documents", INITIAL_DOCUMENTS);
@@ -491,7 +482,7 @@ export const mockCrmData = {
     return false;
   },
 
-  // Payments / Demand Invoices
+
   getPayments: async (customerId) => {
     await delay();
     const payments = getStorageItem("payments", INITIAL_PAYMENTS);
@@ -520,12 +511,12 @@ export const mockCrmData = {
     payments.push(newPayment);
     setStorageItem("payments", payments);
 
-    // If payment status is Paid, update the financial ledger as well
+
     if (newPayment.status === "Paid") {
       const transactions = getStorageItem("transactions", INITIAL_TRANSACTIONS);
       const ledgerId = transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1;
       
-      // Calculate latest balance for customer
+
       const clientTransactions = transactions.filter(t => t.customerId === parseInt(customerId));
       const currentBalance = clientTransactions.length > 0 ? clientTransactions[clientTransactions.length - 1].balance : 0;
       
@@ -545,7 +536,7 @@ export const mockCrmData = {
       transactions.push(newLedgerEntry);
       setStorageItem("transactions", transactions);
     } else {
-      // If invoice raised (Pending), add a Debit entry into the ledger
+
       const transactions = getStorageItem("transactions", INITIAL_TRANSACTIONS);
       const ledgerId = transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1;
       
@@ -581,7 +572,7 @@ export const mockCrmData = {
       payment.status = status;
       setStorageItem("payments", payments);
       
-      // If changed to Paid, log a credit entry in transactions
+
       if (oldStatus !== "Paid" && status === "Paid") {
         const transactions = getStorageItem("transactions", INITIAL_TRANSACTIONS);
         const ledgerId = transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1;
@@ -609,7 +600,7 @@ export const mockCrmData = {
     throw new Error("Invoice payment not found");
   },
 
-  // Ledger / Transactions Account Summary
+
   getLedgerEntries: async (customerId) => {
     await delay();
     const transactions = getStorageItem("transactions", INITIAL_TRANSACTIONS);
@@ -627,7 +618,7 @@ export const mockCrmData = {
     const debit = parseFloat(entryData.debit) || 0;
     const credit = parseFloat(entryData.credit) || 0;
     
-    // Balance logic: Debit decreases balance (since customer owes money initially as a negative), Credit increases it towards 0.
+
     const newBalance = currentBalance - debit + credit;
 
     const newEntry = {

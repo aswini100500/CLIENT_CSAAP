@@ -5,7 +5,7 @@ import { usePermission } from "../../../hooks/usePermission";
 import useAuth from "../../../hooks/useAuth";
 
 const EmployeeServiceReq = () => {
-  // State management
+
   const [requests, setRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,20 +33,20 @@ const EmployeeServiceReq = () => {
 
   const { has } = usePermission();
 
-  // Get user from Redux
+
   const { user, token: authToken } = useAuth();
   const token = authToken;
 
-  // Extract company data with fallbacks
+
   const slug = user?.slug;
   const company_id = user?.company_id || user?.id;
 
-  // Debug logs
+
   console.log("Admin User:", user);
   console.log("Slug:", slug);
   console.log("Company ID:", company_id);
 
-  // Show snackbar message
+
   const showSnackbar = (message, type = "success") => {
     setSnackbar({ show: true, message, type });
     setTimeout(
@@ -55,7 +55,7 @@ const EmployeeServiceReq = () => {
     );
   };
 
-  // Fetch employee names from external API
+
   const fetchEmployees = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -81,7 +81,7 @@ const EmployeeServiceReq = () => {
     }
   }, [token]);
 
-  // Fetch all service requests for the company
+
   const fetchAllRequests = useCallback(async () => {
     if (!slug) {
       setError("Company slug missing");
@@ -101,7 +101,7 @@ const EmployeeServiceReq = () => {
 
       if (response.data.success) {
         console.log("API Response Data:", response.data.data);
-        // Debug: Check if reply_details exists in any request
+
         response.data.data.forEach((req, index) => {
           console.log(`Request ${index + 1}:`, {
             id: req.id,
@@ -125,7 +125,7 @@ const EmployeeServiceReq = () => {
     }
   }, [slug, token, company_id]);
 
-  // Initial fetch
+
   useEffect(() => {
     if (slug) {
       fetchEmployees();
@@ -133,11 +133,11 @@ const EmployeeServiceReq = () => {
     }
   }, [slug, fetchAllRequests, fetchEmployees]);
 
-  // Apply filters whenever filter criteria or requests change
+
   useEffect(() => {
     let filtered = [...requests];
 
-    // Search filter
+
     if (searchTerm) {
       filtered = filtered.filter(
         (request) =>
@@ -162,12 +162,12 @@ const EmployeeServiceReq = () => {
       );
     }
 
-    // Status filter
+
     if (statusFilter !== "All") {
       filtered = filtered.filter((request) => request.status === statusFilter);
     }
 
-    // Department filter (by Requester's Department)
+
     if (departmentFilter !== "All") {
       filtered = filtered.filter((request) => {
         const emp = employees.find(
@@ -177,14 +177,14 @@ const EmployeeServiceReq = () => {
       });
     }
 
-    // Priority filter
+
     if (priorityFilter !== "All") {
       filtered = filtered.filter(
         (request) => request.priority === priorityFilter,
       );
     }
 
-    // Date range filter
+
     if (dateRange.start && dateRange.end) {
       filtered = filtered.filter((request) => {
         const requestDate = new Date(request.created_at);
@@ -351,11 +351,11 @@ const EmployeeServiceReq = () => {
     });
   };
 
-  // Get unique values for filters
+
   const priorities = ["All", "High", "Medium", "Low"];
   const statuses = ["All", "Pending", "In Progress", "Completed", "Rejected"];
 
-  // Pagination calculations
+
   const totalPages = Math.ceil(filteredRequests.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
   const paginatedRequests = filteredRequests.slice(
@@ -363,7 +363,7 @@ const EmployeeServiceReq = () => {
     startIndex + entriesPerPage,
   );
 
-  // Statistics
+
   const stats = {
     total: requests.length,
     pending: requests.filter((r) => r.status === "Pending").length,
@@ -375,7 +375,7 @@ const EmployeeServiceReq = () => {
 
   return (
     <div className="font-sans">
-      {/* Snackbar Notification */}
+
       {snackbar.show && (
         <div
           className={`fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slideIn ${
@@ -409,7 +409,7 @@ const EmployeeServiceReq = () => {
       )}
 
       <div className="w-full">
-        {/* Header Section */}
+
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <button
@@ -435,7 +435,7 @@ const EmployeeServiceReq = () => {
           </div>
         </div>
 
-        {/* Error Message */}
+
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-lg">
             <div className="flex items-center">
@@ -457,11 +457,11 @@ const EmployeeServiceReq = () => {
           </div>
         )}
 
-        {/* Filters Section */}
+
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Filters</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* Search */}
+
             <div className="lg:col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Search
@@ -490,7 +490,7 @@ const EmployeeServiceReq = () => {
               </div>
             </div>
 
-            {/* Status Filter */}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Status
@@ -508,7 +508,7 @@ const EmployeeServiceReq = () => {
               </select>
             </div>
 
-            {/* Department Filter */}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Department
@@ -527,7 +527,7 @@ const EmployeeServiceReq = () => {
               </select>
             </div>
 
-            {/* Priority Filter */}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Priority
@@ -545,27 +545,11 @@ const EmployeeServiceReq = () => {
               </select>
             </div>
 
-            {/* Date Range */}
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
-              <div className="flex gap-2">
-                <input
-                  type="date"
-                  value={dateRange.start}
-                  onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                />
-                <input
-                  type="date"
-                  value={dateRange.end}
-                  onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-            </div> */}
+
+
           </div>
 
-          {/* Filter Actions */}
+
           <div className="flex justify-between items-center mt-4">
             <p className="text-sm text-gray-600">
               Showing{" "}
@@ -600,7 +584,7 @@ const EmployeeServiceReq = () => {
           </div>
         </div>
 
-        {/* Loading State */}
+
         {loading && (
           <div className="text-center py-12 bg-white rounded-xl shadow-sm">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent"></div>
@@ -608,7 +592,7 @@ const EmployeeServiceReq = () => {
           </div>
         )}
 
-        {/* Requests Table */}
+
         {!loading && !error && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="overflow-x-auto">
@@ -751,7 +735,7 @@ const EmployeeServiceReq = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            {/* View Button */}
+
                             <button
                               onClick={() => openViewModal(request)}
                               className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
@@ -778,7 +762,7 @@ const EmployeeServiceReq = () => {
                               </svg>
                             </button>
 
-                            {/* Reply Button */}
+
                             {has("hrms.message.service_request.fulfill") && (
                               <button
                                 onClick={() => openReplyModal(request)}
@@ -801,7 +785,7 @@ const EmployeeServiceReq = () => {
                               </button>
                             )}
 
-                            {/* Delete Button */}
+
                             {has("hrms.message.service_request.fulfill") && (
                               <button
                                 onClick={() => handleDeleteRequest(request.id)}
@@ -824,7 +808,7 @@ const EmployeeServiceReq = () => {
                               </button>
                             )}
 
-                            {/* Status Update Dropdown */}
+
                             <select
                               value={request.status}
                               disabled={!has("hrms.message.service_request.fulfill")}
@@ -847,7 +831,7 @@ const EmployeeServiceReq = () => {
               </table>
             </div>
 
-            {/* Pagination */}
+
             {filteredRequests.length > 0 && (
               <div className="px-6 py-4 border-t border-gray-200 bg-gray-50/50">
                 <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
@@ -913,7 +897,7 @@ const EmployeeServiceReq = () => {
         )}
       </div>
 
-      {/* Reply Modal */}
+
       {showReplyModal && selectedRequest && (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
@@ -944,7 +928,7 @@ const EmployeeServiceReq = () => {
             </div>
 
             <div className="p-6 space-y-4">
-              {/* Existing Reply Display */}
+
               {selectedRequest.reply_details && (
                 <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
                   <p className="text-sm font-semibold text-blue-800 mb-2 flex items-center gap-2">
@@ -972,7 +956,7 @@ const EmployeeServiceReq = () => {
                 </div>
               )}
 
-              {/* Request Details */}
+
               <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                 <p className="text-sm text-gray-600">
                   <span className="font-semibold">Employee:</span>{" "}
@@ -1038,7 +1022,7 @@ const EmployeeServiceReq = () => {
                 </p>
               </div>
 
-              {/* Reply Input */}
+
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Your Reply <span className="text-red-500">*</span>
@@ -1052,7 +1036,7 @@ const EmployeeServiceReq = () => {
                 />
               </div>
 
-              {/* Quick Status Update */}
+
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Update Status
@@ -1074,7 +1058,7 @@ const EmployeeServiceReq = () => {
                 </select>
               </div>
 
-              {/* Action Buttons */}
+
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <button
                   onClick={handleReplySubmit}
@@ -1098,7 +1082,7 @@ const EmployeeServiceReq = () => {
         </div>
       )}
 
-      {/* View Details Modal */}
+
       {showViewModal && selectedViewRequest && (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -1128,7 +1112,7 @@ const EmployeeServiceReq = () => {
             </div>
 
             <div className="p-6 space-y-6">
-              {/* Request Info Grid */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-5 rounded-xl border border-gray-100">
                 <div>
                   <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">
@@ -1189,7 +1173,7 @@ const EmployeeServiceReq = () => {
                 </div>
               </div>
 
-              {/* Request Details */}
+
               <div>
                 <p className="text-sm font-bold text-gray-800 mb-2">
                   Request Description
@@ -1201,7 +1185,7 @@ const EmployeeServiceReq = () => {
                 </div>
               </div>
 
-              {/* Display Existing Response */}
+
               {selectedViewRequest.reply_details && (
                 <div>
                   <p className="text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1251,7 +1235,7 @@ const EmployeeServiceReq = () => {
                   </h4>
 
                   <div className="space-y-4">
-                    {/* Status Dropdown */}
+
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Update Status
@@ -1273,7 +1257,7 @@ const EmployeeServiceReq = () => {
                       </select>
                     </div>
 
-                    {/* Reply Textarea */}
+
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Your Response <span className="text-red-500">*</span>
@@ -1290,7 +1274,7 @@ const EmployeeServiceReq = () => {
                 </div>
               )}
 
-              {/* Action Buttons */}
+
               <div className="flex justify-end pt-6 border-t border-gray-200 gap-3">
                 {has("hrms.message.service_request.fulfill") && (
                   <button
@@ -1323,7 +1307,7 @@ const EmployeeServiceReq = () => {
         </div>
       )}
 
-      {/* Add animation styles */}
+
       <style jsx>{`
         @keyframes slideIn {
           from {

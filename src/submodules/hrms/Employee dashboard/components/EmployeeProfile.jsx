@@ -132,34 +132,34 @@ const EmployeeProfile = () => {
     }
   };
 
-  // Function to get education data (handles both array and object formats)
+
   const getEducationData = () => {
-    // Check if education exists
+
     if (!profile.education) return [];
     
-    // If education is already an array
+
     if (Array.isArray(profile.education)) {
       return profile.education;
     }
     
-    // If education is an object with multiple entries (like from API)
+
     if (typeof profile.education === 'object') {
-      // Check if it has nested array or object
+
       if (profile.education.data && Array.isArray(profile.education.data)) {
         return profile.education.data;
       }
-      // Return as single item array
+
       return [profile.education];
     }
     
     return [];
   };
 
-  // Function to render education fields from an education object
+
   const renderEducationFields = (education, index) => {
     const fields = [];
     
-    // Common education fields
+
     if (education.qualification || education.degree || education.education) {
       fields.push({
         icon: GraduationCap,
@@ -258,13 +258,13 @@ const EmployeeProfile = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Section with Profile Card */}
+
         <div className="relative mb-8">
           <div className="relative bg-white rounded-3xl shadow-lg overflow-hidden">
-            {/* Cover Image - Solid Green */}
+
             <div className="h-32 bg-green-700"></div>
 
-            {/* Profile Info */}
+
             <div className="px-8 pb-4 relative">
               <div className="flex flex-col md:flex-row items-center md:items-end -mt-16 mb-6">
                 <div className="relative group">
@@ -344,7 +344,7 @@ const EmployeeProfile = () => {
           </div>
         </div>
 
-        {/* Tab Navigation - Green Theme */}
+
         <div className="flex gap-2 mb-6 bg-white p-1.5 rounded-2xl shadow-md border border-gray-200 w-fit">
           {[
             { id: 'personal', icon: User, label: 'Personal Info' },
@@ -368,7 +368,7 @@ const EmployeeProfile = () => {
           ))}
         </div>
 
-        {/* Personal Information Tab */}
+
         {activeTab === 'personal' && (
           <div className="space-y-6 animate-fadeIn">
             <div className="bg-white rounded-2xl shadow-md p-6">
@@ -397,7 +397,7 @@ const EmployeeProfile = () => {
           </div>
         )}
 
-        {/* Job Details Tab */}
+
         {activeTab === 'job' && (
           <div className="space-y-6 animate-fadeIn">
             <div className="bg-white rounded-2xl shadow-md p-6">
@@ -426,7 +426,7 @@ const EmployeeProfile = () => {
           </div>
         )}
 
-        {/* Education Tab - Handles array format */}
+
         {activeTab === 'education' && (
           <div className="space-y-6 animate-fadeIn">
             <div className="bg-white rounded-2xl shadow-md p-6">
@@ -442,7 +442,7 @@ const EmployeeProfile = () => {
                   {educationArray.map((education, index) => {
                     const educationFields = renderEducationFields(education, index);
                     
-                    // If no fields found, try to display raw education data
+
                     if (educationFields.length === 0 && typeof education === 'object') {
                       return (
                         <div key={index} className="border border-gray-200 rounded-xl p-4">
@@ -511,11 +511,11 @@ const EmployeeProfile = () => {
           </div>
         )}
 
-        {/* Address Tab */}
+
         {activeTab === 'address' && (
           <div className="space-y-6 animate-fadeIn">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Permanent Address */}
+
               <div className="bg-white rounded-2xl shadow-md p-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-green-600 rounded-xl">
@@ -551,7 +551,7 @@ const EmployeeProfile = () => {
                 </div>
               </div>
 
-              {/* Present Address */}
+
               <div className="bg-white rounded-2xl shadow-md p-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-green-600 rounded-xl">
@@ -590,7 +590,7 @@ const EmployeeProfile = () => {
           </div>
         )}
 
-        {/* Security Tab - Change Password */}
+
         {activeTab === 'security' && (
           <div className="animate-fadeIn">
             <div className="bg-white rounded-2xl shadow-md p-6">
@@ -672,7 +672,7 @@ const EmployeeProfile = () => {
                 </button>
               </form>
 
-              {/* Security Tips */}
+
               <div className="mt-6 p-4 bg-amber-50 rounded-xl border border-amber-100">
                 <div className="flex items-start gap-3">
                   <Shield className="h-5 w-5 text-amber-600 mt-0.5" />

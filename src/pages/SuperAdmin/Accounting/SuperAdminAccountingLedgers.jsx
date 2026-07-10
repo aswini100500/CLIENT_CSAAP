@@ -64,7 +64,7 @@ const SuperAdminAccountingLedgers = ({ hideHeader }) => {
   const [filters, setFilters] = useState({
     companyId: "",
     employeeId: "",
-    type: "ledgers", // Fetch only ledgers
+    type: "ledgers",
     from: "",
     to: "",
     limit: 500,
@@ -110,7 +110,7 @@ const SuperAdminAccountingLedgers = ({ hideHeader }) => {
     setFilters((current) => ({ ...current, [field]: value }));
   };
 
-  // Local filtering based on real-time search term
+
   const ledgers = useMemo(() => {
     let list = data.activity || [];
 
@@ -127,7 +127,7 @@ const SuperAdminAccountingLedgers = ({ hideHeader }) => {
     return list;
   }, [data.activity, searchTerm]);
 
-  // Statistics calculation for ledgers
+
   const stats = useMemo(() => {
     const totalCount = ledgers.length;
     let totalBalances = 0;
@@ -163,7 +163,7 @@ const SuperAdminAccountingLedgers = ({ hideHeader }) => {
     <div className={hideHeader ? "w-full space-y-4 p-2 bg-white relative" : "min-h-screen bg-slate-50 p-3 sm:p-5 relative"}>
       <div className={hideHeader ? "space-y-4" : "mx-auto max-w-7xl space-y-5"}>
         
-        {/* Header Block */}
+
         {!hideHeader && (
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -190,7 +190,7 @@ const SuperAdminAccountingLedgers = ({ hideHeader }) => {
           </div>
         )}
 
-        {/* Filtering Section */}
+
         <div className="p-5 rounded-lg border border-slate-200/80 bg-white shadow-sm">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-xs font-bold uppercase text-slate-500 tracking-wide">Filters</h3>
@@ -259,7 +259,7 @@ const SuperAdminAccountingLedgers = ({ hideHeader }) => {
           </div>
         </div>
 
-        {/* Statistics Cards */}
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <StatCard icon={BookOpen} label="Total Ledgers Created" value={stats.totalCount} tone="blue" />
           <StatCard icon={IndianRupee} label="Cumulative Balances" value={formatAmount(stats.totalBalances)} tone="green" />
@@ -272,12 +272,12 @@ const SuperAdminAccountingLedgers = ({ hideHeader }) => {
           </div>
         )}
 
-        {/* Content Panel */}
+
         <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
           <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-lg font-extrabold text-slate-900">Ledger Records</h2>
             
-            {/* Real-time search */}
+
             <div className="relative w-full max-w-xs">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                 <Search className="h-4 w-4" />
@@ -381,12 +381,12 @@ const SuperAdminAccountingLedgers = ({ hideHeader }) => {
         </div>
       </div>
 
-      {/* View Modal */}
+
       {viewModalOpen && selectedLedger && (
         <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             
-            {/* Modal Header */}
+
             <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-6 py-4">
               <div>
                 <h3 className="text-lg font-extrabold text-slate-900">Ledger Details</h3>
@@ -400,7 +400,7 @@ const SuperAdminAccountingLedgers = ({ hideHeader }) => {
               </button>
             </div>
 
-            {/* Modal Body */}
+
             <div className="p-6 max-h-[80vh] overflow-y-auto">
               
               <div className="mb-6 rounded-lg bg-green-50 p-4 border border-green-100">

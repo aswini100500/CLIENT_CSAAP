@@ -8,7 +8,7 @@ const EmployeeReport = () => {
   const [showReport, setShowReport] = useState(false);
   const [reportData, setReportData] = useState([]);
 
-  // Sample data - in real app, this would come from an API
+
   const sampleReportData = [
     {
       date: "2023-03-01",
@@ -66,7 +66,7 @@ const EmployeeReport = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className=" mx-auto bg-white rounded-lg shadow-md">
-        {/* Header */}
+
         <div className="bg-linear-to-r from-blue-600 to-blue-700 text-white p-4 rounded-t-lg">
           <h1 className="text-xl font-bold text-center">
             Employee Timesheet Report
@@ -76,7 +76,7 @@ const EmployeeReport = () => {
           </p>
         </div>
 
-        {/* Report Controls */}
+
         <div className="p-4 border-b border-gray-200 bg-white">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
             <div>
@@ -147,7 +147,7 @@ const EmployeeReport = () => {
           </div>
         </div>
 
-        {/* Report Title */}
+
         {showReport && (
           <div className="p-3 border-b border-gray-200 bg-blue-50">
             <h2 className="text-lg font-semibold text-gray-800 text-center">
@@ -159,7 +159,7 @@ const EmployeeReport = () => {
           </div>
         )}
 
-        {/* Report Content */}
+
         <div className="p-4">
           {!showReport ? (
             <div className="text-center py-8">
@@ -192,7 +192,7 @@ const EmployeeReport = () => {
                   key={index}
                   className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow transition-shadow duration-200"
                 >
-                  {/* Date Header */}
+
                   <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
                     <div className="flex justify-between items-center">
                       <h3 className="text-sm font-semibold text-gray-800">
@@ -204,7 +204,7 @@ const EmployeeReport = () => {
                     </div>
                   </div>
 
-                  {/* Timesheet Details */}
+
                   <div className="p-3">
                     <div className="space-y-2">
                       {day.details.map((detail, detailIndex) => (
@@ -229,7 +229,7 @@ const EmployeeReport = () => {
                       ))}
                     </div>
 
-                    {/* Daily Summary */}
+
                     <div className="mt-2 pt-2 border-t border-gray-200">
                       <div className="flex justify-between items-center text-xs">
                         <span className="text-gray-600">Daily Summary:</span>
@@ -244,7 +244,7 @@ const EmployeeReport = () => {
                 </div>
               ))}
 
-              {/* Monthly Summary */}
+
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
                 <div className="grid grid-cols-3 gap-3 text-center">
                   <div>

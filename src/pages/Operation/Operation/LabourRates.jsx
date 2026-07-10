@@ -38,7 +38,7 @@ const LabourRates = () => {
     }
   };
 
-  // Calculate summary whenever workers change
+
   useEffect(() => {
     calculateSummary();
   }, [workers]);
@@ -99,7 +99,7 @@ const LabourRates = () => {
     if (result.isConfirmed) {
       try {
         if (typeof id === 'number' && id > 1000000000) {
-          // Local only
+
           setWorkers(workers.filter(w => w.id !== id));
         } else {
           setLoading(true);
@@ -133,11 +133,11 @@ const LabourRates = () => {
         Swal.fire("Warning", "Please fill all fields for the worker", "warning");
         return;
       }
-      // Saving
+
       try {
         setLoading(true);
         if (typeof id === 'number' && id > 1000000000) {
-          // It's a new entry locally, we need to send ALL items to the bulk save endpoint
+
           const payload = {
             workers: workers.map(w => ({
               type: w.type,
@@ -202,11 +202,11 @@ const LabourRates = () => {
         Swal.fire("Warning", "Please enter facility name", "warning");
         return;
       }
-      // Saving
+
       try {
         setLoading(true);
         if (typeof id === 'number' && id > 1000000000) {
-          // Bulk save for new entry
+
           const payload = {
             workers: workers.map(w => ({
               type: w.type,

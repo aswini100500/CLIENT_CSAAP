@@ -4,15 +4,15 @@ import useSWR from 'swr';
 import { getAuthToken } from '../../store/authSession';
 import { Eye, Trash2, Search, Calendar, Download, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// API base URL
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance with authorization
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -26,19 +26,19 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const PurchaseHistory = () => {
 
-  // State for filters
+
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
-  // Generate months (1-12 for API, display names for UI)
+
   const months = [
     { value: '', label: 'All Months' },
     { value: '1', label: 'January' },
@@ -55,7 +55,7 @@ const PurchaseHistory = () => {
     { value: '12', label: 'December' }
   ];
 
-  // Generate years (2023-2026 + current year)
+
   const currentYear = new Date().getFullYear();
   const years = [
     { value: '', label: 'All Years' },
@@ -68,7 +68,7 @@ const PurchaseHistory = () => {
     index === self.findIndex((y) => y.value === year.value)
   );
 
-  // Build API URL with filters
+
   const buildApiUrl = () => {
     let url = '/api/tenant/purchases/history';
     const params = [];
@@ -84,7 +84,7 @@ const PurchaseHistory = () => {
     return url;
   };
 
-  // Use SWR to fetch purchase history
+
   const { data: purchaseData, error, isLoading, mutate } = useSWR(
     buildApiUrl(),
     fetcher,
@@ -96,23 +96,23 @@ const PurchaseHistory = () => {
     }
   );
 
-  // Extract purchases from SWR data
+
   const purchases = purchaseData?.success ? purchaseData.data : [];
 
-  // Function to handle display button click
+
   const handleDisplay = () => {
-    // Revalidate data with current filters
+
     mutate();
   };
 
-  // Function to handle search
+
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       handleDisplay();
     }
   };
 
-  // Format date for display
+
   const formatDate = (dateString) => {
     if (!dateString) return '—';
     const date = new Date(dateString);
@@ -123,7 +123,7 @@ const PurchaseHistory = () => {
     });
   };
 
-  // Format currency
+
   const formatCurrency = (amount) => {
     if (!amount) return "₹0";
     return new Intl.NumberFormat("en-IN", {
@@ -133,7 +133,7 @@ const PurchaseHistory = () => {
     }).format(amount);
   };
 
-  // Filter purchases based on search term (client-side fallback)
+
   const filteredPurchases = purchases.filter(purchase => {
     if (!searchTerm) return true;
     
@@ -146,18 +146,18 @@ const PurchaseHistory = () => {
     );
   });
 
-  // Calculate pagination
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentPurchases = filteredPurchases.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredPurchases.length / itemsPerPage);
 
-  // Handle page change
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Handle delete purchase
+
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this purchase record?')) return;
     
@@ -165,7 +165,7 @@ const PurchaseHistory = () => {
       const response = await api.delete(`/api/tenant/purchases/${id}`);
       if (response.data.success) {
         alert('Purchase record deleted successfully!');
-        // Revalidate data
+
         mutate();
       }
     } catch (error) {
@@ -174,14 +174,14 @@ const PurchaseHistory = () => {
     }
   };
 
-  // Handle view details
+
   const handleView = (purchase) => {
-    // Here you can implement a modal or navigate to a details page
+
     console.log('Viewing purchase:', purchase);
     alert(`Viewing purchase: ${purchase.bill_no}\nSupplier: ${purchase.supplier_name}\nAmount: ${formatCurrency(purchase.net_price)}`);
   };
 
-  // Handle download as CSV
+
   const handleDownloadCSV = () => {
     if (purchases.length === 0) {
       alert('No data to download');
@@ -230,13 +230,13 @@ const PurchaseHistory = () => {
     document.body.removeChild(link);
   };
 
-  // Reset filters
+
   const handleResetFilters = () => {
     setMonth('');
     setYear('');
     setSearchTerm('');
     setCurrentPage(1);
-    // Revalidate data without filters
+
     mutate();
   };
 
@@ -268,14 +268,14 @@ const PurchaseHistory = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mx-auto max-w-7xl">
-      {/* Header */}
+
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Purchase History</h1>
           <div className="w-20 h-1 bg-blue-500"></div>
         </div>
         
-        {/* Download Button */}
+
         {purchases.length > 0 && (
           <button
             onClick={handleDownloadCSV}
@@ -287,7 +287,7 @@ const PurchaseHistory = () => {
         )}
       </div>
 
-      {/* Filters */}
+
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Month</label>
@@ -332,7 +332,7 @@ const PurchaseHistory = () => {
           </div>
         </div>
 
-        {/* Display Button */}
+
         <div className="flex items-end space-x-2">
           <button
             onClick={handleDisplay}
@@ -350,7 +350,7 @@ const PurchaseHistory = () => {
           </button>
         </div>
 
-        {/* Total Records */}
+
         <div className="flex items-end">
           <div className="w-full bg-gray-50 p-3 rounded-md">
             <div className="text-sm text-gray-600">Total Records</div>
@@ -359,7 +359,7 @@ const PurchaseHistory = () => {
         </div>
       </div>
 
-      {/* Summary Cards */}
+
       {purchases.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
@@ -410,7 +410,7 @@ const PurchaseHistory = () => {
         </div>
       )}
 
-      {/* Table */}
+
       <div className="overflow-x-auto border border-gray-200 rounded-lg">
         <table className="min-w-full bg-white">
           <thead className="bg-gray-50">
@@ -531,7 +531,7 @@ const PurchaseHistory = () => {
         </table>
       </div>
 
-      {/* Pagination */}
+
       {currentPurchases.length > 0 && (
         <div className="flex items-center justify-between mt-4 px-6 py-3 bg-gray-50 border-t border-gray-200 rounded-b-lg">
           <div className="text-sm text-gray-700">
@@ -555,7 +555,7 @@ const PurchaseHistory = () => {
               Previous
             </button>
             
-            {/* Page numbers */}
+
             <div className="flex space-x-1">
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                 let pageNum;

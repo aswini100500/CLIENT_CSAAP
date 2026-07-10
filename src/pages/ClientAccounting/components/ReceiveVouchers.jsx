@@ -1,249 +1,249 @@
-// import React, { useState } from "react";
-// import axios from "axios";
-// import Swal from "sweetalert2";
-// import { useCompany } from "../context/CompanyContext";
-
-// const ReceiveVouchers = () => {
-//   const {companyId} = useCompany()
-//   const [voucher, setVoucher] = useState({
-//     voucherno:"",
-//     date: "",
-//     customer: "",
-//     ledger: "",
-//     narration: "",
-//     items: [{ item: "", qty: 1, rate: 0, amount: 0 }],
-//   });
-
-//   const handleItemChange = (index, field, value) => {
-//     const updated = [...voucher.items];
-//     updated[index][field] = value;
-
-//     if (field === "qty" || field === "rate") {
-//       const qty = parseFloat(updated[index].qty) || 0;
-//       const rate = parseFloat(updated[index].rate) || 0;
-//       updated[index].amount = qty * rate;
-//     }
-
-//     setVoucher({ ...voucher, items: updated });
-//   };
-
-//   const addRow = () => {
-//     setVoucher({
-//       ...voucher,
-//       items: [...voucher.items, { item: "", qty: 1, rate: 0, amount: 0 }],
-//     });
-//   };
-
-//   const totalAmount = voucher.items.reduce(
-//     (sum, r) => sum + Number(r.amount || 0),
-//     0
-//   );
 
 
-//   const handleSubmit = async () => {
-//     try {
 
 
-//       if (!companyId) {
-//         Swal.fire("Error", "Company ID not found!", "error");
-//         return;
-//       }
-
-//       const payload = {
-
-//         ...voucher,
-//         totalAmount,
-//         companyId,
-//       };
-// console.log(payload);
-
-//       const res = await axios.post(
-//         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/createReciptVoucher/${companyId}`,
-//         payload
-//       );
-
-//       Swal.fire("Success", "Receive Voucher Saved Successfully!", "success");
-
-//       // Reset Form
-//       setVoucher({
-//         date: "",
-//         customer: "",
-//         ledger: "",
-//         narration: "",
-//         items: [{ item: "", qty: 1, rate: 0, amount: 0 }],
-//       });
-
-//         try {
-//           const res1 = await axios.post(
-//         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher/createVoucher`,
-//         payload
-//       );
-//         } catch (error) {
-//           console.log(error);
-
-//         }
 
 
-//     } catch (err) {
-//       Swal.fire("Error", "Failed to Save Voucher", "error");
-//       console.error(err);
-//     }
-//   };
-
-//   return (
-//     <div className="p-6 bg-white mx-auto shadow-md rounded-xl border border-gray-300">
-
-//       {/* Header */}
-//       <div className="border-b py-3 mb-4">
-//         <h1 className="text-2xl font-bold text-blue-800">Receive Voucher</h1>
-//         <p className="text-gray-600 text-sm">Voucher Type: Receive</p>
-//       </div>
-
-//       {/* Date & Customer */}
-//       <div className="grid grid-cols-2 gap-6 mb-6">
-//          <div>
-//           <label className="text-sm font-medium">VoucherNo</label>
-//           <input
-//             type="text"
-//             className="w-full border px-3 py-2 rounded mt-1"
-//             value={voucher.voucherno}
-//             onChange={(e) => setVoucher({ ...voucher, voucherno: e.target.value })}
-//           />
-//         </div>
 
 
-//         <div>
-//           <label className="text-sm font-medium">Date</label>
-//           <input
-//             type="date"
-//             className="w-full border px-3 py-2 rounded mt-1"
-//             value={voucher.date}
-//             onChange={(e) => setVoucher({ ...voucher, date: e.target.value })}
-//           />
-//         </div>
 
-//         <div>
-//           <label className="text-sm font-medium">Customer (Party Name)</label>
-//           <input
-//             type="text"
-//             placeholder="Enter Customer Name"
-//             className="w-full border px-3 py-2 rounded mt-1"
-//             value={voucher.customer}
-//             onChange={(e) =>
-//               setVoucher({ ...voucher, customer: e.target.value })
-//             }
-//           />
-//         </div>
-//       </div>
 
-//       {/* Ledger */}
-//       <div className="mb-6">
-//         <label className="text-sm font-medium">Receive's Ledger</label>
-//         <input
-//           type="text"
-//           placeholder="Select Ledger (e.g., Sales 18%)"
-//           className="w-full border px-3 py-2 rounded mt-1"
-//           value={voucher.ledger}
-//           onChange={(e) => setVoucher({ ...voucher, ledger: e.target.value })}
-//         />
-//       </div>
 
-//       {/* Items Table */}
-//       <h3 className="text-lg font-semibold mb-2 text-blue-700">Item Details</h3>
 
-//       <table className="w-full border text-sm">
-//         <thead className="bg-gray-100 border-b">
-//           <tr>
-//             <th className="border px-2 py-1 w-2/5">Item</th>
-//             <th className="border px-2 py-1 w-20 text-center">Qty</th>
-//             <th className="border px-2 py-1 w-28 text-center">Rate</th>
-//             <th className="border px-2 py-1 w-28 text-center">Amount</th>
-//           </tr>
-//         </thead>
 
-//         <tbody>
-//           {voucher.items.map((row, index) => (
-//             <tr key={index}>
-//               <td className="border px-2">
-//                 <input
-//                   className="w-full outline-none py-1"
-//                   placeholder="Item Name"
-//                   value={row.item}
-//                   onChange={(e) => handleItemChange(index, "item", e.target.value)}
-//                 />
-//               </td>
 
-//               <td className="border px-2 text-center">
-//                 <input
-//                   type="number"
-//                   className="w-full text-center outline-none py-1"
-//                   value={row.qty}
-//                   onChange={(e) =>
-//                     handleItemChange(index, "qty", e.target.value)
-//                   }
-//                 />
-//               </td>
 
-//               <td className="border px-2 text-center">
-//                 <input
-//                   type="number"
-//                   className="w-full text-center outline-none py-1"
-//                   value={row.rate}
-//                   onChange={(e) =>
-//                     handleItemChange(index, "rate", e.target.value)
-//                   }
-//                 />
-//               </td>
 
-//               <td className="border px-2 text-center text-gray-900">
-//                 {row.amount.toFixed(2)}
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
 
-//       {/* Add Row */}
-//       <button
-//         className="mt-3 text-blue-700 font-medium hover:underline"
-//         onClick={addRow}
-//       >
-//         + Add Item
-//       </button>
 
-//       {/* Total */}
-//       <div className="flex justify-end mt-4">
-//         <p className="text-lg font-semibold text-gray-800">
-//           Total Amount: ₹ {totalAmount.toFixed(2)}
-//         </p>
-//       </div>
 
-//       {/* Narration */}
-//       <div className="mt-6">
-//         <label className="text-sm font-medium">Narration</label>
-//         <textarea
-//           className="w-full border rounded px-3 py-2 mt-1"
-//           rows="3"
-//           placeholder="Enter narration..."
-//           value={voucher.narration}
-//           onChange={(e) =>
-//             setVoucher({ ...voucher, narration: e.target.value })
-//           }
-//         ></textarea>
-//       </div>
 
-//       {/* Submit */}
-//       <button
-//         className="mt-6 bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded font-medium"
-//         onClick={handleSubmit}
-//       >
-//         Save Voucher
-//       </button>
-//     </div>
-//   );
-// };
 
-// export default ReceiveVouchers;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -257,7 +257,7 @@ import BulkImportButton from "./BulkImportButton";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
-// --- Internal Searchable Select Component ---
+
 const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew, disabled = false, }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -408,7 +408,7 @@ const ReceiveVouchers = () => {
         const groupRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`);
         setGroups(groupRes.data || []);
 
-        // --- RESTORE STATE IF RETURNING FROM LEDGER CREATION ---
+
         const savedState = sessionStorage.getItem("receiptVoucherState");
         if (savedState) {
           const state = JSON.parse(savedState);
@@ -499,7 +499,7 @@ const ReceiveVouchers = () => {
     const ledger = ledgers.find((l) => l.id == ledgerId);
     const opening = parseFloat(ledger?.openingBalance) || 0;
     const closing = parseFloat(ledger?.closingBalance) || 0;
-    const type = ledger?.balanceType || ledger?.type || "Credit"; // Usually receiving money from a credit party
+    const type = ledger?.balanceType || ledger?.type || "Credit";
 
     const updated = [...entries];
     updated[index].ledgerId = ledgerId;
@@ -508,9 +508,9 @@ const ReceiveVouchers = () => {
     updated[index].balanceType = type;
 
     const amt = parseFloat(updated[index].amount) || 0;
-    // When receiving money, we are crediting the party's account.
-    // If they have a Credit balance, receiving money from them (usually doesn't happen unless advance) increases Cr.
-    // If they have a Debit balance (Debtor), crediting them reduces Dr balance.
+
+
+
     if (type === "Credit") {
       updated[index].remainingBalance = closing + amt;
     } else {
@@ -785,7 +785,7 @@ const ReceiveVouchers = () => {
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-6 mx-auto">
-      {/* Header */}
+
       <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
         <div className="flex items-center gap-2">
           <h1 className="text-base font-semibold text-slate-800">
@@ -798,7 +798,7 @@ const ReceiveVouchers = () => {
         {!isViewMode && <BulkImportButton onDataParsed={handleBulkImport} />}
       </div>
 
-      {/* Account Type */}
+
       <div className="flex flex-col gap-1 mb-5">
         <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
           Receipt Account (Bank / Cash)
@@ -818,7 +818,7 @@ const ReceiveVouchers = () => {
         </select>
       </div>
 
-      {/* Voucher No & Date */}
+
       <div className="grid grid-cols-2 gap-4 mb-5">
         <div className="flex flex-col gap-1">
           <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
@@ -846,7 +846,7 @@ const ReceiveVouchers = () => {
         </div>
       </div>
 
-      {/* Instrument Details */}
+
       <div className="grid grid-cols-2 gap-4 mb-5">
         <div className="flex flex-col gap-1">
           <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
@@ -880,12 +880,12 @@ const ReceiveVouchers = () => {
         </div>
       </div>
 
-      {/* Section Label */}
+
       <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-2">
         Transaction Details
       </p>
 
-      {/* Table */}
+
       <div className="rounded-lg border border-slate-200 overflow-visible mb-3">
         <table className="w-full text-sm border-collapse">
           <thead>
@@ -904,7 +904,7 @@ const ReceiveVouchers = () => {
                 key={index}
                 className="border-b border-slate-100 last:border-b-0 hover:bg-slate-50 transition-colors relative hover:z-50"
               >
-                {/* Particulars */}
+
                 <td className="px-2 py-1">
                   <SearchableLedgerSelect
                     ledgers={ledgers}
@@ -915,12 +915,12 @@ const ReceiveVouchers = () => {
                   />
                 </td>
 
-                {/* Opening Balance */}
+
                 <td className="px-3 py-2 text-right text-slate-500 text-sm">
                   {row.ledgerId ? formatBalance(row.closingBalance, row.balanceType) : "0.00"}
                 </td>
 
-                {/* Amount */}
+
                 <td className="px-2 py-1">
                   <input
                     type="number"
@@ -934,12 +934,12 @@ const ReceiveVouchers = () => {
                   />
                 </td>
 
-                {/* Closing Balance */}
+
                 <td className="px-3 py-2 text-right text-slate-800 font-medium text-sm">
                   {row.ledgerId ? formatBalance(row.remainingBalance, row.balanceType) : "0.00"}
                 </td>
 
-                {/* Action - Delete Row */}
+
                 <td className="px-2 py-1 text-center">
                   {!isViewMode && entries.length > 1 && (
                     <button
@@ -955,7 +955,7 @@ const ReceiveVouchers = () => {
             ))}
           </tbody>
 
-          {/* Footer Total */}
+
           <tfoot>
             <tr className="bg-slate-50 border-t border-slate-200">
               <td className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wide">
@@ -972,7 +972,7 @@ const ReceiveVouchers = () => {
         </table>
       </div>
 
-      {/* Add Row Button */}
+
       {!isViewMode && (
         <div className="px-3 py-2 border-t border-slate-100 bg-slate-50 rounded-b-lg">
           <button
@@ -984,7 +984,7 @@ const ReceiveVouchers = () => {
         </div>
       )}
 
-      {/* Totals Summary */}
+
       <div className="flex justify-end mb-5">
         <div className="bg-slate-50 rounded-lg px-5 py-3 flex flex-col items-end gap-1 min-w-48">
           <div className="flex justify-between w-full text-sm font-semibold text-slate-800 gap-8">
@@ -994,7 +994,7 @@ const ReceiveVouchers = () => {
         </div>
       </div>
 
-      {/* Narration */}
+
       <div className="flex flex-col gap-1 mb-5">
         <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
           Narration
@@ -1008,7 +1008,7 @@ const ReceiveVouchers = () => {
         ></textarea>
       </div>
 
-      {/* Actions */}
+
       <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-100">
         <button
           className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition-colors"

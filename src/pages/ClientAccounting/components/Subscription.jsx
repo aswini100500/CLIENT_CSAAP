@@ -45,7 +45,7 @@ const Subscription = () => {
 
             if (data.success) {
                 setMySubscriptions(data.subscriptions);
-                // Find active subscription
+
                 const active = data.subscriptions.find(
                     (sub) => sub.status === "active" && new Date(sub.end_date) >= new Date()
                 );
@@ -62,7 +62,7 @@ const Subscription = () => {
         try {
             console.log("Starting subscription for plan:", planId, "user:", userId);
 
-            // Create order
+
             const { data: orderData } = await axios.post(
                 `${API_BASE_URL}/api/v1/subscription/order`,
                 { plan_id: planId, user_id: userId },
@@ -81,7 +81,7 @@ const Subscription = () => {
                 return;
             }
 
-            // Show pricing info with GST breakdown
+
             const htmlContent = orderData.is_renewal
                 ? `<div style="text-align: left; font-size: 14px;">
                     <p style="margin: 10px 0;"><strong>Original Price:</strong> ₹${orderData.original_price}</p>
@@ -113,7 +113,7 @@ const Subscription = () => {
                 return;
             }
 
-            // Initialize Razorpay
+
             const options = {
                 key: orderData.key,
                 amount: orderData.order.amount,
@@ -127,7 +127,7 @@ const Subscription = () => {
                     console.log("Payment successful, verifying...", response);
 
                     try {
-                        // Verify payment
+
                         const { data: verifyData } = await axios.post(
                             `${API_BASE_URL}/api/v1/subscription/verify`,
                             {
@@ -149,7 +149,7 @@ const Subscription = () => {
                                 text: 'Subscription activated successfully!',
                                 confirmButtonColor: '#3B82F6'
                             });
-                            // Reload page to update subscription status in context
+
                             window.location.reload();
                         } else {
                             Swal.fire({
@@ -219,7 +219,7 @@ const Subscription = () => {
                 <h1 className="text-3xl font-bold text-gray-800 mb-2">Subscription Management</h1>
                 <p className="text-gray-600 mb-8">Manage your subscription plans and billing</p>
 
-                {/* Current Subscription Status */}
+
                 {activeSubscription ? (
                     <div className="bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6 mb-8 shadow-lg">
                         <div className="flex items-center gap-3 mb-4">
@@ -264,7 +264,7 @@ const Subscription = () => {
                     </div>
                 )}
 
-                {/* Available Plans */}
+
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Available Plans</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                     {plans.map((plan) => (
@@ -311,7 +311,7 @@ const Subscription = () => {
                     ))}
                 </div>
 
-                {/* Subscription History */}
+
                 {mySubscriptions.length > 0 && (
                     <div>
                         <h2 className="text-2xl font-bold text-gray-800 mb-6">Subscription History</h2>

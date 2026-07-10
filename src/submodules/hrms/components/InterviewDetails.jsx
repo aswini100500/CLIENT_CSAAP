@@ -28,13 +28,13 @@ const RecruitmentTablePage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Search, Sort & Filter states
+
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [filterStatus, setFilterStatus] = useState("All");
   const [filterPosition, setFilterPosition] = useState("All");
 
-  // Modal states
+
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -52,10 +52,10 @@ const RecruitmentTablePage = () => {
   const [interviewDate, setInterviewDate] = useState("");
   const [interviewTime, setInterviewTime] = useState("");
 
-  // API Configuration
+
   const API_BASE = `${import.meta.env.VITE_HRMS_BASE_URL}/api`;
 
-  // Memoized data processing
+
   const processedData = useMemo(() => {
     console.log("Processing recruitment data:", recruitmentData);
     return recruitmentData.map((item) => ({
@@ -75,7 +75,7 @@ const RecruitmentTablePage = () => {
     }));
   }, [recruitmentData]);
 
-  // Enhanced search and filter
+
   const filteredAndSortedData = useMemo(() => {
     let filtered = processedData.filter((candidate) => {
       const matchesSearch =
@@ -95,7 +95,7 @@ const RecruitmentTablePage = () => {
       return matchesSearch && matchesStatus && matchesPosition;
     });
 
-    // Sorting
+
     if (sortConfig.key) {
       filtered.sort((a, b) => {
         const aVal = a[sortConfig.key]?.toString().toLowerCase() || "";
@@ -111,13 +111,13 @@ const RecruitmentTablePage = () => {
     return filtered;
   }, [processedData, searchTerm, filterStatus, filterPosition, sortConfig]);
 
-  // Get unique positions for filter
+
   const uniquePositions = useMemo(() => {
     const positions = [...new Set(processedData.map((item) => item.jobTitle))];
     return positions.filter(Boolean);
   }, [processedData]);
 
-  // Fetch data with error handling
+
   const fetchRecruitments = useCallback(async () => {
     if (!company_id) {
       console.warn("fetchRecruitments skipped: company_id not available yet");
@@ -163,7 +163,7 @@ const RecruitmentTablePage = () => {
     fetchRecruitments();
   }, [fetchRecruitments]);
 
-  // Status color mapping
+
   const getStatusColor = (status) => {
     const statusColors = {
       Approved: "bg-green-100 text-green-800 border border-green-200",
@@ -182,7 +182,7 @@ const RecruitmentTablePage = () => {
     );
   };
 
-  // Enhanced sorting handler
+
   const handleSort = (key) => {
     setSortConfig((prev) => ({
       key,
@@ -200,7 +200,7 @@ const RecruitmentTablePage = () => {
       candidate.completed_round + 1 >= candidate.interview_round;
 
     try {
-      // 🟢 NOT LAST ROUND → JUST COMPLETE ROUND
+
       if (!isLastRound) {
         await axios.put(
           `${API_BASE}/applicant/complete-round/${raw.candidate_id}/${company_id}`,
@@ -209,7 +209,7 @@ const RecruitmentTablePage = () => {
         return;
       }
 
-      // 🔵 LAST ROUND OPTIONS
+
       const result = await Swal.fire({
         title: "All interview rounds completed",
         text: "What do you want to do next?",
@@ -220,7 +220,7 @@ const RecruitmentTablePage = () => {
         cancelButtonText: "⏸ Put On Hold",
       });
 
-      // ❌ CLOSED / ESC → DO NOTHING
+
       if (
         result.dismiss === Swal.DismissReason.close ||
         result.dismiss === Swal.DismissReason.esc ||
@@ -229,16 +229,16 @@ const RecruitmentTablePage = () => {
         return;
       }
 
-      // ⏸ PUT ON HOLD → STATUS ONLY (NO ROUND CHANGE)
+
       if (result.dismiss === Swal.DismissReason.cancel) {
         await axios.put(
           `${API_BASE}/applicant/hold/${raw.candidate_id}/${company_id}`,
         );
         fetchRecruitments();
-        return; // ⛔ STOP HERE
+        return;
       }
 
-      // ➕ ADD MORE ROUNDS → NO ROUND COMPLETE
+
       if (result.isConfirmed) {
         const { value: rounds } = await Swal.fire({
           title: "Add More Rounds",
@@ -256,14 +256,14 @@ const RecruitmentTablePage = () => {
         );
 
         fetchRecruitments();
-        return; // ⛔ STOP HERE
+        return;
       }
     } catch (err) {
       Swal.fire("Error", "Failed to update round", "error");
     }
   };
 
-  // Candidate actions
+
   const handleView = (candidate) => {
     setSelectedCandidate(candidate);
   };
@@ -301,7 +301,7 @@ const RecruitmentTablePage = () => {
     try {
       const { candidate_id, status, ...rest } = editForm;
 
-      // 🔴 REJECT FLOW
+
       if (status === "Rejected") {
         await axios.put(
           `${API_BASE}/applicant/reject/${candidate_id}/${company_id}`,
@@ -310,7 +310,7 @@ const RecruitmentTablePage = () => {
         Swal.fire("Rejected", "Candidate rejected successfully", "success");
       }
 
-      // 🟢 APPROVE / UPDATE FLOW
+
       else {
         await axios.put(
           `${API_BASE}/applicant/approve/${candidate_id}/${company_id}`,
@@ -445,7 +445,7 @@ HR Team`,
     }
   };
 
-  // Render loading state
+
   if (loading) {
     return (
       <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center">
@@ -457,7 +457,7 @@ HR Team`,
     );
   }
 
-  // Render error state
+
   if (error) {
     return (
       <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center">
@@ -480,7 +480,7 @@ HR Team`,
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
+
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-8 border border-gray-200">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex-1">
@@ -503,9 +503,9 @@ HR Team`,
             </div>
           </div>
 
-          {/* Search and Filter Section */}
+
           <div className="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-4">
-            {/* Search */}
+
             <div className="lg:col-span-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -519,7 +519,7 @@ HR Team`,
               </div>
             </div>
 
-            {/* Status Filter */}
+
             <div className="lg:col-span-1">
               <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-4 py-3">
                 <Filter size={18} className="text-gray-400" />
@@ -540,7 +540,7 @@ HR Team`,
               </div>
             </div>
 
-            {/* Position Filter */}
+
             <div className="lg:col-span-1">
               <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-4 py-3">
                 <Filter size={18} className="text-gray-400" />
@@ -559,7 +559,7 @@ HR Team`,
               </div>
             </div>
 
-            {/* Results Count */}
+
             <div className="lg:col-span-1 flex items-center justify-end">
               <span className="text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded-xl">
                 Showing {filteredAndSortedData.length} of {processedData.length}{" "}
@@ -569,7 +569,7 @@ HR Team`,
           </div>
         </div>
 
-        {/* Table Section */}
+
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -615,7 +615,7 @@ HR Team`,
                   const rawStatus = candidate.status || "";
                   const normalizedStatus = rawStatus.trim().toLowerCase();
 
-                  // UI-friendly status
+
                   const displayStatusMap = {
                     approved: "Selected",
                     selected: "Selected",
@@ -663,7 +663,7 @@ HR Team`,
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-                          {/* ON HOLD — SHOW COMPLETED ROUND */}
+
                           {has("hrms.job.interview.schedule") && normalizedStatus === "on hold" && (
                             <button
                               onClick={() => handleResume(candidate)}
@@ -677,7 +677,7 @@ HR Team`,
                             </button>
                           )}
 
-                          {/* COMPLETE ROUND (ONLY IF NOT ON HOLD & NOT COMPLETED) */}
+
                           {has("hrms.job.interview.schedule") && normalizedStatus !== "on hold" &&
                             normalizedStatus !== "approved" &&
                             candidate.completed_round <
@@ -691,7 +691,7 @@ HR Team`,
                               </button>
                             )}
 
-                          {/* ALL ROUNDS COMPLETED (ONLY IF NOT ON HOLD) */}
+
                           {normalizedStatus !== "on hold" &&
                             (candidate.completed_round >=
                               candidate.interview_round ||
@@ -779,7 +779,7 @@ HR Team`,
             </table>
           </div>
 
-          {/* Empty State */}
+
           {filteredAndSortedData.length === 0 && (
             <div className="text-center py-12">
               <div className="text-gray-400 text-6xl mb-4">🔍</div>
@@ -796,12 +796,12 @@ HR Team`,
             </div>
           )}
         </div>
-        {/* Edit Candidate Modal */}
+
         {isEditModalOpen && (
           <div className="fixed inset-0 z-50">
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
             <div className="relative flex items-center justify-center min-h-screen p-4">
-              {/* Changed from max-w-md to max-w-2xl for wider form */}
+
               <div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl mx-auto">
                 <div className="px-6 py-4">
                   <div className="flex items-center justify-between mb-4">
@@ -840,7 +840,7 @@ HR Team`,
           </div>
         )}
 
-        {/* Email Modal */}
+
         {isEmailModalOpen && selectedCandidate && (
           <Modal
             title={`Contact ${selectedCandidate.candidateName}`}
@@ -860,7 +860,7 @@ HR Team`,
           </Modal>
         )}
 
-        {/* View Report Modal */}
+
         {isViewReportOpen && reportData && (
           <Modal
             title="Interview Report"
@@ -877,7 +877,7 @@ HR Team`,
   );
 };
 
-// Reusable Modal Component
+
 const Modal = ({ title, children, onClose }) => (
   <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
     <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-auto">
@@ -895,7 +895,7 @@ const Modal = ({ title, children, onClose }) => (
   </div>
 );
 
-// Reusable Detail Item Component
+
 const DetailItem = ({ label, value }) => (
   <div className="flex justify-between items-start">
     <span className="font-medium text-gray-700">{label}:</span>
@@ -903,12 +903,12 @@ const DetailItem = ({ label, value }) => (
   </div>
 );
 
-// Edit Candidate Form Component
+
 const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
   <form onSubmit={onSubmit} className="flex flex-col h-full">
     <div className="flex-1 overflow-y-auto pr-2 max-h-[70vh]">
       <div className="space-y-6 p-1">
-        {/* Personal Information Section */}
+
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
             Personal Information
@@ -960,7 +960,7 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
           </div>
         </div>
 
-        {/* Interview Details Section */}
+
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
             Interview Details
@@ -993,7 +993,7 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Interview Round Input */}
+
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Total Interview Rounds <span className="text-red-500">*</span>
@@ -1018,7 +1018,7 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
               </p>
             </div>
 
-            {/* Completed Round Display */}
+
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Completed Rounds
@@ -1071,7 +1071,7 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
           </div>
         </div>
 
-        {/* Status Section */}
+
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
             Status & Remarks
@@ -1095,7 +1095,7 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
             ]}
           />
 
-          {/* Remarks */}
+
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Remarks
@@ -1118,7 +1118,7 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
       </div>
     </div>
 
-    {/* Fixed footer with actions */}
+
     <div className="mt-8 pt-6 border-t border-gray-200">
       <div className="flex gap-3 justify-end">
         <button
@@ -1139,7 +1139,7 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
   </form>
 );
 
-// Email Form Component
+
 const EmailForm = ({
   candidate,
   form,
@@ -1162,10 +1162,10 @@ const EmailForm = ({
     }
   }, [candidate]);
 
-  // Auto-generate email template when details change
+
   useEffect(() => {
     const generateEmailTemplate = () => {
-      // Format date
+
       let formattedDate = "___";
       if (interviewDate) {
         const date = new Date(interviewDate);
@@ -1177,7 +1177,7 @@ const EmailForm = ({
         });
       }
 
-      // Get mode icon
+
       const getModeIcon = () => {
         switch (interviewMode) {
           case "Online":
@@ -1191,7 +1191,7 @@ const EmailForm = ({
         }
       };
 
-      // Get mode details text
+
       const getModeDetails = () => {
         if (interviewMode === "Online") {
           return "Join the meeting using the link that will be shared 30 minutes before the interview.";
@@ -1251,14 +1251,14 @@ ${candidate.company || "[Company Name]"}`;
         className="bg-gray-50"
       />
 
-      {/* Interview Details Grid */}
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
           Interview Details
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Interview Date */}
+
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Interview Date <span className="text-red-500">*</span>
@@ -1272,7 +1272,7 @@ ${candidate.company || "[Company Name]"}`;
             />
           </div>
 
-          {/* Interview Time */}
+
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Interview Time <span className="text-red-500">*</span>
@@ -1304,7 +1304,7 @@ ${candidate.company || "[Company Name]"}`;
           </div>
         </div>
 
-        {/* Round Description (optional) */}
+
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Round Type / Description
@@ -1321,7 +1321,7 @@ ${candidate.company || "[Company Name]"}`;
           </p>
         </div>
 
-        {/* Auto-fill Status */}
+
         <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -1334,7 +1334,7 @@ ${candidate.company || "[Company Name]"}`;
         </div>
       </div>
 
-      {/* Email Content */}
+
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
           Email Content
@@ -1378,7 +1378,7 @@ ${candidate.company || "[Company Name]"}`;
         </div>
       </div>
 
-      {/* Actions */}
+
       <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
         <button
           type="button"
@@ -1399,7 +1399,7 @@ ${candidate.company || "[Company Name]"}`;
   );
 };
 
-// Report View Component
+
 const ReportView = ({ data, onClose }) => (
   <div className="space-y-4">
     <div className="bg-gray-50 rounded-lg p-4">
@@ -1418,7 +1418,7 @@ const ReportView = ({ data, onClose }) => (
   </div>
 );
 
-// Reusable Form Field Component
+
 const FormField = ({ label, as = "input", options, ...props }) => (
   <div>
     <label className="block text-sm font-medium text-gray-700 mb-2">

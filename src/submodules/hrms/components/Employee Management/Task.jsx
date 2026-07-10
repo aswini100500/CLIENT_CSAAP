@@ -54,7 +54,7 @@ import ToDoList from "../ToDoList/ToDoList";
 const renderRichText = (html) => {
   if (!html) return null;
 
-  // Replace &nbsp; with a regular space to prevent literal display
+
   const cleanHtml = String(html).replace(/&nbsp;/g, " ");
 
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -89,7 +89,7 @@ const renderRichText = (html) => {
     },
   };
 
-  // Return a fragment instead of a div to avoid layout/line-clamp issues
+
   return <>{parse(cleanHtml, options)}</>;
 };
 
@@ -149,7 +149,7 @@ const Task = () => {
   const [isReassignMode, setIsReassignMode] = useState(false);
   const [viewingTask, setViewingTask] = useState(null);
   const [showChat, setShowChat] = useState(false);
-  // const [newNotifications, setNewNotifications] = useState([]);
+
   const [message, setMessage] = useState("");
   const [showAssigneesDropdown, setShowAssigneesDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -158,10 +158,10 @@ const Task = () => {
     message: "",
     type: "info",
   });
-  // const [showNotificationsDropdown, setShowNotificationsDropdown] = useState(false);
+
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
-  // Table filtering states
+
   const [tableSearchTerm, setTableSearchTerm] = useState("");
   const [tableDateFilter, setTableDateFilter] = useState("");
   const [tableProjectFilter, setTableProjectFilter] = useState("");
@@ -213,7 +213,7 @@ const Task = () => {
     }
   };
 
-  // Pagination states
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [extensionApprovalDeadline, setExtensionApprovalDeadline] =
@@ -273,7 +273,7 @@ const Task = () => {
     [getEmployeeNameById],
   );
 
-  // Reset to first page when filters change
+
   useEffect(() => {
     setCurrentPage(1);
   }, [
@@ -287,10 +287,10 @@ const Task = () => {
   ]);
 
   const dropdownRef = useRef(null);
-  // const notificationsRef = useRef(null);
-  // const chatContainerRef = useRef(null);
 
-  // const [activeChatTask, setActiveChatTask] = useState(null);
+
+
+
   const [chatMessages, setChatMessages] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -320,17 +320,17 @@ const Task = () => {
     "Pending Approval",
   ];
 
-  // Show snackbar notification
+
   const showSnackbar = (message, type = "info") => {
     setSnackbar({ open: true, message, type });
 
-    // Auto hide after 5 seconds
+
     setTimeout(() => {
       setSnackbar((prev) => ({ ...prev, open: false }));
     }, 5000);
   };
 
-  // Helper functions for assignees
+
   const toggleAssignee = (id) => {
     setFormData((prev) => ({
       ...prev,
@@ -338,7 +338,7 @@ const Task = () => {
         ? prev.assignedTo.filter((assignedId) => assignedId !== id)
         : [...prev.assignedTo, id],
     }));
-    setShowAssigneesDropdown(false); // Close dropdown after selection
+    setShowAssigneesDropdown(false);
   };
 
   const selectAllAssignees = () => {
@@ -346,7 +346,7 @@ const Task = () => {
       ...prev,
       assignedTo: teamMembers.map((m) => m.id),
     }));
-    setShowAssigneesDropdown(false); // Close dropdown after selection
+    setShowAssigneesDropdown(false);
   };
 
   const clearAllAssignees = () => {
@@ -354,7 +354,7 @@ const Task = () => {
       ...prev,
       assignedTo: [],
     }));
-    setShowAssigneesDropdown(false); // Close dropdown after clearing
+    setShowAssigneesDropdown(false);
   };
 
   const removeAssignee = (id) => {
@@ -364,7 +364,7 @@ const Task = () => {
     }));
   };
 
-  // Subtask functions
+
   const addSubtask = () => {
     setFormData((prev) => ({
       ...prev,
@@ -392,7 +392,7 @@ const Task = () => {
   };
 
   const handleSubtaskToggle = async (taskId, subtaskId) => {
-    // Implementation for toggling subtask completion
+
     const task = tasks.find((t) => t.id === taskId);
     if (task) {
       const updatedSubtasks = task.subtasks.map((st) =>
@@ -616,7 +616,7 @@ const Task = () => {
           ? t.subtasks
           : JSON.parse(t.subtasks || "[]"),
 
-        // ✅ ADD THIS
+
         history: Array.isArray(t.history)
           ? t.history
           : JSON.parse(t.history || "[]"),
@@ -642,7 +642,7 @@ const Task = () => {
           ];
           if (pendingStatuses.includes(status)) return 2;
           if (status === "Completed" || status === "Approved") return 3;
-          return 4; // Other statuses
+          return 4;
         };
 
         const priorityA = getPriority(a.status);
@@ -764,7 +764,7 @@ const Task = () => {
 
   const handleStatusChange = async (taskId, newStatus) => {
     try {
-      // await axios.put(`${API}/api/tasks/${taskId}/status`, { status: newStatus });
+
       const task = tasks.find((t) => t.id === taskId);
 
       let updatedHistory = [...(task.history || [])];
@@ -796,7 +796,7 @@ const Task = () => {
     }
   };
 
-  // HANDLE SUBMIT FUNCTION
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isProcessing) return;
@@ -845,7 +845,7 @@ const Task = () => {
       })
       .filter((email) => email && email.trim() !== "");
 
-    // ✅ ADD HERE (BEFORE payload)
+
     const uniqueTo = [...new Set(formData.assignedTo)];
     const filteredSubtasks = formData.subtasks.filter(
       (st) => st.name && st.name.trim() !== "",
@@ -1157,7 +1157,7 @@ const Task = () => {
 
   const truncateWords = (str, num = 3) => {
     if (!str) return "";
-    // Strip HTML tags for truncation
+
     const plainText = str.replace(/<[^>]*>/g, " ");
     const words = plainText.trim().split(/\s+/).filter(Boolean);
     if (words.length <= num) return plainText.trim();
@@ -1179,12 +1179,12 @@ const Task = () => {
     },
   ];
 
-  // Derived state: filtered tasks for the main table
+
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
-      // 0. Sub-tab Filter removed
 
-      // 1. Stat Card Filter
+
+
       if (activeStatFilter === "Approved" && task.status !== "Approved")
         return false;
       if (activeStatFilter === "Completed" && task.status !== "Completed")
@@ -1215,7 +1215,7 @@ const Task = () => {
       )
         return false;
 
-      // 2. Text Search Filter
+
       if (tableSearchTerm) {
         const search = tableSearchTerm.toLowerCase();
         const taskTitle = (task.task || task.title || "").toLowerCase();
@@ -1224,7 +1224,7 @@ const Task = () => {
         const priority = (task.priority || "").toLowerCase();
         const status = (task.status || "").toLowerCase();
 
-        // Search across all assignedTo member names
+
         const assignedToNames = (
           Array.isArray(task.assignedTo) ? task.assignedTo : []
         )
@@ -1243,7 +1243,7 @@ const Task = () => {
         }
       }
 
-      // 3. Date Filter
+
       if (tableDateFilter) {
         if (!task.assignedDate) return false;
         const d = new Date(task.assignedDate);
@@ -1255,12 +1255,12 @@ const Task = () => {
         if (taskDate !== tableDateFilter) return false;
       }
 
-      // 4. Project Filter
+
       if (tableProjectFilter && task.project !== tableProjectFilter) {
         return false;
       }
 
-      // 5. Assign By Filter
+
       if (
         tableAssignByFilter &&
         String(task.assignedBy) !== String(tableAssignByFilter)
@@ -1268,12 +1268,12 @@ const Task = () => {
         return false;
       }
 
-      // 6. Status Filter
+
       if (tableStatusFilter && task.status !== tableStatusFilter) {
         return false;
       }
 
-      // 7. Deadline Filter
+
       if (tableDeadlineFilter) {
         if (!task.deadlineDate) return false;
         const d = new Date(task.deadlineDate);
@@ -1300,7 +1300,7 @@ const Task = () => {
     getEmployeeNameById,
   ]);
 
-  // Pagination calculations
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredTasks.slice(indexOfFirstItem, indexOfLastItem);
@@ -1309,7 +1309,7 @@ const Task = () => {
   return (
     <div className="crm-module-root app-shell min-h-[calc(100vh-80px)] font-sans bg-(--bg-app) w-full overflow-x-hidden">
       <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 w-full">
-        {/* Page Header */}
+
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div>
             <h1 className="app-title max-w-3xl font-extrabold text-(--text-strong) tracking-tight">
@@ -1341,7 +1341,7 @@ const Task = () => {
           )}
         </div>
 
-        {/* Tab Headers */}
+
         <div
           className="-mx-3 mb-5 px-3 py-3 lg:-mx-4 lg:px-4"
           style={{ background: "color-mix(in srgb, var(--bg-app) 94%, white)" }}
@@ -1395,7 +1395,7 @@ const Task = () => {
             {activeTab === "task" ? (
               hasReadPermission ? (
                 <>
-                  {/* Stats Cards - Interactive Filtering */}
+
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
                       {
@@ -1476,11 +1476,11 @@ const Task = () => {
                     ))}
                   </div>
 
-                  {/* Tasks Table with filtering bar */}
+
                   <div className="app-panel overflow-hidden">
                     <div className="px-4 sm:px-6 py-4 border-b border-(--border-soft) bg-white">
                       <div className="flex flex-col gap-3">
-                        {/* Row 1: Title + Search + Filter Button */}
+
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                           <div className="flex items-center gap-3">
                             <h3 className="app-heading">
@@ -1492,7 +1492,7 @@ const Task = () => {
                           </div>
 
                           <div className="flex items-center gap-2 sm:ml-auto w-full sm:w-auto">
-                            {/* Search — always visible */}
+
                             <div className="relative flex-1 sm:w-80">
                               <input
                                 type="text"
@@ -1504,7 +1504,7 @@ const Task = () => {
                               <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
                             </div>
 
-                            {/* Filter Toggle Button */}
+
                             <button
                               onClick={() => setShowFilterPanel((prev) => !prev)}
                               className={`flex items-center gap-1.5 px-3 py-2 text-sm border border-(--border-soft) rounded-xl transition-all font-semibold whitespace-nowrap ${showFilterPanel ||
@@ -1537,7 +1537,7 @@ const Task = () => {
                                 )}
                             </button>
 
-                            {/* Reset Button */}
+
                             {(tableSearchTerm ||
                               tableDateFilter ||
                               tableDeadlineFilter ||
@@ -1564,10 +1564,10 @@ const Task = () => {
                           </div>
                         </div>
 
-                        {/* Row 2: Collapsible Filter Panel */}
+
                         {showFilterPanel && (
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-4 border border-(--border-soft) rounded-xl bg-(--bg-subtle)/20">
-                            {/* Date Filter */}
+
                             <div className="relative">
                               <div className="app-label block mb-1 text-(--text-soft)">
                                 Date Assigned
@@ -1583,7 +1583,7 @@ const Task = () => {
                               </div>
                             </div>
 
-                            {/* Deadline Filter */}
+
                             <div className="relative">
                               <div className="app-label block mb-1 text-(--text-soft)">
                                 Deadline Date
@@ -1599,7 +1599,7 @@ const Task = () => {
                               </div>
                             </div>
 
-                            {/* Project Filter */}
+
                             <div className="relative">
                               <div className="app-label block mb-1 text-(--text-soft)">
                                 Project
@@ -1624,7 +1624,7 @@ const Task = () => {
                               </div>
                             </div>
 
-                            {/* Assigned By Filter */}
+
                             <div className="relative">
                               <div className="app-label block mb-1 text-(--text-soft)">
                                 Assigned By
@@ -1655,7 +1655,7 @@ const Task = () => {
                               </div>
                             </div>
 
-                            {/* Status Filter */}
+
                             <div className="relative col-span-1 sm:col-span-2 lg:col-span-4 mt-2">
                               <div className="app-label block mb-1 text-(--text-soft)">
                                 Status
@@ -1680,7 +1680,7 @@ const Task = () => {
                           </div>
                         )}
 
-                        {/* Row 3: Active Filter Tags */}
+
                         {(tableSearchTerm ||
                           tableDateFilter ||
                           tableDeadlineFilter ||
@@ -2035,7 +2035,7 @@ const Task = () => {
                         </tbody>
                       </table>
 
-                      {/* Pagination */}
+
                       {filteredTasks.length > 0 && (
                         <div className="px-4 sm:px-6 py-4 border-t border-(--border-soft) bg-(--bg-subtle)/20 flex flex-col sm:flex-row justify-between items-center gap-3">
                           <div className="text-xs font-semibold text-(--text-soft)">
@@ -2138,7 +2138,7 @@ const Task = () => {
           </motion.div>
         </AnimatePresence>
       </div>
-      {/* Form Modal */}
+
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl border border-(--border-soft) shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -2168,10 +2168,10 @@ const Task = () => {
             </div>
             <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar px-8 py-5 flex flex-col">
               <div className="space-y-5 flex-1">
-                {/* Previously Assigned Info + History (visible only when reassigning) */}
+
                 {editingTask && (
                   <div className="space-y-4">
-                    {/* Task History */}
+
                     {editingTask.history && editingTask.history.length > 0 && (
                       <div className="bg-white border border-(--border-soft) rounded-xl overflow-hidden shadow-2xs">
                         <div className="px-4 py-2.5 border-b border-(--border-soft) bg-(--bg-subtle)/35 flex items-center gap-2">
@@ -2257,7 +2257,7 @@ const Task = () => {
                   </div>
                 )}
 
-                {/* Task Description */}
+
                 <div className="px-1">
                   <label
                     className="block text-(--text-strong) text-sm font-bold mb-1.5"
@@ -2280,7 +2280,7 @@ const Task = () => {
                   </div>
                 </div>
 
-                {/* Project and Deadline */}
+
                 <div className="grid grid-cols-2 gap-5 px-1">
                   <div>
                     <label
@@ -2333,7 +2333,7 @@ const Task = () => {
                   </div>
                 </div>
 
-                {/* Priority and Multi-Select Assignees */}
+
                 <div className="grid grid-cols-2 gap-5 px-1">
                   <div>
                     <label
@@ -2513,7 +2513,7 @@ const Task = () => {
                   </div>
                 </div>
 
-                {/* Remark */}
+
                 <div className="px-1">
                   <label
                     className="block text-(--text-strong) text-sm font-bold mb-1.5"
@@ -2532,7 +2532,7 @@ const Task = () => {
                   />
                 </div>
 
-                {/* Subtasks */}
+
                 <div className="bg-(--bg-subtle)/20 rounded-xl p-4 border border-(--border-soft) mx-1">
                   <div className="flex justify-between items-center mb-3">
                     <div>
@@ -2603,7 +2603,7 @@ const Task = () => {
                 </div>
               </div>
 
-              {/* Form Actions */}
+
               <div className="flex justify-end gap-3 pt-5 mt-5 border-t border-(--border-soft)">
                 <button
                   type="button"
@@ -2639,12 +2639,12 @@ const Task = () => {
         </div>
       )}
 
-      {/* ── helpers ──────────────────────────────────────────── */}
+
 
       {viewingTask && (
         <div className="fixed inset-0 bg-black/45 backdrop-blur-xs flex items-center justify-center p-5 z-50">
           <div className="bg-white rounded-2xl border border-(--border-soft) w-full max-w-2xl my-auto flex flex-col overflow-hidden max-h-[90vh] shadow-2xl">
-            {/* ── Header ─────────────────────────────────────────── */}
+
             <div className="sticky rounded-t-2xl top-0 bg-white border-b border-(--border-soft) px-5 py-4 flex justify-between items-center z-10">
               <div>
                 <p className="text-sm font-extrabold text-(--text-strong) uppercase tracking-wider">
@@ -2663,7 +2663,7 @@ const Task = () => {
             </div>
 
             <div className="px-5 py-5 flex flex-col gap-3 grow overflow-y-auto max-h-[70vh] custom-scrollbar">
-              {/* ── Identity ────────────────────────────────────────── */}
+
               <div className="border border-(--border-soft) bg-white rounded-xl p-4 shadow-3xs">
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -2702,7 +2702,7 @@ const Task = () => {
                 </div>
               </div>
 
-              {/* ── Subtasks (collapsible) - Only for pending tasks ── */}
+
               {viewingTask.subtasks?.length > 0 &&
                 viewingTask.status !== "Completed" &&
                 viewingTask.status !== "Approved" && (
@@ -2727,7 +2727,7 @@ const Task = () => {
                     {showSubtasks && (
                       <div className="p-3.5 bg-white">
                         <div className="space-y-1.5">
-                          {/* Filter only pending subtasks */}
+
                           {viewingTask.subtasks
                             .filter((subtask) => !subtask.completed)
                             .map((subtask) => (
@@ -2771,7 +2771,7 @@ const Task = () => {
                               </div>
                             ))}
 
-                          {/* Optional: Show message when no pending subtasks */}
+
                           {viewingTask.subtasks.filter(
                             (subtask) => !subtask.completed,
                           ).length === 0 && (
@@ -2785,7 +2785,7 @@ const Task = () => {
                   </div>
                 )}
 
-              {/* ── Info grid ───────────────────────────────────────── */}
+
               {(viewingTask.attachedFiles?.length > 0 ||
                 viewingTask.images?.length > 0 ||
                 viewingTask.attachments?.length > 0) && (
@@ -2927,7 +2927,7 @@ const Task = () => {
                 </div>
               </div>
 
-              {/* ── Remark ───────────────────────────────────────────── */}
+
               {viewingTask.remark && (
                 <div className="border border-(--border-soft) rounded-xl overflow-hidden shadow-3xs bg-white">
                   <div className="flex items-center gap-2 px-3.5 py-2.5 bg-(--bg-subtle)/30 border-b border-(--border-soft)">
@@ -2947,7 +2947,7 @@ const Task = () => {
                 </div>
               )}
 
-              {/* ── Status reason ────────────────────────────────────── */}
+
               {getStatusReasonDetails(viewingTask) && (
                 <div className="border border-(--border-soft) rounded-xl overflow-hidden shadow-3xs bg-white">
                   <div className="px-3.5 py-2.5 bg-gray-50/50 border-b border-(--border-soft)">
@@ -2963,7 +2963,7 @@ const Task = () => {
                 </div>
               )}
 
-              {/* ── Extension pending ────────────────────────────────── */}
+
               {viewingTask.status === "Extension Pending" && (
                 <div className="border border-orange-200 bg-orange-50/30 rounded-xl overflow-hidden shadow-3xs">
                   <div className="flex items-center gap-2 px-3.5 py-2.5 bg-orange-50 border-b border-orange-100">
@@ -3047,7 +3047,7 @@ const Task = () => {
                 </div>
               )}
 
-              {/* ── Transfer pending ─────────────────────────────────── */}
+
               {viewingTask.status === "Transfer Pending" && (
                 <div className="border border-pink-200 bg-pink-50/20 rounded-xl overflow-hidden shadow-3xs">
                   <div className="flex items-center gap-2 px-3.5 py-2.5 bg-pink-50 border-b border-pink-100">
@@ -3104,7 +3104,7 @@ const Task = () => {
                 </div>
               )}
 
-              {/* ── History (collapsible) ────────────────────────────── */}
+
               {viewingTask.history?.length > 0 && (
                 <div className="border border-(--border-soft) rounded-xl overflow-hidden shadow-3xs bg-white">
                   <div
@@ -3363,7 +3363,7 @@ const Task = () => {
         </div>
       )}
 
-      {/* Snackbar Notification */}
+
       {snackbar.open && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 animate-slideUp">
           <div
@@ -3388,7 +3388,7 @@ const Task = () => {
         </div>
       )}
 
-      {/* Simple Message Box with History */}
+
       {showChat && (
         <div className="fixed bottom-4 right-4 w-80 bg-white rounded-2xl border border-(--border-soft) shadow-xl z-50 overflow-hidden flex flex-col">
           <div className="bg-linear-to-r from-(--brand) to-(--brand-strong) p-3.5 text-white flex justify-between items-center">
@@ -3549,11 +3549,11 @@ const Task = () => {
         </div>
       )}
 
-      {/* ── Extension Approval Modal (SuperAdmin Side) ── */}
+
       {showExtensionApproveModal && selectedExtensionTask && (
         <div className="fixed inset-0 backdrop-blur-xs bg-black/45 flex items-center justify-center p-4 z-100">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-(--border-soft) flex flex-col">
-            {/* Header */}
+
             <div className="px-6 py-5 border-b border-(--border-soft) flex justify-between items-start bg-white">
               <div>
                 <h3 className="text-base font-extrabold text-(--text-strong) flex items-center gap-2">
@@ -3576,9 +3576,9 @@ const Task = () => {
               </button>
             </div>
 
-            {/* Body */}
+
             <div className="px-6 py-5 space-y-4">
-              {/* Task Details Summary */}
+
               <div className="bg-(--bg-subtle)/35 rounded-xl p-4 border border-(--border-soft) space-y-2.5 shadow-3xs">
                 <div className="space-y-0.5">
                   <p className="text-[10px] text-(--text-faint) font-bold uppercase tracking-wider">
@@ -3636,7 +3636,7 @@ const Task = () => {
                 )}
               </div>
 
-              {/* Approval Action */}
+
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold text-(--text-strong)">
                   Approve with Deadline <span className="text-rose-500">*</span>
@@ -3659,7 +3659,7 @@ const Task = () => {
               </div>
             </div>
 
-            {/* Footer */}
+
             <div className="px-6 py-4 border-t border-(--border-soft) bg-gray-50 flex gap-3 justify-end items-center">
               <button
                 onClick={() =>

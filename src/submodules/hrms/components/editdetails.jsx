@@ -48,7 +48,7 @@ const UserManager = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      {/* MAIN HEADER */}
+
       <div className="bg-linear-to-r from-blue-500 to-blue-600 text-white text-base font-semibold px-4 py-2 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-lg">User Manager</span>
@@ -65,9 +65,9 @@ const UserManager = () => {
 
       <div className="bg-white rounded-b-lg shadow-md overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 border-b border-gray-200">
-          {/* LEFT COLUMN */}
+
           <div className="p-4 space-y-3">
-            {/* DEVICES LIST */}
+
             <div className="flex items-center justify-between text-sm">
               <span className="font-medium text-gray-700">Devices List:</span>
               <div className="flex items-center gap-2">
@@ -89,7 +89,7 @@ const UserManager = () => {
               </div>
             </div>
 
-            {/* EXPORT CSV */}
+
             <div className="flex justify-end">
               <button
                 onClick={() => handleAction("Export CSV")}
@@ -99,7 +99,7 @@ const UserManager = () => {
               </button>
             </div>
 
-            {/* blue TABLE HEADER */}
+
             <div className="bg-linear-to-r from-blue-600 to-blue-500 text-white text-sm font-semibold rounded-t-md overflow-hidden">
               <div className="flex items-center px-2 py-1.5 gap-2">
                 <label className="flex items-center cursor-pointer">
@@ -121,7 +121,7 @@ const UserManager = () => {
               </div>
             </div>
 
-            {/* blue COLUMN HEADERS */}
+
             <div className="bg-linear-to-r from-blue-600 to-blue-500 text-white text-sm font-semibold">
               <div className="grid grid-cols-[80px_80px_100px_80px_100px] gap-0 px-2 py-1.5 border-b border-blue-500">
                 <div>Biometric ID</div>
@@ -132,12 +132,12 @@ const UserManager = () => {
               </div>
             </div>
 
-            {/* EMPTY TABLE BODY */}
+
             <div className="border border-gray-300 min-h-30 bg-white flex items-center justify-center">
               <p className="text-gray-400 text-sm">No data available</p>
             </div>
 
-            {/* UPLOAD USERS */}
+
             <div className="flex items-center justify-end gap-2 text-sm">
               <span className="text-gray-700 whitespace-nowrap">
                 Upload Users in Multiple Devices
@@ -148,18 +148,18 @@ const UserManager = () => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN - REMOTE ENROLL */}
+
           <div className="p-4 space-y-3 text-sm">
-            {/* TITLE */}
+
             <div className="border-b border-gray-200 pb-1">
               <h3 className="font-semibold text-gray-800 text-base">
                 Remote Enroll Command
               </h3>
             </div>
 
-            {/* FORM FIELDS */}
+
             <div className="space-y-2">
-              {/* USER TYPE */}
+
               <div>
                 <label className="block text-gray-700 font-medium mb-0.5">
                   User Type
@@ -174,7 +174,7 @@ const UserManager = () => {
                 </select>
               </div>
 
-              {/* ENROLL NUMBER & NAME */}
+
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-gray-700 font-medium mb-0.5">
@@ -202,7 +202,7 @@ const UserManager = () => {
                 </div>
               </div>
 
-              {/* BACKUP NUMBER & FINGER */}
+
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-gray-700 font-medium mb-0.5">
@@ -230,7 +230,7 @@ const UserManager = () => {
               </div>
             </div>
 
-            {/* SEND COMMAND BUTTON */}
+
             <button
               onClick={() => handleAction("Send Remote Enroll")}
               className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-1.5 px-3 rounded text-sm transition-colors"
@@ -238,7 +238,7 @@ const UserManager = () => {
               Send Remote Enroll Command to Device
             </button>
 
-            {/* PHOTO UPLOAD */}
+
             <div className="border-t border-gray-200 pt-3">
               <p className="text-gray-600 mb-2 text-sm">
                 Select Photo (Note : Photo size Less then 32 Kb, Less Then
@@ -272,7 +272,7 @@ const UserManager = () => {
               </div>
             </div>
 
-            {/* GREEN ACTION BUTTONS GRID */}
+
             <div className="grid grid-cols-4 gap-1 pt-2">
               {actionButtons.map((action, index) => (
                 <button
@@ -286,7 +286,7 @@ const UserManager = () => {
               ))}
             </div>
 
-            {/* BOTTOM BUTTONS */}
+
             <div className="flex justify-center gap-3 pt-3">
               <button
                 onClick={() => handleAction("Clear All Admin")}

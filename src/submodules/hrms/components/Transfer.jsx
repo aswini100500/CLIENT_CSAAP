@@ -43,7 +43,7 @@ const TransferPage = () => {
   const [showActionMenu, setShowActionMenu] = useState(null);
   const [transferHistory, setTransferHistory] = useState([]);
 
-  // Mock data for employees
+
   const mockEmployees = [
     {
       id: 1,
@@ -102,7 +102,7 @@ const TransferPage = () => {
     }
   ];
 
-  // Mock transfer history
+
   const mockTransferHistory = [
     {
       id: 1,
@@ -131,7 +131,7 @@ const TransferPage = () => {
   ];
 
   useEffect(() => {
-    // Simulate API call
+
     setLoading(true);
     setTimeout(() => {
       setEmployees(mockEmployees);
@@ -188,7 +188,7 @@ const TransferPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
+
     setTimeout(() => {
       const newTransfer = {
         id: transferHistory.length + 1,
@@ -205,7 +205,7 @@ const TransferPage = () => {
 
       setTransferHistory(prev => [newTransfer, ...prev]);
 
-      // Update employee department and location
+
       setEmployees(prev => prev.map(emp =>
         emp.id === selectedEmployee.id
           ? {
@@ -220,7 +220,7 @@ const TransferPage = () => {
       setShowTransferModal(false);
       setSelectedEmployee(null);
 
-      // Show success message
+
       alert(`Transfer initiated successfully for ${selectedEmployee.name}`);
     }, 2000);
   };
@@ -268,7 +268,7 @@ const TransferPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-4">
             <button
@@ -283,7 +283,7 @@ const TransferPage = () => {
           <p className="text-gray-600 mt-1">Manage employee transfers between departments and locations</p>
         </div>
 
-        {/* Stats Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
@@ -339,7 +339,7 @@ const TransferPage = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Employee List Section */}
+
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4 md:mb-0">Employees List</h2>
@@ -355,7 +355,7 @@ const TransferPage = () => {
               </div>
             </div>
 
-            {/* Filters */}
+
             <div className="flex flex-col md:flex-row gap-4 mb-6">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -391,7 +391,7 @@ const TransferPage = () => {
               </select>
             </div>
 
-            {/* Employees Table */}
+
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -476,7 +476,7 @@ const TransferPage = () => {
             </div>
           </div>
 
-          {/* Transfer History Section */}
+
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-6">Transfer History</h2>
 
@@ -523,7 +523,7 @@ const TransferPage = () => {
           </div>
         </div>
 
-        {/* Transfer Modal */}
+
         {showTransferModal && selectedEmployee && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
@@ -539,7 +539,7 @@ const TransferPage = () => {
                 </button>
               </div>
 
-              {/* Employee Info */}
+
               <div className="bg-blue-50 rounded-lg p-4 mb-6">
                 <h3 className="font-medium text-blue-900 mb-2">Employee Details</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">

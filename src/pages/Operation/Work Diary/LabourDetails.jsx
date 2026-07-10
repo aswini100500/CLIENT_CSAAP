@@ -55,13 +55,13 @@ const LabourDetails = ({ projectSetup }) => {
     }
   };
 
-  // Handle input changes
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLabour({ ...labour, [name]: Number(value) });
   };
 
-  // Add a new role dynamically
+
   const handleAddRole = () => {
     const role = newRole.trim().toLowerCase().replace(/\s+/g, "_");
     if (!role)
@@ -74,7 +74,7 @@ const LabourDetails = ({ projectSetup }) => {
     Swal.fire("Added!", "New labour role added successfully.", "success");
   };
 
-  // Delete a custom role
+
   const handleDeleteRole = (role) => {
     const updated = { ...labour };
     delete updated[role];
@@ -86,7 +86,7 @@ const LabourDetails = ({ projectSetup }) => {
     );
   };
 
-  // Save and show data
+
   const handleSave = async () => {
     if (!projectSetup) {
         return Swal.fire("Error", "Please complete Project Setup first!", "error");
@@ -96,7 +96,7 @@ const LabourDetails = ({ projectSetup }) => {
         setLoading(true);
         const submissionData = {
             project_setup_id: projectSetup.id,
-            labour_data: JSON.stringify(labour), // Sending as stringified JSON
+            labour_data: JSON.stringify(labour),
             remarks: "Daily labour allocation"
         };
 
@@ -118,7 +118,7 @@ const LabourDetails = ({ projectSetup }) => {
             timer: 2000,
             showConfirmButton: false,
         });
-        fetchLabourDetails(); // Refresh
+        fetchLabourDetails();
     } catch (error) {
         console.error("Error saving labour details:", error);
         Swal.fire("Error", "Failed to save labour details.", "error");
@@ -133,7 +133,7 @@ const LabourDetails = ({ projectSetup }) => {
         Labour Details
       </h2>
 
-      {/* Add new role input */}
+
       <div className="flex flex-col sm:flex-row items-center gap-3 mb-6">
         <input
           type="text"
@@ -150,7 +150,7 @@ const LabourDetails = ({ projectSetup }) => {
         </button>
       </div>
 
-      {/* Labour roles grid */}
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Object.keys(labour).map((role) => (
           <div
@@ -171,7 +171,7 @@ const LabourDetails = ({ projectSetup }) => {
               />
             </div>
 
-            {/* Allow delete only for custom-added roles */}
+
             {!DEFAULT_ROLES.includes(role) && (
               <button
                 onClick={() => handleDeleteRole(role)}
@@ -184,7 +184,7 @@ const LabourDetails = ({ projectSetup }) => {
         ))}
       </div>
 
-      {/* Save button */}
+
       <div className="mt-8 text-right">
         <button
           onClick={handleSave}
@@ -194,7 +194,7 @@ const LabourDetails = ({ projectSetup }) => {
         </button>
       </div>
 
-      {/* Display saved table */}
+
       {savedData && (
         <div className="mt-10 bg-white shadow-md rounded-lg border border-gray-200 p-6">
           <h3 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">

@@ -48,7 +48,7 @@ const monthNames = [
 
 const statusOptions = ["all", "Pending", "Approved", "Rejected"];
 
-// Locked to the established design language
+
 const panelClass =
   "bg-white rounded-3xl shadow-sm ring-1 ring-slate-200 overflow-hidden transition-all hover:shadow-md";
 
@@ -100,7 +100,7 @@ const groupRecordsByDate = (records) => {
     .sort((a, b) => b.date.localeCompare(a.date));
 };
 
-// Matched pastel backgrounds + text + soft border opacities
+
 const getStatusMeta = (status) => {
   if (status === "Approved") {
     return {
@@ -420,7 +420,7 @@ const EmployeeTimesheet = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] bg-transparent font-sans p-3 md:p-4">
       <div className="mx-auto max-w-7xl space-y-3">
-        {/* Stats Cards synced to Mispunch sizing */}
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           <div className="bg-white p-3 rounded-2xl shadow-sm ring-1 ring-slate-200 flex items-center gap-3 transition-all hover:shadow-md">
             <div className="bg-indigo-50 p-2 rounded-full ring-1 ring-indigo-100 shrink-0">
@@ -476,7 +476,7 @@ const EmployeeTimesheet = () => {
           </div>
         </div>
 
-        {/* Toolbar */}
+
         <div className={`${panelClass} p-4`}>
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex flex-wrap items-center gap-3">
@@ -573,7 +573,7 @@ const EmployeeTimesheet = () => {
           )}
         </div>
 
-        {/* Ledger */}
+
         <div className={panelClass}>
           <div className="flex flex-col gap-2 border-b border-slate-100 bg-white px-5 py-3 md:flex-row md:items-center md:justify-between sticky top-0 z-10">
             <div className="flex items-center gap-2.5">
@@ -611,7 +611,7 @@ const EmployeeTimesheet = () => {
             </div>
           </div>
 
-          {/* Bulk Action Bar */}
+
           {selectedCount > 0 && (
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-indigo-100 bg-indigo-50/50 px-5 py-2.5">
               <div className="flex items-center gap-2">
@@ -670,7 +670,7 @@ const EmployeeTimesheet = () => {
 
                   return (
                     <div key={group.date} className="space-y-2">
-                      {/* Date Group Header */}
+
                       <div className="bg-white px-3 py-2.5 rounded-xl ring-1 ring-slate-200 flex items-center gap-3 transition-all hover:shadow-md">
                         <input
                           type="checkbox"
@@ -715,7 +715,7 @@ const EmployeeTimesheet = () => {
                         </button>
                       </div>
 
-                      {/* Date Group Items transformed into cards */}
+
                       {isOpen && (
                         <div className="pl-4 md:pl-8 space-y-1.5">
                           {group.records.map((record) => (
@@ -813,7 +813,7 @@ const EmployeeTimesheet = () => {
             )}
           </div>
 
-          {/* Pagination */}
+
           {groupedRecords.length > itemsPerPage && (
             <div className="flex items-center justify-between border-t border-slate-100 bg-white px-5 py-3">
               <p className="text-xs font-bold text-slate-500">
@@ -843,11 +843,11 @@ const EmployeeTimesheet = () => {
           )}
         </div>
 
-        {/* Detail Modal rewritten to match dense/compact styling */}
+
         {showDetails && selectedRecord && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
             <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl ring-1 ring-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
-              {/* Compact Header */}
+
               <div className="flex items-center justify-between px-5 py-3 border-b border-slate-100 bg-white z-10 shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-linear-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-indigo-700 font-bold text-sm ring-1 ring-indigo-200/50 shrink-0">
@@ -870,12 +870,12 @@ const EmployeeTimesheet = () => {
                 </button>
               </div>
 
-              {/* Dense Body */}
+
               <div className="px-5 py-4 overflow-y-auto space-y-3 bg-slate-50/50 flex-1">
-                {/* Key-value grid */}
+
                 <div className="bg-white rounded-xl ring-1 ring-slate-200 overflow-hidden">
                   <div className="grid grid-cols-2">
-                    {/* ID */}
+
                     <div className="px-4 py-3 border-b border-slate-100 sm:border-r">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
                         Employee ID
@@ -884,7 +884,7 @@ const EmployeeTimesheet = () => {
                         {selectedRecord.employeeId}
                       </p>
                     </div>
-                    {/* Logged Date */}
+
                     <div className="px-4 py-3 border-b border-slate-100">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
                         Logged Date
@@ -896,12 +896,12 @@ const EmployeeTimesheet = () => {
                   </div>
                 </div>
 
-                {/* Status strip */}
+
                 <div className="bg-white rounded-xl ring-1 ring-slate-200 px-4 py-3 flex flex-wrap items-center gap-2">
                   {renderStatusBadge(selectedRecord.status)}
                 </div>
 
-                {/* Timesheet Details */}
+
                 <div className="bg-white rounded-xl ring-1 ring-slate-200 px-4 py-3">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
                     Timesheet Details
@@ -913,7 +913,7 @@ const EmployeeTimesheet = () => {
                 </div>
               </div>
 
-              {/* Compact Footer */}
+
               <div className="border-t border-slate-100 bg-white px-5 py-2.5 flex items-center justify-end gap-1.5 shrink-0">
                 {selectedRecord.status !== "Approved" && (
                   <button

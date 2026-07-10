@@ -5,7 +5,7 @@ const ViewTermsConditions = ({ employee, onClose }) => {
   const [termsData, setTermsData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Default employee data for testing
+
   const defaultEmployee = {
     id: 1,
     name: "John Doe",

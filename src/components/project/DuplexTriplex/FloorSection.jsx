@@ -66,10 +66,10 @@ export const FloorSection = ({
 
             setLoading(false);
 
-            // Always proceed to next step or save
+
             if (typeof onNext === "function") {
-                // For last floor, onNext is the actual save handler from parent
-                // We can wait a tiny bit to let the local success message show
+
+
                 setTimeout(() => {
                     onNext();
                 }, 500);
@@ -148,7 +148,7 @@ export const FloorSection = ({
 
     return (
         <div className="bg-linear-to-br from-slate-50 to-white rounded-2xl border border-slate-200 overflow-hidden shadow-lg">
-            {/* Header */}
+
             <div className="px-5 py-3 bg-linear-to-r from-white to-slate-50 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 bg-linear-to-br ${getFloorColor()} rounded-xl flex items-center justify-center text-white shadow-lg transition-transform hover:rotate-6 duration-500`}>
@@ -173,7 +173,7 @@ export const FloorSection = ({
             </div>
 
             <div className="p-4 space-y-4">
-                {/* Success/Error Message */}
+
                 <AnimatePresence mode="wait">
                     {message && (
                         <motion.div
@@ -216,9 +216,9 @@ export const FloorSection = ({
                     </motion.div>
                 ) : (
                     <>
-                        {/* Main Content Grid */}
+
                         <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-                            {/* Volumetric Matrix Card */}
+
                             <section className="lg:col-span-2 bg-white p-4 rounded-2xl border border-slate-100 shadow-md">
                                 <div className="flex items-center gap-2 mb-4">
                                     <div className="w-9 h-9 bg-linear-to-br from-slate-50 to-white rounded-lg flex items-center justify-center text-slate-600 border border-slate-200 shadow-sm">
@@ -230,7 +230,7 @@ export const FloorSection = ({
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {/* Count Fields */}
+
                                     {[
                                         { label: "Bedroom Count", key: "totalBedrooms", icon: <FaBed className="text-blue-500" />, areaKey: "bedroomAreas", areaLabel: "Bedroom" },
                                         { label: "Bathroom Count", key: "totalBathrooms", icon: <FaBath className="text-emerald-500" />, areaKey: "bathroomAreas", areaLabel: "Bathroom" },
@@ -261,7 +261,7 @@ export const FloorSection = ({
                                                 </div>
                                             </motion.div>
                                             
-                                            {/* Area Fields for this specific count */}
+
                                             {renderDynamicFields(
                                                 floorData[item.key],
                                                 item.areaLabel,
@@ -271,7 +271,7 @@ export const FloorSection = ({
                                         </React.Fragment>
                                     ))}
 
-                                    {/* Other Area Fields */}
+
                                     {[
                                         { label: "Living Area", key: "livingArea", icon: <FaHome className="text-rose-500" />, unit: "SQFT" },
                                         { label: "Dining Area", key: "diningArea", icon: <FaRulerCombined className="text-indigo-500" />, unit: "SQFT" },
@@ -302,7 +302,7 @@ export const FloorSection = ({
                                 </div>
                             </section>
 
-                            {/* Core Provisions Card */}
+
                             <section className="space-y-4">
                                 <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-md space-y-4">
                                     <div className="flex items-center gap-2">
@@ -315,9 +315,9 @@ export const FloorSection = ({
                                         </div>
                                     </div>
 
-                                    {/* Kitchen System & Storage Garage - Side by Side */}
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        {/* Kitchen System */}
+
                                         <div className="space-y-3">
                                             <label className="text-sm font-semibold text-slate-700 flex items-center justify-between">
                                                 <span>Kitchen System</span>
@@ -357,7 +357,7 @@ export const FloorSection = ({
                                                 ))}
                                             </div>
                                             
-                                            {/* Kitchen Area Input */}
+
                                             <AnimatePresence>
                                                 {floorData["kitchen"] === "Yes" && (
                                                     <motion.div
@@ -381,7 +381,7 @@ export const FloorSection = ({
                                             </AnimatePresence>
                                         </div>
 
-                                        {/* Storage Garage */}
+
                                         <div className="space-y-3">
                                             <label className="text-sm font-semibold text-slate-700 flex items-center justify-between">
                                                 <span>Storage Garage</span>
@@ -421,7 +421,7 @@ export const FloorSection = ({
                                                 ))}
                                             </div>
 
-                                            {/* Garage Area Input */}
+
                                             <AnimatePresence>
                                                 {floorData["garage"] === "Yes" && (
                                                     <motion.div
@@ -446,7 +446,7 @@ export const FloorSection = ({
                                         </div>
                                     </div>
 
-                                    {/* Architectural Notes */}
+
                                     <div className="pt-3 border-t border-slate-100 space-y-2">
                                         <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
                                             <FaPen className="text-indigo-500" />
@@ -472,7 +472,7 @@ export const FloorSection = ({
                             animate={{ opacity: 1, y: 0 }}
                             className="flex flex-col md:flex-row justify-between items-center gap-4 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm"
                         >
-                            {/* Left: Info Section */}
+
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-indigo-100 rounded-lg">
                                     <FaInfoCircle className="text-indigo-600" size={20} />
@@ -490,7 +490,7 @@ export const FloorSection = ({
                                 </div>
                             </div>
 
-                            {/* Right: Action Button */}
+
                             <div className="border-l border-slate-200 md:pl-6">
                                 <button
                                     onClick={handleSave}

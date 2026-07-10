@@ -1,1757 +1,1757 @@
-// import axios from "axios";
-// import React, { useState, useEffect } from "react";
-// import {
-//   FaFileExcel,
-//   FaFilePdf,
-//   FaEye,
-//   FaEdit,
-//   FaChevronLeft,
-//   FaChevronRight,
-//   FaTimes,
-//   FaPlus,
-//   FaUser,
-//   FaMapMarkerAlt,
-//   FaPhone,
-//   FaEnvelope,
-//   FaIdCard,
-//   FaBuilding,
-//   FaProjectDiagram,
-//   FaFileInvoiceDollar,
-//   FaMoneyCheckAlt,
-//   FaClipboardCheck,
-//   FaChartBar,
-//   FaUserCheck,
-//   FaHistory,
-//   FaStar,
-//   FaFilter,
-//   FaSearch,
-//   FaCalendar,
-//   FaIndustry,
-//   FaTag,
-//   FaArrowRight,
-//   FaLink,
-//   FaGlobe,
-//   FaBirthdayCake,
-//   FaUserTie,
-//   FaComments,
-//   FaFileAlt,
-//   FaWhatsapp,
-//   FaSms,
-//   FaPaperPlane,
-//   FaEllipsisV,
-//   FaDownload,
-//   FaPrint,
-//   FaShare,
-//   FaFileContract,
-//   FaCalculator,
-//   FaBell,
-//   FaCog,
-//   FaSave,
-//   FaTrash
-// } from "react-icons/fa";
-// import { useNavigate } from "react-router-dom";
 
-// // Export the conversion function separately
-// // export const convertLeadToCustomer = (leadData, customers) => {
-// //   const newCustomer = {
-// //     id: Math.max(...customers.map((c) => c.id), 0) + 1,
-// //     name: leadData.contactPerson || leadData.name,
-// //     contact: leadData.contactNo || leadData.phone,
-// //     email: leadData.email,
-// //     company: leadData.establishmentName || leadData.company,
-// //     industry: leadData.industry || "Not Specified",
-// //     customerType: "Prospect",
-// //     status: "Active",
-// //     source: leadData.leadSource || "Lead Conversion",
-// //     assignedTo: leadData.followupPerson || "Sales Team",
-// //     createdAt: new Date().toISOString().split("T")[0],
-// //     lastContact: new Date().toISOString().split("T")[0],
-// //     totalValue: 0,
-// //     tags: ["From Lead"],
-// //     // Lead conversion tracking
-// //     convertedFromLead: true,
-// //     originalLeadId: leadData.leadId || `L-${Date.now()}`,
-// //     conversionDate: new Date().toISOString().split("T")[0],
-// //     leadStatus: leadData.status || "converted",
-// //     leadScore: leadData.leadScore || 0,
-// //   };
 
-// //   return newCustomer;
-// // };
 
-// const Customerlist = () => {
-//   const navigate = useNavigate();
-//   const [customers, setCustomers] = useState([]);
-//   const [contacts, setContacts] = useState([]);
-//   const [interactions, setInteractions] = useState([]);
-//   const [selectedCustomer, setSelectedCustomer] = useState(null);
-//   const [showCustomerDetails, setShowCustomerDetails] = useState(false);
-//   const [showAddCustomer, setShowAddCustomer] = useState(false);
-//   const [showEditCustomer, setShowEditCustomer] = useState(false);
-//   const [filterStatus, setFilterStatus] = useState("all");
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [loading, setLoading] = useState(true);
-//   const [showActionsDropdown, setShowActionsDropdown] = useState(null);
-//   const [showQuotationModal, setShowQuotationModal] = useState(false);
-//   const [quotationDetails, setQuotationDetails] = useState({
-//     subject: "",
-//     message: "",
-//     items: [],
-//     totalAmount: 0,
-//     validUntil: ""
-//   });
-// const [brokerList, setbrokerList] = useState([])
-//   // Sample projects with units and prices
-//   const projectList = [
-//     {
-//       id: 1,
-//       name: 'Luxury Apartments',
-//       units: [
-//         { id: 'A101', type: 'Flat', price: 250000 },
-//         { id: 'A102', type: 'Flat', price: 275000 },
-//         { id: 'A201', type: 'Duplex', price: 450000 },
-//         { id: 'A202', type: 'Duplex', price: 480000 }
-//       ]
-//     },
-//     {
-//       id: 2,
-//       name: 'Green Valley Homes',
-//       units: [
-//         { id: 'GV101', type: 'Flat', price: 220000 },
-//         { id: 'GV102', type: 'Flat', price: 230000 },
-//         { id: 'GV201', type: 'Duplex', price: 420000 },
-//         { id: 'GV202', type: 'Duplex', price: 440000 }
-//       ]
-//     },
-//     {
-//       id: 3,
-//       name: 'Ocean View Residences',
-//       units: [
-//         { id: 'OV101', type: 'Flat', price: 350000 },
-//         { id: 'OV102', type: 'Flat', price: 370000 },
-//         { id: 'OV201', type: 'Duplex', price: 650000 },
-//         { id: 'OV202', type: 'Duplex', price: 680000 }
-//       ]
-//     }
-//   ];
 
-//   // // Sample broker list
-//   // const brokerList = [
-//   //   { id: 1, name: 'John Smith' },
-//   //   { id: 2, name: 'Emma Wilson' },
-//   //   { id: 3, name: 'Robert Brown' },
-//   //   { id: 4, name: 'Sarah Davis' },
-//   //   { id: 5, name: 'Michael Johnson' }
-//   // ];
 
-//  const fetchcustomers = async () => {
-//   const response = await axios.get(
-//     "https://api.csaap.com/api/tenantuser/customers",
-//     {
-//       params: {
-//         subdomain: "cloudflare",
-//         name: "yyy Brown"
-//       }
-//     }
-//   );
-// setbrokerList(response.data.data.map(c => c.broker_name));
 
-//   console.log(response.data);
-// };
 
-//   useEffect(() => {
-//     fetchcustomers()
-//   }, [])
-  
-//   console.log(brokerList);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
 
-//   // Payment slab templates
-//   const paymentTemplates = [
-//     {
-//       id: 1,
-//       name: 'Standard 5-Slab Plan',
-//       slabs: [
-//         { milestone: 'Booking Amount', percentage: 10 },
-//         { milestone: 'At Time of Agreement', percentage: 15 },
-//         { milestone: 'On Foundation Complete', percentage: 20 },
-//         { milestone: 'On Superstructure', percentage: 25 },
-//         { milestone: 'On Possession', percentage: 30 }
-//       ]
-//     },
-//     {
-//       id: 2,
-//       name: 'Flexi 5-Slab Plan',
-//       slabs: [
-//         { milestone: 'Booking Amount', percentage: 5 },
-//         { milestone: 'At Time of Agreement', percentage: 10 },
-//         { milestone: 'On Foundation Complete', percentage: 15 },
-//         { milestone: 'On Superstructure', percentage: 25 },
-//         { milestone: 'On Possession', percentage: 45 }
-//       ]
-//     },
-//     {
-//       id: 3,
-//       name: 'Quick 4-Slab Plan',
-//       slabs: [
-//         { milestone: 'Booking Amount', percentage: 15 },
-//         { milestone: 'At Time of Agreement', percentage: 20 },
-//         { milestone: 'On Superstructure', percentage: 30 },
-//         { milestone: 'On Possession', percentage: 35 }
-//       ]
-//     }
-//   ];
 
-//   // New Customer Form State
-//   const [newCustomer, setNewCustomer] = useState({
-//     name: "",
-//     company: "",
-//     email: "",
-//     phone: "",
-//     alternatePhone: "",
-//     address: "",
-//     city: "",
-//     state: "",
-//     pincode: "",
-//     country: "India",
-//     industry: "",
-//     customerType: "Prospect",
-//     source: "Website",
-//     assignedTo: "",
-//     brokerName: "",
-//     tags: [],
-//     website: "",
-//     employeeSize: "",
-//     annualRevenue: "",
-//     description: "",
-//     purchaseHistory: {
-//       projectId: "",
-//       unitId: "",
-//       originalPrice: 0,
-//       negotiatedPrice: 0
-//     },
-//     paymentSlabs: []
-//   });
+  
 
-//   // State for selected project units and payment template
-//   const [selectedProjectUnits, setSelectedProjectUnits] = useState([]);
-//   const [selectedPaymentTemplate, setSelectedPaymentTemplate] = useState('');
 
-//   // Helper functions
-//   const formatCurrency = (amount) => {
-//     return new Intl.NumberFormat('en-US', {
-//       style: 'currency',
-//       currency: 'USD'
-//     }).format(amount);
-//   };
 
-//   // Handle form input changes
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-//     if (name.startsWith('purchaseHistory.')) {
-//       const field = name.split('.')[1];
+
+
       
-//       if (field === 'projectId') {
-//         const project = projectList.find(p => p.id === parseInt(value));
-//         const units = project ? project.units : [];
-//         setSelectedProjectUnits(units);
-        
-//         // Reset unit selection when project changes
-//         setNewCustomer({
-//           ...newCustomer,
-//           purchaseHistory: {
-//             ...newCustomer.purchaseHistory,
-//             projectId: value,
-//             unitId: '',
-//             originalPrice: 0,
-//             negotiatedPrice: 0
-//           }
-//         });
-//       } else if (field === 'unitId') {
-//         const selectedUnit = selectedProjectUnits.find(unit => unit.id === value);
-//         setNewCustomer({
-//           ...newCustomer,
-//           purchaseHistory: {
-//             ...newCustomer.purchaseHistory,
-//             unitId: value,
-//             originalPrice: selectedUnit ? selectedUnit.price : 0,
-//             negotiatedPrice: selectedUnit ? selectedUnit.price : 0
-//           }
-//         });
-//       } else {
-//         setNewCustomer({
-//           ...newCustomer,
-//           purchaseHistory: {
-//             ...newCustomer.purchaseHistory,
-//             [field]: field === 'negotiatedPrice' ? parseFloat(value) || 0 : value
-//           }
-//         });
-//       }
-//     } else {
-//       setNewCustomer({
-//         ...newCustomer,
-//         [name]: value
-//       });
-//     }
-//   };
 
-//   // Handle payment template selection
-//   const handleTemplateChange = (e) => {
-//     const templateId = parseInt(e.target.value);
-//     setSelectedPaymentTemplate(templateId);
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-//     if (templateId && newCustomer.purchaseHistory.negotiatedPrice > 0) {
-//       const template = paymentTemplates.find(t => t.id === templateId);
-//       if (template) {
-//         const totalPrice = newCustomer.purchaseHistory.negotiatedPrice;
-//         const today = new Date();
+
+
+
+
+
         
-//         const slabs = template.slabs.map((slab, index) => {
-//           // Calculate due dates (30 days apart for demonstration)
-//           const dueDate = new Date(today);
-//           dueDate.setDate(today.getDate() + (index + 1) * 30);
+
+
+
+
           
-//           return {
-//             milestone: slab.milestone,
-//             percentage: slab.percentage,
-//             amount: Math.round(totalPrice * (slab.percentage / 100)),
-//             dueDate: dueDate.toISOString().split('T')[0],
-//             status: index === 0 ? 'Pending' : 'Pending'
-//           };
-//         });
+
+
+
+
+
+
+
+
         
-//         setNewCustomer({
-//           ...newCustomer,
-//           paymentSlabs: slabs
-//         });
-//       }
-//     }
-//   };
 
-//   // Initialize sample CRM data with enhanced customer details
-//   useEffect(() => {
-//     const initializeData = () => {
-//       // Enhanced sample customers data with more details
-//       const sampleCustomers = [
-//         {
-//           id: 1,
-//           name: "Rajesh Kumar",
-//           contact: "+91 9876543210",
-//           email: "rajesh@abccorp.com",
-//           company: "ABC Corporation",
-//           industry: "Information Technology",
-//           customerType: "Enterprise",
-//           status: "Active",
-//           source: "Website",
-//           assignedTo: "Sales Team A",
-//           createdAt: "2024-01-15",
-//           lastContact: "2024-06-20",
-//           totalValue: 375000,
-//           tags: ["VIP", "Enterprise", "Tech"],
-//           // Enhanced details
-//           website: "www.abccorp.com",
-//           address: "123 Tech Park, Sector 62",
-//           city: "Noida",
-//           state: "Uttar Pradesh",
-//           pincode: "201309",
-//           country: "India",
-//           employeeSize: "500-1000",
-//           annualRevenue: "₹50-100 Cr",
-//           description:
-//             "Leading IT services company specializing in enterprise solutions",
-//           // Lead conversion tracking
-//           convertedFromLead: true,
-//           originalLeadId: "L-27192",
-//           conversionDate: "2024-01-15",
-//           leadStatus: "accepted",
-//           leadScore: 85,
-//         },
-//         {
-//           id: 2,
-//           name: "Priya Sharma",
-//           contact: "+91 8765432109",
-//           email: "priya@xyztech.com",
-//           company: "XYZ Technologies",
-//           industry: "Software Development",
-//           customerType: "SMB",
-//           status: "Active",
-//           source: "Referral",
-//           assignedTo: "Sales Team B",
-//           createdAt: "2024-02-10",
-//           lastContact: "2024-06-18",
-//           totalValue: 187500,
-//           tags: ["SMB", "Software"],
-//           // Enhanced details
-//           website: "www.xyztech.com",
-//           address: "456 Innovation Hub",
-//           city: "Bangalore",
-//           state: "Karnataka",
-//           pincode: "560001",
-//           country: "India",
-//           employeeSize: "50-100",
-//           annualRevenue: "₹10-25 Cr",
-//           description:
-//             "Software development company focused on mobile applications",
-//           // Lead conversion tracking
-//           convertedFromLead: true,
-//           originalLeadId: "L-27193",
-//           conversionDate: "2024-02-10",
-//           leadStatus: "accepted",
-//           leadScore: 92,
-//         }
-//       ];
 
-//       // Enhanced sample contacts data
-//       const sampleContacts = [
-//         {
-//           id: 1,
-//           customerId: 1,
-//           name: "Rajesh Kumar",
-//           position: "CEO",
-//           email: "rajesh@abccorp.com",
-//           phone: "+91 9876543210",
-//           primary: true,
-//           department: "Executive",
-//           linkedin: "linkedin.com/in/rajeshkumar",
-//         },
-//         {
-//           id: 2,
-//           customerId: 1,
-//           name: "Anita Desai",
-//           position: "CTO",
-//           email: "anita@abccorp.com",
-//           phone: "+91 9876543211",
-//           primary: false,
-//           department: "Technology",
-//           linkedin: "linkedin.com/in/anitadesai",
-//         }
-//       ];
 
-//       // Enhanced sample interactions data
-//       const sampleInteractions = [
-//         {
-//           id: 1,
-//           customerId: 1,
-//           type: "Meeting",
-//           date: "2024-06-20",
-//           subject: "Product Demo",
-//           outcome: "Positive",
-//           notes:
-//             "Client showed strong interest in enterprise features. Discussed pricing and implementation timeline.",
-//           assignedTo: "John Doe",
-//           duration: "60 mins",
-//           location: "Virtual Meeting",
-//         }
-//       ];
 
-//       setCustomers(sampleCustomers);
-//       setContacts(sampleContacts);
-//       setInteractions(sampleInteractions);
-//       setLoading(false);
-//     };
 
-//     initializeData();
-//   }, []);
 
-//   // Helper functions
-//   const getCustomerContacts = (customerId) => {
-//     return contacts.filter((contact) => contact.customerId === customerId);
-//   };
 
-//   const getCustomerInteractions = (customerId) => {
-//     return interactions.filter(
-//       (interaction) => interaction.customerId === customerId
-//     );
-//   };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  
-//   // Filter customers based on search and status
-//   const filteredCustomers = customers.filter((customer) => {
-//     const matchesSearch =
-//       customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       customer.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       customer.contact.includes(searchTerm) ||
-//       customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       customer.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       (customer.originalLeadId &&
-//         customer.originalLeadId
-//           .toLowerCase()
-//           .includes(searchTerm.toLowerCase()));
 
-//     const matchesStatus =
-//       filterStatus === "all" ||
-//       (filterStatus === "fromLeads" && customer.convertedFromLead) ||
-//       (filterStatus === "direct" && !customer.convertedFromLead) ||
-//       customer.status === filterStatus;
 
-//     return matchesSearch && matchesStatus;
-//   });
 
-//   // Calculate CRM statistics
-//   const stats = {
-//     total: customers.length,
-//     fromLeads: customers.filter((c) => c.convertedFromLead).length,
-//     direct: customers.filter((c) => !c.convertedFromLead).length,
-//     active: customers.filter((c) => c.status === "Active").length,
-//     leads: customers.filter((c) => c.status === "Lead").length,
-//     totalValue: customers.reduce(
-//       (sum, customer) => sum + customer.totalValue,
-//       0
-//     ),
-//   };
 
-//   // Action Handlers
-//   const handleViewProfile = (customer) => {
-//     setSelectedCustomer(customer);
-//     setShowCustomerDetails(true);
-//   };
 
-//   const handleAction = (action, customer) => {
-//     setSelectedCustomer(customer);
-//     setShowActionsDropdown(null);
 
-//     switch (action) {
-//       case "view":
-//         handleViewProfile(customer);
-//         break;
-//       case "edit":
-//         handleEditCustomer(customer);
-//         break;
-//       case "contacts":
-//         navigate("/customer-contacts", { state: { customer } });
-//         break;
-//       case "send_quotation":
-//         handleSendQuotation(customer);
-//         break;
-//       case "whatsapp":
-//         handleWhatsAppMessage(customer);
-//         break;
-//       case "sms":
-//         handleSMSMessage(customer);
-//         break;
-//       case "email":
-//         handleEmailMessage(customer);
-//         break;
-//       case "create_project":
-//         handleCreateProject(customer);
-//         break;
-//       case "schedule_meeting":
-//         handleScheduleMeeting(customer);
-//         break;
-//       case "add_note":
-//         handleAddNote(customer);
-//         break;
-//       case "generate_contract":
-//         handleGenerateContract(customer);
-//         break;
-//       case "view_ledger":
-//         handleViewLedger(customer);
-//         break;
-//       case "delete":
-//         handleDeleteCustomer(customer);
-//         break;
-//       default:
-//         break;
-//     }
-//   };
 
-//   const closeModals = () => {
-//     setShowCustomerDetails(false);
-//     setShowEditCustomer(false);
-//     setSelectedCustomer(null);
-//     setShowQuotationModal(false);
-//   };
 
-//   const closeAddCustomer = () => {
-//     setShowAddCustomer(false);
-//     setNewCustomer({
-//       name: "",
-//       company: "",
-//       email: "",
-//       phone: "",
-//       alternatePhone: "",
-//       address: "",
-//       city: "",
-//       state: "",
-//       pincode: "",
-//       country: "India",
-//       industry: "",
-//       customerType: "Prospect",
-//       source: "Website",
-//       assignedTo: "",
-//       brokerName: "",
-//       tags: [],
-//       website: "",
-//       employeeSize: "",
-//       annualRevenue: "",
-//       description: "",
-//       purchaseHistory: {
-//         projectId: "",
-//         unitId: "",
-//         originalPrice: 0,
-//         negotiatedPrice: 0
-//       },
-//       paymentSlabs: []
-//     });
-//     setSelectedProjectUnits([]);
-//     setSelectedPaymentTemplate('');
-//   };
 
-//   const handleAddCustomer = () => {
-//     if (!newCustomer.name || !newCustomer.company || !newCustomer.email) {
-//       alert("Please fill in required fields (Name, Company, and Email)");
-//       return;
-//     }
 
-//     // Get project and unit details
-//     const selectedProject = projectList.find(p => p.id === parseInt(newCustomer.purchaseHistory.projectId));
-//     const selectedUnit = selectedProjectUnits.find(u => u.id === newCustomer.purchaseHistory.unitId);
 
-//     const customer = {
-//       id: Math.max(...customers.map((c) => c.id), 0) + 1,
-//       name: newCustomer.name,
-//       contact: newCustomer.phone,
-//       email: newCustomer.email,
-//       company: newCustomer.company,
-//       industry: newCustomer.industry,
-//       customerType: newCustomer.customerType,
-//       status: "Active",
-//       source: newCustomer.source,
-//       assignedTo: newCustomer.assignedTo,
-//       brokerName: newCustomer.brokerName,
-//       createdAt: new Date().toISOString().split("T")[0],
-//       lastContact: new Date().toISOString().split("T")[0],
-//       totalValue: newCustomer.purchaseHistory.negotiatedPrice || 0,
-//       tags: newCustomer.tags,
-//       // Enhanced details
-//       website: newCustomer.website,
-//       address: newCustomer.address,
-//       city: newCustomer.city,
-//       state: newCustomer.state,
-//       pincode: newCustomer.pincode,
-//       country: newCustomer.country,
-//       employeeSize: newCustomer.employeeSize,
-//       annualRevenue: newCustomer.annualRevenue,
-//       description: newCustomer.description,
-//       // Project and unit details
-//       project: selectedProject ? selectedProject.name : '',
-//       unit: selectedUnit ? `${selectedUnit.id} (${selectedUnit.type})` : '',
-//       budget: parseFloat(newCustomer.purchaseHistory.negotiatedPrice) || 0,
-//       // Payment information
-//       paymentSlabs: newCustomer.paymentSlabs,
-//       // Direct customer (not from lead)
-//       convertedFromLead: false,
-//       originalLeadId: null,
-//       conversionDate: null,
-//       leadStatus: null,
-//       leadScore: null,
-//     };
 
-//     setCustomers([...customers, customer]);
-//     alert("Customer added successfully!");
-//     closeAddCustomer();
-//   };
 
-//   const handleEditCustomer = (customer) => {
-//     setSelectedCustomer(customer);
-//     setNewCustomer({
-//       name: customer.name,
-//       company: customer.company,
-//       email: customer.email,
-//       phone: customer.contact,
-//       address: customer.address || "",
-//       city: customer.city || "",
-//       state: customer.state || "",
-//       pincode: customer.pincode || "",
-//       country: customer.country || "India",
-//       industry: customer.industry,
-//       customerType: customer.customerType,
-//       source: customer.source,
-//       assignedTo: customer.assignedTo,
-//       brokerName: customer.brokerName || "",
-//       tags: customer.tags || [],
-//       website: customer.website || "",
-//       employeeSize: customer.employeeSize || "",
-//       annualRevenue: customer.annualRevenue || "",
-//       description: customer.description || "",
-//       purchaseHistory: {
-//         projectId: "",
-//         unitId: "",
-//         originalPrice: customer.budget || 0,
-//         negotiatedPrice: customer.budget || 0
-//       },
-//       paymentSlabs: customer.paymentSlabs || []
-//     });
-//     setShowEditCustomer(true);
-//   };
 
-//   const handleUpdateCustomer = () => {
-//     if (!newCustomer.name || !newCustomer.company || !newCustomer.email) {
-//       alert("Please fill in required fields (Name, Company, and Email)");
-//       return;
-//     }
 
-//     const updatedCustomer = {
-//       ...selectedCustomer,
-//       name: newCustomer.name,
-//       company: newCustomer.company,
-//       email: newCustomer.email,
-//       contact: newCustomer.phone,
-//       industry: newCustomer.industry,
-//       customerType: newCustomer.customerType,
-//       source: newCustomer.source,
-//       assignedTo: newCustomer.assignedTo,
-//       brokerName: newCustomer.brokerName,
-//       tags: newCustomer.tags,
-//       website: newCustomer.website,
-//       address: newCustomer.address,
-//       city: newCustomer.city,
-//       state: newCustomer.state,
-//       pincode: newCustomer.pincode,
-//       country: newCustomer.country,
-//       employeeSize: newCustomer.employeeSize,
-//       annualRevenue: newCustomer.annualRevenue,
-//       description: newCustomer.description,
-//       lastContact: new Date().toISOString().split("T")[0],
-//       paymentSlabs: newCustomer.paymentSlabs
-//     };
 
-//     setCustomers(customers.map(c => c.id === selectedCustomer.id ? updatedCustomer : c));
-//     alert("Customer updated successfully!");
-//     setShowEditCustomer(false);
-//     setSelectedCustomer(null);
-//   };
 
-//   const handleDeleteCustomer = (customer) => {
-//     if (window.confirm(`Are you sure you want to delete ${customer.name}? This action cannot be undone.`)) {
-//       setCustomers(customers.filter(c => c.id !== customer.id));
-//       setContacts(contacts.filter(contact => contact.customerId !== customer.id));
-//       setInteractions(interactions.filter(interaction => interaction.customerId !== customer.id));
-//       alert(`Customer ${customer.name} has been deleted successfully.`);
-//     }
-//   };
 
-//   // Communication Handlers
-//   const handleSendQuotation = (customer) => {
-//     setSelectedCustomer(customer);
-//     setQuotationDetails({
-//       subject: `Quotation for ${customer.company}`,
-//       message: `Dear ${customer.name},\n\nPlease find our quotation attached.\n\nBest regards,\nYour Company`,
-//       items: [
-//         { name: "Product/Service 1", quantity: 1, price: 10000 },
-//         { name: "Product/Service 2", quantity: 2, price: 5000 }
-//       ],
-//       totalAmount: 20000,
-//       validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-//     });
-//     setShowQuotationModal(true);
-//   };
 
-//   const handleWhatsAppMessage = (customer) => {
-//     const message = `Hello ${customer.name}, thank you for your interest in our services. We're here to assist you with any questions you may have.`;
-//     const whatsappUrl = `https://wa.me/${customer.contact.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-//     window.open(whatsappUrl, '_blank');
-//     alert(`Opening WhatsApp chat with ${customer.name}`);
-//   };
 
-//   const handleSMSMessage = (customer) => {
-//     const message = `Hello ${customer.name}, thank you for your interest. We'll contact you shortly.`;
-//     // In a real app, this would integrate with an SMS service API
-//     alert(`SMS would be sent to ${customer.contact}: "${message}"`);
-//   };
 
-//   const handleEmailMessage = (customer) => {
-//     const subject = "Thank you for your inquiry";
-//     const body = `Dear ${customer.name},\n\nThank you for your interest in our services. We'll get back to you shortly.\n\nBest regards,\nYour Team`;
-//     const mailtoUrl = `mailto:${customer.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-//     window.location.href = mailtoUrl;
-//   };
 
-//   const handleCreateProject = (customer) => {
-//     navigate('/projects/new', { state: { customer } });
-//     alert(`Creating new project for ${customer.name}`);
-//   };
 
-//   const handleScheduleMeeting = (customer) => {
-//     // This would open a calendar/scheduling modal in a real app
-//     alert(`Scheduling meeting with ${customer.name}`);
-//   };
 
-//   const handleAddNote = (customer) => {
-//     const note = prompt(`Add a note for ${customer.name}:`);
-//     if (note) {
-//       alert(`Note added: ${note}`);
-//       // In real app, save to database
-//     }
-//   };
 
-//   const handleGenerateContract = (customer) => {
-//     alert(`Generating contract for ${customer.name}`);
-//     // This would generate and download a contract PDF
-//   };
 
-//   const handleViewLedger = (customer) => {
-//     navigate(`/customer-ledger/${customer.id}`);
-//   };
 
-//   const sendQuotation = (method) => {
-//     const { subject, message, totalAmount } = quotationDetails;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-//     switch (method) {
-//       case 'whatsapp':
-//         const whatsappMsg = `${subject}\n\n${message}\n\nTotal Amount: ₹${totalAmount.toLocaleString()}`;
-//         const whatsappUrl = `https://wa.me/${selectedCustomer.contact.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMsg)}`;
-//         window.open(whatsappUrl, '_blank');
-//         break;
-//       case 'sms':
-//         alert(`SMS quotation sent to ${selectedCustomer.contact}`);
-//         break;
-//       case 'email':
-//         const emailBody = `${message}\n\nTotal Amount: ₹${totalAmount.toLocaleString()}\n\nPlease find the detailed quotation attached.`;
-//         const mailtoUrl = `mailto:${selectedCustomer.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-//         window.location.href = mailtoUrl;
-//         break;
-//       default:
-//         break;
-//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-//     setShowQuotationModal(false);
-//     alert(`Quotation sent via ${method.toUpperCase()} to ${selectedCustomer.name}`);
-//   };
 
-//   const exportToExcel = () => {
-//     alert("Exporting customer data to Excel...");
-//   };
 
-//   if (loading) {
-//     return (
-//       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-//         <div className="text-center">
-//           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-//           <p className="mt-4 text-gray-600">Loading customer data...</p>
-//         </div>
-//       </div>
-//     );
-//   }
 
-//   return (
-//     <div className="min-h-screen bg-gray-50 p-6">
-//       <div className="max-w-7xl mx-auto">
-//         {/* Header */}
-//         <div className="mb-8">
-//           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-//             <div>
-//               <h1 className="text-3xl font-bold text-gray-900 mb-2">
-//                 Customer Management
-//               </h1>
-//               <p className="text-gray-600">
-//                 All customers including those converted from leads
-//               </p>
-//             </div>
 
-//             {/* Action Buttons */}
-//             <div className="flex flex-wrap gap-3 mt-4 sm:mt-0">
-//               <button
-//                 onClick={() => setShowAddCustomer(true)}
-//                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 flex items-center shadow-md"
-//               >
-//                 <FaPlus className="w-4 h-4 mr-2" />
-//                 Add Customer
-//               </button>
-//               <button
-//                 onClick={exportToExcel}
-//                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200 flex items-center shadow-md"
-//               >
-//                 <FaFileExcel className="w-4 h-4 mr-2" />
-//                 Export
-//               </button>
-//             </div>
-//           </div>
-//         </div>
 
-//         {/* CRM Statistics Cards */}
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
-//           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-//             <div className="flex items-center">
-//               <div className="p-2 bg-blue-100 rounded-lg mr-3">
-//                 <FaUser className="w-5 h-5 text-blue-600" />
-//               </div>
-//               <div>
-//                 <div className="text-sm text-gray-500">Total Customers</div>
-//                 <div className="text-xl font-bold text-gray-900">
-//                   {stats.total}
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
 
-//           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-//             <div className="flex items-center">
-//               <div className="p-2 bg-green-100 rounded-lg mr-3">
-//                 <FaUserCheck className="w-5 h-5 text-green-600" />
-//               </div>
-//               <div>
-//                 <div className="text-sm text-gray-500">From Leads</div>
-//                 <div className="text-xl font-bold text-gray-900">
-//                   {stats.fromLeads}
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
 
-//           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-//             <div className="flex items-center">
-//               <div className="p-2 bg-purple-100 rounded-lg mr-3">
-//                 <FaStar className="w-5 h-5 text-purple-600" />
-//               </div>
-//               <div>
-//                 <div className="text-sm text-gray-500">Direct</div>
-//                 <div className="text-xl font-bold text-gray-900">
-//                   {stats.direct}
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
 
-//           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-//             <div className="flex items-center">
-//               <div className="p-2 bg-orange-100 rounded-lg mr-3">
-//                 <FaChartBar className="w-5 h-5 text-orange-600" />
-//               </div>
-//               <div>
-//                 <div className="text-sm text-gray-500">Total Value</div>
-//                 <div className="text-xl font-bold text-gray-900">
-//                   ₹{stats.totalValue.toLocaleString()}
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
 
-//           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-//             <div className="flex items-center">
-//               <div className="p-2 bg-indigo-100 rounded-lg mr-3">
-//                 <FaProjectDiagram className="w-5 h-5 text-indigo-600" />
-//               </div>
-//               <div>
-//                 <div className="text-sm text-gray-500">Active</div>
-//                 <div className="text-xl font-bold text-gray-900">
-//                   {stats.active}
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
 
-//           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-//             <div className="flex items-center">
-//               <div className="p-2 bg-yellow-100 rounded-lg mr-3">
-//                 <FaArrowRight className="w-5 h-5 text-yellow-600" />
-//               </div>
-//               <div>
-//                 <div className="text-sm text-gray-500">Lead Conversion</div>
-//                 <div className="text-xl font-bold text-gray-900">
-//                   {stats.fromLeads}
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
 
-//         {/* Filters and Search */}
-//         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-//           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-end">
-//             <div className="flex-1">
-//               <label className="block text-sm font-medium text-gray-700 mb-2">
-//                 Search Customers
-//               </label>
-//               <div className="relative">
-//                 <input
-//                   type="text"
-//                   value={searchTerm}
-//                   onChange={(e) => setSearchTerm(e.target.value)}
-//                   placeholder="Search by name, company, email, industry, or lead ID..."
-//                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-//                 />
-//                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-//               </div>
-//             </div>
 
-//             <div className="w-full lg:w-48">
-//               <label className="block text-sm font-medium text-gray-700 mb-2">
-//                 Filter By
-//               </label>
-//               <select
-//                 value={filterStatus}
-//                 onChange={(e) => setFilterStatus(e.target.value)}
-//                 className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-//               >
-//                 <option value="all">All Customers</option>
-//                 <option value="fromLeads">From Leads</option>
-//                 <option value="direct">Direct Customers</option>
-//                 <option value="Active">Active</option>
-//                 <option value="Lead">Leads</option>
-//                 <option value="Prospect">Prospects</option>
-//               </select>
-//             </div>
 
-//             <div className="flex gap-3">
-//               <button
-//                 onClick={() => {
-//                   setSearchTerm("");
-//                   setFilterStatus("all");
-//                 }}
-//                 className="px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center"
-//               >
-//                 <FaFilter className="w-4 h-4 mr-2" />
-//                 Reset
-//               </button>
-//             </div>
-//           </div>
-//         </div>
 
-//         {/* Add Customer Modal */}
-//         {showAddCustomer && (
-//           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-//             <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
-//               <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white sticky top-0">
-//                 <div className="flex justify-between items-center">
-//                   <div>
-//                     <h2 className="text-2xl font-bold">Add New Customer</h2>
-//                     <p className="text-blue-100">Create a new customer profile</p>
-//                   </div>
-//                   <button
-//                     onClick={closeAddCustomer}
-//                     className="text-white hover:text-gray-200 transition-colors duration-200 p-2"
-//                   >
-//                     <FaTimes className="w-6 h-6" />
-//                   </button>
-//                 </div>
-//               </div>
 
-//               <div className="p-6">
-//                 <form onSubmit={(e) => { e.preventDefault(); handleAddCustomer(); }}>
-//                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//                     {/* Basic Information */}
-//                     <div className="space-y-4">
-//                       <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Basic Information</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                       
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">
-//                           Full Name <span className="text-red-500">*</span>
-//                         </label>
-//                         <input
-//                           type="text"
-//                           name="name"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.name}
-//                           onChange={handleInputChange}
-//                           placeholder="Enter customer full name"
-//                           required
-//                         />
-//                       </div>
 
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">
-//                           Company <span className="text-red-500">*</span>
-//                         </label>
-//                         <input
-//                           type="text"
-//                           name="company"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.company}
-//                           onChange={handleInputChange}
-//                           placeholder="Enter company name"
-//                           required
-//                         />
-//                       </div>
 
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">
-//                           Email <span className="text-red-500">*</span>
-//                         </label>
-//                         <input
-//                           type="email"
-//                           name="email"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.email}
-//                           onChange={handleInputChange}
-//                           placeholder="Enter email address"
-//                           required
-//                         />
-//                       </div>
 
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-//                         <input
-//                           type="tel"
-//                           name="phone"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.phone}
-//                           onChange={handleInputChange}
-//                           placeholder="Enter phone number"
-//                         />
-//                       </div>
 
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Alternate Phone</label>
-//                         <input
-//                           type="tel"
-//                           name="alternatePhone"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.alternatePhone}
-//                           onChange={handleInputChange}
-//                           placeholder="Enter alternate phone number"
-//                         />
-//                       </div>
 
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Broker Name</label>
-//                         <select
-//                           name="brokerName"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.brokerName}
-//                           onChange={handleInputChange}
-//                         >
-//                           <option value="">Select a broker</option>
-//                           {brokerList.map(broker => (
-//                             <option key={broker.id} value={broker.name}>
-//                               {broker.name}
-//                             </option>
-//                           ))}
-//                         </select>
-//                       </div>
-//                     </div>
 
-//                     {/* Additional Information */}
-//                     <div className="space-y-4">
-//                       <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Additional Information</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                       
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Industry</label>
-//                         <select
-//                           name="industry"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.industry}
-//                           onChange={handleInputChange}
-//                         >
-//                           <option value="">Select Industry</option>
-//                           <option value="Information Technology">Information Technology</option>
-//                           <option value="Software Development">Software Development</option>
-//                           <option value="Manufacturing">Manufacturing</option>
-//                           <option value="Healthcare">Healthcare</option>
-//                           <option value="Finance">Finance</option>
-//                           <option value="Education">Education</option>
-//                           <option value="Retail">Retail</option>
-//                           <option value="Real Estate">Real Estate</option>
-//                           <option value="Hospitality">Hospitality</option>
-//                           <option value="Other">Other</option>
-//                         </select>
-//                       </div>
 
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Customer Type</label>
-//                         <select
-//                           name="customerType"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.customerType}
-//                           onChange={handleInputChange}
-//                         >
-//                           <option value="Prospect">Prospect</option>
-//                           <option value="SMB">SMB</option>
-//                           <option value="Enterprise">Enterprise</option>
-//                           <option value="VIP">VIP</option>
-//                         </select>
-//                       </div>
 
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Source</label>
-//                         <select
-//                           name="source"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.source}
-//                           onChange={handleInputChange}
-//                         >
-//                           <option value="Website">Website</option>
-//                           <option value="Referral">Referral</option>
-//                           <option value="Social Media">Social Media</option>
-//                           <option value="Cold Call">Cold Call</option>
-//                           <option value="Event">Event</option>
-//                           <option value="Partner">Partner</option>
-//                           <option value="Existing Customer">Existing Customer</option>
-//                         </select>
-//                       </div>
 
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Assigned To</label>
-//                         <input
-//                           type="text"
-//                           name="assignedTo"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.assignedTo}
-//                           onChange={handleInputChange}
-//                           placeholder="Enter team or person name"
-//                         />
-//                       </div>
 
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
-//                         <input
-//                           type="url"
-//                           name="website"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.website}
-//                           onChange={handleInputChange}
-//                           placeholder="Enter website URL"
-//                         />
-//                       </div>
-//                     </div>
-//                   </div>
 
-//                   {/* Purchase History Section */}
-//                   <div className="mt-6 pt-4">
-//                     <h3 className="text-lg font-semibold text-gray-800 mb-4">Project History</h3>
-//                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Project</label>
-//                         <select
-//                           name="purchaseHistory.projectId"
-//                           value={newCustomer.purchaseHistory.projectId}
-//                           onChange={handleInputChange}
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                         >
-//                           <option value="">Select a project</option>
-//                           {projectList.map(project => (
-//                             <option key={project.id} value={project.id}>
-//                               {project.name}
-//                             </option>
-//                           ))}
-//                         </select>
-//                       </div>
-//                             <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Block</label>
-//                         <select
-//                           name="purchaseHistory.unitId"
-//                           value={newCustomer.purchaseHistory.blockid}
-//                           onChange={handleInputChange}
-//                           disabled={!newCustomer.purchaseHistory.projectId}
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                         >
-//                           <option value="">Select a unit</option>
-//                           {selectedProjectUnits.map(unit => (
-//                             <option key={unit.id} value={unit.id}>
-//                               {unit.id} ({unit.type}) - {formatCurrency(unit.price)}
-//                             </option>
-//                           ))}
-//                         </select>
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Unit (Flat/Duplex)</label>
-//                         <select
-//                           name="purchaseHistory.unitId"
-//                           value={newCustomer.purchaseHistory.unitId}
-//                           onChange={handleInputChange}
-//                           disabled={!newCustomer.purchaseHistory.projectId}
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                         >
-//                           <option value="">Select a unit</option>
-//                           {selectedProjectUnits.map(unit => (
-//                             <option key={unit.id} value={unit.id}>
-//                               {unit.id} ({unit.type}) - {formatCurrency(unit.price)}
-//                             </option>
-//                           ))}
-//                         </select>
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Original Price</label>
-//                         <input
-//                           type="text"
-//                           value={formatCurrency(newCustomer.purchaseHistory.originalPrice)}
-//                           disabled
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
-//                         />
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Negotiated Price</label>
-//                         <input
-//                           type="number"
-//                           name="purchaseHistory.negotiatedPrice"
-//                           value={newCustomer.purchaseHistory.negotiatedPrice}
-//                           onChange={handleInputChange}
-//                           min="0"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                         />
-//                       </div>
-//                     </div>
-//                   </div>
 
-//                   {/* Address Information */}
-//                   <div className="mt-6">
-//                     <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Address Information</h3>
-//                     <div className="grid grid-cols-1 gap-4">
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-//                         <textarea
-//                           name="address"
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                           value={newCustomer.address}
-//                           onChange={handleInputChange}
-//                           placeholder="Enter full address"
-//                           rows="3"
-//                         />
-//                       </div>
-//                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-//                         <div>
-//                           <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
-//                           <input
-//                             type="text"
-//                             name="city"
-//                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                             value={newCustomer.city}
-//                             onChange={handleInputChange}
-//                             placeholder="Enter city"
-//                           />
-//                         </div>
-//                         <div>
-//                           <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
-//                           <input
-//                             type="text"
-//                             name="state"
-//                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                             value={newCustomer.state}
-//                             onChange={handleInputChange}
-//                             placeholder="Enter state"
-//                           />
-//                         </div>
-//                         <div>
-//                           <label className="block text-sm font-medium text-gray-700 mb-2">Pincode</label>
-//                           <input
-//                             type="text"
-//                             name="pincode"
-//                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                             value={newCustomer.pincode}
-//                             onChange={handleInputChange}
-//                             placeholder="Enter pincode"
-//                           />
-//                         </div>
-//                         <div>
-//                           <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
-//                           <select
-//                             name="country"
-//                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                             value={newCustomer.country}
-//                             onChange={handleInputChange}
-//                           >
-//                             <option value="India">India</option>
-//                             <option value="United States">United States</option>
-//                             <option value="United Kingdom">United Kingdom</option>
-//                             <option value="Canada">Canada</option>
-//                             <option value="Australia">Australia</option>
-//                             <option value="Other">Other</option>
-//                           </select>
-//                         </div>
-//                       </div>
-//                     </div>
-//                   </div>
 
-//                   {/* Payment Slabs Section */}
-//                   {newCustomer.purchaseHistory.negotiatedPrice > 0 && (
-//                     <div className="mt-6 border-t border-gray-200 pt-4">
-//                       <h3 className="text-lg font-semibold text-gray-800 mb-4">Payment Plan</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                       
-//                       <div className="mb-4">
-//                         <label className="block text-sm font-medium text-gray-700 mb-2">Select Payment Template</label>
-//                         <select
-//                           value={selectedPaymentTemplate}
-//                           onChange={handleTemplateChange}
-//                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                         >
-//                           <option value="">Select a payment template</option>
-//                           {paymentTemplates.map(template => (
-//                             <option key={template.id} value={template.id}>
-//                               {template.name}
-//                             </option>
-//                           ))}
-//                         </select>
-//                       </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                       
-//                       {newCustomer.paymentSlabs.length > 0 && (
-//                         <div className="bg-gray-50 p-4 rounded-lg">
-//                           <h4 className="text-md font-medium text-gray-700 mb-3">Payment Schedule</h4>
-//                           <div className="overflow-x-auto">
-//                             <table className="min-w-full divide-y divide-gray-200">
-//                               <thead className="bg-gray-100">
-//                                 <tr>
-//                                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Milestone</th>
-//                                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Percentage</th>
-//                                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-//                                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Due Date</th>
-//                                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-//                                 </tr>
-//                               </thead>
-//                               <tbody className="divide-y divide-gray-200">
-//                                 {newCustomer.paymentSlabs.map((slab, index) => (
-//                                   <tr key={index}>
-//                                     <td className="px-4 py-2 text-sm text-gray-700">{slab.milestone}</td>
-//                                     <td className="px-4 py-2 text-sm text-gray-700">{slab.percentage}%</td>
-//                                     <td className="px-4 py-2 text-sm text-gray-700">{formatCurrency(slab.amount)}</td>
-//                                     <td className="px-4 py-2 text-sm text-gray-700">{slab.dueDate}</td>
-//                                     <td className="px-4 py-2 text-sm">
-//                                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-//                                         slab.status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-//                                       }`}>
-//                                         {slab.status}
-//                                       </span>
-//                                     </td>
-//                                   </tr>
-//                                 ))}
-//                               </tbody>
-//                             </table>
-//                           </div>
-//                         </div>
-//                       )}
-//                     </div>
-//                   )}
 
-//                   {/* Description */}
-//                   <div className="mt-6">
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-//                     <textarea
-//                       name="description"
-//                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                       value={newCustomer.description}
-//                       onChange={handleInputChange}
-//                       placeholder="Enter customer description, notes, or special requirements..."
-//                       rows="4"
-//                     />
-//                   </div>
 
-//                   {/* Action Buttons */}
-//                   <div className="flex gap-3 pt-6 mt-6 border-t border-gray-200">
-//                     <button
-//                       type="button"
-//                       onClick={closeAddCustomer}
-//                       className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-//                     >
-//                       Cancel
-//                     </button>
-//                     <button
-//                       type="submit"
-//                       className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center"
-//                     >
-//                       <FaSave className="w-4 h-4 mr-2" />
-//                       Add Customer
-//                     </button>
-//                   </div>
-//                 </form>
-//               </div>
-//             </div>
-//           </div>
-//         )}
 
-//         {/* Main Customer Table */}
-//         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-//           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-//             <div className="flex justify-between items-center">
-//               <h3 className="text-lg font-semibold text-gray-800">
-//                 Customer List ({filteredCustomers.length} customers)
-//               </h3>
-//               <div className="text-sm text-gray-600">
-//                 {stats.fromLeads} from leads • {stats.direct} direct
-//               </div>
-//             </div>
-//           </div>
 
-//           <div className="overflow-x-auto">
-//             <table className="w-full">
-//               <thead>
-//                 <tr className="bg-gray-50 border-b border-gray-200">
-//                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-//                     Customer
-//                   </th>
-//                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-//                     Company & Industry
-//                   </th>
-//                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-//                     Contact Info
-//                   </th>
-//                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-//                      Source
-//                   </th>
-//                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-//                     Status
-//                   </th>
-//                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
-//                     Actions
-//                   </th>
-//                 </tr>
-//               </thead>
-//               <tbody className="divide-y divide-gray-200">
-//                 {filteredCustomers.length > 0 ? (
-//                   filteredCustomers.map((customer) => (
-//                     <tr key={customer.id} className="hover:bg-gray-50">
-//                       <td className="px-6 py-4">
-//                         <div className="flex items-center">
-//                           <div className="font-semibold text-gray-900">
-//                             {customer.name}
-//                           </div>
-//                           {customer.convertedFromLead && (
-//                             <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full flex items-center">
-//                               <FaArrowRight className="w-3 h-3 mr-1" />
-//                               From Lead
-//                             </span>
-//                           )}
-//                         </div>
-//                         <div className="text-sm text-gray-500">
-//                           {customer.company}
-//                         </div>
-//                         {/* View Profile Link */}
-//                         <button
-//                           onClick={() => navigate(`/customerlist/${customer.id}`)}
-//                           className="text-blue-600 hover:text-blue-800 text-sm flex items-center mt-1 transition-colors"
-//                         >
-//                           <FaEye className="w-3 h-3 mr-1" />
-//                           View Profile
-//                         </button>
-//                         {customer.originalLeadId && (
-//                           <div className="text-xs text-gray-400 mt-1">
-//                             Lead ID: {customer.originalLeadId}
-//                           </div>
-//                         )}
-//                       </td>
-//                       <td className="px-6 py-4">
-//                         <div className="font-medium text-gray-900">
-//                           {customer.company}
-//                         </div>
-//                         <div className="text-sm text-gray-500">
-//                           {customer.industry}
-//                         </div>
-//                         {customer.project && (
-//                           <div className="text-xs text-blue-600 mt-1">
-//                             Project: {customer.project} • {customer.unit}
-//                           </div>
-//                         )}
-//                       </td>
-//                       <td className="px-6 py-4">
-//                         <div className="text-sm text-gray-900">
-//                           {customer.email}
-//                         </div>
-//                         <div className="text-sm text-gray-500">
-//                           {customer.contact}
-//                         </div>
-//                         {customer.brokerName && (
-//                           <div className="text-xs text-gray-500 mt-1">
-//                             Broker: {customer.brokerName}
-//                           </div>
-//                         )}
-//                       </td>
-//                            <td className="px-6 py-4">
-//                         <div className="flex flex-col gap-2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                        
-//                           <span
-//                             className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getSourceColor(
-//                               customer.source
-//                             )}`}
-//                           >
-//                             {customer.source}
-//                           </span>
+
+
+
+
+
+
+
                         
-//                         </div>
-//                       </td>
-//                       <td className="px-6 py-4">
-//                         <div className="flex flex-col gap-2">
-//                           <span
-//                             className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-//                               customer.status
-//                             )}`}
-//                           >
-//                             {customer.status}
-//                           </span>
+
+
+
+
+
+
+
+
+
+
+
                     
-//                           {customer.leadStatus && (
-//                             <span
-//                               className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getLeadStatusColor(
-//                                 customer.leadStatus
-//                               )}`}
-//                             >
-//                               Lead: {customer.leadStatus}
-//                             </span>
-//                           )}
-//                         </div>
-//                       </td>
-//                       <td className="px-1 py-2">
-//                         <div className="flex justify-center space-x-1">
-//                           {/* Send Quotation Button */}
-//                           <button
-//                             onClick={() => handleAction("send_quotation", customer)}
-//                             className="p-2 text-green-700 rounded-lg hover:bg-green-50 transition-colors flex items-center"
-//                             title="Send Quotation"
-//                           >
-//                             <FaFileInvoiceDollar className="w-4 h-4" />
-//                           </button>
 
-//                           {/* View Details Button */}
-//                           <button
-//                             onClick={() => handleAction("view", customer)}
-//                             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-//                             title="View Details"
-//                           >
-//                             <FaEye className="w-4 h-4" />
-//                           </button>
 
-//                           {/* Edit Button */}
-//                           <button
-//                             onClick={() => handleAction("edit", customer)}
-//                             className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
-//                             title="Edit Customer"
-//                           >
-//                             <FaEdit className="w-4 h-4" />
-//                           </button>
 
-//                           {/* All Actions Dropdown */}
-//                           <div className="relative">
-//                             <button
-//                               onClick={() => setShowActionsDropdown(showActionsDropdown === customer.id ? null : customer.id)}
-//                               className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-//                               title="All Actions"
-//                             >
-//                               <FaEllipsisV className="w-4 h-4" />
-//                             </button>
 
-//                             {showActionsDropdown === customer.id && (
-//                               <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
-//                                 <div className="py-1">
-//                                   {/* Communication Actions */}
-//                                   <div className="px-3 py-2 text-xs font-semibold text-gray-500 border-b">
-//                                     Communication
-//                                   </div>
-//                                   <button
-//                                     onClick={() => handleAction("whatsapp", customer)}
-//                                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-green-50"
-//                                   >
-//                                     <FaWhatsapp className="w-4 h-4 mr-3 text-green-600" />
-//                                     Send WhatsApp Message
-//                                   </button>
-//                                   <button
-//                                     onClick={() => handleAction("sms", customer)}
-//                                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
-//                                   >
-//                                     <FaSms className="w-4 h-4 mr-3 text-blue-600" />
-//                                     Send SMS
-//                                   </button>
-//                                   <button
-//                                     onClick={() => handleAction("email", customer)}
-//                                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-50"
-//                                   >
-//                                     <FaEnvelope className="w-4 h-4 mr-3 text-red-600" />
-//                                     Send Email
-//                                   </button>
 
-//                                   {/* Business Actions */}
-//                                   <div className="px-3 py-2 text-xs font-semibold text-gray-500 border-b border-t">
-//                                     Business
-//                                   </div>
-//                                   <button
-//                                     onClick={() => handleAction("create_project", customer)}
-//                                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
-//                                   >
-//                                     <FaProjectDiagram className="w-4 h-4 mr-3 text-purple-600" />
-//                                     Create Project
-//                                   </button>
-//                                   <button
-//                                     onClick={() => handleAction("generate_contract", customer)}
-//                                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-orange-50"
-//                                   >
-//                                     <FaFileContract className="w-4 h-4 mr-3 text-orange-600" />
-//                                     Generate Contract
-//                                   </button>
-//                                   <button
-//                                     onClick={() => handleAction("view_ledger", customer)}
-//                                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50"
-//                                   >
-//                                     <FaMoneyCheckAlt className="w-4 h-4 mr-3 text-indigo-600" />
-//                                     View Ledger
-//                                   </button>
 
-//                                   {/* Other Actions */}
-//                                   <div className="px-3 py-2 text-xs font-semibold text-gray-500 border-b border-t">
-//                                     Other
-//                                   </div>
-//                                   <button
-//                                     onClick={() => handleAction("schedule_meeting", customer)}
-//                                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50"
-//                                   >
-//                                     <FaCalendar className="w-4 h-4 mr-3 text-yellow-600" />
-//                                     Schedule Meeting
-//                                   </button>
-//                                   <button
-//                                     onClick={() => handleAction("add_note", customer)}
-//                                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-//                                   >
-//                                     <FaFileAlt className="w-4 h-4 mr-3 text-gray-600" />
-//                                     Add Note
-//                                   </button>
-//                                   <button
-//                                     onClick={() => handleAction("delete", customer)}
-//                                     className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-//                                   >
-//                                     <FaTrash className="w-4 h-4 mr-3" />
-//                                     Delete Customer
-//                                   </button>
-//                                 </div>
-//                               </div>
-//                             )}
-//                           </div>
-//                         </div>
-//                       </td>
-//                     </tr>
-//                   ))
-//                 ) : (
-//                   <tr>
-//                     <td colSpan="5" className="px-6 py-12 text-center">
-//                       <div className="text-gray-500 text-center">
-//                         <FaUser className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-//                         <p className="text-lg font-medium">
-//                           No customers found
-//                         </p>
-//                         <p className="text-sm mt-1">
-//                           Try adjusting your search or filters
-//                         </p>
-//                       </div>
-//                     </td>
-//                   </tr>
-//                 )}
-//               </tbody>
-//             </table>
-//           </div>
-//         </div>
 
-//         {/* Pagination */}
-//         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 px-6 py-4 bg-white rounded-lg shadow-sm border border-gray-200">
-//           <div className="text-sm text-gray-600 mb-4 sm:mb-0">
-//             Showing {filteredCustomers.length} of {filteredCustomers.length}{" "}
-//             entries
-//           </div>
-//           <div className="flex items-center space-x-2">
-//             <button className="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50">
-//               <FaChevronLeft className="w-3 h-3" />
-//               <span>Previous</span>
-//             </button>
-//             <button className="w-8 h-8 bg-blue-600 text-white rounded-lg font-medium">
-//               1
-//             </button>
-//             <button className="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50">
-//               <span>Next</span>
-//               <FaChevronRight className="w-3 h-3" />
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default Customerlist;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1816,14 +1816,14 @@ const Customerlist = () => {
   const [units, setUnits] = useState([]);
   const [apiError, setApiError] = useState(null);
 
-  // API Configuration
+
   const API_BASE_URL = 'https://api.csaap.com/api/tenantuser';
   const API_PARAMS = {
     subdomain: 'cloudflare',
     name: 'yyy Brown'
   };
 
-  // Fetch customers from API
+
   const fetchCustomers = async () => {
     try {
       setLoading(true);
@@ -1834,42 +1834,42 @@ const Customerlist = () => {
       });
 
       if (response.data.success) {
-        // Transform API data to match your component structure
+
         const apiCustomers = response.data.data.map(customer => ({
           id: customer.id,
           name: customer.name,
           email: customer.email,
           contact: customer.phone,
           alternatePhone: customer.alt_phone,
-          company: '', // Not in API response
-          industry: '', // Not in API response
-          customerType: 'Prospect', // Default value
-          status: 'Active', // Default value
-          source: 'Direct', // Default value
-          assignedTo: '', // Not in API response
+          company: '',
+          industry: '',
+          customerType: 'Prospect',
+          status: 'Active',
+          source: 'Direct',
+          assignedTo: '',
           brokerName: customer.broker_name || '',
           createdAt: customer.created_at,
           lastContact: customer.updated_at,
           totalValue: parseFloat(customer.negotiated_price) || 0,
           tags: [],
-          website: '', // Not in API response
+          website: '',
           address: customer.address || '',
-          city: '', // Not in API response
-          state: '', // Not in API response
-          pincode: '', // Not in API response
-          country: 'India', // Default value
-          employeeSize: '', // Not in API response
-          annualRevenue: '', // Not in API response
-          description: '', // Not in API response
+          city: '',
+          state: '',
+          pincode: '',
+          country: 'India',
+          employeeSize: '',
+          annualRevenue: '',
+          description: '',
           project: customer.project_name || '',
           unit: customer.unit_name || '',
           budget: parseFloat(customer.negotiated_price) || 0,
-          convertedFromLead: false, // Default value
-          originalLeadId: null, // Not in API response
-          conversionDate: null, // Not in API response
-          leadStatus: null, // Not in API response
-          leadScore: null, // Not in API response
-          // API specific fields
+          convertedFromLead: false,
+          originalLeadId: null,
+          conversionDate: null,
+          leadStatus: null,
+          leadScore: null,
+
           apiData: {
             broker_id: customer.broker_id,
             project_id: customer.project_id,
@@ -1881,7 +1881,7 @@ const Customerlist = () => {
 
         setCustomers(apiCustomers);
         
-        // Extract unique brokers for dropdown
+
         const brokers = [...new Set(response.data.data
           .filter(c => c.broker_name)
           .map(c => ({
@@ -1891,25 +1891,25 @@ const Customerlist = () => {
         )];
         setBrokerList(brokers);
         
-        // Fetch additional data if needed
+
         await fetchAdditionalData();
       }
     } catch (error) {
       console.error('Error fetching customers:', error);
       setApiError('Failed to load customer data. Please try again.');
       
-      // Fallback to sample data if API fails
+
       initializeSampleData();
     } finally {
       setLoading(false);
     }
   };
 
-  // Fetch additional data like projects and units
+
   const fetchAdditionalData = async () => {
     try {
-      // You can add API calls for projects and units here
-      // For now, we'll use the static projectList
+
+
       const projectList = [
         {
           id: 1,
@@ -1950,7 +1950,7 @@ const Customerlist = () => {
     }
   };
 
-  // Sample data as fallback
+
   const initializeSampleData = () => {
     const sampleCustomers = [
       {
@@ -2000,7 +2000,7 @@ const Customerlist = () => {
     fetchCustomers();
   }, []);
 
-  // Sample project list for dropdowns (you can replace with API data)
+
   const projectList = [
     {
       id: 1,
@@ -2034,7 +2034,7 @@ const Customerlist = () => {
     }
   ];
 
-  // Payment slab templates
+
   const paymentTemplates = [
     {
       id: 1,
@@ -2070,7 +2070,7 @@ const Customerlist = () => {
     }
   ];
 
-  // New Customer Form State
+
   const [newCustomer, setNewCustomer] = useState({
     name: "",
     company: "",
@@ -2101,11 +2101,11 @@ const Customerlist = () => {
     paymentSlabs: []
   });
 
-  // State for selected project units and payment template
+
   const [selectedProjectUnits, setSelectedProjectUnits] = useState([]);
   const [selectedPaymentTemplate, setSelectedPaymentTemplate] = useState('');
 
-  // Helper functions
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -2115,7 +2115,7 @@ const Customerlist = () => {
     }).format(amount);
   };
 
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
@@ -2165,7 +2165,7 @@ const Customerlist = () => {
     }
   };
 
-  // Handle payment template selection
+
   const handleTemplateChange = (e) => {
     const templateId = parseInt(e.target.value);
     setSelectedPaymentTemplate(templateId);
@@ -2197,7 +2197,7 @@ const Customerlist = () => {
     }
   };
 
-  // Filter customers based on search and status
+
   const filteredCustomers = customers.filter((customer) => {
     const matchesSearch =
       customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -2215,7 +2215,7 @@ const Customerlist = () => {
     return matchesSearch && matchesStatus;
   });
 
-  // Calculate CRM statistics
+
   const stats = {
     total: customers.length,
     fromLeads: customers.filter((c) => c.convertedFromLead).length,
@@ -2225,7 +2225,7 @@ const Customerlist = () => {
     totalValue: customers.reduce((sum, customer) => sum + customer.totalValue, 0),
   };
 
-  // Utility functions for status colors
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'Active': return 'bg-green-100 text-green-800';
@@ -2253,7 +2253,7 @@ const Customerlist = () => {
     }
   };
 
-  // Action Handlers
+
   const handleViewProfile = (customer) => {
     setSelectedCustomer(customer);
     setShowCustomerDetails(true);
@@ -2350,7 +2350,7 @@ const Customerlist = () => {
     setSelectedPaymentTemplate('');
   };
 
-  // API call to add customer
+
   const handleAddCustomer = async () => {
     if (!newCustomer.name || !newCustomer.email) {
       alert("Please fill in required fields (Name and Email)");
@@ -2371,12 +2371,12 @@ const Customerlist = () => {
         negotiated_price: newCustomer.purchaseHistory.negotiatedPrice
       };
 
-      // Add API call here when available
-      // const response = await axios.post(`${API_BASE_URL}/customers`, customerData, {
-      //   params: API_PARAMS
-      // });
 
-      // For now, add locally
+
+
+
+
+
       const customer = {
         id: Math.max(...customers.map((c) => c.id), 0) + 1,
         name: newCustomer.name,
@@ -2461,7 +2461,7 @@ const Customerlist = () => {
     }
 
     try {
-      // API call to update customer
+
       const updateData = {
         name: newCustomer.name,
         email: newCustomer.email,
@@ -2471,12 +2471,12 @@ const Customerlist = () => {
         address: newCustomer.address
       };
 
-      // Add API call here when available
-      // await axios.put(`${API_BASE_URL}/customers/${selectedCustomer.id}`, updateData, {
-      //   params: API_PARAMS
-      // });
 
-      // Update locally for now
+
+
+
+
+
       const updatedCustomer = {
         ...selectedCustomer,
         name: newCustomer.name,
@@ -2517,12 +2517,12 @@ const Customerlist = () => {
   const handleDeleteCustomer = async (customer) => {
     if (window.confirm(`Are you sure you want to delete ${customer.name}? This action cannot be undone.`)) {
       try {
-        // API call to delete customer
-        // await axios.delete(`${API_BASE_URL}/customers/${customer.id}`, {
-        //   params: API_PARAMS
-        // });
 
-        // Delete locally for now
+
+
+
+
+
         setCustomers(customers.filter(c => c.id !== customer.id));
         alert(`Customer ${customer.name} has been deleted successfully.`);
         
@@ -2533,7 +2533,7 @@ const Customerlist = () => {
     }
   };
 
-  // Communication Handlers
+
   const handleSendQuotation = (customer) => {
     setSelectedCustomer(customer);
     setQuotationDetails({
@@ -2635,7 +2635,7 @@ const Customerlist = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Error Message */}
+
         {apiError && (
           <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
             <div className="flex items-center">
@@ -2645,7 +2645,7 @@ const Customerlist = () => {
           </div>
         )}
 
-        {/* Header */}
+
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -2657,7 +2657,7 @@ const Customerlist = () => {
               </p>
             </div>
 
-            {/* Action Buttons */}
+
             <div className="flex flex-wrap gap-3 mt-4 sm:mt-0">
               <button
                 onClick={() => setShowAddCustomer(true)}
@@ -2684,7 +2684,7 @@ const Customerlist = () => {
           </div>
         </div>
 
-        {/* CRM Statistics Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center">
@@ -2771,7 +2771,7 @@ const Customerlist = () => {
           </div>
         </div>
 
-        {/* Filters and Search */}
+
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-end">
             <div className="flex-1">
@@ -2823,7 +2823,7 @@ const Customerlist = () => {
           </div>
         </div>
 
-        {/* Add Customer Modal */}
+
         {showAddCustomer && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
@@ -2845,7 +2845,7 @@ const Customerlist = () => {
               <div className="p-6">
                 <form onSubmit={(e) => { e.preventDefault(); handleAddCustomer(); }}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Basic Information */}
+
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Basic Information</h3>
                       
@@ -2921,7 +2921,7 @@ const Customerlist = () => {
                       </div>
                     </div>
 
-                    {/* Additional Information */}
+
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Additional Information</h3>
                       
@@ -2994,7 +2994,7 @@ const Customerlist = () => {
                     </div>
                   </div>
 
-                  {/* Purchase History Section */}
+
                   <div className="mt-6 pt-4">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">Project History</h3>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -3054,7 +3054,7 @@ const Customerlist = () => {
                     </div>
                   </div>
 
-                  {/* Address Information */}
+
                   <div className="mt-6">
                     <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Address Information</h3>
                     <div className="grid grid-cols-1 gap-4">
@@ -3072,7 +3072,7 @@ const Customerlist = () => {
                     </div>
                   </div>
 
-                  {/* Payment Slabs Section */}
+
                   {newCustomer.purchaseHistory.negotiatedPrice > 0 && (
                     <div className="mt-6 border-t border-gray-200 pt-4">
                       <h3 className="text-lg font-semibold text-gray-800 mb-4">Payment Plan</h3>
@@ -3131,7 +3131,7 @@ const Customerlist = () => {
                     </div>
                   )}
 
-                  {/* Action Buttons */}
+
                   <div className="flex gap-3 pt-6 mt-6 border-t border-gray-200">
                     <button
                       type="button"
@@ -3154,7 +3154,7 @@ const Customerlist = () => {
           </div>
         )}
 
-        {/* Main Customer Table */}
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
             <div className="flex justify-between items-center">
@@ -3406,7 +3406,7 @@ const Customerlist = () => {
           </div>
         </div>
 
-        {/* Pagination */}
+
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 px-6 py-4 bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="text-sm text-gray-600 mb-4 sm:mb-0">
             Showing {filteredCustomers.length} of {customers.length} entries

@@ -8,12 +8,12 @@ import SaleHistory from './SaleHistory';
 
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance
+
 const api = axios.create({
   baseURL: API_BASE_URL
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -27,15 +27,15 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const SaleEntry = () => {
 
-  // State for active tab
+
   const [activeTab, setActiveTab] = useState('saleEntry');
 
-  // Main form state
+
   const [formData, setFormData] = useState({
     store_id: '',
     customer_name: '',
@@ -53,7 +53,7 @@ const SaleEntry = () => {
     percentageType: 'Percentage',
   });
 
-  // Single product entry state (removed product list)
+
   const [productEntry, setProductEntry] = useState({
     category: '',
     product_id: '',
@@ -69,12 +69,12 @@ const SaleEntry = () => {
     sale_price: '',
   });
 
-  // Master data state
+
   const [masterData, setMasterData] = useState({
     stores: [],
     categories: [],
     products: [],
-    filteredProducts: [], // Products filtered by category
+    filteredProducts: [],
     gstTypes: [
       { value: 'nogst', label: 'Cash Sell/Retails' },
       { value: 'intrastate', label: 'Intrastate (CGST/SGST)' },
@@ -90,12 +90,12 @@ const SaleEntry = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // Fetch master data using SWR
+
   const { data: storesData, error: storesError, isLoading: storesLoading } = useSWR('/api/tenant/stores', fetcher);
   const { data: categoriesData, error: categoriesError, isLoading: categoriesLoading } = useSWR('/api/tenant/categories', fetcher);
   const { data: productsData, error: productsError, isLoading: productsLoading } = useSWR('/api/tenant/products', fetcher);
 
-  // Update master data when SWR data is available
+
   useEffect(() => {
     if (storesData?.success) {
       setMasterData(prev => ({ ...prev, stores: storesData.data || [] }));
@@ -107,12 +107,12 @@ const SaleEntry = () => {
       setMasterData(prev => ({ 
         ...prev, 
         products: productsData.data || [],
-        filteredProducts: productsData.data || [] // Initially show all products
+        filteredProducts: productsData.data || []
       }));
     }
   }, [storesData, categoriesData, productsData]);
 
-  // Filter products when category changes
+
   useEffect(() => {
     if (productEntry.category && masterData.products.length > 0) {
       const filtered = masterData.products.filter(product => 
@@ -121,15 +121,15 @@ const SaleEntry = () => {
       );
       setMasterData(prev => ({ ...prev, filteredProducts: filtered }));
       
-      // Reset product selection when category changes
+
       setProductEntry(prev => ({ ...prev, product_id: '' }));
     } else {
-      // If no category selected, show all products
+
       setMasterData(prev => ({ ...prev, filteredProducts: masterData.products }));
     }
   }, [productEntry.category, masterData.products]);
 
-  // Calculate product totals
+
   const calculateProductTotals = () => {
     const salePrice = parseFloat(productEntry.sale_price) || 0;
     const quantity = parseFloat(productEntry.quantity) || 0;
@@ -139,10 +139,10 @@ const SaleEntry = () => {
     const sgstRate = parseFloat(productEntry.sgst) || 0;
     const igstRate = parseFloat(productEntry.igst) || 0;
     
-    // Calculate sale amount
+
     const saleAmount = salePrice * quantity;
     
-    // Calculate discount
+
     let discountAmount = 0;
     if (discountType === 'Percentage') {
       discountAmount = saleAmount * (discountValue / 100);
@@ -150,15 +150,15 @@ const SaleEntry = () => {
       discountAmount = Math.min(discountValue, saleAmount);
     }
     
-    // Calculate taxable amount
+
     const taxableAmount = saleAmount - discountAmount;
     
-    // Calculate GST amounts
+
     const cgstAmount = taxableAmount * (cgstRate / 100);
     const sgstAmount = taxableAmount * (sgstRate / 100);
     const igstAmount = taxableAmount * (igstRate / 100);
     
-    // Calculate net amount
+
     const netAmount = taxableAmount + cgstAmount + sgstAmount + igstAmount;
 
     return {
@@ -172,7 +172,7 @@ const SaleEntry = () => {
     };
   };
 
-  // Update form totals when product details change
+
   useEffect(() => {
     const totals = calculateProductTotals();
     
@@ -187,7 +187,7 @@ const SaleEntry = () => {
     }));
   }, [productEntry]);
 
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -196,22 +196,22 @@ const SaleEntry = () => {
     }));
   };
 
-  // Handle product entry changes
+
   const handleProductChange = (e) => {
     const { name, value } = e.target;
     
     setProductEntry(prev => {
       const updatedEntry = { ...prev, [name]: value };
       
-      // If product is selected, fetch its details
+
       if (name === 'product_id' && value) {
         const selectedProduct = masterData.filteredProducts.find(p => p.id == value);
         if (selectedProduct) {
-          // Auto-populate sale price if available
+
           if (selectedProduct.sale_price) {
             updatedEntry.sale_price = selectedProduct.sale_price;
           }
-          // Auto-populate GST rates if available
+
           if (selectedProduct.cgst) {
             updatedEntry.cgst = selectedProduct.cgst;
           }
@@ -221,7 +221,7 @@ const SaleEntry = () => {
           if (selectedProduct.igst) {
             updatedEntry.igst = selectedProduct.igst;
           }
-          // Auto-populate unit if available
+
           if (selectedProduct.unit) {
             updatedEntry.units = selectedProduct.unit;
           }
@@ -232,27 +232,27 @@ const SaleEntry = () => {
     });
   };
 
-  // Handle discount type radio button change
+
   const handleDiscountTypeChange = (e) => {
     const { value } = e.target;
     setProductEntry(prev => ({
       ...prev,
       discount_type: value,
-      discount_value: 0 // Reset discount value when type changes
+      discount_value: 0
     }));
   };
 
-  // Validate sale form before submission
+
   const validateSaleForm = () => {
     const errors = [];
     
-    // Validate customer details
+
     if (!formData.store_id) errors.push('From Store is required');
     if (!formData.customer_name) errors.push('Customer Name is required');
     if (!formData.contact_no) errors.push('Contact No is required');
     if (!formData.to_account) errors.push('To Account is required');
     
-    // Validate product details
+
     if (!productEntry.product_id) errors.push('Product is required');
     if (!productEntry.quantity || parseFloat(productEntry.quantity) <= 0) errors.push('Valid quantity is required');
     if (!productEntry.sale_price || parseFloat(productEntry.sale_price) <= 0) errors.push('Valid sale price is required');
@@ -260,11 +260,11 @@ const SaleEntry = () => {
     return errors;
   };
 
-  // Handle sale submission
+
   const handleSaleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate the entire form
+
     const validationErrors = validateSaleForm();
     
     if (validationErrors.length > 0) {
@@ -274,7 +274,7 @@ const SaleEntry = () => {
       return;
     }
 
-    // Validate paid amount
+
     const paidAmount = parseFloat(formData.paid_amount) || 0;
     if (paidAmount < 0) {
       toast.error('Paid amount cannot be negative');
@@ -283,14 +283,14 @@ const SaleEntry = () => {
 
     setLoading(true);
     try {
-      // Calculate product totals
+
       const totals = calculateProductTotals();
       
-      // Get selected product details
+
       const selectedProduct = masterData.filteredProducts.find(p => p.id == productEntry.product_id);
       const selectedCategory = masterData.categories.find(c => c.id == productEntry.category);
 
-      // Prepare API request data
+
       const saleData = {
         store_id: parseInt(formData.store_id),
         customer_name: formData.customer_name.trim(),
@@ -347,7 +347,7 @@ const SaleEntry = () => {
         
         console.log('Sale created:', response.data.data);
 
-        // Reset form
+
         setFormData({
           store_id: '',
           customer_name: '',
@@ -365,7 +365,7 @@ const SaleEntry = () => {
           percentageType: 'Percentage',
         });
         
-        // Reset product entry
+
         setProductEntry({
           category: '',
           product_id: '',
@@ -381,7 +381,7 @@ const SaleEntry = () => {
           sale_price: '',
         });
         
-        // Invalidate SWR cache for sale history
+
         mutate('/sales/history');
         
       } else {
@@ -391,9 +391,9 @@ const SaleEntry = () => {
     } catch (error) {
       console.error('Sale submission error:', error);
       
-      // Show detailed error message
+
       if (error.response?.data?.errors) {
-        // Handle validation errors from API
+
         const errorMessages = Object.values(error.response.data.errors).flat().join(', ');
         toast.error(`Validation error: ${errorMessages}`, {
           autoClose: 6000,
@@ -412,13 +412,13 @@ const SaleEntry = () => {
     }
   };
 
-  // Safe array access helper
+
   const safeArray = (array) => Array.isArray(array) ? array : [];
 
-  // Check if master data is loading
+
   const masterDataLoading = storesLoading || categoriesLoading || productsLoading;
 
-  // Render Sale Entry Tab
+
   const renderSaleEntry = () => {
     if (masterDataLoading) {
       return (
@@ -433,7 +433,7 @@ const SaleEntry = () => {
 
     return (
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-        {/* Form Header */}
+
         <div className="bg-linear-to-r from-blue-600 to-indigo-700 px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -447,7 +447,7 @@ const SaleEntry = () => {
         </div>
 
         <form onSubmit={handleSaleSubmit} className="p-8">
-          {/* Customer Details Section */}
+
           <div className="mb-12">
             <div className="flex items-center mb-6">
               <div className="w-3 h-8 bg-blue-600 rounded-full mr-4"></div>
@@ -455,7 +455,7 @@ const SaleEntry = () => {
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Form Fields */}
+
               {[
                 { label: 'From Store *', name: 'store_id', type: 'select', options: safeArray(masterData.stores), optionValue: 'id', optionLabel: 'name' },
                 { label: 'Customer Name *', name: 'customer_name', type: 'text' },
@@ -494,7 +494,7 @@ const SaleEntry = () => {
                 </div>
               ))}
 
-              {/* GST Type */}
+
               <div className="space-y-3">
                 <label className="block text-sm font-semibold text-gray-700">
                   GST Type *
@@ -526,7 +526,7 @@ const SaleEntry = () => {
                 </div>
               </div>
 
-              {/* GST Number */}
+
               {formData.gst_type !== 'nogst' && (
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-gray-700">
@@ -543,7 +543,7 @@ const SaleEntry = () => {
                 </div>
               )}
 
-              {/* Address Fields */}
+
               {[
                 { label: 'Address', name: 'address', rows: 2 },
                 { label: 'Shipping Address', name: 'shipping_address', rows: 2 },
@@ -564,7 +564,7 @@ const SaleEntry = () => {
             </div>
           </div>
 
-          {/* Product Details Section */}
+
           <div className="mb-12">
             <div className="flex items-center mb-6">
               <div className="w-3 h-8 bg-green-600 rounded-full mr-4"></div>
@@ -649,7 +649,7 @@ const SaleEntry = () => {
                   </div>
                 ))}
 
-                {/* Discount Value Field */}
+
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Discount {productEntry.discount_type === 'Percentage' ? '(%)' : '($)'}
@@ -665,7 +665,7 @@ const SaleEntry = () => {
                 </div>
               </div>
 
-              {/* Discount Type Radio Buttons */}
+
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Discount Type
@@ -720,7 +720,7 @@ const SaleEntry = () => {
             </div>
           </div>
 
-          {/* Sale Summary Section */}
+
           <div className="mb-8">
             <div className="flex items-center mb-6">
               <div className="w-3 h-8 bg-purple-600 rounded-full mr-4"></div>
@@ -752,7 +752,7 @@ const SaleEntry = () => {
             </div>
           </div>
 
-          {/* Payment Details Section */}
+
           <div className="mb-8">
             <div className="flex items-center mb-6">
               <div className="w-3 h-8 bg-yellow-600 rounded-full mr-4"></div>
@@ -795,7 +795,7 @@ const SaleEntry = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
+
           <div className="flex justify-end pt-8 border-t border-gray-200">
             <button
               type="submit"
@@ -824,7 +824,7 @@ const SaleEntry = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      {/* Toast Notification Container */}
+
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -839,13 +839,13 @@ const SaleEntry = () => {
       />
       
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-3">Sales Management</h1>
           <p className="text-gray-600 text-lg">Create and manage sales transactions efficiently</p>
         </div>
 
-        {/* Tab Navigation */}
+
         <div className="mb-8">
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8">
@@ -883,7 +883,7 @@ const SaleEntry = () => {
           </div>
         </div>
 
-        {/* Tab Content */}
+
         {activeTab === 'saleEntry' && renderSaleEntry()}
         {activeTab === 'saleHistory' && <SaleHistory />}
       </div>

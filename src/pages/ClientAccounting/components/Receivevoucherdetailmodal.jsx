@@ -49,7 +49,7 @@ const ReceiveVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
         >
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden max-h-[90vh]">
 
-                {/* ── Header ── */}
+
                 <div className="px-6 py-5 border-b border-gray-100 shrink-0">
                     <div className="flex items-start justify-between gap-4 mb-4">
                         <div className="flex items-center gap-3">
@@ -72,7 +72,7 @@ const ReceiveVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
                         </button>
                     </div>
 
-                    {/* Meta pills */}
+
                     <div className="flex flex-wrap gap-2">
                         <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-gray-600">
                             <Hash size={11} className="text-gray-400" />
@@ -85,10 +85,10 @@ const ReceiveVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
                     </div>
                 </div>
 
-                {/* ── Body ── */}
+
                 <div className="px-6 py-5 flex flex-col gap-5 overflow-y-auto">
 
-                    {/* Amount card */}
+
                     <div className="rounded-xl border border-gray-100 overflow-hidden">
                         <div className="bg-gray-50 px-4 py-2 border-b border-gray-100">
                             <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
@@ -111,7 +111,7 @@ const ReceiveVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
                         </div>
                     </div>
 
-                    {/* Table of items */}
+
                     {voucher.items && voucher.items.length > 0 && (
                         <div className="border border-gray-200 rounded-xl overflow-hidden">
                             <table className="w-full text-sm">
@@ -141,7 +141,7 @@ const ReceiveVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
                         </div>
                     )}
 
-                    {/* Narration */}
+
                     <div className="flex gap-3 bg-indigo-50 rounded-xl px-4 py-3 border border-indigo-100">
                         <svg className="shrink-0 mt-0.5" width="15" height="15" viewBox="0 0 24 24"
                             fill="none" stroke="#4f46e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -160,7 +160,7 @@ const ReceiveVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
                     </div>
                 </div>
 
-                {/* ── Footer ── */}
+
                 <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between gap-3 shrink-0">
                     <span className="text-xs px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-medium border border-blue-100">
                         Receipt voucher

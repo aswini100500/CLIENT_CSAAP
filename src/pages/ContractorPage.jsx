@@ -31,15 +31,15 @@ import useSWR, { mutate } from "swr";
 import axios from "axios";
 import { getAuthToken } from "../store/authSession";
 
-// API base URL
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance with authorization
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -53,36 +53,36 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then((res) => res.data);
 
 const ContractorPage = () => {
-  // Fetch contractors data using SWR
+
   const { data, error, isLoading } = useSWR("/api/tenant/contractors", fetcher, {
     revalidateOnFocus: false,
   });
 
-  // Initialize contractors from API data
+
   const contractors = data?.contractors || [];
   
-  // State for uploaded files
+
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [workOrderFile, setWorkOrderFile] = useState(null);
   
-  // Equipment modal and verification states
+
   const [showEquipmentEditModal, setShowEquipmentEditModal] = useState(false);
   const [editingEquipment, setEditingEquipment] = useState("");
   const [editingField, setEditingField] = useState("");
   
-  // Success notifications
+
   const [notification, setNotification] = useState({
     show: false,
-    type: '', // 'success', 'error', 'info'
+    type: '',
     message: '',
     title: ''
   });
   
-  // Form and search states
+
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -97,13 +97,13 @@ const ContractorPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   
-  // Edit modal state
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingContractor, setEditingContractor] = useState(null);
   const [editProfilePhoto, setEditProfilePhoto] = useState(null);
   const [editWorkOrderFile, setEditWorkOrderFile] = useState(null);
 
-  // State for new contractor form
+
   const [newContractor, setNewContractor] = useState({
     name: '',
     email: '',
@@ -125,7 +125,7 @@ const ContractorPage = () => {
     equipment_from_store: '',
   });
 
-  // Show notification function
+
   const showNotification = (type, title, message) => {
     setNotification({
       show: true,
@@ -134,24 +134,24 @@ const ContractorPage = () => {
       message
     });
     
-    // Auto-hide after 3 seconds
+
     setTimeout(() => {
       setNotification({ show: false, type: '', message: '', title: '' });
     }, 3000);
   };
 
-  // Handle file uploads
+
   const handleFileChange = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file size (max 5MB)
+
     if (file.size > 5 * 1024 * 1024) {
       showNotification('error', 'File Size Error', 'File size exceeds 5MB limit.');
       return;
     }
 
-    // Validate file types
+
     if (type === 'profilePhoto') {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
@@ -173,18 +173,18 @@ const ContractorPage = () => {
     }
   };
 
-  // Handle edit file uploads
+
   const handleEditFileChange = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file size (max 5MB)
+
     if (file.size > 5 * 1024 * 1024) {
       showNotification('error', 'File Size Error', 'File size exceeds 5MB limit.');
       return;
     }
 
-    // Validate file types
+
     if (type === 'profilePhoto') {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
@@ -206,7 +206,7 @@ const ContractorPage = () => {
     }
   };
 
-  // Open edit modal
+
   const openEditModal = (contractor) => {
     setEditingContractor({
       ...contractor,
@@ -215,11 +215,11 @@ const ContractorPage = () => {
     setShowEditModal(true);
   };
 
-  // Handle edit input changes
+
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
     
-    // Handle representative fields
+
     if (name.startsWith('representative_')) {
       const [_, idx, field] = name.split('_');
       const index = parseInt(idx, 10);
@@ -237,8 +237,8 @@ const ContractorPage = () => {
     }
   };
 
-  // Handle edit form submission
- // Handle edit form submission
+
+
 const handleEditSubmit = async (e) => {
   e.preventDefault();
   setIsSubmitting(true);
@@ -246,9 +246,9 @@ const handleEditSubmit = async (e) => {
   try {
     const formData = new FormData();
     
-    // Add all form fields to FormData, but exclude database timestamps
+
     Object.keys(editingContractor).forEach(key => {
-      // Skip created_at, updated_at, and other non-editable fields
+
       if (key === 'created_at' || key === 'updated_at' || key === 'id') {
         return;
       }
@@ -256,9 +256,9 @@ const handleEditSubmit = async (e) => {
       if (key === 'representatives') {
         formData.append('representatives', JSON.stringify(editingContractor.representatives));
       } else if (editingContractor[key] !== '' && editingContractor[key] !== null && editingContractor[key] !== undefined) {
-        // Format dates properly for MySQL
+
         if (key === 'project_allotted' && editingContractor[key]) {
-          // Convert date to MySQL format (YYYY-MM-DD)
+
           const date = new Date(editingContractor[key]);
           if (!isNaN(date.getTime())) {
             formData.append(key, date.toISOString().split('T')[0]);
@@ -269,7 +269,7 @@ const handleEditSubmit = async (e) => {
       }
     });
 
-    // Add files if changed
+
     if (editProfilePhoto) {
       formData.append('profilePhoto', editProfilePhoto);
     }
@@ -277,7 +277,7 @@ const handleEditSubmit = async (e) => {
       formData.append('workOrder', editWorkOrderFile);
     }
 
-    // Debug: Log what we're sending
+
     console.log('Updating contractor with ID:', editingContractor.id);
     for (let pair of formData.entries()) {
       console.log(pair[0] + ': ', pair[1]);
@@ -290,16 +290,16 @@ const handleEditSubmit = async (e) => {
     });
 
     if (response.data.success) {
-      // Revalidate the contractors list
+
       mutate('/api/tenant/contractors');
       
-      // Reset form
+
       setEditingContractor(null);
       setEditProfilePhoto(null);
       setEditWorkOrderFile(null);
       setShowEditModal(false);
       
-      // If we're viewing this contractor's details, update the selected contractor
+
       if (selectedContractor?.id === editingContractor.id) {
         setSelectedContractor(response.data.data);
       }
@@ -310,7 +310,7 @@ const handleEditSubmit = async (e) => {
     console.error('Error updating contractor:', error);
     console.error('Error response:', error.response?.data);
     
-    // More specific error messages
+
     let errorMessage = 'Failed to update contractor. Please try again.';
     if (error.response?.data?.message) {
       errorMessage = error.response.data.message;
@@ -324,12 +324,12 @@ const handleEditSubmit = async (e) => {
   }
 };
 
-  // Handle search
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Search contractors by name (API call)
+
   const searchContractors = async (query) => {
     try {
       const response = await api.get(`/api/tenant/contractors/search?name=${query}`);
@@ -341,7 +341,7 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-  // Filter contractors based on search term and status filter
+
   const filteredContractors = contractors.filter((contractor) => {
     const matchesSearch =
       contractor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -350,7 +350,7 @@ const handleEditSubmit = async (e) => {
     const matchesStatus =
       statusFilter === "All" || contractor.status === statusFilter;
     
-    // Date filter logic
+
     let matchesDate = true;
     if (fromDate && contractor.project_allotted) {
       matchesDate = new Date(contractor.project_allotted) >= new Date(fromDate);
@@ -362,7 +362,7 @@ const handleEditSubmit = async (e) => {
     return matchesSearch && matchesStatus && matchesDate;
   });
 
-  // Handle sorting
+
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -371,7 +371,7 @@ const handleEditSubmit = async (e) => {
     setSortConfig({ key, direction });
   };
 
-  // Apply sorting to contractors
+
   const sortedContractors = [...filteredContractors].sort((a, b) => {
     if (sortConfig.key) {
       const aValue = a[sortConfig.key];
@@ -387,11 +387,11 @@ const handleEditSubmit = async (e) => {
     return 0;
   });
 
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    // Handle representative fields
+
     if (name.startsWith('representative_')) {
       const [_, idx, field] = name.split('_');
       const index = parseInt(idx, 10);
@@ -409,7 +409,7 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-  // Handle form submission (Create contractor) - API Endpoint: /api/tenant/contractors
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -417,7 +417,7 @@ const handleEditSubmit = async (e) => {
     try {
       const formData = new FormData();
       
-      // Add all form fields to FormData
+
       Object.keys(newContractor).forEach(key => {
         if (key === 'representatives') {
           formData.append('representatives', JSON.stringify(newContractor.representatives));
@@ -426,7 +426,7 @@ const handleEditSubmit = async (e) => {
         }
       });
 
-      // Add files
+
       if (profilePhoto) {
         formData.append('profilePhoto', profilePhoto);
       }
@@ -441,10 +441,10 @@ const handleEditSubmit = async (e) => {
       });
 
       if (response.data.contractor) {
-        // Revalidate the contractors list
+
         mutate('/api/tenant/contractors');
         
-        // Reset form
+
         setNewContractor({
           name: '',
           email: '',
@@ -478,15 +478,15 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-  // Update contractor - API Endpoint: /api/tenant/contractors/:id
+
   const handleUpdateContractor = async (id, updatedData) => {
     try {
       const formData = new FormData();
       
-      // Add updated fields to FormData
+
       Object.keys(updatedData).forEach(key => {
         if (updatedData[key] !== null && updatedData[key] !== undefined) {
-          // Handle nested objects
+
           if (typeof updatedData[key] === 'object') {
             formData.append(key, JSON.stringify(updatedData[key]));
           } else {
@@ -514,7 +514,7 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-  // Delete contractor - API Endpoint: /api/tenant/contractors/:id
+
   const handleDeleteContractor = async (id) => {
     if (!window.confirm('Are you sure you want to delete this contractor?')) return;
 
@@ -523,7 +523,7 @@ const handleEditSubmit = async (e) => {
       const response = await api.delete(`/api/tenant/contractors/${id}`);
       
       if (response.data.success) {
-        // Revalidate the contractors list
+
         mutate('/api/tenant/contractors');
         
         showNotification('success', 'Deleted!', 'Contractor deleted successfully!');
@@ -546,7 +546,7 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-  // Format currency
+
   const formatCurrency = (amount) => {
     if (!amount) return "₹0";
     return new Intl.NumberFormat("en-IN", {
@@ -556,13 +556,13 @@ const handleEditSubmit = async (e) => {
     }).format(amount);
   };
 
-  // Format square footage
+
   const formatSqft = (sqft) => {
     if (!sqft) return "0";
     return new Intl.NumberFormat("en-US").format(sqft);
   };
 
-  // Get status badge class
+
   const getStatusClass = (status) => {
     switch (status) {
       case "Active":
@@ -576,7 +576,7 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-  // Get workmanship badge class
+
   const getWorkmanshipClass = (workmanship) => {
     switch (workmanship) {
       case "Verified":
@@ -590,7 +590,7 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-  // Export data function
+
   const exportData = () => {
     const dataStr = JSON.stringify(contractors, null, 2);
     const dataUri =
@@ -602,13 +602,13 @@ const handleEditSubmit = async (e) => {
     linkElement.click();
   };
 
-  // View contractor details
+
   const viewContractorDetails = (contractor) => {
     setSelectedContractor(contractor);
     setShowDetailModal(true);
   };
 
-  // Calculate totals for summary
+
   const calculateTotals = () => {
     const totalContractors = contractors.length;
     const totalSqft = contractors.reduce((total, contractor) => 
@@ -641,7 +641,7 @@ const handleEditSubmit = async (e) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Modern Notification Component */}
+
       {notification.show && (
         <div className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
           notification.type === 'success' 
@@ -714,7 +714,7 @@ const handleEditSubmit = async (e) => {
         </button>
       </div>
       
-      {/* Summary Section */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
           <div className="flex items-center">
@@ -776,10 +776,10 @@ const handleEditSubmit = async (e) => {
         </div>
       </div>
 
-      {/* Search and Filter Section */}
+
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
-          {/* Date Filter Section */}
+
           <div className="flex gap-2 items-center mb-2 md:mb-0">
             <label className="text-sm text-gray-700">From:</label>
             <input
@@ -821,7 +821,7 @@ const handleEditSubmit = async (e) => {
         </div>
       </div>
 
-      {/* Add Contractor Form */}
+
       {showAddForm && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-6 border border-gray-100">
           <div className="flex justify-between items-center mb-4">
@@ -935,7 +935,7 @@ const handleEditSubmit = async (e) => {
                   placeholder="Enter project name"
                 />
               </div>
-           {/* In the edit form - Project Allotted Date field */}
+
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1132,7 +1132,7 @@ const handleEditSubmit = async (e) => {
         </div>
       )}
 
-      {/* Contractors Table */}
+
       <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -1400,7 +1400,7 @@ const handleEditSubmit = async (e) => {
         </div>
       </div>
 
-      {/* Edit Contractor Modal */}
+
       {showEditModal && editingContractor && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -1733,7 +1733,7 @@ const handleEditSubmit = async (e) => {
         </div>
       )}
 
-      {/* Contractor Detail Modal */}
+
       {showDetailModal && selectedContractor && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -1750,7 +1750,7 @@ const handleEditSubmit = async (e) => {
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Work Order Download Section */}
+
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">
                     Work Order
@@ -1917,7 +1917,7 @@ const handleEditSubmit = async (e) => {
                     Equipment Details
                   </h4>
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    {/* Equipment Owned */}
+
                     <div className="mb-3">
                       <div className="text-sm font-medium text-gray-700 mb-1">
                         Equipment Owned:
@@ -1953,7 +1953,7 @@ const handleEditSubmit = async (e) => {
                         </button>
                       </div>
                     </div>
-                    {/* Equipment from Store */}
+
                     <div>
                       <div className="text-sm font-medium text-gray-700 mb-1">
                         Equipment from Store:
@@ -2013,7 +2013,7 @@ const handleEditSubmit = async (e) => {
         </div>
       )}
 
-      {/* Equipment Edit Modal */}
+
       {showEquipmentEditModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">

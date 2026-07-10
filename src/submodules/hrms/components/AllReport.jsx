@@ -33,7 +33,7 @@ export default function AllReport() {
     <div className="crm-module-root app-shell min-h-[calc(100vh-80px)] font-sans">
       <div className="mx-auto max-w-7xl px-3 py-4 lg:px-4">
         
-        {/* Page Header aligned with design.md and premium font hierarchy */}
+
         <div className="mb-4">
           <h1 className="app-title max-w-3xl">HRMS Advanced Reports</h1>
           <p className="app-subtitle mt-1">
@@ -41,7 +41,7 @@ export default function AllReport() {
           </p>
         </div>
 
-        {/* Tab Bar - identical layout/background behavior to AttendanceCloudsat.jsx */}
+
         <div className="-mx-3 mb-5 border-b border-(--border-soft) px-3 py-3 lg:-mx-4 lg:px-4" style={{ background: "color-mix(in srgb, var(--bg-app) 94%, white)" }}>
           <div className="flex items-center gap-2 overflow-x-auto">
             {filteredTabs.map((tab) => {

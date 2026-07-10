@@ -55,7 +55,7 @@ const LeadList = () => {
 
   const [activeTab, setActiveTab] = useState(canViewAll ? "new" : "assigned");
 
-  // Dynamic page-level actions based on active tab namespace
+
   const canAssign = useMemo(() => {
     if (activeTab === "new") return has("crm.leads.new_leads.assign");
     if (activeTab === "assigned") return has("crm.leads.assigned.assign");
@@ -128,7 +128,7 @@ const LeadList = () => {
   const [paymentSlabLead, setPaymentSlabLead] = useState(null);
   const [showViewPaymentSlab, setShowViewPaymentSlab] = useState(false);
   const [viewPaymentSlabLead, setViewPaymentSlabLead] = useState(null);
-  // Project setup state bypassed for general erp
+
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [createProjectLead, setCreateProjectLead] = useState(null);
   const [showCustomerProfileSetup, setShowCustomerProfileSetup] = useState(false);
@@ -672,7 +672,7 @@ const LeadList = () => {
           />
         )}
 
-        {/* Project setup modal removed for general erp */}
+
 
         {showCreateProject && createProjectLead && (
           <CreateProjectModal

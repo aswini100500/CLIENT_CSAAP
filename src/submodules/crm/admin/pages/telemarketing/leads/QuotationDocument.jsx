@@ -9,7 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
 
-// Helper to format values as currency
+
 const formatValue = (amount, country) => {
   if (amount === undefined || amount === null || amount === "") return "0.00";
   const num = parseFloat(amount);
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     padding: 30,
     fontFamily: "Helvetica",
     fontSize: 9,
-    color: "#334155", // Slate 700
+    color: "#334155",
     backgroundColor: "#FFFFFF",
   },
   headerContainer: {
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-start",
     borderBottomWidth: 2,
-    borderBottomColor: "#334155", // Slate 700 neutral
+    borderBottomColor: "#334155",
     paddingBottom: 15,
     marginBottom: 20,
   },
@@ -43,18 +43,18 @@ const styles = StyleSheet.create({
   quotationTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#1E293B", // Slate 800 neutral
+    color: "#1E293B",
     letterSpacing: 0.5,
     marginBottom: 4,
   },
   metaText: {
     fontSize: 9,
-    color: "#64748B", // Slate 500
+    color: "#64748B",
     marginBottom: 2,
   },
   metaValue: {
     fontWeight: "bold",
-    color: "#1E293B", // Slate 800
+    color: "#1E293B",
   },
   companyWidget: {
     alignItems: "flex-end",
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   companyName: {
     fontSize: 11,
     fontWeight: "bold",
-    color: "#1E293B", // Slate 800 neutral
+    color: "#1E293B",
     marginBottom: 2,
   },
   companyDetails: {
@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
   detailsCard: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#E2E8F0", // Slate 200
+    borderColor: "#E2E8F0",
     borderRadius: 8,
-    backgroundColor: "#F8FAFC", // Slate 50
+    backgroundColor: "#F8FAFC",
     padding: 10,
   },
   cardTitleContainer: {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 10,
     fontWeight: "bold",
-    color: "#1E293B", // Slate 800 neutral
+    color: "#1E293B",
   },
   cardSubtitle: {
     fontSize: 7,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#F1F5F9", // Slate 100
+    backgroundColor: "#F1F5F9",
     borderBottomWidth: 1,
     borderBottomColor: "#E2E8F0",
     paddingVertical: 6,
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 9,
     fontWeight: "bold",
-    color: "#1E293B", // Slate 800 neutral
+    color: "#1E293B",
     borderBottomWidth: 1,
     borderBottomColor: "#E2E8F0",
     paddingBottom: 4,
@@ -233,12 +233,12 @@ const styles = StyleSheet.create({
   grandTotalLabel: {
     fontSize: 9.5,
     fontWeight: "bold",
-    color: "#1E293B", // Slate 800 neutral
+    color: "#1E293B",
   },
   grandTotalVal: {
     fontSize: 11,
     fontWeight: "bold",
-    color: "#1E293B", // Slate 800 neutral
+    color: "#1E293B",
   },
   wordsBox: {
     backgroundColor: "#FFFFFF",
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   wordsVal: {
     fontSize: 7.5,
     fontWeight: "bold",
-    color: "#1E293B", // Slate 800 neutral
+    color: "#1E293B",
   },
   footer: {
     position: "absolute",
@@ -300,7 +300,7 @@ const QuotationDocument = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Document Header */}
+
         <View style={styles.headerContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.quotationTitle}>QUOTATION</Text>
@@ -319,9 +319,9 @@ const QuotationDocument = ({
           </View>
         </View>
 
-        {/* Sender & Receiver Info */}
+
         <View style={styles.detailsGrid}>
-          {/* Sender Details */}
+
           <View style={styles.detailsCard}>
             <View style={styles.cardTitleContainer}>
               <Text style={styles.cardTitle}>Quotation From</Text>
@@ -357,7 +357,7 @@ const QuotationDocument = ({
             ))}
           </View>
 
-          {/* Receiver Details */}
+
           <View style={styles.detailsCard}>
             <View style={styles.cardTitleContainer}>
               <Text style={styles.cardTitle}>Quotation For</Text>
@@ -394,9 +394,9 @@ const QuotationDocument = ({
           </View>
         </View>
 
-        {/* Quotation Items Table */}
+
         <View style={styles.table}>
-          {/* Table Header */}
+
           <View style={styles.tableHeader}>
             <Text style={[styles.headerCell, styles.descCol]}>
               Item Description
@@ -412,7 +412,7 @@ const QuotationDocument = ({
             </Text>
           </View>
 
-          {/* Table Body */}
+
           {items.map((item, idx) => {
             const isLast = idx === items.length - 1;
             return (
@@ -447,9 +447,9 @@ const QuotationDocument = ({
           })}
         </View>
 
-        {/* Bottom Terms & Totals Section */}
+
         <View style={styles.bottomSection}>
-          {/* Terms & Conditions Box */}
+
           <View style={styles.termsCard}>
             <Text style={styles.termsTitle}>Terms & Conditions</Text>
             <Text style={styles.termsText}>
@@ -457,7 +457,7 @@ const QuotationDocument = ({
             </Text>
           </View>
 
-          {/* Totals Summary */}
+
           <View style={styles.summaryCard}>
             <Text style={styles.summaryTitle}>Breakdown</Text>
             <View style={styles.summaryRow}>
@@ -504,7 +504,7 @@ const QuotationDocument = ({
           </View>
         </View>
 
-        {/* Simple Footer Statement */}
+
         <View style={styles.footer}>
           <Text style={styles.footerText}>
             This is a computer generated document. Generated via Builder ERP

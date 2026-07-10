@@ -1,4 +1,4 @@
-// src/api/userPlanService.js
+
 import axios from 'axios';
 import { getAuthToken } from '../store/authSession';
 
@@ -6,7 +6,7 @@ const apiClient = axios.create({
   baseURL: import.meta.env.VITE_CSAAP_URL,
 });
 
-// Add Bearer token to requests
+
 apiClient.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -21,11 +21,11 @@ apiClient.interceptors.request.use(
 );
 
 export const userPlanService = {
-  // Get company details by ID
+
   getCompanyDetailsById: (companyId) =>
     apiClient.get(`/api/builder-companies/${companyId}`).then(r => r.data),
 
-  // Get all available services
+
   getAllServices: () =>
     apiClient.get('/api/master/services').then(r => r.data),
 };

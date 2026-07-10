@@ -8,12 +8,12 @@ import IndentHistory from './IndentHistory';
 
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance
+
 const api = axios.create({
   baseURL: API_BASE_URL
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -27,7 +27,7 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const IndentEntry = () => {
@@ -50,21 +50,21 @@ const IndentEntry = () => {
   const [loading, setLoading] = useState(false);
   const [selectedSupplierId, setSelectedSupplierId] = useState('');
 
-  // Master data state
+
   const [masterData, setMasterData] = useState({
     suppliers: [],
     categories: [],
     products: [],
-    filteredProducts: [], // Products filtered by category
+    filteredProducts: [],
     units: ['Pieces', 'Kg', 'Liters', 'Meters', 'Box', 'Pack']
   });
 
-  // Fetch master data using SWR
+
   const { data: suppliersData, error: suppliersError, isLoading: suppliersLoading } = useSWR('/api/tenant/supplier', fetcher);
   const { data: categoriesData, error: categoriesError, isLoading: categoriesLoading } = useSWR('/api/tenant/categories', fetcher);
   const { data: productsData, error: productsError, isLoading: productsLoading } = useSWR('/api/tenant/products', fetcher);
 
-  // Update master data when SWR data is available
+
   useEffect(() => {
     if (suppliersData?.success) {
       setMasterData(prev => ({ ...prev, suppliers: suppliersData.data || [] }));
@@ -76,12 +76,12 @@ const IndentEntry = () => {
       setMasterData(prev => ({ 
         ...prev, 
         products: productsData.data || [],
-        filteredProducts: productsData.data || [] // Initially show all products
+        filteredProducts: productsData.data || []
       }));
     }
   }, [suppliersData, categoriesData, productsData]);
 
-  // Filter products when category changes
+
   useEffect(() => {
     if (productForm.category && masterData.products.length > 0) {
       const filtered = masterData.products.filter(product => 
@@ -90,15 +90,15 @@ const IndentEntry = () => {
       );
       setMasterData(prev => ({ ...prev, filteredProducts: filtered }));
       
-      // Reset product selection when category changes
+
       setProductForm(prev => ({ ...prev, product: '' }));
     } else {
-      // If no category selected, show all products
+
       setMasterData(prev => ({ ...prev, filteredProducts: masterData.products }));
     }
   }, [productForm.category, masterData.products]);
 
-  // Handle supplier selection from dropdown
+
   const handleSupplierSelect = (e) => {
     const supplierId = e.target.value;
     setSelectedSupplierId(supplierId);
@@ -113,7 +113,7 @@ const IndentEntry = () => {
         });
       }
     } else {
-      // Reset supplier fields if "Select Supplier" is chosen
+
       setSupplier({
         name: '',
         contact: '',
@@ -122,7 +122,7 @@ const IndentEntry = () => {
     }
   };
 
-  // Handle manual supplier input changes
+
   const handleSupplierChange = (e) => {
     const { name, value } = e.target;
     setSupplier(prev => ({
@@ -130,7 +130,7 @@ const IndentEntry = () => {
       [name]: value
     }));
     
-    // Clear selected supplier ID when manually editing
+
     if (name === 'name' && value !== '') {
       setSelectedSupplierId('');
     }
@@ -140,12 +140,12 @@ const IndentEntry = () => {
     const { name, value } = e.target;
     
     setProductForm(prev => {
-      // If category changes, reset product selection
+
       if (name === 'category') {
         return {
           ...prev,
           category: value,
-          product: '' // Reset product when category changes
+          product: ''
         };
       }
       return {
@@ -161,7 +161,7 @@ const IndentEntry = () => {
       return;
     }
 
-    // Find selected product and category details
+
     const selectedProduct = masterData.filteredProducts.find(p => p.id === parseInt(productForm.product));
     const selectedCategory = masterData.categories.find(c => c.id === parseInt(productForm.category));
 
@@ -170,7 +170,7 @@ const IndentEntry = () => {
       return;
     }
 
-    // Use category_name from product if available, otherwise find from categories
+
     const categoryName = selectedProduct.category_name || 
                         (selectedCategory ? selectedCategory.name : 'Unknown Category');
 
@@ -187,13 +187,13 @@ const IndentEntry = () => {
 
     setProductList(prev => [...prev, newProduct]);
     
-    // Show success notification
+
     toast.success('Product added to list!', {
       position: "top-right",
       autoClose: 3000,
     });
     
-    // Reset form
+
     setProductForm({
       category: '',
       product: '',
@@ -210,7 +210,7 @@ const IndentEntry = () => {
     });
   };
 
-  // Save indent using new API structure
+
   const saveIndent = async () => {
     if (!selectedSupplierId && !supplier.name) {
       toast.error('Please select or enter supplier name');
@@ -225,7 +225,7 @@ const IndentEntry = () => {
     try {
       setLoading(true);
 
-      // Prepare products array for API
+
       const apiProducts = productList.map(product => ({
         productId: parseInt(product.product_id),
         quantity: parseFloat(product.quantity),
@@ -251,7 +251,7 @@ const IndentEntry = () => {
           autoClose: 5000,
         });
         
-        // Reset form
+
         setSupplier({
           name: '',
           contact: '',
@@ -266,10 +266,10 @@ const IndentEntry = () => {
           units: 'Pieces'
         });
         
-        // Invalidate SWR cache for indent history
+
         mutate('/indents/history');
         
-        // Switch to list tab
+
         setActiveTab('list');
         
       } else {
@@ -298,13 +298,13 @@ const IndentEntry = () => {
     }
   };
 
-  // Safe array access helper
+
   const safeArray = (array) => Array.isArray(array) ? array : [];
 
-  // Check if master data is loading
+
   const masterDataLoading = suppliersLoading || categoriesLoading || productsLoading;
 
-  // Refresh data function
+
   const refreshData = () => {
     mutate('/api/tenant/suppliers');
     mutate('/api/tenant/categories');
@@ -317,7 +317,7 @@ const IndentEntry = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      {/* Toast Notification Container */}
+
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -332,7 +332,7 @@ const IndentEntry = () => {
       />
       
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Indent Management</h1>
           <p className="text-lg text-gray-600">Create and manage purchase indents</p>
@@ -340,7 +340,7 @@ const IndentEntry = () => {
       
         </div>
 
-        {/* Tabs */}
+
         <div className="mb-8">
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8">
@@ -368,14 +368,14 @@ const IndentEntry = () => {
           </div>
         </div>
 
-        {/* Tab Content */}
+
         {activeTab === 'entry' && (
           <div className="space-y-8">
-            {/* Supplier Information */}
+
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <h2 className="text-xl font-semibold text-gray-700 mb-6">Supplier Information</h2>
               
-              {/* Supplier Dropdown */}
+
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Select Existing Supplier
@@ -438,7 +438,7 @@ const IndentEntry = () => {
               </div>
             </div>
 
-            {/* Product Entry Section */}
+
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <h2 className="text-xl font-semibold text-gray-700 mb-6">Product Details</h2>
               
@@ -548,7 +548,7 @@ const IndentEntry = () => {
               )}
             </div>
 
-            {/* Product List Table */}
+
             {productList.length > 0 && (
               <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
@@ -590,7 +590,7 @@ const IndentEntry = () => {
               </div>
             )}
 
-            {/* Action Buttons */}
+
             <div className="flex justify-end space-x-4 pt-6">
               <button
                 onClick={() => {

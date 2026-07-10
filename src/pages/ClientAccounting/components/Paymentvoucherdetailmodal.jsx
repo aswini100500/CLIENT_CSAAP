@@ -49,7 +49,7 @@ const PaymentVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
         >
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col overflow-hidden">
 
-                {/* ── Header ── */}
+
                 <div className="px-6 py-5 border-b border-gray-100">
                     <div className="flex items-start justify-between gap-4 mb-4">
                         <div className="flex items-center gap-3">
@@ -76,7 +76,7 @@ const PaymentVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
                         </button>
                     </div>
 
-                    {/* Meta pills */}
+
                     <div className="flex flex-wrap gap-2">
                         <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-gray-600">
                             <Hash size={11} className="text-gray-400" />
@@ -93,10 +93,10 @@ const PaymentVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
                     </div>
                 </div>
 
-                {/* ── Body ── */}
+
                 <div className="px-6 py-5 flex flex-col gap-4">
 
-                    {/* Amount card */}
+
                     <div className="rounded-xl border border-gray-100 overflow-hidden">
                         <div className="bg-gray-50 px-4 py-2 border-b border-gray-100">
                             <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
@@ -120,7 +120,7 @@ const PaymentVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
                         </div>
                     </div>
 
-                    {/* Narration */}
+
                     <div className="flex gap-3 bg-blue-50 rounded-xl px-4 py-3 border border-blue-100">
                         <svg className="shrink-0 mt-0.5" width="15" height="15" viewBox="0 0 24 24"
                             fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -139,7 +139,7 @@ const PaymentVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload, ledge
                     </div>
                 </div>
 
-                {/* ── Footer ── */}
+
                 <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between gap-3">
                     <span className="text-xs px-2.5 py-1 rounded-full bg-green-50 text-green-700 font-medium border border-green-100">
                         Payment voucher

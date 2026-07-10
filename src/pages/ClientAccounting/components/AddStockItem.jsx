@@ -8,13 +8,13 @@ const AddStockItem = () => {
     value: "",
   });
 
-  // Handle input change
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     let updated = { ...item, [name]: value };
 
-    // Auto calculate value
+
     if (name === "qty" || name === "rate") {
       const qty = Number(updated.qty);
       const rate = Number(updated.rate);
@@ -25,7 +25,7 @@ const AddStockItem = () => {
     setItem(updated);
   };
 
-  // Save data to localStorage
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -39,7 +39,7 @@ const AddStockItem = () => {
 
     alert("Item added successfully!");
 
-    // Reset the form
+
     setItem({
       name: "",
       qty: "",
@@ -56,7 +56,7 @@ const AddStockItem = () => {
         </h2>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          {/* Name */}
+
           <div>
             <label className="block font-medium mb-1">Item Name</label>
             <input
@@ -70,7 +70,7 @@ const AddStockItem = () => {
             />
           </div>
 
-          {/* Quantity */}
+
           <div>
             <label className="block font-medium mb-1">Quantity</label>
             <input
@@ -82,7 +82,7 @@ const AddStockItem = () => {
             />
           </div>
 
-          {/* Rate */}
+
           <div>
             <label className="block font-medium mb-1">Rate</label>
             <input
@@ -94,7 +94,7 @@ const AddStockItem = () => {
             />
           </div>
 
-          {/* Value */}
+
           <div>
             <label className="block font-medium mb-1">Value</label>
             <input
@@ -106,7 +106,7 @@ const AddStockItem = () => {
             />
           </div>
 
-          {/* Submit Button */}
+
           <button
             type="submit"
             className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"

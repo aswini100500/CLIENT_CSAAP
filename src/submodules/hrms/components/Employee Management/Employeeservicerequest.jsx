@@ -7,7 +7,7 @@ const EmployeesRequest = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [requests, setRequests] = useState([]);
 
-  // Sample data for demonstration
+
   useEffect(() => {
     const fetchRequests = async () => {
       try {
@@ -16,10 +16,10 @@ const EmployeesRequest = () => {
           `${import.meta.env.VITE_HRMS_BASE_URL}`;
         const res = await axios.get(`${API_BASE}/api/requests?company_id=1`);
 
-        // Map backend fields to frontend fields if necessary
+
         const formattedRequests = res.data.map((r) => ({
           id: r.id,
-          employeeName: r.user_name || r.employeeName || "Unknown", // adjust if your API has a different field
+          employeeName: r.user_name || r.employeeName || "Unknown",
           employeeId: r.empCode || r.employeeId || "",
           department: r.department || "",
           requestDetail: r.request_details,
@@ -99,7 +99,7 @@ const EmployeesRequest = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50/30 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
+
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
@@ -129,7 +129,7 @@ const EmployeesRequest = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
@@ -238,9 +238,9 @@ const EmployeesRequest = () => {
           </div>
         </div>
 
-        {/* Main Content Card */}
+
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          {/* Table Controls */}
+
           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50/50">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
               <div className="flex items-center gap-4">
@@ -290,7 +290,7 @@ const EmployeesRequest = () => {
             </div>
           </div>
 
-          {/* Table */}
+
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -403,7 +403,7 @@ const EmployeesRequest = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          {/* Status Update Dropdown */}
+
                           <select
                             value={request.status}
                             onChange={(e) =>
@@ -466,7 +466,7 @@ const EmployeesRequest = () => {
             </table>
           </div>
 
-          {/* Table Footer */}
+
           <div className="px-6 py-4 border-t border-gray-200 bg-gray-50/50">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-4 text-sm text-gray-600">
               <div className="font-medium">

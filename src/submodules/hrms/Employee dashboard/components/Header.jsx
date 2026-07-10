@@ -26,7 +26,7 @@ import parse from "html-react-parser";
 const renderRichText = (html) => {
   if (!html) return null;
 
-  // Replace &nbsp; with a regular space to prevent literal display
+
   const cleanHtml = String(html).replace(/&nbsp;/g, " ");
 
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -61,11 +61,11 @@ const renderRichText = (html) => {
     },
   };
 
-  // Return a fragment instead of a div to avoid layout issues
+
   return <>{parse(cleanHtml, options)}</>;
 };
 
-// ── Notification type config ──────────────────────────────────────────────────
+
 const NOTIF_CONFIG = {
   task: {
     icon: ClipboardList,
@@ -157,7 +157,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
   const userRole = user?.role || "Employee";
   const userInitials = userName.substring(0, 2).toUpperCase();
 
-  // Timer State
+
   const [timer, setTimer] = useState("00:00:00");
   const [punchIn, setPunchIn] = useState(null);
   const [leaveTime, setLeaveTime] = useState(null);
@@ -167,7 +167,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
       timeZone: "Asia/Kolkata",
     }).format(new Date());
 
-  // Fetch Attendance for Timer
+
   useEffect(() => {
     const fetchAttendanceForTimer = async () => {
       if (!employeeProfileId) return;
@@ -244,7 +244,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     fetchAttendanceForTimer();
   }, [companySlug, employeeProfileId]);
 
-  // Timer interval
+
   useEffect(() => {
     if (!punchIn) return;
 
@@ -268,7 +268,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     return () => clearInterval(interval);
   }, [punchIn, leaveTime]);
 
-  // Profile Fetch
+
   useEffect(() => {
     if (!employeeProfileId || !token) {
       setLoading(false);
@@ -295,7 +295,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     fetchEmployee();
   }, [employeeProfileId, token]);
 
-  // ── Fetch Unified Notifications ─────────────────────────────────────────────
+
   const fetchNotifications = async () => {
     if (!employeeProfileId) {
       console.log("No employeeProfileId for notifications");
@@ -308,7 +308,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
       const apiBaseUrl =
         import.meta.env.VITE_ACCOUNTING_URL || "https://csaapnodeapi.csaap.com";
 
-      // 1. Fetch standard notifications
+
       const notifRes = await axios.get(
         `${baseUrl}/api/notifications/employee/${employeeProfileId}`,
         {
@@ -350,7 +350,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         }
       }
 
-      // 2. Fetch lead assignments
+
       try {
         const leadRes = await axios.get(
           `${import.meta.env.VITE_CSAAP_URL}/api/tenant/lead-assignments/employee/${employeeProfileId}`,
@@ -374,7 +374,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         console.error("Error fetching leads for notifications:", leadErr);
       }
 
-      // 3. Deduplicate and sort
+
       const uniqueNotifs = Array.from(
         new Map(allNotifs.map((item) => [item.id, item])).values(),
       );
@@ -385,7 +385,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         return dateB - dateA;
       });
 
-      // Limit to 30 total
+
       setNotifications(uniqueNotifs.slice(0, 30));
     } catch (err) {
       console.error("Error fetching notifications:", err);
@@ -397,12 +397,12 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
 
     fetchNotifications();
 
-    // Refresh every 30 seconds
+
     const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
   }, [employeeProfileId, companySlug, isAdminOrHR, resolvedCompanyId]);
 
-  // ── Unseen count — ID-based tracking ────────────────────────────────────────
+
   useEffect(() => {
     if (!employeeProfileId) return;
 
@@ -418,7 +418,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     }
   }, [notifications, employeeProfileId]);
 
-  // Handle clicking outside to close notifications
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -435,7 +435,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     };
   }, [isNotificationOpen]);
 
-  // Listen for custom "new-notification" events
+
   useEffect(() => {
     const handleNewNotification = () => {
       fetchNotifications();
@@ -447,7 +447,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     };
   }, [employeeProfileId]);
 
-  // ── Helpers ─────────────────────────────────────────────────────────────────
+
   const timeAgo = (dateStr) => {
     const diff = Date.now() - new Date(dateStr).getTime();
     const mins = Math.floor(diff / 60000);
@@ -468,7 +468,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
       className="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-4 sticky top-0 z-40 transition-all duration-300 shrink-0"
       style={{ fontFamily: "'Manrope', 'Inter', 'Segoe UI', sans-serif" }}
     >
-      {/* LEFT SECTION – Desktop Collapse Button */}
+
       <div className="flex items-center gap-3 min-w-50">
         {!isSidebarCollapsed && (
           <button
@@ -482,7 +482,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         )}
       </div>
 
-      {/* CENTER SECTION – Working Time Timer */}
+
       <div className="flex items-center justify-center flex-1">
         <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-100 shadow-sm">
           <Clock className="w-4 h-4 text-green-500 shrink-0" />
@@ -500,9 +500,9 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         </div>
       </div>
 
-      {/* RIGHT SECTION – Actions */}
+
       <div className="flex items-center justify-end gap-3 min-w-50">
-        {/* QR Code Button */}
+
         <button
           onClick={() => setIsQRModalOpen(true)}
           className="w-9 h-9 rounded-xl hover:bg-slate-50 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-all duration-200 cursor-pointer"
@@ -511,7 +511,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
           <QrCode className="w-4 h-4" />
         </button>
 
-        {/* Notification Bell */}
+
         <div className="relative notification-container">
           <button
             onClick={(e) => {
@@ -523,7 +523,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
               setIsNotificationOpen(!isNotificationOpen);
 
               if (!isNotificationOpen && notifications.length > 0) {
-                // Mark all current notification IDs as seen
+
                 const allIds = notifications.map((n) => n.id);
                 localStorage.setItem(
                   `seenNotifIds_${employeeProfileId}`,
@@ -546,7 +546,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
             )}
           </button>
 
-          {/* Notification Dropdown Panel */}
+
           {isNotificationOpen && (
             <div
               className="absolute right-0 mt-2 w-96 bg-white rounded-2xl shadow-xl border border-gray-100 z-9999 overflow-hidden"
@@ -555,7 +555,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                   "fadeIn 0.2s ease-out, slideInFromTop 0.2s ease-out",
               }}
             >
-              {/* Header */}
+
               <div className="p-3 border-b border-gray-50 bg-slate-50/80 flex items-center justify-between">
                 <h3 className="font-semibold text-slate-800 text-sm">
                   Notifications
@@ -567,7 +567,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                 )}
               </div>
 
-              {/* Notification List */}
+
               <div
                 className="max-h-96 overflow-y-auto"
                 style={{ scrollbarWidth: "thin" }}
@@ -577,7 +577,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                     const style = getNotifStyle(notif);
                     const Icon = style.icon;
 
-                    // Check if this notification is unseen
+
                     const raw = localStorage.getItem(
                       `seenNotifIds_${employeeProfileId}`,
                     );
@@ -595,14 +595,14 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                         }`}
                       >
                         <div className="flex gap-3">
-                          {/* Icon */}
+
                           <div
                             className={`w-9 h-9 rounded-xl ${style.bg} flex items-center justify-center shrink-0 mt-0.5`}
                           >
                             <Icon className={`w-4 h-4 ${style.color}`} />
                           </div>
 
-                          {/* Content */}
+
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-2 mb-1">
                               <span
@@ -621,7 +621,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                               {renderRichText(notif.message)}
                             </p>
 
-                            {/* Priority badge for tasks */}
+
                             {notif.type === "task" &&
                               notif.meta?.priority && (
                                 <span
@@ -661,18 +661,18 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
 
         <div className="w-px h-7 bg-slate-200 mx-1 shrink-0" />
 
-        {/* User Profile */}
+
         <button
           onClick={() => navigate("/employee/profile")}
           className="flex items-center gap-2.5 cursor-pointer py-1.5 px-2 rounded-xl hover:bg-slate-50 transition-colors duration-200 group text-left outline-none"
           title="My Profile"
         >
-          {/* Avatar / Initials */}
+
           <div className="w-8 h-8 rounded-xl bg-linear-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shadow-green-200">
             {userInitials}
           </div>
           
-          {/* Name & Role */}
+
           <div className="hidden sm:block text-left">
             <p className="text-[13px] font-semibold text-slate-700 capitalize leading-tight">
               {userName}
@@ -684,7 +684,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         </button>
       </div>
 
-      {/* Notification Detail Modal */}
+
       {selectedNotif && (
         <div
           className="fixed inset-0 z-99999 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
@@ -698,7 +698,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
               animation: "zoomIn 0.3s ease-out",
             }}
           >
-            {/* Header */}
+
             <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-slate-50/50">
               <div className="flex items-center gap-3">
                 <div
@@ -728,7 +728,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
               </button>
             </div>
 
-            {/* Content */}
+
             <div
               className="p-8 overflow-y-auto max-h-[60vh]"
               style={{ scrollbarWidth: "thin" }}
@@ -764,26 +764,19 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                 )}
             </div>
 
-            {/* Footer */}
-            {/* <div className="p-4 bg-slate-50 border-t border-gray-100 flex justify-end">
-              <button
-                onClick={() => setSelectedNotif(null)}
-                className="px-8 py-2.5 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 active:scale-95"
-              >
-                Done
-              </button>
-            </div> */}
+
+
           </div>
         </div>
       )}
 
-      {/* QR Code Modal Overlay */}
+
       <AttendanceQRModal
         isOpen={isQRModalOpen}
         onClose={() => setIsQRModalOpen(false)}
       />
 
-      {/* Add global styles for animations */}
+
       <style jsx>{`
         @keyframes fadeIn {
           from {

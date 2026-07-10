@@ -69,7 +69,7 @@ const TrackGSTActivities = () => {
 
   return (
     <div className="space-y-6">
-      {/* Filters */}
+
       <div className="flex flex-wrap gap-4">
         <select 
           value={timePeriod}
@@ -86,7 +86,7 @@ const TrackGSTActivities = () => {
         </button>
       </div>
 
-      {/* Activities Table */}
+
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
@@ -156,7 +156,7 @@ const TrackGSTActivities = () => {
         </table>
       </div>
 
-      {/* Summary Stats */}
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-green-50 border border-green-200 rounded-xl p-6">
           <div className="flex items-center justify-between">

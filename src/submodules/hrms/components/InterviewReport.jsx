@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePermission } from "../../../hooks/usePermission";
 
-// Custom components defined outside to prevent re-creation
+
 const Input = ({
   label,
   name,
@@ -179,9 +179,9 @@ const RecruitmentProcess = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { id } = useParams(); // Get ID from URL for editing
+  const { id } = useParams();
 
-  // Safer update for deeply nested values with useCallback
+
   const handleChange = useCallback((e, section) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -200,7 +200,7 @@ const RecruitmentProcess = () => {
       return;
     }
 
-    // Simple validations
+
     if (!formData.candidateInfo.candidateName || !formData.jobInfo.jobTitle) {
       alert("Please fill in Candidate Name and Job Title.");
       return;
@@ -217,13 +217,13 @@ const RecruitmentProcess = () => {
     setError(null);
 
     try {
-      // Always create new form
+
       await axios.post(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/recruitments/`,
         formData,
       );
       alert("Recruitment form submitted successfully!");
-      navigate(`/interview-detail/${id}`); // Redirect after submission
+      navigate(`/interview-detail/${id}`);
     } catch (err) {
       setError("Failed to save form data.");
       console.error(err);
@@ -252,7 +252,7 @@ const RecruitmentProcess = () => {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-10">
-          {/* Candidate Information */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">
               Candidate Information
@@ -267,7 +267,7 @@ const RecruitmentProcess = () => {
             />
           </section>
 
-          {/* Job Information */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Job Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -317,7 +317,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Job Summary */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Job Summary</h2>
             <Textarea
@@ -357,7 +357,7 @@ const RecruitmentProcess = () => {
             />
           </section>
 
-          {/* Challenges */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Job Challenges</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -392,7 +392,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Hierarchy */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Hierarchy</h2>
             <Textarea
@@ -404,7 +404,7 @@ const RecruitmentProcess = () => {
             />
           </section>
 
-          {/* Qualification */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Qualification</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -432,7 +432,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Working Conditions */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Working Conditions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -495,7 +495,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Responsibilities */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Responsibilities</h2>
             <Textarea
@@ -521,7 +521,7 @@ const RecruitmentProcess = () => {
             />
           </section>
 
-          {/* Competencies */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Competencies</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -549,7 +549,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Promotion & Hiring */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Promotion & Hiring</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -584,7 +584,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Cultural Fit */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Cultural Fit</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -689,7 +689,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Evaluation */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Evaluation</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -717,7 +717,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Background */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Background & History</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -773,7 +773,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Soft Skills */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Soft Skills</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -906,7 +906,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Hard Skills */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Hard Skills</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -934,7 +934,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Background Check */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Background Check</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -969,7 +969,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Orientation */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">
               Orientation / Induction
@@ -1090,7 +1090,7 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-          {/* Final Section */}
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Final Conclusion</h2>
             <Textarea

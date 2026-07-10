@@ -18,10 +18,10 @@ const Header = ({
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
-  // States for user data and dropdown toggle
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
-  // Ref for closing dropdown when clicking outside
+
   const dropdownRef = useRef(null);
 
   const userData = useMemo(() => {
@@ -31,7 +31,7 @@ const Header = ({
     return { name, role, initials };
   }, [user]);
 
-  // 2. Handle closing the dropdown when clicking outside of it
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -42,10 +42,10 @@ const Header = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 3. Robust Logout functionality
+
   const handleLogout = async () => {
     const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
-    // 1. Call Backend API to clear HttpOnly session cookies
+
     try {
       await fetch(`${API_BASE_URL}/api/builder-companies/logout`, {
         method: 'POST',
@@ -81,10 +81,10 @@ const Header = ({
       style={{ fontFamily: "'Manrope', 'Inter', 'Segoe UI', sans-serif" }}
     >
       
-      {/* Left Section: Collapse + Separator + Search */}
+
       <div className="flex items-center gap-3">
         
-        {/* MOBILE Toggle Button */}
+
         <button 
           onClick={toggleMobileSidebar}
           className="p-2 rounded-xl hover:bg-slate-50 text-slate-500 md:hidden transition-colors duration-200"
@@ -92,7 +92,7 @@ const Header = ({
           <Menu size={22} />
         </button>
 
-        {/* Desktop Collapse Button — only when sidebar is expanded */}
+
         {!isSidebarCollapsed && (
           <button
             type="button"
@@ -106,7 +106,7 @@ const Header = ({
 
 
 
-        {/* Search Bar */}
+
         <div className="relative hidden sm:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input 
@@ -117,7 +117,7 @@ const Header = ({
         </div>
       </div>
 
-      {/* Right Section: Notifications + Separator + Profile */}
+
       <div className="flex items-center gap-2">
         <button className="w-9 h-9 rounded-xl hover:bg-slate-50 text-slate-500 hover:text-slate-700 relative flex items-center justify-center transition-colors duration-200">
           <Bell size={18} />
@@ -126,18 +126,18 @@ const Header = ({
         
         <div className="w-px h-7 bg-slate-200 mx-1 shrink-0" />
 
-        {/* PROFILE SECTION WITH DROPDOWN */}
+
         <div className="relative" ref={dropdownRef}>
           <div 
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="flex items-center gap-2.5 cursor-pointer py-1.5 px-2 rounded-xl hover:bg-slate-50 transition-colors duration-200"
           >
-            {/* Dynamic Initials */}
+
             <div className="w-8 h-8 rounded-xl bg-linear-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shadow-green-200">
               {userData.initials}
             </div>
             
-            {/* Dynamic Name & Role */}
+
             <div className="hidden sm:block text-left">
               <p className="text-[13px] font-semibold text-slate-700 capitalize leading-tight">
                 {userData.name}
@@ -148,10 +148,10 @@ const Header = ({
             </div>
           </div>
 
-          {/* DROPDOWN MENU */}
+
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 py-1.5 z-50">
-              {/* Optional Profile Link */}
+
               <button 
               onClick={() => {navigate('/profile'); setIsDropdownOpen(false);}}
               className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-800 transition-colors duration-150">
@@ -161,7 +161,7 @@ const Header = ({
               
               <div className="h-px bg-slate-100 mx-3 my-1" />
               
-              {/* Logout Button */}
+
               <button 
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors duration-150"

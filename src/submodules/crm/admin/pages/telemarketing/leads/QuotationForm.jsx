@@ -275,7 +275,7 @@ const QuotationForm = () => {
         className={`app-shell p-4 transition-all duration-400 ease-out ${ contentVisible ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-xs translate-y-2" }`}
       >
         <div className="max-w-7xl mx-auto space-y-6">
-          {/* Top Page Header */}
+
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-(--border-soft) pb-4">
             <div>
               <h1 className="app-title">Quotation Generator</h1>
@@ -285,10 +285,10 @@ const QuotationForm = () => {
             </div>
           </div>
 
-          {/* Interactive Form Panel */}
+
           <div className="app-panel overflow-hidden">
             <div ref={printRef} className="p-6 md:p-8 space-y-8 bg-white">
-              {/* Document Header Section */}
+
               <div className="flex flex-col md:flex-row justify-between items-start gap-6 border-b border-(--border-soft) pb-6">
                 <div className="space-y-3">
                   <h2 className="text-3xl font-extrabold text-(--text-strong) tracking-tight">
@@ -344,7 +344,7 @@ const QuotationForm = () => {
                   </div>
                 </div>
 
-                {/* Company Profile Widget */}
+
                 <div className="w-full md:w-56 bg-(--bg-app) p-3 border border-(--border-soft) flex flex-col items-center">
                   <div
                     onClick={() => logoInputRef.current?.click()}
@@ -400,7 +400,7 @@ const QuotationForm = () => {
                 </div>
               </div>
 
-              {/* Vendor & Client Details Grid */}
+
               <div className="grid md:grid-cols-2 gap-8 md:gap-12">
                 {["From", "For"].map((type) => {
                   const details = type === "From" ? fromDetails : forDetails;
@@ -469,7 +469,7 @@ const QuotationForm = () => {
                         className="app-input w-full px-3 py-1.5 text-xs"
                       />
 
-                      {/* Dynamic Email Fields */}
+
                       {(type === "From" ? vendorEmails : clientEmails).map(
                         (email, idx) => (
                           <div
@@ -498,7 +498,7 @@ const QuotationForm = () => {
                         ),
                       )}
 
-                      {/* Dynamic PAN Fields */}
+
                       {(type === "From" ? vendorPans : clientPans).map(
                         (pan, idx) => (
                           <div
@@ -586,7 +586,7 @@ const QuotationForm = () => {
                 })}
               </div>
 
-              {/* Line Items Section */}
+
               <div className="space-y-3">
                 <div className="app-section-bar px-4 py-2 rounded-t-lg">
                   <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-(--text-soft)">
@@ -724,9 +724,9 @@ const QuotationForm = () => {
                 </button>
               </div>
 
-              {/* Terms and Summary Section */}
+
               <div className="grid md:grid-cols-2 gap-8 pt-4">
-                {/* Terms Box */}
+
                 <div className="space-y-3.5">
                   <div className="flex items-center gap-2">
                     <h4 className="text-xs font-bold text-(--text-strong)">
@@ -741,7 +741,7 @@ const QuotationForm = () => {
                   />
                 </div>
 
-                {/* Summary Calculator Card */}
+
                 <div className="app-panel-muted p-5 rounded-2xl space-y-4 shadow-sm border border-(--border-soft)">
                   <div className="flex items-center justify-between text-(--text-strong) font-bold border-b border-(--border-soft) pb-2 mb-2">
                     <span className="text-xs font-bold">
@@ -828,7 +828,7 @@ const QuotationForm = () => {
               </div>
             </div>
 
-            {/* Form Actions Footer */}
+
             <div className="p-4 bg-white border-t border-(--border-soft) flex justify-end">
               {canCreate && (
                 <button

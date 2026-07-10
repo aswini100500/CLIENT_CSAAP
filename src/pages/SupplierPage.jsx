@@ -26,15 +26,15 @@ import {
   Loader2,
 } from 'lucide-react';
 
-// API base URL
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance with authorization
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -48,30 +48,30 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const SupplierPage = () => {
   const navigate = useNavigate();
 
-  // Use SWR for real-time data fetching
+
   const { data: swrData, error: swrError, isLoading } = useSWR(
     '/api/tenant/supplier',
     fetcher,
     {
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
-      refreshInterval: 30000, // Refresh every 30 seconds
+      refreshInterval: 30000,
       shouldRetryOnError: true,
       retryCount: 3,
     }
   );
 
-  // Extract suppliers from SWR data
+
   const suppliers = swrData?.success ? swrData.data : [];
   const error = swrError ? 'Failed to load suppliers. Please try again.' : null;
 
-  // State for search and filters
+
   const [filters, setFilters] = useState({
     name: "",
     fromDate: "",
@@ -93,7 +93,7 @@ const SupplierPage = () => {
     title: ''
   });
 
-  // State for new supplier form - ONLY include fields from API
+
   const [newSupplier, setNewSupplier] = useState({
     name: '',
     email: '',
@@ -102,15 +102,15 @@ const SupplierPage = () => {
     gst_number: '',
     address: '',
     contact_person: '',
-    // Removed project-related fields as they're not in the database
-    // projectName: '',
-    // materialsProvided: [{ name: '', quantity: 0, perUnitPrice: 0 }],
-    // billAmount: '',
-    // payoutDue: '',
-    // gst: ''
+
+
+
+
+
+
   });
 
-  // Show notification function
+
   const showNotification = (type, title, message) => {
     setNotification({
       show: true,
@@ -119,13 +119,13 @@ const SupplierPage = () => {
       message
     });
     
-    // Auto-hide after 3 seconds
+
     setTimeout(() => {
       setNotification({ show: false, type: '', message: '', title: '' });
     }, 3000);
   };
 
-  // Handle search filter change
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({
@@ -134,7 +134,7 @@ const SupplierPage = () => {
     });
   };
 
-  // Filter suppliers based on search term
+
   const filteredSuppliers = suppliers.filter((supplier) => {
     const matchesName = supplier.name
       .toLowerCase()
@@ -150,7 +150,7 @@ const SupplierPage = () => {
     return matchesName && matchesFrom && matchesTo;
   });
 
-  // Handle sorting
+
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -159,7 +159,7 @@ const SupplierPage = () => {
     setSortConfig({ key, direction });
   };
 
-  // Apply sorting to suppliers
+
   const sortedSuppliers = [...filteredSuppliers].sort((a, b) => {
     if (sortConfig.key) {
       const aValue = a[sortConfig.key];
@@ -175,19 +175,19 @@ const SupplierPage = () => {
     return 0;
   });
 
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
     if (name === 'gst_number') {
-      // Format GST number as user types
+
       const formattedValue = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
       setNewSupplier({
         ...newSupplier,
         [name]: formattedValue
       });
     } else if (name === 'phone' || name === 'alternate_phone') {
-      // Allow only numbers for phone fields
+
       const numericValue = value.replace(/\D/g, '');
       setNewSupplier({
         ...newSupplier,
@@ -201,9 +201,9 @@ const SupplierPage = () => {
     }
   };
 
-  // Optimistic update helper
+
   const optimisticUpdate = async (operation, data, optimisticData) => {
-    // Update local cache optimistically
+
     mutate('/api/tenant/supplier', async (currentData) => {
       if (!currentData) return currentData;
       
@@ -231,13 +231,13 @@ const SupplierPage = () => {
     }, false);
   };
 
-  // Handle supplier form submission
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // ✅ Validation: Check compulsory fields
+
       if (
         !newSupplier.name.trim() ||
         !newSupplier.email.trim() ||
@@ -248,7 +248,7 @@ const SupplierPage = () => {
         return;
       }
 
-      // Prepare data according to API schema (only fields that exist in the database)
+
       const supplierData = {
         name: newSupplier.name,
         email: newSupplier.email,
@@ -262,7 +262,7 @@ const SupplierPage = () => {
       let response;
       
       if (editingSupplier) {
-        // Optimistic update for editing
+
         const optimisticData = {
           ...editingSupplier,
           ...supplierData
@@ -270,22 +270,22 @@ const SupplierPage = () => {
         
         optimisticUpdate('update', { id: editingSupplier.id }, optimisticData);
         
-        // Update existing supplier
+
         response = await api.put(`/api/tenant/supplier/${editingSupplier.id}`, supplierData);
         
         if (response.data.success) {
           showNotification('success', 'Success!', 'Supplier updated successfully!');
-          // Revalidate SWR cache
+
           mutate('/api/tenant/supplier');
         } else {
-          // Revert optimistic update on error
+
           mutate('/api/tenant/supplier');
           throw new Error(response.data.message || 'Update failed');
         }
       } else {
-        // Optimistic update for creating
+
         const optimisticData = {
-          id: Date.now(), // Temporary ID
+          id: Date.now(),
           ...supplierData,
           is_active: 1,
           created_at: new Date().toISOString(),
@@ -294,21 +294,21 @@ const SupplierPage = () => {
         
         optimisticUpdate('create', null, optimisticData);
         
-        // Add new supplier
+
         response = await api.post('/api/tenant/supplier', supplierData);
         
         if (response.data.success) {
           showNotification('success', 'Success!', 'Supplier created successfully!');
-          // Revalidate SWR cache
+
           mutate('/api/tenant/supplier');
         } else {
-          // Revert optimistic update on error
+
           mutate('/api/tenant/supplier');
           throw new Error(response.data.message || 'Creation failed');
         }
       }
 
-      // Reset form
+
       resetForm();
       setShowAddForm(false);
     } catch (error) {
@@ -320,7 +320,7 @@ const SupplierPage = () => {
     }
   };
 
-  // Edit supplier
+
   const handleEdit = (supplier) => {
     setNewSupplier({
       name: supplier.name || '',
@@ -335,22 +335,22 @@ const SupplierPage = () => {
     setShowAddForm(true);
   };
 
-  // Delete supplier
+
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this supplier?')) return;
 
     setIsDeleting(true);
     try {
-      // Optimistic delete
+
       optimisticUpdate('delete', { id });
       
       const response = await api.delete(`/api/tenant/supplier/${id}`);
       if (response.data.success) {
         showNotification('success', 'Deleted!', 'Supplier deleted successfully!');
-        // Revalidate SWR cache
+
         mutate('/api/tenant/supplier');
       } else {
-        // Revert optimistic delete on error
+
         mutate('/api/tenant/supplier');
         throw new Error(response.data.message || 'Delete failed');
       }
@@ -363,7 +363,7 @@ const SupplierPage = () => {
     }
   };
 
-  // Download supplier details
+
   const handleDownload = (supplier) => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(supplier, null, 2));
     const downloadAnchorNode = document.createElement('a');
@@ -374,7 +374,7 @@ const SupplierPage = () => {
     downloadAnchorNode.remove();
   };
 
-  // Reset form
+
   const resetForm = () => {
     setNewSupplier({
       name: '',
@@ -388,23 +388,23 @@ const SupplierPage = () => {
     setEditingSupplier(null);
   };
 
-  // Cancel form
+
   const handleCancel = () => {
     setShowAddForm(false);
     resetForm();
   };
 
-  // State for viewing supplier details
+
   const [selectedSupplierForView, setSelectedSupplierForView] = useState(null);
   const [showViewModal, setShowViewModal] = useState(false);
 
-  // View supplier details in a modal
+
   const handleViewSupplier = (supplier) => {
     setSelectedSupplierForView(supplier);
     setShowViewModal(true);
   };
 
-  // Format date
+
   const formatDate = (dateString) => {
     if (!dateString) return '—';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -414,7 +414,7 @@ const SupplierPage = () => {
     });
   };
 
-  // Format currency
+
   const formatCurrency = (amount) => {
     if (!amount) return "₹0";
     return new Intl.NumberFormat("en-IN", {
@@ -424,12 +424,12 @@ const SupplierPage = () => {
     }).format(amount);
   };
 
-  // Calculate summary statistics
+
   const calculateSummary = () => {
     const totalSuppliers = suppliers.length;
     const activeSuppliers = suppliers.filter(s => s.is_active === 1).length;
     
-    // Calculate average rating (if available in future)
+
     const avgRating = suppliers.length > 0 
       ? (suppliers.reduce((total, supplier) => total + (supplier.rating || 0), 0) / suppliers.length).toFixed(1)
       : 0;
@@ -438,7 +438,7 @@ const SupplierPage = () => {
       totalSuppliers,
       activeSuppliers,
       avgRating,
-      totalBillAmount: 0 // Not available in current API
+      totalBillAmount: 0
     };
   };
 
@@ -471,7 +471,7 @@ const SupplierPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Notification Component */}
+
       {notification.show && (
         <div className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
           notification.type === 'success' 
@@ -550,7 +550,7 @@ const SupplierPage = () => {
         </button>
       </div>
 
-      {/* Summary Section */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
           <div className="flex items-center">
@@ -614,10 +614,10 @@ const SupplierPage = () => {
         </div>
       </div>
 
-      {/* Search and Filter Section */}
+
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
-          {/* Name Filter with Dropdown */}
+
           <div className="relative grow">
             <div className="flex items-center">
               <Search className="absolute left-3 text-gray-400" size={20} />
@@ -659,7 +659,7 @@ const SupplierPage = () => {
             )}
           </div>
 
-          {/* Date Filters */}
+
           <div className="flex gap-2 items-center">
             <input
               type="date"
@@ -682,7 +682,7 @@ const SupplierPage = () => {
         </div>
       </div>
 
-      {/* Add/Edit Supplier Form */}
+
       {showAddForm && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-6 border border-gray-100">
           <div className="flex justify-between items-center mb-4">
@@ -699,7 +699,7 @@ const SupplierPage = () => {
           
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              {/* Supplier Name */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Supplier Name *
@@ -715,7 +715,7 @@ const SupplierPage = () => {
                 />
               </div>
 
-              {/* Email */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Email *
@@ -731,7 +731,7 @@ const SupplierPage = () => {
                 />
               </div>
 
-              {/* Phone */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Phone *
@@ -749,7 +749,7 @@ const SupplierPage = () => {
                 />
               </div>
 
-              {/* Alternate Phone */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Alternate Phone
@@ -766,7 +766,7 @@ const SupplierPage = () => {
                 />
               </div>
 
-              {/* GST Number */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   GST Number
@@ -782,7 +782,7 @@ const SupplierPage = () => {
                 />
               </div>
 
-              {/* Contact Person */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Contact Person
@@ -797,7 +797,7 @@ const SupplierPage = () => {
                 />
               </div>
 
-              {/* Address */}
+
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Address
@@ -833,7 +833,7 @@ const SupplierPage = () => {
         </div>
       )}
 
-      {/* Suppliers Table */}
+
       <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -857,7 +857,7 @@ const SupplierPage = () => {
               {sortedSuppliers.length > 0 ? (
                 sortedSuppliers.map((supplier) => (
                   <tr key={supplier.id} className="hover:bg-gray-50 transition-colors">
-                    {/* Supplier Details */}
+
                     <td className="px-6 py-4">
                       <div className="flex items-center">
                         <div className="shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
@@ -882,7 +882,7 @@ const SupplierPage = () => {
                       </div>
                     </td>
 
-                    {/* Contact Information */}
+
                     <td className="px-6 py-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
@@ -916,7 +916,7 @@ const SupplierPage = () => {
                       </div>
                     </td>
 
-                    {/* Status & Dates */}
+
                     <td className="px-6 py-4">
                       <div className="space-y-1">
                         <div className="flex items-center">
@@ -936,7 +936,7 @@ const SupplierPage = () => {
                       </div>
                     </td>
 
-                    {/* Actions */}
+
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <button
@@ -955,14 +955,7 @@ const SupplierPage = () => {
                           <Pencil size={16} className="mr-1" />
                           Edit
                         </button>
-                        {/* <button
-                          onClick={() => handleDownload(supplier)}
-                          className="flex items-center text-purple-600 hover:text-purple-800 transition-colors px-3 py-1 rounded-md hover:bg-purple-50"
-                          title="Download Details"
-                        >
-                          <Download size={16} className="mr-1" />
-                          Download
-                        </button> */}
+
                         <button
                           onClick={() => handleDelete(supplier.id)}
                           disabled={isDeleting}
@@ -1006,11 +999,11 @@ const SupplierPage = () => {
         </div>
       </div>
 
-      {/* Supplier Details Modal */}
+
       {showViewModal && selectedSupplierForView && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-[2px] transition-opacity duration-300">
           <div className="bg-white rounded-xl shadow-xl border border-slate-200 w-full max-w-lg overflow-hidden flex flex-col transform transition-all duration-300 scale-100">
-            {/* Header */}
+
             <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 bg-slate-50/50">
               <div>
                 <h2 className="text-lg font-bold text-slate-800">Supplier Profile</h2>
@@ -1027,9 +1020,9 @@ const SupplierPage = () => {
               </button>
             </div>
 
-            {/* Body */}
+
             <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
-              {/* Basic Info Header Section */}
+
               <div className="flex justify-between items-start pb-4 border-b border-slate-100">
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 leading-tight">{selectedSupplierForView.name}</h3>
@@ -1048,7 +1041,7 @@ const SupplierPage = () => {
                 </span>
               </div>
 
-              {/* Grid Content */}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 text-sm">
                 <div>
                   <span className="block text-xs font-medium text-slate-400 uppercase tracking-wider">GST IN</span>
@@ -1098,7 +1091,7 @@ const SupplierPage = () => {
                 </div>
               </div>
 
-              {/* Timestamps */}
+
               <div className="pt-4 border-t border-slate-100 flex justify-between text-[11px] text-slate-400">
                 <span>Registered: {formatDate(selectedSupplierForView.created_at)}</span>
                 {selectedSupplierForView.updated_at && (
@@ -1107,7 +1100,7 @@ const SupplierPage = () => {
               </div>
             </div>
 
-            {/* Footer */}
+
             <div className="bg-slate-50 px-6 py-4 flex justify-end gap-3 border-t border-slate-100">
               <button
                 onClick={() => {

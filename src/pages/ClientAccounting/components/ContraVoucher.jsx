@@ -1,565 +1,565 @@
 
 
-// import React, { useState } from "react";
-// import Swal from "sweetalert2";
-
-// const ContraVoucher = () => {
-//   const [voucher, setVoucher] = useState({
-//     date: new Date().toISOString().split("T")[0],
-//     narration: "",
-//     gstType: "",
-//     gstRate: 0,
-//     transactions: [
-//       { fromAccount: "", toAccount: "", amount: "", narration: "" },
-//     ],
-//   });
-
-//   // Update transaction field
-//   const handleTransactionChange = (index, field, value) => {
-//     const updated = [...voucher.transactions];
-//     updated[index][field] = value;
-//     setVoucher({ ...voucher, transactions: updated });
-//   };
-
-//   // Add new transaction row
-//   const addTransaction = () => {
-//     setVoucher({
-//       ...voucher,
-//       transactions: [
-//         ...voucher.transactions,
-//         { fromAccount: "", toAccount: "", amount: "", narration: "" },
-//       ],
-//     });
-//   };
-
-//   // Calculate total
-//   const totalAmount = voucher.transactions.reduce(
-//     (sum, t) => sum + (parseFloat(t.amount) || 0),
-//     0
-//   );
-
-//   // Apply Auto GST (18%)
-//   const handleAutoGST = () => {
-//     const gstRate = 18;
-//     setVoucher({ ...voucher, gstType: "Auto", gstRate });
-//     Swal.fire({
-//       icon: "success",
-//       title: "GST Applied",
-//       text: `Automatically applied GST: ${gstRate}%`,
-//       timer: 2000,
-//       showConfirmButton: false,
-//     });
-//   };
-
-//   // Apply Manual GST (SweetAlert input)
-//   const handleManualGST = async () => {
-//     const { value: gstInput } = await Swal.fire({
-//       title: "Enter GST Percentage",
-//       input: "number",
-//       inputAttributes: { min: 0, max: 100, step: 0.1 },
-//       inputPlaceholder: "e.g., 5, 12, 18, 28",
-//       confirmButtonText: "Apply GST",
-//       showCancelButton: true,
-//       inputValidator: (value) => {
-//         if (!value || isNaN(value)) {
-//           return "Please enter a valid GST percentage";
-//         }
-//       },
-//     });
-
-//     if (gstInput) {
-//       const gstRate = parseFloat(gstInput);
-//       setVoucher({ ...voucher, gstType: "Manual", gstRate });
-
-//       const gstAmount = (totalAmount * gstRate) / 100;
-//       Swal.fire({
-//         icon: "success",
-//         title: "GST Added",
-//         text: `${gstRate}% GST applied: ₹${gstAmount.toFixed(2)}`,
-//         timer: 2000,
-//         showConfirmButton: false,
-//       });
-//     }
-//   };
-
-//   // GST Calculations
-//   const gstAmount = (totalAmount * voucher.gstRate) / 100;
-//   const grandTotal = totalAmount + gstAmount;
-
-//   // Save voucher
-//   const handleSave = () => {
-//     if (
-//       voucher.transactions.some(
-//         (t) => !t.fromAccount || !t.toAccount || !t.amount
-//       )
-//     ) {
-//       Swal.fire({
-//         icon: "error",
-//         title: "Incomplete Details",
-//         text: "Please fill all fields in each transaction before saving.",
-//       });
-//       return;
-//     }
-
-//     Swal.fire({
-//       icon: "success",
-//       title: "Voucher Saved",
-//       text: "Contra Voucher saved successfully!",
-//       timer: 2000,
-//       showConfirmButton: false,
-//     });
-
-//     console.log("Saved Contra Voucher:", voucher);
-//   };
-
-//   return (
-//     <div className="p-6 bg-white mx-auto shadow-md rounded-xl border border-gray-300">
-//       {/* Header */}
-//       <div className="border-b py-3 mb-4">
-//         <h1 className="text-2xl font-bold text-blue-800">Contra Voucher</h1>
-//         <p className="text-gray-600 text-sm">Voucher Type: Contra</p>
-//       </div>
-
-//       {/* Date */}
-//       <div className="mb-6">
-//         <label className="text-sm font-medium">Date</label>
-//         <input
-//           type="date"
-//           className="w-full border px-3 py-2 rounded mt-1"
-//           value={voucher.date}
-//           onChange={(e) => setVoucher({ ...voucher, date: e.target.value })}
-//         />
-//       </div>
-
-//       {/* Transactions Table */}
-//       <h3 className="text-lg font-semibold mb-2 text-blue-700">
-//         Transfer Details
-//       </h3>
-
-//       <table className="w-full border text-sm">
-//         <thead className="bg-gray-100 border-b">
-//           <tr>
-//             <th className="border px-2 py-1 w-1/4">From Account</th>
-//             <th className="border px-2 py-1 w-1/4">To Account</th>
-//             <th className="border px-2 py-1 w-24 text-center">Amount (₹)</th>
-//             <th className="border px-2 py-1 w-1/3">Narration</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {voucher.transactions.map((t, index) => (
-//             <tr key={index}>
-//               <td className="border px-2">
-//                 <input
-//                   className="w-full outline-none py-1"
-//                   placeholder="From Account"
-//                   value={t.fromAccount}
-//                   onChange={(e) =>
-//                     handleTransactionChange(index, "fromAccount", e.target.value)
-//                   }
-//                 />
-//               </td>
-//               <td className="border px-2">
-//                 <input
-//                   className="w-full outline-none py-1"
-//                   placeholder="To Account"
-//                   value={t.toAccount}
-//                   onChange={(e) =>
-//                     handleTransactionChange(index, "toAccount", e.target.value)
-//                   }
-//                 />
-//               </td>
-//               <td className="border px-2 text-center">
-//                 <input
-//                   type="number"
-//                   className="w-full text-center outline-none py-1"
-//                   placeholder="0.00"
-//                   value={t.amount}
-//                   onChange={(e) =>
-//                     handleTransactionChange(index, "amount", e.target.value)
-//                   }
-//                 />
-//               </td>
-//               <td className="border px-2">
-//                 <input
-//                   className="w-full outline-none py-1"
-//                   placeholder="Narration"
-//                   value={t.narration}
-//                   onChange={(e) =>
-//                     handleTransactionChange(index, "narration", e.target.value)
-//                   }
-//                 />
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-
-//       {/* Add Transaction Button */}
-//       <button
-//         className="mt-3 text-blue-700 font-medium hover:underline"
-//         onClick={addTransaction}
-//       >
-//         + Add Transaction
-//       </button>
-
-//       {/* GST Section */}
-//       <div className="mt-6 border-t pt-4">
-//         <h3 className="text-lg font-semibold mb-3 text-blue-700">
-//           GST Details
-//         </h3>
-//         <div className="flex gap-4">
-//           <button
-//             onClick={handleAutoGST}
-//             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-//           >
-//             Add GST Automatically
-//           </button>
-
-//           <button
-//             onClick={handleManualGST}
-//             className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
-//           >
-//             Add GST Manually
-//           </button>
-//         </div>
-
-//         {voucher.gstRate > 0 && (
-//           <div className="mt-4 text-right">
-//             <p className="text-sm text-gray-700">
-//               GST Type: {voucher.gstType} ({voucher.gstRate}%)
-//             </p>
-//             <p className="text-md font-medium text-gray-800">
-//               GST Amount: ₹ {gstAmount.toFixed(2)}
-//             </p>
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Total */}
-//       <div className="flex justify-end mt-4">
-//         <div className="text-right">
-//           <p className="text-lg font-semibold text-gray-800">
-//             Total Before GST: ₹ {totalAmount.toFixed(2)}
-//           </p>
-//           <p className="text-xl font-bold text-blue-800">
-//             Grand Total: ₹ {grandTotal.toFixed(2)}
-//           </p>
-//         </div>
-//       </div>
-
-//       {/* Narration */}
-//       <div className="mt-6">
-//         <label className="text-sm font-medium">Overall Narration</label>
-//         <textarea
-//           className="w-full border rounded px-3 py-2 mt-1"
-//           rows="3"
-//           placeholder="Enter narration..."
-//           value={voucher.narration}
-//           onChange={(e) =>
-//             setVoucher({ ...voucher, narration: e.target.value })
-//           }
-//         ></textarea>
-//       </div>
-
-//       {/* Save Button */}
-//       <div className="flex justify-end">
-//         <button
-//           onClick={handleSave}
-//           className="mt-6 bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded font-medium"
-//         >
-//           Save Voucher
-//         </button>
-//       </div>
-
-//       {/* Footer Note */}
-//       <div className="mt-6 border-t pt-3 text-sm text-gray-600">
-//         <p>
-//           <strong>Note:</strong> Contra Voucher is used to record transfers
-//           between Cash and Bank Accounts. GST is included here for demo or
-//           internal accounting purposes.
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ContraVoucher;
 
 
 
-// import React, { useState, useEffect } from "react";
-// import Swal from "sweetalert2";
-// import axios from "axios";
-// import { useCompany } from "../context/CompanyContext";
-
-// const ContraVoucher = () => {
-//   const {companyId} = useCompany();
-//   const API = "http://localhost:3000/api/v1";
-
-//   const [accounts, setAccounts] = useState([]);
 
 
-//   const [voucher, setVoucher] = useState({
-//     date: new Date().toISOString().split("T")[0],
-//     narration: "",
-//     gstType: "",
-//     gstRate: 0,
-//     transactions: [
-//       { fromAccount: "", toAccount: "", amount: "", narration: "" },
-//     ],
-//   });
 
-//   // Fetch accounts (still useful for future use)
-//   useEffect(() => {
-//     const fetchAccounts = async () => {
-//       try {
-//         const res = await axios.get(`${API}/accounts/${companyId}`);
-//         setAccounts(res.data.data);
-//       } catch (error) {
-//         console.log("Error fetching accounts:", error);
-//       }
-//     };
-//     fetchAccounts();
-//   }, [companyId]);
 
-//   const handleTransactionChange = (index, field, value) => {
-//     const updated = [...voucher.transactions];
-//     updated[index][field] = value;
-//     setVoucher({ ...voucher, transactions: updated });
-//   };
 
-//   const addTransaction = () => {
-//     setVoucher({
-//       ...voucher,
-//       transactions: [
-//         ...voucher.transactions,
-//         { fromAccount: "", toAccount: "", amount: "", narration: "" },
-//       ],
-//     });
-//   };
 
-//   const totalAmount = voucher.transactions.reduce(
-//     (sum, t) => sum + (parseFloat(t.amount) || 0),
-//     0
-//   );
-//   const gstAmount = (totalAmount * voucher.gstRate) / 100;
-//   const grandTotal = totalAmount + gstAmount;
 
-//   const handleAutoGST = () => {
-//     const gstRate = 18;
-//     setVoucher({ ...voucher, gstType: "Auto", gstRate });
-//     Swal.fire({
-//       icon: "success",
-//       title: "GST Applied",
-//       text: `Automatically applied GST: ${gstRate}%`,
-//       timer: 1500,
-//       showConfirmButton: false,
-//     });
-//   };
 
-//   const handleManualGST = async () => {
-//     const { value: gstInput } = await Swal.fire({
-//       title: "Enter GST Percentage",
-//       input: "number",
-//       inputAttributes: { min: 0, max: 100 },
-//       confirmButtonText: "Apply GST",
-//       showCancelButton: true,
-//     });
 
-//     if (gstInput) {
-//       const gstRate = parseFloat(gstInput);
-//       setVoucher({ ...voucher, gstType: "Manual", gstRate });
 
-//       Swal.fire({
-//         icon: "success",
-//         title: "GST Updated",
-//         text: `${gstRate}% GST applied.`,
-//         timer: 1500,
-//         showConfirmButton: false,
-//       });
-//     }
-//   };
 
-//   const handleSave = async () => {
-//     if (
-//       voucher.transactions.some(
-//         (t) => !t.fromAccount || !t.toAccount || !t.amount
-//       )
-//     ) {
-//       Swal.fire({
-//         icon: "error",
-//         title: "Incomplete Details",
-//         text: "Please fill all fields in each transaction.",
-//       });
-//       return;
-//     }
 
-//     const payload = {
-//       ...voucher,
-//       companyId,
-//       totalAmount,
-//       gstAmount,
-//       grandTotal,
-//     };
 
-//     try {
-//       const res = await axios.post(`${API}/contra-voucher/${companyId}/create`, payload);
 
-//       Swal.fire({
-//         icon: "success",
-//         title: "Saved Successfully",
-//         text: "Contra Voucher saved!",
-//         timer: 1500,
-//         showConfirmButton: false,
-//       });
 
-//       console.log("Saved:", res.data);
-//     } catch (err) {
-//       console.log("Error saving:", err);
-//       Swal.fire({
-//         icon: "error",
-//         title: "Save Failed",
-//         text: "Something went wrong while saving!",
-//       });
-//     }
-//   };
 
-//   return (
-//     <div className="p-6 bg-white mx-auto shadow-md rounded-xl border border-gray-300">
-//       <div className="border-b py-3 mb-4">
-//         <h1 className="text-2xl font-bold text-blue-800">Contra Voucher</h1>
-//         <p className="text-gray-600 text-sm">Voucher Type: Contra</p>
-//       </div>
 
-//       <input
-//         type="date"
-//         className="border px-3 py-2 rounded mb-4"
-//         value={voucher.date}
-//         onChange={(e) => setVoucher({ ...voucher, date: e.target.value })}
-//       />
 
-//       <table className="w-full border text-sm">
-//         <thead className="bg-gray-100">
-//           <tr>
-//             <th className="border px-2 py-1">From Account</th>
-//             <th className="border px-2 py-1">To Account</th>
-//             <th className="border px-2 py-1">Amount</th>
-//             <th className="border px-2 py-1">Narration</th>
-//           </tr>
-//         </thead>
 
-//         <tbody>
-//           {voucher.transactions.map((t, index) => (
-//             <tr key={index}>
-//               {/* From Account as Input */}
-//               <td className="border px-2">
-//                 <input
-//                   type="text"
-//                   className="w-full py-1 border rounded px-2"
-//                   placeholder="From Account"
-//                   value={t.fromAccount}
-//                   onChange={(e) =>
-//                     handleTransactionChange(index, "fromAccount", e.target.value)
-//                   }
-//                 />
-//               </td>
 
-//               {/* To Account as Input */}
-//               <td className="border px-2">
-//                 <input
-//                   type="text"
-//                   className="w-full py-1 border rounded px-2"
-//                   placeholder="To Account"
-//                   value={t.toAccount}
-//                   onChange={(e) =>
-//                     handleTransactionChange(index, "toAccount", e.target.value)
-//                   }
-//                 />
-//               </td>
 
-//               <td className="border px-2">
-//                 <input
-//                   type="number"
-//                   className="w-full text-center"
-//                   placeholder="0.00"
-//                   value={t.amount}
-//                   onChange={(e) =>
-//                     handleTransactionChange(index, "amount", e.target.value)
-//                   }
-//                 />
-//               </td>
 
-//               <td className="border px-2">
-//                 <input
-//                   className="w-full"
-//                   placeholder="Narration"
-//                   value={t.narration}
-//                   onChange={(e) =>
-//                     handleTransactionChange(index, "narration", e.target.value)
-//                   }
-//                 />
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
 
-//       <button className="mt-3 text-blue-700 font-medium" onClick={addTransaction}>
-//         + Add Row
-//       </button>
 
-//       <div className="mt-6 border-t pt-4">
-//         <button
-//           className="bg-green-600 text-white px-4 py-2 rounded mr-3"
-//           onClick={handleAutoGST}
-//         >
-//           Auto GST
-//         </button>
 
-//         <button
-//           className="bg-yellow-500 text-white px-4 py-2 rounded"
-//           onClick={handleManualGST}
-//         >
-//           Manual GST
-//         </button>
 
-//         {voucher.gstRate > 0 && (
-//           <div className="mt-2 text-right">
-//             <p className="text-sm">
-//               GST ({voucher.gstRate}%): ₹ {gstAmount.toFixed(2)}
-//             </p>
-//           </div>
-//         )}
-//       </div>
 
-//       <div className="mt-4 text-right">
-//         <p>Total Before GST: ₹ {totalAmount.toFixed(2)}</p>
-//         <p className="text-xl font-bold text-blue-800">
-//           Grand Total: ₹ {grandTotal.toFixed(2)}
-//         </p>
-//       </div>
 
-//       <textarea
-//         className="w-full border mt-4 p-2 rounded"
-//         rows="3"
-//         placeholder="Overall Narration"
-//         value={voucher.narration}
-//         onChange={(e) => setVoucher({ ...voucher, narration: e.target.value })}
-//       ></textarea>
 
-//       <div className="text-right">
-//         <button
-//           className="bg-blue-700 text-white px-6 py-2 mt-4 rounded"
-//           onClick={handleSave}
-//         >
-//           Save Voucher
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default ContraVoucher;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -596,7 +596,7 @@ const ContraVoucher = () => {
 
   const [gst, setGst] = useState({ applied: false, percentage: 0, amount: 0 });
 
-  // Dynamic Lists
+
   const [accounts, setAccounts] = useState([]);
 
   const fetchAccounts = async () => {
@@ -608,7 +608,7 @@ const ContraVoucher = () => {
         name: b.bankName ? `${b.accountName} (${b.bankName})` : b.accountName,
       }));
 
-      // Find Cash Ledger
+
       const ledgerRes = await axios.get(`${API}/ledger/${companyId}/all`);
       const allLedgers = ledgerRes.data || [];
       const cashLedger = allLedgers.find(
@@ -665,12 +665,12 @@ const ContraVoucher = () => {
     }
   }, [id, companyId]);
 
-  // Handle Transaction Change
+
   const handleTransactionChange = (index, field, value) => {
     const updated = [...voucher.transactions];
     updated[index][field] = value;
 
-    // Recalculate GST if amount changes and GST is applied
+
     if (field === "amount" && gst.applied) {
       const totalAmount = updated.reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
       const gstAmount = (totalAmount * gst.percentage) / 100;
@@ -697,86 +697,86 @@ const ContraVoucher = () => {
   const grandTotal = totalAmount + (gst.applied ? gst.amount : 0);
 
 
-  // Save Voucher
-  // const saveVoucher = async () => {
-  //   if (
-  //     voucher.transactions.some(
-  //       (t) => !t.fromAccount || !t.toAccount || !t.amount
-  //     )
-  //   ) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Incomplete Details",
-  //       text: "Please fill all fields in each transaction.",
-  //     });
-  //     return;
-  //   }
-
-  //   const payload = {
-  //     ...voucher,
-  //     companyId,
-  //     totalAmount,
-  //     gstAmount: gst.amount,
-  //     grandTotal,
-  //   };
-
-  //   try {
-  //     const res = await axios.post(`${API}/contra-voucher/${companyId}/create`, payload);
-
-  //     Swal.fire({
-  //       icon: "success",
-  //       title: "Saved Successfully",
-  //       text: "Contra Voucher saved!",
-  //       timer: 2000,
-  //       showConfirmButton: false,
-  //     });
-
-  //     console.log("Saved:", res.data);
-
-  //     // Reset form
-  //     setVoucher({
-  //       date: new Date().toISOString().split("T")[0],
-  //       narration: "",
-  //       transactions: [
-  //         { fromAccount: "", toAccount: "", amount: "" },
-  //       ],
-  //     });
-  //     setGst({ applied: false, percentage: 0, amount: 0 });
-
-  //        try {
-  //   await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher/createVoucher`, {
-  //     companyId,
-  //     voucherNo: voucher.voucherNo, 
-  //     voucherType: "Contra",
-  //     items:payload.transactions
-
-  //   });
-
-  //   Swal.fire({
-  //     icon: "success",
-  //     title: "Saved Successfully",
-  //     timer: 2000,
-  //     showConfirmButton: false,
-  //   });
-  // } catch (err) {
-  //   console.log(err);
-  //   Swal.fire("Error", "Something went wrong!", "error");
-  // }
-
-
-  //   } 
 
 
 
-  //   catch (err) {
-  //     console.log("Error saving:", err);
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Save Failed",
-  //       text: "Something went wrong while saving!",
-  //     });
-  //   }
-  // };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const saveVoucher = async () => {
     if (
       voucher.transactions.some(
@@ -826,7 +826,7 @@ const ContraVoucher = () => {
         payload
       );
 
-      // Create Voucher Entry
+
       await axios.post(
         `${API}/voucher/createVoucher`,
         {
@@ -850,10 +850,10 @@ const ContraVoucher = () => {
         if (res.data?.pdf_path) {
           const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
           if (result.isConfirmed) {
-            // Directly download AND view
-            window.open(pdfUrl, "_blank"); // View in new tab
+
+            window.open(pdfUrl, "_blank");
             
-            // Force download
+
             fetch(pdfUrl)
               .then((response) => response.blob())
               .then((blob) => {
@@ -871,7 +871,7 @@ const ContraVoucher = () => {
         }
       });
 
-      // Reset Form
+
       setVoucher({
         date: new Date()
           .toISOString()
@@ -922,13 +922,13 @@ const ContraVoucher = () => {
         return;
       }
 
-      // ===== TAKE FIRST VOUCHER =====
+
 
       const firstRow = data[0];
 
-      // ===== BUILD TRANSACTIONS =====
 
-      // ===== REFRESH LATEST BANKS =====
+
+
 
       const bankRes =
         await axios.get(
@@ -938,7 +938,7 @@ const ContraVoucher = () => {
       const latestBanks =
         bankRes.data.accounts || [];
 
-      // ===== FETCH CASH LEDGER =====
+
 
       const ledgerRes =
         await axios.get(
@@ -948,7 +948,7 @@ const ContraVoucher = () => {
       const allLedgers =
         ledgerRes.data || [];
 
-      // ===== BUILD OPTIONS =====
+
 
       const latestAccounts =
         latestBanks.map((b) => ({
@@ -961,7 +961,7 @@ const ContraVoucher = () => {
               : b.accountName,
         }));
 
-      // ===== CASH =====
+
 
       const cashLedger =
         allLedgers.find(
@@ -996,7 +996,7 @@ const ContraVoucher = () => {
         });
       }
 
-      // ===== IMPORTED TRANSACTIONS =====
+
 
       const importedTransactions = [];
 
@@ -1012,7 +1012,7 @@ const ContraVoucher = () => {
             ?.trim()
             ?.toLowerCase();
 
-        // ===== AUTO CREATE BANK =====
+
 
         const createBankIfMissing =
           async (name) => {
@@ -1070,7 +1070,7 @@ const ContraVoucher = () => {
           toName
         );
 
-        // ===== FIND ACCOUNTS =====
+
 
         const fromAcc =
           latestAccounts.find(
@@ -1113,11 +1113,11 @@ const ContraVoucher = () => {
         });
       }
 
-      // ===== UPDATE DROPDOWNS =====
+
 
       setAccounts(latestAccounts);
 
-      // ===== SHOW DATA IN FORM =====
+
 
       setVoucher({
 
@@ -1146,7 +1146,7 @@ const ContraVoucher = () => {
           importedTransactions,
       });
 
-      // ===== REFRESH ACCOUNTS =====
+
 
       const refreshedBankRes =
         await axios.get(
@@ -1214,7 +1214,7 @@ const ContraVoucher = () => {
 
   return (
     <div className="p-6 bg-white mx-auto shadow-md rounded-xl border border-gray-300">
-      {/* Header */}
+
       <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
         <div className="flex items-center gap-2">
           <h1 className="text-base font-semibold text-slate-800">
@@ -1265,7 +1265,7 @@ const ContraVoucher = () => {
         </div>
       </div>
 
-      {/* Transactions Table */}
+
       <div className="overflow-x-auto mb-2 border border-slate-100 rounded-lg">
         <table className="w-full border-collapse">
           <thead>
@@ -1392,29 +1392,15 @@ const ContraVoucher = () => {
           </tbody>
         </table>
       </div>
-      {/* Add Row */}
+
       <button className="mt-3 text-blue-700" onClick={addTransaction}>
         + Add Transaction
       </button>
 
-      {/* GST */}
-      {/* <div className="flex justify-end gap-4 mt-6">
-        <button
-          onClick={handleAutoGST}
-          className="bg-green-600 text-white px-5 py-2 rounded"
-        >
-          Auto GST
-        </button>
 
-        <button
-          onClick={handleManualGST}
-          className="bg-yellow-500 text-white px-5 py-2 rounded"
-        >
-          Manual GST
-        </button>
-      </div> */}
 
-      {/* Totals */}
+
+
       <div className="flex justify-end mt-4">
         <div className="text-right space-y-1">
           <p className="font-medium">Subtotal: ₹ {totalAmount.toFixed(2)}</p>
@@ -1429,7 +1415,7 @@ const ContraVoucher = () => {
         </div>
       </div>
 
-      {/* Narration */}
+
       <div className="mt-6">
         <label className="text-sm font-medium">Narration</label>
         <textarea
@@ -1443,7 +1429,7 @@ const ContraVoucher = () => {
         ></textarea>
       </div>
 
-      {/* Submit */}
+
       <button
         onClick={saveVoucher}
         className="mt-6 bg-blue-700 text-white px-6 py-2 rounded"

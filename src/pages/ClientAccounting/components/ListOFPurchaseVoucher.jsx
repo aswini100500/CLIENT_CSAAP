@@ -158,7 +158,7 @@ const ListOfPurchaseVoucher = () => {
       generatedOn: today,
     });
 
-    // Totals
+
     const totalAmount = filteredVouchers.reduce((acc, v) => acc + (Number(v.amount) || 0), 0);
     doc.setFontSize(10);
     doc.setTextColor(40);
@@ -167,7 +167,7 @@ const ListOfPurchaseVoucher = () => {
     doc.setFont("helvetica", "bold");
     doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, { align: "right" });
 
-    // Table
+
     const tableData = filteredVouchers.map((v, i) => [
       i + 1,
       v.date,
@@ -203,7 +203,7 @@ const ListOfPurchaseVoucher = () => {
       }
     });
 
-    // Footer
+
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
@@ -303,7 +303,7 @@ const handlePrint = () => {
     generatedOn: today,
   });
 
-  // ===== TOTAL =====
+
 
   const totalAmount =
     filteredVouchers.reduce(
@@ -337,7 +337,7 @@ const handlePrint = () => {
     }
   );
 
-  // ===== TABLE =====
+
 
   const tableData =
     filteredVouchers.map(
@@ -438,7 +438,7 @@ autoTable(doc, {
 
 columnStyles: {
 
-  // SERIAL
+
 
   0: {
 
@@ -447,7 +447,7 @@ columnStyles: {
     cellWidth: 12,
   },
 
-  // DATE
+
 
   1: {
 
@@ -456,7 +456,7 @@ columnStyles: {
     cellWidth: 32,
   },
 
-  // VOUCHER NO
+
 
   2: {
 
@@ -465,7 +465,7 @@ columnStyles: {
     cellWidth: 38,
   },
 
-  // CUSTOMER NAME
+
 
   3: {
 
@@ -474,7 +474,7 @@ columnStyles: {
     cellWidth: 78,
   },
 
-  // AMOUNT
+
 
   4: {
 
@@ -486,7 +486,7 @@ columnStyles: {
 
   didParseCell: function (data) {
 
-    // CENTER HEADER TEXT
+
 
     if (data.section === "head") {
 
@@ -494,7 +494,7 @@ columnStyles: {
         "center";
     }
 
-    // RIGHT ALIGN TOTAL LABEL
+
 
     if (
       data.section === "foot" &&
@@ -506,7 +506,7 @@ columnStyles: {
     }
   },
 });
-  // ===== FOOTER =====
+
 
   const pageCount =
     doc.internal.getNumberOfPages();
@@ -548,7 +548,7 @@ columnStyles: {
     );
   }
 
-  // ===== OPEN PRINT =====
+
 
   const blobURL =
     doc.output(
@@ -652,19 +652,19 @@ setVouchers(
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-[monospace]">
-      {/* Header */}
+
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
 
-          {/* Left - Title */}
+
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Purchase Vouchers
           </h1>
 
-          {/* Right - Search + Buttons */}
+
           <div className="flex items-center gap-2.5 flex-wrap">
 
-            {/* Search */}
+
             <div className="relative">
               <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -676,7 +676,7 @@ setVouchers(
               />
             </div>
 
-            {/* Buttons */}
+
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
@@ -698,7 +698,7 @@ setVouchers(
                 <Printer size={14} /> Print
               </button>
 
-              {/* Export Dropdown */}
+
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -753,7 +753,7 @@ setVouchers(
         </div>
       </div>
 
-      {/* Table */}
+
       <div className="max-w-6xl mx-auto mt-6 bg-white shadow rounded-lg border border-gray-300">
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
@@ -849,12 +849,12 @@ setVouchers(
           </table>
         </div>
       </div>
-      {/* ── Purchase Voucher Detail Modal ── */}
+
       {viewModalOpen && selectedVoucher && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setViewModalOpen(false)}>
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
 
-            {/* Header */}
+
             <div className="flex items-center justify-between px-6 py-4 bg-linear-to-r from-blue-700 to-blue-500 rounded-t-2xl">
               <div>
                 <p className="text-blue-100 text-xs font-semibold uppercase tracking-widest">Purchase Voucher</p>
@@ -866,7 +866,7 @@ setVouchers(
             </div>
 
             <div className="p-6 space-y-6">
-              {/* Basics */}
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   ["Date", selectedVoucher.date?.split("T")[0] || "—"],
@@ -881,7 +881,7 @@ setVouchers(
                 ))}
               </div>
 
-              {/* Party & Tax */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600 mb-3 flex items-center gap-1"><MapPin size={12} /> Supplier Details</p>
@@ -924,7 +924,7 @@ setVouchers(
                 </div>
               </div>
 
-              {/* Items Table */}
+
               {selectedVoucher.items && selectedVoucher.items.length > 0 && (
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3 flex items-center gap-1"><Package size={12} /> Line Items</p>
@@ -959,7 +959,7 @@ setVouchers(
                 </div>
               )}
 
-              {/* Dispatch Details */}
+
               {(selectedVoucher.dispatchedThrough || selectedVoucher.destination || selectedVoucher.receiptNoteNo) && (
                 <div className="bg-orange-50/50 rounded-xl p-4 border border-orange-100">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-orange-600 mb-3 flex items-center gap-1"><Truck size={12} /> Receipt / Dispatch</p>
@@ -981,7 +981,7 @@ setVouchers(
                 </div>
               )}
 
-              {/* Narration */}
+
               {selectedVoucher.narration && (
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Narration</p>
@@ -989,7 +989,7 @@ setVouchers(
                 </div>
               )}
 
-              {/* Footer */}
+
               <div className="flex justify-between items-center pt-2">
                 <button
                   onClick={() => { setViewModalOpen(false); handleEdit(selectedVoucher.id); }}

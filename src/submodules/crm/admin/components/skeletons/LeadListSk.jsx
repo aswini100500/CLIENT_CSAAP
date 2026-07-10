@@ -19,7 +19,7 @@ const LeadListSk = () => {
         `}
       </style>
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Dashboard header skeleton */}
+
         <div className="rounded-xl border border-slate-200 bg-white p-4">
           <div className="flex flex-col md:flex-row gap-4 justify-between md:items-center">
             <div className={`h-8 w-48 rounded-lg ${shimmerClass}`}></div>
@@ -30,7 +30,7 @@ const LeadListSk = () => {
           </div>
         </div>
 
-        {/* Table Skeleton */}
+
         <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
           <div className="px-4 py-3 border-b border-slate-200 bg-linear-to-t from-slate-100 to-white">
             <div className="flex justify-between items-center">

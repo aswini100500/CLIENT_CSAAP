@@ -31,17 +31,17 @@ export default function IDCardMaker() {
       .catch((err) => console.error("html2canvas error:", err));
   };
 
-  const templateImg = "/id.png"; // Left side
-  const termsImg = "/id2.png"; // Right side
+  const templateImg = "/id.png";
+  const termsImg = "/id2.png";
   const placeholderImg = "/placeholder.png";
 
   return (
     <div className="p-8 flex flex-row gap-8 max-w-6xl mx-auto min-h-screen">
-      {/* Left Side: ID Card Preview (Top and Bottom) */}
 
-      {/* Right Side: Input Form (One Field per Row) */}
+
+
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-8 rounded-2xl shadow-xl">
-        {/* Full Name */}
+
         <div className="flex flex-col">
           <label
             htmlFor="name"
@@ -59,7 +59,7 @@ export default function IDCardMaker() {
           />
         </div>
 
-        {/* Staff ID */}
+
         <div className="flex flex-col">
           <label
             htmlFor="staffId"
@@ -77,7 +77,7 @@ export default function IDCardMaker() {
           />
         </div>
 
-        {/* Email */}
+
         <div className="flex flex-col">
           <label
             htmlFor="email"
@@ -95,7 +95,7 @@ export default function IDCardMaker() {
           />
         </div>
 
-        {/* Phone */}
+
         <div className="flex flex-col">
           <label
             htmlFor="phone"
@@ -113,7 +113,7 @@ export default function IDCardMaker() {
           />
         </div>
 
-        {/* Role */}
+
         <div className="flex flex-col">
           <label
             htmlFor="role"
@@ -131,7 +131,7 @@ export default function IDCardMaker() {
           />
         </div>
 
-        {/* Profile Photo */}
+
         <div className="flex flex-col">
           <label
             htmlFor="photo"
@@ -155,7 +155,7 @@ export default function IDCardMaker() {
           />
         </div>
 
-        {/* Join Date */}
+
         <div className="flex flex-col">
           <label
             htmlFor="joinDate"
@@ -172,7 +172,7 @@ export default function IDCardMaker() {
           />
         </div>
 
-        {/* Expiry Date */}
+
         <div className="flex flex-col">
           <label
             htmlFor="expiryDate"
@@ -189,7 +189,7 @@ export default function IDCardMaker() {
           />
         </div>
 
-        {/* Terms & Conditions */}
+
         <div className="flex flex-col col-span-2">
           <label
             htmlFor="terms"
@@ -206,7 +206,7 @@ export default function IDCardMaker() {
           />
         </div>
 
-        {/* Download Button */}
+
         <div className="col-span-2 flex justify-end">
           <button
             onClick={handleDownload}
@@ -218,7 +218,7 @@ export default function IDCardMaker() {
       </div>
 
       <div className="flex flex-col gap-8 w-1/2">
-        {/* Top Image: Left Section of ID Card */}
+
         <div
           ref={cardRef}
           className="relative w-120 h-100 border shadow-xl flex font-sans rounded-2xl overflow-hidden gap-4 bg-white"
@@ -249,7 +249,7 @@ export default function IDCardMaker() {
             </div>
           </div>
 
-          {/* Right Section */}
+
           <div className="relative w-1/2 h-full">
             <img
               src={termsImg}

@@ -60,7 +60,7 @@ const ViewPaymentSlabsModal = ({
         setHasProject(true);
       }
 
-      // Parse project ID parts
+
       let pId = lead.project_id;
       let projectType = "apartment";
       let projectId = lead.project_id;
@@ -71,7 +71,7 @@ const ViewPaymentSlabsModal = ({
         pId = parts[1];
       }
 
-      // Fetch project details to get units FIRST (needed to detect finished units)
+
       let units = [];
       try {
         const response = await axios.get(
@@ -88,7 +88,7 @@ const ViewPaymentSlabsModal = ({
         console.warn("Failed fetching project details for units:", err);
       }
 
-      // Detect if the selected unit (or lead's unit) is finished
+
       const currentUnitId = lead?.unit_id;
       const matchedUnit = currentUnitId ? units.find(u => u.unit_id === currentUnitId) : null;
       const unitIsFinished = matchedUnit ? isFinishedUnit(matchedUnit) : false;
@@ -97,18 +97,18 @@ const ViewPaymentSlabsModal = ({
         setIsFinished(unitIsFinished);
       }
 
-      // For finished units: skip setup check
-      // For ongoing units: verify project setup exists
+
+
       let data = [];
       let stagePassings = [];
       if (unitIsFinished) {
         if (isMounted.current) setHasSetup(true);
-        // Static slabs for finished units — just balance payment
+
         data = [
           { id: "balance_payment", name: "Balance / Possession Payment", description: "Remaining balance on possession", status: "planned" }
         ];
       } else {
-        // Ongoing unit — check for project setup
+
         const setupsRes = await operationApi.getProjectSetups();
         const setups = getArrayData(setupsRes);
         const matchedSetup = setups.find(s => 
@@ -128,10 +128,10 @@ const ViewPaymentSlabsModal = ({
           setHasSetup(true);
         }
 
-        // Fetch the construction milestone stages
+
         data = await fetchProjectStages(lead.project_id, lead.project_type || "apartment", token);
 
-        // Fetch stage passings for this project setup
+
         try {
           const passingsRes = await operationApi.getStagePassings();
           const passings = getArrayData(passingsRes);
@@ -141,7 +141,7 @@ const ViewPaymentSlabsModal = ({
         }
       }
       
-      // Fetch existing payment plan
+
       let existingPlan = null;
       try {
         const planRes = await accountingApi.get(`/api/v1/project-payment`, {
@@ -159,13 +159,13 @@ const ViewPaymentSlabsModal = ({
           setPaymentPlan(existingPlan);
           setTotalDealValue(existingPlan.total_deal_value);
           
-          // Map stage_id to slab
+
           const slabMap = new Map();
           existingPlan.slabs.forEach(slab => {
             slabMap.set(slab.stage_id, slab);
           });
 
-          // Extract booking slab
+
           const matchedBooking = slabMap.get("booking_amount");
           if (matchedBooking) {
             setBookingSlab({
@@ -185,7 +185,7 @@ const ViewPaymentSlabsModal = ({
           const mergedStages = data.map((s, idx) => {
             const matchedSlab = slabMap.get(s.id);
             
-            // Get construction status from stage passings API if available, otherwise fallback to stage status
+
             const matchedPassing = stagePassings.find(p => 
               String(p.stage_name || "").toLowerCase().trim() === String(s.name || "").toLowerCase().trim()
             );
@@ -213,7 +213,7 @@ const ViewPaymentSlabsModal = ({
             };
           });
 
-          // Compute isDue for each stage based on project setup status
+
           if (!unitIsFinished && mergedStages.length > 0) {
             const isCompleted = (s) => {
               const cs = (s.construction_status || "").toLowerCase().trim();
@@ -253,7 +253,7 @@ const ViewPaymentSlabsModal = ({
           setStages(mergedStages);
           setError("");
         } else {
-          // Plan does not exist - automatically open create/edit slabs
+
           setPaymentPlan(null);
           setBookingSlab(null);
           setError("No active payment slab found for this lead.");
@@ -279,10 +279,10 @@ const ViewPaymentSlabsModal = ({
     return () => {
       isMounted.current = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [lead?.project_id, lead?.project_type, lead?.id, lead?.company_id, user?.company_id]);
 
-  // Helper to format currency
+
   const formatINR = (val) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -299,7 +299,7 @@ const ViewPaymentSlabsModal = ({
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-xs">
       <div className="app-modal w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         
-        {/* Modal Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="flex items-start gap-3 min-w-0">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-100 shrink-0">
@@ -331,7 +331,7 @@ const ViewPaymentSlabsModal = ({
           </button>
         </div>
 
-        {/* Modal Body */}
+
         <div className="p-5 overflow-y-auto custom-scrollbar flex-1 space-y-5 bg-[#fcfdfd]">
           {loading ? (
             <div className="p-16 text-center">
@@ -398,9 +398,9 @@ const ViewPaymentSlabsModal = ({
                 </div>
               )}
 
-              {/* Payment Summary Indicators */}
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Total Contract Value */}
+
                 <div className="bg-white p-4 rounded-2xl border border-(--border-soft) shadow-2xs flex items-center gap-3">
                   <div className="size-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-500 shrink-0">
                     <Receipt className="size-5" />
@@ -413,7 +413,7 @@ const ViewPaymentSlabsModal = ({
                   </div>
                 </div>
 
-                {/* Total Collected */}
+
                 <div className="bg-white p-4 rounded-2xl border border-(--border-soft) shadow-2xs flex items-center gap-3">
                   <div className="size-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-500 shrink-0">
                     <CheckCircle2 className="size-5" />
@@ -431,7 +431,7 @@ const ViewPaymentSlabsModal = ({
                   </div>
                 </div>
 
-                {/* Outstanding Balance */}
+
                 <div className="bg-white p-4 rounded-2xl border border-(--border-soft) shadow-2xs flex items-center gap-3">
                   <div className="size-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-500 shrink-0">
                     <TrendingUp className="size-5" />
@@ -445,7 +445,7 @@ const ViewPaymentSlabsModal = ({
                 </div>
               </div>
 
-              {/* Collection Progress Bar */}
+
               {totalDealValue > 0 && (
                 <div className="bg-white p-4 rounded-2xl border border-(--border-soft) shadow-2xs space-y-2">
                   <div className="flex items-center justify-between text-[12px] font-bold text-(--text-soft)">
@@ -461,7 +461,7 @@ const ViewPaymentSlabsModal = ({
                 </div>
               )}
 
-              {/* Booking Slab Highlight Card */}
+
               {bookingSlab && (
                 <div className="app-panel p-4 bg-sky-50/40 border border-sky-100/70 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-2.5">
@@ -510,7 +510,7 @@ const ViewPaymentSlabsModal = ({
                 </div>
               )}
 
-              {/* Milestones Breakdown */}
+
               <div className="app-panel overflow-hidden border border-(--border-soft) bg-white">
                 <div className="app-section-bar px-4 py-2.5 flex items-center justify-between border-b border-(--border-soft)">
                   <h4 className="app-heading flex items-center gap-1.5 text-slate-700">
@@ -595,7 +595,7 @@ const ViewPaymentSlabsModal = ({
           )}
         </div>
 
-        {/* Modal Footer */}
+
         <div className="px-5 py-3 border-t border-(--border-soft) flex justify-between items-center bg-white">
           <div className="text-[12px] font-bold text-(--text-soft) flex items-center gap-1.5">
           </div>
@@ -624,7 +624,7 @@ const ViewPaymentSlabsModal = ({
   return createPortal(modalContent, document.body);
 };
 
-// Mock setups
+
 const mockProjectSetupResponse = {
   "2": {
     "success": true,

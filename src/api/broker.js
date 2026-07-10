@@ -1,4 +1,4 @@
-// api/brokers.js
+
 import client from './client'
 
 export const getBrokers = () => client.get('/api/tenant/brokers').then(r => r.data)

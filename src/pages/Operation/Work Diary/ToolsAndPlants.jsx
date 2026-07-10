@@ -43,13 +43,13 @@ const ToolsAndPlants = ({ projectSetup }) => {
     }
   };
 
-  // Handle input changes
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTools({ ...tools, [name]: Number(value) });
   };
 
-  // Add a new tool
+
   const handleAddTool = () => {
     const tool = newTool.trim().replace(/\s+/g, "_");
     if (!tool) return Swal.fire("Oops!", "Please enter a valid tool name!", "warning");
@@ -60,7 +60,7 @@ const ToolsAndPlants = ({ projectSetup }) => {
     Swal.fire("Added!", "New tool added successfully.", "success");
   };
 
-  // Delete custom tool
+
   const handleDeleteTool = (tool) => {
     const updated = { ...tools };
     delete updated[tool];
@@ -68,7 +68,7 @@ const ToolsAndPlants = ({ projectSetup }) => {
     Swal.fire("Deleted!", `${tool.replace(/_/g, " ")} removed successfully.`, "success");
   };
 
-  // Save tools
+
   const handleSave = async () => {
     if (!projectSetup) {
         return Swal.fire("Error", "Please complete Project Setup first!", "error");
@@ -100,7 +100,7 @@ const ToolsAndPlants = ({ projectSetup }) => {
             timer: 2000,
             showConfirmButton: false,
         });
-        fetchToolsDetails(); // Refresh
+        fetchToolsDetails();
     } catch (error) {
         console.error("Error saving tools details:", error);
         Swal.fire("Error", "Failed to save tools details.", "error");
@@ -113,7 +113,7 @@ const ToolsAndPlants = ({ projectSetup }) => {
     <div className="w-[95%] mx-auto max-w-6xl bg-gray-50 p-6 rounded-lg shadow-sm">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Tools & Plants</h2>
 
-      {/* Add new tool input */}
+
       <div className="flex flex-col sm:flex-row items-center gap-3 mb-6">
         <input
           type="text"
@@ -130,7 +130,7 @@ const ToolsAndPlants = ({ projectSetup }) => {
         </button>
       </div>
 
-      {/* Tools grid */}
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Object.keys(tools).map((tool) => (
           <div
@@ -151,7 +151,7 @@ const ToolsAndPlants = ({ projectSetup }) => {
               />
             </div>
 
-            {/* Delete button for custom tools */}
+
             {!DEFAULT_TOOLS.includes(tool) && (
               <button
                 onClick={() => handleDeleteTool(tool)}
@@ -164,7 +164,7 @@ const ToolsAndPlants = ({ projectSetup }) => {
         ))}
       </div>
 
-      {/* Save button */}
+
       <div className="mt-8 text-right">
         <button
           onClick={handleSave}
@@ -174,7 +174,7 @@ const ToolsAndPlants = ({ projectSetup }) => {
         </button>
       </div>
 
-      {/* Display saved table */}
+
       {savedData && (
         <div className="mt-10 bg-white shadow-md rounded-lg border border-gray-200 p-6">
           <h3 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Saved Tools & Plants</h3>

@@ -88,7 +88,7 @@ const EmployeeAttendance = () => {
   ];
   const availableMonths = monthNames.map((_, index) => index);
 
-  // Soft Enterprise Design Language Classes
+
   const panelClass =
     "app-panel overflow-hidden transition-colors duration-200 hover:border-(--border-strong)";
   const controlClass =
@@ -1147,7 +1147,7 @@ const EmployeeAttendance = () => {
   return (
     <div className="app-shell min-h-screen p-4 font-sans md:p-6">
       <div className="mx-auto max-w-425">
-        {/* Filters and Controls */}
+
         <div className="app-panel mb-6 p-4 md:p-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-3">
@@ -1358,7 +1358,7 @@ const EmployeeAttendance = () => {
           )}
         </div>
 
-        {/* Attendance Table */}
+
         <div
           className="app-panel overflow-hidden max-h-[calc(100vh-130px)] flex flex-col bg-(--bg-subtle)/45"
         >
@@ -1584,7 +1584,7 @@ const EmployeeAttendance = () => {
                 </table>
               </div>
 
-              {/* Pagination Section */}
+
               <div className="app-section-bar border-t border-(--border-soft) px-4 py-3">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="flex flex-col gap-1">
@@ -1686,7 +1686,7 @@ const EmployeeAttendance = () => {
         </div>
       </div>
 
-      {/* Daily Attendance Modal */}
+
       {selectedAttendanceRecord && !showAuditModal && (
         <DailyAttendanceModal
           selectedAttendanceRecord={selectedAttendanceRecord}
@@ -1724,7 +1724,7 @@ const EmployeeAttendance = () => {
         />
       )}
 
-      {/* Monthly Attendance Overview */}
+
       {showTimesheet && selectedEmployee && (
         <MonthlyAttendanceOverview
           selectedEmployee={selectedEmployee}

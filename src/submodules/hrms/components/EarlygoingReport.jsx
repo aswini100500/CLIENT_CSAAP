@@ -54,7 +54,7 @@ export default function EarlyGoingReport() {
 
   const daysInMonth = getDaysInMonth();
 
-  // Calculate summary statistics
+
   const summary = {
     totalEmployees: earlyGoingData.length,
     totalEarlyGoingDays: earlyGoingData.reduce(
@@ -76,12 +76,12 @@ export default function EarlyGoingReport() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Monthly Early Going Report
         </h1>
 
-        {/* Form Section */}
+
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Early Going Report
@@ -137,10 +137,10 @@ export default function EarlyGoingReport() {
           </form>
         </div>
 
-        {/* Report Section */}
+
         {showReport && (
           <div className="bg-white rounded-2xl shadow-lg p-6 animate-fadeIn">
-            {/* Early Going Table */}
+
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm">
                 <thead>
@@ -164,7 +164,7 @@ export default function EarlyGoingReport() {
                       Location
                     </th>
 
-                    {/* Day Headers */}
+
                     {Array.from({ length: daysInMonth }, (_, i) => (
                       <th
                         key={i + 1}
@@ -200,7 +200,7 @@ export default function EarlyGoingReport() {
                         {employee.location}
                       </td>
 
-                      {/* Day Cells */}
+
                       {(employee.days || [])
                         .slice(0, daysInMonth)
                         .map((day) => (
@@ -224,7 +224,7 @@ export default function EarlyGoingReport() {
         )}
       </div>
 
-      {/* Add custom animation for fade-in effect */}
+
       <style jsx>{`
         @keyframes fadeIn {
           from {

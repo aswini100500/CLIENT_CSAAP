@@ -38,7 +38,7 @@ const CompanyProfilePage = () => {
         if (result.success && result.data) {
           setCompanyData(result.data);
           setError(null);
-          // Log the logo path to debug
+
           console.log('Logo path from API:', result.data.logo_path);
         } else {
           throw new Error('Invalid data structure received from API');
@@ -54,7 +54,7 @@ const CompanyProfilePage = () => {
     fetchCompanyData();
   }, [companyId]);
 
-  // Format date
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -65,7 +65,7 @@ const CompanyProfilePage = () => {
     });
   };
 
-  // Status badge color
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'active':
@@ -81,7 +81,7 @@ const CompanyProfilePage = () => {
     }
   };
 
-  // Get status icon
+
   const getStatusIcon = (status) => {
     switch (status) {
       case 'active':
@@ -101,11 +101,11 @@ const CompanyProfilePage = () => {
     ? `${API_BASE_URL}/${companyData.logo_path}`
     : null;
 
-  // Company name for fallback
+
   const companyName = companyData?.company_name || companyData?.master_company_name || "Company";
   const companyLogoText = companyName.charAt(0).toUpperCase();
 
-  // Loading State
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f8faf8] flex items-center justify-center">
@@ -118,7 +118,7 @@ const CompanyProfilePage = () => {
     );
   }
 
-  // Error State
+
   if (error) {
     return (
       <div className="min-h-screen bg-[#f8faf8] flex items-center justify-center p-4">
@@ -139,7 +139,7 @@ const CompanyProfilePage = () => {
     );
   }
 
-  // No Data State
+
   if (!companyData) {
     return (
       <div className="min-h-screen bg-[#f8faf8] flex items-center justify-center p-4">
@@ -154,11 +154,11 @@ const CompanyProfilePage = () => {
     );
   }
 
-  // Main Render
+
   return (
     <div className="app-shell p-4 min-h-screen bg-[#f8faf8]">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header Section */}
+
         <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
           <div className="px-6 py-5 border-b border-[#e2f2e9] bg-linear-to-r from-[#f8faf8] to-[#f0fdf4]">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -189,7 +189,7 @@ const CompanyProfilePage = () => {
             </div>
           </div>
 
-          {/* Company Logo and Basic Info - Updated to match Sidebar */}
+
           <div className="px-6 py-5">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
               <div className="relative">
@@ -207,7 +207,7 @@ const CompanyProfilePage = () => {
                       onLoad={() => console.log('Logo loaded successfully in profile page')}
                     />
                   ) : (
-                    /* Fallback text logo - same as Sidebar */
+
                     <div className="w-full h-full bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-3xl font-bold">
                       {companyLogoText}
                     </div>
@@ -232,11 +232,11 @@ const CompanyProfilePage = () => {
           </div>
         </div>
 
-        {/* Main Content Grid */}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Company Details */}
+
           <div className="lg:col-span-2 space-y-6">
-            {/* Company Information */}
+
             <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
               <div className="px-6 py-3.5 border-b border-[#e2f2e9] bg-[#f8faf8]">
                 <h2 className="text-[15px] font-bold text-[#042f2e] flex items-center gap-2">
@@ -272,7 +272,7 @@ const CompanyProfilePage = () => {
               </div>
             </div>
 
-            {/* Address */}
+
             <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
               <div className="px-6 py-3.5 border-b border-[#e2f2e9] bg-[#f8faf8]">
                 <h2 className="text-[15px] font-bold text-[#042f2e] flex items-center gap-2">
@@ -301,9 +301,9 @@ const CompanyProfilePage = () => {
             </div>
           </div>
 
-          {/* Right Column - Contact & Admin */}
+
           <div className="space-y-6">
-            {/* Contact Information */}
+
             <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
               <div className="px-6 py-3.5 border-b border-[#e2f2e9] bg-[#f8faf8]">
                 <h2 className="text-[15px] font-bold text-[#042f2e] flex items-center gap-2">
@@ -327,7 +327,7 @@ const CompanyProfilePage = () => {
               </div>
             </div>
 
-            {/* Admin Information */}
+
             <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
               <div className="px-6 py-3.5 border-b border-[#e2f2e9] bg-[#f8faf8]">
                 <h2 className="text-[15px] font-bold text-[#042f2e] flex items-center gap-2">

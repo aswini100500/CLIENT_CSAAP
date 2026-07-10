@@ -40,7 +40,7 @@ function Navigation() {
     }
   }, [userId, user, navigate]);
 
-  // auto-open voucher dropdown if any voucher page is active
+
   useEffect(() => {
     if (
       location.pathname.includes("purchasevoucher") ||
@@ -102,7 +102,7 @@ function Navigation() {
     },
   ];
 
-  // Handle click on restricted links
+
   const handleRestrictedClick = (e, requiresSubscription) => {
     if (requiresSubscription && !hasActiveSubscription) {
       e.preventDefault();
@@ -110,7 +110,7 @@ function Navigation() {
     }
   };
 
-  // reusable link component
+
   const NavLink = ({ path, label, icon, requiresSubscription = false }) => {
     const active = location.pathname === path;
     return (
@@ -130,7 +130,7 @@ function Navigation() {
 
   return (
     <div className=" sidebar  flex font-[monospace] no-print">
-      {/*  FIXED SIDEBAR WITH SCROLL */}
+
       <div
         className={`${isOpen ? "w-60" : "w-16"} 
     fixed left-0 top-0 h-screen 
@@ -141,7 +141,7 @@ function Navigation() {
     transition-all duration-300 
     scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200`}
       >
-        {/* HEADER */}
+
         <div onClick={() => navigate('/')} className=" cursor-pointer flex items-center justify-between mb-1 top-0 bg-white pb-2 z-10">
           {isOpen && (
             <h1 className="text-lg font-bold tracking-wide text-blue-800">
@@ -159,13 +159,13 @@ function Navigation() {
 
         <hr className="border-gray-300 mb-4" />
 
-        {/* SCROLLABLE NAVIGATION */}
+
         <nav className="space-y-1">
           {links.map((item) => (
             <NavLink key={item.path} {...item} />
           ))}
 
-          {/* VOUCHER DROPDOWN */}
+
           <div>
             <button
               onClick={(e) => {
@@ -208,7 +208,7 @@ function Navigation() {
                   label="List Of Payment Voucher"
                   requiresSubscription={true}
                 />
-                {/* recepit voucher */}
+
                 <NavLink path="/receptVoucher" label="Recipt Voucher" requiresSubscription={true} />
                 <NavLink
                   path="/listOfReciptVoucher"
@@ -247,9 +247,9 @@ function Navigation() {
             )}
           </div>
 
-          {/* BANKING DROPDOWN */}
+
           <div>
-            {/* Banking Main Button */}
+
             <button
               onClick={(e) => {
                 if (!hasActiveSubscription) {
@@ -277,7 +277,7 @@ function Navigation() {
               )}
             </button>
 
-            {/* Banking Expanded Menu */}
+
             {showBanking && (
               <div className="ml-4 mt-2 space-y-1">
                 <NavLink path="/bank-activities" label="Bank Activities" requiresSubscription={true} />
@@ -319,7 +319,7 @@ function Navigation() {
             icon={<BarChart4 size={18} />}
             requiresSubscription={true}
           />
-          {/* INVENTORY BOOK DROPDOWN */}
+
           <div>
             <button
               onClick={(e) => {
@@ -381,21 +381,21 @@ function Navigation() {
           Logout <LogOut size={20} />
         </button>
 
-        {/* FOOTER */}
+
         <div className="mt-auto border-t border-gray-200 pt-4 text-center text-md text-gray-500 sticky bottom-0 bg-white pb-2">
           {isOpen ? "© 2025 Cloudsat Pvt Ltd" : "©"}
         </div>
       </div>
 
-      {/* SHIFT PAGE CONTENT RIGHT OF SIDEBAR */}
+
       <div
         className={`${isOpen ? "ml-60" : "ml-16"
           } w-full transition-all duration-300`}
       >
-        {/* Your main content goes here */}
+
       </div>
 
-      {/* Subscription Modal */}
+
       <SubscriptionModal
         isOpen={showSubscriptionModal}
         onClose={() => setShowSubscriptionModal(false)}

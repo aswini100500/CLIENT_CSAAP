@@ -17,7 +17,7 @@ const BulkImportButton = ({ onDataParsed, buttonLabel = "Import Excel/CSV" }) =>
             const ws = workbook.Sheets[wsname];
             const data = XLSX.utils.sheet_to_json(ws, { raw: false, dateNF: 'yyyy-mm-dd' });
             onDataParsed(data);
-            // Reset input to allow selecting same file again if needed
+
             if (fileInputRef.current) fileInputRef.current.value = "";
         };
         reader.readAsBinaryString(file);

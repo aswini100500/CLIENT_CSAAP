@@ -14,14 +14,14 @@ export default function SalaryReport() {
   return (
     <div className="p-6 bg-linear-to-br from-gray-50 to-gray-100 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        {/* Header Card */}
+
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden mb-6">
           <div className="bg-linear-to-r from-blue-500 to-blue-600 px-6 py-4">
             <h1 className="text-white text-xl font-bold">Salary Report</h1>
             <p className="text-blue-100 text-sm mt-1">Generate and manage salary reports</p>
           </div>
 
-          {/* Month Selection */}
+
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-center justify-between">
               <div>
@@ -41,7 +41,7 @@ export default function SalaryReport() {
             </div>
           </div>
 
-          {/* Selection Section */}
+
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
@@ -53,7 +53,7 @@ export default function SalaryReport() {
                 <div key={index} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                   <h3 className="font-semibold text-gray-700 mb-3 text-sm">{sec.title}</h3>
                   
-                  {/* Radio Filters */}
+
                   <div className="space-y-2 mb-4">
                     <label className="flex items-center gap-2 cursor-pointer group">
                       <input 
@@ -81,7 +81,7 @@ export default function SalaryReport() {
                     </label>
                   </div>
 
-                  {/* List Box */}
+
                   <div className="border border-gray-300 rounded-lg bg-white h-40 overflow-hidden flex flex-col">
                     {sec.search && (
                       <div className="p-2 border-b border-gray-200">
@@ -109,7 +109,7 @@ export default function SalaryReport() {
             </div>
           </div>
 
-          {/* Report Type Selection */}
+
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
@@ -136,7 +136,7 @@ export default function SalaryReport() {
             </div>
           </div>
 
-          {/* Action Buttons */}
+
           <div className="p-6 bg-gray-50">
             <div className="flex flex-col sm:flex-row gap-3 justify-end">
               <button className="px-6 py-3 bg-linear-to-r from-green-500 to-green-600 text-white rounded-lg font-semibold shadow-md hover:from-green-600 hover:to-green-700 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2 justify-center">

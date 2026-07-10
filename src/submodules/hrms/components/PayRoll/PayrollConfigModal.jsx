@@ -17,7 +17,7 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
   });
 
   const handleChange = (field, value, isNumber = true) => {
-    // Prevent negative values during typing if isNumber is true
+
     if (isNumber && value.startsWith("-")) {
       return;
     }
@@ -42,7 +42,7 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
   };
 
   const handleKeyDown = (e) => {
-    // Prevent special characters like 'e', '+', '-' in numeric inputs
+
     if (["e", "E", "+", "-"].includes(e.key)) {
       e.preventDefault();
     }
@@ -69,7 +69,7 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
         </div>
 
         <div className="p-4 space-y-4">
-          {/* ── OT Rate Type Toggle ── */}
+
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className="modal-label text-(--text-body)">OT Rate Is Fixed</label>
@@ -85,7 +85,7 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
             </div>
           </div>
 
-          {/* ── Fixed OT Rate (shown when is_ot_rate_fixed) ── */}
+
           {localConfig.is_ot_rate_fixed ? (
             <div>
               <label className="modal-label block text-(--text-body) mb-1.5">

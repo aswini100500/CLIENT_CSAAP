@@ -27,8 +27,8 @@ const GstDetails = () => {
           sessionStorage.getItem("employeeToken") ||
           sessionStorage.getItem("token");
 
-        // Fetch and sync from the backend
-        // We use the auth endpoint that we created
+
+
         const response = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/gst/sync`, {
           headers: {
             "x-tenant-slug": currentSlug,
@@ -207,7 +207,7 @@ const GstDetails = () => {
 
       {companyDetails && (
         <form onSubmit={handleSave} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Main Company Info */}
+
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
             <div className="bg-linear-to-r from-slate-800 to-slate-900 p-6">
               <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm border border-white/20">
@@ -353,7 +353,7 @@ const GstDetails = () => {
             </div>
           </div>
 
-          {/* Tax & Registration Info */}
+
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
             <div className="bg-linear-to-r from-green-600 to-emerald-600 p-6">
               <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm border border-white/20">

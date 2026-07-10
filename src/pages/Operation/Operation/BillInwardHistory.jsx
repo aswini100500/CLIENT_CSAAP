@@ -18,7 +18,7 @@ const BillInwardHistory = () => {
       setLoading(true);
       const response = await operationApi.getBillInwards();
       if (response.data && response.data.data) {
-        // The API returns an array or an object with data array
+
         const data = Array.isArray(response.data.data) ? response.data.data : [response.data.data];
         setBills(data);
       }

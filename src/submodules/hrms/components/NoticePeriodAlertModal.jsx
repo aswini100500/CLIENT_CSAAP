@@ -29,7 +29,7 @@ const NoticePeriodAlertModal = ({
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
-        {/* Header */}
+
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-red-50/50">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-red-100 text-red-600 rounded-xl">
@@ -50,7 +50,7 @@ const NoticePeriodAlertModal = ({
           </button>
         </div>
 
-        {/* Content */}
+
         <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
           {alerts.map((item) => {
             const loadingKeyPrefix = `${item.source}-${item.id}`;
@@ -141,7 +141,7 @@ const NoticePeriodAlertModal = ({
           })}
         </div>
 
-        {/* Footer */}
+
         <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
           <button 
             onClick={onClose}

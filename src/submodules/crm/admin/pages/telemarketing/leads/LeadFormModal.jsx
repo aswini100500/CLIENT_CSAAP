@@ -17,13 +17,13 @@ import {
   Building,
   ChevronDown,
 } from "lucide-react";
-// Import project units directly using VITE_CSAAP_URL
+
 import { LEAD_SOURCES, normalizeUnits } from "./leadUtils";
 
 const inputClass =
   "app-input w-full rounded-xl px-4 py-2.5 text-[14px]";
 
-// Helper to check if a specific unit is booked from tenant booking status endpoint response
+
 const checkIfBooked = (responseData, targetItemId) => {
   if (!responseData) return false;
   
@@ -75,7 +75,7 @@ const checkIfBooked = (responseData, targetItemId) => {
   return false;
 };
 
-// Possession status chip styling helper supporting booked units
+
 const getUnitStatusChip = (status, isBooked) => {
   if (isBooked) {
     return { label: "Booked", style: "text-amber-700 bg-amber-50 border-amber-200" };
@@ -105,7 +105,7 @@ const LeadFormModal = ({
   const [projectDropdownStyle, setProjectDropdownStyle] = useState(null);
   const { token, companyId } = useAuth();
 
-  // Broker states and refs
+
   const [brokerSearch, setBrokerSearch] = useState("");
   const [showBrokerDropdown, setShowBrokerDropdown] = useState(false);
   const brokerDropdownRef = useRef(null);
@@ -113,7 +113,7 @@ const LeadFormModal = ({
   const brokerPortalDropdownRef = useRef(null);
   const [brokerDropdownStyle, setBrokerDropdownStyle] = useState(null);
 
-  // Unit states and refs
+
   const [unitSearch, setUnitSearch] = useState("");
   const [showUnitDropdown, setShowUnitDropdown] = useState(false);
   const unitDropdownRef = useRef(null);
@@ -227,7 +227,7 @@ const LeadFormModal = ({
   const filteredUnits = useMemo(() => {
     const term = unitSearch.trim().toLowerCase();
 
-    // If term matches the selected unit's name, show all options on focus.
+
     const selectedDisplay = leadForm.unit_name ? leadForm.unit_name.trim().toLowerCase() : "";
 
     if (!term || term === selectedDisplay) return availableUnits;
@@ -247,7 +247,7 @@ const LeadFormModal = ({
   const filteredProjects = useMemo(() => {
     const term = projectSearch.trim().toLowerCase();
 
-    // If term matches the selected project's full display value, show all options on focus.
+
     const selectedDisplay = selectedProject
       ? `${selectedProject.name}${selectedProject.location ? ` - ${selectedProject.location}` : ""}`.trim().toLowerCase()
       : "";
@@ -269,7 +269,7 @@ const LeadFormModal = ({
   const filteredBrokers = useMemo(() => {
     const term = brokerSearch.trim().toLowerCase();
 
-    // If term matches the selected broker's name, show all options on focus.
+
     const selectedDisplay = selectedBroker
       ? selectedBroker.name.trim().toLowerCase()
       : "";

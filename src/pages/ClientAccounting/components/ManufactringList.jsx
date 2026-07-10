@@ -83,7 +83,7 @@ const ManufacturingList = () => {
                     "en-IN"
                 );
 
-        // ===== HEADER =====
+
 
         doc.setFontSize(22);
 
@@ -125,7 +125,7 @@ const ManufacturingList = () => {
             24
         );
 
-        // ===== SUMMARY =====
+
 
         const totalValue =
             journals.reduce(
@@ -168,7 +168,7 @@ const ManufacturingList = () => {
             }
         );
 
-        // ===== TABLE =====
+
 
         const tableData =
             journals.map(
@@ -349,7 +349,7 @@ const ManufacturingList = () => {
             },
         });
 
-        // ===== FOOTER =====
+
 
         const pageCount =
             doc.internal.getNumberOfPages();
@@ -395,7 +395,7 @@ const ManufacturingList = () => {
             );
         }
 
-        // ===== PRINT =====
+
 
         const blobURL =
             doc.output(
@@ -502,19 +502,19 @@ const ManufacturingList = () => {
 
     return (
         <div className="bg-[#F4F6F8] min-h-screen font-[monospace]">
-            {/* Top Header */}
+
             <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                     
-                    {/* Left - Title */}
+
                     <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
                         Manufacturing History
                     </h1>
 
-                    {/* Right - Search + Buttons */}
+
                     <div className="flex items-center gap-2.5 flex-wrap">
 
-                        {/* Search */}
+
                         <div className="relative">
                             <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
@@ -526,7 +526,7 @@ const ManufacturingList = () => {
                             />
                         </div>
 
-                        {/* Buttons */}
+
                         <div className="flex items-center gap-1.5">
                             <button
                                 onClick={() => {
@@ -548,7 +548,7 @@ const ManufacturingList = () => {
                                 <Printer size={14} /> Print
                             </button>
 
-                            {/* Export Dropdown */}
+
                             <div className="relative">
                                 <button
                                     onClick={() => setShowExportMenu(!showExportMenu)}
@@ -574,7 +574,7 @@ const ManufacturingList = () => {
                                         </button>
                                         <button
                                             onClick={() => {
-                                                handlePrint(); // Manufactring uses handlePrint to print/generate pdf
+                                                handlePrint();
                                                 setShowExportMenu(false);
                                             }}
                                             className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
@@ -694,7 +694,7 @@ const ManufacturingList = () => {
                                         <tr className="bg-[#fcfcfb]">
                                             <td colSpan={showEmployeeActivity ? "8" : "7"} className="px-8 py-6 border-b border-[#e2e2dc]">
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                                    {/* Components Section */}
+
                                                     <div>
                                                         <h4 className="text-[12px] font-bold uppercase tracking-widest text-[#5c6070] mb-3 flex items-center gap-2">
                                                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
@@ -726,7 +726,7 @@ const ManufacturingList = () => {
                                                         </div>
                                                     </div>
 
-                                                    {/* By-Products Section */}
+
                                                     <div>
                                                         <h4 className="text-[12px] font-bold uppercase tracking-widest text-[#5c6070] mb-3 flex items-center gap-2">
                                                             <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>

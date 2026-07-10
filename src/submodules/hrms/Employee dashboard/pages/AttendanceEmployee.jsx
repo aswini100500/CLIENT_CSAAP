@@ -242,7 +242,7 @@ const MonthlyAttendanceOverview = ({ monthData, year, onClose }) => {
   );
 };
 
-// --- UTILS ---
+
 const currentIndiaDate = getCurrentIndiaDate();
 const [currentIndiaYear] = currentIndiaDate.split("-").map(Number);
 
@@ -267,12 +267,12 @@ const EmployeeYearlyAttendance = () => {
   const [selectedYear, setSelectedYear] = useState(currentIndiaYear);
   const [holidayDates, setHolidayDates] = useState([]);
 
-  // Filters
+
   const [showFilter, setShowFilter] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedShift, setSelectedShift] = useState("all");
 
-  // Modal States
+
   const [selectedAttendanceRecord, setSelectedAttendanceRecord] =
     useState(null);
   const [showTimesheet, setShowTimesheet] = useState(false);
@@ -283,7 +283,7 @@ const EmployeeYearlyAttendance = () => {
 
   const { user } = useAuth();
   const slug = user.slug;
-  // Fallback to ID if no specific employee ID logic is present in your auth state
+
   const employeeId = user.employee_id || user.id;
   const companyScopeId = user.company_id || user.id;
   const holidayDateSet = new Set(holidayDates);
@@ -294,7 +294,7 @@ const EmployeeYearlyAttendance = () => {
     currentIndiaYear - 1,
   ];
 
-  // Design tokens
+
   const panelClass =
     "bg-white rounded-3xl shadow-sm ring-1 ring-slate-200 overflow-hidden transition-all hover:shadow-md";
   const filterChipBase =
@@ -336,7 +336,7 @@ const EmployeeYearlyAttendance = () => {
     try {
       setLoading(true);
 
-      // The proper, single API call for the whole year
+
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/attendance/${slug}/employee/${employeeId}/year/${year}`,
       );
@@ -361,7 +361,7 @@ const EmployeeYearlyAttendance = () => {
       setHolidayDates(fetchedHolidayDates);
       const fetchedHolidaySet = new Set(fetchedHolidayDates);
 
-      // 1. Initialize empty buckets for all 12 months
+
       const processedYear = monthNames.map((monthName, monthIndex) => ({
         monthIndex,
         monthName,
@@ -370,38 +370,38 @@ const EmployeeYearlyAttendance = () => {
         summary: { present: 0, absent: 0, halfDay: 0, late: 0 },
       }));
 
-      // 2. Iterate through the flat array and distribute records into the correct month buckets
+
       allYearRecords.forEach((record) => {
-        const date = getAttendanceDateValue(record); // format expected: YYYY-MM-DD
+        const date = getAttendanceDateValue(record);
         if (!date) return;
         if (fetchedHolidaySet.has(date) || isSunday(date) || isFutureDate(date)) return;
 
-        // Extract month from date string (0-indexed for our array)
+
         const recordMonthIndex = parseInt(date.split("-")[1], 10) - 1;
 
-        // Safety check just in case backend sends garbage dates
+
         if (recordMonthIndex < 0 || recordMonthIndex > 11) return;
 
         const isHalfDay = Number(record.is_half_day || 0);
         const isLate = Number(record.is_late || 0);
 
-        // Slot it in
+
         processedYear[recordMonthIndex].attendance[date] =
           createAttendanceEntryFromRecord(record);
 
-        // Update basic counts
+
         if (isHalfDay) processedYear[recordMonthIndex].summary.halfDay++;
         else processedYear[recordMonthIndex].summary.present++;
 
         if (isLate) processedYear[recordMonthIndex].summary.late++;
       });
 
-      // 3. Calculate absents for each month based on elapsed working days
+
       processedYear.forEach((monthData) => {
         let elapsedWorkingDays = 0;
         for (let day = 1; day <= monthData.daysInMonth; day++) {
           const dateStr = `${year}-${String(monthData.monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-          // If it's not a Sunday, holiday, or future date, it was a required working day
+
           if (!isSunday(dateStr) && !fetchedHolidaySet.has(dateStr) && !isFutureDate(dateStr)) {
             elapsedWorkingDays++;
           }
@@ -553,13 +553,13 @@ const EmployeeYearlyAttendance = () => {
     );
   }
 
-  // Define static 31 columns for the monthly grid
+
   const dayColumns = Array.from({ length: 31 }, (_, i) => i + 1);
 
   return (
     <div className="min-h-screen w-full mx-auto p-4 md:p-8 bg-transparent font-sans">
       <div className="mx-auto max-w-full space-y-8">
-        {/* Page Header */}
+
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
               <div className="flex items-center gap-3 mb-2">
@@ -576,7 +576,7 @@ const EmployeeYearlyAttendance = () => {
             </div>
         </div>
 
-        {/* Summary Cards */}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {[
             {
@@ -635,7 +635,7 @@ const EmployeeYearlyAttendance = () => {
           ))}
         </div>
 
-        {/* Controls Panel */}
+
         <div className={`${panelClass} p-3 md:p-4 bg-white`}>
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2.5">
@@ -695,7 +695,7 @@ const EmployeeYearlyAttendance = () => {
             </div>
           </div>
 
-          {/* Filter Dropdown */}
+
           {showFilter && (
             <div
               ref={filterPanelRef}
@@ -750,7 +750,7 @@ const EmployeeYearlyAttendance = () => {
           )}
         </div>
 
-        {/* 12-Month Matrix */}
+
         <div
           className={`${panelClass} flex h-[calc(100vh-320px)] flex-col bg-slate-50 overflow-hidden`}
         >
@@ -783,7 +783,7 @@ const EmployeeYearlyAttendance = () => {
                     key={`row-${monthData.monthIndex}`}
                     className="group hover:bg-slate-50 transition-colors"
                   >
-                    {/* Month Name Column */}
+
                     <td className="sticky left-0 z-20 min-w-32 border-b border-r border-slate-100 px-4 py-3 bg-white group-hover:bg-slate-50 transition-colors">
                       <div className="font-bold text-slate-900">
                         {monthData.monthName}
@@ -794,14 +794,14 @@ const EmployeeYearlyAttendance = () => {
                       </div>
                     </td>
 
-                    {/* Day Matrix Columns */}
+
                     {dayColumns.map((day) => {
                       const isValidDay = day <= monthData.daysInMonth;
                       const dateStr = isValidDay
                         ? `${selectedYear}-${String(monthData.monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
                         : null;
 
-                      // Filter checks
+
                       const dayRecord = isValidDay
                         ? monthData.attendance[dateStr]
                         : null;
@@ -815,7 +815,7 @@ const EmployeeYearlyAttendance = () => {
                         ? isFutureDate(dateStr)
                         : false;
 
-                      // Apply UI filters logically - if filters fail, treat as absent visual logic but muted
+
                       let isVisibleByFilter = true;
                       if (dayRecord) {
                         if (
@@ -876,7 +876,7 @@ const EmployeeYearlyAttendance = () => {
                       );
                     })}
 
-                    {/* Actions Column */}
+
                     <td className="sticky right-0 z-20 whitespace-nowrap border-b border-l border-slate-100 px-4 py-3 bg-white group-hover:bg-slate-50">
                       <div className="flex items-center justify-center gap-2">
                         <button

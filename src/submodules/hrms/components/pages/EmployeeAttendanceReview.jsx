@@ -55,7 +55,7 @@ const monthNames = [
 
 const statusOptions = ["all", "Pending", "Approved", "Rejected"];
 
-// Locked to the established design language
+
 const panelClass =
   "app-panel overflow-hidden transition-colors duration-200 hover:border-(--border-strong)";
 
@@ -116,7 +116,7 @@ const groupRecordsByDate = (records) => {
     .sort((a, b) => b.date.localeCompare(a.date));
 };
 
-// Matched pastel backgrounds + text + soft border opacities
+
 const EmployeeAttendanceReview = () => {
   const { user } = useAuth();
   const slug = user.slug;
@@ -436,7 +436,7 @@ const EmployeeAttendanceReview = () => {
   return (
     <div className="app-shell min-h-[calc(100vh-80px)] font-sans p-3 md:p-4">
       <div className="mx-auto max-w-6xl space-y-3">
-        {/* Stats Cards synced to Mispunch sizing */}
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           <div className="app-panel p-3 flex items-center gap-3 transition-all">
             <div className="bg-(--brand-soft) border border-(--border-soft) p-2 rounded-xl shrink-0">
@@ -492,7 +492,7 @@ const EmployeeAttendanceReview = () => {
           </div>
         </div>
 
-        {/* Toolbar */}
+
         <div className="app-panel p-4">
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex flex-wrap items-center gap-3">
@@ -597,7 +597,7 @@ const EmployeeAttendanceReview = () => {
           )}
         </div>
 
-        {/* Ledger */}
+
         <div className="app-panel overflow-hidden">
           <div className="app-section-bar flex flex-col gap-2 px-4 py-3 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-2.5">
@@ -707,7 +707,7 @@ const EmployeeAttendanceReview = () => {
 
                   return (
                     <div key={group.date} className="space-y-2">
-                      {/* Date Group Header */}
+
                       <div className="app-panel px-3 py-2.5 flex items-center gap-3 transition-all">
                         <input
                           type="checkbox"
@@ -752,7 +752,7 @@ const EmployeeAttendanceReview = () => {
                         </button>
                       </div>
 
-                      {/* Date Group Items transformed into cards */}
+
                       {isOpen && (
                         <div className="pl-4 md:pl-8 space-y-1.5">
                           {group.records.map((record) => (
@@ -877,7 +877,7 @@ const EmployeeAttendanceReview = () => {
             )}
           </div>
 
-          {/* Pagination */}
+
           {groupedRecords.length > itemsPerPage && (
             <div className="app-section-bar flex items-center justify-between border-t border-(--border-soft) px-5 py-3">
               <p className="text-xs font-bold text-(--text-soft)">
@@ -907,11 +907,11 @@ const EmployeeAttendanceReview = () => {
           )}
         </div>
 
-        {/* Detail Modal rewritten to match dense/compact styling */}
+
         {showDetails && selectedRecord && (
           <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="app-modal w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
-              {/* Compact Header */}
+
               <div className="flex items-center justify-between px-5 py-3 border-b border-(--border-soft) bg-white z-10 shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl border border-(--border-soft) bg-(--brand-soft) flex items-center justify-center text-(--brand) font-bold text-sm shrink-0">
@@ -934,7 +934,7 @@ const EmployeeAttendanceReview = () => {
                 </button>
               </div>
 
-              {/* Dense Body */}
+
               <div className="px-5 py-4 overflow-y-auto space-y-3 bg-(--bg-subtle)/45 flex-1 custom-scrollbar">
                 <div className="app-panel overflow-hidden">
                   <div className="grid grid-cols-2 sm:grid-cols-3">
@@ -1051,7 +1051,7 @@ const EmployeeAttendanceReview = () => {
                 )}
               </div>
 
-              {/* Compact Footer */}
+
               <div className="border-t border-(--border-soft) bg-white px-5 py-2.5 flex items-center justify-end gap-1.5 shrink-0">
                 {selectedRecord.reason &&
                   selectedRecord.mispunchStatus !== "Approved" && (

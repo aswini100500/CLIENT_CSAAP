@@ -39,7 +39,7 @@ import React from "react";
 const 
 EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
   const {
-    // State
+
     activeTab,
     setActiveTab,
     showPassword,
@@ -69,7 +69,7 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
 
     leaveData,
     handleLeaveChange,
-    // Handlers
+
     handleInputChange,
     handleFileInput,
     removeUploadedFile,
@@ -80,27 +80,27 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
     handleConfirmEmployee,
     handleSubmit,
 
-    // Education
+
     addEducation,
     removeEducation,
     updateEducation,
 
-    // Experience
+
     addExperience,
     removeExperience,
     updateExperience,
 
-    // Other components
+
     addOtherComponent,
     updateOtherComponent,
     removeOtherComponent,
 
-    // Wizard
+
     currentTabIndex,
     goNext,
     goPrev,
 
-    // Session
+
     isSessionExpired,
     navigate,
     salaryEffectiveDateExists,
@@ -164,7 +164,7 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
           </div>
         </div>
 
-        {/* Tab Navigation */}
+
         <div className="mb-6 border-b border-(--border-soft) pb-3">
           <div className="flex items-center justify-start md:justify-center gap-2 overflow-x-auto scrollbar-hide">
             {TABS.map((tab) => {
@@ -213,7 +213,7 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
-            {/* Render Active Tab Content */}
+
             <div className="mb-6">
               {activeTab === "basic" && (
                 <BasicInfoTab
@@ -302,9 +302,9 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
               />
             )}
 
-            {/* Wizard Navigation + Form Actions */}
+
             <div className="flex items-center justify-between pt-6 border-t border-(--border-soft)">
-              {/* Left side – Previous */}
+
               <div>
                 {currentTabIndex > 0 && (
                   <button
@@ -322,7 +322,7 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
                 )}
               </div>
 
-              {/* Right side – Cancel / Next / Save */}
+
               <div className="flex gap-3">
                 {isEditMode ? (
                   <>

@@ -7,7 +7,7 @@ const AddressTab = ({
   handleSameAsPermanent,
 }) => (
   <div className="space-y-4">
-    {/* Same as Permanent Address checkbox – shown between the two cards */}
+
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {["Permanent", "Present"].map((type) => (
         <div
@@ -105,7 +105,7 @@ const AddressTab = ({
       ))}
     </div>
 
-    {/* Same as Permanent checkbox */}
+
     <label className="inline-flex items-center gap-3 cursor-pointer select-none bg-white rounded-xl border border-(--border-soft) px-5 py-4 hover:shadow-sm transition-all duration-200">
       <input
         type="checkbox"

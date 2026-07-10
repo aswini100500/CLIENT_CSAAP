@@ -1,240 +1,240 @@
-// import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// const ListOfLedger = () => {
-//   const [ledgers, setLedgers] = useState([]);
-
-//   useEffect(() => {
-//     // Load data from localStorage or fallback to demo data
-//     let storedLedgers = JSON.parse(localStorage.getItem("tallyLedgers"));
-//     if (!storedLedgers || storedLedgers.length === 0) {
-//       storedLedgers = [
-//         {
-//           ledgerName: "Cash Account",
-//           alias: "Cash",
-//           under: "Cash-in-Hand",
-//           openingBalance: "10,000",
-//           debitCredit: "Dr",
-//         },
-//         {
-//           ledgerName: "HDFC Bank",
-//           alias: "",
-//           under: "Bank Accounts",
-//           openingBalance: "45,000",
-//           debitCredit: "Dr",
-//         },
-//         {
-//           ledgerName: "Sundry Debtors",
-//           alias: "Debtors",
-//           under: "Accounts Receivable",
-//           openingBalance: "25,000",
-//           debitCredit: "Dr",
-//         },
-//         {
-//           ledgerName: "Sundry Creditors",
-//           alias: "Creditors",
-//           under: "Accounts Payable",
-//           openingBalance: "15,000",
-//           debitCredit: "Cr",
-//         },
-//         {
-//           ledgerName: "Sales Account",
-//           alias: "Sales",
-//           under: "Sales",
-//           openingBalance: "0",
-//           debitCredit: "--",
-//         },
-//       ];
-//       localStorage.setItem("tallyLedgers", JSON.stringify(storedLedgers));
-//     }
-//     setLedgers(storedLedgers);
-//   }, []);
-
-//   return (
-//     <div className="min-h-screen bg-white p-6 font-[monospace]">
-//       <div className="max-w-5xl mx-auto border border-gray-300 rounded-md shadow bg-[#fffef7]">
-//         {/* Header */}
-//        <div className="flex justify-between items-center border-b border-gray-300 py-3 px-4">
-//   <h2 className="text-xl font-semibold text-blue-800">
-//     List of Ledgers
-//   </h2>
-
-//   <Link
-//     to="/ledger"
-//     className="text-sm text-blue-700 hover:underline font-medium"
-//   >
-//     + Create New Ledger
-//   </Link>
-// </div>
-
-//         {/* Table */}
-//         {ledgers.length === 0 ? (
-//           <p className="text-center text-gray-500 py-6">
-//             No ledgers created yet.
-//           </p>
-//         ) : (
-//           <table className="w-full text-sm border-collapse">
-//             <thead className="bg-[#f4f4f4] border-b border-gray-300">
-//               <tr className="text-left text-gray-700">
-//                 <th className="py-2 px-3 border-r border-gray-300">#</th>
-//                 <th className="py-2 px-3 border-r border-gray-300">Ledger Name</th>
-//                 <th className="py-2 px-3 border-r border-gray-300">Alias</th>
-//                 <th className="py-2 px-3 border-r border-gray-300">Under</th>
-//                 <th className="py-2 px-3 border-r border-gray-300 text-right">Opening Balance</th>
-//                 <th className="py-2 px-3 text-center">Dr / Cr</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {ledgers.map((l, idx) => (
-//                 <tr
-//                   key={idx}
-//                   className="hover:bg-blue-50 border-b border-gray-200 transition"
-//                 >
-//                   <td className="py-2 px-3 border-r border-gray-300">{idx + 1}</td>
-//                   <td className="py-2 px-3 border-r border-gray-300 font-medium text-gray-800">
-//                     {l.ledgerName}
-//                   </td>
-//                   <td className="py-2 px-3 border-r border-gray-300 text-gray-700">
-//                     {l.alias || "--"}
-//                   </td>
-//                   <td className="py-2 px-3 border-r border-gray-300 text-gray-700">
-//                     {l.under}
-//                   </td>
-//                   <td className="py-2 px-3 border-r border-gray-300 text-right text-gray-800">
-//                     {l.openingBalance}
-//                   </td>
-//                   <td className="py-2 px-3 text-center text-gray-800">
-//                     {l.debitCredit}
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         )}sync
-//       </div>
-
-//       {/* Bottom Hint */}
-//       <div className="text-xs text-gray-600 text-center mt-6">
-//         Press <span className="bg-gray-100 px-1">Alt+C</span> to create a new ledger
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ListOfLedger;
-
-// import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// import axios from "axios";
-// import { useCompany } from "../context/CompanyContext";
-
-// const API_BASE = "http://localhost:3000/api/v1/ledger";
-
-// const ListOfLedger = () => {
-//   const [ledgers, setLedgers] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//    const { companyId } = useCompany();
-
-//   const fetchLedgers = async () => {
-//     try {
-//       const res = await axios.get(`${API_BASE}/${companyId}/all`);
-//       console.log(res);
 
 
-//         setLedgers(res.data);
-//         console.log(ledgers);
 
 
-//     } catch (err) {
-//       console.error("Error fetching ledgers:", err);
-//       setLedgers([]);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
 
-//   useEffect(() => {
-//     fetchLedgers();
-//   }, []);
 
-//   return (
-//     <div className="min-h-screen bg-white p-6 font-[monospace]">
-//       <div className="max-w-5xl mx-auto border border-gray-300 rounded-md shadow bg-[#fffef7]">
 
-//         {/* Header */}
-//         <div className="flex justify-between items-center border-b border-gray-300 py-3 px-4">
-//           <h2 className="text-xl font-semibold text-blue-800">
-//             List of Ledgers
-//           </h2>
 
-//           <Link
-//             to="/ledger"
-//             className="text-sm text-blue-700 hover:underline font-medium"
-//           >
-//             + Create New Ledger
-//           </Link>
-//         </div>
 
-//         {/* Loading State */}
-//         {loading && (
-//           <p className="text-center text-gray-500 py-6">Loading ledgers...</p>
-//         )}
 
-//         {/* Empty State */}
-//         {!loading && ledgers.length === 0 && (
-//           <p className="text-center text-gray-500 py-6">No ledgers found.</p>
-//         )}
 
-//         {/* Table */}
-//         {!loading && ledgers.length > 0 && (
-//           <table className="w-full text-sm border-collapse">
-//             <thead className="bg-[#f4f4f4] border-b border-gray-300">
-//               <tr className="text-left text-gray-700">
-//                 <th className="py-2 px-3 border-r border-gray-300">#</th>
-//                 <th className="py-2 px-3 border-r border-gray-300">Ledger Name</th>
-//                 <th className="py-2 px-3 border-r border-gray-300">Alias</th>
-//                 <th className="py-2 px-3 border-r border-gray-300">Under</th>
-//                 <th className="py-2 px-3 border-r border-gray-300 text-right">Opening Balance</th>
-//                 <th className="py-2 px-3 text-center">Dr / Cr</th>
-//               </tr>
-//             </thead>
 
-//             <tbody>
-//               {ledgers.map((l, idx) => (
-//                 <tr
-//                   key={l.id}
-//                   className="hover:bg-blue-50 border-b border-gray-200 transition"
-//                 >
-//                   <td className="py-2 px-3 border-r border-gray-300">{idx + 1}</td>
 
-//                   <td className="py-2 px-3 border-r border-gray-300 font-medium text-gray-800">
-//                     {l.name}
-//                   </td>
 
-//                   <td className="py-2 px-3 border-r border-gray-300 text-gray-700">
-//                     {l.aliasName || "--"}
-//                   </td>
 
-//                   <td className="py-2 px-3 border-r border-gray-300 text-gray-700">
-//                     {l.underGroup}
-//                   </td>
 
-//                   <td className="py-2 px-3 border-r border-gray-300 text-right text-gray-800">
-//                     {l.openingBalance}
-//                   </td>
 
-//                   <td className="py-2 px-3 text-center text-gray-800">
-//                     {l.type === "Debit" ? "Dr" : "Cr"}
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         )}
-//       </div>      
-//     </div>
-//   );
-// };
-// export default ListOfLedger;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -262,7 +262,7 @@ const ListOfLedger = () => {
   const [ledgers, setLedgers] = useState([]);
   const [showEmployeeActivity, setShowEmployeeActivity] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [history, setHistory] = useState([]); // ⭐ NEW — update history
+  const [history, setHistory] = useState([]);
 
   const { companyId, companyName, employees } = useCompany();
   const [companyDetails, setCompanyDetails] = useState(null);
@@ -270,9 +270,7 @@ const ListOfLedger = () => {
   const [ledgerTransactions, setLedgerTransactions] = useState([]);
   const [showViewModal, setShowViewModal] = useState(false);
   const navigate = useNavigate();
-  /* --------------------------------------------------
-      FETCH ALL LEDGERS
-  -----------------------------------------------------*/
+
   const fetchLedgers = async () => {
     try {
       const res = await axios.get(`${API_BASE}/${companyId}/all`);
@@ -284,7 +282,7 @@ const ListOfLedger = () => {
         credit: item.credit || 0,
       }));
 
-      console.log("Fetched Ledgers from API:", formatted); // ⭐ Debugging log
+      console.log("Fetched Ledgers from API:", formatted);
 
       setLedgers(formatted);
     } catch (err) {
@@ -318,7 +316,7 @@ const ListOfLedger = () => {
         }
       );
       if (res.data && res.data.success) {
-        // Map the properties from csaap_db.builder_companies to match expected properties
+
         setCompanyDetails({
           ...res.data.data,
           name: res.data.data.company_name,
@@ -350,9 +348,7 @@ const ListOfLedger = () => {
       fetchCompanyDetails();
     }
   }, [companyId]);
-  /* --------------------------------------------------
-      INPUT HANDLER
-  -----------------------------------------------------*/
+
   const updateField = (id, field, value) => {
     setLedgers((prev) =>
       prev.map((l) =>
@@ -361,15 +357,13 @@ const ListOfLedger = () => {
     );
   };
 
-  /* --------------------------------------------------
-      CLOSING BALANCE FORMULA
-  -----------------------------------------------------*/
+
   const getClosingBalance = (l) => {
-    // Try to get from property first (handles casing)
+
     const closing = l.closingBalance ?? l.ClosingBalance;
     if (closing !== undefined && closing !== null) return parseFloat(closing);
 
-    // If not found, fall back to calculation
+
     const opening = parseFloat(l.openingBalance) || 0;
     const debit = parseFloat(l.debit) || 0;
     const credit = parseFloat(l.credit) || 0;
@@ -381,9 +375,7 @@ const ListOfLedger = () => {
     }
   };
 
-  /* --------------------------------------------------
-      TOGGLE EDIT MODE
-  -----------------------------------------------------*/
+
   const enableEdit = (id) => {
     const role = userRole || "admin";
     if (role === "employee") {
@@ -397,9 +389,7 @@ const ListOfLedger = () => {
     fetchLedgers();
   };
 
-  /* --------------------------------------------------
-      SAVE UPDATED LEDGER
-  -----------------------------------------------------*/
+
   const saveLedger = async (l) => {
     try {
       const payload = {
@@ -436,7 +426,7 @@ const ListOfLedger = () => {
       alert("Ledger updated successfully!");
 
       fetchLedgers();
-      fetchHistory(); // ⭐ Refresh history after update
+      fetchHistory();
     } catch (err) {
       console.error(err);
       alert("Failed to update ledger");
@@ -495,7 +485,7 @@ const ListOfLedger = () => {
       return num < 0 ? `-Rs. ${formatted}` : `Rs. ${formatted}`;
     };
 
-    // Header
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(15, 23, 42);
@@ -513,7 +503,7 @@ const ListOfLedger = () => {
     doc.setDrawColor(220);
     doc.line(14, 32, 195, 32);
 
-    // Totals
+
     const totalOpening = filteredLedgers.reduce((sum, l) => sum + Number(l.openingBalance || 0), 0);
     const totalClosing = filteredLedgers.reduce((sum, l) => sum + Number(getClosingBalance(l) || 0), 0);
 
@@ -524,7 +514,7 @@ const ListOfLedger = () => {
     doc.setFont("helvetica", "bold");
     doc.text(`Total Closing: ${formatAmount(totalClosing)}`, 195, 40, { align: "right" });
 
-    // Table
+
     const tableData = filteredLedgers.map((l, i) => [
       i + 1,
       l.name || "-",
@@ -563,7 +553,7 @@ const ListOfLedger = () => {
       }
     });
 
-    // Footer
+
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
@@ -673,9 +663,9 @@ const ListOfLedger = () => {
           : `Rs. ${formatted}`;
       };
 
-    // =========================
-    // HEADER
-    // =========================
+
+
+
 
     doc.setFont(
       "helvetica",
@@ -739,9 +729,9 @@ const ListOfLedger = () => {
       32
     );
 
-    // =========================
-    // TOTALS
-    // =========================
+
+
+
 
     const totalOpening =
       filteredLedgers.reduce(
@@ -789,9 +779,9 @@ const ListOfLedger = () => {
       }
     );
 
-    // =========================
-    // TABLE DATA
-    // =========================
+
+
+
 
     const tableData =
       filteredLedgers.map(
@@ -819,9 +809,9 @@ const ListOfLedger = () => {
         ]
       );
 
-    // =========================
-    // TABLE
-    // =========================
+
+
+
 
     autoTable(doc, {
 
@@ -952,7 +942,7 @@ const ListOfLedger = () => {
 
       columnStyles: {
 
-        // SERIAL
+
 
         0: {
 
@@ -961,7 +951,7 @@ const ListOfLedger = () => {
           cellWidth: 12,
         },
 
-        // LEDGER NAME
+
 
         1: {
 
@@ -970,7 +960,7 @@ const ListOfLedger = () => {
           cellWidth: 58,
         },
 
-        // UNDER GROUP
+
 
         2: {
 
@@ -979,7 +969,7 @@ const ListOfLedger = () => {
           cellWidth: 42,
         },
 
-        // OPENING
+
 
         3: {
 
@@ -988,7 +978,7 @@ const ListOfLedger = () => {
           cellWidth: 28,
         },
 
-        // CLOSING
+
 
         4: {
 
@@ -999,7 +989,7 @@ const ListOfLedger = () => {
           fontStyle: "bold",
         },
 
-        // TYPE
+
 
         5: {
 
@@ -1012,7 +1002,7 @@ const ListOfLedger = () => {
       didParseCell:
         function (data) {
 
-          // CENTER HEADERS
+
 
           if (
             data.section === "head"
@@ -1022,7 +1012,7 @@ const ListOfLedger = () => {
               "center";
           }
 
-          // TOTAL ALIGNMENT
+
 
           if (
             data.section === "foot" &&
@@ -1035,9 +1025,9 @@ const ListOfLedger = () => {
         },
     });
 
-    // =========================
-    // FOOTER
-    // =========================
+
+
+
 
     const pageCount =
       doc.internal.getNumberOfPages();
@@ -1083,9 +1073,9 @@ const ListOfLedger = () => {
       );
     }
 
-    // =========================
-    // OPEN PRINT
-    // =========================
+
+
+
 
     const blobURL =
       doc.output(
@@ -1129,7 +1119,7 @@ const ListOfLedger = () => {
 
   const handleDelete = async (id) => {
 
-    // First confirmation
+
     const result = await Swal.fire({
       title: "Delete Ledger?",
       text: "This action cannot be undone.",
@@ -1170,7 +1160,7 @@ const ListOfLedger = () => {
         err?.response?.data?.message ||
         "";
 
-      // Linked vouchers / transactions
+
       if (
         backendMessage.includes("foreign key") ||
         backendMessage.includes("sales_vouchers") ||
@@ -1214,7 +1204,7 @@ const ListOfLedger = () => {
         return;
       }
 
-      // Normal error
+
       Swal.fire({
         icon: "error",
         title: "Delete Failed",
@@ -1226,7 +1216,7 @@ const ListOfLedger = () => {
     <div className="min-h-screen bg-white p-6 font-[monospace]">
       <div className="max-w-7xl mx-auto border border-gray-300 rounded-md shadow bg-[#fffef7]">
 
-        {/* HEADER */}
+
         <div className="flex justify-between items-center border-b border-gray-300 py-3 px-4">
           <h2 className="text-xl font-semibold text-blue-800">List of Ledgers</h2>
 
@@ -1274,7 +1264,7 @@ const ListOfLedger = () => {
             </Link>
           </div>
 
-          {/* VIEW LEDGER MODAL */}
+
           {showViewModal && viewLedger && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
               <div className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl">
@@ -1289,7 +1279,7 @@ const ListOfLedger = () => {
                 </div>
 
                 <div className="p-8 space-y-8">
-                  {/* Basic Info Section */}
+
                   <div>
                     <h4 className="text-sm font-bold text-blue-800 uppercase tracking-wider border-b border-blue-100 pb-2 mb-4">Basic Information</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
@@ -1314,7 +1304,7 @@ const ListOfLedger = () => {
                     </div>
                   </div>
 
-                  {/* Mailing & Address Section */}
+
                   <div>
                     <h4 className="text-sm font-bold text-blue-800 uppercase tracking-wider border-b border-blue-100 pb-2 mb-4">Mailing & Contact Details</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
@@ -1341,7 +1331,7 @@ const ListOfLedger = () => {
                     </div>
                   </div>
 
-                  {/* Tax & Registration Section */}
+
                   <div>
                     <h4 className="text-sm font-bold text-blue-800 uppercase tracking-wider border-b border-blue-100 pb-2 mb-4">Tax & Registration</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
@@ -1360,7 +1350,7 @@ const ListOfLedger = () => {
                     </div>
                   </div>
 
-                  {/* Bank Details Section */}
+
                   {viewLedger.haveBankDetails === "Yes" && viewLedger.bankDetails ? (
                     <div>
                       <h4 className="text-sm font-bold text-blue-800 uppercase tracking-wider border-b border-blue-100 pb-2 mb-4">Bank Account Details</h4>
@@ -1390,7 +1380,7 @@ const ListOfLedger = () => {
                     </div>
                   )}
 
-                  {/* Transaction details like Tally */}
+
                   <div>
                     <h4 className="text-sm font-bold text-[#1f4e79] uppercase tracking-wider border-b border-blue-100 pb-2 mb-4">Voucher Transactions (Ledger Statement)</h4>
                     {ledgerTransactions.length === 0 ? (
@@ -1449,7 +1439,7 @@ const ListOfLedger = () => {
           <p className="text-center text-gray-500 py-6">Loading ledgers...</p>
         )}
 
-        {/* LEDGER LIST TABLE */}
+
         {!loading && filteredLedgers.length > 0 && (
           <table className="w-full text-sm border-collapse">
             <thead className="bg-[#f4f4f4] border-b border-gray-300">
@@ -1487,7 +1477,7 @@ const ListOfLedger = () => {
                     {l.balanceType === "Debit" ? "Dr" : "Cr"}
                   </td>
 
-                  {/* Editable Debit */}
+
                   <td className="py-2 px-3 border-r text-right">
                     {l.isEditing ? (
                       <input
@@ -1503,7 +1493,7 @@ const ListOfLedger = () => {
                     )}
                   </td>
 
-                  {/* Editable Credit */}
+
                   <td className="py-2 px-3 border-r text-right">
                     {l.isEditing ? (
                       <input
@@ -1519,7 +1509,7 @@ const ListOfLedger = () => {
                     )}
                   </td>
 
-                  {/* Closing Balance */}
+
                   <td className="py-2 px-3 border-r text-right font-medium">
                     {getClosingBalance(l).toFixed(2)}
                   </td>
@@ -1562,9 +1552,9 @@ const ListOfLedger = () => {
           </table>
         )}
 
-        {/* -------------------------------------------------- */}
-        {/*                    UPDATE HISTORY                  */}
-        {/* -------------------------------------------------- */}
+
+
+
         <div className="mt-12 p-4">
           <h3 className="text-lg font-semibold text-blue-900 mb-3">
             Ledger Update History

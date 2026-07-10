@@ -9,9 +9,9 @@ export default function LeaveApplicationList() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ------------------------------
-  // ✅ Fetch from API
-  // ------------------------------
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -20,7 +20,7 @@ export default function LeaveApplicationList() {
         );
         console.log(res.data);
 
-        // Map API response to required format
+
         const formatted = res.data?.data?.map((emp) => ({
           id: emp.id,
           employeeName: emp.name || "---",
@@ -91,7 +91,7 @@ export default function LeaveApplicationList() {
     filteredApplications.length > 0 &&
     selectedApplications.length === filteredApplications.length;
 
-  // Approve selected
+
   const handleApprove = () => {
     if (selectedApplications.length === 0) {
       Swal.fire({
@@ -122,7 +122,7 @@ export default function LeaveApplicationList() {
     });
   };
 
-  // Delete selected
+
   const handleDelete = () => {
     if (selectedApplications.length === 0) {
       Swal.fire({
@@ -169,9 +169,9 @@ export default function LeaveApplicationList() {
   const formatDate = (d) =>
     d ? new Date(d).toLocaleDateString("en-GB") : "---";
 
-  // ------------------------------
-  // Loading Screen
-  // ------------------------------
+
+
+
   if (loading)
     return (
       <div className="text-center py-20 text-xl font-semibold text-gray-600">
@@ -185,7 +185,7 @@ export default function LeaveApplicationList() {
         📋 Leave Application List
       </div>
 
-      {/* Search and Filter */}
+
       <div className="bg-white shadow p-4 rounded-md m-4">
         <div className="flex flex-wrap items-center gap-4">
           <input
@@ -213,7 +213,7 @@ export default function LeaveApplicationList() {
         </div>
       </div>
 
-      {/* Table */}
+
       <div className="bg-white shadow rounded-md m-4 overflow-x-auto">
         <table className="w-full text-sm border">
           <thead className="bg-blue-50 text-blue-600">
@@ -264,7 +264,7 @@ export default function LeaveApplicationList() {
         </table>
       </div>
 
-      {/* Action Buttons */}
+
       <div className="flex justify-center gap-4 my-6">
         <button
           onClick={handleApprove}

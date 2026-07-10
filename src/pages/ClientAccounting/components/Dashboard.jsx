@@ -60,14 +60,14 @@ const Dashboard = () => {
 
     setLoading(true);
     try {
-      // Fetch Profit & Loss data
+
       const profitLossResponse = await axios.get(
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/profit-loss/${companyId}`,
         { withCredentials: true }
       );
       setProfitLossData(profitLossResponse.data);
 
-      // Fetch Balance Sheet data
+
       const balanceSheetResponse = await axios.get(
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/balanceSheet/${companyId}`,
         { withCredentials: true }
@@ -123,7 +123,7 @@ const Dashboard = () => {
     return { status: 'Critical', color: 'text-red-600', bg: 'bg-red-100' };
   };
 
-  // Calculate quick metrics
+
   const getQuickMetrics = () => {
     if (!profitLossData || !balanceSheetData) return [];
 
@@ -169,7 +169,7 @@ const Dashboard = () => {
     ];
   };
 
-  // Get income/expense breakdown for charts
+
   const getIncomeBreakdown = () => {
     if (!profitLossData?.income) return [];
     return profitLossData.income.map(item => ({
@@ -218,7 +218,7 @@ const Dashboard = () => {
     fetchDashboardData();
   };
 
-  // Check if no company is selected
+
   if (!companyId) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -255,7 +255,7 @@ const Dashboard = () => {
 
   return (
     <div id="dashboard-content" className="space-y-6">
-      {/* Header */}
+
       <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Financial Dashboard</h1>
@@ -282,7 +282,7 @@ const Dashboard = () => {
       </div>
     
 
-      {/* Quick Metrics */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {getQuickMetrics().map((metric, index) => (
           <div key={index} className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -315,9 +315,9 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {/* Financial Overview */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Profit & Loss Summary */}
+
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center space-x-3">
@@ -368,7 +368,7 @@ const Dashboard = () => {
               </span>
             </div>
 
-            {/* Income Details */}
+
             <div className="border border-gray-200 rounded-lg overflow-hidden">
               <button
                 onClick={() => setShowIncomeDetails(!showIncomeDetails)}
@@ -410,7 +410,7 @@ const Dashboard = () => {
               )}
             </div>
 
-            {/* Expense Details */}
+
             <div className="border border-gray-200 rounded-lg overflow-hidden">
               <button
                 onClick={() => setShowExpenseDetails(!showExpenseDetails)}
@@ -454,7 +454,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Balance Sheet Summary */}
+
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center space-x-3">
@@ -510,7 +510,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Assets Details */}
+
             <div className="border border-gray-200 rounded-lg overflow-hidden">
               <button
                 onClick={() => setShowAssetsDetails(!showAssetsDetails)}
@@ -553,7 +553,7 @@ const Dashboard = () => {
               )}
             </div>
 
-            {/* Liabilities & Capital Details */}
+
             <div className="border border-gray-200 rounded-lg overflow-hidden">
               <button
                 onClick={() => setShowLiabilitiesDetails(!showLiabilitiesDetails)}
@@ -611,7 +611,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Financial Health Insights */}
+
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center space-x-3">
@@ -623,7 +623,7 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Profitability */}
+
           <div className="p-4 border border-gray-200 rounded-lg">
             <div className="flex items-center space-x-3 mb-3">
               <TrendingUp className="w-5 h-5 text-green-600" />
@@ -653,7 +653,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Liquidity */}
+
           <div className="p-4 border border-gray-200 rounded-lg">
             <div className="flex items-center space-x-3 mb-3">
               <Banknote className="w-5 h-5 text-blue-600" />
@@ -682,7 +682,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Efficiency */}
+
           <div className="p-4 border border-gray-200 rounded-lg">
             <div className="flex items-center space-x-3 mb-3">
               <LineChart className="w-5 h-5 text-purple-600" />
@@ -705,7 +705,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Recommendations */}
+
         <div className="mt-6 p-4 bg-linear-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
           <div className="flex items-start space-x-3">
             <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
@@ -734,7 +734,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Action Bar */}
+
       <div className="bg-white rounded-xl border border-gray-200 p-4">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="flex items-center space-x-2">

@@ -57,7 +57,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
     setExistingDocs((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Fetch existing profile if any
+
   const { data: existingProfile, isLoading: loadingProfile } = useQuery({
     queryKey: ["customer-profile", lead.id, companyId],
     queryFn: async () => {
@@ -140,7 +140,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
   return createPortal(
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
       <div className="app-modal w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-        {/* Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex items-center justify-between shrink-0">
           <div className="flex items-start gap-3.5 min-w-0 pr-4">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-blue-50 border border-blue-100 shrink-0">
@@ -165,7 +165,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
           </button>
         </div>
 
-        {/* Body */}
+
         <div className="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar">
           {loadingProfile ? (
             <div className="flex items-center justify-center py-12">
@@ -176,7 +176,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
             </div>
           ) : (
             <>
-              {/* Address Section */}
+
               <div className="space-y-4">
                 <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                   <MapPin className="size-4 text-blue-600" />
@@ -233,7 +233,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                 </div>
               </div>
 
-              {/* Identity Section */}
+
               <div className="space-y-4">
                 <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                   <CreditCard className="size-4 text-emerald-600" />
@@ -321,7 +321,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                 </div>
               </div>
 
-              {/* Nominee Section */}
+
               <div className="space-y-4">
                 <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                   <Heart className="size-4 text-rose-500" />
@@ -382,7 +382,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                 </div>
               </div>
 
-              {/* Notes */}
+
               <div>
                 <label className="modal-label block mb-1">
                   Additional Notes
@@ -396,7 +396,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                 />
               </div>
 
-              {/* Documents Section */}
+
               <div className="space-y-4">
                 <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                   <Upload className="size-4 text-purple-600" />
@@ -405,7 +405,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                   </h4>
                 </div>
 
-                {/* Existing Documents */}
+
                 {existingDocs.length > 0 && (
                   <div className="space-y-2">
                     <label className="modal-label block">Uploaded Documents</label>
@@ -447,7 +447,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                   </div>
                 )}
 
-                {/* New Files Pending Upload */}
+
                 {newFiles.length > 0 && (
                   <div className="space-y-2">
                     <label className="modal-label block text-emerald-700">New Files to Upload</label>
@@ -474,7 +474,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                   </div>
                 )}
 
-                {/* File Input */}
+
                 <div className="flex items-center justify-center w-full">
                   <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-2xl cursor-pointer bg-slate-50/30 hover:bg-slate-50 hover:border-slate-300 transition-all">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -497,7 +497,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
           )}
         </div>
 
-        {/* Footer */}
+
         <div className="px-5 py-3.5 border-t border-(--border-soft) flex items-center justify-between shrink-0">
           {isEditing && (
             <span className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-600">

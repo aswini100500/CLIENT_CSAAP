@@ -19,7 +19,7 @@ export default function AdminRoutes() {
         <Route path="quotation-form" element={<QuotationForm />} />
         <Route path="brokers" element={<Brokers />} />
 
-        {/* Dummy Routes */}
+
         <Route
           path="site-visits"
           element={<ComingSoon title="Site Visits" />}
@@ -42,7 +42,7 @@ export default function AdminRoutes() {
           element={<ComingSoon title="Sales Reports" />}
         />
 
-        {/* Default redirect - prefixing with /crm to match integrated route */}
+
         <Route path="/" element={<Navigate to="/crm/lead-list" replace />} />
         <Route path="*" element={<Navigate to="/crm/lead-list" replace />} />
       </Routes>

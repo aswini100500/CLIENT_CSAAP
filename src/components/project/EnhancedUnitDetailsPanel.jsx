@@ -12,10 +12,7 @@ import {
     FaChartLine
 } from 'react-icons/fa';
 
-/**
- * Enhanced Unit Details Panel with Dynamic Room Area Inputs
- * Premium UI with animations, auto-calculations, and advanced features
- */
+
 const EnhancedUnitDetailsPanel = ({
     selectedUnit,
     propertyFeatures,
@@ -103,13 +100,13 @@ const EnhancedUnitDetailsPanel = ({
 
     const autoCalculateBuiltUpArea = () => {
         const carpetArea = areaDetails.carpetArea || calculateGrandTotalArea();
-        const builtUp = carpetArea * 1.2; // 20% more than carpet
+        const builtUp = carpetArea * 1.2;
         setAreaDetails({ ...areaDetails, builtUpArea: Math.round(builtUp) });
     };
 
     const autoCalculateSuperBuiltUpArea = () => {
         const builtUp = areaDetails.builtUpArea || (areaDetails.carpetArea * 1.2);
-        const superBuiltUp = builtUp * 1.25; // 25% more than built-up
+        const superBuiltUp = builtUp * 1.25;
         setAreaDetails({ ...areaDetails, superBuiltUpArea: Math.round(superBuiltUp) });
     };
 
@@ -121,7 +118,7 @@ const EnhancedUnitDetailsPanel = ({
 
     return (
         <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transform transition-all duration-300 hover:shadow-3xl">
-            {/* Header with Gradient */}
+
             <div className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 px-6 py-5 relative overflow-hidden">
                 <div className="absolute inset-0 bg-black opacity-10"></div>
                 <div className="relative z-10">
@@ -149,7 +146,7 @@ const EnhancedUnitDetailsPanel = ({
                 </div>
             </div>
 
-            {/* Enhanced Tabs */}
+
             <div className="flex border-b border-gray-200 bg-linear-to-r from-gray-50 to-slate-50">
                 {tabs.map((tab) => {
                     const Icon = tab.icon;
@@ -173,9 +170,9 @@ const EnhancedUnitDetailsPanel = ({
                 })}
             </div>
 
-            {/* Tab Content with Animations */}
+
             <div className="p-6 min-h-125">
-                {/* Room Details Tab */}
+
                 {activeTab === 'rooms' && (
                     <div className="space-y-6 animate-fadeIn">
                         <div className="bg-linear-to-br from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-200">
@@ -184,7 +181,7 @@ const EnhancedUnitDetailsPanel = ({
                                 Room Configuration
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {/* Bedrooms */}
+
                                 <div className="group">
                                     <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                                         <FaBed className="inline mr-2 text-indigo-600" />
@@ -200,7 +197,7 @@ const EnhancedUnitDetailsPanel = ({
                                     />
                                 </div>
 
-                                {/* Bathrooms */}
+
                                 <div className="group">
                                     <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                                         <FaBath className="inline mr-2 text-blue-600" />
@@ -216,7 +213,7 @@ const EnhancedUnitDetailsPanel = ({
                                     />
                                 </div>
 
-                                {/* Balconies */}
+
                                 <div className="group">
                                     <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                                         <FaHome className="inline mr-2 text-green-600" />
@@ -234,7 +231,7 @@ const EnhancedUnitDetailsPanel = ({
                             </div>
                         </div>
 
-                        {/* Furnished Status */}
+
                         <div className="bg-white rounded-xl p-6 border-2 border-gray-200 shadow-sm">
                             <label className="block text-sm font-bold text-gray-700 mb-3">
                                 Furnished Status
@@ -250,7 +247,7 @@ const EnhancedUnitDetailsPanel = ({
                             </select>
                         </div>
 
-                        {/* Summary Card */}
+
                         <div className="bg-linear-to-r from-indigo-500 to-purple-600 rounded-xl p-6 text-white shadow-xl">
                             <h4 className="font-bold text-lg mb-3">Quick Summary</h4>
                             <div className="grid grid-cols-3 gap-4 text-center">
@@ -271,10 +268,10 @@ const EnhancedUnitDetailsPanel = ({
                     </div>
                 )}
 
-                {/* Area Details Tab */}
+
                 {activeTab === 'areas' && (
                     <div className="space-y-6 animate-fadeIn">
-                        {/* Auto-Calculate Tools */}
+
                         <div className="bg-linear-to-r from-purple-500 to-pink-500 rounded-xl p-4 text-white shadow-lg">
                             <div className="flex items-center justify-between flex-wrap gap-3">
                                 <div className="flex items-center gap-2">
@@ -304,7 +301,7 @@ const EnhancedUnitDetailsPanel = ({
                             </div>
                         </div>
 
-                        {/* Dynamic Bedroom Areas */}
+
                         {bedroomAreas.length > 0 && (
                             <div className="bg-linear-to-br from-indigo-50 to-purple-50 rounded-xl p-6 border-2 border-indigo-200 shadow-md">
                                 <div className="flex items-center justify-between mb-5">
@@ -359,7 +356,7 @@ const EnhancedUnitDetailsPanel = ({
                             </div>
                         )}
 
-                        {/* Dynamic Bathroom Areas */}
+
                         {bathroomAreas.length > 0 && (
                             <div className="bg-linear-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border-2 border-blue-200 shadow-md">
                                 <div className="flex items-center justify-between mb-5">
@@ -414,7 +411,7 @@ const EnhancedUnitDetailsPanel = ({
                             </div>
                         )}
 
-                        {/* Dynamic Balcony Areas */}
+
                         {balconyAreas.length > 0 && (
                             <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200 shadow-md">
                                 <div className="flex items-center justify-between mb-5">
@@ -469,7 +466,7 @@ const EnhancedUnitDetailsPanel = ({
                             </div>
                         )}
 
-                        {/* Grand Total */}
+
                         {(bedroomAreas.length > 0 || bathroomAreas.length > 0 || balconyAreas.length > 0) && (
                             <div className="bg-linear-to-r from-amber-400 via-orange-500 to-red-500 rounded-xl p-6 text-white shadow-2xl">
                                 <div className="flex items-center justify-between">
@@ -490,7 +487,7 @@ const EnhancedUnitDetailsPanel = ({
                             </div>
                         )}
 
-                        {/* Traditional Area Inputs */}
+
                         <div className="bg-white rounded-xl p-6 border-2 border-gray-200 shadow-md">
                             <h3 className="text-xl font-bold text-gray-900 mb-5 flex items-center">
                                 <FaRulerCombined className="mr-3 text-indigo-600" />
@@ -538,7 +535,7 @@ const EnhancedUnitDetailsPanel = ({
                     </div>
                 )}
 
-                {/* Price Details Tab */}
+
                 {activeTab === 'price' && (
                     <div className="space-y-6 animate-fadeIn">
                         <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200 shadow-md">
@@ -586,7 +583,7 @@ const EnhancedUnitDetailsPanel = ({
                             </div>
                         </div>
 
-                        {/* Price Summary */}
+
                         {(priceDetails.expectedPrice || priceDetails.tokenAmount) && (
                             <div className="bg-linear-to-r from-green-500 to-emerald-600 rounded-xl p-6 text-white shadow-xl">
                                 <h4 className="font-bold text-lg mb-4">Price Summary</h4>
@@ -610,7 +607,7 @@ const EnhancedUnitDetailsPanel = ({
                 )}
             </div>
 
-            {/* Enhanced Footer Actions */}
+
             <div className="bg-linear-to-r from-gray-50 to-slate-100 px-6 py-5 border-t-2 border-gray-200 flex justify-between items-center">
                 <div className="text-sm text-gray-600">
                     <span className="font-semibold">Last Updated:</span> {new Date().toLocaleTimeString()}
@@ -624,7 +621,7 @@ const EnhancedUnitDetailsPanel = ({
                 </button>
             </div>
 
-            {/* Custom CSS for animations */}
+
             <style jsx>{`
                 @keyframes fadeIn {
                     from {

@@ -4,15 +4,15 @@ import useSWR, { mutate } from 'swr';
 import { getAuthToken } from '../../store/authSession';
 import { CheckCircle, AlertCircle, X } from 'lucide-react';
 
-// API base URL
+
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance with authorization
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -26,12 +26,12 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const PurchaseEntry = () => {
 
-  // Notification state
+
   const [notification, setNotification] = useState({
     show: false,
     type: '',
@@ -39,7 +39,7 @@ const PurchaseEntry = () => {
     title: ''
   });
 
-  // Show notification function
+
   const showNotification = (type, title, message) => {
     setNotification({
       show: true,
@@ -48,13 +48,13 @@ const PurchaseEntry = () => {
       message
     });
     
-    // Auto-hide after 3 seconds
+
     setTimeout(() => {
       setNotification({ show: false, type: '', message: '', title: '' });
     }, 3000);
   };
 
-  // Fetch stores from API
+
   const { data: storesData, isLoading: storesLoading } = useSWR(
     '/api/tenant/stores',
     fetcher,
@@ -64,7 +64,7 @@ const PurchaseEntry = () => {
     }
   );
 
-  // Fetch suppliers from API
+
   const { data: suppliersData, isLoading: suppliersLoading } = useSWR(
     '/api/tenant/supplier',
     fetcher,
@@ -74,7 +74,7 @@ const PurchaseEntry = () => {
     }
   );
 
-  // Fetch categories from API
+
   const { data: categoriesData, isLoading: categoriesLoading } = useSWR(
     '/api/tenant/categories',
     fetcher,
@@ -84,7 +84,7 @@ const PurchaseEntry = () => {
     }
   );
 
-  // Fetch products from API
+
   const { data: productsData, isLoading: productsLoading } = useSWR(
     '/api/tenant/products',
     fetcher,
@@ -94,13 +94,13 @@ const PurchaseEntry = () => {
     }
   );
 
-  // Extract data from SWR responses
+
   const stores = storesData?.success ? storesData.data : [];
   const suppliers = suppliersData?.success ? suppliersData.data : [];
   const categories = categoriesData?.success ? categoriesData.data : [];
   const products = productsData?.success ? productsData.data : [];
 
-  // State for form fields
+
   const [formData, setFormData] = useState({
     billNo: '',
     toStore: '',
@@ -109,7 +109,7 @@ const PurchaseEntry = () => {
     supplierGST: '',
     storeGST: '',
     gstType: 'NoGST',
-    purchaseDate: new Date().toISOString().split('T')[0], // Default to today
+    purchaseDate: new Date().toISOString().split('T')[0],
     discount: 0,
     netPrice: 0,
     paidAmount: 0,
@@ -118,13 +118,13 @@ const PurchaseEntry = () => {
     notes: ''
   });
 
-  // State for selected IDs (store_id and supplier_id)
+
   const [selectedIds, setSelectedIds] = useState({
     store_id: '',
     supplier_id: ''
   });
 
-  // State for add store form visibility
+
   const [showAddStoreForm, setShowAddStoreForm] = useState(false);
   const [newStore, setNewStore] = useState({
     name: '',
@@ -135,14 +135,14 @@ const PurchaseEntry = () => {
     alternate_mobile: ''
   });
 
-  // State for add category form visibility
+
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [newCategory, setNewCategory] = useState({
     name: '',
     description: ''
   });
 
-  // State for add product form visibility
+
   const [showAddProductForm, setShowAddProductForm] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -150,7 +150,7 @@ const PurchaseEntry = () => {
     description: ''
   });
 
-  // State for product entry
+
   const [product, setProduct] = useState({
     category: '',
     product: '',
@@ -168,13 +168,13 @@ const PurchaseEntry = () => {
     totalPrice: 0
   });
 
-  // State for product list
+
   const [productList, setProductList] = useState([]);
 
-  // State for submission loading
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
@@ -203,7 +203,7 @@ const PurchaseEntry = () => {
     }
   };
 
-  // Handle store input changes
+
   const handleStoreChange = (e) => {
     const { name, value } = e.target;
     setNewStore({
@@ -212,7 +212,7 @@ const PurchaseEntry = () => {
     });
   };
 
-  // Handle category input changes
+
   const handleCategoryChange = (e) => {
     const { name, value } = e.target;
     setNewCategory({
@@ -221,7 +221,7 @@ const PurchaseEntry = () => {
     });
   };
 
-  // Handle product input changes
+
   const handleProductChange = (e) => {
     const { name, value } = e.target;
     
@@ -240,7 +240,7 @@ const PurchaseEntry = () => {
     });
   };
 
-  // Handle new product form changes
+
   const handleNewProductChange = (e) => {
     const { name, value } = e.target;
     setNewProduct({
@@ -249,13 +249,13 @@ const PurchaseEntry = () => {
     });
   };
 
-  // Add new store
+
   const handleAddStore = async (e) => {
     e.preventDefault();
     try {
       const response = await api.post('/api/tenant/stores', newStore);
       if (response.data.success) {
-        // Revalidate stores cache
+
         mutate('/api/tenant/stores');
         const store = response.data.data;
         setFormData({
@@ -285,7 +285,7 @@ const PurchaseEntry = () => {
     }
   };
 
-  // Cancel adding new store
+
   const handleCancelAddStore = () => {
     setNewStore({
       name: '',
@@ -298,13 +298,13 @@ const PurchaseEntry = () => {
     setShowAddStoreForm(false);
   };
 
-  // Add new category
+
   const handleAddCategory = async (e) => {
     e.preventDefault();
     try {
       const response = await api.post('/api/tenant/categories', newCategory);
       if (response.data.success) {
-        // Revalidate categories cache
+
         mutate('/api/tenant/categories');
         setProduct({
           ...product,
@@ -324,7 +324,7 @@ const PurchaseEntry = () => {
     }
   };
 
-  // Cancel adding new category
+
   const handleCancelAddCategory = () => {
     setNewCategory({ 
       name: '',
@@ -333,13 +333,13 @@ const PurchaseEntry = () => {
     setShowAddCategoryForm(false);
   };
 
-  // Add new product
+
   const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
       const response = await api.post('/api/tenant/products', newProduct);
       if (response.data.success) {
-        // Revalidate products cache
+
         mutate('/api/tenant/products');
         const productData = response.data.data;
         setProduct({
@@ -361,7 +361,7 @@ const PurchaseEntry = () => {
     }
   };
 
-  // Cancel adding new product
+
   const handleCancelAddProduct = () => {
     setNewProduct({
       name: '',
@@ -371,7 +371,7 @@ const PurchaseEntry = () => {
     setShowAddProductForm(false);
   };
 
-  // Handle store selection
+
   const handleStoreSelect = (e) => {
     const selectedStore = stores.find(store => store.name === e.target.value);
     setFormData({
@@ -385,7 +385,7 @@ const PurchaseEntry = () => {
     });
   };
 
-  // Handle supplier selection
+
   const handleSupplierSelect = (e) => {
     const selectedSupplier = suppliers.find(supplier => supplier.name === e.target.value);
     setFormData({
@@ -400,7 +400,7 @@ const PurchaseEntry = () => {
     });
   };
 
-  // Handle category selection
+
   const handleCategorySelect = (e) => {
     const value = e.target.value;
     setProduct({
@@ -409,7 +409,7 @@ const PurchaseEntry = () => {
     });
   };
 
-  // Handle product selection
+
   const handleProductSelect = (e) => {
     const selectedProduct = products.find(p => p.name === e.target.value);
     setProduct({
@@ -419,7 +419,7 @@ const PurchaseEntry = () => {
     });
   };
 
-  // Add product to list
+
   const addProductToList = () => {
     if (!product.product) {
       showNotification('error', 'Validation Error', 'Please select a product first.');
@@ -431,17 +431,17 @@ const PurchaseEntry = () => {
       return;
     }
 
-    // Get product ID
+
     const selectedProduct = products.find(p => p.name === product.product);
     if (!selectedProduct) {
       showNotification('error', 'Validation Error', 'Selected product not found.');
       return;
     }
 
-    // Calculate total price
+
     const totalPrice = product.quantity * product.purchaseUnitPrice;
     
-    // Set GST values based on selected type
+
     let cgst = 0, sgst = 0, igst = 0;
     if (formData.gstType === 'IntraState') {
       cgst = product.cgst || 0;
@@ -457,12 +457,12 @@ const PurchaseEntry = () => {
       cgst,
       sgst,
       igst,
-      id: Date.now() // Add unique ID for list management
+      id: Date.now()
     };
     
     setProductList([...productList, productWithTotal]);
     
-    // Reset product form
+
     setProduct({
       category: '',
       product: '',
@@ -483,7 +483,7 @@ const PurchaseEntry = () => {
     showNotification('success', 'Product Added', 'Product added to list successfully!');
   };
 
-  // Remove product from list
+
   const removeProduct = (index) => {
     const newList = [...productList];
     newList.splice(index, 1);
@@ -491,7 +491,7 @@ const PurchaseEntry = () => {
     showNotification('success', 'Product Removed', 'Product removed from list successfully!');
   };
 
-  // Calculate totals
+
   const calculateTotals = () => {
     let totalNetPrice = 0;
     let totalCGST = 0;
@@ -505,7 +505,7 @@ const PurchaseEntry = () => {
       totalIGST += item.igst || 0;
     });
 
-    // Apply discount
+
     const discount = parseFloat(formData.discount) || 0;
     totalNetPrice -= discount;
 
@@ -519,19 +519,19 @@ const PurchaseEntry = () => {
 
   const totals = calculateTotals();
 
-  // Calculate pending amount
+
   const calculatePendingAmount = () => {
     const netPrice = totals.netPrice || 0;
     const paidAmount = parseFloat(formData.paidAmount) || 0;
     return netPrice - paidAmount;
   };
 
-  // Handle form submission
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Validate form
+
     if (!formData.billNo || !formData.toStore || !formData.supplierName || !formData.purchaseDate) {
       showNotification('error', 'Validation Error', 'Please fill all required fields.');
       setIsSubmitting(false);
@@ -551,7 +551,7 @@ const PurchaseEntry = () => {
     }
 
     try {
-      // Prepare API request data
+
       const purchaseData = {
         bill_no: formData.billNo,
         store_id: selectedIds.store_id,
@@ -586,13 +586,13 @@ const PurchaseEntry = () => {
 
       console.log('Submitting purchase data:', purchaseData);
 
-      // Call the purchase entry API
+
       const response = await api.post('/api/tenant/purchases', purchaseData);
       
       if (response.data.success) {
         showNotification('success', 'Success!', 'Purchase entry saved successfully!');
         
-        // Reset form after successful submission
+
         setFormData({
           billNo: '',
           toStore: '',
@@ -615,7 +615,7 @@ const PurchaseEntry = () => {
         });
         setProductList([]);
         
-        // Revalidate purchase history cache
+
         mutate('/api/tenant/purchases/history');
       } else {
         throw new Error(response.data.message || 'Failed to save purchase entry');
@@ -630,13 +630,13 @@ const PurchaseEntry = () => {
     }
   };
 
-  // Helper function to safely format numbers
+
   const formatNumber = (value, decimals = 2) => {
     const num = parseFloat(value);
     return isNaN(num) ? '0.00' : num.toFixed(decimals);
   };
 
-  // Function to render GST fields based on selected GST type
+
   const renderGSTFields = () => {
     switch(formData.gstType) {
       case 'NoGST':
@@ -700,7 +700,7 @@ const PurchaseEntry = () => {
     }
   };
 
-  // Update totals when product list changes
+
   useEffect(() => {
     const netPrice = totals.netPrice;
     const pendingAmount = netPrice - parseFloat(formData.paidAmount || 0);
@@ -711,7 +711,7 @@ const PurchaseEntry = () => {
     }));
   }, [productList, formData.paidAmount]);
 
-  // Show loading states
+
   if (storesLoading || suppliersLoading || categoriesLoading || productsLoading) {
     return (
       <div className="container mx-auto p-4 bg-gray-50 min-h-screen flex items-center justify-center">
@@ -725,7 +725,7 @@ const PurchaseEntry = () => {
 
   return (
     <div className="container mx-auto p-4 bg-gray-50 min-h-screen">
-      {/* Notification Component */}
+
       {notification.show && (
         <div className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
           notification.type === 'success' 
@@ -783,7 +783,7 @@ const PurchaseEntry = () => {
       <h1 className="text-2xl font-bold mb-6 text-center text-blue-800">Purchase Entry</h1>
       
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
-        {/* Basic Information Section */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">Bill No *</label>
@@ -802,7 +802,7 @@ const PurchaseEntry = () => {
             <label className="block text-sm font-medium text-gray-700">To Store *</label>
             
             {showAddStoreForm ? (
-              // Add Store Form (modal style)
+
               <div className="bg-gray-100 p-4 rounded-md border border-gray-300">
                 <h3 className="font-medium mb-3">Add New Store</h3>
                 <div className="grid grid-cols-1 gap-2 mb-3">
@@ -877,7 +877,7 @@ const PurchaseEntry = () => {
                 </div>
               </div>
             ) : (
-              // Store Selection Dropdown with Add Button
+
               <div className="flex space-x-2">
                 <select
                   name="toStore"
@@ -990,7 +990,7 @@ const PurchaseEntry = () => {
             />
           </div>
 
-          {/* Notes Field */}
+
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700">Notes</label>
             <textarea
@@ -1004,13 +1004,13 @@ const PurchaseEntry = () => {
           </div>
         </div>
 
-        {/* Product Entry Section */}
+
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-4 text-blue-700">Product List</h2>
           <p className="text-sm text-gray-600 mb-4">Enter Product details and press "Add Product To List" to add product</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            {/* Category Field with Add Button */}
+
             <div>
               <label className="block text-sm font-medium text-gray-700">Category</label>
               {showAddCategoryForm ? (
@@ -1075,7 +1075,7 @@ const PurchaseEntry = () => {
               )}
             </div>
             
-            {/* Product Field with Add Button */}
+
             <div>
               <label className="block text-sm font-medium text-gray-700">Product *</label>
               {showAddProductForm ? (
@@ -1276,7 +1276,7 @@ const PurchaseEntry = () => {
               />
             </div>
             
-            {/* Dynamic GST Fields */}
+
             {renderGSTFields()}
           </div>
           
@@ -1289,7 +1289,7 @@ const PurchaseEntry = () => {
           </button>
         </div>
 
-        {/* Product List Table */}
+
         {productList.length > 0 && (
           <div className="mb-6 overflow-x-auto">
             <table className="min-w-full table-auto border border-gray-200">
@@ -1354,7 +1354,7 @@ const PurchaseEntry = () => {
           </div>
         )}
 
-        {/* Totals Section */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           {formData.gstType === 'IntraState' && (
             <>
@@ -1439,7 +1439,7 @@ const PurchaseEntry = () => {
             />
           </div>
 
-          {/* Pending Amount Field */}
+
           <div>
             <label className="block text-sm font-medium text-gray-700">Pending Amount</label>
             <div className={`mt-1 block w-full border rounded-md p-2 font-bold text-lg ${
@@ -1452,7 +1452,7 @@ const PurchaseEntry = () => {
           </div>
         </div>
 
-        {/* Submit Button */}
+
         <div className="flex justify-end space-x-3">
           <button
             type="button"

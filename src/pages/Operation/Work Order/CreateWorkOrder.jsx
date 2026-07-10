@@ -1,227 +1,227 @@
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
-//           />
-//         </div>
-//         <div>
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Address
-//           </label>
-//           <input
-//             type="text"
-//             name="address"
-//             value={formData.address}
-//             onChange={handleInputChange}
-//             placeholder="Contractor address"
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
-//           />
-//         </div>
-//         <div>
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Pin Code
-//           </label>
-//           <input
-//             type="text"
-//             name="pin"
-//             value={formData.pin}
-//             onChange={handleInputChange}
-//             placeholder="e.g. 400001"
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
-//           />
-//         </div>
-//         <div>
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Project Name
-//           </label>
-//           <input
-//             type="text"
-//             name="projectName"
-//             value={formData.projectName}
-//             onChange={handleInputChange}
-//             placeholder="Enter project name"
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
-//           />
-//         </div>
-//         <div>
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Contractor Name
-//           </label>
-//           <input
-//             type="text"
-//             name="contractorName"
-//             value={formData.contractorName}
-//             onChange={handleInputChange}
-//             placeholder="Enter contractor name"
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
-//           />
-//         </div>
-//         <div>
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Work Order Date
-//           </label>
-//           <input
-//             type="date"
-//             name="workOrderDate"
-//             value={formData.workOrderDate}
-//             onChange={handleInputChange}
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
-//           />
-//         </div>
-//         <div className="md:col-span-2">
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Work Description
-//           </label>
-//           <input
-//             type="text"
-//             name="description"
-//             value={formData.description}
-//             onChange={handleInputChange}
-//             placeholder="e.g., Masonry, Electrical, Plumbing"
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
-//           />
-//         </div>
-//       </div>
-
-//       {/* Line Items */}
-//      <div className="mb-6">
-//   <h3 className="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">
-//     Work Items
-//   </h3>
-
-//   <div className="space-y-3">
-//     {items.map((item, index) => (
-//       <div
-//         key={index}
-//         className="grid grid-cols-12 gap-3 items-end bg-gray-50 dark:bg-gray-700 p-4 rounded-lg"
-//       >
-//         {/* Description */}
-//         <div className="col-span-4">
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Description
-//           </label>
-//           <input
-//             type="text"
-//             placeholder="Enter work description"
-//             value={item.description}
-//             onChange={(e) =>
-//               handleItemChange(index, "description", e.target.value)
-//             }
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-600 dark:border-gray-500"
-//           />
-//         </div>
-
-//         {/* Quantity */}
-//         <div className="col-span-2">
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Quantity
-//           </label>
-//           <input
-//             type="number"
-//             placeholder="Qty"
-//             value={item.quantity}
-//             onChange={(e) =>
-//               handleItemChange(index, "quantity", e.target.value)
-//             }
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-600 dark:border-gray-500"
-//           />
-//         </div>
-
-//         {/* Rate */}
-//         <div className="col-span-2">
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Rate
-//           </label>
-//           <input
-//             type="number"
-//             placeholder="Rate"
-//             value={item.rate}
-//             onChange={(e) => handleItemChange(index, "rate", e.target.value)}
-//             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-600 dark:border-gray-500"
-//           />
-//         </div>
-
-//         {/* Amount */}
-//         <div className="col-span-3">
-//           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//             Amount
-//           </label>
-//           <input
-//             type="number"
-//             readOnly
-//             value={item.amount}
-//             className="w-full px-3 py-2 border rounded-lg bg-gray-100 dark:bg-gray-500 dark:border-gray-400"
-//           />
-//         </div>
-
-//         {/* Remove Button */}
-//         <div className="col-span-1 flex items-end justify-center">
-//           <button
-//             onClick={() => removeItem(index)}
-//             className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg"
-//           >
-//             <Trash2 size={18} />
-//           </button>
-//             <button
-//            onClick={addItem}
-//             className=" flex items-center  text-blue-600 hover:text-blue-700"
-//          >
-//            <Plus size={18} />New 
-//   </button>
-
-//         </div>
-//       </div>
-//     ))}
-//   </div>
-
-//   {/* <button
-//     onClick={addItem}
-//     className="mt-3 flex items-center gap-2 text-blue-600 hover:text-blue-700"
-//   >
-//     <Plus size={18} /> Add New Item
-//   </button> */}
-// </div>
 
 
-//       {/* Terms and Conditions */}
-//       <div className="mb-6">
-//         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-//           Terms & Conditions
-//         </label>
-//         <textarea
-//           name="terms"
-//           rows={4}
-//           value={formData.terms}
-//           onChange={handleInputChange}
-//           placeholder="Enter payment, completion, or quality terms"
-//           className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
-//         />
-//       </div>
 
-//       {/* Total */}
-//       <div className="flex justify-end items-center mb-4">
-//         <span className="text-lg font-semibold">
-//           Total: ₹{totalAmount.toFixed(2)}
-//         </span>
-//       </div>
 
-//       {/* Action Buttons */}
-//       <div className="flex justify-end gap-3">
-//         <button
-//           onClick={handleSave}
-//           className="flex items-center gap-2 px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
-//         >
-//           <Save size={18} /> Save
-//         </button>
-//         <button
-//           onClick={downloadPDF}
-//           className="flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-//         >
-//           <FileText size={18} /> Download PDF
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default CreateWorkOrder;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -250,7 +250,7 @@ const CreateWorkOrder = () => {
     note: "",
     terms_accepted: false,
     payment_terms_accepted: false,
-    applicant_id: "", // Add applicant selection
+    applicant_id: "",
   });
 
   const [items, setItems] = useState([
@@ -262,10 +262,10 @@ const CreateWorkOrder = () => {
   const [contractors, setContractors] = useState([]);
   const [projects, setProjects] = useState([]);
   const [tenders, setTenders] = useState([]);
-  const [tenderApplicants, setTenderApplicants] = useState([]); // New state for applicants
+  const [tenderApplicants, setTenderApplicants] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Extract user ID from JWT token
+
   const getApplicantId = () => {
     try {
       const activeToken = token || localStorage.getItem('token');
@@ -284,7 +284,7 @@ const CreateWorkOrder = () => {
     fetchAllData();
   }, []);
 
-  // Fetch applicants when tender is selected
+
   useEffect(() => {
     if (formData.tender_id) {
       fetchTenderApplicants(formData.tender_id);
@@ -311,7 +311,7 @@ const CreateWorkOrder = () => {
       setContractors(contRes.data.contractors || []);
       setTenders(tendRes.data.data || []);
       
-      // Combine all project types
+
       const allProjects = [
         ...(apts.data.data || []),
         ...(comms.data.data || []),
@@ -333,7 +333,7 @@ const CreateWorkOrder = () => {
     }
   };
 
-  // New function to fetch tender applicants
+
   const fetchTenderApplicants = async (tenderId) => {
     try {
       setLoading(true);
@@ -435,7 +435,7 @@ const CreateWorkOrder = () => {
       setLoading(true);
       
       const payload = {
-        applicant_id: formData.applicant_id, // Use selected applicant ID
+        applicant_id: formData.applicant_id,
         tender_id: parseInt(formData.tender_id),
         subject: formData.subject,
         project_id: formData.projectName ? projects.find(p => p.name === formData.projectName)?.id : null,
@@ -455,7 +455,7 @@ const CreateWorkOrder = () => {
 
       await operationApi.createTenderWorkOrder(payload);
       Swal.fire("Success", "Work Order Saved Successfully!", "success");
-      // Reset form
+
       setFormData(prev => ({
         ...prev,
         contractor_id: "",
@@ -494,7 +494,7 @@ const CreateWorkOrder = () => {
     const doc = new jsPDF();
     let y = 15;
 
-    // Header
+
     doc.setFontSize(18);
     doc.setTextColor(37, 99, 235);
     doc.text("CONSTRUCTION WORK ORDER", 105, y, { align: "center" });
@@ -503,7 +503,7 @@ const CreateWorkOrder = () => {
     doc.line(20, y, 190, y);
     y += 15;
 
-    // Contractor Details
+
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     doc.setFont(undefined, 'bold');
@@ -528,7 +528,7 @@ const CreateWorkOrder = () => {
     }
     y += 12;
 
-    // Work Order Info
+
     doc.setFont(undefined, 'bold');
     doc.text("WORK ORDER INFORMATION:", 20, y);
     y += 8;
@@ -558,7 +558,7 @@ const CreateWorkOrder = () => {
     }
     y += 12;
 
-    // Table Header
+
     doc.setFont(undefined, 'bold');
     doc.text("S.No", 20, y);
     doc.text("Description", 40, y);
@@ -570,7 +570,7 @@ const CreateWorkOrder = () => {
     doc.line(20, y, 190, y);
     y += 6;
 
-    // Items
+
     doc.setFont(undefined, 'normal');
     items.forEach((item, index) => {
       doc.text(`${index + 1}`, 22, y);
@@ -582,7 +582,7 @@ const CreateWorkOrder = () => {
       y += 8;
     });
 
-    // Totals
+
     y += 4;
     doc.line(20, y, 190, y);
     y += 8;
@@ -593,7 +593,7 @@ const CreateWorkOrder = () => {
     doc.setFont(undefined, 'bold');
     doc.text(`Grand Total: ₹${totalAmount.toFixed(2)}`, 120, y);
 
-    // Terms
+
     y += 15;
     doc.setFont(undefined, 'bold');
     doc.text("TERMS & CONDITIONS:", 20, y);
@@ -603,7 +603,7 @@ const CreateWorkOrder = () => {
     const splitText = doc.splitTextToSize(termsText, 170);
     doc.text(splitText, 20, y);
 
-    // Signature
+
     y += splitText.length * 6 + 20;
     doc.setFont(undefined, 'bold');
     doc.text("Authorized Signature", 150, y);
@@ -618,9 +618,9 @@ const CreateWorkOrder = () => {
         Construction Work Order
       </h2>
 
-      {/* Work Order Form */}
+
       <div className="grid md:grid-cols-2 gap-4 mb-6">
-        {/* Contractor Selection */}
+
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Select Contractor *
@@ -677,7 +677,7 @@ const CreateWorkOrder = () => {
             )}
           </div>
 
-          {/* Selected Contractor Info */}
+
           {formData.contractor_id && (
             <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
               <div className="flex items-center justify-between">
@@ -709,7 +709,7 @@ const CreateWorkOrder = () => {
           )}
         </div>
 
-        {/* Tender Selection */}
+
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Link to Tender *
@@ -730,7 +730,7 @@ const CreateWorkOrder = () => {
           </select>
         </div>
 
-        {/* Applicant Selection - New Field */}
+
         {formData.tender_id && tenderApplicants.length > 0 && (
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -753,7 +753,7 @@ const CreateWorkOrder = () => {
           </div>
         )}
 
-        {/* Subject */}
+
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Subject *
@@ -769,7 +769,7 @@ const CreateWorkOrder = () => {
           />
         </div>
 
-        {/* Auto-filled fields */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Company Name
@@ -879,7 +879,7 @@ const CreateWorkOrder = () => {
         </div>
       </div>
 
-      {/* Line Items */}
+
       <div className="mb-6">
         <h3 className="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">
           Work Items
@@ -982,7 +982,7 @@ const CreateWorkOrder = () => {
         </button>
       </div>
 
-      {/* Note */}
+
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Note
@@ -997,7 +997,7 @@ const CreateWorkOrder = () => {
         />
       </div>
 
-      {/* Terms and Conditions */}
+
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Terms & Conditions
@@ -1012,7 +1012,7 @@ const CreateWorkOrder = () => {
         />
       </div>
 
-      {/* Acceptance Checkboxes */}
+
       <div className="mb-6 p-4 border rounded-lg bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
         <div className="flex items-center gap-3 mb-3">
           <input
@@ -1042,14 +1042,14 @@ const CreateWorkOrder = () => {
         </div>
       </div>
 
-      {/* Total (informational) */}
+
       <div className="flex justify-end items-center mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
         <span className="text-lg font-semibold text-gray-800 dark:text-gray-100">
           Estimated Total: ₹{totalAmount.toFixed(2)}
         </span>
       </div>
 
-      {/* Action Buttons */}
+
       <div className="flex justify-end gap-3">
         <button
           onClick={handleSave}

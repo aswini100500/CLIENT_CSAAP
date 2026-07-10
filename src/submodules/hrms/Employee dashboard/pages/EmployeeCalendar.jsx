@@ -27,7 +27,7 @@ import {
   User,
 } from "lucide-react";
 
-// --- Configuration ---
+
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const locales = { "en-US": enUS };
@@ -140,7 +140,7 @@ const EmployeeCalendar = () => {
     { label: "Meetings Today", value: meetingsToday.length.toString().padStart(2, '0'), icon: Video, color: "from-purple-500 to-purple-600", lightColor: "bg-purple-50 text-purple-600", change: "", subtext: "Scheduled for today" },
   ];
 
-  // Group holidays by month
+
   const holidaysByMonth = holidays.reduce((acc, holiday) => {
     const month = format(new Date(holiday.date), "MMMM yyyy");
     if (!acc[month]) acc[month] = [];
@@ -150,7 +150,7 @@ const EmployeeCalendar = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50/30">
-      {/* Navigation */}
+
       <nav className=" top-0 z-40 bg-white/95 border-b rounded-2xl border-slate-100 backdrop-blur-md shadow-sm">
         <div className="max-w-400 mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -188,7 +188,7 @@ const EmployeeCalendar = () => {
       </nav>
 
       <main className="max-w-400 mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {/* Stats Grid */}
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           {stats.map((stat, index) => (
             <div
@@ -216,9 +216,9 @@ const EmployeeCalendar = () => {
           ))}
         </div>
 
-        {/* Calendar and Meetings Side by Side */}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Calendar - Takes 2/3 width on desktop */}
+
           <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-3 sm:p-4">
             <BigCalendar
               localizer={localizer}
@@ -237,7 +237,7 @@ const EmployeeCalendar = () => {
             />
           </div>
 
-          {/* Meetings Sidebar - Takes 1/3 width */}
+
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="p-4 border-b border-slate-100 bg-linear-to-r from-slate-50 to-white">
               <div className="flex items-center justify-between">
@@ -288,7 +288,7 @@ const EmployeeCalendar = () => {
               ))}
             </div>
 
-            {/* View All Button */}
+
             <div className="p-3 border-t border-slate-100 bg-slate-50/50">
               <button className="w-full py-2 text-xs font-medium text-slate-600 hover:text-slate-800 transition-colors">
                 View All Meetings →
@@ -298,7 +298,7 @@ const EmployeeCalendar = () => {
         </div>
       </main>
 
-      {/* Holiday Modal - Side by Side Layout */}
+
 <AnimatePresence>
   {showHolidayPDF && (
     <motion.div
@@ -315,7 +315,7 @@ const EmployeeCalendar = () => {
         className="max-w-6xl w-full max-h-[90vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-white"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* --- Header --- */}
+
         <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-10">
           <div className="flex items-center gap-5">
             <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200">
@@ -339,21 +339,21 @@ const EmployeeCalendar = () => {
           </div>
         </div>
 
-        {/* --- Calendar Month Grid --- */}
+
         <div className="flex-1 overflow-y-auto px-8 py-10 bg-slate-50/30">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {Object.entries(holidaysByMonth).map(([month, monthHolidays]) => (
               <div key={month} className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                {/* Month Label */}
+
                 <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 border-b border-slate-50 pb-2">
                   {month}
                 </h3>
                 
-                {/* Holiday Events in this month */}
+
                 <div className="space-y-2">
                   {monthHolidays.map((holiday, idx) => (
                     <div key={idx} className="group flex items-start gap-3">
-                      {/* Date "Ticket" */}
+
                       <div className="min-w-10 h-10 bg-emerald-50 rounded-lg flex flex-col items-center justify-center border border-emerald-100 group-hover:bg-blue-600 transition-colors duration-300">
                         <span className="text-[10px] font-bold text-blue-600 group-hover:text-white leading-none">
                           {format(new Date(holiday.date), "dd")}
@@ -363,7 +363,7 @@ const EmployeeCalendar = () => {
                         </span>
                       </div>
                       
-                      {/* Holiday Info */}
+
                       <div className="flex flex-col">
                         <h4 className="text-[13px] font-bold text-slate-800 leading-tight group-hover:text-blue-700 transition-colors">
                           {holiday.name}
@@ -376,7 +376,7 @@ const EmployeeCalendar = () => {
                   ))}
                 </div>
 
-                {/* Visual Empty Calendar Filler (Optional decorative) */}
+
                 {monthHolidays.length === 0 && (
                   <p className="text-[10px] font-medium text-slate-300 italic py-2">No public holidays</p>
                 )}
@@ -385,7 +385,7 @@ const EmployeeCalendar = () => {
           </div>
         </div>
 
-        {/* --- Footer Stats --- */}
+
         <div className="px-4 py-4 bg-white border-t border-slate-100 flex items-center justify-between">
           <div className="flex gap-4">
              <div className="flex items-center gap-2">

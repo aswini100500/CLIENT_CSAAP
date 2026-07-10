@@ -1,881 +1,881 @@
-// import React, { useState } from 'react';
-// import { 
-//   HiSearch, 
-//   HiDownload, 
-//   HiPrinter, 
-//   HiRefresh,
-//   HiFilter,
-//   HiDocumentAdd,
-//   HiEye,
-//   HiPencilAlt,
-//   HiTrash,
-//   HiCheckCircle,
-//   HiExclamationCircle,
-//   HiPlus
-// } from 'react-icons/hi';
-// import { BiChevronDown, BiChevronUp, BiCopy } from 'react-icons/bi';
-// import { FaFileExcel, FaFilePdf } from 'react-icons/fa';
 
-// const Gstr2a = () => {
-//   const [activeTab, setActiveTab] = useState('b2b');
-//   const [searchTerm, setSearchTerm] = useState('');
-//   const [selectedMonth, setSelectedMonth] = useState('October 2023');
-//   const [expandedRows, setExpandedRows] = useState([]);
-//   const [showAddEntry, setShowAddEntry] = useState(false);
-//   const [entryType, setEntryType] = useState('b2b');
 
-//   // Sample GSTR-2A data for different tabs
-//   const tabData = {
-//     b2b: {
-//       title: 'B2B Invoices',
-//       description: 'Auto-populated B2B invoices from suppliers',
-//       entries: [
-//         {
-//           id: 'INV-2023-001',
-//           supplierGSTIN: '27AABCU9603R1ZX',
-//           supplierName: 'ABC Suppliers Pvt Ltd',
-//           invoiceDate: '2023-10-05',
-//           invoiceNo: 'INV/ABC/2023/001',
-//           invoiceValue: '₹45,000',
-//           taxableValue: '₹38,983',
-//           cgst: '₹3,508',
-//           sgst: '₹3,508',
-//           igst: '₹0',
-//           status: 'Matched',
-//           action: 'Auto-matched',
-//           matchStatus: 'Fully Matched'
-//         },
-//         {
-//           id: 'INV-2023-002',
-//           supplierGSTIN: '29ABCDE1234F1Z5',
-//           supplierName: 'XYZ Traders',
-//           invoiceDate: '2023-10-12',
-//           invoiceNo: 'INV/XYZ/2023/002',
-//           invoiceValue: '₹1,25,000',
-//           taxableValue: '₹1,06,780',
-//           cgst: '₹9,610',
-//           sgst: '₹9,610',
-//           igst: '₹0',
-//           status: 'Pending',
-//           action: 'Pending Acceptance',
-//           matchStatus: 'Partially Matched'
-//         }
-//       ]
-//     },
-//     b2bAmendments: {
-//       title: 'Amendments to B2B Invoices',
-//       description: 'Amended B2B invoices and corrections',
-//       entries: [
-//         {
-//           id: 'AMEND-2023-001',
-//           supplierGSTIN: '24AABCA1234A1Z2',
-//           supplierName: 'MNO Enterprises',
-//           originalInvoiceNo: 'INV/MNO/2023/003',
-//           amendmentDate: '2023-10-20',
-//           amendmentType: 'Value Correction',
-//           originalValue: '₹82,500',
-//           amendedValue: '₹75,000',
-//           status: 'Pending',
-//           action: 'Review Required'
-//         }
-//       ]
-//     },
-//     creditDebitNotes: {
-//       title: 'Credit/Debit Notes',
-//       description: 'Credit and debit notes received from suppliers',
-//       entries: [
-//         {
-//           id: 'CDN-2023-001',
-//           supplierGSTIN: '07AADCB2234M1Z3',
-//           supplierName: 'PQR Industries',
-//           noteDate: '2023-10-25',
-//           noteNo: 'CDN/PQR/2023/001',
-//           noteType: 'Credit Note',
-//           originalInvoiceNo: 'INV/PQR/2023/004',
-//           noteValue: '₹10,000',
-//           taxableValue: '₹8,475',
-//           cgst: '₹763',
-//           sgst: '₹763',
-//           status: 'Available',
-//           action: 'ITC Reversal'
-//         }
-//       ]
-//     },
-//     amendmentsToCreditDebitNotes: {
-//       title: 'Amendments to Credit/Debit Notes',
-//       description: 'Amended credit and debit notes',
-//       entries: [
-//         {
-//           id: 'AMEND-CDN-001',
-//           supplierGSTIN: '06AABCS5678N1Z4',
-//           supplierName: 'DEF Manufacturing',
-//           originalNoteNo: 'CDN/DEF/2023/001',
-//           amendmentDate: '2023-10-30',
-//           amendmentType: 'Value Adjustment',
-//           originalValue: '₹5,000',
-//           amendedValue: '₹3,000',
-//           status: 'Matched',
-//           action: 'Auto-processed'
-//         }
-//       ]
-//     }
-//   };
 
-//   const tabs = [
-//     { id: 'b2b', label: 'B2B Invoices' },
-//     { id: 'b2bAmendments', label: 'Amendments to B2B Invoices' },
-//     { id: 'creditDebitNotes', label: 'Credit/Debit Notes' },
-//     { id: 'amendmentsToCreditDebitNotes', label: 'Amendments to Credit/Debit Notes' }
-//   ];
 
-//   const months = [
-//     'April 2023', 'May 2023', 'June 2023', 'July 2023',
-//     'August 2023', 'September 2023', 'October 2023',
-//     'November 2023', 'December 2023', 'January 2024',
-//     'February 2024', 'March 2024'
-//   ];
 
-//   const toggleRow = (id) => {
-//     setExpandedRows(prev => 
-//       prev.includes(id) 
-//         ? prev.filter(rowId => rowId !== id)
-//         : [...prev, id]
-//     );
-//   };
 
-//   const handlePrint = () => {
-//     window.print();
-//   };
 
-//   const handleExport = (type) => {
-//     alert(`Exporting ${tabData[activeTab].title} data as ${type.toUpperCase()}...`);
-//   };
 
-//   const handleAccept = (entryId) => {
-//     alert(`Accepting entry ${entryId}`);
-//   };
 
-//   const handleReject = (entryId) => {
-//     alert(`Rejecting entry ${entryId}`);
-//   };
 
-//   const handleAddEntry = (type) => {
-//     setEntryType(type);
-//     setShowAddEntry(true);
-//   };
 
-//   const renderTable = () => {
-//     const data = tabData[activeTab];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-//     if (activeTab === 'b2b') {
-//       return (
-//         <table className="min-w-full divide-y divide-gray-200">
-//           <thead className="bg-gray-50">
-//             <tr>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Supplier Details
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Invoice Details
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Tax Amounts
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Status
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Actions
-//               </th>
-//             </tr>
-//           </thead>
-//           <tbody className="bg-white divide-y divide-gray-200">
-//             {data.entries.map((entry) => (
-//               <React.Fragment key={entry.id}>
-//                 <tr className="hover:bg-gray-50">
-//                   <td className="px-6 py-4 whitespace-nowrap">
-//                     <div className="flex items-center">
-//                       <button
-//                         onClick={() => toggleRow(entry.id)}
-//                         className="mr-3 text-gray-400 hover:text-gray-600"
-//                       >
-//                         {expandedRows.includes(entry.id) ? 
-//                           <BiChevronUp className="w-5 h-5" /> : 
-//                           <BiChevronDown className="w-5 h-5" />
-//                         }
-//                       </button>
-//                       <div>
-//                         <div className="text-sm font-medium text-gray-900">
-//                           {entry.supplierName}
-//                         </div>
-//                         <div className="text-sm text-gray-500">
-//                           GSTIN: {entry.supplierGSTIN}
-//                         </div>
-//                       </div>
-//                     </div>
-//                   </td>
-//                   <td className="px-6 py-4 whitespace-nowrap">
-//                     <div className="text-sm text-gray-900">{entry.invoiceNo}</div>
-//                     <div className="text-sm text-gray-500">{entry.invoiceDate}</div>
-//                   </td>
-//                   <td className="px-6 py-4 whitespace-nowrap">
-//                     <div className="text-sm text-gray-900">{entry.invoiceValue}</div>
-//                     <div className="text-sm text-gray-500">
-//                       CGST: {entry.cgst} | SGST: {entry.sgst}
-//                     </div>
-//                   </td>
-//                   <td className="px-6 py-4 whitespace-nowrap">
-//                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-//                       entry.status === 'Matched' 
-//                         ? 'bg-green-100 text-green-800'
-//                         : entry.status === 'Pending'
-//                         ? 'bg-yellow-100 text-yellow-800'
-//                         : 'bg-red-100 text-red-800'
-//                     }`}>
-//                       {entry.status}
-//                     </span>
-//                     <div className="text-xs text-gray-500 mt-1">{entry.action}</div>
-//                   </td>
-//                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-//                     <div className="flex space-x-2">
-//                       <button
-//                         onClick={() => handleAccept(entry.id)}
-//                         className="text-green-600 hover:text-green-900"
-//                         title="Accept"
-//                       >
-//                         <HiCheckCircle className="w-5 h-5" />
-//                       </button>
-//                       <button
-//                         onClick={() => handleReject(entry.id)}
-//                         className="text-red-600 hover:text-red-900"
-//                         title="Reject"
-//                       >
-//                         <HiTrash className="w-5 h-5" />
-//                       </button>
-//                       <button
-//                         className="text-blue-600 hover:text-blue-900"
-//                         title="View Details"
-//                       >
-//                         <HiEye className="w-5 h-5" />
-//                       </button>
-//                     </div>
-//                   </td>
-//                 </tr>
-//                 {expandedRows.includes(entry.id) && (
-//                   <tr>
-//                     <td colSpan="5" className="px-6 py-4 bg-gray-50">
-//                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-//                         <div>
-//                           <h4 className="text-sm font-semibold text-gray-700 mb-2">Invoice Details</h4>
-//                           <dl className="space-y-1 text-sm">
-//                             <div className="flex justify-between">
-//                               <dt className="text-gray-500">Invoice Number:</dt>
-//                               <dd className="font-medium">{entry.invoiceNo}</dd>
-//                             </div>
-//                             <div className="flex justify-between">
-//                               <dt className="text-gray-500">Invoice Date:</dt>
-//                               <dd className="font-medium">{entry.invoiceDate}</dd>
-//                             </div>
-//                             <div className="flex justify-between">
-//                               <dt className="text-gray-500">Taxable Value:</dt>
-//                               <dd className="font-medium">{entry.taxableValue}</dd>
-//                             </div>
-//                           </dl>
-//                         </div>
-//                         <div>
-//                           <h4 className="text-sm font-semibold text-gray-700 mb-2">Tax Details</h4>
-//                           <dl className="space-y-1 text-sm">
-//                             <div className="flex justify-between">
-//                               <dt className="text-gray-500">CGST:</dt>
-//                               <dd className="font-medium">{entry.cgst}</dd>
-//                             </div>
-//                             <div className="flex justify-between">
-//                               <dt className="text-gray-500">SGST:</dt>
-//                               <dd className="font-medium">{entry.sgst}</dd>
-//                             </div>
-//                             <div className="flex justify-between">
-//                               <dt className="text-gray-500">IGST:</dt>
-//                               <dd className="font-medium">{entry.igst}</dd>
-//                             </div>
-//                           </dl>
-//                         </div>
-//                         <div>
-//                           <h4 className="text-sm font-semibold text-gray-700 mb-2">Status</h4>
-//                           <div className="space-y-2">
-//                             <div className="flex items-center space-x-2">
-//                               <div className={`w-3 h-3 rounded-full ${
-//                                 entry.matchStatus === 'Fully Matched' 
-//                                   ? 'bg-green-500'
-//                                   : entry.matchStatus === 'Partially Matched'
-//                                   ? 'bg-yellow-500'
-//                                   : 'bg-red-500'
-//                               }`} />
-//                               <span className="text-sm">{entry.matchStatus}</span>
-//                             </div>
-//                             <p className="text-xs text-gray-600">{entry.action}</p>
-//                           </div>
-//                         </div>
-//                       </div>
-//                     </td>
-//                   </tr>
-//                 )}
-//               </React.Fragment>
-//             ))}
-//           </tbody>
-//         </table>
-//       );
-//     }
 
-//     if (activeTab === 'b2bAmendments') {
-//       return (
-//         <table className="min-w-full divide-y divide-gray-200">
-//           <thead className="bg-gray-50">
-//             <tr>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Supplier Details
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Amendment Details
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Value Changes
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Status
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Actions
-//               </th>
-//             </tr>
-//           </thead>
-//           <tbody className="bg-white divide-y divide-gray-200">
-//             {data.entries.map((entry) => (
-//               <tr key={entry.id} className="hover:bg-gray-50">
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <div>
-//                     <div className="text-sm font-medium text-gray-900">
-//                       {entry.supplierName}
-//                     </div>
-//                     <div className="text-sm text-gray-500">
-//                       GSTIN: {entry.supplierGSTIN}
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <div className="text-sm text-gray-900">Original: {entry.originalInvoiceNo}</div>
-//                   <div className="text-sm text-gray-500">Amended: {entry.amendmentDate}</div>
-//                   <div className="text-sm text-gray-500">Type: {entry.amendmentType}</div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <div className="text-sm text-gray-900 line-through">{entry.originalValue}</div>
-//                   <div className="text-sm font-semibold text-green-700">{entry.amendedValue}</div>
-//                   <div className="text-sm text-gray-500">Difference: ₹{parseInt(entry.originalValue.replace('₹', '').replace(',', '')) - parseInt(entry.amendedValue.replace('₹', '').replace(',', ''))}</div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-//                     entry.status === 'Pending' 
-//                       ? 'bg-yellow-100 text-yellow-800'
-//                       : 'bg-green-100 text-green-800'
-//                   }`}>
-//                     {entry.status}
-//                   </span>
-//                   <div className="text-xs text-gray-500 mt-1">{entry.action}</div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-//                   <div className="flex space-x-2">
-//                     <button className="text-blue-600 hover:text-blue-900 px-3 py-1 border border-blue-200 rounded hover:bg-blue-50">
-//                       Review
-//                     </button>
-//                   </div>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       );
-//     }
 
-//     if (activeTab === 'creditDebitNotes') {
-//       return (
-//         <table className="min-w-full divide-y divide-gray-200">
-//           <thead className="bg-gray-50">
-//             <tr>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Supplier Details
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Note Details
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Tax Amounts
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Status
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Actions
-//               </th>
-//             </tr>
-//           </thead>
-//           <tbody className="bg-white divide-y divide-gray-200">
-//             {data.entries.map((entry) => (
-//               <tr key={entry.id} className="hover:bg-gray-50">
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <div>
-//                     <div className="text-sm font-medium text-gray-900">
-//                       {entry.supplierName}
-//                     </div>
-//                     <div className="text-sm text-gray-500">
-//                       GSTIN: {entry.supplierGSTIN}
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <div className="text-sm text-gray-900">{entry.noteNo}</div>
-//                   <div className="text-sm text-gray-500">{entry.noteDate}</div>
-//                   <div className={`text-sm font-medium ${
-//                     entry.noteType === 'Credit Note' ? 'text-green-700' : 'text-red-700'
-//                   }`}>
-//                     {entry.noteType}
-//                   </div>
-//                   <div className="text-sm text-gray-500">Original: {entry.originalInvoiceNo}</div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <div className="text-sm text-gray-900">{entry.noteValue}</div>
-//                   <div className="text-sm text-gray-500">
-//                     Tax: ₹{parseInt(entry.cgst.replace('₹', '')) + parseInt(entry.sgst.replace('₹', ''))}
-//                   </div>
-//                   <div className="text-sm text-gray-500">Taxable: {entry.taxableValue}</div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-//                     entry.status === 'Available' 
-//                       ? 'bg-green-100 text-green-800'
-//                       : 'bg-yellow-100 text-yellow-800'
-//                   }`}>
-//                     {entry.status}
-//                   </span>
-//                   <div className="text-xs text-gray-500 mt-1">{entry.action}</div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-//                   <div className="flex space-x-2">
-//                     <button className="text-blue-600 hover:text-blue-900 px-3 py-1 border border-blue-200 rounded hover:bg-blue-50">
-//                       Process
-//                     </button>
-//                     <button className="text-green-600 hover:text-green-900 px-3 py-1 border border-green-200 rounded hover:bg-green-50">
-//                       Apply ITC
-//                     </button>
-//                   </div>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       );
-//     }
 
-//     if (activeTab === 'amendmentsToCreditDebitNotes') {
-//       return (
-//         <table className="min-w-full divide-y divide-gray-200">
-//           <thead className="bg-gray-50">
-//             <tr>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Supplier Details
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Amendment Details
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Value Changes
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Status
-//               </th>
-//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//                 Actions
-//               </th>
-//             </tr>
-//           </thead>
-//           <tbody className="bg-white divide-y divide-gray-200">
-//             {data.entries.map((entry) => (
-//               <tr key={entry.id} className="hover:bg-gray-50">
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <div>
-//                     <div className="text-sm font-medium text-gray-900">
-//                       {entry.supplierName}
-//                     </div>
-//                     <div className="text-sm text-gray-500">
-//                       GSTIN: {entry.supplierGSTIN}
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <div className="text-sm text-gray-900">Original Note: {entry.originalNoteNo}</div>
-//                   <div className="text-sm text-gray-500">Amended: {entry.amendmentDate}</div>
-//                   <div className="text-sm text-gray-500">Type: {entry.amendmentType}</div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <div className="text-sm text-gray-900 line-through">{entry.originalValue}</div>
-//                   <div className="text-sm font-semibold text-green-700">{entry.amendedValue}</div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap">
-//                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-//                     entry.status === 'Matched' 
-//                       ? 'bg-green-100 text-green-800'
-//                       : 'bg-yellow-100 text-yellow-800'
-//                   }`}>
-//                     {entry.status}
-//                   </span>
-//                   <div className="text-xs text-gray-500 mt-1">{entry.action}</div>
-//                 </td>
-//                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-//                   <div className="flex space-x-2">
-//                     <button className="text-blue-600 hover:text-blue-900 px-3 py-1 border border-blue-200 rounded hover:bg-blue-50">
-//                       Verify
-//                     </button>
-//                   </div>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       );
-//     }
-//   };
 
-//   return (
-//     <div className="space-y-6 print:p-0">
-//       {/* Header with Month Selection */}
-//       <div className="bg-white rounded-lg border border-gray-200 p-4">
-//         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
-//           <div>
-//             <h2 className="text-xl font-bold text-gray-800">GSTR-2A Auto-drafted Purchase Data</h2>
-//             <p className="text-gray-600">Auto-populated invoices from suppliers for ITC claims</p>
-//           </div>
-//           <div className="flex items-center space-x-4">
-//             <div className="relative">
-//               <select
-//                 value={selectedMonth}
-//                 onChange={(e) => setSelectedMonth(e.target.value)}
-//                 className="appearance-none bg-white border border-gray-300 rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//               >
-//                 {months.map(month => (
-//                   <option key={month} value={month}>{month}</option>
-//                 ))}
-//               </select>
-//               <BiChevronDown className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
-//             </div>
-//             <button
-//               onClick={() => alert('Refreshing data...')}
-//               className="flex items-center space-x-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-4 py-2 rounded-lg"
-//             >
-//               <HiRefresh className="w-5 h-5" />
-//               <span>Refresh</span>
-//             </button>
-//           </div>
-//         </div>
-//       </div>
 
-//       {/* Tabs Navigation */}
-//       <div className="bg-white rounded-lg border border-gray-200">
-//         <div className="border-b border-gray-200">
-//           <nav className="flex overflow-x-auto">
-//             {tabs.map(tab => (
-//               <button
-//                 key={tab.id}
-//                 onClick={() => setActiveTab(tab.id)}
-//                 className={`flex items-center space-x-2 flex-shrink-0 px-6 py-3 border-b-2 font-medium text-sm ${
-//                   activeTab === tab.id
-//                     ? 'border-blue-500 text-blue-600 bg-blue-50'
-//                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-//                 }`}
-//               >
-//                 <span>{tab.label}</span>
-//                 {activeTab === tab.id && (
-//                   <button
-//                     onClick={(e) => {
-//                       e.stopPropagation();
-//                       handleAddEntry(tab.id);
-//                     }}
-//                     className="flex items-center space-x-1 text-xs bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded"
-//                     title={`Add ${tab.label}`}
-//                   >
-//                     <HiPlus className="w-3 h-3" />
-//                     <span>Add</span>
-//                   </button>
-//                 )}
-//               </button>
-//             ))}
-//           </nav>
-//         </div>
 
-//         {/* Tab Content */}
-//         <div className="p-6">
-//           <div className="space-y-6">
-//             {/* Tab Header with Description */}
-//             <div className="flex justify-between items-start">
-//               <div>
-//                 <h3 className="text-lg font-semibold text-gray-800">{tabData[activeTab].title}</h3>
-//                 <p className="text-gray-600 text-sm mt-1">{tabData[activeTab].description}</p>
-//               </div>
-//               <button
-//                 onClick={() => handleAddEntry(activeTab)}
-//                 className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-//               >
-//                 <HiPlus className="w-4 h-4" />
-//                 <span>Add Entry</span>
-//               </button>
-//             </div>
 
-//             {/* Search and Filter Bar */}
-//             <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
-//               <div className="relative w-full md:w-96">
-//                 <HiSearch className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-//                 <input
-//                   type="text"
-//                   placeholder={`Search ${tabData[activeTab].title.toLowerCase()}...`}
-//                   value={searchTerm}
-//                   onChange={(e) => setSearchTerm(e.target.value)}
-//                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                 />
-//               </div>
-//               <div className="flex items-center space-x-4">
-//                 <button className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50">
-//                   <HiFilter className="w-5 h-5" />
-//                   <span>Filter</span>
-//                 </button>
-//                 <button 
-//                   onClick={() => handleExport('pdf')}
-//                   className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
-//                 >
-//                   <FaFilePdf className="w-5 h-5 text-red-600" />
-//                   <span>PDF</span>
-//                 </button>
-//                 <button 
-//                   onClick={() => handleExport('excel')}
-//                   className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
-//                 >
-//                   <FaFileExcel className="w-5 h-5 text-green-600" />
-//                   <span>Excel</span>
-//                 </button>
-//                 <button 
-//                   onClick={handlePrint}
-//                   className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
-//                 >
-//                   <HiPrinter className="w-5 h-5" />
-//                   <span>Print</span>
-//                 </button>
-//               </div>
-//             </div>
 
-//             {/* Data Table */}
-//             <div className="overflow-x-auto border border-gray-200 rounded-lg">
-//               {renderTable()}
-//             </div>
 
-//             {/* Empty State */}
-//             {tabData[activeTab].entries.length === 0 && (
-//               <div className="text-center py-12 border border-dashed border-gray-300 rounded-lg">
-//                 <HiDocumentAdd className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-//                 <h4 className="text-lg font-medium text-gray-800 mb-2">No entries found</h4>
-//                 <p className="text-gray-600 mb-4">There are no {tabData[activeTab].title.toLowerCase()} available for this period.</p>
-//                 <button
-//                   onClick={() => handleAddEntry(activeTab)}
-//                   className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-//                 >
-//                   <HiPlus className="w-4 h-4" />
-//                   <span>Add Your First Entry</span>
-//                 </button>
-//               </div>
-//             )}
-//           </div>
-//         </div>
-//       </div>
 
-//       {/* Add Entry Modal */}
-//       {showAddEntry && (
-//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-//           <div className="bg-white rounded-lg w-full max-w-2xl">
-//             <div className="flex justify-between items-center p-6 border-b">
-//               <h3 className="text-xl font-bold text-gray-800">
-//                 Add {tabs.find(t => t.id === entryType)?.label}
-//               </h3>
-//               <button
-//                 onClick={() => setShowAddEntry(false)}
-//                 className="text-gray-400 hover:text-gray-600"
-//               >
-//                 ✕
-//               </button>
-//             </div>
-//             <div className="p-6">
-//               <form className="space-y-4">
-//                 {entryType === 'b2b' ? (
-//                   <>
-//                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Supplier GSTIN *
-//                         </label>
-//                         <input
-//                           type="text"
-//                           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                           placeholder="27AABCU9603R1ZX"
-//                         />
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Supplier Name *
-//                         </label>
-//                         <input
-//                           type="text"
-//                           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                           placeholder="ABC Suppliers Pvt Ltd"
-//                         />
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Invoice Number *
-//                         </label>
-//                         <input
-//                           type="text"
-//                           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                           placeholder="INV/2023/001"
-//                         />
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Invoice Date *
-//                         </label>
-//                         <input
-//                           type="date"
-//                           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                         />
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Invoice Value *
-//                         </label>
-//                         <input
-//                           type="text"
-//                           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                           placeholder="₹"
-//                         />
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Taxable Value *
-//                         </label>
-//                         <input
-//                           type="text"
-//                           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                           placeholder="₹"
-//                         />
-//                       </div>
-//                     </div>
-//                   </>
-//                 ) : entryType === 'creditDebitNotes' ? (
-//                   <>
-//                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Note Type *
-//                         </label>
-//                         <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
-//                           <option value="credit">Credit Note</option>
-//                           <option value="debit">Debit Note</option>
-//                         </select>
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Note Number *
-//                         </label>
-//                         <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" />
-//                       </div>
-//                     </div>
-//                   </>
-//                 ) : (
-//                   <>
-//                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Amendment Type *
-//                         </label>
-//                         <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
-//                           <option value="value">Value Correction</option>
-//                           <option value="tax">Tax Correction</option>
-//                           <option value="details">Details Update</option>
-//                         </select>
-//                       </div>
-//                       <div>
-//                         <label className="block text-sm font-medium text-gray-700 mb-1">
-//                           Original Document Number *
-//                         </label>
-//                         <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" />
-//                       </div>
-//                     </div>
-//                   </>
-//                 )}
-//                 <div>
-//                   <label className="block text-sm font-medium text-gray-700 mb-1">
-//                     Reason for Manual Entry *
-//                   </label>
-//                   <textarea
-//                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                     rows="3"
-//                     placeholder="Explain why this entry needs to be manually added..."
-//                   />
-//                 </div>
-//               </form>
-//             </div>
-//             <div className="flex justify-end space-x-4 p-6 border-t">
-//               <button
-//                 onClick={() => setShowAddEntry(false)}
-//                 className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-//               >
-//                 Cancel
-//               </button>
-//               <button
-//                 onClick={() => {
-//                   alert(`Entry added successfully to ${tabs.find(t => t.id === entryType)?.label}!`);
-//                   setShowAddEntry(false);
-//                 }}
-//                 className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-//               >
-//                 Add Entry
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
 
-//       {/* Print Styles */}
-//       <style jsx>{`
-//         @media print {
-//           .no-print {
-//             display: none !important;
-//           }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           
-//           body * {
-//             visibility: hidden;
-//           }
-          
-//           #print-section, #print-section * {
-//             visibility: visible;
-//           }
-          
-//           #print-section {
-//             position: absolute;
-//             left: 0;
-//             top: 0;
-//             width: 100%;
-//           }
-//         }
-//       `}</style>
-//     </div>
-//   );
-// };
 
-// export default Gstr2a;
+
+
+          
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 import React, { useState, useEffect } from 'react';
@@ -1984,7 +1984,7 @@ const Gstr2a = () => {
 
   return (
     <div className="space-y-6 print:p-0">
-      {/* Header with Month Selection */}
+
       <div className="bg-white rounded-lg border border-gray-200 p-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
           <div>
@@ -2015,7 +2015,7 @@ const Gstr2a = () => {
         </div>
       </div>
 
-      {/* Tabs Navigation */}
+
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="border-b border-gray-200">
           <nav className="flex overflow-x-auto">
@@ -2049,10 +2049,10 @@ const Gstr2a = () => {
           </nav>
         </div>
 
-        {/* Tab Content */}
+
         <div className="p-6">
           <div className="space-y-6">
-            {/* Tab Header with Description */}
+
             <div className="flex justify-between items-start">
               <div>
                 <h3 className="text-lg font-semibold text-gray-800">{tabData[activeTab].title}</h3>
@@ -2070,7 +2070,7 @@ const Gstr2a = () => {
               </button>
             </div>
 
-            {/* Search and Filter Bar */}
+
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
               <div className="relative w-full md:w-96">
                 <HiSearch className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -2111,7 +2111,7 @@ const Gstr2a = () => {
               </div>
             </div>
 
-            {/* Data Table */}
+
             <div className="overflow-x-auto border border-gray-200 rounded-lg">
               {data[activeTab].length === 0 && !loading ? (
                 <div className="text-center py-12 border border-dashed border-gray-300 rounded-lg">
@@ -2139,7 +2139,7 @@ const Gstr2a = () => {
         </div>
       </div>
 
-      {/* Add Entry Modal */}
+
       {showAddEntry && (
         <AddEntryForm
           onClose={() => setShowAddEntry(false)}
@@ -2147,7 +2147,7 @@ const Gstr2a = () => {
         />
       )}
 
-      {/* Print Styles */}
+
       <style jsx>{`
         @media print {
           .no-print {

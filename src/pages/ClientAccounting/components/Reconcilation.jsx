@@ -17,7 +17,7 @@ const Reconciliation = () => {
 
   return (
     <div className="space-y-6">
-      {/* Tabs */}
+
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8">
           {tabs.map((tab) => (
@@ -37,14 +37,14 @@ const Reconciliation = () => {
         </nav>
       </div>
 
-      {/* Tab Content */}
+
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         {activeTab === 'gstr2a' && <Gstr2a />}
         {activeTab === 'gstr2b' && <Gstr2b />}
         {activeTab === 'challan' && <ChallanReconcilation />} 
       </div>
 
-      {/* Help Text */}
+
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-blue-700">
           <span className="font-semibold">Note:</span> Regular reconciliation helps in identifying ITC mismatches early and ensures accurate tax credit claims.

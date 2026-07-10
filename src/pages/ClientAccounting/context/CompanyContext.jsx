@@ -1,42 +1,42 @@
 
 
 
-// import { createContext, useContext, useState, useEffect } from "react";
 
-// const CompanyContext = createContext();
 
-// export const CompanyProvider = ({ children }) => {
-//   const [companyId, setCompanyId] = useState(null);
-//   const [companyName, setcompanyName] = useState("");
 
-//   // 🔥 Restore saved values on page load
-//   useEffect(() => {
-//     const savedId = sessionStorage.getItem("selectedCompanyId");
-//     const savedName = sessionStorage.getItem("selectedCompanyName");
 
-//     if (savedId) setCompanyId(Number(savedId));
-//     if (savedName) setcompanyName(savedName);
-//   }, []);
 
-//   // 🔥 Save automatically when changed
-//   useEffect(() => {
-//     if (companyId) sessionStorage.setItem("selectedCompanyId", companyId);
-//   }, [companyId]);
 
-//   useEffect(() => {
-//     if (companyName) sessionStorage.setItem("selectedCompanyName", companyName);
-//   }, [companyName]);
 
-//   return (
-//     <CompanyContext.Provider
-//       value={{ companyId, setCompanyId, companyName, setcompanyName }}
-//     >
-//       {children}
-//     </CompanyContext.Provider>
-//   );
-// };
 
-// export const useCompany = () => useContext(CompanyContext);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 import { createContext, useContext, useState, useEffect, useRef } from "react";
@@ -53,7 +53,7 @@ export const CompanyProvider = ({ children }) => {
   const [employees, setEmployees] = useState([]);
   const isFetching = useRef(false);
 
-  // 🔥 Fetch company using email
+
   const fetchCompanyByEmail = async () => {
     if (isFetching.current) return;
 
@@ -75,12 +75,12 @@ export const CompanyProvider = ({ children }) => {
           setCompanyId(company.id);
           setcompanyName(company.name);
 
-          // Save in sessionStorage
+
           sessionStorage.setItem("selectedCompanyId", company.id);
           sessionStorage.setItem("selectedCompanyName", company.name);
         }
       } catch (error) {
-        // If company is not found, automatically create it in the accounting DB
+
         if (error.response && error.response.status === 404) {
           try {
             const createRes = await axios.post(
@@ -133,7 +133,7 @@ export const CompanyProvider = ({ children }) => {
     }
   };
 
-  // 🔥 Fetch company when user is loaded/changed
+
   useEffect(() => {
     if (user?.email) {
       const savedId = sessionStorage.getItem("selectedCompanyId");
@@ -147,7 +147,7 @@ export const CompanyProvider = ({ children }) => {
         fetchCompanyByEmail().then(() => {
           const id = sessionStorage.getItem("selectedCompanyId");
           if (id) fetchEmployeesList(Number(id));
-        }); // If not in session, call API
+        });
       }
     }
   }, [user?.email, token]);

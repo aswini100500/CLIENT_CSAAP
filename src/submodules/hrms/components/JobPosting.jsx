@@ -195,7 +195,7 @@ const JobPosting = () => {
 
   return (
     <div className="font-sans">
-      {/* Header */}
+
       <div className="flex justify-between items-center p-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Job Postings</h1>
@@ -218,7 +218,7 @@ const JobPosting = () => {
         )}
       </div>
 
-      {/* Table Card */}
+
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -347,7 +347,7 @@ const JobPosting = () => {
           </table>
         </div>
 
-        {/* Pagination */}
+
         {jobs.length > itemsPerPage && (
           <div className="px-5 py-3 border-t border-gray-100 flex items-center justify-between">
             <p className="text-xs text-gray-400">
@@ -385,11 +385,11 @@ const JobPosting = () => {
         )}
       </div>
 
-      {/* ── VIEW MODAL ── */}
+
       {viewJob && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden">
-            {/* Modal Header */}
+
             <div className="px-6 py-5 border-b border-gray-100 flex items-start justify-between">
               <div>
                 <h2 className="text-lg font-bold text-gray-900">
@@ -419,9 +419,9 @@ const JobPosting = () => {
               </button>
             </div>
 
-            {/* Modal Body */}
+
             <div className="overflow-y-auto flex-1 px-6 py-5 space-y-6">
-              {/* Quick stats row */}
+
               <div className="grid grid-cols-3 gap-3">
                 {[
                   { label: "Vacancies", value: viewJob.noOfVacancies },
@@ -440,7 +440,7 @@ const JobPosting = () => {
                 ))}
               </div>
 
-              {/* Dates */}
+
               <div>
                 <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                   Important Dates
@@ -454,7 +454,7 @@ const JobPosting = () => {
                 </div>
               </div>
 
-              {/* Requirements */}
+
               <div>
                 <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                   Requirements
@@ -472,7 +472,7 @@ const JobPosting = () => {
                 </div>
               </div>
 
-              {/* Description */}
+
               {viewJob.jobDescription && (
                 <div>
                   <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
@@ -484,7 +484,7 @@ const JobPosting = () => {
                 </div>
               )}
 
-              {/* Responsibilities */}
+
               {viewJob.jobResponsibility && (
                 <div>
                   <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
@@ -496,7 +496,7 @@ const JobPosting = () => {
                 </div>
               )}
 
-              {/* Skills */}
+
               {viewJob.preferedSkills && (
                 <div>
                   <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
@@ -508,7 +508,7 @@ const JobPosting = () => {
                 </div>
               )}
 
-              {/* Contact */}
+
               <div>
                 <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                   Contact Information
@@ -542,7 +542,7 @@ const JobPosting = () => {
               </div>
             </div>
 
-            {/* Modal Footer */}
+
             <div className="px-6 py-4 border-t border-gray-100 flex justify-end gap-2">
               <button
                 onClick={() => setViewJob(null)}
@@ -563,7 +563,7 @@ const JobPosting = () => {
         </div>
       )}
 
-      {/* ── FORM MODAL ── */}
+
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
@@ -583,7 +583,7 @@ const JobPosting = () => {
               onSubmit={handleSubmit}
               className="overflow-y-auto flex-1 px-6 py-5"
             >
-              {/* Section: Basic Info */}
+
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Basic Information
               </p>
@@ -660,7 +660,7 @@ const JobPosting = () => {
                 </div>
               </div>
 
-              {/* Section: Job Details */}
+
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Job Details
               </p>
@@ -750,7 +750,7 @@ const JobPosting = () => {
                 </div>
               </div>
 
-              {/* Section: Dates */}
+
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Application Dates
               </p>
@@ -779,7 +779,7 @@ const JobPosting = () => {
                 </div>
               </div>
 
-              {/* Section: Content */}
+
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Job Content
               </p>
@@ -819,7 +819,7 @@ const JobPosting = () => {
                 </div>
               </div>
 
-              {/* Section: Contact */}
+
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Contact Information
               </p>

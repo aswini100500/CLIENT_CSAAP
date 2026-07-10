@@ -13,15 +13,15 @@ const ProfitLoss = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // TOTALS
+
   const totalIncome = income.reduce((sum, i) => sum + (i.amount || 0), 0);
   const totalExpenses = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
 
   const netProfit = totalIncome - totalExpenses;
 
-  // ================================
-  //   FETCH PROFIT & LOSS DATA
-  // ================================
+
+
+
   const fetchPL = async () => {
     if (!companyId) return;
 
@@ -40,9 +40,9 @@ const ProfitLoss = () => {
       const rawIncome = res.data.income || [];
       const rawExpenses = res.data.expenses || [];
 
-      // ================================
-      //   TRANSFORM DATA FOR UI
-      // ================================
+
+
+
       setIncome(
         rawIncome.map((it) => ({
           name: it.ledgerName,
@@ -72,7 +72,7 @@ const ProfitLoss = () => {
 
   return (
     <div className="bg-[#FDFDFD] min-h-screen font-[Cambria] text-sm text-gray-800">
-      {/* Top Blue Bar */}
+
       <div className="bg-[#0078D7] text-white py-2 px-4 flex justify-between items-center text-[15px]">
         <div className="font-semibold">Profit & Loss Account</div>
         <div>
@@ -80,7 +80,7 @@ const ProfitLoss = () => {
         </div>
       </div>
 
-      {/* Date Filter */}
+
       <div className="flex justify-center gap-6 py-3 border-b border-gray-300 text-[14px]">
         <div>
           From:{" "}
@@ -102,16 +102,16 @@ const ProfitLoss = () => {
         </div>
       </div>
 
-      {/* Report Content */}
+
       <div className="max-w-4xl mx-auto mt-4 border border-gray-300">
 
-        {/* Header */}
+
         <div className="grid grid-cols-2 font-semibold bg-gray-100 border-b border-gray-300">
           <div className="py-2 px-3 border-r border-gray-300">Particulars</div>
           <div className="py-2 px-3 text-right">Amount (₹)</div>
         </div>
 
-        {/* Income Section */}
+
         <div className="border-b border-gray-200">
           <div className="bg-[#F2F8FF] font-semibold px-3 py-1">Income</div>
 
@@ -143,7 +143,7 @@ const ProfitLoss = () => {
           </div>
         </div>
 
-        {/* Expenses Section */}
+
         <div className="border-b border-gray-200">
           <div className="bg-[#F2F8FF] font-semibold px-3 py-1">Expenses</div>
 
@@ -177,7 +177,7 @@ const ProfitLoss = () => {
           </div>
         </div>
 
-        {/* Net Profit / Loss */}
+
         <div className="grid grid-cols-2 bg-yellow-50 font-semibold text-[15px]">
           <div className="px-3 py-2 border-r border-gray-300">
             {netProfit >= 0 ? "Net Profit" : "Net Loss"}

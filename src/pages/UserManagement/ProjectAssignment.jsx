@@ -10,7 +10,7 @@ import useAuth from '../../hooks/useAuth';
 
 const API_URL = import.meta.env.VITE_ACCOUNTING_URL;
 
-// --- API HELPER ---
+
 const fetcher = ([url, token]) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } }).then((res) => res.data);
 
 const getEmployeeId = (emp) => {
@@ -23,20 +23,20 @@ const ProjectAssignment = () => {
   const { token, companyId } = useAuth();
   const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
   const getAuthHeaders = () => ({ headers: { Authorization: `Bearer ${token}` } });
-  // --- STATE ---
+
   const [employees, setEmployees] = useState([]);
   const [allProjects, setAllProjects] = useState([]);
   
-  // Department & Role State
+
   const [departments, setDepartments] = useState([]);
   const [departmentRoles, setDepartmentRoles] = useState([]);
   const [globalRoles, setGlobalRoles] = useState([]); 
   const [selectedDepartmentId, setSelectedDepartmentId] = useState('');
   
-  // Workflow Toggle State ('manager' = Step 1, 'team' = Step 2)
+
   const [assignmentMode, setAssignmentMode] = useState('manager'); 
 
-  // Form State
+
   const [selectedEmployeeIds, setSelectedEmployeeIds] = useState([]); 
   const [selectedProjectNames, setSelectedProjectNames] = useState([]); 
   const [selectedBranches, setSelectedBranches] = useState([]);         
@@ -45,11 +45,11 @@ const ProjectAssignment = () => {
   const [isAssigning, setIsAssigning] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Pagination State
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
   
-  // Custom Dropdown State
+
   const [isEmployeeDropdownOpen, setIsEmployeeDropdownOpen] = useState(false);
   const [isProjectDropdownOpen, setIsProjectDropdownOpen] = useState(false);
   const [isBranchDropdownOpen, setIsBranchDropdownOpen] = useState(false);
@@ -57,14 +57,14 @@ const ProjectAssignment = () => {
   const projectDropdownRef = useRef(null);
   const branchDropdownRef = useRef(null);
 
-  // Fetch Assignments using SWR
+
   const assignmentsApiUrl = `${API_BASE_URL}/api/tenant/project-assignments`;
   const { data: assignmentsData, isLoading: isAssignmentsLoading } = useSWR(
     token ? [assignmentsApiUrl, token] : null,
     fetcher
   );
 
-  // --- 🌟 FETCH EMPLOYEES ---
+
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -90,7 +90,7 @@ const ProjectAssignment = () => {
     }
   }, [token]);
 
-  // --- 🌟 FETCH PROJECTS ---
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -143,7 +143,7 @@ const ProjectAssignment = () => {
     }
   }, [token, companyId]);
 
-  // --- 🌟 FETCH DEPARTMENTS ---
+
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
@@ -169,7 +169,7 @@ const ProjectAssignment = () => {
     }
   }, [token]);
 
-  // --- 🌟 FETCH GLOBAL ROLES (MANAGER MODE) ---
+
   const fetchGlobalRoles = async () => {
     try {
       const csaapToken = token;
@@ -197,7 +197,7 @@ const ProjectAssignment = () => {
     }
   };
 
-  // --- 🌟 FETCH DEPARTMENT ROLES (TEAM MODE) ---
+
   const fetchDepartmentRoles = async (departmentId) => {
     try {
       if (!departmentId) return;
@@ -230,7 +230,7 @@ const ProjectAssignment = () => {
     }
   };
 
-  // --- FETCH ROLES BASED ON MODE & DEPARTMENT ---
+
   useEffect(() => {
     if (token) {
       if (assignmentMode === 'manager') {
@@ -247,7 +247,7 @@ const ProjectAssignment = () => {
     }
   }, [selectedDepartmentId, assignmentMode, token]);
 
-  // Handle clicking outside custom dropdowns
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (employeeDropdownRef.current && !employeeDropdownRef.current.contains(event.target)) {
@@ -264,7 +264,7 @@ const ProjectAssignment = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // --- CASCADING MULTI-SELECT LOGIC ---
+
   const uniqueProjectNames = useMemo(() => {
     const names = allProjects.map(p => p.name).filter(Boolean);
     return [...new Set(names)];
@@ -295,13 +295,13 @@ const ProjectAssignment = () => {
     return unique;
   }, [selectedProjectNames, allProjects]);
 
-  // Clean up selected branches if a project is un-checked
+
   useEffect(() => {
     const availableValues = availableBranches.map(b => b.value);
     setSelectedBranches(prev => prev.filter(val => availableValues.includes(val)));
   }, [availableBranches]);
 
-  // Toggle Selections
+
   const handleEmployeeToggle = (id) => {
     setSelectedEmployeeIds(prev => prev.includes(id) ? prev.filter(eId => eId !== id) : [...prev, id]);
   };
@@ -314,8 +314,8 @@ const ProjectAssignment = () => {
     setSelectedBranches(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val]);
   };
 
-  // --- SUBMIT ASSIGNMENT MATRIX WITH PROPER ROLE HANDLING ---
-// --- SUBMIT ASSIGNMENT MATRIX (FIXED FOR PROPER ROLE HANDLING) ---
+
+
 const handleAssign = async (e) => {
   e.preventDefault();
   
@@ -350,7 +350,7 @@ const handleAssign = async (e) => {
         let payload;
         
         if (assignmentMode === 'manager') {
-          // Manager mode - set BOTH project_role AND assigned_global_role
+
           payload = {
             employeeid: getEmployeeId(selectedEmp),
             employeename: selectedEmp?.name || selectedEmp?.employee_name,
@@ -358,14 +358,14 @@ const handleAssign = async (e) => {
             projectname: proj.name,
             projectbranch: proj.branch || proj.locality || 'Main',
             project_type: proj.property_type,
-            project_role: selectedRoleName, // ✅ Set project_role for managers too
+            project_role: selectedRoleName,
             project_role_id: selectedRoleId,
             globalrole_assigned: 'yes',
             assigned_global_role: selectedRoleName,
             grade: "0"
           };
         } else {
-          // Team mode - only project_role, no global role
+
           payload = {
             employeeid: getEmployeeId(selectedEmp),
             employeename: selectedEmp?.name || selectedEmp?.employee_name,
@@ -373,7 +373,7 @@ const handleAssign = async (e) => {
             projectname: proj.name,
             projectbranch: proj.branch || proj.locality || 'Main',
             project_type: proj.property_type,
-            project_role: selectedRoleName, // ✅ Set project_role for team members
+            project_role: selectedRoleName,
             project_role_id: selectedRoleId,
             department_id: parseInt(selectedDepartmentId),
             globalrole_assigned: 'no',
@@ -393,7 +393,7 @@ const handleAssign = async (e) => {
     const successful = results.filter(r => r.status === 'fulfilled').length;
     const failed = results.filter(r => r.status === 'rejected').length;
 
-    // Log detailed errors
+
     results.forEach((result, index) => {
       if (result.status === 'rejected') {
         console.error(`Assignment ${index + 1} failed:`, result.reason);
@@ -410,7 +410,7 @@ const handleAssign = async (e) => {
       toast.success(`Successfully assigned ${successful} record(s)!`, { id: toastId });
     }
     
-    // Reset form fields
+
     setSelectedEmployeeIds([]);
     setSelectedProjectNames([]);
     setSelectedBranches([]);
@@ -442,7 +442,7 @@ const handleAssign = async (e) => {
     }
   };
 
-  // --- FILTERING & PAGINATION ---
+
   const assignments = assignmentsData?.data || [];
   
   const filteredAssignments = assignments.filter(a => {
@@ -456,14 +456,14 @@ const handleAssign = async (e) => {
     );
   });
 
-  // Reset to page 1 whenever the search term changes
+
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
   const totalPages = Math.ceil(filteredAssignments.length / itemsPerPage);
   
-  // Get the slice of assignments for the current page
+
   const paginatedAssignments = filteredAssignments.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -473,7 +473,7 @@ const handleAssign = async (e) => {
     <div className="p-6 lg:p-10 bg-[#FDFDFF] min-h-screen relative font-sans">
       <Toaster position="top-center" toastOptions={{ style: { borderRadius: '1rem', background: '#333', color: '#fff', fontWeight: 'bold', fontSize: '14px' } }} />
 
-      {/* Header */}
+
       <div className="mb-8">
         <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
           <ShieldCheck className="text-blue-600" size={32} />
@@ -486,11 +486,11 @@ const handleAssign = async (e) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* --- LEFT COLUMN: ASSIGNMENT FORM --- */}
+
         <div className="lg:col-span-1">
           <div className="bg-white rounded-4xl shadow-sm border border-slate-100 p-6 sm:p-8 sticky top-8">
             
-            {/* WORKFLOW MODE TOGGLE */}
+
             <div className="flex bg-slate-100/80 p-1 rounded-xl mb-6">
               <button
                 type="button"
@@ -519,7 +519,7 @@ const handleAssign = async (e) => {
 
             <form onSubmit={handleAssign} className="space-y-5">
               
-              {/* Employee Selection */}
+
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Select Employee(s)</label>
                 <div className="relative" ref={employeeDropdownRef}>
@@ -572,7 +572,7 @@ const handleAssign = async (e) => {
                 </div>
               </div>
 
-              {/* Project Name Selection */}
+
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">1. Select Project Name(s)</label>
                 <div className="relative" ref={projectDropdownRef}>
@@ -618,7 +618,7 @@ const handleAssign = async (e) => {
                 </div>
               </div>
 
-              {/* Location Selection */}
+
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">2. Select Location(s)</label>
                 <div className="relative" ref={branchDropdownRef}>
@@ -670,7 +670,7 @@ const handleAssign = async (e) => {
                 )}
               </div>
 
-              {/* MANAGER MODE: GLOBAL ROLE SELECTION */}
+
               {assignmentMode === 'manager' && (
                 <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-4 animate-in fade-in slide-in-from-top-2">
                   <div className="space-y-2">
@@ -699,7 +699,7 @@ const handleAssign = async (e) => {
                 </div>
               )}
 
-              {/* TEAM MODE: DEPARTMENT & ROLE SELECTION */}
+
               {assignmentMode === 'team' && (
                 <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-4 animate-in fade-in slide-in-from-top-2">
                   <div className="space-y-2">
@@ -752,7 +752,7 @@ const handleAssign = async (e) => {
                 </div>
               )}
 
-              {/* Submit Button */}
+
               <div className="pt-2">
                 <button 
                   type="submit" 
@@ -767,11 +767,11 @@ const handleAssign = async (e) => {
           </div>
         </div>
 
-        {/* --- RIGHT COLUMN: ACTIVE ASSIGNMENTS TABLE --- */}
+
         <div className="lg:col-span-2">
           <div className="bg-white rounded-4xl shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-slate-50 overflow-hidden w-full flex flex-col h-full">
             
-            {/* Table Header & Search */}
+
             <div className="p-6 border-b border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <h2 className="text-sm font-black text-slate-800 tracking-tight">Active Allocations</h2>
@@ -790,7 +790,7 @@ const handleAssign = async (e) => {
               </div>
             </div>
 
-            {/* Table Content */}
+
             <div className="overflow-x-auto w-full block flex-1">
               <table className="w-full min-w-150">
                 <thead>
@@ -871,7 +871,7 @@ const handleAssign = async (e) => {
               </table>
             </div>
 
-            {/* PAGINATION CONTROLS */}
+
             {totalPages > 1 && (
               <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">

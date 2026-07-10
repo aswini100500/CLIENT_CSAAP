@@ -107,21 +107,21 @@ const ProjectPlotRow = ({ plot, project, onEdit }) => {
       <td className="px-6 py-4">
         {hasPlotData ? (
           <div className="flex flex-wrap gap-1">
-            {/* New Property Status Badge */}
+
             {plot.propertyFeatures?.propertyStatus && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800 capitalize">
                 {plot.propertyFeatures.propertyStatus}
               </span>
             )}
 
-            {/* New Land Area Badge */}
+
             {plot.propertyFeatures?.landArea && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 text-purple-800">
                 Land: {plot.propertyFeatures.landArea} sqft
               </span>
             )}
 
-            {/* New Outhouse Badge */}
+
             {plot.propertyFeatures?.hasOuthouse === "Yes" && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-orange-100 text-orange-800">
                 {plot.propertyFeatures.outhouseArea
@@ -130,7 +130,7 @@ const ProjectPlotRow = ({ plot, project, onEdit }) => {
               </span>
             )}
 
-            {/* Existing Features */}
+
             {plot.propertyFeatures?.openSides && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
                 {plot.propertyFeatures.openSides}s
@@ -400,7 +400,7 @@ const ProjectDetailsTable = ({ project, onEditPlot, onEditUnit }) => {
 
   return (
     <div className="space-y-6">
-      {/* Project Summary */}
+
       <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
         <h4 className="text-lg font-semibold text-blue-800 mb-2 flex items-center">
           <FaBuilding className="mr-2" />
@@ -435,7 +435,7 @@ const ProjectDetailsTable = ({ project, onEditPlot, onEditUnit }) => {
         </div>
       </div>
 
-      {/* Detailed Plots/Units Table */}
+
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
           <h4 className="text-lg font-semibold text-gray-800 flex items-center">
@@ -504,7 +504,7 @@ const ProjectDetailsTable = ({ project, onEditPlot, onEditUnit }) => {
         </div>
       </div>
 
-      {/* Summary of completion status */}
+
       <div className="bg-gray-50 p-4 rounded-lg">
         <h4 className="text-lg font-semibold text-gray-800 mb-2">
           Completion Summary

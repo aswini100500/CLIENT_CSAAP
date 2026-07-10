@@ -35,7 +35,7 @@ const PaymentsPage = () => {
     }
 
     const options = {
-      key: "rzp_test_your_key_here", // Use a test key
+      key: "rzp_test_your_key_here",
       amount: amount * 100, 
       currency: "INR",
       name: "Builder ERP",

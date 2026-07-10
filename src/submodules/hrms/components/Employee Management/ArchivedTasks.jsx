@@ -24,7 +24,7 @@ import parse from "html-react-parser";
 const renderRichText = (html) => {
   if (!html) return null;
 
-  // Replace &nbsp; with a regular space to prevent literal display
+
   const cleanHtml = String(html).replace(/&nbsp;/g, ' ');
 
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -59,7 +59,7 @@ const renderRichText = (html) => {
     }
   };
 
-  // Return a fragment instead of a div to avoid layout/line-clamp issues
+
   return <>{parse(cleanHtml, options)}</>;
 };
 
@@ -88,7 +88,7 @@ const ArchivedTasks = () => {
     );
   };
 
-  // Fetch employees to get names from IDs
+
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -123,7 +123,7 @@ const ArchivedTasks = () => {
     fetchEmployees();
   }, [csaapToken]);
 
-  // Helper function to get employee name by ID
+
   const getEmployeeNameById = useCallback(
     (id) => {
       if (!id) return "Unknown";
@@ -135,7 +135,7 @@ const ArchivedTasks = () => {
     [teamMembers, user.company_id],
   );
 
-  // Helper function to get employee names from array of IDs
+
   const getEmployeeNamesByIds = useCallback(
     (ids = []) => {
       const names = (Array.isArray(ids) ? ids : [])
@@ -230,7 +230,7 @@ const ArchivedTasks = () => {
   return (
     <div className="crm-module-root min-h-screen bg-(--bg-app) w-full p-4 flex flex-col">
       <div className="max-w-7xl mx-auto w-full space-y-6 flex-1">
-        {/* Navigation & Title */}
+
         <div className="space-y-4">
           <button
             onClick={() => navigate(-1)}
@@ -247,7 +247,7 @@ const ArchivedTasks = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
+
         <div className="app-grid-4">
           <div className="app-panel p-4">
             <div className="flex items-start justify-between gap-3">
@@ -330,7 +330,7 @@ const ArchivedTasks = () => {
           </div>
         </div>
 
-        {/* Filter / Search Bar */}
+
         <div className="app-panel p-4">
           <div className="relative max-w-xl">
             <input
@@ -344,7 +344,7 @@ const ArchivedTasks = () => {
           </div>
         </div>
 
-        {/* Tasks Table Panel */}
+
         <div className="app-panel overflow-hidden border border-(--border-soft)">
           <div className="app-section-bar px-4 py-3.5 flex items-center justify-between gap-3 bg-white">
             <h3 className="app-heading flex items-center gap-2">
@@ -487,7 +487,7 @@ const ArchivedTasks = () => {
         </div>
       </div>
 
-      {/* Snackbar Notification */}
+
       {snackbar.open && (
         <motion.div
           initial={{ opacity: 0, y: 50, x: 20 }}

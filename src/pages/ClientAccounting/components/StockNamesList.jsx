@@ -115,7 +115,7 @@ const StockNamesList = () => {
       },
     });
 
-    // ===== PRINT =====
+
 
     if (isPrint) {
 
@@ -134,7 +134,7 @@ const StockNamesList = () => {
 
     }
 
-    // ===== DOWNLOAD =====
+
 
     else {
 
@@ -206,7 +206,7 @@ const StockNamesList = () => {
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-2xl mx-auto">
 
-          {/* Header */}
+
           <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-lg bg-blue-100 flex items-center justify-center">
@@ -269,7 +269,7 @@ const StockNamesList = () => {
             </div>
           </div>
 
-          {/* Summary Cards */}
+
           <div className="grid grid-cols-2 gap-3 mb-5">
             <div className="bg-gray-100 rounded-lg px-4 py-3">
               <p className="text-xs text-gray-500 mb-1">Total items</p>
@@ -281,7 +281,7 @@ const StockNamesList = () => {
             </div>
           </div>
 
-          {/* Search */}
+
           <div className="relative mb-4 no-print">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
             <input
@@ -293,7 +293,7 @@ const StockNamesList = () => {
             />
           </div>
 
-          {/* Table */}
+
           <div className="bg-white border border-gray-100 rounded-xl overflow-hidden">
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <span className="text-sm font-medium text-gray-700">Stock items</span>

@@ -25,7 +25,7 @@ const Bill = () => {
   const [expanded, setExpanded] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Demo Projects with more details
+
   useEffect(() => {
     setProjects([
       { 
@@ -52,7 +52,7 @@ const Bill = () => {
     ]);
   }, []);
 
-  // Demo Employers when project selected
+
   useEffect(() => {
     if (!selectedProject) return;
     setLoading(true);
@@ -75,7 +75,7 @@ const Bill = () => {
     }, 500);
   }, [selectedProject]);
 
-  // Demo Subletting when employer selected
+
   useEffect(() => {
     if (!selectedEmployer) return;
     setLoading(true);
@@ -117,7 +117,7 @@ const Bill = () => {
     }, 800);
   }, [selectedEmployer]);
 
-  // Filter subletting items based on search
+
   const filteredSubletting = subletting.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.contractor.toLowerCase().includes(searchTerm.toLowerCase())
@@ -305,7 +305,7 @@ const Bill = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <FileText className="h-8 w-8 text-blue-600" />
@@ -318,10 +318,10 @@ const Bill = () => {
           </p>
         </div>
 
-        {/* Project & Employer Selection */}
+
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Project Selection */}
+
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Building className="h-5 w-5 text-blue-600" />
@@ -352,7 +352,7 @@ const Bill = () => {
               )}
             </div>
 
-            {/* Employer Selection */}
+
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Users className="h-5 w-5 text-green-600" />
@@ -385,7 +385,7 @@ const Bill = () => {
           </div>
         </div>
 
-        {/* Loader */}
+
         {loading && (
           <div className="flex justify-center items-center py-12">
             <Loader2 className="animate-spin text-blue-600 h-8 w-8" />
@@ -395,10 +395,10 @@ const Bill = () => {
           </div>
         )}
 
-        {/* Subletting Items Section */}
+
         {!loading && selectedEmployer && (
           <div className="space-y-6">
-            {/* Header with Stats and Actions */}
+
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
@@ -412,7 +412,7 @@ const Bill = () => {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  {/* Search */}
+
                   <div className="relative">
                     <input
                       type="text"
@@ -437,7 +437,7 @@ const Bill = () => {
                 </div>
               </div>
 
-              {/* Summary Cards */}
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                   <p className="text-sm text-blue-600 dark:text-blue-400">Total Value</p>
@@ -454,7 +454,7 @@ const Bill = () => {
               </div>
             </div>
 
-            {/* Subletting Items List */}
+
             <div className="space-y-4">
               {filteredSubletting.length === 0 ? (
                 <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
@@ -478,7 +478,7 @@ const Bill = () => {
                     key={item.id}
                     className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700"
                   >
-                    {/* Item Header */}
+
                     <button
                       onClick={() => toggleExpand(item.id)}
                       className="w-full flex justify-between items-center p-6 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-200"
@@ -513,10 +513,10 @@ const Bill = () => {
                       </div>
                     </button>
 
-                    {/* Expanded Details */}
+
                     {expanded === item.id && (
                       <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-750">
-                        {/* Basic Info */}
+
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -563,7 +563,7 @@ const Bill = () => {
                           </div>
                         </div>
 
-                        {/* Pricing Fields */}
+
                         <div className="mb-6">
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
                             Pricing & Quantities
@@ -599,7 +599,7 @@ const Bill = () => {
                           </div>
                         </div>
 
-                        {/* Action Buttons */}
+
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4 border-t border-gray-200 dark:border-gray-600">
                           <div className="flex gap-3">
                             <button
@@ -651,7 +651,7 @@ const Bill = () => {
               )}
             </div>
 
-            {/* Grand Total */}
+
             {filteredSubletting.length > 0 && (
               <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white p-6 rounded-2xl shadow-lg">
                 <div className="flex justify-between items-center">
@@ -671,7 +671,7 @@ const Bill = () => {
           </div>
         )}
 
-        {/* Empty State when no employer selected */}
+
         {!loading && !selectedEmployer && selectedProject && (
           <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
             <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -684,7 +684,7 @@ const Bill = () => {
           </div>
         )}
 
-        {/* Empty State when no project selected */}
+
         {!loading && !selectedProject && (
           <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
             <Building className="h-16 w-16 text-gray-400 mx-auto mb-4" />

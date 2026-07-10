@@ -13,7 +13,7 @@ const MyMessage = () => {
   const slug = user?.slug;
   const companyId = user?.company_id ?? user?.id;
 
-  // Fetch messages
+
   const fetchMessages = async () => {
     setLoading(true);
     setError(null);
@@ -24,7 +24,7 @@ const MyMessage = () => {
       console.log("Company ID:", companyId);
       console.log("Slug:", slug);
 
-      // Check if all required params exist
+
       if (!user?.employee_id) {
         console.error("Missing employee_id");
         setError("Employee ID not found");
@@ -60,7 +60,7 @@ const MyMessage = () => {
       console.log("Full API Response:", res);
       console.log("Response data:", res.data);
 
-      // Check different possible response structures
+
       let messagesData = [];
       if (res.data?.data && Array.isArray(res.data.data)) {
         messagesData = res.data.data;
@@ -104,7 +104,7 @@ const MyMessage = () => {
     }
   }, [user?.employee_id, companyId, slug]);
 
-  // Search filter
+
   const filteredMessages = messages.filter((msg) =>
     msg.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     msg.message?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -114,26 +114,26 @@ const MyMessage = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
 
-        {/* Header */}
+
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">My Message</h1>
         </div>
 
-        {/* Loading State */}
+
         {loading && (
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
             Loading messages...
           </div>
         )}
 
-        {/* Error State */}
+
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
           </div>
         )}
 
-        {/* Controls */}
+
         <div className="bg-white rounded-lg border border-gray-300 p-4 mb-6">
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
@@ -163,7 +163,7 @@ const MyMessage = () => {
           </div>
         </div>
 
-        {/* Table */}
+
         <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -228,7 +228,7 @@ const MyMessage = () => {
             </table>
           </div>
 
-          {/* Footer */}
+
           <div className="bg-white px-4 py-3 border-t border-gray-300">
             <div className="text-sm text-gray-700">
               Showing {filteredMessages.length} entries

@@ -18,7 +18,7 @@ const ProjectList = ({
         const da = a?.createdAt ? Date.parse(a.createdAt) : 0;
         const db = b?.createdAt ? Date.parse(b.createdAt) : 0;
         if (!isNaN(db) && !isNaN(da)) return db - da;
-        // fallback to id if dates missing or unparsable
+
         return (b.id || 0) - (a.id || 0);
       });
     } catch (e) {

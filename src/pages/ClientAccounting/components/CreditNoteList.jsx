@@ -1,187 +1,187 @@
-// import React, { useEffect, useState } from "react";
-// import Swal from "sweetalert2";
 
-// const CreditNoteList = () => {
-//   const [creditNotes, setCreditNotes] = useState([]);
 
-//   // Load Demo Data on First Render
-//   useEffect(() => {
-//     loadDemoData();
-//   }, []);
 
-//   const loadDemoData = () => {
-//     const demo = [
-//       {
-//         id: 1,
-//         voucherNo: "CN-001",
-//         date: "2025-01-10",
-//         partyLedger: "ABC Traders",
-//         totalAmount: 12000,
-//         status: "Pending",
-//       },
-//       {
-//         id: 2,
-//         voucherNo: "CN-002",
-//         date: "2025-01-12",
-//         partyLedger: "Smart Distributors",
-//         totalAmount: 6500,
-//         status: "Accepted",
-//       },
-//       {
-//         id: 3,
-//         voucherNo: "CN-003",
-//         date: "2025-01-16",
-//         partyLedger: "Metro Buyers",
-//         totalAmount: 8800,
-//         status: "Rejected",
-//       },
-//     ];
 
-//     setCreditNotes(demo);
-//   };
 
-//   // Accept credit note
-//   const handleAccept = async (id) => {
-//     Swal.fire({
-//       title: "Accept Credit Note?",
-//       icon: "question",
-//       showCancelButton: true,
-//       confirmButtonText: "Yes, Accept",
-//       cancelButtonText: "Cancel",
-//     }).then((result) => {
-//       if (result.isConfirmed) {
-//         setCreditNotes((prev) =>
-//           prev.map((n) => (n.id === id ? { ...n, status: "Accepted" } : n))
-//         );
 
-//         Swal.fire("Accepted!", "Credit Note has been accepted.", "success");
-//       }
-//     });
-//   };
 
-//   // Reject credit note
-//   const handleReject = async (id) => {
-//     Swal.fire({
-//       title: "Reject Credit Note?",
-//       icon: "warning",
-//       showCancelButton: true,
-//       confirmButtonText: "Yes, Reject",
-//       cancelButtonText: "Cancel",
-//     }).then((result) => {
-//       if (result.isConfirmed) {
-//         setCreditNotes((prev) =>
-//           prev.map((n) => (n.id === id ? { ...n, status: "Rejected" } : n))
-//         );
 
-//         Swal.fire("Rejected!", "Credit Note has been rejected.", "success");
-//       }
-//     });
-//   };
 
-//   // Delete credit note
-//   const handleDelete = async (id) => {
-//     Swal.fire({
-//       title: "Delete Credit Note?",
-//       text: "This action cannot be undone!",
-//       icon: "error",
-//       showCancelButton: true,
-//       confirmButtonText: "Delete",
-//       cancelButtonText: "Cancel",
-//     }).then((result) => {
-//       if (result.isConfirmed) {
-//         setCreditNotes((prev) => prev.filter((n) => n.id !== id));
 
-//         Swal.fire("Deleted!", "Credit Note has been deleted.", "success");
-//       }
-//     });
-//   };
 
-//   return (
-//     <div className="p-6 bg-gray-100 min-h-screen">
-//       <div className="bg-white shadow-md rounded-lg p-4 border">
 
-//         <h1 className="text-2xl font-semibold text-center border-b pb-2 mb-4">
-//           Credit Notes List
-//         </h1>
 
-//         <table className="w-full border text-sm">
-//           <thead className="bg-gray-200">
-//             <tr>
-//               <th className="border p-2 text-left">Voucher No</th>
-//               <th className="border p-2 text-left">Date</th>
-//               <th className="border p-2 text-left">Party</th>
-//               <th className="border p-2 text-right">Amount</th>
-//               <th className="border p-2 text-center">Status</th>
-//               {showEmployeeActivity && <th className="text-left px-2 py-2">Employee Name</th>}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <th className="border p-2 text-center">Actions</th>
-//             </tr>
-//           </thead>
 
-//           <tbody>
-//             {creditNotes.length === 0 ? (
-//               <tr>
-//                 <td colSpan="6" className="text-center p-4">
-//                   No Credit Notes Found
-//                 </td>
-//               </tr>
-//             ) : (
-//               creditNotes.map((note) => (
-//                 <tr key={note.id}>
-//                   <td className="border p-2">{note.voucherNo}</td>
-//                   <td className="border p-2">{note.date}</td>
-//                   <td className="border p-2">{note.partyLedger}</td>
-//                   <td className="border p-2 text-right">
-//                     ₹ {note.totalAmount.toFixed(2)}
-//                   </td>
 
-//                   <td className="border p-2 text-center">
-//                     <span
-//                       className={`px-3 py-1 rounded text-white text-xs ${
-//                         note.status === "Accepted"
-//                           ? "bg-green-600"
-//                           : note.status === "Rejected"
-//                           ? "bg-red-600"
-//                           : "bg-gray-500"
-//                       }`}
-//                     >
-//                       {note.status}
-//                     </span>
-//                   </td>
 
-//                   <td className="border p-2 text-center space-x-2">
-//                     <button
-//                       onClick={() => handleAccept(note.id)}
-//                       className="bg-green-600 text-white px-3 py-1 rounded text-xs"
-//                     >
-//                       Accept
-//                     </button>
 
-//                     <button
-//                       onClick={() => handleReject(note.id)}
-//                       className="bg-yellow-600 text-white px-3 py-1 rounded text-xs"
-//                     >
-//                       Reject
-//                     </button>
 
-//                     <button
-//                       onClick={() => handleDelete(note.id)}
-//                       className="bg-red-600 text-white px-3 py-1 rounded text-xs"
-//                     >
-//                       Delete
-//                     </button>
-//                   </td>
-//                 </tr>
-//               ))
-//             )}
-//           </tbody>
-//         </table>
 
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default CreditNoteList;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -245,7 +245,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 pt-10 overflow-y-auto">
       <div className="bg-white rounded-xl border border-gray-200 w-full max-w-3xl shadow-xl my-8">
 
-        {/* Header */}
+
         <div className="flex justify-between items-start px-6 py-5 border-b border-gray-100">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -279,7 +279,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </button>
         </div>
 
-        {/* Section: Party & Ledger */}
+
         <div className="px-6 py-4">
           <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Party & Ledger</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -294,12 +294,12 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </div>
         </div>
 
-        {/* Section: Billing, Consignee & Dispatch */}
+
         <div className="px-6 py-4">
           <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2.5">Billing & Dispatch</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-            {/* Billing Details Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Party / Billing Details</h4>
               <div className="space-y-2 text-xs leading-relaxed text-gray-800">
@@ -324,7 +324,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </div>
             </div>
 
-            {/* Consignee (Ship To) Details Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Consignee (Ship To)</h4>
               <div className="space-y-2 text-xs leading-relaxed text-gray-800">
@@ -355,7 +355,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </div>
             </div>
 
-            {/* Invoice & Order Info Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Invoice & Order Info</h4>
               <div className="space-y-2 text-xs leading-relaxed text-gray-800">
@@ -386,14 +386,11 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </div>
             </div>
 
-            {/* Dispatch details Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50 lg:col-span-2">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Dispatch details</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs text-gray-800">
-                {/* <div className="flex justify-between">
-                  <span className="text-gray-400">Delivery note</span>
-                  <span className="font-semibold">{note.deliveryNoteNo || "—"}</span>
-                </div> */}
+
                 <div className="flex justify-between">
                   <span className="text-gray-400">Dispatch Doc No.</span>
                   <span className="font-semibold">{note.dispatchDocNo || "—"}</span>
@@ -406,10 +403,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
                   <span className="text-gray-400">Destination</span>
                   <span className="font-semibold">{note.destination || "—"}</span>
                 </div>
-                {/* <div className="flex justify-between">
-                  <span className="text-gray-400">Vehicle no.</span>
-                  <span className="font-semibold">{note.motorVehicleNo || "—"}</span>
-                </div> */}
+
                 <div className="flex justify-between">
                   <span className="text-gray-400">Other Reference</span>
                   <span className="font-semibold">{note.otherReferences || "—"}</span>
@@ -417,7 +411,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </div>
             </div>
 
-            {/* Terms of Delivery Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Terms of Delivery</h4>
               <p className="text-xs text-gray-700 leading-relaxed font-medium">
@@ -428,7 +422,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </div>
         </div>
 
-        {/* Section: Items */}
+
         <div className="px-6 py-4">
           <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Items</h3>
           <div className="overflow-hidden border border-gray-100 rounded-xl">
@@ -461,7 +455,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </div>
         </div>
 
-        {/* Section: Narration & Totals */}
+
         <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row justify-between gap-6">
           <div className="flex-1 min-w-50">
             <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Narration</p>
@@ -499,7 +493,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </div>
         </div>
 
-        {/* Footer */}
+
         <div className="px-6 py-4 border-t border-gray-100 flex justify-end bg-white rounded-b-xl">
           <button
             onClick={onClose}
@@ -771,7 +765,7 @@ const handlePrint = () => {
     );
   }
 
-  // ===== OPEN PRINT =====
+
 
   const blobURL =
     doc.output("bloburl");
@@ -887,7 +881,7 @@ const handlePrint = () => {
     doc.save(`Credit_Notes_Report_${today}.pdf`);
   };
 
-  // Load data from backend when page loads
+
   useEffect(() => {
     if (companyId) {
       fetchCreditNotes();
@@ -907,7 +901,7 @@ const handlePrint = () => {
     }
   };
 
-  // Accept Credit Note
+
   const _handleAccept = async (id) => {
     Swal.fire({
       title: "Accept Credit Note?",
@@ -930,7 +924,7 @@ const handlePrint = () => {
     });
   };
 
-  // Reject Credit Note
+
   const _handleReject = async (id) => {
     Swal.fire({
       title: "Reject Credit Note?",
@@ -953,7 +947,7 @@ const handlePrint = () => {
     });
   };
 
-  // Delete Credit Note
+
   const handleDelete = async (id) => {
     Swal.fire({
       title: "Delete Credit Note?",

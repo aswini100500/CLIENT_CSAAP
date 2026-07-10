@@ -1,17 +1,17 @@
 import axios from 'axios';
 import { getAuthToken } from '../store/authSession';
 
-// const API_URL = import.meta.env.VITE_CSAAP_URL ;
-// const API_URL = "http://localhost:3000";
+
+
 const API_URL = `${import.meta.env.VITE_CRM_BASE_URL}/api/tenant`;
 console.log('API URL:', API_URL);
 
-// Create axios instance with default headers
+
 const axiosInstance = axios.create({
     baseURL: API_URL,
 });
 
-// Request interceptor to add token to every request
+
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = getAuthToken();
@@ -27,7 +27,7 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// Response interceptor to handle token expiration
+
 axiosInstance.interceptors.response.use(
     (response) => {
         return response;
@@ -41,7 +41,7 @@ axiosInstance.interceptors.response.use(
 );
 
 const projectService = {
-    // --- APARTMENT APIS ---
+
     createApartment: async (projectData) => {
         const response = await axiosInstance.post(`${API_URL}/api/tenant/apartment`, projectData);
         return response.data;
@@ -67,7 +67,7 @@ const projectService = {
         return response.data;
     },
 
-    // --- COMMERCIAL APIS ---
+
     createCommercial: async (projectData) => {
         const response = await axiosInstance.post(`${API_URL}/api/tenant/commercial`, projectData);
         return response.data;
@@ -93,7 +93,7 @@ const projectService = {
         return response.data;
     },
 
-    // --- PLOTTING APIS ---
+
     createPlotting: async (projectData) => {
         const response = await axiosInstance.post(`${API_URL}/api/tenant/plotting`, projectData);
         return response.data;
@@ -119,7 +119,7 @@ const projectService = {
         return response.data;
     },
 
-    // --- DUPLEX APIS ---
+
     createDuplex: async (projectData) => {
         const response = await axiosInstance.post(`${API_URL}/api/tenant/duplex`, projectData);
         return response.data;
@@ -145,7 +145,7 @@ const projectService = {
         return response.data;
     },
 
-    // --- TRIPLEX APIS ---
+
     createTriplex: async (projectData) => {
         const response = await axiosInstance.post(`${API_URL}/api/tenant/triplex`, projectData);
         return response.data;

@@ -67,11 +67,11 @@ const SideBar = () => {
   };
   const { user } = useAuth();
 
-  // Cleaned up menu items without duplicates
+
   const menuItems = [
     { name: "Dashboard", path: "/hrms/dashboard", icon: <LayoutDashboard size={20} /> },
 
-    // Employee Section
+
     {
       name: "Employee",
       path: "/hrms/joined-employee",
@@ -79,7 +79,7 @@ const SideBar = () => {
     },
 
 
-    // Employee Hub with submenu
+
     {
       name: "Employee Hub",
       icon: <UserPlus size={20} />,
@@ -98,28 +98,28 @@ const SideBar = () => {
       ],
     },
 
-    // Recruitment Section
+
     {
       name: "Job",
       path: "/hrms/job",
       icon: <Folder size={20} />,
     },
 
-    // Finance Section
+
     {
       name: "Payroll",
       path: "/hrms/payroll",
       icon: <IndianRupee size={20} />,
     },
 
-    // Reports & Settings
+
     {
       name: "All Report",
       path: "/hrms/all-report",
       icon: <PieChart size={20} />,
     },
 
-    // Attendance Section
+
     {
       name: "Attendance",
       path: "/hrms/attendance-cloudsat",
@@ -128,7 +128,7 @@ const SideBar = () => {
 
 
 
-    // Calendar with submenu
+
     {
       name: "Calendar",
       icon: <Calendar size={20} />,
@@ -151,7 +151,7 @@ const SideBar = () => {
         className={`bg-[#032c50] text-white ${isSidebarOpen ? "w-70" : "w-20"
           } shrink-0 duration-300 relative flex flex-col h-full`}
       >
-        {/* Header - Fixed at top */}
+
         <div
           className={`shrink-0 flex items-center p-5 border-b border-gray-700 ${isSidebarOpen ? "justify-between" : "justify-center"
             }`}
@@ -174,7 +174,7 @@ const SideBar = () => {
           </button>
         </div>
 
-        {/* Scrollable Navigation Area - Hidden Scrollbar */}
+
         <nav
           className="flex-1 overflow-y-auto p-4 space-y-2"
           style={{
@@ -182,7 +182,7 @@ const SideBar = () => {
             msOverflowStyle: "none",
           }}
         >
-          {/* Hide scrollbar for Chrome/Safari/Edge */}
+
 
           <ul className="space-y-1">
             {menuItems.map((item, index) => (
@@ -263,9 +263,9 @@ const SideBar = () => {
           </ul>
         </nav>
 
-        {/* Footer - Fixed at bottom */}
+
         <div className="shrink-0 border-t border-gray-700 p-5">
-          {/* User Profile */}
+
           <div
             className={`mb-4 flex items-center ${!isSidebarOpen ? "justify-center" : ""
               }`}
@@ -281,7 +281,7 @@ const SideBar = () => {
             )}
           </div>
 
-          {/* Logout Button */}
+
           <button
             onClick={handleLogout}
             title={!isSidebarOpen ? "Logout" : undefined}

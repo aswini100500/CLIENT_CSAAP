@@ -1,4 +1,4 @@
-// src/components/admin/ComplaintsManagement.jsx
+
 import React, { useState,useEffect } from 'react';
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -102,7 +102,7 @@ useEffect(() => {
 
       const formattedData = res.data.map((item) => {
         const employee = employees.find(
-          (emp) => String(emp.id) === String(item.employee_id) // 🔥 FIXED MATCH
+          (emp) => String(emp.id) === String(item.employee_id)
         );
 
         return {
@@ -241,7 +241,7 @@ const filteredComplaints = complaints.filter((complaint) => {
       Swal.fire("Access Denied", "You do not have permission to resolve complaints.", "error");
       return;
     }
-    // In real app, this would be an API call
+
     setComplaints(complaints.map(c => 
       c.id === complaintId 
         ? { ...c, status: 'resolved', lastUpdated: new Date().toISOString().split('T')[0] }
@@ -281,7 +281,7 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
       
 
 
-      {/* Filters and Search */}
+
       <div className="bg-white rounded-lg shadow p-4 mb-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
           <div className="flex items-center space-x-4">
@@ -318,7 +318,7 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
         </div>
       </div>
 
-      {/* Complaints Table */}
+
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -470,7 +470,7 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
         )}
       </div>
 
-      {/* Complaint Detail Modal */}
+
       {selectedComplaint && !showResolveModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-xs bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -564,7 +564,7 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
         </div>
       )}
 
-      {/* Resolve Modal */}
+
       {showResolveModal && selectedComplaint && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-xs bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full">

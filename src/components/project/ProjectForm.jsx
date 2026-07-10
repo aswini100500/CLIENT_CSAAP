@@ -145,7 +145,7 @@ const ProjectForm = ({
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
-        {/* Project Basic Info */}
+
         <div className="w-full bg-gray-50 p-4 md:p-5 rounded-lg border border-gray-200">
           <h2 className="text-lg font-semibold mb-4 text-indigo-700 flex items-center">
             <FaHome className="mr-2" />

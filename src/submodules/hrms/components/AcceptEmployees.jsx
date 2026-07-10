@@ -42,19 +42,19 @@ const AcceptedEmployees = () => {
   const entriesPerPage = 10;
   const navigate = useNavigate();
 
-  // Sample data - Replace with actual API call
+
   useEffect(() => {
     const fetchAcceptedEmployees = async () => {
       try {
         setLoading(true);
-        // Replace with your actual API endpoint
+
         const res = await axios.get(
           `${import.meta.env.VITE_HRMS_BASE_URL}/api/employees/accepted`,
         );
         if (res.data.success) {
           setEmployees(res.data.data || getSampleAcceptedEmployees());
 
-          // Extract unique departments
+
           const uniqueDepts = [
             ...new Set(
               (res.data.data || getSampleAcceptedEmployees()).map(
@@ -66,7 +66,7 @@ const AcceptedEmployees = () => {
         }
       } catch (err) {
         console.error("Error fetching accepted employees:", err);
-        // Fallback to sample data
+
         setEmployees(getSampleAcceptedEmployees());
         const uniqueDepts = [
           ...new Set(getSampleAcceptedEmployees().map((emp) => emp.department)),
@@ -80,7 +80,7 @@ const AcceptedEmployees = () => {
     fetchAcceptedEmployees();
   }, []);
 
-  // Sample data function
+
   const getSampleAcceptedEmployees = () => [
     {
       id: 1,
@@ -123,7 +123,7 @@ const AcceptedEmployees = () => {
     },
   ];
 
-  // Filtering
+
   const filteredData = employees.filter((employee) => {
     const matchesSearch =
       employee.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -138,7 +138,7 @@ const AcceptedEmployees = () => {
     return matchesSearch && matchesDepartment;
   });
 
-  // Pagination
+
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
   const currentData = filteredData.slice(
@@ -146,17 +146,17 @@ const AcceptedEmployees = () => {
     startIndex + entriesPerPage,
   );
 
-  // Payroll calculation functions
+
   const calculatePayrollComponents = (basicSalary) => {
-    const basic = basicSalary * 0.5; // 50% of basic salary
-    const hra = basicSalary * 0.25; // 25% of basic salary
+    const basic = basicSalary * 0.5;
+    const hra = basicSalary * 0.25;
     const conveyance = 1600;
     const medical = 1250;
     const specialAllowance = basicSalary - (basic + hra + conveyance + medical);
 
-    // Deductions - PF is 12% of basic salary
-    const pf = basic * 0.12; // 12% of basic
-    const esi = basicSalary * 0.0075; // 0.75% of gross
+
+    const pf = basic * 0.12;
+    const esi = basicSalary * 0.0075;
     const professionalTax = 200;
 
     const grossSalary = basic + hra + conveyance + medical + specialAllowance;
@@ -178,11 +178,11 @@ const AcceptedEmployees = () => {
     };
   };
 
-  // Recalculate payroll when any component changes
+
   const recalculatePayroll = (currentPayroll, field, value) => {
     let updatedPayroll = { ...currentPayroll, [field]: parseFloat(value) || 0 };
 
-    // Recalculate gross salary
+
     updatedPayroll.grossSalary =
       updatedPayroll.basic +
       updatedPayroll.hra +
@@ -190,21 +190,21 @@ const AcceptedEmployees = () => {
       updatedPayroll.medical +
       updatedPayroll.specialAllowance;
 
-    // Recalculate PF as 12% of basic salary
+
     updatedPayroll.pf = updatedPayroll.basic * 0.12;
 
-    // Recalculate total deductions
+
     updatedPayroll.totalDeductions =
       updatedPayroll.pf + updatedPayroll.esi + updatedPayroll.professionalTax;
 
-    // Recalculate net salary
+
     updatedPayroll.netSalary =
       updatedPayroll.grossSalary - updatedPayroll.totalDeductions;
 
     return updatedPayroll;
   };
 
-  // Initialize payroll data
+
   const initializePayrollData = (employee) => {
     const components = calculatePayrollComponents(employee.salary);
     return {
@@ -219,7 +219,7 @@ const AcceptedEmployees = () => {
     };
   };
 
-  // Handle payroll edit
+
   const handleEditPayroll = (employee) => {
     if (!canSetup) {
       alert("You do not have permission to setup candidate payroll");
@@ -230,14 +230,14 @@ const AcceptedEmployees = () => {
     setEditingPayroll(employee.id);
   };
 
-  // Handle payroll save
+
   const handleSavePayroll = async (employeeId) => {
     if (!canSetup) {
       alert("You do not have permission to setup candidate payroll");
       return;
     }
     try {
-      // Save to backend
+
       await axios.put(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/employees/${employeeId}/payroll`,
         {
@@ -245,7 +245,7 @@ const AcceptedEmployees = () => {
         },
       );
 
-      // Update local state
+
       setEmployees((prev) =>
         prev.map((emp) =>
           emp.id === employeeId ? { ...emp, payrollSetup: true } : emp,
@@ -255,7 +255,7 @@ const AcceptedEmployees = () => {
       setEditingPayroll(null);
     } catch (error) {
       console.error("Error saving payroll:", error);
-      // Fallback to local update
+
       setEmployees((prev) =>
         prev.map((emp) =>
           emp.id === employeeId ? { ...emp, payrollSetup: true } : emp,
@@ -265,7 +265,7 @@ const AcceptedEmployees = () => {
     }
   };
 
-  // Handle payroll input change
+
   const handlePayrollChange = (employeeId, field, value) => {
     setPayrollData((prev) => ({
       ...prev,
@@ -273,7 +273,7 @@ const AcceptedEmployees = () => {
     }));
   };
 
-  // Download payslip
+
   const downloadPayslip = (employee) => {
     const payroll = payrollData[employee.id];
     if (!payroll) {
@@ -283,7 +283,7 @@ const AcceptedEmployees = () => {
 
     const doc = new jsPDF();
 
-    // Header
+
     doc.setFontSize(20);
     doc.setTextColor(40, 40, 40);
     doc.text("PAYSLIP", 105, 20, { align: "center" });
@@ -297,18 +297,18 @@ const AcceptedEmployees = () => {
       { align: "center" },
     );
 
-    // Company Info
+
     doc.setFontSize(8);
     doc.text("Company Name: Your Company Inc.", 14, 40);
     doc.text("Address: 123 Business Street, City, State - 12345", 14, 46);
 
-    // Employee Info
+
     doc.text(`Employee Name: ${employee.name}`, 14, 58);
     doc.text(`Employee ID: ${employee.employeeId}`, 14, 64);
     doc.text(`Department: ${employee.department}`, 14, 70);
     doc.text(`Designation: ${employee.position}`, 14, 76);
 
-    // Earnings Table
+
     autoTable(doc, {
       startY: 85,
       head: [["Earnings", "Amount (₹)"]],
@@ -323,7 +323,7 @@ const AcceptedEmployees = () => {
       headStyles: { fillColor: [59, 130, 246] },
     });
 
-    // Deductions Table
+
     autoTable(doc, {
       startY: doc.lastAutoTable.finalY + 10,
       head: [["Deductions", "Amount (₹)"]],
@@ -336,7 +336,7 @@ const AcceptedEmployees = () => {
       headStyles: { fillColor: [239, 68, 68] },
     });
 
-    // Summary
+
     const finalY = doc.lastAutoTable.finalY + 15;
     doc.setFillColor(243, 244, 246);
     doc.rect(14, finalY, 182, 20, "F");
@@ -362,7 +362,7 @@ const AcceptedEmployees = () => {
       finalY + 12,
     );
 
-    // Footer
+
     doc.setFontSize(8);
     doc.setTextColor(100, 100, 100);
     doc.text(
@@ -377,7 +377,7 @@ const AcceptedEmployees = () => {
     );
   };
 
-  // Badge components
+
   const StatusBadge = ({ status }) => (
     <span className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border bg-green-100 text-green-800 border-green-200">
       <UserCheck size={12} />
@@ -400,7 +400,7 @@ const AcceptedEmployees = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="mb-6">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
             Accepted Employees
@@ -410,7 +410,7 @@ const AcceptedEmployees = () => {
           </p>
         </div>
 
-        {/* Stats Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
@@ -482,7 +482,7 @@ const AcceptedEmployees = () => {
           </div>
         </div>
 
-        {/* Filters */}
+
         <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-6">
           <div className="flex flex-col md:flex-row gap-4 justify-between">
             <div className="relative flex-1 max-w-md">
@@ -521,7 +521,7 @@ const AcceptedEmployees = () => {
           </div>
         </div>
 
-        {/* Table */}
+
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -647,7 +647,7 @@ const AcceptedEmployees = () => {
                                         className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-blue-700 hover:bg-blue-50"
                                         onClick={() => {
                                           handleEditPayroll(employee);
-                                          setShowActionMenu(null); // Close menu
+                                          setShowActionMenu(null);
                                         }}
                                       >
                                         <DollarSign size={16} />
@@ -662,7 +662,7 @@ const AcceptedEmployees = () => {
                                         className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-green-700 hover:bg-green-50"
                                         onClick={() => {
                                           downloadPayslip(employee);
-                                          setShowActionMenu(null); // Close menu
+                                          setShowActionMenu(null);
                                         }}
                                       >
                                         <Download size={16} />
@@ -674,7 +674,7 @@ const AcceptedEmployees = () => {
                                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                       onClick={() => {
                                         setSelectedEmployee(employee);
-                                        setShowActionMenu(null); // Already closing, just confirming
+                                        setShowActionMenu(null);
                                       }}
                                     >
                                       View Details
@@ -706,7 +706,7 @@ const AcceptedEmployees = () => {
             </table>
           </div>
 
-          {/* Pagination */}
+
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between">
             <div className="text-sm text-gray-700 mb-4 sm:mb-0">
               Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
@@ -742,7 +742,7 @@ const AcceptedEmployees = () => {
           </div>
         </div>
 
-        {/* Payroll Setup Modal */}
+
         {editingPayroll && payrollData[editingPayroll] && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -774,7 +774,7 @@ const AcceptedEmployees = () => {
           </div>
         )}
 
-        {/* Employee Details Modal */}
+
         {selectedEmployee && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl">
@@ -801,7 +801,7 @@ const AcceptedEmployees = () => {
   );
 };
 
-// Payroll Form Component
+
 const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
   const [activeTab, setActiveTab] = useState("salary");
 
@@ -827,7 +827,7 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
 
   return (
     <div className="space-y-6">
-      {/* Tabs */}
+
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
           <button
@@ -863,7 +863,7 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
         </nav>
       </div>
 
-      {/* Salary Components Tab */}
+
       {activeTab === "salary" && (
         <div className="space-y-6">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -972,7 +972,7 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
         </div>
       )}
 
-      {/* Bank Details Tab */}
+
       {activeTab === "bank" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -1037,7 +1037,7 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
         </div>
       )}
 
-      {/* Preview Tab */}
+
       {activeTab === "preview" && (
         <div className="space-y-6">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -1097,7 +1097,7 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
         </div>
       )}
 
-      {/* Action Buttons */}
+
       <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
         <button
           onClick={onCancel}
@@ -1117,7 +1117,7 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
   );
 };
 
-// Employee Details Component
+
 const EmployeeDetails = ({ employee }) => {
   return (
     <div className="space-y-6">

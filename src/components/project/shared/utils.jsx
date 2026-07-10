@@ -29,7 +29,7 @@ export const getProjectOverallStatus = (project) => {
   
   let statuses = [];
 
-  // For custom projects, data might be nested inside 'configuration'
+
   let effectiveProject = project;
   if ((project.type === "custom" || project.type === "Custom") && project.configuration) {
     try {

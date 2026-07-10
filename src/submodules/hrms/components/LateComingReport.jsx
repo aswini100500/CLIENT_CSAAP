@@ -30,7 +30,7 @@ export default function MonthlyLateComingReport() {
     (_, i) => new Date().getFullYear() - i,
   );
 
-  // Sample data for demonstration
+
   const [employees, setEmployees] = useState([]);
 
   async function handleSubmit(e) {
@@ -46,7 +46,7 @@ export default function MonthlyLateComingReport() {
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/late-reports?month=${month}&year=${year}`,
       );
 
-      // Convert backend rows into grouped employee objects
+
       const data = res.data;
       const grouped = {};
 
@@ -63,7 +63,7 @@ export default function MonthlyLateComingReport() {
           };
         }
 
-        // mark late days
+
         if (row.status === "Late" && row.day <= 31) {
           grouped[row.empCode].lateDays[row.day - 1] = true;
         }
@@ -77,7 +77,7 @@ export default function MonthlyLateComingReport() {
     }
   }
 
-  // 🟢 Export table to Excel
+
   const handleExportExcel = () => {
     if (employees.length === 0) {
       alert("No data to export!");
@@ -107,19 +107,19 @@ export default function MonthlyLateComingReport() {
     XLSX.writeFile(wb, `LateComingReport_${month}_${year}.xlsx`);
   };
 
-  // 🟣 Export table to PDF
-  // 🟣 Export table to multi-page PDF
+
+
   const handleExportPDF = () => {
     if (employees.length === 0) {
       alert("No data to export!");
       return;
     }
 
-    const pdf = new jsPDF("l", "pt", "a4"); // landscape orientation
+    const pdf = new jsPDF("l", "pt", "a4");
     pdf.setFontSize(14);
     pdf.text(`Late Coming Report - ${month} ${year}`, 40, 40);
 
-    // Define table headers dynamically based on number of days in the month
+
     const headers = [
       "Sl",
       "Emp Code",
@@ -130,7 +130,7 @@ export default function MonthlyLateComingReport() {
       ...Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString()),
     ];
 
-    // Define table rows
+
     const data = employees.map((emp) => [
       emp.sl,
       emp.empCode,
@@ -143,13 +143,13 @@ export default function MonthlyLateComingReport() {
       ),
     ]);
 
-    // Generate PDF table
+
     autoTable(pdf, {
       head: [headers],
       body: data,
       startY: 60,
       styles: { fontSize: 6, cellPadding: 2 },
-      headStyles: { fillColor: [41, 128, 185] }, // blue header
+      headStyles: { fillColor: [41, 128, 185] },
       theme: "grid",
     });
 

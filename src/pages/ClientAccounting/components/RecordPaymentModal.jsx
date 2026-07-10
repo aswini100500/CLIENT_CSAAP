@@ -21,7 +21,7 @@ const RecordPaymentModal = ({
   onClose,
   onPaymentSuccess
 }) => {
-  // Filter active slabs (stages with allocated amount)
+
   const activeSlabs = stages.filter(s => (s.allocated_amount || 0) > 0);
 
   const [selectedSlabId, setSelectedSlabId] = useState("");
@@ -41,13 +41,13 @@ const RecordPaymentModal = ({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Get details of currently selected slab
+
   const selectedSlab = activeSlabs.find(s => String(s.db_slab_id) === String(selectedSlabId));
   const outstandingAmount = selectedSlab 
     ? (selectedSlab.allocated_amount - (selectedSlab.paid_amount || 0)) 
     : 0;
 
-  // Calculate max allowed payment (selected slab + subsequent unpaid slabs)
+
   const maxAllowedPayment = (() => {
     if (!selectedSlab) return 0;
     const selectedIndex = activeSlabs.findIndex(s => String(s.db_slab_id) === String(selectedSlabId));
@@ -63,10 +63,10 @@ const RecordPaymentModal = ({
     return sum;
   })();
 
-  // Set default selection and amount when selected slab changes
+
   useEffect(() => {
     if (activeSlabs.length > 0 && !selectedSlabId) {
-      // Find first unpaid slab
+
       const firstUnpaid = activeSlabs.find(s => s.status !== "paid");
       if (firstUnpaid) {
         setSelectedSlabId(String(firstUnpaid.db_slab_id));
@@ -84,7 +84,7 @@ const RecordPaymentModal = ({
     }
   }, [selectedSlabId, selectedSlab, outstandingAmount]);
 
-  // Helper to format currency
+
   const formatINR = (val) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -157,7 +157,7 @@ const RecordPaymentModal = ({
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-md">
       <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
         
-        {/* Header */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="flex items-start gap-3 min-w-0">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-(--brand-soft) border border-(--border-soft) shrink-0">
@@ -181,7 +181,7 @@ const RecordPaymentModal = ({
           </button>
         </div>
 
-        {/* Body */}
+
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-[#f8faf8]/40">
           {success ? (
             <div className="py-12 text-center space-y-4">
@@ -204,7 +204,7 @@ const RecordPaymentModal = ({
                 </div>
               )}
 
-              {/* Milestone Selection */}
+
               <div>
                 <label className="modal-label block mb-1.5 uppercase">
                   Select Milestone Slab *
@@ -237,7 +237,7 @@ const RecordPaymentModal = ({
                 </div>
               </div>
 
-              {/* Selected Slab Ledger Card */}
+
               {selectedSlab && (
                 <div className="app-panel p-3.5 space-y-2.5 shadow-xs bg-white">
                   <div className="flex items-center justify-between text-[12px]">
@@ -255,7 +255,7 @@ const RecordPaymentModal = ({
                 </div>
               )}
 
-              {/* Amount & Mode */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="modal-label block mb-1.5 uppercase">
@@ -306,7 +306,7 @@ const RecordPaymentModal = ({
                 </div>
               </div>
 
-              {/* Reference & Date */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="modal-label block mb-1.5 uppercase">
@@ -341,7 +341,7 @@ const RecordPaymentModal = ({
                 </div>
               </div>
 
-              {/* Note */}
+
               <div>
                 <label className="modal-label block mb-1.5 uppercase">
                   Remarks / Notes
@@ -356,7 +356,7 @@ const RecordPaymentModal = ({
             </>
           )}
 
-          {/* Footer */}
+
           {!success && (
             <div className="px-5 py-4 border-t border-(--border-soft) bg-white flex items-center justify-end gap-3 -mx-5 -mb-5 mt-4">
               <button

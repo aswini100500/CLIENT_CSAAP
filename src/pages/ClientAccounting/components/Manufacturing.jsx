@@ -15,7 +15,7 @@ export default function ManufacturingJournal() {
   const basePath = location.pathname.includes('/employee/hr') ? '/employee/hr/accounting/client' : '/accounting/client';
   const isEditMode = !!id;
 
-  // Header / Product details
+
   const [voucherNo, setVoucherNo] = useState("1");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [productName, setProductName] = useState("");
@@ -32,7 +32,7 @@ export default function ManufacturingJournal() {
   const [additionalCosts, setAdditionalCosts] = useState([{ type: "", percentage: 0, amount: 0 }]);
   const [narration, setNarration] = useState("");
 
-  // Fetch data for Edit Mode
+
   useEffect(() => {
     if (isEditMode) {
       const fetchJournal = async () => {
@@ -65,7 +65,7 @@ export default function ManufacturingJournal() {
     }
   }, [id, isEditMode]);
 
-  // Handlers for components
+
   const updateComponent = (index, field, value) => {
     const copy = [...components];
     if (field === "itemName") {
@@ -95,7 +95,7 @@ export default function ManufacturingJournal() {
     setComponents(components.filter((_, idx) => idx !== i));
   };
 
-  // Handlers for byProducts
+
   const updateByProduct = (index, field, value) => {
     const copy = [...byProducts];
     if (field === "itemName") {
@@ -125,7 +125,7 @@ export default function ManufacturingJournal() {
     setByProducts(byProducts.filter((_, idx) => idx !== i));
   };
 
-  // Handlers for additional costs
+
   const addAdditionalCostRow = () => {
     setAdditionalCosts([...additionalCosts, { type: "", percentage: 0, amount: 0 }]);
   };
@@ -148,7 +148,7 @@ export default function ManufacturingJournal() {
     setAdditionalCosts(copy);
   };
 
-  // Fetch stock items for selection
+
   useEffect(() => {
     if (!companyId) return;
     const fetchStock = async () => {
@@ -163,7 +163,7 @@ export default function ManufacturingJournal() {
     fetchStock();
   }, [companyId]);
 
-  // When finishedQty changes, update all component/byproduct amounts
+
   useEffect(() => {
     const fQty = Number(finishedQty) || 0;
     setComponents(prev => prev.map(c => ({
@@ -176,7 +176,7 @@ export default function ManufacturingJournal() {
     })));
   }, [finishedQty]);
 
-  // Calculations
+
   const totalComponents = components.reduce((s, c) => s + (Number(c.amount) || 0), 0);
   const totalByProducts = byProducts.reduce((s, b) => s + (Number(b.amount) || 0), 0);
   const totalCostOfComponents = totalComponents - totalByProducts;

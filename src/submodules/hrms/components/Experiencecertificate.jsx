@@ -44,7 +44,7 @@ const ExperienceCertificateManagement = () => {
   const [toast, setToast] = useState(null);
   const entriesPerPage = 5;
 
-  // Sample data for experience certificates
+
   const [certificateData, setCertificateData] = useState([]);
 
   const { user } = useAuth();
@@ -72,7 +72,7 @@ const ExperienceCertificateManagement = () => {
 
     fetchEligibleEmployees();
   }, []);
-  // Auto-calculate duration when editing certificate dates
+
   useEffect(() => {
     if (editForm.startDate && editForm.endDate) {
       const duration = calculateDuration(editForm.startDate, editForm.endDate);
@@ -126,7 +126,7 @@ const ExperienceCertificateManagement = () => {
 
     return matchesSearch && matchesDepartment && matchesStatus;
   });
-  // Pagination
+
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
   const currentData = filteredData.slice(
@@ -134,12 +134,12 @@ const ExperienceCertificateManagement = () => {
     startIndex + entriesPerPage,
   );
 
-  // Get unique departments (defensive: certificateData may be undefined if API returns unexpected shape)
+
   const departments = [
     ...new Set((certificateData || []).map((cert) => cert.department)),
   ];
 
-  // Status badge component
+
   const StatusBadge = ({ status }) => {
     const statusConfig = {
       draft: { label: "Draft", color: "bg-gray-50 text-gray-600 border border-gray-200" },
@@ -157,7 +157,7 @@ const ExperienceCertificateManagement = () => {
     );
   };
 
-  // Performance badge component
+
   const PerformanceBadge = ({ performance }) => {
     const performanceConfig = {
       Excellent: { color: "bg-green-50 text-green-700 border border-green-100" },
@@ -176,7 +176,7 @@ const ExperienceCertificateManagement = () => {
     );
   };
 
-  // Toast notification component
+
   const Toast = ({ message, type }) => {
     useEffect(() => {
       const timer = setTimeout(() => setToast(null), 3000);
@@ -192,7 +192,7 @@ const ExperienceCertificateManagement = () => {
     );
   };
 
-  // View certificate
+
   const handleView = (certificate) => {
     const mappedCertificate = {
       employeeName: certificate.name || certificate.employeeName || "",
@@ -218,7 +218,7 @@ const ExperienceCertificateManagement = () => {
     setShowViewModal(true);
   };
 
-  // Edit certificate
+
   const handleEdit = (certificate) => {
     const mappedCertificate = {
       id: certificate.id,
@@ -241,7 +241,7 @@ const ExperienceCertificateManagement = () => {
     setEditForm(mappedCertificate);
     setShowEditModal(true);
   };
-  // Handle edit form submission
+
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -257,13 +257,13 @@ const ExperienceCertificateManagement = () => {
 
       alert("✅ Certificate updated successfully!");
       setShowEditModal(false);
-      fetchCertificates(); // refresh list
+      fetchCertificates();
     } catch (error) {
       console.error(" Error updating certificate:", error);
       alert("Failed to update certificate");
     }
   };
-  // Handle create form submission
+
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
 
@@ -290,8 +290,8 @@ const ExperienceCertificateManagement = () => {
           reasonForLeaving: "Resignation",
           performance: "Excellent",
           issuedDate: new Date().toISOString().split("T")[0],
-        }); // reset form
-        fetchCertificates(); // refresh the list
+        });
+        fetchCertificates();
       }
     } catch (err) {
       console.error("Error creating certificate:", err);
@@ -311,7 +311,7 @@ const ExperienceCertificateManagement = () => {
           res.data.message || `${res.data.inserted} certificates generated.`,
         icon: "success",
       });
-      fetchCertificates(); // refresh table
+      fetchCertificates();
     } catch (err) {
       Swal.fire({
         title: "Error!",
@@ -320,44 +320,44 @@ const ExperienceCertificateManagement = () => {
       });
     }
   };
-  // Send certificate
-  // const handleSend = async (certificate) => {
-  //   try {
-  //     const certificateElement = document.getElementById('certificate-content');
 
-  //     if (!certificateElement) {
-  //       setToast({ message: 'Please open the certificate first to send it', type: 'error' });
-  //       return;
-  //     }
 
-  //     const canvas = await html2canvas(certificateElement, { scale: 2 });
-  //     const imgData = canvas.toDataURL('image/png');
 
-  //     const pdf = new jsPDF({
-  //       orientation: 'portrait',
-  //       unit: 'pt',
-  //       format: 'a4'
-  //     });
-  //     const imgProps = pdf.getImageProperties(imgData);
-  //     const pdfWidth = pdf.internal.pageSize.getWidth();
-  //     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-  //     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
-  //     const pdfBase64 = pdf.output('datauristring').split(',')[1];
 
-  //     await axios.post('http://localhost:5000/api/experience-certificates/send-mail', {
-  //       employeeEmail: certificate.email,
-  //       employeeName: certificate.employeeName,
-  //       certificateText: `Dear ${certificate.employeeName}, please find attached your experience certificate.`,
-  //       pdfBuffer: pdfBase64
-  //     });
 
-  //     setToast({ message: `Experience certificate sent to ${certificate.employeeName}`, type: 'success' });
-  //   } catch (err) {
-  //     console.error(err);
-  //     setToast({ message: 'Failed to send certificate', type: 'error' });
-  //   }
-  // };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const handleSend = async () => {
     try {
@@ -374,14 +374,14 @@ const ExperienceCertificateManagement = () => {
     }
   };
 
-  // Issue certificate
+
   const handleIssue = async () => {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/experience-certificates/issue/${selectedEmployee.id}`,
         {
           startDate: selectedEmployee.joinDate,
-          endDate: selectedEmployee.endDate, // or resignDate
+          endDate: selectedEmployee.endDate,
           experience: calculatedMonths,
         },
       );
@@ -400,7 +400,7 @@ const ExperienceCertificateManagement = () => {
     setCertificateId(res.data.certificateId);
   };
 
-  // Export to CSV
+
   const handleExport = () => {
     const headers = [
       "ID,Employee Name,Employee ID,Position,Department,Start Date,End Date,Duration,Status,Performance",
@@ -452,7 +452,7 @@ const ExperienceCertificateManagement = () => {
     }
   };
 
-  // Download experience certificate
+
   const handleDownloadCertificate = async () => {
     if (!selectedCertificate) return;
 
@@ -508,7 +508,7 @@ const ExperienceCertificateManagement = () => {
     }
   };
 
-  // Calculate work duration
+
   const calculateDuration = (startDate, endDate) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -530,7 +530,7 @@ const ExperienceCertificateManagement = () => {
       : yearsPart || monthsPart || "0 months";
   };
 
-  // Auto-calculate duration when dates change
+
   useEffect(() => {
     if (newCertificate.startDate && newCertificate.endDate) {
       const duration = calculateDuration(
@@ -544,7 +544,7 @@ const ExperienceCertificateManagement = () => {
   return (
     <div className="crm-module-root app-shell font-sans">
       <div className="mx-auto max-w-7xl px-3 py-4 lg:px-4">
-        {/* Header */}
+
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
           <div>
             <h1 className="app-title max-w-3xl">
@@ -572,7 +572,7 @@ const ExperienceCertificateManagement = () => {
           </div>
         </div>
 
-        {/* Filters and Search */}
+
         <div className="app-panel p-4 md:p-5 mb-6 bg-white border border-(--border-soft)">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -647,7 +647,7 @@ const ExperienceCertificateManagement = () => {
           </div>
         </div>
 
-        {/* Table */}
+
         <div className="app-panel overflow-hidden border border-(--border-soft) bg-white">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-(--border-soft)">
@@ -704,7 +704,7 @@ const ExperienceCertificateManagement = () => {
                       key={certificate.employeeId}
                       className="hover:bg-(--bg-subtle)/40 transition-colors"
                     >
-                      {/* Employee Name + ID */}
+
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="font-extrabold text-[13px] text-(--text-strong)">
@@ -716,7 +716,7 @@ const ExperienceCertificateManagement = () => {
                         </div>
                       </td>
 
-                      {/* Position & Department */}
+
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-xs text-(--text-strong) font-semibold">
@@ -728,7 +728,7 @@ const ExperienceCertificateManagement = () => {
                         </div>
                       </td>
 
-                      {/* Employment Period */}
+
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-xs text-(--text-strong) font-semibold">
                           <div>
@@ -749,7 +749,7 @@ const ExperienceCertificateManagement = () => {
                         </div>
                       </td>
 
-                      {/* Duration */}
+
                       <td className="px-6 py-4 whitespace-nowrap text-xs text-(--text-strong) font-semibold">
                         <div>
                           {certificate.monthsWorked
@@ -758,19 +758,19 @@ const ExperienceCertificateManagement = () => {
                         </div>
                       </td>
 
-                      {/* Performance */}
+
                       <td className="px-6 py-4 whitespace-nowrap">
                         <PerformanceBadge
                           performance={certificate.performance || "N/A"}
                         />
                       </td>
 
-                      {/* Status */}
+
                       <td className="px-6 py-4 whitespace-nowrap">
                         <StatusBadge status={certificate.status || "Pending"} />
                       </td>
 
-                      {/* Actions */}
+
                       <td className="px-6 py-4 whitespace-nowrap text-xs">
                         <div className="flex space-x-1">
                           <button
@@ -838,7 +838,7 @@ const ExperienceCertificateManagement = () => {
             </table>
           </div>
 
-          {/* Pagination */}
+
           <div className="px-6 py-4 bg-(--bg-subtle)/35 border-t border-(--border-soft) flex flex-col sm:flex-row items-center justify-between">
             <div className="text-xs font-bold text-(--text-soft) mb-4 sm:mb-0">
               Showing <span className="text-(--text-strong)">{startIndex + 1}</span> to{" "}
@@ -884,7 +884,7 @@ const ExperienceCertificateManagement = () => {
           </div>
         </div>
 
-        {/* View Modal with Certificate Design */}
+
         {showViewModal && selectedCertificate && (
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="app-modal p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col">
@@ -898,7 +898,7 @@ const ExperienceCertificateManagement = () => {
                 </button>
               </div>
 
-              {/* Certificate Content */}
+
               <div
                 id="certificate-content"
                 style={{
@@ -910,7 +910,7 @@ const ExperienceCertificateManagement = () => {
                   border: "1px solid var(--border-soft)",
                 }}
               >
-                {/* Certificate Header */}
+
                 <div style={{ textAlign: "center", marginBottom: "32px" }}>
                   <div
                     style={{
@@ -957,7 +957,7 @@ const ExperienceCertificateManagement = () => {
                   ></div>
                 </div>
 
-                {/* Certificate Body */}
+
                 <div
                   style={{
                     color: "var(--text-body)",
@@ -1038,7 +1038,7 @@ const ExperienceCertificateManagement = () => {
                   <p>We wish them the very best in their future endeavors.</p>
                 </div>
 
-                {/* Certificate Footer */}
+
                 <div
                   style={{
                     display: "flex",
@@ -1085,7 +1085,7 @@ const ExperienceCertificateManagement = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
+
               <div className="mt-6 flex justify-end gap-3 pt-4 border-t border-(--border-soft)">
                 <button
                   onClick={handleDownloadCertificate}
@@ -1105,7 +1105,7 @@ const ExperienceCertificateManagement = () => {
           </div>
         )}
 
-        {/* Edit Modal */}
+
         {showEditModal && selectedCertificate && (
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="app-modal p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col">
@@ -1280,7 +1280,7 @@ const ExperienceCertificateManagement = () => {
           </div>
         )}
 
-        {/* Create New Certificate Modal */}
+
         {showCreateModal && (
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="app-modal p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col">
@@ -1470,7 +1470,7 @@ const ExperienceCertificateManagement = () => {
           </div>
         )}
 
-        {/* Toast Notification */}
+
         {toast && <Toast message={toast.message} type={toast.type} />}
       </div>
     </div>

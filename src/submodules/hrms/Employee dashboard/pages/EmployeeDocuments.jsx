@@ -1,4 +1,4 @@
-// EmployeeDocuments.jsx
+
 import React, { useState } from 'react';
 import { 
   FileText,
@@ -48,7 +48,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: 'month', direction: 'desc' });
 
-  // Sample employee data
+
   const employee = {
     id: 'EMP001',
     name: 'John Smith',
@@ -80,7 +80,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
     }
   };
 
-  // Sample payslips data
+
   const payslips = [
     {
       id: 1,
@@ -265,7 +265,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
     }
   ];
 
-  // Sample offer letters and other documents
+
   const officialDocuments = [
     {
       id: 101,
@@ -365,7 +365,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
 
   const allDocuments = [...payslips.map(p => ({ ...p, docType: 'payslip' })), ...officialDocuments];
 
-  // Filter documents based on type and search
+
   const filteredDocuments = allDocuments.filter(doc => {
     if (documentType !== 'all' && doc.docType !== documentType && doc.type !== documentType) return false;
     if (searchTerm) {
@@ -377,7 +377,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
     return true;
   });
 
-  // Sort function for payslips
+
   const sortPayslips = (payslips) => {
     return [...payslips].sort((a, b) => {
       if (sortConfig.key === 'month') {
@@ -399,7 +399,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
     });
   };
 
-  // Get only payslips for the table view
+
   const payslipsList = sortPayslips(payslips);
 
   const getDocumentIcon = (type) => {
@@ -451,7 +451,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
   };
 
   const downloadPayslipPDF = async (payslip) => {
-    // PDF generation code (kept as is)
+
     const pdfContent = document.createElement('div');
     pdfContent.innerHTML = `
       <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 30px; background: white;">
@@ -741,7 +741,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
 
   return (
     <div className="space-y-6">
-      {/* Header with Summary Cards */}
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className={`rounded-xl shadow-lg p-6 transition-colors duration-300 ${
           darkMode ? 'bg-gray-800' : 'bg-white'
@@ -808,7 +808,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
         </div>
       </div>
 
-      {/* Filters and Search */}
+
       <div className={`rounded-xl shadow-lg p-4 transition-colors duration-300 ${
         darkMode ? 'bg-gray-800' : 'bg-white'
       }`}>
@@ -880,9 +880,9 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
         </div>
       </div>
 
-      {/* Conditional Content Based on Selected Tab */}
+
       {documentType === 'payslip' ? (
-        /* Payslips Table - Only shown when Payslips tab is active */
+
         <div className={`rounded-xl shadow-lg overflow-hidden transition-colors duration-300 ${
           darkMode ? 'bg-gray-800' : 'bg-white'
         }`}>
@@ -994,7 +994,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
           </div>
         </div>
       ) : (
-        /* Other Documents Grid - Only shown when All Documents or Official Letters tabs are active */
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredDocuments
             .filter(doc => doc.docType !== 'payslip')
@@ -1057,13 +1057,13 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
         </div>
       )}
 
-      {/* Document Preview Modal */}
+
       {showDocumentModal && selectedDocument && (
         <div className="fixed inset-0 bg-black bg-opacity-75 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className={`max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-xl ${
             darkMode ? 'bg-gray-800' : 'bg-white'
           }`}>
-            {/* Modal Header */}
+
             <div className={`p-6 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'} sticky top-0 bg-inherit z-10`}>
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-3">
@@ -1115,12 +1115,12 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
               </div>
             </div>
 
-            {/* Modal Body - Document Preview */}
+
             <div className="p-6">
               {selectedDocument.docType === 'payslip' ? (
-                /* Payslip Preview */
+
                 <div className={`rounded-lg p-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                  {/* Company Header */}
+
                   <div className="text-center mb-6 pb-6 border-b border-gray-300 dark:border-gray-600">
                     <h3 className="text-2xl font-bold text-blue-600">Company Name</h3>
                     <p className="text-gray-500">123 Business Ave, Suite 100, New York, NY 10001</p>
@@ -1128,7 +1128,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
                     <p className="text-gray-500">Salary Date: {selectedDocument.salaryDate}</p>
                   </div>
 
-                  {/* Employee Info Table */}
+
                   <div className="mb-6">
                     <h4 className="font-semibold mb-2">Employee Details</h4>
                     <table className="w-full border-collapse border border-gray-300">
@@ -1155,7 +1155,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
                     </table>
                   </div>
 
-                  {/* Earnings Table */}
+
                   <div className="mb-6">
                     <h4 className="font-semibold mb-2">Earnings</h4>
                     <table className="w-full border-collapse border border-gray-300">
@@ -1180,7 +1180,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
                     </table>
                   </div>
 
-                  {/* Deductions Table */}
+
                   <div className="mb-6">
                     <h4 className="font-semibold mb-2">Deductions</h4>
                     <table className="w-full border-collapse border border-gray-300">
@@ -1205,7 +1205,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
                     </table>
                   </div>
 
-                  {/* Net Pay */}
+
                   <div className="mb-6 p-4 bg-green-100 rounded-lg">
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-lg">NET PAY (Take Home)</span>
@@ -1216,7 +1216,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
                   </div>
                 </div>
               ) : (
-                /* Official Document Preview */
+
                 <div className={`rounded-lg p-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
                   <div className="text-center mb-6 pb-6 border-b border-gray-300 dark:border-gray-600">
                     <div className="flex justify-center mb-4">
@@ -1261,7 +1261,7 @@ const EmployeeDocuments = ({ darkMode, employeeData }) => {
               )}
             </div>
 
-            {/* Modal Footer */}
+
             <div className={`p-6 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'} flex justify-end space-x-3`}>
               <button
                 onClick={() => downloadDocument(selectedDocument)}

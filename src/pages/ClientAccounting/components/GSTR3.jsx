@@ -31,7 +31,7 @@ const GSTR3 = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+
       <div className="bg-linear-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -58,7 +58,7 @@ const GSTR3 = () => {
         </div>
       </div>
 
-      {/* Tax Summary Cards */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white border border-blue-200 rounded-xl p-6">
           <div className="flex items-center justify-between">
@@ -101,9 +101,9 @@ const GSTR3 = () => {
         </div>
       </div>
 
-      {/* Two Column Layout */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left Column - Tax Computation */}
+
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <h4 className="text-lg font-semibold text-gray-800 mb-4">Tax Computation</h4>
           <div className="space-y-4">
@@ -145,9 +145,9 @@ const GSTR3 = () => {
           </div>
         </div>
 
-        {/* Right Column - Payment & Actions */}
+
         <div className="space-y-6">
-          {/* Payment Methods */}
+
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <h4 className="text-lg font-semibold text-gray-800 mb-4">Payment Methods</h4>
             <div className="space-y-3">
@@ -170,7 +170,7 @@ const GSTR3 = () => {
             </div>
           </div>
 
-          {/* Quick Actions */}
+
           <div className="bg-linear-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
             <h4 className="text-lg font-semibold text-green-800 mb-4">Quick Actions</h4>
             <div className="grid grid-cols-2 gap-4">
@@ -204,7 +204,7 @@ const GSTR3 = () => {
         </div>
       </div>
 
-      {/* Important Notes */}
+
       <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
         <h4 className="text-lg font-semibold text-yellow-800 mb-3">Important Notes</h4>
         <ul className="space-y-2 text-yellow-700">

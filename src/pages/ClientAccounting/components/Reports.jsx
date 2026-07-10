@@ -12,7 +12,7 @@ function Reports() {
 
   return (
     <div className="min-h-screen bg-[#FDFBE6] font-[calibri] text-[15px]">
-      {/* Top Navigation Bar */}
+
       <div className="bg-gray-200 text-gray-800 flex items-center justify-start   shadow">
         <div className="flex ">
           {reports.map((report) => (
@@ -32,7 +32,7 @@ function Reports() {
         </div>
       </div>
 
-      {/* Main Content Area */}
+
       <div className="mt-2 py-3 px-2 mx-auto">
         <h2 className="text-xl font-semibold text-[#1C5D99] mb-4 border-b border-gray-300 pb-1">
           {selectedReport}

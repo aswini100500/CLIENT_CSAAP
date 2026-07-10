@@ -124,7 +124,7 @@ const ProjectsTable = () => {
   return (
     <div className="crm-module-root">
       <div className="app-panel overflow-hidden">
-        {/* Table Header / Toolbar */}
+
         <div className="app-section-bar p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="app-heading">
             Active Projects ({projects.length})
@@ -139,7 +139,7 @@ const ProjectsTable = () => {
           </div>
         </div>
 
-        {/* Table Content */}
+
         <div className="overflow-x-auto">
           <table className="min-w-full text-left border-collapse">
             <thead>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const LedgerDetails = () => {
-  // Sample ledger data
+
   const initialLedgerData = [
     { id: 57, customerName: 'Aggarwal Connectors', transactionDate: '02/08/2024', transactionType: 'Credited', remark: 'Purchase Entry From Aggarwal Connectors', accountNo: '', debitAmount: '', creditAmount: '1650', balance: '-101512.5' },
     { id: 58, customerName: 'Aggarwal Connectors', transactionDate: '02/08/2024', transactionType: 'Debited', remark: 'Purchase Entry From Aggarwal Connectors', accountNo: 'Cash', debitAmount: '1650', creditAmount: '', balance: '-99862.5' },
@@ -15,7 +15,7 @@ const LedgerDetails = () => {
     { id: 66, customerName: 'Aggarwal Connectors', transactionDate: '25/12/2024', transactionType: 'Debited', remark: 'Purchase Entry From Aggarwal Connectors', accountNo: 'SonuCash', debitAmount: '520', creditAmount: '', balance: '-99862.5' }
   ];
 
-  // Sample customers for dropdown
+
   const customers = [
     { id: 1, name: 'Aggarwal Connectors' },
     { id: 2, name: 'Sharma Enterprises' },
@@ -23,7 +23,7 @@ const LedgerDetails = () => {
     { id: 4, name: 'Verma Industries' }
   ];
 
-  // State for filters and data
+
   const [selectedCustomer, setSelectedCustomer] = useState('');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
@@ -33,16 +33,16 @@ const LedgerDetails = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Summary data
+
   const totalAmount = 1468967;
   const paidAmount = 1680845;
   const dueAmount = 211878;
 
-  // Handle search button click
+
   const handleSearch = () => {
     let results = initialLedgerData;
     
-    // Filter by customer
+
     if (selectedCustomer) {
       const customerName = customers.find(c => c.id.toString() === selectedCustomer)?.name || '';
       results = results.filter(item => 
@@ -50,7 +50,7 @@ const LedgerDetails = () => {
       );
     }
     
-    // Filter by date range
+
     if (fromDate && toDate) {
       results = results.filter(item => {
         const itemDate = new Date(
@@ -62,7 +62,7 @@ const LedgerDetails = () => {
       });
     }
     
-    // Filter by search term
+
     if (searchTerm) {
       results = results.filter(item =>
         item.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -73,10 +73,10 @@ const LedgerDetails = () => {
     }
     
     setFilteredData(results);
-    setCurrentPage(1); // Reset to first page after search
+    setCurrentPage(1);
   };
 
-  // Handle reset button click
+
   const handleReset = () => {
     setSelectedCustomer('');
     setFromDate('');
@@ -86,16 +86,16 @@ const LedgerDetails = () => {
     setCurrentPage(1);
   };
 
-  // Pagination logic
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // Change page
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Format currency
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {
       maximumFractionDigits: 2,
@@ -107,7 +107,7 @@ const LedgerDetails = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Ledger Details</h1>
       
-      {/* Filters Section */}
+
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
@@ -170,7 +170,7 @@ const LedgerDetails = () => {
         </div>
       </div>
 
-      {/* Summary Section */}
+
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg">
@@ -188,7 +188,7 @@ const LedgerDetails = () => {
         </div>
       </div>
       
-      {/* Ledger Table */}
+
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -245,7 +245,7 @@ const LedgerDetails = () => {
           </table>
         </div>
         
-        {/* Pagination */}
+
         <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
           <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
             <div>
@@ -268,7 +268,7 @@ const LedgerDetails = () => {
                   Previous
                 </button>
                 
-                {/* Page numbers */}
+
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
                   <button
                     key={number}

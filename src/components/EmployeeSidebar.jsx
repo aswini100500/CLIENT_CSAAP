@@ -48,12 +48,12 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
   const [hoveredItem, setHoveredItem] = useState(null);
   const [hoveredPos, setHoveredPos] = useState({ top: 0, left: 0 });
 
-  // State for company data
+
   const [companyData, setCompanyData] = useState(null);
   const [companyLoading, setCompanyLoading] = useState(true);
   const [logoError, setLogoError] = useState(false);
 
-  // Extract stable primitive keys from user object to prevent infinite useEffect loops
+
   const companyId = user?.company_id || 
                     user?.companyId || 
                     user?.master_company_id ||
@@ -76,7 +76,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     return hasAccess(permissionCode);
   };
 
-  // Fetch company data
+
   useEffect(() => {
     const fetchCompanyData = async () => {
       try {
@@ -87,7 +87,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
           return;
         }
 
-        // Fetch company details
+
         const response = await axios.get(
           `https://csaapnodeapi.csaap.com/api/builder-companies/${companyId}`,
           {
@@ -97,7 +97,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
         if (response.data && response.data.success) {
           setCompanyData(response.data.data || response.data.company);
-          // Reset logo error when new data arrives
+
           setLogoError(false);
         } else if (response.data) {
           setCompanyData(response.data);
@@ -113,7 +113,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     fetchCompanyData();
   }, [token, companyId]);
 
-  // Fetch employee permissions
+
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
@@ -147,13 +147,13 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     fetchPermissions();
   }, [token, employeeProfileId, dispatch]);
 
-  // Get company name and logo from fetched data
+
   const companyName = companyData?.master_company_name ||
     companyData?.company_name ||
     companyData?.name ||
     "BuilderERP PRO";
 
-  // FIX: Use logo_path from API response
+
   const companyLogo = companyData?.logo_path
     ? `https://csaapnodeapi.csaap.com/${companyData.logo_path}`
     : companyData?.logo ||
@@ -162,7 +162,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
   const companyLogoText = companyName.charAt(0).toUpperCase();
 
-  // Debug logs
+
   console.log("Company Data:", companyData);
   console.log("Company Logo URL:", companyLogo);
 
@@ -208,7 +208,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     }
   };
 
-  // Generate sidebar items dynamically based on calculated employee permissions
+
   const sidebarItems = useMemo(() => {
     const rawItems = [
       {
@@ -276,7 +276,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
     const items = rawItems.filter((item) => hasPermission(item.permission));
 
-    // ── HRMS Module (per-child permission gating) ──
+
     const hrmsChildren = [
       {
         id: "hr_dashboard",
@@ -355,7 +355,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       });
     }
 
-    // ── Accounting Module (per-child permission gating) ──
+
     const accountingChildren = [
       {
         id: "client-dashboard",
@@ -409,7 +409,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         icon: <FileText size={16} className="text-green-700 " />,
       },
 
-      // Voucher submenu
+
       {
         id: "client-vouchers",
         permission: "accounting.vouchers",
@@ -437,7 +437,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         ],
       },
 
-      // Banking submenu
+
       {
         id: "client-banking",
         permission: "accounting.banking",
@@ -479,7 +479,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         icon: <FileText size={16} className="text-green-700 " />,
       },
 
-      // Inventory submenu
+
       {
         id: "client-inventory",
         permission: "accounting.inventory",
@@ -507,7 +507,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       });
     }
 
-    // ── CRM Module (per-child permission gating) ──
+
     const crmChildren = [
       {
         id: "crm_upload",
@@ -552,7 +552,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     return items;
   }, [activePermissions]);
 
-  // Recursive Item Renderer following exactly the look of components/Sidebar.jsx
+
   const renderItem = (item, level = 0) => {
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedMenus[item.id];
@@ -561,7 +561,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     const textSize = level === 0 ? "text-[13px]" : "text-[12.5px]";
     const iconSize = level === 0 ? 19 : 17;
 
-    // 1. COLLAPSED VIEW
+
     if (isCollapsed) {
       const isInactiveFolder = hasChildren && !isExpanded;
       return (
@@ -655,7 +655,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       );
     }
 
-    // 2. EXPANDED VIEW
+
     return (
       <div key={`${item.id}-exp`} className="mb-1.5">
         {hasChildren ? (
@@ -749,7 +749,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     );
   };
 
-  // Show loading state while fetching company data
+
   if (companyLoading) {
     return (
       <aside
@@ -794,7 +794,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       `}
       </style>
 
-      {/* Header */}
+
       {isCollapsed ? (
         <div className="h-16 flex flex-col items-center justify-center border-b border-slate-100 shrink-0 bg-white">
           <button
@@ -813,7 +813,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
             onClick={handleItemClick}
             className="flex-1 flex items-center min-w-0 gap-3"
           >
-            {/* Logo Image */}
+
             {companyLogo && !logoError ? (
               <img
                 src={companyLogo}
@@ -827,7 +827,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                 onLoad={() => console.log('Logo loaded successfully in expanded mode')}
               />
             ) : (
-              /* Fallback text logo */
+
               <div
                 className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0"
               >
@@ -846,14 +846,14 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         </div>
       )}
 
-      {/* Navigation */}
+
       <div className="flex-1 overflow-y-auto px-3 py-4 custom-scrollbar">
         <nav className="space-y-1">
           {sidebarItems.map((item) => renderItem(item))}
         </nav>
       </div>
 
-      {/* Logout Button */}
+
       <div className="border-t border-slate-100 p-3 shrink-0">
         {isCollapsed ? (
           <button
@@ -890,7 +890,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         )}
       </div>
 
-      {/* Premium White Popover Tooltip for Collapsed Mode */}
+
       {isCollapsed && hoveredItem && (
         <div
           className="fixed bg-white text-slate-800 text-[12px] font-semibold px-4 py-2.5 rounded-xl z-9999 pointer-events-none shadow-2xl border border-slate-200 animate-sidebar-tooltip-in whitespace-nowrap"
@@ -901,7 +901,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
           }}
         >
           {hoveredItem.label}
-          {/* Precise Tooltip Arrow */}
+
           <div className="absolute -left-1.75 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-white border-l border-b border-slate-200 rotate-45 rounded-sm" />
         </div>
       )}

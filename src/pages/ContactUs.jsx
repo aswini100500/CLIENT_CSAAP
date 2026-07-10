@@ -23,7 +23,7 @@ const ContactUs = () => {
     }, 800);
   };
 
-  // Scroll to form only if path is /form
+
   useEffect(() => {
     if (location.pathname === "/form" && formRef.current) {
       window.scrollTo({ top: formRef.current.offsetTop, behavior: "smooth" });
@@ -32,7 +32,7 @@ const ContactUs = () => {
 
   return (
     <div className="crm-module-root p-4 max-w-7xl mx-auto space-y-6">
-      {/* Header Area */}
+
       <div className="border-b border-(--border-soft) pb-4">
         <h1 className="app-title">Contact Us</h1>
         <p className="app-subtitle mt-1">
@@ -40,16 +40,16 @@ const ContactUs = () => {
         </p>
       </div>
 
-      {/* Scroll Target */}
+
       <div ref={formRef} />
 
-      {/* Main Grid */}
+
       <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-6 items-start">
         
-        {/* Left Side: Contact Information Panel */}
+
         <div className="app-panel divide-y divide-(--border-soft)">
           
-          {/* Section 1: Support Channels */}
+
           <div className="p-6">
             <h2 className="app-heading mb-4">Support Channels</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -77,7 +77,7 @@ const ContactUs = () => {
             </div>
           </div>
 
-          {/* Section 2: Office Addresses */}
+
           <div className="p-6">
             <h2 className="app-heading mb-4">Office Locations</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -115,7 +115,7 @@ const ContactUs = () => {
             </div>
           </div>
 
-          {/* Section 3: Maps Integration */}
+
           <div className="p-1">
             <div className="h-64 md:h-80 w-full overflow-hidden rounded-b-[15px]">
               <iframe
@@ -131,7 +131,7 @@ const ContactUs = () => {
             </div>
           </div>
 
-          {/* Section 4: Social Networks */}
+
           <div className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 rounded-b-2xl">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Follow csaap ERP</span>
             <div className="flex space-x-3">
@@ -156,15 +156,15 @@ const ContactUs = () => {
 
         </div>
 
-        {/* Right Side: Demo Request Form & Support Guide */}
+
         <div className="space-y-6">
           
-          {/* Action Card: Demo request */}
+
           <div className="app-panel p-6">
             <h2 className="app-heading mb-4 text-emerald-950">Book Free Demo</h2>
             
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name field */}
+
               <div>
                 <label className="app-label block mb-1.5">Name / Firm Name <span className="text-red-500">*</span></label>
                 <input
@@ -178,7 +178,7 @@ const ContactUs = () => {
                 />
               </div>
 
-              {/* Mobile Number field */}
+
               <div>
                 <label className="app-label block mb-1.5">Mobile Number <span className="text-red-500">*</span></label>
                 <div className="flex">
@@ -199,7 +199,7 @@ const ContactUs = () => {
                 </div>
               </div>
 
-              {/* Pincode field */}
+
               <div>
                 <label className="app-label block mb-1.5">Pin Code <span className="text-red-500">*</span></label>
                 <input
@@ -213,7 +213,7 @@ const ContactUs = () => {
                 />
               </div>
 
-              {/* Submit Action */}
+
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -225,7 +225,7 @@ const ContactUs = () => {
             </form>
           </div>
 
-          {/* Services Guide panel */}
+
           <div className="app-panel-muted p-5 space-y-4">
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Services Guide</h3>
             <div className="space-y-3">

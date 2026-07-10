@@ -53,7 +53,7 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
                 className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden"
                 style={{ maxHeight: "90vh" }}
             >
-                {/* ── Header ── */}
+
                 <div className="px-6 py-5 border-b border-gray-100">
                     <div className="flex items-start justify-between gap-4 mb-4">
                         <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
                         </button>
                     </div>
 
-                    {/* Meta pills */}
+
                     <div className="flex flex-wrap gap-2">
                         <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-gray-600">
                             <Hash size={11} className="text-gray-400" />
@@ -123,13 +123,13 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
                     </div>
                 </div>
 
-                {/* ── Body ── */}
+
                 <div className="overflow-y-auto flex-1 px-6 py-5">
                     <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
                         Transactions
                     </p>
 
-                    {/* Transaction table */}
+
                     <div className="rounded-xl border border-gray-100 overflow-x-auto [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
                         <table className="w-full text-sm min-w-max">
                             <thead>
@@ -193,7 +193,7 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
                         </table>
                     </div>
 
-                    {/* Narration */}
+
                     <div className="mt-4 flex gap-3 bg-blue-50 rounded-xl px-4 py-3 border border-blue-100">
                         <svg
                             className="shrink-0 mt-0.5"
@@ -216,7 +216,7 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
                     </div>
                 </div>
 
-                {/* ── Footer ── */}
+
                 <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between gap-3">
                     <span className="text-xs px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 font-medium">
                         {voucher.transactions?.length ?? 0} transaction

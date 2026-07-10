@@ -28,7 +28,7 @@ const StockItemCreation = () => {
   const [groups, setGroups] = useState([]);
 
   const { companyId } = useCompany();
-  // handle input change
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({
@@ -116,7 +116,7 @@ const StockItemCreation = () => {
     }
   }, [companyId]);
 
-  // Accept button
+
   const handleAccept = async () => {
     if (!form.name.trim()) {
       return Swal.fire({
@@ -212,17 +212,17 @@ const StockItemCreation = () => {
   return (
     <div className="w-full  bg-[#f6f3e9] p-4 font-mono text-sm overflow-auto">
 
-      {/* Title */}
+
       <h1 className="text-center font-bold text-lg mb-4">
         {stockId ? "Edit: Stock Item" : "Create: Stock Item"}
       </h1>
 
       <div className="grid grid-cols-12 gap-4">
 
-        {/* MAIN FORM SECTION */}
+
         <div className="col-span-9 pl-4">
 
-          {/* Basic Details */}
+
           <div className="space-y-3">
 
             <div className="flex items-center">
@@ -359,7 +359,7 @@ const StockItemCreation = () => {
 
           <hr className="my-4 border-black" />
 
-          {/* Batch / Mfg Details */}
+
           <div className="space-y-2">
             <div className="flex items-center">
               <label className="w-48">Maintain in Batches:</label>
@@ -394,7 +394,7 @@ const StockItemCreation = () => {
 
           <hr className="my-4 border-black" />
 
-          {/* GST DETAILS */}
+
           <div className="space-y-3">
             <p className="font-semibold">GST Details</p>
 
@@ -426,7 +426,7 @@ const StockItemCreation = () => {
 
           <hr className="my-4 border-black" />
 
-          {/* OPENING BALANCE */}
+
           <div>
             <p className="font-semibold mb-2">Opening Balance</p>
 
@@ -469,7 +469,7 @@ const StockItemCreation = () => {
         </div>
       </div>
 
-      {/* FOOTER BUTTONS */}
+
       <div className="flex justify-center mt-6 space-x-6 font-semibold">
         <button
           onClick={handleAccept}

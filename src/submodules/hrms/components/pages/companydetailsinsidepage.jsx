@@ -8,7 +8,7 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           Company Details
         </h2>
 
-        {/* Top Section */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -55,7 +55,7 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           </div>
         </div>
 
-        {/* Advanced Section */}
+
         <h3 className="text-lg font-semibold mt-8 mb-2 text-blue-600">
           Advanced Company Details
         </h3>
@@ -92,7 +92,7 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           </div>
         </div>
 
-        {/* More Details */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1 block">
@@ -123,7 +123,7 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           </div>
         </div>
 
-        {/* GST + Registration */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1 block">
@@ -147,7 +147,7 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           </div>
         </div>
 
-        {/* Define Additions */}
+
         <h3 className="text-lg font-semibold mt-8 mb-2 text-blue-600">
           Define Addition Heads
         </h3>
@@ -162,7 +162,7 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           ))}
         </div>
 
-        {/* Fixed Deductions */}
+
         <h3 className="text-lg font-semibold mt-8 mb-2 text-blue-600">
           Fixed Deduction Heads
         </h3>
@@ -177,7 +177,7 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           ))}
         </div>
 
-        {/* Define Deduction Heads */}
+
         <h3 className="text-lg font-semibold mt-8 mb-2 text-blue-600">
           Define Deduction Heads
         </h3>
@@ -192,7 +192,7 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           ))}
         </div>
 
-        {/* Buttons */}
+
         <div className="flex gap-4 justify-center mt-8">
           <button className="bg-green-600 text-white px-6 py-2 rounded-lg">
             Save

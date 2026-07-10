@@ -116,7 +116,7 @@ const SalesPipeline = () => {
     return () => clearTimeout(revealTimer);
   }, []);
 
-  // Fetch all leads
+
   const {
     data: rawLeads = [],
     isLoading,
@@ -132,7 +132,7 @@ const SalesPipeline = () => {
     enabled: !!companyId,
   });
 
-  // Fetch project options
+
   const { data: projectOptions = [] } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
@@ -164,7 +164,7 @@ const SalesPipeline = () => {
     return map;
   }, [projectOptions]);
 
-  // Map raw leads to include safe defaults
+
   const leads = useMemo(
     () =>
       rawLeads
@@ -177,7 +177,7 @@ const SalesPipeline = () => {
     [rawLeads]
   );
 
-  // Dynamically extract unique options present in the current leads
+
   const uniqueProjects = useMemo(() => {
     const ids = [...new Set(leads.map((l) => l.project_id).filter(Boolean))];
     return ids.map((id) => ({
@@ -236,7 +236,7 @@ const SalesPipeline = () => {
     setSelectedAssignee("");
   };
 
-  // Filter and sort visible leads
+
   const visibleLeads = useMemo(() => {
     let result = [...leads];
 
@@ -273,7 +273,7 @@ const SalesPipeline = () => {
       });
     }
 
-    // Sort by created_at DESC by default
+
     result.sort(
       (first, second) =>
         new Date(second.created_at || 0).getTime() -
@@ -379,7 +379,7 @@ const SalesPipeline = () => {
 
             <div className="app-panel p-4">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                {/* Left section: Search bar */}
+
                 <div className="flex-1 min-w-0">
                   <label className="app-label block mb-1.5 font-bold tracking-wide">
                     Search Leads
@@ -396,9 +396,9 @@ const SalesPipeline = () => {
                   </div>
                 </div>
 
-                {/* Right section: Filters controls */}
+
                 <div className="flex flex-wrap items-center gap-3 shrink-0">
-                  {/* Project Filter */}
+
                   <div className="w-full sm:w-44">
                     <label className="app-label block mb-1.5">Project</label>
                     <div className="relative">
@@ -432,7 +432,7 @@ const SalesPipeline = () => {
                     </div>
                   </div>
 
-                  {/* Source Filter */}
+
                   <div className="w-full sm:w-36">
                     <label className="app-label block mb-1.5">Source</label>
                     <div className="relative">
@@ -466,7 +466,7 @@ const SalesPipeline = () => {
                     </div>
                   </div>
 
-                  {/* Status Filter */}
+
                   <div className="w-full sm:w-36">
                     <label className="app-label block mb-1.5">Status</label>
                     <div className="relative">
@@ -500,7 +500,7 @@ const SalesPipeline = () => {
                     </div>
                   </div>
 
-                  {/* Assignee Filter */}
+
                   <div className="w-full sm:w-40">
                     <label className="app-label block mb-1.5">Assignee</label>
                     <div className="relative">
@@ -534,7 +534,7 @@ const SalesPipeline = () => {
                     </div>
                   </div>
 
-                  {/* Clear Filters Button */}
+
                   {hasActiveFilters && (
                     <div className="w-full sm:w-auto self-end pt-1 lg:pt-0">
                       <button

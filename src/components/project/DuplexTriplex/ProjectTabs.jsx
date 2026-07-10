@@ -23,9 +23,9 @@ export const ProjectTabs = ({
 
     return (
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden mb-1 shadow-sm">
-            {/* Header Section */}
+
             <div className="px-6 py-5 border-b border-gray-100 relative">
-                {/* ❌ Back / Close */}
+
 {onClose && (
     <button
         onClick={onClose}
@@ -41,7 +41,7 @@ export const ProjectTabs = ({
 )}
 
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                    {/* Project Info */}
+
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
                             <FaProjectDiagram size={18} />
@@ -61,7 +61,7 @@ export const ProjectTabs = ({
                         </div>
                     </div>
 
-                    {/* Unit Selector */}
+
                     {units.length > 0 && currentTab >= 2 && (
                         <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 max-w-md">
                             <div className="flex items-center justify-between mb-2">
@@ -94,7 +94,7 @@ export const ProjectTabs = ({
                 </div>
             </div>
 
-            {/* Tabs Navigation */}
+
             <div className="px-6 py-2">
                 <div className="flex gap-1 overflow-x-auto">
                     {tabs.map((tab, index) => (

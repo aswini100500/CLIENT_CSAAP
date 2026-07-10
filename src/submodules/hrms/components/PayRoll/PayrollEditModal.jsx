@@ -322,7 +322,7 @@ const PayrollEditModal = ({
                     className="app-input w-32 px-2 py-1 text-right"
                   />
                 </div>
-                {/* ── Initial Other Earnings ── */}
+
                 {localOtherComps.map(
                   (comp, idx) =>
                     comp.type === "earning" && (
@@ -361,7 +361,7 @@ const PayrollEditModal = ({
                   <span>{formatINR(baseGross)}</span>
                 </div>
 
-                {/* ── Extra Earnings ── */}
+
                 {localExtraEarnings.map((comp, idx) => (
                   <div
                     key={`e-earn-${idx}`}
@@ -527,7 +527,7 @@ const PayrollEditModal = ({
                   />
                 </div>
 
-                {/* ── Initial Other Deductions ── */}
+
                 {localOtherComps.map(
                   (comp, idx) =>
                     comp.type === "deduction" && (
@@ -561,7 +561,7 @@ const PayrollEditModal = ({
                     ),
                 )}
 
-                {/* ── Extra Deductions ── */}
+
                 {localExtraDeductions.map((comp, idx) => (
                   <div
                     key={`e-ded-${idx}`}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const CandidateDetailsUpdate = ({ employee, onClose }) => {
-  // State for form data
+
   const [formData, setFormData] = useState({
     employeeDepartment: "",
     employeeDesignation: "",
@@ -26,7 +26,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
     hrSignatory: "",
   });
 
-  // Handle input changes
+
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
 
@@ -43,14 +43,14 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
     }
   };
 
-  // Handle form submission
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
     alert("Candidate details updated successfully!");
   };
 
-  // Department options
+
   const departments = [
     "Select Department",
     "Human Resources",
@@ -62,7 +62,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
     "Research & Development",
   ];
 
-  // Designation options
+
   const designations = [
     "Select Designation",
     "Software Engineer",
@@ -75,16 +75,16 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
     "Marketing Specialist",
   ];
 
-  // Work type options
+
   const workTypes = ["Full-time", "Part-time", "Contract", "Remote", "Hybrid"];
 
-  // Employee status options
+
   const employeeStatuses = ["Active", "Inactive", "On Leave", "Probation"];
 
-  // Payment mode options
+
   const paymentModes = ["Bank Transfer", "Cash", "Cheque", "Online Transfer"];
 
-  // Blood group options
+
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   return (
@@ -94,16 +94,16 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
           onSubmit={handleSubmit}
           className="app-panel bg-white shadow-sm border border-(--border-soft) rounded-2xl overflow-hidden"
         >
-          {/* Form Content */}
+
           <div className="p-6 space-y-8">
-            {/* Personal & Job Details Section */}
+
             <div>
               <h2 className="text-[14px] font-bold text-(--text-strong) mb-4 pb-2 border-b border-(--border-soft) uppercase tracking-wider">
                 Personal & Job Details
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Employee Department */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Employee Department <span className="text-red-500">*</span>
@@ -123,7 +123,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-                {/* Employee Designation */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Employee Designation <span className="text-red-500">*</span>
@@ -143,7 +143,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-                {/* Reporting Authority */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Reporting Authority
@@ -161,7 +161,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-                {/* Office Mail ID */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Office Mail ID <span className="text-red-500">*</span>
@@ -177,7 +177,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-                {/* Employee Work Type */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Employee Work Type
@@ -197,7 +197,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-                {/* Target Amount */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Target Amount
@@ -218,7 +218,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </div>
                 </div>
 
-                {/* PF Required/NOT */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     PF Required/NOT
@@ -249,7 +249,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </div>
                 </div>
 
-                {/* Basic Salary */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Basic Salary
@@ -272,14 +272,14 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
               </div>
             </div>
 
-            {/* Employment Details Section */}
+
             <div>
               <h2 className="text-[14px] font-bold text-(--text-strong) mb-4 pb-2 border-b border-(--border-soft) uppercase tracking-wider">
                 Employment Details
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Employee Status */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Employee Status
@@ -299,7 +299,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-                {/* Joining Date */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Joining Date
@@ -313,7 +313,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-                {/* Blood Group */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Blood Group
@@ -333,7 +333,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-                {/* Probation Period */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Probation Period
@@ -348,7 +348,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-                {/* HR Signatory */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     HR Signatory
@@ -363,7 +363,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-                {/* Photo Upload */}
+
                 <div className="md:col-span-2">
                   <label className="app-label block mb-1.5">
                     Photo Upload
@@ -409,14 +409,14 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
               </div>
             </div>
 
-            {/* Payment Details Section */}
+
             <div>
               <h2 className="text-[14px] font-bold text-(--text-strong) mb-4 pb-2 border-b border-(--border-soft) uppercase tracking-wider">
                 Payment Details
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Mode Of Payment */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Mode Of Payment
@@ -436,7 +436,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-                {/* Bank Name */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Bank Name
@@ -451,7 +451,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-                {/* Branch Name */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Branch Name
@@ -466,7 +466,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-                {/* A/C No */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     A/C No
@@ -481,7 +481,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-                {/* IFSC Code */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     IFSC Code
@@ -496,7 +496,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-                {/* Allowance */}
+
                 <div>
                   <label className="app-label block mb-1.5">
                     Allowance
@@ -519,7 +519,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
               </div>
             </div>
 
-            {/* Comment Section */}
+
             <div>
               <label className="app-label block mb-1.5">
                 Comment
@@ -535,7 +535,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
             </div>
           </div>
 
-          {/* Form Actions */}
+
           <div className="bg-(--bg-subtle)/30 px-6 py-4 border-t border-(--border-soft)">
             <div className="flex justify-end gap-3">
               <button

@@ -11,7 +11,7 @@ const AttachmentPage = () => {
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Supported file types and their icons
+
   const fileIcons = {
     pdf: "📄",
     doc: "📝",
@@ -64,14 +64,14 @@ const AttachmentPage = () => {
   };
 
   const validateAndSetFile = (selectedFile) => {
-    // File size validation (10MB max)
+
     const maxSize = 10 * 1024 * 1024;
     if (selectedFile.size > maxSize) {
       alert("File size too large. Maximum size is 10MB.");
       return;
     }
 
-    // File type validation
+
     const allowedTypes = [
       'image/jpeg', 'image/jpg', 'image/png', 'image/gif',
       'application/pdf', 
@@ -126,7 +126,7 @@ const AttachmentPage = () => {
 
     simulateUpload();
 
-    // Simulate API call completion
+
     setTimeout(() => {
       const newAttachment = {
         id: Date.now(),
@@ -149,7 +149,7 @@ const AttachmentPage = () => {
       setRemark("");
       setUploadProgress(0);
       
-      // Reset file input
+
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -182,13 +182,13 @@ const AttachmentPage = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Attachments</h2>
           <p className="text-gray-600">Upload and manage project files</p>
         </div>
 
-        {/* Upload Section */}
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
@@ -226,7 +226,7 @@ const AttachmentPage = () => {
             </div>
           </div>
 
-          {/* File Preview & Upload Controls */}
+
           {(file || isUploading) && (
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
               {file && (
@@ -286,7 +286,7 @@ const AttachmentPage = () => {
           )}
         </div>
 
-        {/* Stats & Controls */}
+
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
           <div className="text-sm text-gray-600">
             {attachments.length} files • {formatFileSize(totalSize)} total
@@ -318,7 +318,7 @@ const AttachmentPage = () => {
           </div>
         </div>
 
-        {/* Attachments Table */}
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           {filteredAttachments.length > 0 ? (
             <div className="overflow-x-auto">

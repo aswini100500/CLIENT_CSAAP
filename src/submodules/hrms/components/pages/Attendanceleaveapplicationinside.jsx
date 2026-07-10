@@ -4,14 +4,14 @@ export default function LeaveApplicationPage() {
   return (
     <div className="w-full min-h-screen bg-gray-100 p-6">
       <div className="bg-white shadow-xl rounded-xl p-6">
-        {/* Header */}
+
         <div className="bg-blue-600 text-white px-4 py-2 rounded-md mb-6 font-semibold text-lg">
           Leave Application
         </div>
 
-        {/* Top Section */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-          {/* Employee Code */}
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">
               Employee Code *
@@ -22,7 +22,7 @@ export default function LeaveApplicationPage() {
             />
           </div>
 
-          {/* Date From */}
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">
               Date From *
@@ -30,7 +30,7 @@ export default function LeaveApplicationPage() {
             <input type="date" className="w-full border rounded-md p-2" />
           </div>
 
-          {/* To From */}
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">
               To From *
@@ -38,7 +38,7 @@ export default function LeaveApplicationPage() {
             <input type="date" className="w-full border rounded-md p-2" />
           </div>
 
-          {/* Employee Name */}
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">
               Employee Name
@@ -49,7 +49,7 @@ export default function LeaveApplicationPage() {
             />
           </div>
 
-          {/* Father/Husband Name */}
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">
               Father/Husband Name
@@ -57,7 +57,7 @@ export default function LeaveApplicationPage() {
             <input className="w-full border rounded-md p-2" placeholder="" />
           </div>
 
-          {/* Card No */}
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">
               Card No.
@@ -69,9 +69,9 @@ export default function LeaveApplicationPage() {
           </div>
         </div>
 
-        {/* Leave Details */}
+
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-          {/* Leave Name */}
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">
               Leave Name *
@@ -83,7 +83,7 @@ export default function LeaveApplicationPage() {
             </select>
           </div>
 
-          {/* Reason */}
+
           <div>
             <label className="block font-medium text-gray-700 mb-1">
               Reason *
@@ -95,7 +95,7 @@ export default function LeaveApplicationPage() {
           </div>
         </div>
 
-        {/* Leave Duration Table */}
+
         <div className="mt-6 border rounded-md overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-gray-100">
@@ -117,7 +117,7 @@ export default function LeaveApplicationPage() {
           </table>
         </div>
 
-        {/* Leave Balance */}
+
         <div className="mt-8 border rounded-md">
           <div className="bg-blue-700 text-white px-4 py-2 font-semibold text-sm">
             Leave Balance
@@ -138,7 +138,7 @@ export default function LeaveApplicationPage() {
           </div>
         </div>
 
-        {/* Buttons */}
+
         <div className="flex justify-center mt-8 gap-4">
           <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md text-sm">
             Save

@@ -86,15 +86,15 @@ const JobJoinedList = ({ basePath }) => {
 
   const [resigning, setResigning] = useState(false);
   const [departments, setDepartments] = useState([]);
-  const [activeTab, setActiveTab] = useState("all"); // "all", "accepted", "projects", "certificate", "terminate", "notice"
+  const [activeTab, setActiveTab] = useState("all");
   const [showDownloadDropdown, setShowDownloadDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Termination states
+
   const [showTerminationForm, setShowTerminationForm] = useState(null);
   const [terminating, setTerminating] = useState(false);
 
-  // Notice states
+
   const [showNoticeForm, setShowNoticeForm] = useState(null);
   const [noticing, setNoticing] = useState(false);
 
@@ -113,7 +113,7 @@ const JobJoinedList = ({ basePath }) => {
   console.log(role);
   const navigate = useNavigate();
   const location = useLocation();
-  //  const { id } = useParams();
+
   const resolvedBasePath =
     basePath ||
     (location.pathname.startsWith("/employee/hr") ? "/employee/hr" : "/hrms");
@@ -173,7 +173,7 @@ const JobJoinedList = ({ basePath }) => {
       params.employeeShift = tableShiftFilter;
     }
 
-    // Tab level filters
+
     if (activeTab === "accepted" || activeTab === "confirm") {
       params.status = "Accepted";
     } else if (activeTab === "probation") {
@@ -334,7 +334,7 @@ const JobJoinedList = ({ basePath }) => {
     activeTab,
   ]);
 
-  // Filter ex employees locally
+
   const getFilteredExEmployees = () => {
     const exList = Array.isArray(exEmployees) ? exEmployees : [];
     return exList
@@ -394,7 +394,7 @@ const JobJoinedList = ({ basePath }) => {
 
   const filteredData = isExTab ? filteredExData : { length: totalCount };
 
-  // Accept Employee Function
+
   const handleAcceptEmployee = (employee) => {
     setEmployeeToAccept(employee);
     setShowAcceptConfirmation(true);
@@ -406,7 +406,7 @@ const JobJoinedList = ({ basePath }) => {
     setAccepting(true);
 
     try {
-      // Optimistic UI update
+
       setAcceptedEmployees((prev) => new Set([...prev, employee.id]));
 
       setEmployees((prev) =>
@@ -424,7 +424,7 @@ const JobJoinedList = ({ basePath }) => {
         ),
       );
 
-      // 1️⃣ HRMS API
+
       await axios.put(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee/${employee.id}/accept`,
         {},
@@ -435,7 +435,7 @@ const JobJoinedList = ({ basePath }) => {
         },
       );
 
-      // 2️⃣ CSAAP API → Permanent
+
       await axios.put(
         `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/update-employee/${employee.id}`,
         {
@@ -443,7 +443,7 @@ const JobJoinedList = ({ basePath }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // ✅ use same token
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         },
@@ -453,7 +453,7 @@ const JobJoinedList = ({ basePath }) => {
     } catch (error) {
       console.error("Error accepting employee:", error);
 
-      // rollback (optional)
+
       setEmployees((prev) =>
         prev.map((emp) =>
           emp.id === employee.id ? { ...emp, status: "Pending" } : emp,
@@ -479,7 +479,7 @@ const JobJoinedList = ({ basePath }) => {
     setEmployeeToAccept(null);
   };
 
-  // Termination handler with modal
+
   const handleTerminateClick = (employee) => {
     setShowTerminationForm(employee);
     setShowActionMenu(null);
@@ -522,7 +522,7 @@ const JobJoinedList = ({ basePath }) => {
       );
 
       if (res.data.success) {
-        // 🔹 If immediate ex-employee, also delete from production Cloudsat
+
         if (finalStatus === "Ex-Employee") {
           try {
             await axios.delete(
@@ -557,7 +557,7 @@ const JobJoinedList = ({ basePath }) => {
       setResigning(false);
     }
   };
-  // In your handleTerminate function in JobJoinedList component
+
   const handleTerminate = async (terminationData) => {
     if (!canTerminate) {
       alert("You do not have permission to terminate employees");
@@ -566,7 +566,7 @@ const JobJoinedList = ({ basePath }) => {
     try {
       setTerminating(true);
 
-      // ✅ decide status here
+
       const finalStatus =
         parseNoticeDays(terminationData.noticePeriod) > 0
           ? "Notice Period"
@@ -586,7 +586,7 @@ const JobJoinedList = ({ basePath }) => {
       );
 
       if (res.data.success) {
-        // 🔹 If immediate ex-employee, also delete from production Cloudsat
+
         if (finalStatus === "Ex-Employee") {
           try {
             await axios.delete(
@@ -613,7 +613,7 @@ const JobJoinedList = ({ basePath }) => {
 
         alert("Employee terminated successfully!");
 
-        fetchEmployees(); // refresh list
+        fetchEmployees();
         fetchTerminatedEmployees();
         setShowTerminationForm(null);
       }
@@ -714,7 +714,7 @@ const JobJoinedList = ({ basePath }) => {
     }
 
     try {
-      // 🔹 Call production API (with token)
+
       await axios.delete(
         `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/delete-employee/${employee.id}`,
         {
@@ -724,7 +724,7 @@ const JobJoinedList = ({ basePath }) => {
         },
       );
 
-      // ✅ Update UI
+
       setEmployees((prev) => prev.filter((emp) => emp.id !== employee.id));
       setAllEmployeesForStats((prev) =>
         prev.filter((emp) => emp.id !== employee.id),
@@ -733,7 +733,7 @@ const JobJoinedList = ({ basePath }) => {
         prev.filter((emp) => emp.id !== employee.id),
       );
 
-      // 🔥 Refresh terminated employees from backend
+
       await fetchTerminatedEmployees();
 
       setShowActionMenu(null);
@@ -746,7 +746,7 @@ const JobJoinedList = ({ basePath }) => {
     }
   };
 
-  // Badge components
+
   const StatusBadge = ({ status, employeeId }) => {
     const isAccepted =
       acceptedEmployees.has(employeeId) || status === "Accepted";
@@ -839,7 +839,7 @@ const JobJoinedList = ({ basePath }) => {
     }
   };
 
-  // Download functions
+
   const downloadCSV = async () => {
     const list = await fetchFilteredEmployeesForDownload();
     const headers = [
@@ -948,12 +948,12 @@ const JobJoinedList = ({ basePath }) => {
   };
 
   useEffect(() => {
-    // Keep document.body overflow hidden to prevent the whole window/body from scrolling,
-    // especially when absolute/portalled submenus or dropdowns are open.
+
+
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    // Close the open action dropdown menus when any container scrolls
+
     const handleScroll = () => {
       setShowActionMenu(null);
     };
@@ -981,7 +981,7 @@ const JobJoinedList = ({ basePath }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Stats calculations
+
   const totalAccepted = allEmployeesForStats.filter(
     (e) => acceptedEmployees.has(e.id) || e.status === "Accepted",
   ).length;
@@ -1042,7 +1042,7 @@ const JobJoinedList = ({ basePath }) => {
     <>
       <div className="crm-module-root app-shell p-4 min-h-screen">
         <div className="max-w-7xl mx-auto space-y-6">
-          {/* Success Message */}
+
           {successMessage && (
             <div className="fixed top-4 right-4 bg-(--brand-strong) text-white px-6 py-3 rounded-xl shadow-lg z-50 font-bold animate-in fade-in slide-in-from-top-4 duration-300">
               {successMessage}
@@ -1056,9 +1056,9 @@ const JobJoinedList = ({ basePath }) => {
             </p>
           </div>
 
-          {/* Stats/KPI Cards */}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* Total Employees */}
+
             <div
               className={`app-panel p-4 cursor-pointer hover:shadow-md transition-all duration-200 ${
                 activeTab === "all"
@@ -1085,7 +1085,7 @@ const JobJoinedList = ({ basePath }) => {
               </div>
             </div>
 
-            {/* On Probation */}
+
             <div
               className={`app-panel p-4 cursor-pointer hover:shadow-md transition-all duration-200 ${
                 activeTab === "probation"
@@ -1112,7 +1112,7 @@ const JobJoinedList = ({ basePath }) => {
               </div>
             </div>
 
-            {/* Notice Period */}
+
             <div
               className={`app-panel p-4 cursor-pointer hover:shadow-md transition-all duration-200 ${
                 activeTab === "notice"
@@ -1139,7 +1139,7 @@ const JobJoinedList = ({ basePath }) => {
               </div>
             </div>
 
-            {/* Part Time */}
+
             <div
               className={`app-panel p-4 cursor-pointer hover:shadow-md transition-all duration-200 ${
                 activeTab === "parttime"
@@ -1166,7 +1166,7 @@ const JobJoinedList = ({ basePath }) => {
               </div>
             </div>
 
-            {/* Ex Employees */}
+
             <div
               className={`app-panel p-4 cursor-pointer hover:shadow-md transition-all duration-200 ${
                 activeTab === "ex"
@@ -1194,7 +1194,7 @@ const JobJoinedList = ({ basePath }) => {
             </div>
           </div>
 
-          {/* Action Bar */}
+
           <div className="app-panel p-4 mb-6">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
               <div className="flex flex-wrap gap-3">
@@ -1280,7 +1280,7 @@ const JobJoinedList = ({ basePath }) => {
             </div>
           </div>
 
-          {/* Show employee table for employee-list tabs */}
+
           {[
             "all",
             "accepted",
@@ -1291,12 +1291,12 @@ const JobJoinedList = ({ basePath }) => {
             "parttime",
           ].includes(activeTab) && (
             <>
-              {/* Filters Panel */}
+
               <div className="app-panel p-4 mb-6">
                 <div className="flex flex-col gap-4">
-                  {/* Row 1 - Search & Actions */}
+
                   <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-                    {/* Search - wider and more prominent */}
+
                     <div className="relative flex-1 max-w-md">
                       <input
                         type="text"
@@ -1308,9 +1308,9 @@ const JobJoinedList = ({ basePath }) => {
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-(--text-faint) w-4 h-4" />
                     </div>
 
-                    {/* Action Buttons Group */}
+
                     <div className="flex items-center gap-2">
-                      {/* Filter Button */}
+
                       <button
                         onClick={() => setShowFilterPanel((prev) => !prev)}
                         className={`inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-sm font-bold transition-all ${
@@ -1339,7 +1339,7 @@ const JobJoinedList = ({ basePath }) => {
                         )}
                       </button>
 
-                      {/* Reset Button - only show when filters active */}
+
                       {(searchTerm ||
                         statusFilter ||
                         tableDepartmentFilter ||
@@ -1361,10 +1361,10 @@ const JobJoinedList = ({ basePath }) => {
                     </div>
                   </div>
 
-                  {/* Row 2 - Filter Panel (animated) */}
+
                   {showFilterPanel && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5 bg-(--bg-subtle) rounded-xl border border-(--border-soft) mt-1 animate-in fade-in slide-in-from-top-2 duration-200">
-                      {/* Status Filter */}
+
                       <div className="space-y-1.5 flex flex-col">
                         <label className="app-label">Status</label>
                         <select
@@ -1381,7 +1381,7 @@ const JobJoinedList = ({ basePath }) => {
                         </select>
                       </div>
 
-                      {/* Department Filter */}
+
                       <div className="space-y-1.5 flex flex-col">
                         <label className="app-label">Department</label>
                         <select
@@ -1404,7 +1404,7 @@ const JobJoinedList = ({ basePath }) => {
                         </select>
                       </div>
 
-                      {/* Designation Filter */}
+
                       <div className="space-y-1.5 flex flex-col">
                         <label className="app-label">Designation</label>
                         <select
@@ -1427,7 +1427,7 @@ const JobJoinedList = ({ basePath }) => {
                         </select>
                       </div>
 
-                      {/* Shift Filter */}
+
                       <div className="space-y-1.5 flex flex-col">
                         <label className="app-label">Shift</label>
                         <select
@@ -1444,7 +1444,7 @@ const JobJoinedList = ({ basePath }) => {
                     </div>
                   )}
 
-                  {/* Optional: Active filter chips */}
+
                   {(tableDepartmentFilter ||
                     tableDesignationFilter ||
                     tableShiftFilter ||
@@ -1500,7 +1500,7 @@ const JobJoinedList = ({ basePath }) => {
                 </div>
               </div>
 
-              {/* Table Panel */}
+
               <div className="app-panel overflow-hidden">
                 <div className="app-section-bar px-4 py-3 flex justify-between items-center bg-white">
                   <h3 className="app-heading">
@@ -1676,17 +1676,17 @@ const JobJoinedList = ({ basePath }) => {
                               key={employee.rowKey || employee.id}
                               className="hover:bg-(--bg-subtle)/70 transition-colors duration-200"
                             >
-                              {/* Serial Number */}
+
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-body)">
                                   {startIndex + index + 1}
                               </td>
 
-                              {/* Employee ID */}
+
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-body)">
                                {employee.registered_emp_id || "NA"}
                               </td>
 
-                              {/* Name */}
+
                               <td className="px-4 py-3">
                                 <div className="flex flex-col">
                                   <button
@@ -1704,7 +1704,7 @@ const JobJoinedList = ({ basePath }) => {
                                 </div>
                               </td>
 
-                              {/* Type (Notice Tab only) */}
+
                               {activeTab === "notice" && (
                                 <td className="px-4 py-3 text-[13px] font-medium text-(--text-soft)">
                                   <span
@@ -1726,36 +1726,36 @@ const JobJoinedList = ({ basePath }) => {
                                 </td>
                               )}
 
-                              {/* Department */}
+
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-soft)">
                                 {employee.department || "-"}
                               </td>
 
-                              {/* Designation */}
+
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-soft)">
                                 {employee.designation ||
                                   employee.postApplied ||
                                   "-"}
                               </td>
 
-                              {/* Mobile */}
+
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-soft)">
                                 {employee.phone || "-"}
                               </td>
 
-                              {/* Email */}
+
                               <td className="px-4 py-3 text-[13px] font-medium text-(--text-soft)">
                                 {employee.email}
                               </td>
 
-                              {/* Shift */}
+
                               <td className="px-4 py-3 whitespace-nowrap">
                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-sm">
                                   {employee.employeeShift || "-"}
                                 </span>
                               </td>
 
-                              {/* Status Badge */}
+
                               <td className="px-4 py-3 whitespace-nowrap">
                                 <StatusBadge
                                   status={
@@ -1765,11 +1765,11 @@ const JobJoinedList = ({ basePath }) => {
                                 />
                               </td>
 
-                              {/* Table Actions */}
+
                               <td className="px-4 py-3 whitespace-nowrap">
                                 <div className="flex items-center gap-1.5">
-                                  {/* Edit Employee Button */}
-                                  {/* Edit Employee Button */}
+
+
                                   {canEdit && (
                                     <button
                                       title="Edit Employee"
@@ -1791,7 +1791,7 @@ const JobJoinedList = ({ basePath }) => {
                                     </button>
                                   )}
 
-                                  {/* Delete / Terminate Dropdown Button */}
+
                                   {(canDelete ||
                                     canResign ||
                                     canTerminate ||
@@ -1898,7 +1898,7 @@ const JobJoinedList = ({ basePath }) => {
                                     </div>
                                   )}
 
-                                  {/* Download Documents Dropdown Button */}
+
                                   {(canIdCard || canVisitingCard) && (
                                     <div className="relative inline-block">
                                       <button
@@ -2008,7 +2008,7 @@ const JobJoinedList = ({ basePath }) => {
                   )}
                 </div>
 
-                {/* Pagination */}
+
                 <div className="app-section-bar px-6 py-4 flex flex-col sm:flex-row items-center justify-between">
                   <div className="text-sm text-(--text-soft) mb-4 sm:mb-0 font-medium">
                     Showing{" "}
@@ -2082,7 +2082,7 @@ const JobJoinedList = ({ basePath }) => {
             </>
           )}
 
-          {/* Conditional rendering for other tabs */}
+
           {activeTab === "certificate" && (
             <div className="app-panel p-4">
               <Experiencecertificate />
@@ -2094,7 +2094,7 @@ const JobJoinedList = ({ basePath }) => {
             </div>
           )}
 
-          {/* Termination Form Modal */}
+
           {showTerminationForm && (
             <TerminationFormModal
               employee={showTerminationForm}
@@ -2122,7 +2122,7 @@ const JobJoinedList = ({ basePath }) => {
             />
           )}
 
-          {/* Other modals */}
+
           {selectedEmployee && activePanel === "view" && (
             <ViewModal
               employee={selectedEmployee}
@@ -2153,7 +2153,7 @@ const JobJoinedList = ({ basePath }) => {
   );
 };
 
-// Accept Confirmation Modal Component
+
 const AcceptConfirmationModal = ({
   employee,
   onConfirm,
@@ -2225,7 +2225,7 @@ const AcceptConfirmationModal = ({
   );
 };
 
-// Termination Form Modal Component
+
 const TerminationFormModal = ({
   employee,
   onClose,
@@ -2237,7 +2237,7 @@ const TerminationFormModal = ({
   const [remark, setRemark] = useState("");
   const [noticePeriod, setNoticePeriod] = useState("0");
 
-  // Set default date to today
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setDate(today);
@@ -2280,7 +2280,7 @@ const TerminationFormModal = ({
         className="app-modal max-w-md w-full overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+
         <div className="flex justify-between items-center px-5 py-4 border-b border-(--border-soft) bg-white">
           <h2 className="modal-title">Terminate Employee</h2>
           <button
@@ -2292,7 +2292,7 @@ const TerminationFormModal = ({
           </button>
         </div>
 
-        {/* Form Body */}
+
         <form
           onSubmit={handleSubmit}
           className="p-5 space-y-4 overflow-y-auto max-h-[75vh] custom-scrollbar"
@@ -2354,7 +2354,7 @@ const TerminationFormModal = ({
             </span>
           </div>
 
-          {/* Footer */}
+
           <div className="flex justify-end gap-3 pt-3 border-t border-(--border-soft) bg-white">
             <button
               type="button"
@@ -2410,7 +2410,7 @@ const TerminationFormModal = ({
   );
 };
 
-// View Modal Component
+
 const ViewModal = ({ employee, onClose, animateView }) => (
   <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center">
     <div
@@ -2436,7 +2436,7 @@ const ViewModal = ({ employee, onClose, animateView }) => (
   </div>
 );
 
-// Update Modal Component
+
 const UpdateModal = ({ employee, onClose }) => (
   <div className="app-modal-backdrop fixed inset-0 z-50 flex flex-col overflow-y-auto">
     <div className="app-modal w-full max-w-4xl mx-auto my-4 shadow-lg flex flex-col min-h-screen">
@@ -2457,18 +2457,18 @@ const UpdateModal = ({ employee, onClose }) => (
   </div>
 );
 
-// Resignation Form Modal Component
+
 const ResignationFormModal = ({ employee, onClose, onResign, resigning }) => {
   const [resignationDate, setResignationDate] = useState("");
   const [lastWorkingDay, setLastWorkingDay] = useState("");
   const [reason, setReason] = useState("");
   const [noticePeriod, setNoticePeriod] = useState("0");
 
-  // Set default dates
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setResignationDate(today);
-    // Default last working day = today + 15 days
+
     const defaultLastDay = new Date();
     defaultLastDay.setDate(defaultLastDay.getDate() + 15);
     setLastWorkingDay(defaultLastDay.toISOString().split("T")[0]);
@@ -2515,7 +2515,7 @@ const ResignationFormModal = ({ employee, onClose, onResign, resigning }) => {
         className="app-modal max-w-md w-full overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+
         <div className="flex justify-between items-center px-5 py-4 border-b border-(--border-soft) bg-white">
           <h2 className="modal-title">Resign Employee</h2>
           <button
@@ -2527,7 +2527,7 @@ const ResignationFormModal = ({ employee, onClose, onResign, resigning }) => {
           </button>
         </div>
 
-        {/* Form Body */}
+
         <form
           onSubmit={handleSubmit}
           className="p-5 space-y-4 overflow-y-auto max-h-[75vh] custom-scrollbar"
@@ -2585,7 +2585,7 @@ const ResignationFormModal = ({ employee, onClose, onResign, resigning }) => {
             />
           </div>
 
-          {/* Footer */}
+
           <div className="flex justify-end gap-3 pt-3 border-t border-(--border-soft) bg-white">
             <button
               type="button"
@@ -2641,7 +2641,7 @@ const ResignationFormModal = ({ employee, onClose, onResign, resigning }) => {
   );
 };
 
-// Notice Form Modal Component
+
 const NoticeFormModal = ({ employee, onClose, onNotice, noticing }) => {
   const [noticeType, setNoticeType] = useState("Notice");
   const [date, setDate] = useState("");
@@ -2688,7 +2688,7 @@ const NoticeFormModal = ({ employee, onClose, onNotice, noticing }) => {
         className="app-modal max-w-md w-full overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+
         <div className="flex justify-between items-center px-5 py-4 border-b border-(--border-soft) bg-white">
           <h2 className="modal-title">Notice Employee</h2>
           <button
@@ -2756,7 +2756,7 @@ const NoticeFormModal = ({ employee, onClose, onNotice, noticing }) => {
             />
           </div>
 
-          {/* Footer */}
+
           <div className="flex justify-end gap-3 pt-3 border-t border-(--border-soft) bg-white">
             <button
               type="button"

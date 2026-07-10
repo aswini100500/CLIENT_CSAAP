@@ -20,7 +20,7 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
         </div>
 
         <div className="p-4 space-y-4">
-          {/* Employee Info */}
+
           <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-(--text-body)">
             <div>
               <span className="text-(--text-faint)">ID:</span> <span className="font-semibold text-(--text-strong)">{employee.id}</span>
@@ -45,7 +45,7 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
           </div>
 
-          {/* Attendance Section */}
+
           <div className="app-panel-muted p-4">
             <h3 className="app-heading mb-2 border-b border-(--border-soft) pb-1 flex items-center gap-1.5">
               <Calendar size={14} className="text-(--brand)" /> Attendance & Leaves
@@ -72,7 +72,7 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
           </div>
 
-          {/* Payable Gross Section */}
+
           {payroll.proratedEarnings && (
             <div className="app-panel p-4 bg-amber-50/40 border border-amber-200 shadow-sm">
               <div className="flex justify-between items-start mb-3">
@@ -158,7 +158,7 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
           )}
 
-          {/* Overtime */}
+
           {payroll.otHoursDecimal > 0 && (
             <div className="app-panel p-4 bg-blue-50/40 border border-blue-200">
               <div className="flex items-center justify-between">
@@ -177,7 +177,7 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
           )}
 
-          {/* Earnings Section */}
+
           <div className="app-panel p-4">
             <h3 className="app-heading mb-2 border-b border-(--border-soft) pb-1 flex items-center gap-1.5">
               <IndianRupee size={14} className="text-(--brand)" /> Monthly Earnings
@@ -236,7 +236,7 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
           </div>
 
-          {/* Deductions Section */}
+
           <div className="app-panel p-4">
             <h3 className="app-heading mb-2 border-b border-(--border-soft) pb-1">
               Deductions
@@ -314,7 +314,7 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
           </div>
 
-          {/* Net Pay */}
+
           <div className="app-panel p-4 bg-emerald-50/40 border border-emerald-200">
             <div className="flex justify-between font-bold text-lg text-emerald-950">
               <span>Net Payable</span>

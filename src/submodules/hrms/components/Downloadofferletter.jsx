@@ -69,7 +69,7 @@ const DownloadOfferLetter = () => {
     alert("Email functionality would be implemented here");
   };
 
-  // Get salutation based on name
+
   const getSalutation = (name) => {
     if (name.includes("Miss.")) return "Miss.";
     if (name.includes("Mrs.")) return "Mrs.";
@@ -84,7 +84,7 @@ const DownloadOfferLetter = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        {/* Header with Back Button */}
+
         <div className="mb-6">
           <button
             onClick={() => navigate(-1)}
@@ -126,7 +126,7 @@ const DownloadOfferLetter = () => {
           </div>
         </div>
 
-        {/* Edit Form */}
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Customize Offer Letter
@@ -187,20 +187,20 @@ const DownloadOfferLetter = () => {
           </div>
         </div>
 
-        {/* Offer Letter Content */}
+
         <div
           ref={printRef}
           style={{
-            backgroundColor: "#ffffff", // white background
+            backgroundColor: "#ffffff",
             width: "800px",
             margin: "0 auto",
           }}
         >
-          {/* Letterhead */}
+
           <div
             style={{
-              backgroundColor: "#2563eb", // blue background
-              color: "#ffffff", // white text
+              backgroundColor: "#2563eb",
+              color: "#ffffff",
               padding: "2rem",
               textAlign: "center",
             }}
@@ -219,21 +219,21 @@ const DownloadOfferLetter = () => {
             </p>
           </div>
 
-          {/* Letter Content */}
+
           <div style={{ padding: "2rem", color: "#374151", lineHeight: "1.6" }}>
-            {/* Reference Number */}
+
             <div style={{ textAlign: "right", marginBottom: "2rem" }}>
               Ref:{" "}
               <span style={{ fontWeight: "600" }}>{formData.refNumber}</span>
             </div>
 
-            {/* Salutation */}
+
             <p>{getSalutation(employee.name)}</p>
             <h2 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
               {getNameWithoutTitle(employee.name)}
             </h2>
 
-            {/* Letter Title */}
+
             <h3
               style={{
                 fontSize: "1.125rem",
@@ -245,7 +245,7 @@ const DownloadOfferLetter = () => {
               Letter of Offer for Employment
             </h3>
 
-            {/* Letter Body */}
+
             <p>
               Dear {getSalutation(employee.name)}{" "}
               {getNameWithoutTitle(employee.name)},
@@ -260,7 +260,7 @@ const DownloadOfferLetter = () => {
               the details of this offer of employment:
             </p>
 
-            {/* Details Table */}
+
             <table
               style={{
                 width: "100%",
@@ -346,7 +346,7 @@ const DownloadOfferLetter = () => {
               We look forward to a mutually fulfilling professional association.
             </p>
 
-            {/* Signature Area */}
+
             <div style={{ marginTop: "4rem" }}>
               <p>Thanking You</p>
               <p style={{ fontWeight: "600", marginTop: "1rem" }}>
@@ -369,7 +369,7 @@ const DownloadOfferLetter = () => {
           </div>
         </div>
 
-        {/* Document Checklist */}
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Required Documents Checklist
@@ -423,7 +423,7 @@ const DownloadOfferLetter = () => {
         </div>
       </div>
 
-      {/* Print Styles */}
+
       <style>
         {`
           @media print {

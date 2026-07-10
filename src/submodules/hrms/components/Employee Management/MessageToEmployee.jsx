@@ -8,7 +8,7 @@ const MessageToEmployee = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedDesignation, setSelectedDesignation] = useState(null);
-  const [activeTab, setActiveTab] = useState("designation"); // 'designation' or 'individual'
+  const [activeTab, setActiveTab] = useState("designation");
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
 
@@ -30,7 +30,7 @@ const MessageToEmployee = () => {
     company_id: user?.company_id,
   });
 
-  // Option 1: Move above useEffect
+
   const fetchMessages = async () => {
     const companyId = user?.company_id;
     if (!companyId) return;
@@ -103,16 +103,16 @@ const MessageToEmployee = () => {
     fetchEmployees();
   }, [user?.token]);
 
-  // Mock employee data with Indian names
+
   const [employees, setEmployees] = useState({});
 
   const designations = Object.keys(employees).map((name) => ({
     name,
-    icon: "👤", // generic icon, you can assign emojis by designation if you like
+    icon: "👤",
     count: employees[name]?.length || 0,
   }));
 
-  // Get all employees for "Send to All" option
+
   const getAllEmployees = () => {
     return Object.values(employees).flat();
   };
@@ -136,19 +136,19 @@ const MessageToEmployee = () => {
       "image/jpeg",
       "image/png",
     ];
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 10 * 1024 * 1024;
 
     if (!allowedTypes.includes(file.type)) {
       alert(
         "Unsupported file format. Please upload PDF, DOC, DOCX, JPG, or PNG.",
       );
-      e.target.value = ""; // Reset input
+      e.target.value = "";
       return;
     }
 
     if (file.size > maxSize) {
       alert("File is too large. Maximum size is 10MB.");
-      e.target.value = ""; // Reset input
+      e.target.value = "";
       return;
     }
 
@@ -281,7 +281,7 @@ const MessageToEmployee = () => {
 
       alert("Message sent successfully!");
 
-      // Refresh messages
+
       await fetchMessages();
 
       handleCancel();
@@ -347,7 +347,7 @@ const MessageToEmployee = () => {
   return (
     <div className=" ">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
           {showAddForm ? (
             <button
@@ -392,19 +392,19 @@ const MessageToEmployee = () => {
           )}
         </div>
 
-        {/* Add Message Form */}
+
         {showAddForm && (
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 lg:p-8 mb-8 transform transition-all duration-300">
             <div className="max-w-6xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left Sidebar - Recipient Selection */}
+
                 <div className="lg:col-span-1">
                   <div className="bg-linear-to-br from-emerald-50 to-green-50 rounded-2xl p-6 border border-emerald-100 sticky top-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-6">
                       Select Recipients
                     </h2>
 
-                    {/* Send to All Option */}
+
                     <div className="mb-6">
                       <label className="flex items-start space-x-3 p-4 bg-white rounded-xl border-2 border-emerald-200 hover:border-emerald-300 cursor-pointer transition-all duration-200 shadow-sm">
                         <input
@@ -430,7 +430,7 @@ const MessageToEmployee = () => {
                       </label>
                     </div>
 
-                    {/* Designation List */}
+
                     <div className="space-y-3">
                       <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
                         By Designation
@@ -477,7 +477,7 @@ const MessageToEmployee = () => {
                       ))}
                     </div>
 
-                    {/* Selected Count */}
+
                     {selectedDesignation && (
                       <div className="mt-6 p-4 bg-white rounded-xl border border-emerald-200">
                         <div className="text-center">
@@ -493,10 +493,10 @@ const MessageToEmployee = () => {
                   </div>
                 </div>
 
-                {/* Right Content - Message Composition */}
+
                 <div className="lg:col-span-2">
                   <div className="space-y-6">
-                    {/* Message Heading */}
+
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-3">
                         Message Heading <span className="text-red-500">*</span>
@@ -512,7 +512,7 @@ const MessageToEmployee = () => {
                       />
                     </div>
 
-                    {/* Selected Employees Preview */}
+
                     {selectedDesignation && (
                       <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                         <div className="flex items-center justify-between mb-3">
@@ -539,7 +539,7 @@ const MessageToEmployee = () => {
                           </div>
                         </div>
 
-                        {/* Employee Search */}
+
                         <div className="mb-3">
                           <input
                             type="text"
@@ -551,7 +551,7 @@ const MessageToEmployee = () => {
                           />
                         </div>
 
-                        {/* Employees Grid */}
+
                         <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto">
                           {filteredEmployees.map((employee) => (
                             <label
@@ -592,13 +592,13 @@ const MessageToEmployee = () => {
                       </div>
                     )}
 
-                    {/* Message Content */}
+
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                       <h3 className="text-lg font-semibold text-gray-800 mb-4">
                         Message Content
                       </h3>
 
-                      {/* Formatting Toolbar */}
+
                       <div className="flex flex-wrap gap-1 mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
                         {[
                           "B",
@@ -670,7 +670,7 @@ const MessageToEmployee = () => {
                         ))}
                       </div>
 
-                      {/* Content Editable Div */}
+
                       <div
                         contentEditable
                         onInput={(e) =>
@@ -684,7 +684,7 @@ const MessageToEmployee = () => {
                       />
                     </div>
 
-                    {/* Attachment Section */}
+
                     <div className="bg-linear-to-br from-emerald-50 to-indigo-50 rounded-xl p-6 border-2 border-dashed border-emerald-200">
                       <div className="flex items-center justify-between mb-3">
                         <h3 className="text-lg font-semibold text-gray-800">
@@ -734,7 +734,7 @@ const MessageToEmployee = () => {
                       </p>
                     </div>
 
-                    {/* Action Buttons */}
+
                     <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200">
                       <button
                         type="button"
@@ -746,8 +746,8 @@ const MessageToEmployee = () => {
                       <button
                         type="button"
                         onClick={async () => {
-                          await handleSave(); // send the messages
-                          // window.location.reload(); // reload page after sending
+                          await handleSave();
+
                         }}
                         disabled={
                           formData.selectedEmployees.length === 0 &&
@@ -778,12 +778,12 @@ const MessageToEmployee = () => {
           </div>
         )}
 
-        {/* Messages List */}
+
         {!showAddForm && (
           <>
-            {/* Messages Table Card */}
+
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-              {/* Table Header with Controls */}
+
               <div className="px-6 py-4 border-b border-gray-200 bg-linear-to-r from-gray-50 to-gray-100">
                 <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
                   <div className="flex items-center gap-3">
@@ -837,7 +837,7 @@ const MessageToEmployee = () => {
                 </div>
               </div>
 
-              {/* Table */}
+
               <div className="overflow-x-auto">
                 <table className="min-w-full">
                   <thead className="bg-gray-50">
@@ -907,7 +907,7 @@ const MessageToEmployee = () => {
                                   }`}
                                 >
                                   {getEmployeeName(message.employee_id)}{" "}
-                                  {/* Show employee name instead of ID */}
+
                                 </span>
                               </div>
                             </td>
@@ -989,7 +989,7 @@ const MessageToEmployee = () => {
                 </table>
               </div>
 
-              {/* Table Footer */}
+
               <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                   <div className="text-sm text-gray-600">
@@ -1042,11 +1042,11 @@ const MessageToEmployee = () => {
         )}
       </div>
 
-      {/* View Message Modal */}
+
       {showViewModal && selectedMessage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md transition-all duration-300">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden transform animate-fade-in">
-            {/* Modal Header */}
+
             <div className="bg-linear-to-r from-emerald-600 to-purple-600 px-6 py-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 <svg
@@ -1087,10 +1087,10 @@ const MessageToEmployee = () => {
               </button>
             </div>
 
-            {/* Modal Body */}
+
             <div className="p-6 overflow-y-auto max-h-[70vh]">
               <div className="space-y-6">
-                {/* Meta Info */}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
                   <div>
                     <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">
@@ -1135,7 +1135,7 @@ const MessageToEmployee = () => {
                   </div>
                 </div>
 
-                {/* Message Content */}
+
                 <div>
                   <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-3">
                     Message Body
@@ -1148,7 +1148,7 @@ const MessageToEmployee = () => {
                   />
                 </div>
 
-                {/* Attachments */}
+
                 {selectedMessage.attachment && (
                   <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1189,7 +1189,7 @@ const MessageToEmployee = () => {
               </div>
             </div>
 
-            {/* Modal Footer */}
+
             <div className="p-6 border-t border-gray-100 flex justify-end">
               <button
                 onClick={() => {

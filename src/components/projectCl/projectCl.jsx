@@ -27,7 +27,7 @@ import {
     CalendarClock
 } from 'lucide-react';
 
-// ==================== Configuration ====================
+
 
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
 const API_ENDPOINTS = {
@@ -36,7 +36,7 @@ const API_ENDPOINTS = {
     PROJECT_BY_CODE: (code) => `/api/tenant/clprojects/code/${code}`,
 };
 
-// ==================== API Service ====================
+
 
 const apiService = {
     async request(endpoint, options = {}) {
@@ -156,11 +156,11 @@ const apiService = {
         return result;
     },
 
-    // Fetch unique companies with complete details from projects
+
     async getCompaniesFromProjects(companyId) {
         try {
             const projects = await this.getProjects(companyId);
-            // Extract unique companies with all details
+
             const companyMap = new Map();
             projects.forEach(project => {
                 if (project.client_company_name) {
@@ -175,7 +175,7 @@ const apiService = {
                             website: project.website || '',
                         });
                     } else {
-                        // Update with any missing details
+
                         const existing = companyMap.get(key);
                         if (!existing.contact_person && project.contact_person) {
                             existing.contact_person = project.contact_person;
@@ -204,7 +204,7 @@ const apiService = {
     }
 };
 
-// ==================== Constants ====================
+
 
 const STATUS_OPTIONS = ['Planning', 'Active', 'On Hold', 'Completed', 'Cancelled'];
 const PRIORITY_OPTIONS = ['Low', 'Medium', 'High', 'Critical'];
@@ -225,14 +225,14 @@ const PRIORITY_COLORS = {
     Critical: 'bg-red-50 text-red-700 border-red-200',
 };
 
-// ==================== Custom Hooks ====================
+
 
 const useProjects = (companyId) => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [companyCache, setCompanyCache] = useState(() => {
-        // Load company cache from localStorage
+
         try {
             const cached = localStorage.getItem('companyCache');
             return cached ? JSON.parse(cached) : {};
@@ -254,7 +254,7 @@ const useProjects = (companyId) => {
             const data = await apiService.getProjects(companyId, slugValue);
             setProjects(data || []);
             
-            // Update company cache with any new company data
+
             if (data && data.length > 0) {
                 const newCache = { ...companyCache };
                 data.forEach(project => {
@@ -270,7 +270,7 @@ const useProjects = (companyId) => {
                                 website: project.website || '',
                             };
                         } else {
-                            // Update with any new information
+
                             if (!newCache[key].contact_person && project.contact_person) {
                                 newCache[key].contact_person = project.contact_person;
                             }
@@ -312,13 +312,13 @@ const useProjects = (companyId) => {
     return { projects, loading, error, refetch: fetchProjects, companyCache };
 };
 
-// ==================== Helper Functions ====================
+
 
 const generateSlug = (name) => {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 };
 
-// ==================== Components ====================
+
 
 const Modal = ({ isOpen, onClose, title, children, size = 'max-w-2xl' }) => {
     if (!isOpen) return null;
@@ -391,8 +391,8 @@ const StatsCard = ({ title, value, icon: Icon }) => (
     </div>
 );
 
-// Updated ProjectFormModal with company cache
-// Updated ProjectFormModal with API integration for client details
+
+
 const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing = false, companyId, companyCache = {} }) => {
     const { user } = useAuth();
     const [loading, setLoading] = useState(false);
@@ -432,22 +432,22 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
 
     const [locations, setLocations] = useState([{ location_name: '', }]);
 
-    // Fetch client details from API using project ID
+
     const fetchClientDetailsByProjectId = async (companyName) => {
         if (!companyId || !companyName) return null;
         
         setFetchingCompanyDetails(true);
         try {
-            // First, get all projects to find the company
+
             const projects = await apiService.getProjects(companyId);
             
-            // Find a project with matching client_company_name
+
             const matchingProject = projects.find(p => 
                 p.client_company_name === companyName
             );
 
             if (matchingProject) {
-                // Fetch full project details using the project ID
+
                 const projectDetail = await apiService.getProjectById(matchingProject.id, companyId);
                 
                 if (projectDetail && projectDetail.client) {
@@ -471,7 +471,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
         }
     };
 
-    // Load companies from cache when modal opens
+
     useEffect(() => {
         if (isOpen && !isEditing) {
             setLoadingCompanies(true);
@@ -578,7 +578,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
             return;
         }
 
-        // Handle "New Company" option
+
         if (selectedCompanyName === '__new__') {
             setShowNewCompany(true);
             setClient(prev => ({
@@ -595,10 +595,10 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
             return;
         }
 
-        // Check if company exists in cache with complete details
+
         const cachedCompany = companyCache[selectedCompanyName];
         if (cachedCompany && cachedCompany.contact_person && cachedCompany.email) {
-            // Use cached data if available
+
             setClient(prev => ({
                 ...prev,
                 company_name: cachedCompany.company_name || selectedCompanyName,
@@ -612,7 +612,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
             setShowNewCompany(false);
             setProjectIdForFetch(null);
         } else {
-            // Fetch from API using project ID
+
             const clientDetails = await fetchClientDetailsByProjectId(selectedCompanyName);
             if (clientDetails) {
                 setClient(prev => ({
@@ -628,7 +628,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
                 setShowNewCompany(false);
                 setProjectIdForFetch(clientDetails.project_id);
 
-                // Update cache with fetched data
+
                 const updatedCache = { ...companyCache };
                 updatedCache[selectedCompanyName] = {
                     company_name: clientDetails.company_name || selectedCompanyName,
@@ -640,7 +640,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
                 };
                 localStorage.setItem('companyCache', JSON.stringify(updatedCache));
             } else {
-                // If not found, use basic company name
+
                 setClient(prev => ({
                     ...prev,
                     company_name: selectedCompanyName,
@@ -679,12 +679,12 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
         try {
             const userSlug = user?.slug || generateSlug(project.project_name);
 
-            // Validate company name
+
             if (!client.company_name || client.company_name.trim() === '') {
                 throw new Error('Company name is required');
             }
 
-            // Update company cache with new/updated company data
+
             const updatedCache = { ...companyCache };
             updatedCache[client.company_name] = {
                 company_name: client.company_name,
@@ -834,23 +834,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
                                         Fetching client details from API...
                                     </p>
                                 )}
-                                {/* {projectIdForFetch && (
-                                    <p className="text-[11px] text-[#00a651] mt-1">
-                                        ✓ Details fetched from project ID: {projectIdForFetch}
-                                    </p>
-                                )}
-                                {selectedCompanyData && (
-                                    <div className="mt-2 p-3 bg-[#f0fdf4] rounded-lg border border-[#e2f2e9]">
-                                        <p className="text-[12px] font-semibold text-[#042f2e]">Company Details:</p>
-                                        <div className="grid grid-cols-2 gap-1 mt-1 text-[12px]">
-                                            <div><span className="text-[#475569]">Contact:</span> {selectedCompanyData.contact_person || 'N/A'}</div>
-                                            <div><span className="text-[#475569]">Email:</span> {selectedCompanyData.email || 'N/A'}</div>
-                                            <div><span className="text-[#475569]">Phone:</span> {selectedCompanyData.phone || 'N/A'}</div>
-                                            <div><span className="text-[#475569]">Website:</span> {selectedCompanyData.website || 'N/A'}</div>
-                                            <div className="col-span-2"><span className="text-[#475569]">Address:</span> {selectedCompanyData.address || 'N/A'}</div>
-                                        </div>
-                                    </div>
-                                )} */}
+
                             </div>
 
                             {(showNewCompany || !client.company_name) && (
@@ -925,7 +909,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
                     </div>
                 )}
 
-                {/* Project Details Section - unchanged */}
+
                 <div>
                     <h3 className="text-[16px] font-bold text-[#042f2e] mb-3">Project Details</h3>
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -1043,7 +1027,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSuccess, initialData, isEditing =
                     </div>
                 </div>
 
-                {/* Locations Section - unchanged */}
+
                 <div>
                     <div className="flex items-center justify-between mb-3">
                         <h3 className="text-[16px] font-bold text-[#042f2e]">Project Locations</h3>
@@ -1372,7 +1356,7 @@ const ProjectTableRow = ({ project, onView, onEdit, onDelete }) => {
     );
 };
 
-// ==================== Main Page Component ====================
+
 
 const ProjectsPage = () => {
     const { companyId } = useAuth();
@@ -1478,7 +1462,7 @@ const ProjectsPage = () => {
         <div className="min-h-screen bg-[#f8faf8]">
             <div className="app-shell p-4">
                 <div className="max-w-7xl mx-auto space-y-6">
-                    {/* Page Header */}
+
                     <div>
                         <h1 className="app-title max-w-3xl text-[24px] font-extrabold text-[#042f2e]">Client Projects</h1>
                         <p className="app-subtitle mt-1 text-[13px] text-[#475569]">
@@ -1486,7 +1470,7 @@ const ProjectsPage = () => {
                         </p>
                     </div>
 
-                    {/* KPI Cards */}
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <StatsCard title="Total Projects" value={stats.total} icon={Briefcase} />
                         <StatsCard title="Active Projects" value={stats.active} icon={Check} />
@@ -1494,7 +1478,7 @@ const ProjectsPage = () => {
                         <StatsCard title="Completed" value={stats.completed} icon={Target} />
                     </div>
 
-                    {/* Actions Bar */}
+
                     <div className="flex flex-col sm:flex-row justify-between gap-3">
                         <div className="relative max-w-md w-full">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8] size-3.5" />
@@ -1522,7 +1506,7 @@ const ProjectsPage = () => {
                         </div>
                     </div>
 
-                    {/* Filters */}
+
                     <div className="flex flex-wrap gap-2 items-center">
                         <button
                             onClick={() => setShowFilters(!showFilters)}
@@ -1573,7 +1557,7 @@ const ProjectsPage = () => {
                         </div>
                     )}
 
-                    {/* Projects Table */}
+
                     <div className="bg-white rounded-2xl border border-[#e2f2e9] overflow-hidden">
                         <div className="app-section-bar px-4 py-3 bg-[#f8faf8] border-b border-[#e2f2e9]">
                             <h3 className="app-heading text-[14px] font-bold text-[#042f2e]">
@@ -1631,7 +1615,7 @@ const ProjectsPage = () => {
                                     </table>
                                 </div>
 
-                                {/* Pagination */}
+
                                 <div className="flex items-center justify-between border-t border-[#e2f2e9] bg-[#f8faf8] px-4 py-3">
                                     <div className="text-[12px] font-medium text-[#475569]">
                                         Showing <span className="font-bold text-[#042f2e]">{filteredProjects.length}</span> of{' '}
@@ -1655,7 +1639,7 @@ const ProjectsPage = () => {
                 </div>
             </div>
 
-            {/* Modals */}
+
             <ProjectFormModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}

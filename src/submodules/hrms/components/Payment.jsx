@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTimesCircle, faDownload } from "@fortawesome/free-solid-svg-icons";
 
 const Payment = () => {
-  // Dummy data for payments
+
   const payments = [
     {
       id: 1,

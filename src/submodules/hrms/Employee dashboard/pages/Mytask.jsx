@@ -1315,7 +1315,7 @@ const MyTask = () => {
 
   return (
     <div className="w-full">
-      {/* Snackbar Notification */}
+
       {snackbar.open && (
         <div className="fixed top-4 left-0 right-0 flex justify-center z-100 pointer-events-none px-4">
           <div
@@ -1349,7 +1349,7 @@ const MyTask = () => {
         </div>
       )}
 
-      {/* Conversation Modal */}
+
       {showConversationModal &&
         selectedTask &&
         helpReplies[selectedTask.id] && (
@@ -1361,7 +1361,7 @@ const MyTask = () => {
               transition={{ type: "spring", duration: 0.3 }}
               className="app-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto flex flex-col"
             >
-              {/* Header */}
+
               <div className="bg-white px-6 py-4 border-b border-(--border-soft) flex justify-between items-center sticky top-0 z-10">
                 <div>
                   <h3 className="modal-title flex items-center gap-2">
@@ -1381,11 +1381,11 @@ const MyTask = () => {
               </div>
 
               <div className="p-6 space-y-6 flex-1 overflow-y-auto">
-                {/* Original Help Requests */}
+
                 {selectedTask.helpRequests &&
                   selectedTask.helpRequests.map((hr, idx) => (
                     <div key={idx} className="space-y-4">
-                      {/* Help Request */}
+
                       <div className="flex items-start gap-3">
                         <div className="w-8 h-8 rounded-full bg-(--brand-soft) flex items-center justify-center shrink-0">
                           <span className="text-xs font-semibold text-(--brand)">
@@ -1409,7 +1409,7 @@ const MyTask = () => {
                         </div>
                       </div>
 
-                      {/* Reply if exists */}
+
                       {hr.reply && (
                         <div className="flex items-start gap-3 ml-8">
                           <div className="w-8 h-8 rounded-full bg-sky-50 flex items-center justify-center shrink-0">
@@ -1437,7 +1437,7 @@ const MyTask = () => {
                     </div>
                   ))}
 
-                {/* Quick Reply Section */}
+
                 <div className="pt-4 border-t border-(--border-soft)">
                   <div className="flex gap-2">
                     <input
@@ -1464,7 +1464,7 @@ const MyTask = () => {
           </div>
         )}
 
-      {/* Receive Help Modal for recipients to reply */}
+
       {showReceiveHelpModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <motion.div
@@ -1474,7 +1474,7 @@ const MyTask = () => {
             transition={{ type: "spring", duration: 0.3 }}
             className="app-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto flex flex-col"
           >
-            {/* Header */}
+
             <div className="bg-white px-6 py-4 border-b border-(--border-soft) flex justify-between items-center sticky top-0 z-10">
               <div>
                 <h3 className="modal-title flex items-center gap-2">
@@ -1499,7 +1499,7 @@ const MyTask = () => {
             </div>
 
             <div className="p-6 space-y-6 flex-1 overflow-y-auto">
-              {/* Request Message Card */}
+
               <div className="p-4 rounded-xl border border-(--border-soft) bg-(--bg-subtle)/30">
                 <div className="flex items-center gap-2 mb-3">
                   <MessageCircle className="w-4 h-4 text-(--brand)" />
@@ -1525,7 +1525,7 @@ const MyTask = () => {
                   )}
                 </div>
 
-                {/* Request Metadata */}
+
                 {selectedTask.helpRequestDate && (
                   <div className="mt-3 flex items-center gap-4 text-xs font-semibold text-(--brand)">
                     <span className="flex items-center gap-1">
@@ -1542,7 +1542,7 @@ const MyTask = () => {
                 )}
               </div>
 
-              {/* Show existing replies */}
+
               {helpReplies[selectedTask.id] &&
                 helpReplies[selectedTask.id].length > 0 && (
                   <div className="space-y-3">
@@ -1568,7 +1568,7 @@ const MyTask = () => {
                   </div>
                 )}
 
-              {/* Reply Section */}
+
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-semibold text-(--text-strong) flex items-center gap-2">
@@ -1594,7 +1594,7 @@ const MyTask = () => {
                   placeholder="Type your response here... Be specific and helpful ✨"
                 />
 
-                {/* Character count indicator */}
+
                 <div className="flex justify-end">
                   <div
                     className={`h-1 w-20 rounded-full transition-all duration-300 ${
@@ -1611,7 +1611,7 @@ const MyTask = () => {
                 </div>
               </div>
 
-              {/* File Upload Section */}
+
               <div className="space-y-4">
                 <label className="text-sm font-semibold text-(--text-strong) flex items-center gap-2">
                   <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -1620,7 +1620,7 @@ const MyTask = () => {
                   Attachments (Optional)
                 </label>
 
-                {/* File Upload Area */}
+
                 <div className="relative">
                   <input
                     type="file"
@@ -1653,7 +1653,7 @@ const MyTask = () => {
                   </label>
                 </div>
 
-                {/* File Previews */}
+
                 {(receiveHelpFiles.length > 0 ||
                   receiveHelpImages.length > 0) && (
                   <div className="bg-(--bg-subtle)/40 rounded-xl p-4 space-y-4 border border-(--border-soft)">
@@ -1662,7 +1662,7 @@ const MyTask = () => {
                       Selected Files ({receiveHelpFiles.length + receiveHelpImages.length})
                     </h6>
 
-                    {/* Images Grid */}
+
                     {receiveHelpImages.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-xs text-(--text-soft)">Images</p>
@@ -1691,7 +1691,7 @@ const MyTask = () => {
                       </div>
                     )}
 
-                    {/* Documents List */}
+
                     {receiveHelpFiles.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-xs text-(--text-soft)">Documents</p>
@@ -1733,7 +1733,7 @@ const MyTask = () => {
                 )}
               </div>
 
-              {/* Quick Response Suggestions */}
+
               <div className="bg-(--bg-subtle)/30 p-4 rounded-xl border border-(--border-soft)">
                 <p className="text-xs font-semibold text-(--text-soft) mb-2">
                   Quick responses:
@@ -1756,7 +1756,7 @@ const MyTask = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
+
               <div className="flex gap-3 pt-4 border-t border-(--border-soft)">
                 <button
                   onClick={() => {
@@ -1781,7 +1781,7 @@ const MyTask = () => {
                 </button>
               </div>
 
-              {/* Help Text */}
+
               <p className="text-xs text-center text-(--text-faint)">
                 Your reply will be sent to{" "}
                 {selectedTask.assignedBy || "the requester"} immediately
@@ -1791,15 +1791,15 @@ const MyTask = () => {
         </div>
       )}
 
-      {/* Main content */}
+
       <div className="w-full transition-all duration-300">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
+
           <div className="mb-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
               <div className="mt-4 md:mt-0 flex items-center gap-3"></div>
             </div>
-            {/* Stats */}
+
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-5">
               {[
                 {
@@ -1881,7 +1881,7 @@ const MyTask = () => {
             </div>
           </div>
 
-          {/* Filters and Search */}
+
           <div className="app-panel p-4 mb-6">
             <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1">
@@ -1897,7 +1897,7 @@ const MyTask = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-                {/* More Filter Button */}
+
                 <button
                   onClick={() => setShowMoreFilters(!showMoreFilters)}
                   className={`app-btn-secondary min-h-0 py-2 text-[13px] flex items-center gap-2 px-4 rounded-xl border transition-all duration-200 font-medium ${showMoreFilters ? "bg-(--brand-soft) border-(--border-strong) text-(--brand)" : ""}`}
@@ -1906,7 +1906,7 @@ const MyTask = () => {
                   More Filter
                 </button>
 
-                {/* Reset Filters */}
+
                 {(searchTerm ||
                   selectedCategory !== "All Projects" ||
                   selectedStatus !== "All" ||
@@ -1931,10 +1931,10 @@ const MyTask = () => {
               </div>
             </div>
 
-            {/* More Filters Panel */}
+
             {showMoreFilters && (
               <div className="mt-4 pt-4 border-t border-(--border-soft) grid grid-cols-1 md:grid-cols-5 gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                {/* Assigned By Filter */}
+
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
                     Assigned By
@@ -1953,7 +1953,7 @@ const MyTask = () => {
                   </select>
                 </div>
 
-                {/* Status Filter */}
+
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
                     Status
@@ -1971,7 +1971,7 @@ const MyTask = () => {
                   </select>
                 </div>
 
-                {/* Deadline Date Filter */}
+
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
                     Deadline Date
@@ -1984,7 +1984,7 @@ const MyTask = () => {
                   />
                 </div>
 
-                {/* Category Filter */}
+
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
                     Project/Category
@@ -2002,7 +2002,7 @@ const MyTask = () => {
                   </select>
                 </div>
 
-                {/* Assigned Date Filter */}
+
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
                     Assigned Date
@@ -2018,8 +2018,8 @@ const MyTask = () => {
             )}
           </div>
 
-          {/* Task List (Fixed to only show List view) */}
-          {/* Task List (Fixed to only show List view) */}
+
+
           <div className="app-panel overflow-hidden mb-6">
             <div className="overflow-x-auto">
               <table className="w-full min-w-245 table-fixed">
@@ -2163,7 +2163,7 @@ const MyTask = () => {
         </div>
       </div>
 
-      {/* Chat Sidebar */}
+
       <div
         className={`fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform transition-transform duration-300 ${showChat ? "translate-x-0" : "translate-x-full"} z-40 border-l border-gray-200 flex flex-col`}
       >
@@ -2233,7 +2233,7 @@ const MyTask = () => {
         </div>
       </div>
 
-      {/* New Want Help Modal */}
+
       {showWantHelpModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-lg w-full max-h-[90vh] overflow-y-auto">
@@ -2272,7 +2272,7 @@ const MyTask = () => {
                   </p>
                 </div>
 
-                {/* Employee Selection */}
+
                 <div>
                   <label className="block text-sm font-semibold text-(--text-strong) mb-2">
                     Select Team Member *
@@ -2338,7 +2338,7 @@ const MyTask = () => {
                   </div>
                 </div>
 
-                {/* Description */}
+
                 <div>
                   <label className="block text-sm font-semibold text-(--text-strong) mb-2">
                     What help do you need? *
@@ -2353,7 +2353,7 @@ const MyTask = () => {
                   />
                 </div>
 
-                {/* File Upload Area for Want Help */}
+
                 <div>
                   <label className="block text-sm font-semibold text-(--text-strong) mb-2">
                     Attachments (Optional)
@@ -2384,14 +2384,14 @@ const MyTask = () => {
                   </div>
                 </div>
 
-                {/* Uploaded Files Preview for Want Help */}
+
                 {(wantHelpFiles.length > 0 || wantHelpImages.length > 0) && (
                   <div className="space-y-3">
                     <h4 className="font-bold text-(--text-strong) text-sm">
                       Attached Files
                     </h4>
 
-                    {/* Images Preview */}
+
                     {wantHelpImages.length > 0 && (
                       <div>
                         <h5 className="text-xs font-semibold text-(--text-soft) mb-1.5">
@@ -2420,7 +2420,7 @@ const MyTask = () => {
                       </div>
                     )}
 
-                    {/* Documents Preview */}
+
                     {wantHelpFiles.length > 0 && (
                       <div>
                         <h5 className="text-xs font-semibold text-(--text-soft) mb-1.5">
@@ -2486,7 +2486,7 @@ const MyTask = () => {
         </div>
       )}
 
-      {/* Task Details Modal */}
+
       {showTaskDetails && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto flex flex-col">
@@ -2505,7 +2505,7 @@ const MyTask = () => {
                 </button>
               </div>
 
-              {/* Task details content */}
+
               {selectedTask && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -2611,7 +2611,7 @@ const MyTask = () => {
                     </div>
                   </div>
 
-                  {/* ADD DESCRIPTION SECTION HERE */}
+
                   {(selectedTask.description || selectedTask.remark) && (
                     <div className="border-t border-(--border-soft) pt-3">
                       <label className="text-[11px] font-extrabold uppercase tracking-widest text-(--text-soft) mb-2 block">
@@ -2666,7 +2666,7 @@ const MyTask = () => {
                     </div>
                   )}
 
-                  {/* Subtasks Section */}
+
                   {selectedTask.subtasks &&
                     selectedTask.subtasks.length > 0 && (
                       <div className="border-t border-(--border-soft) pt-3">
@@ -2754,7 +2754,7 @@ const MyTask = () => {
                       </div>
                     )}
 
-                  {/* Help Requests and Replies Section */}
+
                   {selectedTask.helpRequests &&
                     selectedTask.helpRequests.length > 0 && (
                       <div className="border-t border-(--border-soft) pt-4 mt-4">
@@ -2767,7 +2767,7 @@ const MyTask = () => {
                         <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                           {selectedTask.helpRequests.map((hr, idx) => (
                             <div key={idx} className="space-y-3">
-                              {/* Help Request (Bubble Style) */}
+
                               <div className="flex flex-col items-start max-w-[90%]">
                                 <div className="flex items-center gap-2 mb-1 px-1">
                                   <span className="text-[10px] font-bold text-(--text-faint) uppercase tracking-wider">
@@ -2787,7 +2787,7 @@ const MyTask = () => {
                                 </div>
                               </div>
 
-                              {/* Reply (Bubble Style - Right Aligned) */}
+
                               {hr.reply && (
                                 <div className="flex flex-col items-end w-full">
                                   <div className="flex items-center gap-2 mb-1 px-1">
@@ -2814,7 +2814,7 @@ const MyTask = () => {
                       </div>
                     )}
 
-                  {/* Attachments Section */}
+
                   {(selectedTask.attachedFiles?.length > 0 ||
                     selectedTask.images?.length > 0) && (
                     <div className="border-t border-(--border-soft) pt-3">
@@ -2940,7 +2940,7 @@ const MyTask = () => {
         </div>
       )}
 
-      {/* Cannot Complete Modal */}
+
       {showCannotCompleteModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-md w-full">
@@ -3010,7 +3010,7 @@ const MyTask = () => {
         </div>
       )}
 
-      {/* Request Extension Modal */}
+
       {showExtensionModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-md w-full">
@@ -3080,7 +3080,7 @@ const MyTask = () => {
         </div>
       )}
 
-      {/* Upload Files Modal */}
+
       {showUploadModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-lg w-full max-h-[90vh] overflow-y-auto">
@@ -3112,7 +3112,7 @@ const MyTask = () => {
                   </p>
                 </div>
 
-                {/* Upload Description */}
+
                 <div>
                   <label className="block text-sm font-semibold text-(--text-strong) mb-2">
                     Description (Optional)
@@ -3126,7 +3126,7 @@ const MyTask = () => {
                   />
                 </div>
 
-                {/* File Upload Area */}
+
                 <div className="border-2 border-dashed border-(--border-strong) rounded-lg p-4 text-center hover:border-(--brand) hover:bg-(--brand-soft) transition-all duration-200">
                   <input
                     type="file"
@@ -3152,14 +3152,14 @@ const MyTask = () => {
                   </label>
                 </div>
 
-                {/* Uploaded Files Preview */}
+
                 {(uploadedFiles.length > 0 || uploadedImages.length > 0) && (
                   <div className="space-y-3">
                     <h4 className="font-bold text-(--text-strong) text-sm">
                       Selected Files
                     </h4>
 
-                    {/* Images Preview */}
+
                     {uploadedImages.length > 0 && (
                       <div>
                         <h5 className="text-xs font-semibold text-(--text-soft) mb-1.5">
@@ -3189,7 +3189,7 @@ const MyTask = () => {
                       </div>
                     )}
 
-                    {/* Documents Preview */}
+
                     {uploadedFiles.length > 0 && (
                       <div>
                         <h5 className="text-xs font-semibold text-(--text-soft) mb-1.5">
@@ -3256,7 +3256,7 @@ const MyTask = () => {
         </div>
       )}
 
-      {/* Custom scrollbar styles */}
+
       <style jsx>{`
         .no-scrollbar::-webkit-scrollbar {
           display: none;

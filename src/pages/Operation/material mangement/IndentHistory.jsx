@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 const IndentHistory = () => {
-  // Sample data - in a real app, this would come from an API
+
   const [indents, setIndents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Mock data for demonstration
+
   const mockIndents = [
     {
       id: 1,
@@ -35,14 +35,14 @@ const IndentHistory = () => {
     }
   ];
 
-  // Filter indents based on search term
+
   const filteredIndents = mockIndents.filter(indent =>
     indent.supplierName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     indent.supplierGST.toLowerCase().includes(searchTerm.toLowerCase()) ||
     indent.contactNo.includes(searchTerm)
   );
 
-  // Pagination logic
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentIndents = filteredIndents.slice(indexOfFirstItem, indexOfLastItem);
@@ -65,28 +65,28 @@ const IndentHistory = () => {
   };
 
   const exportToExcel = () => {
-    // In a real app, this would generate and download an Excel file
+
     alert('Exporting to Excel...');
   };
 
   const exportToPDF = () => {
-    // In a real app, this would generate and download a PDF file
+
     alert('Exporting to PDF...');
   };
 
   const viewIndent = (id) => {
-    // In a real app, this would navigate to indent details
+
     alert(`Viewing indent #${id}`);
   };
 
   const editIndent = (id) => {
-    // In a real app, this would navigate to edit indent page
+
     alert(`Editing indent #${id}`);
   };
 
   const deleteIndent = (id) => {
     if (window.confirm('Are you sure you want to delete this indent?')) {
-      // In a real app, this would call an API to delete the indent
+
       setIndents(indents.filter(indent => indent.id !== id));
       alert(`Indent #${id} deleted successfully`);
     }
@@ -94,13 +94,13 @@ const IndentHistory = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      {/* Header */}
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Indent History</h1>
         <p className="text-lg text-gray-600">View and manage all purchase indents</p>
       </div>
 
-      {/* Export Buttons and Search */}
+
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex gap-3">
@@ -139,7 +139,7 @@ const IndentHistory = () => {
         </div>
       </div>
 
-      {/* Indent History Table */}
+
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -243,7 +243,7 @@ const IndentHistory = () => {
           </table>
         </div>
 
-        {/* Pagination */}
+
         <div className="bg-white px-6 py-3 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
             <div className="text-sm text-gray-700">
@@ -267,7 +267,7 @@ const IndentHistory = () => {
                 Previous
               </button>
 
-              {/* Page Numbers */}
+
               <div className="flex space-x-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <button

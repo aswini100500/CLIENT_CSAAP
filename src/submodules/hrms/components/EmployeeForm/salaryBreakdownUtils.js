@@ -105,16 +105,7 @@ export const recalculateSalaryBreakdown = (
   const annualFixedPay = ctc - variablePay;
   const monthlyFixed = annualFixedPay / 12;
 
-  /**
-   * BACK-CALCULATION LOGIC:
-   * We need to find the Gross Salary (G) such that:
-   * G + Employer_EPF + Employer_ESI = Monthly_Fixed_CTC
-   *
-   * Where:
-   * Basic (B) = G * basic_rate
-   * Employer_EPF = min(B * 0.12, 1800)
-   * Employer_ESI = G <= 21000 ? G * 0.0325 : 0
-   */
+
 
   const epfRateEffective =
     normalizedPolicy.basic_rate * normalizedPolicy.epf_employer_rate;
@@ -124,8 +115,8 @@ export const recalculateSalaryBreakdown = (
 
   let grossMonthly = 0;
 
-  // Step 1: Trial for Case 1 (ESI Applicable, EPF Percentage-based)
-  // G = Fixed / (1 + (BasicRate * EPF_er_Rate) + ESI_er_Rate)
+
+
   const g1 =
     monthlyFixed /
     (1 + (toggles.epf ? epfRateEffective : 0) + (toggles.esi ? esiRate : 0));
@@ -138,8 +129,8 @@ export const recalculateSalaryBreakdown = (
   ) {
     grossMonthly = g1;
   } else {
-    // Step 2: Trial for Case 2 (ESI Applicable, EPF Capped)
-    // G = (Fixed - EPF_Cap) / (1 + ESI_er_Rate)
+
+
     const g2 =
       (monthlyFixed - (toggles.epf ? epfCap : 0)) /
       (1 + (toggles.esi ? esiRate : 0));
@@ -153,8 +144,8 @@ export const recalculateSalaryBreakdown = (
     ) {
       grossMonthly = g2;
     } else {
-      // Step 3: Trial for Case 3 (ESI Not Applicable, EPF Percentage-based)
-      // G = Fixed / (1 + (BasicRate * EPF_er_Rate))
+
+
       const g3 = monthlyFixed / (1 + (toggles.epf ? epfRateEffective : 0));
       const b3 = g3 * normalizedPolicy.basic_rate;
 
@@ -164,14 +155,14 @@ export const recalculateSalaryBreakdown = (
       ) {
         grossMonthly = g3;
       } else {
-        // Step 4: Case 4 (ESI Not Applicable, EPF Capped)
-        // G = Fixed - EPF_Cap
+
+
         grossMonthly = monthlyFixed - (toggles.epf ? epfCap : 0);
       }
     }
   }
 
-  // Now derived all components from the back-calculated Gross
+
   const basicMonthly = grossMonthly * normalizedPolicy.basic_rate;
 
   const epfEmployerMonthly = toggles.epf

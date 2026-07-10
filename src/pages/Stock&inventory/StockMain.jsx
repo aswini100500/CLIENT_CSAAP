@@ -17,11 +17,11 @@ const StockMain = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50">
-      {/* Modern Tab Navigation */}
+
       <div className="bg-white shadow-xl rounded-b-xl mb-6">
         <div className="container mx-auto px-4">
           <div className="flex relative">
-            {/* Animated Background Slider */}
+
             <div 
               className="absolute bottom-0 h-1 bg-linear-to-r from-blue-500 to-purple-600 transition-all duration-300 ease-in-out"
               style={{
@@ -44,14 +44,14 @@ const StockMain = () => {
                   <span className="text-xl">{tab.icon}</span>
                   <span className="font-semibold tracking-wide">{tab.label}</span>
                   
-                  {/* Active Tab Indicator Arrow */}
+
                   {activeTab === tab.id && (
                     <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
                       <div className="w-0 h-0 border-l-10 border-r-10 border-b-10 border-l-transparent border-r-transparent border-b-white"></div>
                     </div>
                   )}
                   
-                  {/* Hover Effect */}
+
                   <div className={`absolute inset-0 rounded-lg transition-all duration-300 ${
                     activeTab === tab.id 
                       ? 'ring-2 ring-blue-200 ring-inset' 
@@ -64,7 +64,7 @@ const StockMain = () => {
         </div>
       </div>
 
-      {/* Tab Content */}
+
       <div className="container mx-auto px-4 pb-8">
         <div className="animate-fadeIn">
           {activeTab === 'stockEntry' && <StockEntry />}

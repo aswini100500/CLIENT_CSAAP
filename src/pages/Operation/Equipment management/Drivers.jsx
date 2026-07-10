@@ -35,7 +35,7 @@ const Drivers = () => {
     }
   };
 
-  // Add new driver
+
   const handleAddDriver = async () => {
     if (
       !newDriver.name ||
@@ -66,14 +66,14 @@ console.log(newDriver);
     }
   };
 
-  // Edit driver
+
   const handleEdit = (id) => {
     const driver = drivers.find((d) => d.id === id);
     setNewDriver(driver);
     setEditingId(id);
   };
 
-  // Update driver
+
   const handleUpdate = async () => {
     try {
       setLoading(true);
@@ -94,7 +94,7 @@ console.log(newDriver);
     }
   };
 
-  // Delete driver
+
   const handleDelete = async (id) => {
     try {
       setLoading(true);
@@ -116,7 +116,7 @@ console.log(newDriver);
         </h2>
       </div>
 
-      {/* Add/Edit Form */}
+
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
         <input
           type="text"
@@ -169,7 +169,7 @@ console.log(newDriver);
         </button>
       </div>
 
-      {/* Driver Table */}
+
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
           <thead className="bg-blue-50">

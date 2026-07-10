@@ -9,26 +9,26 @@ const fetcher = (url) => client.get(url).then((res) => res.data.brokers || res.d
 const BrokerPage = () => {
   const API_ENDPOINT = '/api/tenant/broker';
   
-  // --- UI STATE ---
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedBroker, setSelectedBroker] = useState(null);
   const [activeDetailsBroker, setActiveDetailsBroker] = useState(null);
   
-  // Notification (Toast) State
+
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  // --- SWR Hook with URL Parameter Logic ---
-  // Logic: If there is a search term, use /broker/search/:name. Otherwise, use /broker
+
+
   const swrKey = searchTerm.trim() 
     ? `${API_ENDPOINT}/search/${searchTerm}` 
     : API_ENDPOINT;
 
   const { data: brokers = [], error, isLoading } = useSWR(swrKey, fetcher);
 
-  // Form State
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -38,7 +38,7 @@ const BrokerPage = () => {
     commission: ''
   });
 
-  // --- ACTIONS ---
+
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -104,7 +104,7 @@ const BrokerPage = () => {
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-10 relative overflow-hidden font-sans">
 
-      {/* --- MODERN TOAST --- */}
+
       <div className={`fixed top-20 right-8 z-999 transform transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex items-center gap-4 bg-white border border-blue-100 shadow-[0_20px_50px_rgba(0,0,0,0.1)] px-6 py-4 rounded-2xl ${showToast ? 'translate-x-0 opacity-100' : '-translate-x-32 opacity-0 pointer-events-none'}`}>
         <div className="bg-blue-600 rounded-full p-1.5 shadow-lg shadow-blue-200">
           <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +118,7 @@ const BrokerPage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto">
-        {/* --- HEADER --- */}
+
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
           <div>
             <h1 className="text-3xl font-black text-slate-900 tracking-tighter mb-2">Brokers</h1>
@@ -143,7 +143,7 @@ const BrokerPage = () => {
           </div>
         </header>
 
-        {/* --- MAIN DATA CONTAINER --- */}
+
         <div className="bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] min-h-125 flex flex-col">
           {isLoading ? (
             <div className="flex-1 flex items-center justify-center">
@@ -225,7 +225,7 @@ const BrokerPage = () => {
         </div>
       </div>
 
-      {/* --- MODAL --- */}
+
       {showAddForm && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-500 animate-in fade-in duration-300">
           <div className="bg-white w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">

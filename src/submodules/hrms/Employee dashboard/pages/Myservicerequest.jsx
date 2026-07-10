@@ -18,16 +18,16 @@ const MyRequest = () => {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
-  // const [departmentFilter, setDepartmentFilter] = useState('All');
-  // const [employeeFilter, setEmployeeFilter] = useState('All');
+
+
   const [employees, setEmployees] = useState([]);
   const [employeeMap, setEmployeeMap] = useState({});
   const [departmentsList, setDepartmentsList] = useState([]);
 
-  // Get user & token from useAuth
+
   const { user, token } = useAuth();
 
-  // Extract user data
+
   const employeeId = user?.employee_id;
   const company_id = user?.company_id;
   const slug = user?.slug;
@@ -46,7 +46,7 @@ const MyRequest = () => {
     priority: 'Medium'
   });
 
-  // Fetch requests on component mount
+
   useEffect(() => {
     if (employeeId && slug && company_id) {
       fetchRequests();
@@ -57,7 +57,7 @@ const MyRequest = () => {
     fetchEmployees();
   }, []);
 
-  // Update departments list whenever employees data changes
+
   useEffect(() => {
     if (employees.length > 0) {
       const uniqueDepts = [...new Set(employees.map(e => e.department).filter(Boolean))];
@@ -87,7 +87,7 @@ const MyRequest = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        // `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/${slug}/${employeeId}`,
+
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/employee-search?employeeId=${employeeId}&company_id=${company_id}&slug=${slug}`,
       );
       console.log("Employee API Response:", response.data.data);
@@ -130,10 +130,10 @@ const MyRequest = () => {
       );
 
       if (response.data.success) {
-        // Refresh requests
+
         fetchRequests();
 
-        // Reset form
+
         setFormData({
           request_to: '',
           request_to_employee_id: '',
@@ -165,7 +165,7 @@ const MyRequest = () => {
         );
 
         if (response.data.success) {
-          fetchRequests(); // refresh list
+          fetchRequests();
         }
       } catch (error) {
         console.error("Error deleting request:", error);
@@ -204,7 +204,7 @@ const MyRequest = () => {
     });
   };
 
-  // Filter and pagination
+
   const filteredRequests = requests.filter(request => {
     const matchesSearch =
       request.request_to.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -269,10 +269,10 @@ const MyRequest = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50/30 p-4 md:p-6">
-      {/* Main Request Dashboard */}
+
       {!showAddRequest ? (
         <div className="max-w-6xl mx-auto">
-          {/* Header Section */}
+
           <div className="mb-8">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
               <div>
@@ -300,7 +300,7 @@ const MyRequest = () => {
             </div>
           </div>
 
-          {/* Stats Cards */}
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div
               onClick={() => { setStatusFilter('All'); setCurrentPage(1); }}
@@ -377,7 +377,7 @@ const MyRequest = () => {
             </div>
           </div>
 
-          {/* Loading State */}
+
           {loading && (
             <div className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
@@ -385,10 +385,10 @@ const MyRequest = () => {
             </div>
           )}
 
-          {/* Main Content Card */}
+
           {!loading && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              {/* Table Controls */}
+
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50/50">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                   <div className="flex items-center gap-4">
@@ -430,7 +430,7 @@ const MyRequest = () => {
                 </div>
               </div>
 
-              {/* Table */}
+
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -589,7 +589,7 @@ const MyRequest = () => {
                 </table>
               </div>
 
-              {/* Table Footer - Pagination */}
+
               {filteredRequests.length > 0 && (
                 <div className="px-6 py-4 border-t border-gray-200 bg-gray-50/50">
                   <div className="flex flex-col lg:flex-row justify-between items-center gap-4 text-sm text-gray-600">
@@ -648,7 +648,7 @@ const MyRequest = () => {
             </div>
 
             <div className="p-8 space-y-6">
-              {/* Request Type Field */}
+
            <div>
   <label className="block text-sm font-semibold text-gray-700 mb-3">
     Request Type <span className="text-red-500">*</span>
@@ -660,7 +660,7 @@ const MyRequest = () => {
     onChange={(e) => {
       const value = e.target.value;
 
-      // Prevent more than 50 characters
+
       if (value.length <= 50) {
         handleInputChange('request_type', value);
       }
@@ -678,7 +678,7 @@ const MyRequest = () => {
   </div>
 </div>
 
-              {/* Request To Field */}
+
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-3">
                   Request To <span className="text-red-500">*</span>
@@ -697,7 +697,7 @@ const MyRequest = () => {
                 </select>
               </div>
 
-              {/* Request To Employee Field */}
+
               {formData.request_to && (
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -720,7 +720,7 @@ const MyRequest = () => {
                 </div>
               )}
 
-              {/* Priority Field */}
+
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-3">
                   Priority
@@ -736,7 +736,7 @@ const MyRequest = () => {
                 </select>
               </div>
 
-              {/* Request Details Field */}
+
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-3">
                   Request Details <span className="text-red-500">*</span>
@@ -755,7 +755,7 @@ const MyRequest = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
+
               <div className="flex gap-4 pt-6 border-t border-gray-200">
                 <button
                   onClick={() => setShowAddRequest(false)}
@@ -778,7 +778,7 @@ const MyRequest = () => {
         </div>
       )}
 
-      {/* Reply Modal */}
+
       {showReplyModal && selectedRequest && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md">
           <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 relative animate-fade-in">
@@ -845,7 +845,7 @@ const MyRequest = () => {
         </div>
       )}
 
-      {/* View Modal */}
+
       {showViewModal && selectedRequest && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md">
           <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 relative animate-fade-in">

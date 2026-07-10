@@ -1,926 +1,926 @@
-// // merging code with api
-// import React, { useState, useEffect } from "react";
-// import projectService from "./projectService";
-// import {
-//     FaHome,
-//     FaArrowRight,
-//     FaTrash,
-//     FaSpinner,
-//     FaCheckCircle,
-//     FaSync,
-//     FaSave,
-//     FaList,
-//     FaInfoCircle,
-//     FaCheck,
-//     FaChevronLeft,
-//     FaChevronRight,
-//     FaEdit,
-//     FaTimes,
-//     FaMoneyBill,
-//     FaCalendarAlt,
-//     FaExclamationTriangle,
-// } from "react-icons/fa";
-
-// // Import modular components
-// import { HomeSection } from "./DuplexTriplex/HomeSection";
-// import { ProjectTabs } from "./DuplexTriplex/ProjectTabs";
-// import { MainInfoSection } from "./DuplexTriplex/MainInfoSection";
-// import { FloorSection } from "./DuplexTriplex/FloorSection";
-
-// // ====================== DUPLETRIPLEX PROJECT COMPONENT ======================
-// const DuplexTriplexProject = ({
-//     projectName,
-//     setProjectName,
-//     projectType,
-//     setProjectType,
-//     city,
-//     setCity,
-//     locality,
-//     setLocality,
-//     landArea,
-//     setLandArea,
-//     revenuePlots,
-//     setRevenuePlots,
-//     addRevenuePlotNumber,
-//     setAddRevenuePlotNumber,
-//     attachment,
-//     setAttachment,
-//     onSaveProject,
-//     constants,
-//     PROJECT_TYPES,
-//     landZone,
-//     setLandZone,
-//     commercialSubType,
-//     setCommercialSubType,
-//     selectedProject = null,
-//     editingProjectId = null,
-//       initialUnits = [],
-// }) => {
-//     const [currentTab, setCurrentTab] = useState(selectedProject ? 1 : 0);
-//     const [unitPrefix, setUnitPrefix] = useState("");
-//     const [numUnits, setNumUnits] = useState(1);
-//     const [facilities, setFacilities] = useState({});
-//     const [customFacilities, setCustomFacilities] = useState([]);
-//     const [mainInfo, setMainInfo] = useState(constants?.INITIAL_MAIN_INFO || {});
-//     const [groundFloor, setGroundFloor] = useState(constants?.INITIAL_FLOOR_DETAILS || {});
-//     const [firstFloor, setFirstFloor] = useState(constants?.INITIAL_FLOOR_DETAILS || {});
-//     const [secondFloor, setSecondFloor] = useState(constants?.INITIAL_FLOOR_DETAILS || {});
-// const [showUnitEditingOverview, setShowUnitEditingOverview] = useState(false);
-// const [editingUnitId, setEditingUnitId] = useState(null);
-//     const [selectedUnit, setSelectedUnit] = useState(null);
-//     const [showSpecifications, setShowSpecifications] = useState(false);
-//     const [projectId, setProjectId] = useState(null);
-//     const [units, setUnits] = useState([]);
-
-// useEffect(() => {
-//   if (initialUnits && initialUnits.length > 0) {
-//     setUnits(initialUnits);
-//   }
-// }, [initialUnits]);
-
-//     // Set project data when in edit mode
-//     useEffect(() => {
-//         if (selectedProject) {
-//             console.log('Edit mode activated with project:', selectedProject);
-//             console.log('Selected Project keys:', Object.keys(selectedProject));
-
-//             setProjectId(selectedProject.id);
-//             setProjectName(selectedProject.name || '');
-//             setProjectType(selectedProject.type || '');
-//             setCity(selectedProject.city || '');
-//             setLocality(selectedProject.locality || '');
-//             setLandArea(selectedProject.land_area || selectedProject.landArea || '');
-
-//             // Parse facilities from database JSON
-//             try {
-//                 const parsedFacilities = selectedProject.facilities 
-//                     ? (typeof selectedProject.facilities === 'string' 
-//                         ? JSON.parse(selectedProject.facilities) 
-//                         : selectedProject.facilities)
-//                     : {};
-//                 setFacilities(parsedFacilities);
-//             } catch (e) {
-//                 console.error('Failed to parse facilities:', e);
-//                 setFacilities({});
-//             }
-
-//             // Parse custom_facilities from database JSON
-//             try {
-//                 const parsedCustomFacilities = selectedProject.custom_facilities 
-//                     ? (typeof selectedProject.custom_facilities === 'string' 
-//                         ? JSON.parse(selectedProject.custom_facilities) 
-//                         : selectedProject.custom_facilities)
-//                     : [];
-//                 setCustomFacilities(parsedCustomFacilities);
-//             } catch (e) {
-//                 console.error('Failed to parse custom_facilities:', e);
-//                 setCustomFacilities([]);
-//             }
-
-//             // Load units from units_data (database column name)
-//             let unitsData = [];
-
-//             if (selectedProject.units_data) {
-//                 try {
-//                     unitsData = typeof selectedProject.units_data === 'string'
-//                         ? JSON.parse(selectedProject.units_data)
-//                         : selectedProject.units_data;
-//                     console.log('✅ Loaded units from units_data:', unitsData);
-//                 } catch (e) {
-//                     console.error('❌ Failed to parse units_data:', e);
-//                     unitsData = [];
-//                 }
-//             }
-//             // Fallback to old property names for backwards compatibility
-//             else if (selectedProject.units) {
-//                 unitsData = Array.isArray(selectedProject.units) ? selectedProject.units : [];
-//                 console.log('✅ Loaded units from units (legacy):', unitsData);
-//             }
-
-//             console.log('🔥 Final unitsData loaded:', unitsData, 'Length:', unitsData?.length);
-//             setUnits(unitsData);
-//             setNumUnits(unitsData.length || 1);
-
-//             // Extract unit prefix from first unit name or use database value
-//             if (selectedProject.unit_prefix) {
-//                 setUnitPrefix(selectedProject.unit_prefix);
-//             } else if (unitsData && unitsData.length > 0 && unitsData[0].name) {
-//                 const nameParts = unitsData[0].name.split('-');
-//                 if (nameParts.length > 1) {
-//                     setUnitPrefix(nameParts[0]); // e.g., "UNIT" from "UNIT-001"
-//                 }
-//             }
-
-//             // Load initial unit data
-//             if (unitsData && unitsData.length > 0) {
-//                 setSelectedUnit(unitsData[0]);
-//                 if (unitsData[0].mainInfo) setMainInfo(unitsData[0].mainInfo);
-//                 if (unitsData[0].floors) {
-//                     setGroundFloor(unitsData[0].floors.groundFloor || constants?.INITIAL_FLOOR_DETAILS || {});
-//                     setFirstFloor(unitsData[0].floors.firstFloor || constants?.INITIAL_FLOOR_DETAILS || {});
-//                     if (selectedProject.type === "triplex") {
-//                         setSecondFloor(unitsData[0].floors.secondFloor || constants?.INITIAL_FLOOR_DETAILS || {});
-//                     }
-//                 }
-//             }
-
-//         setCurrentTab(1);
-//     }
-// }, [selectedProject, constants]);
-
-
-//     const handleUnitEditFromOverview = (unitId) => {
-//   const unitToEdit = units.find(u => u.id === unitId);
-//   if (unitToEdit) {
-//     setEditingUnitId(unitId);
-//     setSelectedUnit(unitToEdit);
-//     setShowUnitEditingOverview(false);
-
-//     // Set current tab based on unit completion
-//     if (!unitToEdit.mainInfo?.facing) {
-//       setCurrentTab(1); // Main Info tab
-//     } else if (!unitToEdit.floors?.groundFloor) {
-//       setCurrentTab(2); // Ground floor
-//     } else if (projectType === "duplex" && !unitToEdit.floors?.firstFloor) {
-//       setCurrentTab(3); // First floor
-//     } else if (projectType === "triplex" && !unitToEdit.floors?.firstFloor) {
-//       setCurrentTab(3); // First floor
-//     } else if (projectType === "triplex" && !unitToEdit.floors?.secondFloor) {
-//       setCurrentTab(4); // Second floor
-//     } else {
-//       setCurrentTab(1); // Default to main info
-//     }
-//         }
-
-//     }
-// };
-
-// // Add this function to mark unit as saved
-// const markUnitAsSaved = (unitId) => {
-//   const updatedUnits = units.map(unit => {
-//     if (unit.id === unitId) {
-//       return {
-//         ...unit,
-//         lastSaved: new Date().toISOString(),
-//         isBeingEdited: false
-//       };
-//     }
-//     return unit;
-//   });
-//   setUnits(updatedUnits);
-// };
-
-// // Add this function to mark unit as being edited
-// const markUnitAsBeingEdited = (unitId) => {
-//   const updatedUnits = units.map(unit => ({
-//     ...unit,
-//     isBeingEdited: unit.id === unitId
-//   }));
-//   setUnits(updatedUnits);
-// };
-
-// // Add this useEffect to mark unit as being edited when selected
-// useEffect(() => {
-//   if (selectedUnit && editingUnitId === selectedUnit.id) {
-//     markUnitAsBeingEdited(selectedUnit.id);
-//   }
-// }, [selectedUnit, editingUnitId]);
-
-// // Add this function to complete editing for a unit
-// const completeUnitEditing = (unitId) => {
-//   const updatedUnits = units.map(unit => {
-//     if (unit.id === unitId) {
-//       return {
-//         ...unit,
-//         isBeingEdited: false,
-//         isComplete: true,
-//         lastSaved: new Date().toISOString()
-//       };
-//     }
-//     return unit;
-//   });
-//   setUnits(updatedUnits);
-// };
 
 
 
-//     const handleGenerateProject = (projectData) => {
-//         if (projectData.id) {
-//             setProjectId(projectData.id);
-//             console.log('Project ID stored in state:', projectData.id);
-//         }
-
-//         if (projectName && projectType) {
-//             setCurrentTab(1);
-//             alert(`Project "${projectName}" generated successfully!`);
-//         } else {
-//             alert("Please enter project name and select project type");
-//         }
-//     };
-
-//     const checkUnitCompletion = (unit) => {
-//         return !!(
-//             unit.mainInfo?.landArea &&
-//             unit.mainInfo?.totalBuiltUpArea &&
-//             unit.priceDetails?.expectedPrice
-//         );
-//     };
-
-//     const handleUnitClick = (unit) => {
-//         setSelectedUnit(unit);
-//         if (unit.mainInfo) {
-//             setMainInfo(unit.mainInfo);
-//         } else {
-//             setMainInfo(constants?.INITIAL_MAIN_INFO || {});
-//         }
-
-//         if (unit.floors) {
-//             setGroundFloor(unit.floors.groundFloor || constants?.INITIAL_FLOOR_DETAILS || {});
-//             setFirstFloor(unit.floors.firstFloor || constants?.INITIAL_FLOOR_DETAILS || {});
-//             if (projectType === "triplex") {
-//                 setSecondFloor(unit.floors.secondFloor || constants?.INITIAL_FLOOR_DETAILS || {});
-//             }
-//         }
-//     };
-
-//     const handleSaveMainInfo = () => {
-//         if (selectedUnit) {
-//             const updatedUnits = units.map((unit) => {
-//                 if (unit.id === selectedUnit.id) {
-//                     const updatedUnit = {
-//                         ...unit,
-//                         mainInfo: { ...mainInfo },
-//                     };
-//                     updatedUnit.isComplete = checkUnitCompletion(updatedUnit);
-//                     return updatedUnit;
-//                 }
-//                 return unit;
-//             });
-//             setUnits(updatedUnits);
-//             setSelectedUnit(updatedUnits.find((u) => u.id === selectedUnit.id));
-//             alert(`Project specifications saved for ${selectedUnit.name}`);
-//         }
-//         setCurrentTab(2);
-//     };
-
-//     const handleSaveGroundFloor = () => {
-//         if (selectedUnit) {
-//             const updatedUnits = units.map((unit) => {
-//                 if (unit.id === selectedUnit.id) {
-//                     const updatedUnit = {
-//                         ...unit,
-//                         floors: {
-//                             ...unit.floors,
-//                             groundFloor: { ...groundFloor },
-//                         },
-//                     };
-//                     updatedUnit.isComplete = checkUnitCompletion(updatedUnit);
-//                     return updatedUnit;
-//                 }
-//                 return unit;
-//             });
-//             setUnits(updatedUnits);
-//             setSelectedUnit(updatedUnits.find((u) => u.id === selectedUnit.id));
-//             alert(`Ground floor details saved for ${selectedUnit.name}`);
-//         }
-
-//         if (projectType === "duplex") {
-//             setCurrentTab(3);
-//         } else if (projectType === "triplex") {
-//             setCurrentTab(3);
-//         }
-//     };
-
-//     const handleSaveFirstFloor = () => {
-//         if (selectedUnit) {
-//             const updatedUnits = units.map((unit) => {
-//                 if (unit.id === selectedUnit.id) {
-//                     const updatedUnit = {
-//                         ...unit,
-//                         floors: {
-//                             ...unit.floors,
-//                             firstFloor: { ...firstFloor },
-//                         },
-//                     };
-//                     updatedUnit.isComplete = checkUnitCompletion(updatedUnit);
-//                     return updatedUnit;
-//                 }
-//                 return unit;
-//             });
-//             setUnits(updatedUnits);
-//             setSelectedUnit(updatedUnits.find((u) => u.id === selectedUnit.id));
-//             alert(`First floor details saved for ${selectedUnit.name}`);
-//         }
-
-//         if (projectType === "triplex") {
-//             setCurrentTab(4);
-//         } else {
-//             handleSaveDuplexTriplexProject();
-//         }
-//     };
-
-//     const handleSaveSecondFloor = () => {
-//         if (selectedUnit) {
-//             const updatedUnits = units.map((unit) => {
-//                 if (unit.id === selectedUnit.id) {
-//                     const updatedUnit = {
-//                         ...unit,
-//                         floors: {
-//                             ...unit.floors,
-//                             secondFloor: { ...secondFloor },
-//                         },
-//                     };
-//                     updatedUnit.isComplete = checkUnitCompletion(updatedUnit);
-//                     return updatedUnit;
-//                 }
-//                 return unit;
-//             });
-//             setUnits(updatedUnits);
-//             setSelectedUnit(updatedUnits.find((u) => u.id === selectedUnit.id));
-//             alert(`Second floor details saved for ${selectedUnit.name}`);
-//         }
-//         handleSaveDuplexTriplexProject();
-//     };
-
-// const handleSaveDuplexTriplexProject = async () => {
-//   // Get the existing project if editing
-//   const existingProject = selectedProject || {};
-
-//   // Get existing units from database (using correct column name)
-//   let existingUnits = [];
-//   if (existingProject.units_data) {
-//     try {
-//       existingUnits = typeof existingProject.units_data === 'string' 
-//         ? JSON.parse(existingProject.units_data) 
-//         : existingProject.units_data;
-//       console.log('✅ Loaded existing units from units_data:', existingUnits);
-//     } catch (error) {
-//       console.error("❌ Error parsing existing units_data:", error);
-//     }
-//   }
-
-//   // Create a map of current units by ID
-//   const currentUnitsMap = new Map();
-//   units.forEach(unit => {
-//     // Mark as saved if not already saved
-//     const updatedUnit = {
-//       ...unit,
-//       lastSaved: unit.lastSaved || new Date().toISOString()
-//     };
-//     currentUnitsMap.set(unit.id, updatedUnit);
-//   });
-
-//   // Merge with existing units (keep unsaved units from database)
-//   const finalUnits = [...units]; // Start with current units
-
-//   existingUnits.forEach(existingUnit => {
-//     if (!currentUnitsMap.has(existingUnit.id)) {
-//       // Add existing unit that hasn't been edited in this session
-//       finalUnits.push(existingUnit);
-//     }
-//   });
-
-//   // Use snake_case for database field names
-//   const projectData = {
-//     name: projectName,
-//     type: projectType,
-//     city,
-//     locality,
-//     unit_prefix: unitPrefix,  // Database uses snake_case
-//     num_units: finalUnits.length,  // Use actual count
-//     units_data: JSON.stringify(finalUnits),  // Database column name is units_data
-//     facilities: JSON.stringify(facilities),  // Store as JSON
-//     custom_facilities: JSON.stringify(customFacilities),  // Database uses snake_case
-//     land_area: landArea,  // Database uses snake_case
-//     revenue_plots: revenuePlots,  // Database uses snake_case
-//     // Preserve existing properties
-//     ...(selectedProject && {
-//       id: selectedProject.id,
-//       created_at: selectedProject.created_at,
-//       source: selectedProject.source
-//     })
-//   };
-
-//   console.log('💾 Saving project data:', projectData);
-//   console.log('💾 Final units being saved:', finalUnits);
-
-// try {
-//   if (projectType.toLowerCase() === "duplex") {
-//     if (projectId) {
-//       await projectService.updateDuplex(projectId, projectData);
-//       alert("Duplex project updated successfully!");
-//       onSaveProject?.({ ...projectData, id: projectId });
-//     } else {
-//       const response = await projectService.createDuplex(projectData);
-//       setProjectId(response.id);
-//       alert(`Duplex project created successfully with ID: ${response.id}`);
-//       onSaveProject?.({ ...projectData, id: response.id });
-//     }
-//   } else if (projectType.toLowerCase() === "triplex") {
-//     if (projectId) {
-//       await projectService.updateTriplex(projectId, projectData);
-//       alert("Triplex project updated successfully!");
-//       onSaveProject?.({ ...projectData, id: projectId });
-//     } else {
-//       const response = await projectService.createTriplex(projectData);
-//       setProjectId(response.id);
-//       alert(`Triplex project created successfully with ID: ${response.id}`);
-//       onSaveProject?.({ ...projectData, id: response.id });
-//     }
-//   }
-// } catch (error) {
-//   console.error("❌ Error saving project:", error);
-//   alert("Something went wrong while saving the project.");
-// }
 
 
-// // Render Unit Editing Overview
-// const renderUnitEditingOverview = () => {
-//   // Calculate statistics
-//   const stats = {
-//     total: units.length,
-//     beingEdited: units.filter(u => u.isBeingEdited).length,
-//     saved: units.filter(u => u.lastSaved && !u.isBeingEdited).length,
-//     notEdited: units.filter(u => !u.lastSaved && !u.isBeingEdited).length,
-//     complete: units.filter(u => u.isComplete).length
-//   };
 
-//   return (
-//     <div className="space-y-6">
-//       {/* Header */}
-//       <div className="flex items-center justify-between mb-6">
-//         <div className="flex items-center gap-3">
-//           <button
-//             onClick={() => {
-//               setShowUnitEditingOverview(false);
-//               setEditingUnitId(null);
-//             }}
-//             className="p-2 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
-//           >
-//             <FaArrowLeft />
-//           </button>
-//           <div>
-//             <h2 className="text-xl font-bold text-slate-900">Unit Editing Overview</h2>
-//             <p className="text-slate-500 text-sm">
-//               Project: {projectName} • {units.length} unit(s)
-//             </p>
-//           </div>
-//         </div>
-//         <div className="flex gap-2">
-//           <button
-//             onClick={() => {
-//               const updatedUnits = units.map(unit => ({
-//                 ...unit,
-//                 isBeingEdited: false
-//               }));
-//               setUnits(updatedUnits);
-//               setShowUnitEditingOverview(false);
-//               setEditingUnitId(null);
-//               alert("All unit editing completed!");
-//             }}
-//             className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl transition-all duration-200 flex items-center"
-//           >
-//             <FaCheck className="mr-2" />
-//             Complete All Editing
-//           </button>
-//         </div>
-//       </div>
 
-//       {/* Stats Cards */}
-//       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-//         <div className="bg-slate-50 rounded-2xl p-3">
-//           <div className="text-2xl font-bold text-slate-900">{stats.total}</div>
-//           <div className="text-xs text-slate-500">Total Units</div>
-//         </div>
-//         <div className="bg-blue-50 rounded-2xl p-3">
-//           <div className="text-2xl font-bold text-blue-700">{stats.beingEdited}</div>
-//           <div className="text-xs text-blue-600">Being Edited</div>
-//         </div>
-//         <div className="bg-emerald-50 rounded-2xl p-3">
-//           <div className="text-2xl font-bold text-emerald-700">{stats.saved}</div>
-//           <div className="text-xs text-emerald-600">Saved</div>
-//         </div>
-//         <div className="bg-amber-50 rounded-2xl p-3">
-//           <div className="text-2xl font-bold text-amber-700">{stats.notEdited}</div>
-//           <div className="text-xs text-amber-600">Not Edited</div>
-//         </div>
-//         <div className="bg-purple-50 rounded-2xl p-3">
-//           <div className="text-2xl font-bold text-purple-700">{stats.complete}</div>
-//           <div className="text-xs text-purple-600">Complete</div>
-//         </div>
-//       </div>
 
-//       {/* Instructions */}
-//       <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6">
-//         <div className="flex items-start gap-3">
-//           <FaInfoCircle className="text-blue-600 mt-1" />
-//           <div>
-//             <h4 className="font-semibold text-blue-800 mb-1">Editing Status Guide</h4>
-//             <ul className="text-sm text-blue-700 space-y-1">
-//               <li className="flex items-center">
-//                 <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-//                 <span><span className="font-semibold">Blue</span> - Unit is currently being edited</span>
-//               </li>
-//               <li className="flex items-center">
-//                 <div className="w-3 h-3 bg-emerald-500 rounded-full mr-2"></div>
-//                 <span><span className="font-semibold">Green</span> - Unit has been saved/edited</span>
-//               </li>
-//               <li className="flex items-center">
-//                 <div className="w-3 h-3 bg-slate-300 rounded-full mr-2"></div>
-//                 <span><span className="font-semibold">Gray/Blurry</span> - Unit has not been edited yet</span>
-//               </li>
-//             </ul>
-//           </div>
-//         </div>
-//       </div>
 
-//       {/* Units Table */}
-//       <div className="bg-white rounded-2xl border border-(--border-soft) overflow-hidden shadow-sm">
-//         <div className="overflow-x-auto">
-//           <table className="w-full">
-//             <thead className="bg-slate-50">
-//               <tr>
-//                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-//                   Unit
-//                 </th>
-//                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-//                   Details
-//                 </th>
-//                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-//                   Price
-//                 </th>
-//                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-//                   Status
-//                 </th>
-//                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-//                   Last Saved
-//                 </th>
-//                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-//                   Completion
-//                 </th>
-//                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-//                   Actions
-//                 </th>
-//               </tr>
-//             </thead>
-//             <tbody className="divide-y divide-slate-100">
-//               {units.map((unit) => (
-//                 <tr
-//                   key={unit.id}
-//                   className={`hover:bg-slate-50 transition-colors ${unit.isBeingEdited
-//                       ? 'bg-blue-50'
-//                       : unit.lastSaved
-//                         ? 'bg-white'
-//                         : 'bg-slate-50/30 opacity-60'
-//                     }`}
-//                 >
-//                   <td className="px-6 py-4">
-//                     <div className="flex items-center">
-//                       <div className="flex-shrink-0 h-10 w-10">
-//                         <div className={`h-10 w-10 rounded-full flex items-center justify-center ${unit.isBeingEdited
-//                             ? 'bg-blue-100'
-//                             : unit.lastSaved
-//                               ? 'bg-emerald-100'
-//                               : 'bg-slate-200'
-//                           }`}>
-//                           <FaHome className={`h-5 w-5 ${unit.isBeingEdited
-//                               ? 'text-blue-600'
-//                               : unit.lastSaved
-//                                 ? 'text-emerald-600'
-//                                 : 'text-slate-400'
-//                             }`} />
-//                         </div>
-//                       </div>
-//                       <div className="ml-4">
-//                         <div className={`text-sm font-medium ${unit.isBeingEdited
-//                             ? 'text-blue-900 font-bold'
-//                             : unit.lastSaved
-//                               ? 'text-slate-900'
-//                               : 'text-slate-500 italic'
-//                           }`}>
-//                           {unit.name}
-//                         </div>
-//                         <div className="text-xs text-slate-500">
-//                           {unit.room_type || `${unit.propertyFeatures?.bedrooms || 2}BHK`}
-//                         </div>
-//                       </div>
-//                     </div>
-//                   </td>
-//                   <td className="px-6 py-4">
-//                     <div className={`text-sm ${unit.area_details?.carpet_area
-//                         ? 'text-slate-900'
-//                         : 'text-slate-500 italic'
-//                       }`}>
-//                       {unit.area_details?.carpet_area ? `${unit.area_details.carpet_area} sqft` : 'Not set'}
-//                     </div>
-//                     {unit.propertyFeatures?.bedrooms && (
-//                       <div className="text-xs text-slate-500">
-//                         {unit.propertyFeatures.bedrooms} BHK
-//                       </div>
-//                     )}
-//                   </td>
-//                   <td className="px-6 py-4">
-//                     <div className={`text-sm ${unit.priceDetails?.expectedPrice
-//                         ? 'text-slate-900'
-//                         : 'text-slate-500 italic'
-//                       }`}>
-//                       {unit.priceDetails?.expectedPrice
-//                         ? `₹${parseInt(unit.priceDetails.expectedPrice).toLocaleString()}`
-//                         : 'Not set'
-//                       }
-//                     </div>
-//                     {unit.priceDetails?.tokenAmount && (
-//                       <div className="text-xs text-slate-500">
-//                         Token: ₹{parseInt(unit.priceDetails.tokenAmount).toLocaleString()}
-//                       </div>
-//                     )}
-//                   </td>
-//                   <td className="px-6 py-4">
-//                     <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${unit.isBeingEdited
-//                         ? 'bg-blue-100 text-blue-800'
-//                         : unit.lastSaved
-//                           ? 'bg-emerald-100 text-emerald-800'
-//                           : 'bg-slate-100 text-slate-500 italic'
-//                       }`}>
-//                       {unit.isBeingEdited ? 'Being Edited' : unit.lastSaved ? 'Saved' : 'Not Edited'}
-//                     </span>
-//                   </td>
-//                   <td className="px-6 py-4 text-sm text-slate-500">
-//                     {unit.lastSaved
-//                       ? new Date(unit.lastSaved).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-//                       : 'Never'
-//                     }
-//                   </td>
-//                   <td className="px-6 py-4">
-//                     <div className="flex items-center">
-//                       {unit.isComplete ? (
-//                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-800">
-//                           <FaCheckCircle className="mr-1" />
-//                           Complete
-//                         </span>
-//                       ) : (
-//                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-amber-100 text-amber-800">
-//                           <FaTimesCircle className="mr-1" />
-//                           In Progress
-//                         </span>
-//                       )}
-//                     </div>
-//                   </td>
-//                   <td className="px-6 py-4">
-//                     <div className="flex items-center gap-2">
-//                       <button
-//                         onClick={() => handleUnitEditFromOverview(unit.id)}
-//                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
-//                         title="Edit this unit"
-//                       >
-//                         <FaPen />
-//                       </button>
-//                       <button
-//                         onClick={() => {
-//                           alert(`Unit Details:\n\nName: ${unit.name}\nArea: ${unit.area_details?.carpet_area || 'N/A'} sqft\nBedrooms: ${unit.propertyFeatures?.bedrooms || 'N/A'}\nBathrooms: ${unit.propertyFeatures?.bathrooms || 'N/A'}\nPrice: ${unit.priceDetails?.expectedPrice || 'N/A'}\nStatus: ${unit.isComplete ? 'Complete' : 'In Progress'}\nLast Edited: ${unit.lastSaved || 'Never'}`);
-//                         }}
-//                         className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors"
-//                         title="View details"
-//                       >
-//                         <FaEye />
-//                       </button>
-//                     </div>
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
 
-//         {units.length === 0 && (
-//           <div className="py-12 text-center">
-//             <FaHome className="mx-auto h-16 w-16 text-slate-300 mb-4" />
-//             <h3 className="text-lg font-semibold text-slate-700 mb-2">No Units Created</h3>
-//             <p className="text-slate-500">This project doesn't have any units yet.</p>
-//           </div>
-//         )}
-//       </div>
 
-//       {/* Action Buttons */}
-//       <div className="mt-6 flex justify-between items-center">
-//         <div className="text-sm text-slate-500">
-//           Showing {units.length} unit(s)
-//         </div>
-//         <div className="flex gap-3">
-//           <button
-//             onClick={() => {
-//               setShowUnitEditingOverview(false);
-//               setEditingUnitId(null);
-//             }}
-//             className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl transition-all duration-200 flex items-center"
-//           >
-//             <FaEdit className="mr-2" />
-//             Back to Project
-//           </button>
-//           <button
-//             onClick={handleSaveDuplexTriplexProject}
-//             className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl transition-all duration-200 flex items-center"
-//           >
-//             <FaSave className="mr-2" />
-//             Save All Changes
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
-//     const isEditMode = !!selectedProject;
 
-//     return (
-//         <div className="space-y-6">
-//             <ProjectTabs
-//                 currentTab={currentTab}
-//                 onTabChange={setCurrentTab}
-//                 projectType={projectType}
-//                 projectName={projectName}
-//                 units={units}
-//                 selectedUnit={selectedUnit}
-//                 onUnitChange={handleUnitClick}
-//                 isEditMode={!!selectedProject}
-//                 projectId={projectId}
-//             />
 
-//             {/* HOME SECTION */}
-//             {currentTab === 0 && (
-//                 <HomeSection
-//                     projectName={projectName}
-//                     setProjectName={setProjectName}
-//                     projectType={projectType}
-//                     setProjectType={setProjectType}
-//                     city={city}
-//                     setCity={setCity}
-//                     locality={locality}
-//                     setLocality={setLocality}
-//                     landArea={landArea}
-//                     setLandArea={setLandArea}
-//                     revenuePlots={revenuePlots}
-//                     setRevenuePlots={setRevenuePlots}
-//                     addRevenuePlotNumber={addRevenuePlotNumber}
-//                     setAddRevenuePlotNumber={setAddRevenuePlotNumber}
-//                     attachment={attachment}
-//                     setAttachment={setAttachment}
-//                     onGenerate={handleGenerateProject}
-//                     constants={constants}
-//                     PROJECT_TYPES={PROJECT_TYPES}
-//                     isEditMode={isEditMode}
-//                     onProceedToMainInfo={() => setCurrentTab(1)}
-//                     editingProjectId={editingProjectId}
 
-//                 />
-//             )}
 
-//             {/* MAIN INFO SECTION */}
-//             {currentTab === 1 && (
-//                 <MainInfoSection
-//                     mainInfo={mainInfo}
-//                     setMainInfo={setMainInfo}
-//                     onSave={handleSaveMainInfo}
-//                     unitPrefix={unitPrefix}
-//                     setUnitPrefix={setUnitPrefix}
-//                     numUnits={numUnits}
-//                     setNumUnits={setNumUnits}
-//                     facilities={facilities}
-//                     setFacilities={setFacilities}
-//                     customFacilities={customFacilities}
-//                     setCustomFacilities={setCustomFacilities}
-//                     projectType={projectType}
-//                     PROJECT_TYPES={PROJECT_TYPES}
-//                     projectName={projectName}
-//                     units={units}
-//                     setUnits={setUnits}
-//                     onUnitClick={handleUnitClick}
-//                     selectedUnit={selectedUnit}
-//                     showSpecifications={showSpecifications}
-//                     setShowSpecifications={setShowSpecifications}
-//                     setSelectedUnit={setSelectedUnit}
-//                     checkUnitCompletion={checkUnitCompletion}
-//                     projectId={projectId}
-//                     onContinueToFloors={handleSaveMainInfo}
-//                     FACILITIES={constants?.FACILITIES || []}
-//                     FACING_OPTIONS={constants?.FACING_OPTIONS || []}
-//                     BROKER_LIST={constants?.BROKER_LIST || []}
-//                     INITIAL_MAIN_INFO={constants?.INITIAL_MAIN_INFO || {}}
-//                     INITIAL_FLOOR_DETAILS={constants?.INITIAL_FLOOR_DETAILS || {}}
-//                     INITIAL_PROPERTY_FEATURES={constants?.INITIAL_PROPERTY_FEATURES || {}}
-//                     INITIAL_AREA_DETAILS={constants?.INITIAL_AREA_DETAILS || {}}
-//                     INITIAL_APPROVAL_STATUS={constants?.INITIAL_APPROVAL_STATUS || []}
-//                     INITIAL_TRANSACTION_TYPE={constants?.INITIAL_TRANSACTION_TYPE || {}}
-//                     INITIAL_PRICE_DETAILS={constants?.INITIAL_PRICE_DETAILS || {}}
-//                     isEditMode={isEditMode}
-//                     selectedProject={selectedProject}
-//                 />
-//             )}
 
-//             {/* GROUND FLOOR SECTION */}
-//             {currentTab === 2 && (
-//                 <FloorSection
-//                     floorData={groundFloor}
-//                     setFloorData={setGroundFloor}
-//                     floorName="Ground Floor"
-//                     selectedUnit={selectedUnit}
-//                     floorKey="groundFloor"
-//                     units={units}
-//                     onUnitChange={handleUnitClick}
-//                     onNext={() => setCurrentTab(3)}
-//                     isLastFloor={false}
-//                 />
-//             )}
 
-//             {/* FIRST FLOOR SECTION */}
-//             {currentTab === 3 && projectType === "duplex" && (
-//                 <FloorSection
-//                     floorData={firstFloor}
-//                     setFloorData={setFirstFloor}
-//                     floorName="1st Floor"
-//                     selectedUnit={selectedUnit}
-//                     floorKey="firstFloor"
-//                     units={units}
-//                     onUnitChange={handleUnitClick}
-//                     onNext={handleSaveDuplexTriplexProject}
-//                     isLastFloor={true}
-//                 />
-//             )}
 
-//             {/* For Triplex - 1st Floor */}
-//             {currentTab === 3 && projectType === "triplex" && (
-//                 <FloorSection
-//                     floorData={firstFloor}
-//                     setFloorData={setFirstFloor}
-//                     floorName="1st Floor"
-//                     selectedUnit={selectedUnit}
-//                     floorKey="firstFloor"
-//                     units={units}
-//                     onUnitChange={handleUnitClick}
-//                     onNext={() => setCurrentTab(4)}
-//                     isLastFloor={false}
-//                 />
-//             )}
 
-//             {/* For Triplex - 2nd Floor */}
-//             {currentTab === 4 && projectType === "triplex" && (
-//                 <FloorSection
-//                     floorData={secondFloor}
-//                     setFloorData={setSecondFloor}
-//                     floorName="2nd Floor"
-//                     selectedUnit={selectedUnit}
-//                     floorKey="secondFloor"
-//                     units={units}
-//                     onUnitChange={handleUnitClick}
-//                     onNext={handleSaveDuplexTriplexProject}
-//                     isLastFloor={true}
-//                 />
-//             )}
-//         </div>
-//     );
-// };
 
-// export default DuplexTriplexProject;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -975,91 +975,91 @@ import {
   FaPen,
   FaArrowLeft,
   FaTimesCircle,
-  // Add these if you also need them:
-  FaUsers,           // For profile/team icons
-  FaBuilding,        // For building/project icons
-  FaPlus,            // For add/create buttons
-  FaSearch,          // For search functionality
-  FaFilter,          // For filter options
-  FaDownload,        // For export/download
-  FaUpload,          // For import/upload
-  FaPrint,           // For print functionality
-  FaCopy,            // For duplicate/copy
-  FaEllipsisH,       // For more options/menu
-  FaBars,            // For hamburger menu
-  FaCog,             // For settings
-  FaBell,            // For notifications
-  FaUser,            // For user profile
-  FaSignOutAlt,      // For logout
-  FaQuestionCircle,  // For help/FAQ
-  FaChartBar,        // For analytics
-  FaFileAlt,         // For documents
-  FaImage,           // For images/media
-  FaMapMarkerAlt,    // For location
-  FaPhone,           // For contact
-  FaEnvelope,        // For email
-  FaLink,            // For links
-  FaLock,            // For security
-  FaUnlock,          // For unlock
-  FaStar,            // For favorites/ratings
-  FaHeart,           // For likes/favorites
-  FaShare,           // For sharing
-  FaExternalLinkAlt, // For external links
-  FaWindowClose,     // For close modals
-  FaAngleDown,       // For dropdown arrows
-  FaAngleUp,         // For dropdown arrows (up)
-  FaAngleRight,      // For right arrows
-  FaAngleLeft,       // For left arrows
-  FaFolder,          // For folders
-  FaFolderOpen,      // For open folders
-  FaClock,           // For time/clock
-  FaCalendar,        // For calendar (alternative)
-  FaCalculator,      // For calculations
-  FaChartLine,       // For charts/trends
-  FaDatabase,        // For database/storage
-  FaKey,             // For API keys/auth
-  FaWrench,          // For tools/settings
-  FaCubes,           // For components/modules
-  FaLayerGroup,      // For layers
-  FaMap,             // For maps
-  FaTable,           // For tables/data
-  FaColumns,         // For columns/layout
-  FaSlidersH,        // For sliders/controls
-  FaTag,             // For tags/labels
-  FaTags,            // For multiple tags
-  FaCloud,           // For cloud/storage
-  FaMobile,          // For mobile/responsive
-  FaDesktop,         // For desktop
-  FaLaptop,          // For laptop
-  FaServer,          // For server
-  FaNetworkWired,    // For network
-  FaGlobe,           // For web/internet
-  FaLanguage,        // For language/localization
-  FaPalette,         // For themes/colors
-  FaBold,            // For text formatting
-  FaItalic,          // For text formatting
-  FaUnderline,       // For text formatting
-  FaAlignLeft,       // For text alignment
-  FaAlignCenter,     // For text alignment
-  FaAlignRight,      // For text alignment
-  FaListUl,          // For bullet lists
-  FaListOl,          // For numbered lists
-  FaQuoteRight,      // For quotes
-  FaCode,            // For code
-  FaTerminal,        // For terminal/console
-  FaBug,             // For debugging
-  FaShieldAlt,       // For security/shield
-  FaRocket,          // For launch/start
-  FaHandPointer,     // For click/pointer
-  FaMousePointer,    // For cursor
-  FaRegCircle,       // For empty circles
-  FaRegSquare,       // For empty squares
-  FaMinus,           // For minus/remove
-  FaEquals,          // For equals
-  FaDivide,          // For divide
-  FaPercentage,      // For percentage
-  FaHashtag,         // For hashtag/number
-  FaAt,              // For @ mentions
+
+  FaUsers,
+  FaBuilding,
+  FaPlus,
+  FaSearch,
+  FaFilter,
+  FaDownload,
+  FaUpload,
+  FaPrint,
+  FaCopy,
+  FaEllipsisH,
+  FaBars,
+  FaCog,
+  FaBell,
+  FaUser,
+  FaSignOutAlt,
+  FaQuestionCircle,
+  FaChartBar,
+  FaFileAlt,
+  FaImage,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaEnvelope,
+  FaLink,
+  FaLock,
+  FaUnlock,
+  FaStar,
+  FaHeart,
+  FaShare,
+  FaExternalLinkAlt,
+  FaWindowClose,
+  FaAngleDown,
+  FaAngleUp,
+  FaAngleRight,
+  FaAngleLeft,
+  FaFolder,
+  FaFolderOpen,
+  FaClock,
+  FaCalendar,
+  FaCalculator,
+  FaChartLine,
+  FaDatabase,
+  FaKey,
+  FaWrench,
+  FaCubes,
+  FaLayerGroup,
+  FaMap,
+  FaTable,
+  FaColumns,
+  FaSlidersH,
+  FaTag,
+  FaTags,
+  FaCloud,
+  FaMobile,
+  FaDesktop,
+  FaLaptop,
+  FaServer,
+  FaNetworkWired,
+  FaGlobe,
+  FaLanguage,
+  FaPalette,
+  FaBold,
+  FaItalic,
+  FaUnderline,
+  FaAlignLeft,
+  FaAlignCenter,
+  FaAlignRight,
+  FaListUl,
+  FaListOl,
+  FaQuoteRight,
+  FaCode,
+  FaTerminal,
+  FaBug,
+  FaShieldAlt,
+  FaRocket,
+  FaHandPointer,
+  FaMousePointer,
+  FaRegCircle,
+  FaRegSquare,
+  FaMinus,
+  FaEquals,
+  FaDivide,
+  FaPercentage,
+  FaHashtag,
+  FaAt,
   FaDollarSign,
   FaEuroSign,
   FaPoundSign,
@@ -1074,13 +1074,13 @@ import {
   FaWarehouse
 } from "react-icons/fa";
 
-// Import modular components
+
 import { HomeSection } from "./DuplexTriplex/HomeSection";
 import { ProjectTabs } from "./DuplexTriplex/ProjectTabs";
 import { MainInfoSection } from "./DuplexTriplex/MainInfoSection";
 import { FloorSection } from "./DuplexTriplex/FloorSection";
 
-// ====================== DUPLETRIPLEX PROJECT COMPONENT ======================
+
 const DuplexTriplexProject = ({
   projectName,
   setProjectName,
@@ -1110,7 +1110,7 @@ const DuplexTriplexProject = ({
   editingProjectId = null,
   initialUnits = [],
   onClose,
-  showUnitOverviewOnLoad = false, // New prop to show overview on load
+  showUnitOverviewOnLoad = false,
 }) => {
   const { user } = useAuth();
   const [currentTab, setCurrentTab] = useState(selectedProject ? 1 : 0);
@@ -1136,7 +1136,7 @@ const DuplexTriplexProject = ({
     setAlertConfig({ message, type });
   };
 
-  // Initialize with showUnitOverviewOnLoad
+
   useEffect(() => {
     if (showUnitOverviewOnLoad) {
       setShowUnitEditingOverview(true);
@@ -1149,7 +1149,7 @@ const DuplexTriplexProject = ({
     }
   }, [initialUnits]);
 
-  // Listen for custom event to show unit overview
+
   useEffect(() => {
     const handleOpenUnitOverview = () => {
       setShowUnitEditingOverview(true);
@@ -1162,7 +1162,7 @@ const DuplexTriplexProject = ({
     };
   }, []);
 
-  // Set project data when in edit mode
+
   useEffect(() => {
     if (selectedProject) {
       console.log('Edit mode activated with project:', selectedProject);
@@ -1176,7 +1176,7 @@ const DuplexTriplexProject = ({
       setLandArea(selectedProject.land_area || selectedProject.landArea || '');
       setRevenuePlots(selectedProject.revenue_plots || selectedProject.revenuePlots || 0);
 
-      // Parse revenue_plots_data
+
       try {
         const parsedPlots = selectedProject.revenue_plots_data
           ? (typeof selectedProject.revenue_plots_data === 'string'
@@ -1189,7 +1189,7 @@ const DuplexTriplexProject = ({
         setRevenuePlotsData([]);
       }
 
-      // Parse facilities from database JSON
+
       try {
         const parsedFacilities = selectedProject.facilities
           ? (typeof selectedProject.facilities === 'string'
@@ -1202,7 +1202,7 @@ const DuplexTriplexProject = ({
         setFacilities({});
       }
 
-      // Parse custom_facilities from database JSON
+
       try {
         const parsedCustomFacilities = selectedProject.custom_facilities
           ? (typeof selectedProject.custom_facilities === 'string'
@@ -1215,7 +1215,7 @@ const DuplexTriplexProject = ({
         setCustomFacilities([]);
       }
 
-      // Load units from units_data (database column name)
+
       let unitsData = [];
 
       if (selectedProject.units_data) {
@@ -1229,7 +1229,7 @@ const DuplexTriplexProject = ({
           unitsData = [];
         }
       }
-      // Fallback to old property names for backwards compatibility
+
       else if (selectedProject.units) {
         unitsData = Array.isArray(selectedProject.units) ? selectedProject.units : [];
         console.log('✅ Loaded units from units (legacy):', unitsData);
@@ -1240,17 +1240,17 @@ const DuplexTriplexProject = ({
       setDeletedUnitIds([]);
       setNumUnits(unitsData.length || "");
 
-      // Extract unit prefix from first unit name or use database value
+
       if (selectedProject.unit_prefix) {
         setUnitPrefix(selectedProject.unit_prefix);
       } else if (unitsData && unitsData.length > 0 && unitsData[0].name) {
         const nameParts = unitsData[0].name.split('-');
         if (nameParts.length > 1) {
-          setUnitPrefix(nameParts[0]); // e.g., "UNIT" from "UNIT-001"
+          setUnitPrefix(nameParts[0]);
         }
       }
 
-      // Load initial unit data
+
       if (unitsData && unitsData.length > 0) {
         setSelectedUnit(unitsData[0]);
         if (unitsData[0].mainInfo) setMainInfo(unitsData[0].mainInfo);
@@ -1274,24 +1274,24 @@ const DuplexTriplexProject = ({
       setSelectedUnit(unitToEdit);
       setShowUnitEditingOverview(false);
 
-      // Set current tab based on unit completion
+
       if (!unitToEdit.mainInfo?.facing) {
-        setCurrentTab(1); // Main Info tab
+        setCurrentTab(1);
       } else if (!unitToEdit.floors?.groundFloor) {
-        setCurrentTab(2); // Ground floor
+        setCurrentTab(2);
       } else if (projectType === "duplex" && !unitToEdit.floors?.firstFloor) {
-        setCurrentTab(3); // First floor
+        setCurrentTab(3);
       } else if (projectType === "triplex" && !unitToEdit.floors?.firstFloor) {
-        setCurrentTab(3); // First floor
+        setCurrentTab(3);
       } else if (projectType === "triplex" && !unitToEdit.floors?.secondFloor) {
-        setCurrentTab(4); // Second floor
+        setCurrentTab(4);
       } else {
-        setCurrentTab(1); // Default to main info
+        setCurrentTab(1);
       }
     }
   };
 
-  // Add this function to mark unit as saved
+
   const markUnitAsSaved = (unitId) => {
     const updatedUnits = units.map(unit => {
       if (unit.id === unitId) {
@@ -1306,7 +1306,7 @@ const DuplexTriplexProject = ({
     setUnits(updatedUnits);
   };
 
-  // Add this function to mark unit as being edited
+
   const markUnitAsBeingEdited = (unitId) => {
     const updatedUnits = units.map(unit => ({
       ...unit,
@@ -1315,14 +1315,14 @@ const DuplexTriplexProject = ({
     setUnits(updatedUnits);
   };
 
-  // Add this useEffect to mark unit as being edited when selected
+
   useEffect(() => {
     if (selectedUnit && editingUnitId === selectedUnit.id) {
       markUnitAsBeingEdited(selectedUnit.id);
     }
   }, [selectedUnit, editingUnitId]);
 
-  // Add this function to complete editing for a unit
+
   const completeUnitEditing = (unitId) => {
     const updatedUnits = units.map(unit => {
       if (unit.id === unitId) {
@@ -1482,10 +1482,10 @@ const DuplexTriplexProject = ({
   };
 
   const handleSaveDuplexTriplexProject = async (unitsToSave = units) => {
-    // Get the existing project if editing
+
     const existingProject = selectedProject || {};
 
-    // Get existing units from database (using correct column name)
+
     let existingUnits = [];
     if (existingProject.units_data) {
       try {
@@ -1498,10 +1498,10 @@ const DuplexTriplexProject = ({
       }
     }
 
-    // Create a map of current units by ID and ensure lastSaved is updated
+
     const currentUnitsMap = new Map();
     const finalUnits = unitsToSave.map(unit => {
-      // Only mark as saved/complete if this is the currently selected unit being edited and saved
+
       const isCurrentlyEditing = selectedUnit && unit.id === selectedUnit.id;
       
       const updatedUnit = {
@@ -1510,7 +1510,7 @@ const DuplexTriplexProject = ({
         isComplete: isCurrentlyEditing ? true : unit.isComplete,
       };
       
-      // Optionally clear beingEdited flag when saved
+
       if (isCurrentlyEditing) {
         updatedUnit.isBeingEdited = false;
       }
@@ -1521,12 +1521,12 @@ const DuplexTriplexProject = ({
 
     existingUnits.forEach(existingUnit => {
       if (!currentUnitsMap.has(existingUnit.id) && !deletedUnitIds.includes(existingUnit.id)) {
-        // Add existing unit that hasn't been edited in this session
+
         finalUnits.push(existingUnit);
       }
     });
 
-    // Use snake_case for database field names
+
     const projectData = {
       name: projectName,
       type: projectType,
@@ -1543,11 +1543,11 @@ const DuplexTriplexProject = ({
       revenuePlotsData: (revenuePlotsData || [])
         .filter(plot => plot.plot_no || plot.plot_area_sqft || plot.khata_no || plot.fileName)
         .map(plot => {
-          // Remove File objects before stringifying for database
+
           const { file, ...rest } = plot;
           return rest;
         }),
-      // Preserve existing properties
+
       ...(selectedProject && {
         id: selectedProject.id,
         created_at: selectedProject.created_at,
@@ -1560,8 +1560,8 @@ const DuplexTriplexProject = ({
 
     try {
       if (isSubtype) {
-        // If it's a subtype of a custom project, skip internal server save
-        // and let PABC's handleSaveProject take care of it.
+
+
         onSaveProject?.({ ...projectData, id: projectId });
         return;
       }
@@ -1595,9 +1595,9 @@ const DuplexTriplexProject = ({
     }
   };
 
-  // Render Unit Editing Overview
+
   const renderUnitEditingOverview = () => {
-    // Calculate statistics
+
     const stats = {
       total: units.length,
       beingEdited: units.filter(u => u.isBeingEdited).length,
@@ -1608,7 +1608,7 @@ const DuplexTriplexProject = ({
 
     return (
       <div className="fixed inset-0 z-9999 overflow-y-auto">
-        {/* Glass Overlay */}
+
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
           onClick={() => {
@@ -1620,11 +1620,11 @@ const DuplexTriplexProject = ({
           }}
         />
 
-        {/* Modal Container */}
+
         <div className="relative min-h-screen flex items-center justify-center p-4">
-          {/* Modal Content */}
+
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-7xl max-h-[90vh] overflow-hidden">
-            {/* Header with gradient */}
+
             <div className="bg-linear-to-r from-slate-900 to-slate-800 text-white p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -1660,7 +1660,7 @@ const DuplexTriplexProject = ({
                       setShowUnitEditingOverview(false);
                       setEditingUnitId(null);
 
-                      // Sweet notification instead of alert
+
                       const notification = document.createElement('div');
                       notification.className = 'fixed top-4 right-4 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-lg z-[10000]';
                       notification.textContent = '✅ All unit editing completed!';
@@ -1699,9 +1699,9 @@ const DuplexTriplexProject = ({
               </div>
             </div>
 
-            {/* Content Area */}
+
             <div className="p-6 space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto">
-              {/* Stats Cards - Enhanced */}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {[
                   { label: 'Total Units', value: stats.total, color: 'bg-slate-50', iconColor: 'text-slate-600', ringColor: 'border-slate-100' },
@@ -1723,7 +1723,7 @@ const DuplexTriplexProject = ({
               </div>
 
 
-              {/* Units Table */}
+
               <div className="bg-white rounded-2xl border border-(--border-soft) overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
                   <table className="w-full">
@@ -1851,7 +1851,7 @@ const DuplexTriplexProject = ({
                               </button>
                               <button
                                 onClick={() => {
-                                  // Custom modal for details instead of alert
+
                                   const modal = document.createElement('div');
                                   modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-[10000] p-4';
                                   modal.innerHTML = `
@@ -1906,7 +1906,7 @@ const DuplexTriplexProject = ({
                 )}
               </div>
 
-              {/* Action Buttons */}
+
               <div className="mt-6 flex justify-between items-center">
                 <div className="text-sm text-slate-500">
                   Showing {units.length} unit(s)
@@ -1922,7 +1922,7 @@ const DuplexTriplexProject = ({
 
   const isEditMode = !!selectedProject;
 
-  // If showing unit editing overview, render that instead
+
   if (showUnitEditingOverview) {
     return renderUnitEditingOverview();
   }
@@ -1942,7 +1942,7 @@ const DuplexTriplexProject = ({
         onClose={onClose}
       />
 
-      {/* HOME SECTION */}
+
       {currentTab === 0 && (
         <HomeSection
           projectName={projectName}
@@ -1972,7 +1972,7 @@ const DuplexTriplexProject = ({
         />
       )}
 
-      {/* MAIN INFO SECTION */}
+
       {currentTab === 1 && (
         <MainInfoSection
           mainInfo={mainInfo}
@@ -2017,7 +2017,7 @@ const DuplexTriplexProject = ({
         />
       )}
 
-      {/* GROUND FLOOR SECTION */}
+
       {currentTab === 2 && (
         <FloorSection
           floorData={groundFloor}
@@ -2032,7 +2032,7 @@ const DuplexTriplexProject = ({
         />
       )}
 
-      {/* FIRST FLOOR SECTION */}
+
       {currentTab === 3 && projectType === "duplex" && (
         <FloorSection
           floorData={firstFloor}
@@ -2047,7 +2047,7 @@ const DuplexTriplexProject = ({
         />
       )}
 
-      {/* For Triplex - 1st Floor */}
+
       {currentTab === 3 && projectType === "triplex" && (
         <FloorSection
           floorData={firstFloor}
@@ -2062,7 +2062,7 @@ const DuplexTriplexProject = ({
         />
       )}
 
-      {/* For Triplex - 2nd Floor */}
+
       {currentTab === 4 && projectType === "triplex" && (
         <FloorSection
           floorData={secondFloor}

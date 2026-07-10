@@ -153,7 +153,7 @@ const History = () => {
     setExpandedEmployee(expandedEmployee === employeeId ? null : employeeId);
   };
 
-  // Filter employees based on filters
+
   const filteredEmployees = employees.filter((employee) => {
     const matchesName =
       !filters.name ||
@@ -221,7 +221,7 @@ const History = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Main content */}
+
       <div className="flex-1 p-7">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -234,7 +234,7 @@ const History = () => {
           </div>
         </div>
 
-        {/* Filters Card */}
+
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Filter Employees
@@ -274,20 +274,7 @@ const History = () => {
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               />
             </div>
-            {/* <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="currentCompany">
-                Current Company
-              </label>
-              <input
-                type="text"
-                id="currentCompany"
-                name="currentCompany"
-                value={filters.currentCompany}
-                onChange={handleFilterChange}
-                placeholder="Search by company"
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-              />
-            </div> */}
+
             <div>
               <label
                 className="block text-gray-700 text-sm font-medium mb-2"
@@ -333,7 +320,7 @@ const History = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-6">
           <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
             <div className="flex justify-between items-center">
@@ -474,7 +461,7 @@ const History = () => {
           </div>
         </div>
 
-        {/* Employees List */}
+
         <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -486,7 +473,7 @@ const History = () => {
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Current Position
                   </th>
-                  {/* <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Company</th> */}
+
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Current Salary
                   </th>
@@ -527,9 +514,7 @@ const History = () => {
                           {employee.position}
                         </div>
                       </td>
-                      {/* <td className="px-6 py-4">
-                        <div className="text-sm text-gray-500">{employee.currentCompany}</div>
-                      </td> */}
+
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-green-600">
                           {employee.currentSalary}

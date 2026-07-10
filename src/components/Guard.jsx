@@ -2,18 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { usePermission } from "../hooks/usePermission";
 
-/**
- * Guard component to conditionally render children based on user permissions.
- *
- * Examples:
- * <Guard permission="hrms.employee.add">
- *   <button>Add Employee</button>
- * </Guard>
- *
- * <Guard anyOf={["hrms.employee.edit", "hrms.employee.delete"]} fallback={<p>Locked</p>}>
- *   <EditControlPanel />
- * </Guard>
- */
+
 const Guard = ({
   permission,
   anyOf = [],

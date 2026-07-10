@@ -1,178 +1,178 @@
-// import React, { useRef, useState } from "react";
 
-// export default function StockQuery() {
-//     const printRef = useRef();
-//   const [itemData] = useState({
-//     name: "Bajaj WX 3 Wet Grinder",
-//     group: "Wet Grinders",
-//     closingBalance: "-46 Pcs",
-//     costPrice: "3,934.86/Pcs",
-//     costingMethod: "Avg. Cost",
-//     standardCost: "3,917.00/Pcs",
-//     partNo: "Not Applicable",
-//     category: "Not Applicable",
-//     closingValue: "(-)1,79,932.00",
-//     sellingPrice: "4,000.00/Pcs",
-//     marketValuationMethod: "Avg. Price",
-//   });
 
-//   const purchases = [
-//     {
-//       date: "21-Dec-20",
-//       party: "Confident Traders",
-//       qty: "1 Pcs",
-//       rate: "3,917.00",
-//       amount: "3,917.00",
-//     },
-//   ];
 
-//   const sales = [
-//     { date: "28-Feb-21", party: "Sun Stores", qty: "15 Pcs", rate: "4,000.00", amount: "60,000.00" },
-//     { date: "2-Nov-20", party: "Sun Stores", qty: "15 Pcs", rate: "4,000.00", amount: "60,000.00" },
-//     { date: "31-Aug-20", party: "Sun Stores", qty: "15 Pcs", rate: "4,000.00", amount: "60,000.00" },
-//     { date: "30-May-20", party: "Sun Stores", qty: "15 Pcs", rate: "4,000.00", amount: "60,000.00" },
-//   ];
 
-//   const godownDetails = [
-//     { godown: "Main Location", batch: "Primary Batch", qty: "(-)47 Pcs" },
-//     { godown: "Electronic City Godown", batch: "Primary Batch", qty: "1 Pcs" },
-//   ];
 
-//   const handlePrint = () => {
-//     const printContent = printRef.current.innerHTML;
-//     const printWindow = window.open("", "", "width=900,height=650");
-//     printWindow.document.write(`
-//       <html>
-//         <head>
-//           <title>Print</title>
-//           <style>
-//             body { font-family: Arial; padding: 10px; }
-//             table, th, td { border: 1px solid black; border-collapse: collapse; padding: 6px; }
-//             .title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
-//           </style>
-//         </head>
-//         <body>${printContent}</body>
-//       </html>
-//     `);
-//     printWindow.document.close();
-//     printWindow.print();
-//   };
 
-//   return (
-//     <div className="w-full bg-white p-4 shadow-lg border rounded text-sm font-medium">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
      
-//       {/* ----------------- Header Item Info ----------------- */}
-//       <div className="grid grid-cols-2 gap-6 border-b pb-3">
-//         <div>
-//           <p><span className="font-semibold">Name :</span> {itemData.name}</p>
-//           <p><span className="font-semibold">Group :</span> {itemData.group}</p>
-//           <p><span className="font-semibold">Closing Balance :</span> {itemData.closingBalance}</p>
-//           <p><span className="font-semibold">Cost price :</span> {itemData.costPrice}</p>
-//           <p><span className="font-semibold">Costing method :</span> {itemData.costingMethod}</p>
-//           <p><span className="font-semibold">Standard cost :</span> {itemData.standardCost}</p>
-//         </div>
 
-//         <div>
-//           <p><span className="font-semibold">Part No. :</span> {itemData.partNo}</p>
-//           <p><span className="font-semibold">Category :</span> {itemData.category}</p>
-//           <p><span className="font-semibold">Closing value :</span> {itemData.closingValue}</p>
-//           <p><span className="font-semibold">Standard selling price :</span> {itemData.sellingPrice}</p>
-//           <p><span className="font-semibold">Market valuation method :</span> {itemData.marketValuationMethod}</p>
-//         </div>
-//       </div>
 
-//       {/* ---------------- Purchases & Sales Table ---------------- */}
-//       <div className="grid grid-cols-2 gap-4 mt-4">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
-//         {/* Purchases */}
-//         <div>
-//           <h2 className="font-semibold bg-gray-200 p-2">Purchases</h2>
-//           <table className="w-full border">
-//             <thead className="bg-gray-100">
-//               <tr>
-//                 <th className="border p-2">Date</th>
-//                 <th className="border p-2">Party Name</th>
-//                 <th className="border p-2">Qty</th>
-//                 <th className="border p-2">Rate</th>
-//                 <th className="border p-2">Amount</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {purchases.map((p, i) => (
-//                 <tr key={i} className="hover:bg-yellow-100">
-//                   <td className="border p-2">{p.date}</td>
-//                   <td className="border p-2">{p.party}</td>
-//                   <td className="border p-2">{p.qty}</td>
-//                   <td className="border p-2">{p.rate}</td>
-//                   <td className="border p-2">{p.amount}</td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
 
-//         {/* Sales */}
-//         <div>
-//           <h2 className="font-semibold bg-gray-200 p-2">Sales</h2>
-//           <table className="w-full border">
-//             <thead className="bg-gray-100">
-//               <tr>
-//                 <th className="border p-2">Date</th>
-//                 <th className="border p-2">Party Name</th>
-//                 <th className="border p-2">Qty</th>
-//                 <th className="border p-2">Rate</th>
-//                 <th className="border p-2">Amount</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {sales.map((s, i) => (
-//                 <tr key={i}>
-//                   <td className="border p-2">{s.date}</td>
-//                   <td className="border p-2">{s.party}</td>
-//                   <td className="border p-2">{s.qty}</td>
-//                   <td className="border p-2">{s.rate}</td>
-//                   <td className="border p-2">{s.amount}</td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
 
-//       </div>
 
-//       {/* ---------------- Godown / Batch Details ---------------- */}
-//       <div className="mt-6">
-//         <h2 className="font-semibold bg-gray-200 p-2">Godown / Batch Details</h2>
 
-//         <table className="w-full border mt-1">
-//           <thead className="bg-gray-100">
-//             <tr>
-//               <th className="border p-2">Godown</th>
-//               <th className="border p-2">Batch</th>
-//               <th className="border p-2">Quantity</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {godownDetails.map((g, i) => (
-//               <tr key={i}>
-//                 <td className="border p-2">{g.godown}</td>
-//                 <td className="border p-2">{g.batch}</td>
-//                 <td className="border p-2">{g.qty}</td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
 
-//   <button onClick={()=>{
-//         window.print()
-//       }}>
-//         print
-//       </button> 
 
-//     </div>
-//   );
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -305,10 +305,10 @@ export default function ItemCategories() {
   const exportToCSV = () => {
     const csvData = [];
     
-    // Add headers
+
     csvData.push(['Category Name', 'Product Name', 'Product Code', 'Price', 'Stock', 'Unit']);
     
-    // Add data
+
     categories.forEach(category => {
       if (category.products.length > 0) {
         category.products.forEach(product => {
@@ -370,7 +370,7 @@ export default function ItemCategories() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
           <div className="flex justify-between items-center">
             <div>
@@ -408,7 +408,7 @@ export default function ItemCategories() {
             </div>
           </div>
 
-          {/* Search Bar */}
+
           <div className="mt-6">
             <div className="relative">
               <input
@@ -426,7 +426,7 @@ export default function ItemCategories() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Categories List */}
+
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-sm border">
               <div className="p-4 border-b bg-gray-50">
@@ -458,7 +458,7 @@ export default function ItemCategories() {
                           </h3>
                           <p className="text-gray-600 text-sm mt-1">{category.description}</p>
                           
-                          {/* Products List */}
+
                           {category.products.length > 0 && (
                             <div className="mt-3">
                               <div className="text-xs font-semibold text-gray-500 mb-2">PRODUCTS:</div>
@@ -492,19 +492,7 @@ export default function ItemCategories() {
                             <div className="font-semibold text-gray-800">{category.items} items</div>
                             <div className="text-green-600 font-medium">{category.value}</div>
                           </div>
-                          {/* <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleCategoryStatus(category.id);
-                            }}
-                            className={`px-3 py-1 rounded text-xs font-medium ${
-                              category.isActive
-                                ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                                : 'bg-green-100 text-green-700 hover:bg-green-200'
-                            }`}
-                          >
-                            {category.isActive ? 'Deactivate' : 'Activate'}
-                          </button> */}
+
                         </div>
                       </div>
                     </div>
@@ -514,9 +502,9 @@ export default function ItemCategories() {
             </div>
           </div>
 
-          {/* Sidebar - Category Details & Products */}
+
           <div className="space-y-6">
-            {/* Category Details */}
+
             {selectedCategory && (
               <div className="bg-white rounded-lg shadow-sm border p-6">
                 <h3 className="font-semibold text-lg text-gray-800 mb-4">Category Details</h3>
@@ -551,7 +539,7 @@ export default function ItemCategories() {
                   </div>
                 </div>
 
-                {/* Products in this Category */}
+
                 <div className="mt-6">
                   <h4 className="font-semibold text-gray-800 mb-3">Products in this Category</h4>
                   {selectedCategory.products.length > 0 ? (
@@ -590,7 +578,7 @@ export default function ItemCategories() {
               </div>
             )}
 
-            {/* Quick Stats */}
+
             <div className="bg-white rounded-lg shadow-sm border p-6">
               <h3 className="font-semibold text-lg text-gray-800 mb-4">Quick Stats</h3>
               <div className="space-y-4">
@@ -624,7 +612,7 @@ export default function ItemCategories() {
         </div>
       </div>
 
-      {/* Printable Content (Hidden) */}
+
       <div id="printable-content" className="hidden">
         {categories.map(category => (
           <div key={category.id} className="category">
@@ -660,7 +648,7 @@ export default function ItemCategories() {
         ))}
       </div>
 
-      {/* Add Product Modal */}
+
       {isAddingProduct && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">

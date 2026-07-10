@@ -1,9 +1,9 @@
 export const hrmsPermissions = [
-  // 1. Global HRMS Access
+
   { module: 'HRMS', action: 'Base Layout Access', code: 'hrms', description: 'Base access to the HRMS folder in the sidebar' },
   { module: 'HRMS', action: 'Super Admin Access', code: 'hrms.*', description: 'Complete access to the entire HRMS module (Super Admin level)' },
 
-  // 2. Employee Management
+
   { module: 'HRMS', action: 'Employee Layout Access', code: 'hrms.employee', description: 'Access to Employee Management sidebar/routes' },
   { module: 'HRMS', action: 'Full Employee Access', code: 'hrms.employee.*', description: 'Complete access to all Employee Management features' },
   { module: 'HRMS', action: 'Active Tab Access', code: 'hrms.employee.active', description: 'Access to Active Employees tab' },
@@ -15,7 +15,7 @@ export const hrmsPermissions = [
   { module: 'HRMS', action: 'Full Inactive Tab Access', code: 'hrms.employee.inactive.*', description: 'Complete access to actions in Inactive Employees tab' },
   { module: 'HRMS', action: 'View Inactive Employee', code: 'hrms.employee.inactive.view', description: 'Ability to view inactive employee details' },
 
-  // 3. Attendance
+
   { module: 'HRMS', action: 'Attendance Layout Access', code: 'hrms.attendance', description: 'Access to Attendance sidebar/routes' },
   { module: 'HRMS', action: 'Full Attendance Access', code: 'hrms.attendance.*', description: 'Complete access to all Attendance features' },
   { module: 'HRMS', action: 'Daily Punch Tab Access', code: 'hrms.attendance.daily_punch', description: 'Access to Daily Punch tab' },
@@ -32,7 +32,7 @@ export const hrmsPermissions = [
   { module: 'HRMS', action: 'Approve Leave', code: 'hrms.attendance.leaves.approve', description: 'Ability to approve a leave request' },
   { module: 'HRMS', action: 'Reject Leave', code: 'hrms.attendance.leaves.reject', description: 'Ability to reject a leave request' },
 
-  // 4. Task Management
+
   { module: 'HRMS', action: 'Tasks Layout Access', code: 'hrms.tasks', description: 'Access to Task Management sidebar/routes' },
   { module: 'HRMS', action: 'Full Tasks Access', code: 'hrms.tasks.*', description: 'Complete access to all Task features' },
   { module: 'HRMS', action: 'Assigned Tab Access', code: 'hrms.tasks.assigned', description: 'Access to Assigned Tasks tab' },
@@ -44,7 +44,7 @@ export const hrmsPermissions = [
   { module: 'HRMS', action: 'Full Completed Tasks Access', code: 'hrms.tasks.completed.*', description: 'Complete access to Completed Tasks actions' },
   { module: 'HRMS', action: 'View Completed Task', code: 'hrms.tasks.completed.view', description: 'Ability to view completed tasks' },
 
-  // 5. Report
+
   { module: 'HRMS', action: 'Report Layout Access', code: 'hrms.report', description: 'Access to Report sidebar/routes' },
   { module: 'HRMS', action: 'Full Report Access', code: 'hrms.report.*', description: 'Complete access to all Reports' },
   { module: 'HRMS', action: 'Attendance Report Tab Access', code: 'hrms.report.attendance', description: 'Access to Attendance Reports tab' },
@@ -54,7 +54,7 @@ export const hrmsPermissions = [
   { module: 'HRMS', action: 'Full Payroll Report Access', code: 'hrms.report.payroll.*', description: 'Complete access to Payroll Reports' },
   { module: 'HRMS', action: 'Export Payroll Report', code: 'hrms.report.payroll.export', description: 'Ability to export payroll report' },
 
-  // 6. Payroll
+
   { module: 'HRMS', action: 'Payroll Layout Access', code: 'hrms.payroll', description: 'Access to Payroll sidebar/routes' },
   { module: 'HRMS', action: 'Full Payroll Access', code: 'hrms.payroll.*', description: 'Complete access to all Payroll features' },
   { module: 'HRMS', action: 'Salary Slips Tab Access', code: 'hrms.payroll.salary_slips', description: 'Access to Salary Slips tab' },
@@ -65,7 +65,7 @@ export const hrmsPermissions = [
   { module: 'HRMS', action: 'Full Advances Access', code: 'hrms.payroll.advances.*', description: 'Complete access to Salary Advances actions' },
   { module: 'HRMS', action: 'Approve Advance', code: 'hrms.payroll.advances.approve', description: 'Ability to approve a salary advance' },
 
-  // 7. Job
+
   { module: 'HRMS', action: 'Job Layout Access', code: 'hrms.job', description: 'Access to Job sidebar/routes' },
   { module: 'HRMS', action: 'Full Job Access', code: 'hrms.job.*', description: 'Complete access to all Job features' },
   { module: 'HRMS', action: 'Active Jobs Tab Access', code: 'hrms.job.active_jobs', description: 'Access to Active Job Postings tab' },
@@ -78,7 +78,7 @@ export const hrmsPermissions = [
   { module: 'HRMS', action: 'View Application', code: 'hrms.job.applications.view', description: 'Ability to view applicant details' },
   { module: 'HRMS', action: 'Shortlist Application', code: 'hrms.job.applications.shortlist', description: 'Ability to shortlist an applicant' },
 
-  // 8. Message
+
   { module: 'HRMS', action: 'Message Layout Access', code: 'hrms.message', description: 'Access to Message sidebar/routes' },
   { module: 'HRMS', action: 'Full Message Access', code: 'hrms.message.*', description: 'Complete access to all Message features' },
   { module: 'HRMS', action: 'Inbox Tab Access', code: 'hrms.message.inbox', description: 'Access to Message Inbox tab' },
@@ -89,7 +89,7 @@ export const hrmsPermissions = [
   { module: 'HRMS', action: 'Full Sent Access', code: 'hrms.message.sent.*', description: 'Complete access to Sent Messages actions' },
   { module: 'HRMS', action: 'Create Message', code: 'hrms.message.sent.create', description: 'Ability to compose/send a new message' },
 
-  // 9. Calendar
+
   { module: 'HRMS', action: 'Calendar Layout Access', code: 'hrms.calendar', description: 'Access to Calendar sidebar/routes' },
   { module: 'HRMS', action: 'Full Calendar Access', code: 'hrms.calendar.*', description: 'Complete access to all Calendar features' },
   { module: 'HRMS', action: 'Events Tab Access', code: 'hrms.calendar.events', description: 'Access to Calendar Events tab' },

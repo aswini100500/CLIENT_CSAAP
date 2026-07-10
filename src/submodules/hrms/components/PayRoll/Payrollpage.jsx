@@ -66,12 +66,12 @@ const PayrollPage = () => {
   const canDownload = has("hrms.payroll.download");
   const companyId = user?.id;
   const companySlug = user?.slug;
-  /* ── Period selection ─────────────────────────────────── */
+
   const now = new Date();
   const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
 
-  /* ── Data ─────────────────────────────────────────────── */
+
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -87,10 +87,10 @@ const PayrollPage = () => {
   const [selectedEntries, setSelectedEntries] = useState([]);
   const [processingBulkAction, setProcessingBulkAction] = useState(null);
 
-  /* ── TDS overrides  { employeeId: number } ─────────────── */
+
   const [tdsValues, setTdsValues] = useState({});
 
-  /* ── UI state ──────────────────────────────────────────── */
+
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -124,11 +124,11 @@ const PayrollPage = () => {
 
   const entriesPerPage = 10;
 
-  /* ── Year range for selector ──────────────────────────── */
+
   const yearRange = [];
   for (let y = 2020; y <= now.getFullYear() + 1; y++) yearRange.push(y);
 
-  /* ── Fetch payroll config ───────────────────────────────── */
+
   const fetchPayrollConfig = useCallback(async () => {
     if (!companySlug) return;
     try {
@@ -146,7 +146,7 @@ const PayrollPage = () => {
     }
   }, [companyId, companySlug]);
 
-  /* ── Fetch payroll data ───────────────────────────────── */
+
   const fetchPayrollData = useCallback(async () => {
     if (!companyId) return;
     try {
@@ -185,7 +185,7 @@ const PayrollPage = () => {
     fetchPayrollConfig();
   }, [fetchPayrollData, fetchPayrollConfig]);
 
-  /* ── Close action menu on outside click ───────────────── */
+
   useEffect(() => {
     if (!showActionMenu) return;
     const close = () => setShowActionMenu(null);
@@ -193,7 +193,7 @@ const PayrollPage = () => {
     return () => document.removeEventListener("click", close);
   }, [showActionMenu]);
 
-  /* ── Computed payroll records ──────────────────────────── */
+
   const payrollRecords = useMemo(
     () =>
       employees.map((emp) => {
@@ -353,7 +353,7 @@ const PayrollPage = () => {
     [employees, tdsValues, payrollExists],
   );
 
-  /* ── Filtered + searched ──────────────────────────────── */
+
   const filteredRecords = useMemo(() => {
     const term = searchTerm.toLowerCase();
     if (!term) return payrollRecords;
@@ -366,7 +366,7 @@ const PayrollPage = () => {
     );
   }, [payrollRecords, searchTerm]);
 
-  /* ── Pagination ───────────────────────────────────────── */
+
   const totalPages = Math.ceil(filteredRecords.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
   const currentData = filteredRecords.slice(
@@ -374,7 +374,7 @@ const PayrollPage = () => {
     startIndex + entriesPerPage,
   );
 
-  /* ── Summary totals ───────────────────────────────────── */
+
   const totals = useMemo(
     () =>
       payrollRecords.reduce(
@@ -405,7 +405,7 @@ const PayrollPage = () => {
     [payrollRecords],
   );
 
-  /* ── Handlers ─────────────────────────────────────────── */
+
   const handleTdsChange = (empId, value) => {
     setTdsValues((prev) => ({ ...prev, [empId]: parseFloat(value) || 0 }));
   };
@@ -740,7 +740,7 @@ const PayrollPage = () => {
   return (
     <div className="crm-module-root app-shell p-4">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* ── Success toast ─────────────────────────────── */}
+
         {successMessage && (
           <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl border border-emerald-700 shadow-lg z-50 flex items-center gap-2 animate-in fade-in slide-in-from-top duration-200">
             <CheckCircle size={16} />
@@ -748,7 +748,7 @@ const PayrollPage = () => {
           </div>
         )}
 
-        {/* ── Header ────────────────────────────────────── */}
+
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="app-title">
@@ -760,7 +760,7 @@ const PayrollPage = () => {
             </p>
           </div>
 
-          {/* Period selector + refresh */}
+
           <div className="flex flex-wrap items-center gap-2">
             <select
               value={selectedMonth}
@@ -816,7 +816,7 @@ const PayrollPage = () => {
           </div>
         </div>
 
-        {/* ── Action bar (exports + config) ─────────────── */}
+
         {(canConfig || canDownload) && (
           <div className="app-panel p-4">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
@@ -872,7 +872,7 @@ const PayrollPage = () => {
           </div>
         )}
 
-        {/* ── Stats cards ───────────────────────────────── */}
+
         <div className="app-grid-5 gap-4">
           <div className="app-panel p-4">
             <p className="app-label flex items-center gap-1 text-[11px] uppercase tracking-wider">
@@ -965,7 +965,7 @@ const PayrollPage = () => {
           })()}
         </div>
 
-        {/* ── Search bar + Initiate button ─────────────── */}
+
         <div className="app-panel p-4 flex flex-col md:flex-row items-center gap-3">
           <div className="relative flex-1 max-w-sm">
             <Search
@@ -1100,7 +1100,7 @@ const PayrollPage = () => {
           </div>
         </div>
 
-        {/* ── Error state ───────────────────────────────── */}
+
         {error && (
           <div className="bg-rose-50/50 border border-rose-200 text-rose-700 rounded-xl p-4 flex items-center gap-2">
             <AlertCircle size={16} />
@@ -1114,7 +1114,7 @@ const PayrollPage = () => {
           </div>
         )}
 
-        {/* ── Table ─────────────────────────────────────── */}
+
         <div className="app-panel overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-(--border-soft)">
@@ -1186,7 +1186,7 @@ const PayrollPage = () => {
                             />
                           </td>
                         )}
-                        {/* ── Employee info ──────────── */}
+
                         <td
                           className={`px-4 py-3 align-top ${isFailed ? "opacity-50" : ""}`}
                         >
@@ -1212,7 +1212,7 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-                        {/* ── Attendance ─────────────── */}
+
                         <td
                           className={`px-4 py-3 align-top ${isFailed ? "opacity-50" : ""}`}
                         >
@@ -1265,7 +1265,7 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-                        {/* ── Earnings ───────────────── */}
+
                         <td
                           className={`px-4 py-3 align-top text-right ${isFailed ? "opacity-50" : ""}`}
                         >
@@ -1295,7 +1295,7 @@ const PayrollPage = () => {
                                 Special: {formatINR(payroll.specialAllowance)}
                               </div>
                             )}
-                            {/* Initial Other Earnings */}
+
                             {payroll.otherComponents
                               ?.filter((c) => c.type === "earning")
                               .map(
@@ -1319,7 +1319,7 @@ const PayrollPage = () => {
                                   Base Gross: {formatINR(payroll.baseGross)}
                                 </div>
 
-                                {/* Extra Earnings */}
+
                                 {payroll.extraEarnings?.map(
                                   (comp, idx) =>
                                     comp.amount > 0 && (
@@ -1347,7 +1347,7 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-                        {/* ── Deductions ─────────────── */}
+
                         <td
                           className={`px-4 py-3 align-top text-right ${isFailed ? "opacity-50" : ""}`}
                         >
@@ -1373,7 +1373,7 @@ const PayrollPage = () => {
                               </div>
                             )}
 
-                            {/* Initial Other Deductions */}
+
                             {payroll.otherComponents
                               ?.filter((c) => c.type === "deduction")
                               .map(
@@ -1386,7 +1386,7 @@ const PayrollPage = () => {
                                     </div>
                                   ),
                               )}
-                            {/* Extra Deductions */}
+
                             {payroll.extraDeductions?.map(
                               (comp, idx) =>
                                 comp.amount > 0 && (
@@ -1421,7 +1421,7 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-                        {/* ── Net pay ──────────────────── */}
+
                         <td
                           className={`px-4 py-3 align-top text-right ${isFailed ? "opacity-50" : ""}`}
                         >
@@ -1433,12 +1433,12 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-                        {/* ── Status ───────────────────── */}
+
                         <td className="px-4 py-3 align-top text-center">
                           <PayrollStatusBadge status={currentStatus} />
                         </td>
 
-                        {/* ── Actions ────────────────── */}
+
                         <td className="px-4 py-3 align-top text-right">
                           <div className="flex items-center justify-end gap-2 text-left">
                             <button
@@ -1566,7 +1566,7 @@ const PayrollPage = () => {
             </table>
           </div>
 
-          {/* ── Pagination ──────────────────────────────── */}
+
           {filteredRecords.length > 0 && (
             <div className="px-4 py-3 bg-(--bg-panel) border-t border-(--border-soft) flex flex-col sm:flex-row items-center justify-between text-xs text-(--text-soft)">
               <div className="mb-2 sm:mb-0 font-medium">
@@ -1606,7 +1606,7 @@ const PayrollPage = () => {
           )}
         </div>
 
-        {/* ── Modals ──────────────────────────────────── */}
+
         {selectedEmployee && (
           <EmployeeDetailsModal
             employee={selectedEmployee}
@@ -1643,7 +1643,7 @@ const PayrollPage = () => {
                   setPayrollConfig(res.data.data);
                   setShowConfigModal(false);
                   showSuccess("Configuration updated!");
-                  // Re-fetch payroll data to apply new policies to UI
+
                   if (!payrollExists) {
                     fetchPayrollData();
                   }
@@ -1723,7 +1723,7 @@ const PayrollPage = () => {
             );
           })()}
 
-        {/* Approve Modal */}
+
         {showApproveModal && (
           <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="app-modal w-full max-w-md overflow-hidden">
@@ -1763,7 +1763,7 @@ const PayrollPage = () => {
           </div>
         )}
 
-        {/* Finalize Modal */}
+
         {showFinalizeModal && (
           <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="app-modal w-full max-w-md overflow-hidden">
@@ -1805,7 +1805,7 @@ const PayrollPage = () => {
           </div>
         )}
 
-        {/* Return To Draft Modal */}
+
         {showRevertModal && (
           <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="app-modal w-full max-w-md overflow-hidden">
@@ -1848,7 +1848,7 @@ const PayrollPage = () => {
           </div>
         )}
 
-        {/* Discard Modal */}
+
         {showDiscardModal && (
           <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="app-modal w-full max-w-md overflow-hidden">

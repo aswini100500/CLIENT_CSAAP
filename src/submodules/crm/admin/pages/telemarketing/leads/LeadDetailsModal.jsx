@@ -51,7 +51,7 @@ const formatRelativeDate = (value) => {
   return date.toLocaleDateString();
 };
 
-/** Compact inline detail row used inside grouped sections */
+
 const DetailRow = ({
   icon: IconComponent,
   label,
@@ -130,7 +130,7 @@ const LeadDetailsModal = ({
       {!showProjectModal ? (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
         <div className="app-modal w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-        {/* ── Header ── */}
+
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="flex items-start gap-3.5 min-w-0 pr-4">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-(--brand-soft) border border-(--border-soft) shrink-0">
@@ -158,9 +158,9 @@ const LeadDetailsModal = ({
           </button>
         </div>
 
-        {/* ── Body ── */}
+
         <div className="p-5 overflow-y-auto custom-scrollbar space-y-4">
-          {/* Contact & details — single bordered card, two-column grid */}
+
           <div className="app-panel overflow-hidden">
             <div className="app-section-bar px-4 py-2.5">
               <h4 className="app-heading">
@@ -168,7 +168,7 @@ const LeadDetailsModal = ({
               </h4>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-(--bg-subtle)">
-              {/* Left column */}
+
               <div className="px-4 py-1 divide-y divide-(--bg-subtle)">
                 <DetailRow icon={Phone} label="Phone" value={lead.phone} iconColor="text-sky-500" />
                 <DetailRow icon={Mail} label="Email" value={lead.email} iconColor="text-emerald-500" />
@@ -188,7 +188,7 @@ const LeadDetailsModal = ({
                   iconColor="text-rose-400"
                 />
               </div>
-              {/* Right column */}
+
               <div className="px-4 py-1 divide-y divide-(--bg-subtle)">
                 <div className="flex items-center gap-2.5 py-2 min-w-0">
                   <Hash className="size-3.5 shrink-0 text-(--text-faint)" />
@@ -262,7 +262,7 @@ const LeadDetailsModal = ({
             </div>
           </div>
 
-          {/* Last interaction card */}
+
           <div className="app-panel overflow-hidden">
             <div className="app-section-bar px-4 py-2.5 flex items-center justify-between">
               <h4 className="app-heading">
@@ -321,7 +321,7 @@ const LeadDetailsModal = ({
             </div>
           </div>
 
-          {/* Quick actions */}
+
           {((canLogInteraction && onReportEntry) || onEdit) && (
             <div className={`grid grid-cols-1 ${((canLogInteraction && onReportEntry) && onEdit) ? "sm:grid-cols-2" : ""} gap-3`}>
               {canLogInteraction && onReportEntry && (
@@ -363,7 +363,7 @@ const LeadDetailsModal = ({
             </div>
           )}
 
-          {/* Footer metadata */}
+
           <div className="flex items-center gap-1.5 text-[12px] text-(--text-faint) px-1">
             <FileText className="size-3 text-(--text-faint)" />
             Created {formatDateTime(lead.created_at)}

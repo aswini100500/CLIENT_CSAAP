@@ -1,153 +1,153 @@
-// import React, { useState, useEffect } from "react";
-// import { Calendar, Search, FileText } from "lucide-react";
 
-// const ListOfSaleVoucher = () => {
-//   const [fromDate, setFromDate] = useState("2025-11-01");
-//   const [toDate, setToDate] = useState("2025-11-12");
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const [vouchers, setVouchers] = useState([]);
 
-//   // Sample static data (replace later with backend fetch)
-//   useEffect(() => {
-//     const data = [
-//       {
-//         id: 1,
-//         date: "2025-11-01",
-//         voucherNo: "SV001",
-//         party: "ABC Traders",
-//         amount: 25000,
-//         type: "Sales",
-//       },
-//       {
-//         id: 2,
-//         date: "2025-11-02",
-//         voucherNo: "SV002",
-//         party: "Prime Distributors",
-//         amount: 12000,
-//         type: "Sales",
-//       },
-//       {
-//         id: 3,
-//         date: "2025-11-05",
-//         voucherNo: "SV003",
-//         party: "TechMart Pvt Ltd",
-//         amount: 48000,
-//         type: "Sales",
-//       },
-//     ];
-//     setVouchers(data);
-//   }, []);
 
-//   const filteredVouchers = vouchers.filter(
-//     (v) =>
-//       v.party.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       v.voucherNo.toLowerCase().includes(searchQuery.toLowerCase())
-//   );
 
-//   const totalAmount = filteredVouchers.reduce((acc, v) => acc + v.amount, 0);
 
-//   return (
-//     <div className="p-6 bg-gray-50 min-h-screen font-[Inter]">
-//       {/* Header Section */}
-//       <div className="bg-blue-700 text-white p-4 rounded-t-xl shadow-md">
-//         <h1 className="text-xl font-semibold tracking-wide">List of Sales Vouchers</h1>
-//         <p className="text-sm text-blue-100">From {fromDate} to {toDate}</p>
-//       </div>
 
-//       {/* Filter Section */}
-//       <div className="bg-white shadow p-4 flex flex-wrap gap-4 justify-between items-center rounded-b-xl">
-//         <div className="flex items-center gap-2">
-//           <Calendar className="text-gray-600" size={18} />
-//           <div className="flex gap-2 items-center">
-//             <label className="text-gray-700 text-sm">From:</label>
-//             <input
-//               type="date"
-//               value={fromDate}
-//               onChange={(e) => setFromDate(e.target.value)}
-//               className="border rounded-md px-2 py-1 text-sm"
-//             />
-//             <label className="text-gray-700 text-sm">To:</label>
-//             <input
-//               type="date"
-//               value={toDate}
-//               onChange={(e) => setToDate(e.target.value)}
-//               className="border rounded-md px-2 py-1 text-sm"
-//             />
-//           </div>
-//         </div>
 
-//         {/* Search Bar */}
-//         <div className="flex items-center gap-2 border rounded-lg px-3 py-1 bg-gray-100">
-//           <Search size={16} className="text-gray-500" />
-//           <input
-//             type="text"
-//             placeholder="Search by Party or Voucher No..."
-//             className="outline-none bg-transparent text-sm w-64"
-//             value={searchQuery}
-//             onChange={(e) => setSearchQuery(e.target.value)}
-//           />
-//         </div>
-//       </div>
 
-//       {/* Table Section */}
-//       <div className="mt-6 bg-white rounded-xl shadow-md overflow-hidden">
-//         <table className="w-full border-collapse">
-//           <thead className="bg-blue-100 text-gray-800">
-//             <tr>
-//               <th className="text-left px-4 py-2 border-b">Date</th>
-//               <th className="text-left px-4 py-2 border-b">Voucher No</th>
-//               <th className="text-left px-4 py-2 border-b">Party Name</th>
-//               <th className="text-right px-4 py-2 border-b">Amount</th>
-//               <th className="text-left px-4 py-2 border-b">Type</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {filteredVouchers.length > 0 ? (
-//               filteredVouchers.map((v) => (
-//                 <tr
-//                   key={v.id}
-//                   className="hover:bg-blue-50 transition-colors duration-150"
-//                 >
-//                   <td className="px-4 py-2 border-b">{v.date}</td>
-//                   <td className="px-4 py-2 border-b text-blue-600 font-medium">
-//                     {v.voucherNo}
-//                   </td>
-//                   <td className="px-4 py-2 border-b">{v.party}</td>
-//                   <td className="px-4 py-2 border-b text-right font-semibold">
-//                     ₹{v.amount.toLocaleString()}
-//                   </td>
-//                   <td className="px-4 py-2 border-b">{v.type}</td>
-//                 </tr>
-//               ))
-//             ) : (
-//               <tr>
-//                 <td
-//                   colSpan={5}
-//                   className="text-center py-6 text-gray-500 italic"
-//                 >
-//                   No vouchers found for the selected period.
-//                 </td>
-//               </tr>
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
 
-//       {/* Summary Section */}
-//       <div className="flex justify-between items-center bg-blue-50 border-t mt-4 p-4 rounded-xl shadow-inner">
-//         <div className="flex items-center gap-2 text-blue-700">
-//           <FileText size={18} />
-//           <span className="font-medium">Total Vouchers: {filteredVouchers.length}</span>
-//         </div>
-//         <div className="text-lg font-semibold text-blue-800">
-//           Total Amount: ₹{totalAmount.toLocaleString()}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default ListOfSaleVoucher;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 import React, { useState, useEffect } from "react";
@@ -191,7 +191,7 @@ const ListOfSaleVoucher = () => {
 
   const API = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/sale-voucher`;
 
-  // Fetch vouchers from backend
+
   const fetchVouchers = async () => {
     try {
       setLoading(true);
@@ -253,7 +253,7 @@ const ListOfSaleVoucher = () => {
       generatedOn: today,
     });
 
-    // Totals
+
     doc.setFontSize(10);
     doc.setTextColor(40);
     doc.text(`Total Vouchers: ${filteredVouchers.length}`, 14, summaryY);
@@ -261,7 +261,7 @@ const ListOfSaleVoucher = () => {
     doc.setFont("helvetica", "bold");
     doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, { align: "right" });
 
-    // Table
+
     const tableData = filteredVouchers.map((v, i) => [
       i + 1,
       v.date,
@@ -297,7 +297,7 @@ const ListOfSaleVoucher = () => {
       }
     });
 
-    // Footer
+
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
@@ -397,7 +397,7 @@ const ListOfSaleVoucher = () => {
       generatedOn: today,
     });
 
-    // ===== SUMMARY =====
+
 
     doc.setFontSize(10);
 
@@ -423,7 +423,7 @@ const ListOfSaleVoucher = () => {
       }
     );
 
-    // ===== TABLE DATA =====
+
 
     const tableData =
       filteredVouchers.map(
@@ -441,7 +441,7 @@ const ListOfSaleVoucher = () => {
         ]
       );
 
-    // ===== TABLE =====
+
     autoTable(doc, {
 
       startY: tableStartY,
@@ -533,7 +533,7 @@ const ListOfSaleVoucher = () => {
 
       columnStyles: {
 
-        // SERIAL
+
 
         0: {
 
@@ -542,7 +542,7 @@ const ListOfSaleVoucher = () => {
           cellWidth: 12,
         },
 
-        // DATE
+
 
         1: {
 
@@ -551,7 +551,7 @@ const ListOfSaleVoucher = () => {
           cellWidth: 32,
         },
 
-        // VOUCHER NO
+
 
         2: {
 
@@ -560,7 +560,7 @@ const ListOfSaleVoucher = () => {
           cellWidth: 38,
         },
 
-        // CUSTOMER NAME
+
 
         3: {
 
@@ -569,7 +569,7 @@ const ListOfSaleVoucher = () => {
           cellWidth: 78,
         },
 
-        // AMOUNT
+
 
         4: {
 
@@ -581,7 +581,7 @@ const ListOfSaleVoucher = () => {
 
       didParseCell: (data) => {
 
-        // HEADER ALIGN
+
 
         if (
           data.section === "head"
@@ -591,7 +591,7 @@ const ListOfSaleVoucher = () => {
             "center";
         }
 
-        // FOOTER TOTAL ALIGN
+
 
         if (
           data.section === "foot"
@@ -616,7 +616,7 @@ const ListOfSaleVoucher = () => {
       },
     });
 
-    // ===== FOOTER =====
+
 
     const pageCount =
       doc.internal.getNumberOfPages();
@@ -658,7 +658,7 @@ const ListOfSaleVoucher = () => {
       );
     }
 
-    // ===== OPEN PRINT =====
+
 
     const blobURL =
       doc.output(
@@ -814,7 +814,7 @@ const ListOfSaleVoucher = () => {
 
             Swal.fire("Success", `${uniqueMissing.length} Ledgers created. Retrying import...`, "success");
 
-            // Refetch Ledgers and re-match
+
             const ledgerRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`);
             const newLedgers = Array.isArray(ledgerRes.data) ? ledgerRes.data : ledgerRes.data.data || [];
             setLedgersList(newLedgers);
@@ -836,7 +836,7 @@ const ListOfSaleVoucher = () => {
         }
       }
 
-      // Check again after potential creation
+
       const finalValid = vouchersPayload.filter(v => v.ledgerId);
       if (finalValid.length === 0) {
         Swal.fire("Error", "All vouchers are missing valid ledgers.", "error");
@@ -859,7 +859,7 @@ const ListOfSaleVoucher = () => {
   const loggedInRole = user?.role?.toLowerCase() || "admin";
   const loggedInEmployeeId = user?.employee_id || null;
 
-  // Filter search
+
   const filteredVouchers = vouchers.filter((v) => {
     if (loggedInRole === "employee") {
       if (v.employee_id != loggedInEmployeeId || v.role?.toLowerCase() !== 'employee') return false;
@@ -878,12 +878,12 @@ const ListOfSaleVoucher = () => {
     );
   });
 
-  // Total amount
+
   const totalAmount = filteredVouchers.reduce((acc, v) => acc + v.amount, 0);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen font-[Inter]">
-      {/* Header */}
+
       <div className="bg-blue-700 text-white p-4 rounded-t-xl shadow-md">
         <h1 className="text-xl font-semibold tracking-wide">
           List of Sales Vouchers
@@ -893,7 +893,7 @@ const ListOfSaleVoucher = () => {
         </p>
       </div>
 
-      {/* Filters */}
+
       <div className="bg-white shadow p-4 flex flex-wrap gap-4 justify-between items-center rounded-b-xl">
         <div className="flex items-center gap-2">
           <Calendar className="text-gray-600" size={18} />
@@ -915,19 +915,19 @@ const ListOfSaleVoucher = () => {
             />
           </div>
         </div>
-            {/* Top Header */}
+
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
 
-          {/* Left - Title */}
+
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Sales Vouchers
           </h1>
 
-          {/* Right - Search + Buttons */}
+
           <div className="flex items-center gap-2.5 flex-wrap">
 
-            {/* Search */}
+
             <div className="relative">
               <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -939,7 +939,7 @@ const ListOfSaleVoucher = () => {
               />
             </div>
 
-            {/* Buttons */}
+
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
@@ -961,7 +961,7 @@ const ListOfSaleVoucher = () => {
                 <Printer size={14} /> Print
               </button>
 
-              {/* Export Dropdown */}
+
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -1016,7 +1016,7 @@ const ListOfSaleVoucher = () => {
         </div>
       </div>  </div>
 
-      {/* Table Section */}
+
       <div className="max-w-6xl mx-auto mt-6 bg-white shadow rounded-lg border border-gray-300">
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
@@ -1109,7 +1109,7 @@ const ListOfSaleVoucher = () => {
 
         </div>
 
-        {/* Summary */}
+
         <div className="flex justify-between items-center bg-blue-50 border-t mt-4 p-4 rounded-xl shadow-inner">
           <div className="flex items-center gap-2 text-blue-700">
             <FileText size={18} />
@@ -1121,14 +1121,14 @@ const ListOfSaleVoucher = () => {
         </div>
       </div>
 
-      {/* ── Sale Voucher Detail Modal ── */}
+
       {viewModalOpen && selectedVoucher && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setViewModalOpen(false)}>
           <div
             className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
-            {/* Modal Header */}
+
             <div className="flex items-center justify-between px-6 py-4 border-b bg-linear-to-r from-blue-700 to-blue-500 rounded-t-2xl">
               <div>
                 <p className="text-blue-100 text-xs font-semibold uppercase tracking-widest">Sales Voucher</p>
@@ -1140,7 +1140,7 @@ const ListOfSaleVoucher = () => {
             </div>
 
             <div className="p-6 space-y-6">
-              {/* Voucher Basics */}
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   ["Date", selectedVoucher.date?.split("T")[0] || "—"],
@@ -1155,7 +1155,7 @@ const ListOfSaleVoucher = () => {
                 ))}
               </div>
 
-              {/* Party & GST */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600 mb-3 flex items-center gap-1"><MapPin size={12} /> Party Details</p>
@@ -1200,7 +1200,7 @@ const ListOfSaleVoucher = () => {
                 </div>
               </div>
 
-              {/* Items Table */}
+
               {selectedVoucher.items && selectedVoucher.items.length > 0 && (
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3 flex items-center gap-1"><Package size={12} /> Line Items</p>
@@ -1235,7 +1235,7 @@ const ListOfSaleVoucher = () => {
                 </div>
               )}
 
-              {/* Dispatch / Shipping */}
+
               {(selectedVoucher.dispatchedThrough || selectedVoucher.destination || selectedVoucher.motorVehicleNo || selectedVoucher.deliveryNoteNo) && (
                 <div className="bg-orange-50/50 rounded-xl p-4 border border-orange-100">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-orange-600 mb-3 flex items-center gap-1"><Truck size={12} /> Dispatch Details</p>
@@ -1260,7 +1260,7 @@ const ListOfSaleVoucher = () => {
                 </div>
               )}
 
-              {/* Narration */}
+
               {selectedVoucher.narration && (
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Narration</p>
@@ -1268,7 +1268,7 @@ const ListOfSaleVoucher = () => {
                 </div>
               )}
 
-              {/* Footer */}
+
               <div className="flex justify-between items-center pt-2">
                 <button
                   onClick={() => { setViewModalOpen(false); handleEdit(selectedVoucher.id); }}

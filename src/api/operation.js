@@ -3,21 +3,21 @@ import client from './client';
 const API_PREFIX = '/api/tenant';
 
 const operationApi = {
-    // Categories
+
     getCategories: () => client.get(`${API_PREFIX}/categories`),
 
-    // Products
+
     getProducts: () => client.get(`${API_PREFIX}/products`),
     getProductsByCategory: (categoryId) => client.get(`${API_PREFIX}/products/category/${categoryId}`),
 
-    // Suppliers
+
     getSuppliers: () => client.get(`${API_PREFIX}/supplier`),
     getSupplier: (id) => client.get(`${API_PREFIX}/supplier/${id}`),
     createSupplier: (data) => client.post(`${API_PREFIX}/supplier`, data),
     updateSupplier: (id, data) => client.put(`${API_PREFIX}/supplier/${id}`, data),
     deleteSupplier: (id) => client.delete(`${API_PREFIX}/supplier/${id}`),
 
-    // Contractors
+
     getContractors: () => client.get(`${API_PREFIX}/contractors`),
     getContractor: (id) => client.get(`${API_PREFIX}/contractors/${id}`),
     createContractor: (data) => client.post(`${API_PREFIX}/contractors`, data),
@@ -25,7 +25,7 @@ const operationApi = {
     deleteContractor: (id) => client.delete(`${API_PREFIX}/contractors/${id}`),
     searchContractors: (query) => client.get(`${API_PREFIX}/contractors/search?name=${query}`),
 
-    // Projects (Cross-category)
+
     getApartments: () => client.get(`${API_PREFIX}/apartments`),
     getCommercials: () => client.get(`${API_PREFIX}/commercials`),
     getPlottings: () => client.get(`${API_PREFIX}/plottings`),
@@ -33,7 +33,7 @@ const operationApi = {
     getTriplexes: () => client.get(`${API_PREFIX}/triplexes`),
     getCustomProjects: () => client.get(`${API_PREFIX}/custom-projects`),
 
-    // Vendors
+
     getVendors: () => client.get(`${API_PREFIX}/vendors`),
     getVendor: (id) => client.get(`${API_PREFIX}/vendors/${id}`),
     createVendor: (data) => client.post(`${API_PREFIX}/vendors/create`, data),
@@ -43,42 +43,42 @@ const operationApi = {
     updateVendorWorkHistory: (id, data) => client.put(`${API_PREFIX}/vendors/${id}/work-history`, data),
     deleteVendor: (id) => client.delete(`${API_PREFIX}/vendors/${id}`),
 
-    // Tenders
+
     getTenders: () => client.get(`${API_PREFIX}/tenders`),
     getTender: (id) => client.get(`${API_PREFIX}/tenders/${id}`),
     createTender: (data) => client.post(`${API_PREFIX}/tenders/create`, data),
     updateTender: (id, data) => client.put(`${API_PREFIX}/tenders/${id}`, data),
     deleteTender: (id) => client.delete(`${API_PREFIX}/tenders/${id}`),
 
-    // Equipments
+
     getEquipments: () => client.get(`${API_PREFIX}/equipments`),
     getEquipment: (id) => client.get(`${API_PREFIX}/equipments/${id}`),
     createEquipment: (data) => client.post(`${API_PREFIX}/equipments/create`, data),
     updateEquipment: (id, data) => client.put(`${API_PREFIX}/equipments/${id}`, data),
     deleteEquipment: (id) => client.delete(`${API_PREFIX}/equipments/${id}`),
 
-    // Operators
+
     getOperators: () => client.get(`${API_PREFIX}/operators`),
     getOperator: (id) => client.get(`${API_PREFIX}/operators/${id}`),
     createOperator: (data) => client.post(`${API_PREFIX}/operators/create`, data),
     updateOperator: (id, data) => client.put(`${API_PREFIX}/operators/${id}`, data),
     deleteOperator: (id) => client.delete(`${API_PREFIX}/operators/${id}`),
 
-    // Drivers
+
     getDrivers: () => client.get(`${API_PREFIX}/drivers`),
     getDriver: (id) => client.get(`${API_PREFIX}/drivers/${id}`),
     createDriver: (data) => client.post(`${API_PREFIX}/drivers/create`, data),
     updateDriver: (id, data) => client.put(`${API_PREFIX}/drivers/${id}`, data),
     deleteDriver: (id) => client.delete(`${API_PREFIX}/drivers/${id}`),
 
-    // Vehicles
+
     getVehicles: () => client.get(`${API_PREFIX}/vehicles`),
     getVehicle: (id) => client.get(`${API_PREFIX}/vehicles/${id}`),
     createVehicle: (data) => client.post(`${API_PREFIX}/vehicles/create`, data),
     updateVehicle: (id, data) => client.put(`${API_PREFIX}/vehicles/${id}`, data),
     deleteVehicle: (id) => client.delete(`${API_PREFIX}/vehicles/${id}`),
 
-    // Hindering Records
+
     getHinderingRecords: () => client.get(`${API_PREFIX}/hindering-records`),
     getHinderingRecord: (id) => client.get(`${API_PREFIX}/hindering-records/${id}`),
     createHinderingRecord: (data) => client.post(`${API_PREFIX}/hindering-records/create`, data),
@@ -87,7 +87,7 @@ const operationApi = {
     updateHinderingRecordStatus: (id, status) => client.patch(`${API_PREFIX}/hindering-records/${id}/status`, { status }),
 
 
-    // Labour Rates
+
     getLabourRates: () => client.get(`${API_PREFIX}/labour-rates`),
     getLabourRate: (id) => client.get(`${API_PREFIX}/labour-rates/${id}`),
     createLabourRate: (data) => client.post(`${API_PREFIX}/labour-rates/save`, data),
@@ -97,21 +97,21 @@ const operationApi = {
     deleteLabourFacility: (id) => client.delete(`${API_PREFIX}/labour-rates/facility/${id}`),
 
 
-    // Project Budgets
+
     getProjectBudgets: () => client.get(`${API_PREFIX}/project-budgets`),
     getProjectBudget: (id) => client.get(`${API_PREFIX}/project-budgets/${id}`),
     createProjectBudget: (data) => client.post(`${API_PREFIX}/project-budgets/create`, data),
     updateProjectBudget: (id, data) => client.put(`${API_PREFIX}/project-budgets/${id}`, data),
     deleteProjectBudget: (id) => client.delete(`${API_PREFIX}/project-budgets/${id}`),
 
-    // Bill Inwards
+
     getBillInwards: () => client.get(`${API_PREFIX}/bill-inwards`),
     getBillInward: (id) => client.get(`${API_PREFIX}/bill-inwards/${id}`),
     createBillInward: (data) => client.post(`${API_PREFIX}/bill-inwards/create`, data),
     updateBillInward: (id, data) => client.put(`${API_PREFIX}/bill-inwards/${id}`, data),
     deleteBillInward: (id) => client.delete(`${API_PREFIX}/bill-inwards/${id}`),
 
-    // Contractor Compliances
+
     getContractorCompliances: () => client.get(`${API_PREFIX}/contractor-compliances`),
     getContractorCompliance: (id) => client.get(`${API_PREFIX}/contractor-compliances/${id}`),
     createContractorCompliance: (data) => client.post(`${API_PREFIX}/contractor-compliances`, data),
@@ -120,25 +120,25 @@ const operationApi = {
     createContractorComplianceItem: (complianceId, data) => client.post(`${API_PREFIX}/contractor-compliances/${complianceId}/items`, data),
     updateContractorComplianceItemStatus: (complianceId, itemId, data) => client.patch(`${API_PREFIX}/contractor-compliances/${complianceId}/items/${itemId}/status`, data),
 
-    // Tender Work Orders
+
     getTenderWorkOrders: () => client.get(`${API_PREFIX}/tenders/work-order/all`),
     createTenderWorkOrder: (data) => client.post(`${API_PREFIX}/tenders/work-order/create`, data),
     updateTenderWorkOrder: (id, data) => client.put(`${API_PREFIX}/tenders/work-order/${id}`, data),
     deleteTenderWorkOrder: (id) => client.delete(`${API_PREFIX}/tenders/work-order/${id}`),
     getTenderApplicants: (tenderId) => client.get(`${API_PREFIX}/tenders/${tenderId}/applicants`),
 
-    // Indents
+
     getIndentMasterData: () => client.get(`${API_PREFIX}/indents/master-data`),
     saveIndentEntry: (data) => client.post(`${API_PREFIX}/indents/save`, data),
     getIndentHistory: (params) => client.get(`${API_PREFIX}/indents/history`, { params }),
     updateIndentStatus: (id, status) => client.put(`${API_PREFIX}/indents/status/${id}`, { status }),
     updateIndent: (id, data) => client.put(`${API_PREFIX}/indents/${id}`, data),
     deleteIndent: (id) => client.delete(`${API_PREFIX}/indents/${id}`),
-    // Indent Categories and Products
+
     createCategory: (data) => client.post(`${API_PREFIX}/categories`, data),
     createProduct: (data) => client.post(`${API_PREFIX}/products`, data),
 
-    // Work Diary
+
     getProjectSetups: () => client.get(`${API_PREFIX}/work-diary/project-setup`),
     getProjectSetup: (id) => client.get(`${API_PREFIX}/work-diary/project-setup/${id}`),
     createProjectSetup: (data) => client.post(`${API_PREFIX}/work-diary/project-setup`, data),
@@ -169,13 +169,13 @@ const operationApi = {
     updateDailyReport: (id, data) => client.put(`${API_PREFIX}/work-diary/daily-reports/${id}`, data),
     deleteDailyReport: (id) => client.delete(`${API_PREFIX}/work-diary/daily-reports/${id}`),
 
-    // Raw Materials
+
     getRawMaterials: () => client.get(`${API_PREFIX}/work-diary/raw-materials`),
     createRawMaterial: (data) => client.post(`${API_PREFIX}/work-diary/raw-materials`, data),
     updateRawMaterial: (id, data) => client.put(`${API_PREFIX}/work-diary/raw-materials/${id}`, data),
     deleteRawMaterial: (id) => client.delete(`${API_PREFIX}/work-diary/raw-materials/${id}`),
 
-//Bill of Quantities
+
     getBOQItems: () => client.get(`${API_PREFIX}/document-managements`),
     createBOQItem: (data) => client.post(`${API_PREFIX}/document-managements`, data),
     updateBOQItem: (id, data) => client.put(`${API_PREFIX}/document-managements/${id}`, data),

@@ -48,19 +48,19 @@ const BasicInfoTab = ({
   departmentsList = [],
   designationsList = [],
 }) => {
-  // Filter designations based on selected department
+
   const getFilteredDesignations = () => {
     if (!formData.department) return [];
     
-    // Assuming designationsList is an array of objects with department and designation properties
-    // Adjust this based on your actual data structure
+
+
     if (designationsList.length > 0 && typeof designationsList[0] === 'object') {
       return designationsList
         .filter(item => item.department === formData.department)
         .map(item => item.designation);
     }
     
-    // If designationsList is just an array of strings, return as is
+
     return designationsList;
   };
 
@@ -78,12 +78,12 @@ const BasicInfoTab = ({
             field.options = departmentsList;
           }
           
-          // Handle designation field - update options based on department
+
           if (field.name === "postApplied") {
             field.options = filteredDesignations;
           }
 
-          // Skip rendering designation field if no department is selected
+
           if (field.name === "postApplied" && !formData.department) {
             return null;
           }

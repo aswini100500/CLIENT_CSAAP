@@ -20,10 +20,10 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-/** Returns distance in metres between two lat/lon points (Haversine). */
+
 const getDistanceMetres = (lat1, lon1, lat2, lon2) => {
   const toRad = (v) => (v * Math.PI) / 180;
-  const R = 6_371_000; // Earth radius in metres
+  const R = 6_371_000;
   const dLat = toRad(lat2 - lat1);
   const dLon = toRad(lon2 - lon1);
   const a =
@@ -396,7 +396,7 @@ const XYZ = () => {
     hasPunchedIn &&
     (otEligibleFromApi || liveOtMetrics.otEligible);
 
-  // ── Geofence: disable submit when user is not within 10 m of QR location ──
+
   const hasDeviceLocation = deviceLat != null && deviceLon != null;
   const hasQrLocation = qrLat != null && qrLon != null;
   const distanceMetres =
@@ -468,7 +468,7 @@ const XYZ = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ── Validate synchronously before entering loading state ──
+
     if (!formData.employeeId) {
       Swal.fire({
         icon: "warning",
@@ -573,7 +573,7 @@ const XYZ = () => {
       }
     }
 
-    // ── All checks passed — now enter loading state ──
+
     if (hasPunchedIn && !timesheetDetails.trim()) {
       Swal.fire({
         icon: "warning",
@@ -1099,7 +1099,7 @@ const XYZ = () => {
                   </label>
                 )}
 
-                {/* ── Geofence warning banner ── */}
+
                 {!hasPunchedOut && geofenceBlocked && (
                   <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3.5 text-sm text-red-800">
                     <CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />

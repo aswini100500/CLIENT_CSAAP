@@ -48,7 +48,7 @@ const AdminMonthlyReports = () => {
   const years = [2024, 2025, 2026];
   const statuses = ["pending", "approved", "rejected"];
 
-  // Get unique employees for filter
+
   const uniqueEmployees = reports.reduce((acc, report) => {
     if (!acc.find((e) => e.id === report.employee.id)) {
       acc.push({
@@ -105,7 +105,7 @@ const AdminMonthlyReports = () => {
 
       Swal.fire("Success", `Report ${status} successfully`, "success");
 
-      // refresh list
+
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/monthly-reports/${slug}/admin/all`,
       );
@@ -198,9 +198,9 @@ const AdminMonthlyReports = () => {
     a.click();
   };
 
-  // Filter reports
+
   const filteredReports = reports.filter((report) => {
-    // Employee filter
+
     if (
       filters.employee !== "all" &&
       report.employee.id !== (filters.employee)
@@ -208,22 +208,22 @@ const AdminMonthlyReports = () => {
       return false;
     }
 
-    // Month filter
+
     if (filters.month !== "all" && report.month !== filters.month) {
       return false;
     }
 
-    // Year filter
+
     if (filters.year !== "all" && report.year !== parseInt(filters.year)) {
       return false;
     }
 
-    // Status filter
+
     if (filters.status !== "all" && report.status !== filters.status) {
       return false;
     }
 
-    // Search filter (employee name, employee ID, department)
+
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
       return (
@@ -236,7 +236,7 @@ const AdminMonthlyReports = () => {
     return true;
   });
 
-  // Statistics
+
   const stats = {
     total: filteredReports.length,
     pending: filteredReports.filter((r) => r.status === "pending").length,
@@ -247,7 +247,7 @@ const AdminMonthlyReports = () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      {/* Header */}
+
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">
@@ -266,7 +266,7 @@ const AdminMonthlyReports = () => {
         </button>
       </div>
 
-      {/* Statistics Cards */}
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow-sm p-4">
           <div className="flex items-center justify-between">
@@ -323,7 +323,7 @@ const AdminMonthlyReports = () => {
         </div>
       </div>
 
-      {/* Filters */}
+
       <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
@@ -427,7 +427,7 @@ const AdminMonthlyReports = () => {
         </div>
       </div>
 
-      {/* Reports Table */}
+
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -520,7 +520,7 @@ const AdminMonthlyReports = () => {
         )}
       </div>
 
-      {/* Review Modal */}
+
       {selectedReport && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
@@ -540,7 +540,7 @@ const AdminMonthlyReports = () => {
                 </button>
               </div>
 
-              {/* Employee Info */}
+
               <div className="bg-gray-50 p-4 rounded-lg mb-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -564,7 +564,7 @@ const AdminMonthlyReports = () => {
                 </div>
               </div>
 
-              {/* Report Details */}
+
               <div className="space-y-4 mb-6">
                 <div>
                   <p className="text-sm font-medium text-gray-700">Period</p>
@@ -616,7 +616,7 @@ const AdminMonthlyReports = () => {
                 </div>
               </div>
 
-              {/* Admin Comment */}
+
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Admin Feedback
@@ -630,7 +630,7 @@ const AdminMonthlyReports = () => {
                 />
               </div>
 
-              {/* Action Buttons */}
+
               <div className="flex justify-end gap-3">
                 <button
                   onClick={() => {

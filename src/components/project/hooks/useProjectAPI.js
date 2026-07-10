@@ -5,33 +5,30 @@ import useAuth from '../../../hooks/useAuth';
 const API_URL = "https://api.csaap.com/api/tenantuser/projects";
 
 
-/**
- * Custom hook for managing project API operations
- * Handles authentication, error formatting, and ID extraction
- */
+
 export const useProjectAPI = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const { user, token } = useAuth();
     const slug = user?.slug || "";
 
-    /* -------------- Get Auth Headers -------------- */
+
     const getAuthHeaders = useCallback(() => {
         const rawToken = token || localStorage.getItem("token") || "";
         return rawToken ? { Authorization: `Bearer ${rawToken}` } : {};
     }, [token]);
 
-    /* -------------- Extract ID Helper -------------- */
+
     const extractIdFromResponse = useCallback((responseData) => {
         if (!responseData) return null;
 
-        // Direct ID fields
+
         if (responseData.id) return responseData.id;
         if (responseData._id) return responseData._id;
         if (responseData.projectId) return responseData.projectId;
         if (responseData.project_id) return responseData.project_id;
 
-        // Nested in data
+
         if (responseData.data) {
             if (responseData.data.id) return responseData.data.id;
             if (responseData.data._id) return responseData.data._id;
@@ -39,7 +36,7 @@ export const useProjectAPI = () => {
             if (responseData.data.project_id) return responseData.data.project_id;
         }
 
-        // Deep search
+
         const findIdInObject = (obj) => {
             for (const [key, value] of Object.entries(obj)) {
                 const keyLower = key.toLowerCase();
@@ -65,7 +62,7 @@ export const useProjectAPI = () => {
         return findIdInObject(responseData);
     }, []);
 
-    /* -------------- Format Server Errors -------------- */
+
     const formatServerErrors = useCallback((err) => {
         const respData = err?.response?.data;
         if (!respData) {
@@ -106,7 +103,7 @@ export const useProjectAPI = () => {
         return JSON.stringify(respData);
     }, []);
 
-    /* -------------- Create Project -------------- */
+
     const createProject = useCallback(async (projectData) => {
         setIsLoading(true);
         setError(null);
@@ -124,7 +121,7 @@ export const useProjectAPI = () => {
                 boundary_type: "compound_wall",
             };
 
-            // Add price details if provided
+
             if (projectData.priceDetails) {
                 const pd = {
                     expected_price: projectData.priceDetails.expectedPrice || "",
@@ -132,7 +129,7 @@ export const useProjectAPI = () => {
                     price_negotiable: !!projectData.priceDetails.priceNegotiable,
                 };
 
-                // Convert numeric strings to numbers
+
                 if (pd.expected_price && !isNaN(Number(pd.expected_price))) {
                     pd.expected_price = Number(pd.expected_price);
                 }
@@ -140,7 +137,7 @@ export const useProjectAPI = () => {
                     pd.token_amount = Number(pd.token_amount);
                 }
 
-                // Only include if has values
+
                 const hasAny = Object.values(pd).some((v) => v !== undefined && v !== "" && v !== null);
                 if (hasAny) {
                     payload.price_details = pd;
@@ -158,7 +155,7 @@ export const useProjectAPI = () => {
 
             let projectId = extractIdFromResponse(response.data);
 
-            // Try location header if no ID in response
+
             if (!projectId && response.headers?.location) {
                 const location = response.headers.location;
                 const idMatch = location.match(/\/([0-9a-fA-F-]{3,})$/);
@@ -171,7 +168,7 @@ export const useProjectAPI = () => {
                 throw new Error("No project ID returned from API");
             }
 
-            // Convert string IDs to numbers if applicable
+
             if (typeof projectId === "string" && /^\d+$/.test(projectId)) {
                 projectId = parseInt(projectId, 10);
             }
@@ -189,7 +186,7 @@ export const useProjectAPI = () => {
         }
     }, [getAuthHeaders, extractIdFromResponse, formatServerErrors, slug]);
 
-    /* -------------- Update Project -------------- */
+
     const updateProject = useCallback(async (projectId, projectData) => {
         if (!projectId) {
             throw new Error("No project ID provided for update");
@@ -220,7 +217,7 @@ export const useProjectAPI = () => {
                 loan: projectData.loan || "",
             };
 
-            // Add price details if provided
+
             if (projectData.priceDetails) {
                 const pd = {
                     expected_price: projectData.priceDetails.expectedPrice || null,
@@ -263,7 +260,7 @@ export const useProjectAPI = () => {
         }
     }, [getAuthHeaders, formatServerErrors, slug]);
 
-    /* -------------- Create Block -------------- */
+
     const createBlock = useCallback(async (projectId, blockData) => {
         if (!projectId) {
             throw new Error("Project ID required to create block");
@@ -307,7 +304,7 @@ export const useProjectAPI = () => {
         }
     }, [getAuthHeaders, extractIdFromResponse, formatServerErrors, slug]);
 
-    /* -------------- Update Block -------------- */
+
     const updateBlock = useCallback(async (projectId, blockId, blockData) => {
         if (!projectId || !blockId) {
             throw new Error("Project and block IDs required");
@@ -346,7 +343,7 @@ export const useProjectAPI = () => {
         }
     }, [getAuthHeaders, formatServerErrors, slug]);
 
-    /* -------------- Create Unit -------------- */
+
     const createUnit = useCallback(async (projectId, unitData) => {
         if (!projectId || !unitData.blockId) {
             throw new Error("Project and block IDs required");
@@ -378,7 +375,7 @@ export const useProjectAPI = () => {
                 total_built_up_area: unitData.areaDetails?.builtUpArea || 0,
             };
 
-            // Optional fields
+
             if (unitData.priceDetails?.expectedPrice) payload.price = unitData.priceDetails.expectedPrice;
             if (unitData.broker) payload.broker = unitData.broker;
             if (unitData.purchaser) payload.purchaser = unitData.purchaser;
@@ -406,7 +403,7 @@ export const useProjectAPI = () => {
         }
     }, [getAuthHeaders, extractIdFromResponse, formatServerErrors, slug]);
 
-    /* -------------- Create Floor Details -------------- */
+
     const createFloorDetails = useCallback(async (projectId, unitId, floorData) => {
         if (!projectId || !unitId) {
             throw new Error("Project and unit IDs required");
@@ -457,7 +454,7 @@ export const useProjectAPI = () => {
     }, [getAuthHeaders, formatServerErrors, slug]);
 
 
-    /* -------------- Fetch Revenue Plots -------------- */
+
     const fetchRevenuePlots = useCallback(async (projectId) => {
         if (!projectId) return [];
         try {
@@ -475,7 +472,7 @@ export const useProjectAPI = () => {
         }
     }, [getAuthHeaders, slug]);
 
-    /* -------------- Fetch Floor Details -------------- */
+
     const fetchFloorDetails = useCallback(async (projectId, unitId) => {
         if (!projectId || !unitId) return null;
         try {

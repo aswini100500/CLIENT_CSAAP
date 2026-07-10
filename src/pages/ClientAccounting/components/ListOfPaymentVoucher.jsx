@@ -1,148 +1,148 @@
-// import React, { useState, useEffect } from "react";
-// import { ArrowLeft, Search } from "lucide-react";
-// import Swal from "sweetalert2";
-// import axios from "axios";
-// import { useCompany } from "../context/CompanyContext";
 
-// const ListOfPaymentVoucher = () => {
-//   const [vouchers, setVouchers] = useState([]);
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const [loading, setLoading] = useState(false);
 
-//   // Simulated companyId context (replace with your actual context)
-//   const { companyId, companyName, employees } = useCompany();
+
+
+
+
+
+
+
+
+
+
+
 
 const getEmployeeName = (id) => {
   const emp = employees?.find(e => e.id == id);
   return emp ? (emp.name || emp.first_name || "Employee") : "Unknown Employee";
 };
-//   useEffect(() => {
-//     if (!companyId) {
-//       Swal.fire({
-//         icon: "info",
-//         title: "No Company Selected",
-//         text: "Please select a company first.",
-//         confirmButtonText: "Go to Dashboard",
-//       }).then(() => {
-//         window.location.href = "/dashboard";
-//       });
-//     } else {
-//       fetchVouchers();
-//     }
-//   }, [companyId]);
 
-//   const fetchVouchers = async () => {
-//     setLoading(true);
-//     try {
-//       const res = await axios.get(
-//         `http://localhost:3000/api/v1/payment-voucher/all/${companyId}`
-//       );
-//       console.log(res);
-//       setVouchers(res.data || []);
-//     } catch (error) {
-//       Swal.fire("Error", "Failed to fetch vouchers.", error);
-//     }
-//     setLoading(false);
-//   };
 
-//   const filteredVouchers = vouchers.filter(
-//     (v) =>
-//       v.partyName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       v.voucherNumber?.toString().includes(searchQuery)
-//   );
 
-//   return (
-//     <div className="min-h-screen bg-[#F4F6F8] font-[monospace]">
-//       {/* Top Header */}
-//       <div className="bg-[#005AB3] text-white px-6 py-3 flex items-center justify-between shadow">
-//         <div className="flex items-center gap-3">
-//           <button
-//             onClick={() => window.history.back()}
-//             className="flex items-center gap-1 text-white hover:text-yellow-200 transition"
-//           >
-//             <ArrowLeft size={18} /> Back
-//           </button>
-//           <h1 className="text-lg font-bold uppercase tracking-wide">
-//             List of Payment Vouchers
-//           </h1>
-//         </div>
 
-//         {/* Search Bar */}
-//         <div className="relative w-60">
-//           <Search
-//             size={16}
-//             className="absolute left-3 top-2.5 text-gray-400"
-//           />
-//           <input
-//             type="text"
-//             placeholder="Search Party / Voucher No."
-//             className="pl-8 pr-3 py-1 rounded text-sm w-full text-black"
-//             value={searchQuery}
-//             onChange={(e) => setSearchQuery(e.target.value)}
-//           />
-//         </div>
-//       </div>
 
-//       {/* Table Section */}
-//       <div className="max-w-6xl mx-auto mt-6 bg-white shadow rounded-lg border border-gray-300">
-//         <div className="overflow-x-auto">
-//           <table className="w-full text-sm border-collapse">
-//             <thead className="bg-[#E6EEF8] border-b border-gray-300">
-//               <tr className="text-left text-gray-700">
-//                 <th className="px-4 py-2 border-r">Date</th>
-//                 <th className="px-4 py-2 border-r">Voucher No.</th>
-//                 <th className="px-4 py-2 border-r">Party Name</th>
-//                 <th className="px-4 py-2 border-r">Amount (₹)</th>
-//                 <th className="px-4 py-2 border-r">Narration</th>
-// {showEmployeeActivity && <th className="text-left px-2 py-2">Employee Name</th>}
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {loading ? (
-//                 <tr>
-//                   <td
-//                     colSpan={5}
-//                     className="text-center py-6 text-gray-500 italic"
-//                   >
-//                     Loading vouchers...
-//                   </td>
-//                 </tr>
-//               ) : filteredVouchers.length > 0 ? (
-//                 filteredVouchers.map((voucher, index) => (
-//                   <tr
-//                     key={index}
-//                     className={`border-b border-gray-200 hover:bg-[#F9FCFF] transition ${
-//                       index % 2 === 0 ? "bg-white" : "bg-[#F7F9FB]"
-//                     }`}
-//                   >
-//                     <td className="px-4 py-2">{voucher.date}</td>
-//                     <td className="px-4 py-2">{voucher.voucherNumber}</td>
-//                     <td className="px-4 py-2">{voucher.partyName}</td>
-//                     <td className="px-4 py-2 text-right">
-//                       {voucher.amount?.toLocaleString("en-IN")}
-//                     </td>
-//                     <td className="px-4 py-2">{voucher.narration || "-"}</td>
-//                   </tr>
-//                 ))
-//               ) : (
-//                 <tr>
-//                   <td
-//                     colSpan={5}
-//                     className="text-center py-6 text-gray-500 italic"
-//                   >
-//                     No vouchers found.
-//                   </td>
-//                 </tr>
-//               )}
-//             </tbody>
-//           </table>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default ListOfPaymentVoucher;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -207,7 +207,7 @@ const ListOfPaymentVoucher = () => {
   const loggedInRole = userRole?.toLowerCase() || "admin";
   const loggedInEmployeeId = user?.employee_id || null;
 
-  // FIXED FILTER — now matches your API fields
+
   const filteredVouchers = vouchers.filter((v) => {
     if (loggedInRole === "employee") {
       if (v.employee_id != loggedInEmployeeId || v.role?.toLowerCase() !== 'employee') return false;
@@ -392,19 +392,19 @@ const ListOfPaymentVoucher = () => {
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-[monospace]">
-      {/* Top Header */}
+
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
 
-          {/* Left - Title */}
+
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Payment Vouchers
           </h1>
 
-          {/* Right - Search + Buttons */}
+
           <div className="flex items-center gap-2.5 flex-wrap">
 
-            {/* Search */}
+
             <div className="relative">
               <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -416,7 +416,7 @@ const ListOfPaymentVoucher = () => {
               />
             </div>
 
-            {/* Buttons */}
+
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
@@ -438,7 +438,7 @@ const ListOfPaymentVoucher = () => {
                 <Printer size={14} /> Print
               </button>
 
-              {/* Export Dropdown */}
+
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -492,7 +492,7 @@ const ListOfPaymentVoucher = () => {
         </div>
       </div>
 
-      {/* Table Section */}
+
       <div className="max-w-6xl mx-auto mt-6 bg-white shadow rounded-lg border border-gray-300">
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
@@ -526,7 +526,7 @@ const ListOfPaymentVoucher = () => {
                     </td>
                     <td className="px-4 py-2">{voucher.voucherNo}</td>
 
-                    {/* Show debit or credit */}
+
                     <td className="px-4 py-2 text-right">
                       {(voucher.amount || voucher.totalCredit || 0).toString()}
                     </td>

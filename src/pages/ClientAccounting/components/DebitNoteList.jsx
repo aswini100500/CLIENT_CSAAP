@@ -1,187 +1,187 @@
-// import React, { useEffect, useState } from "react";
-// import Swal from "sweetalert2";
-
-// const DebitNoteList = () => {
-//   const [debitNotes, setDebitNotes] = useState([]);
-
-//   useEffect(() => {
-//     loadDemoData();
-//   }, []);
-
-//   const loadDemoData = () => {
-//     const demo = [
-//       {
-//         id: 1,
-//         voucherNo: "DN-001",
-//         date: "2025-01-12",
-//         partyLedger: "ABC Traders",
-//         totalAmount: 15000,
-//         status: "Pending",
-//       },
-//       {
-//         id: 2,
-//         voucherNo: "DN-002",
-//         date: "2025-01-15",
-//         partyLedger: "XYZ Distributors",
-//         totalAmount: 8200,
-//         status: "Accepted",
-//       },
-//       {
-//         id: 3,
-//         voucherNo: "DN-003",
-//         date: "2025-01-18",
-//         partyLedger: "SuperMart Pvt Ltd",
-//         totalAmount: 5400,
-//         status: "Rejected",
-//       },
-//     ];
-
-//     setDebitNotes(demo);
-//   };
-
-//   const handleAccept = async (id) => {
-//     const confirm = await Swal.fire({
-//       title: "Accept Debit Note?",
-//       text: "Are you sure you want to ACCEPT this Debit Note?",
-//       icon: "question",
-//       showCancelButton: true,
-//       confirmButtonColor: "#16a34a",
-//       cancelButtonColor: "#6b7280",
-//       confirmButtonText: "Yes, Accept",
-//     });
-
-//     if (confirm.isConfirmed) {
-//       setDebitNotes((prev) =>
-//         prev.map((n) => (n.id === id ? { ...n, status: "Accepted" } : n))
-//       );
-
-//       Swal.fire("Accepted!", "Debit Note has been accepted.", "success");
-//     }
-//   };
 
 
-//   const handleReject = async (id) => {
-//     const confirm = await Swal.fire({
-//       title: "Reject Debit Note?",
-//       text: "Are you sure you want to REJECT this Debit Note?",
-//       icon: "warning",
-//       showCancelButton: true,
-//       confirmButtonColor: "#d97706",
-//       cancelButtonColor: "#6b7280",
-//       confirmButtonText: "Yes, Reject",
-//     });
 
-//     if (confirm.isConfirmed) {
-//       setDebitNotes((prev) =>
-//         prev.map((n) => (n.id === id ? { ...n, status: "Rejected" } : n))
-//       );
 
-//       Swal.fire("Rejected!", "Debit Note has been rejected.", "success");
-//     }
-//   };
 
-//   // --------------------------
-//   // Delete with Swal
-//   // --------------------------
-//   const handleDelete = async (id) => {
-//     const confirm = await Swal.fire({
-//       title: "Delete?",
-//       text: "This action cannot be undone!",
-//       icon: "error",
-//       showCancelButton: true,
-//       confirmButtonColor: "#dc2626",
-//       cancelButtonColor: "#6b7280",
-//       confirmButtonText: "Delete",
-//     });
 
-//     if (confirm.isConfirmed) {
-//       setDebitNotes((prev) => prev.filter((n) => n.id !== id));
 
-//       Swal.fire("Deleted!", "Debit Note has been removed.", "success");
-//     }
-//   };
 
-//   return (
-//     <div className="p-6 bg-gray-100 min-h-screen">
-//       <div className="bg-white shadow-md rounded-lg p-4 border">
-//         <h1 className="text-2xl font-semibold text-center border-b pb-2 mb-4">
-//           Debit Notes List
-//         </h1>
 
-//         <table className="w-full border text-sm">
-//           <thead className="bg-gray-200">
-//             <tr>
-//               <th className="border p-2 text-left">Voucher No</th>
-//               <th className="border p-2 text-left">Date</th>
-//               <th className="border p-2 text-left">Party</th>
-//               <th className="border p-2 text-right">Amount</th>
-//               <th className="border p-2 text-center">Status</th>
-//               {showEmployeeActivity && <th className="text-left px-2 py-2">Employee Name</th>}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <th className="border p-2 text-center">Actions</th>
-//             </tr>
-//           </thead>
 
-//           <tbody>
-//             {debitNotes.length === 0 ? (
-//               <tr>
-//                 <td colSpan="6" className="text-center p-4">
-//                   No Debit Notes Found
-//                 </td>
-//               </tr>
-//             ) : (
-//               debitNotes.map((note) => (
-//                 <tr key={note.id}>
-//                   <td className="border p-2">{note.voucherNo}</td>
-//                   <td className="border p-2">{note.date}</td>
-//                   <td className="border p-2">{note.partyLedger}</td>
-//                   <td className="border p-2 text-right">
-//                     ₹ {note.totalAmount.toFixed(2)}
-//                   </td>
 
-//                   <td className="border p-2 text-center">
-//                     <span
-//                       className={`px-3 py-1 rounded text-white text-xs ${
-//                         note.status === "Accepted"
-//                           ? "bg-green-600"
-//                           : note.status === "Rejected"
-//                           ? "bg-red-600"
-//                           : "bg-gray-500"
-//                       }`}
-//                     >
-//                       {note.status}
-//                     </span>
-//                   </td>
 
-//                   <td className="border p-2 text-center space-x-2">
-//                     <button
-//                       onClick={() => handleAccept(note.id)}
-//                       className="bg-green-600 text-white px-3 py-1 rounded text-xs"
-//                     >
-//                       Accept
-//                     </button>
 
-//                     <button
-//                       onClick={() => handleReject(note.id)}
-//                       className="bg-yellow-600 text-white px-3 py-1 rounded text-xs"
-//                     >
-//                       Reject
-//                     </button>
 
-//                     <button
-//                       onClick={() => handleDelete(note.id)}
-//                       className="bg-red-600 text-white px-3 py-1 rounded text-xs"
-//                     >
-//                       Delete
-//                     </button>
-//                   </td>
-//                 </tr>
-//               ))
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -244,13 +244,13 @@ const NoteDetailModal = ({ note, items, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 pt-10 overflow-y-auto">
       <div className="bg-white rounded-xl border border-gray-200 w-full max-w-3xl shadow-xl my-8">
 
-        {/* Header */}
+
         <div className="relative flex justify-between items-start px-6 py-6 border-b border-gray-100 bg-white">
-          {/* Decorative Accent */}
+
           <div className="absolute top-0 left-0 w-32 h-1 bg-linear-to-r from-blue-500 via-blue-400 to-transparent rounded-full"></div>
 
           <div className="flex-1">
-            {/* Title Section */}
+
             <div className="flex flex-wrap items-center gap-3 mb-3">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 bg-blue-50 rounded-lg">
@@ -279,9 +279,9 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </span>
             </div>
 
-            {/* Meta Information with Icons */}
+
             <div className="flex flex-wrap items-center gap-3 text-xs">
-              {/* Voucher Card */}
+
               <div className="flex items-center gap-2 pr-3 border-r border-gray-200">
                 <div className="p-1 bg-blue-50 rounded-md">
                   <FileText size={12} className="text-blue-500" />
@@ -294,7 +294,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
                 </div>
               </div>
 
-              {/* Date Card */}
+
               <div className="flex items-center gap-2 pr-3 border-r border-gray-200">
                 <div className="p-1 bg-blue-50 rounded-md">
                   <Calendar size={12} className="text-blue-500" />
@@ -311,7 +311,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
                 </div>
               </div>
 
-              {/* Party Card */}
+
               <div className="flex items-center gap-2">
                 <div className="p-1 bg-blue-50 rounded-md">
                   <Building2 size={12} className="text-blue-500" />
@@ -326,7 +326,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
             </div>
           </div>
 
-          {/* Elegant Close Button */}
+
           <button
             onClick={onClose}
             className="relative flex items-center justify-center w-8 h-8 bg-white border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-200 transition-all duration-200 group shadow-sm"
@@ -338,27 +338,15 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </button>
         </div>
 
-        {/* Section: Party & Ledger */}
-        {/* <div className="px-6 py-4">
-          <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Party & Ledger</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <p className="text-xs text-gray-500 mb-1">Party ledger</p>
-              <p className="text-base font-semibold text-gray-900">{note.partyLedgerName || note.PartyLedger || "—"}</p>
-            </div>
-            <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <p className="text-xs text-gray-500 mb-1">Purchase / sales ledger</p>
-              <p className="text-base font-semibold text-gray-900">{note.purchaseLedgerName || note.PurchaseLedger || "—"}</p>
-            </div>
-          </div>
-        </div> */}
 
-        {/* Section: Billing, Consignee & Dispatch */}
+
+
+
         <div className="px-6 py-4">
           <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2.5">Billing & Dispatch</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-            {/* Billing Details Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Party / Billing Details</h4>
               <div className="space-y-2 text-xs leading-relaxed text-gray-800">
@@ -383,7 +371,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </div>
             </div>
 
-            {/* Consignee (Ship To) Details Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Consignee (Ship To)</h4>
               <div className="space-y-2 text-xs leading-relaxed text-gray-800">
@@ -414,7 +402,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </div>
             </div>
 
-            {/* Invoice & Order Info Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Invoice & Order Info</h4>
               <div className="space-y-2 text-xs leading-relaxed text-gray-800">
@@ -445,7 +433,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </div>
             </div>
 
-            {/* Dispatch details Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50 lg:col-span-2">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Dispatch details</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs text-gray-800">
@@ -476,7 +464,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </div>
             </div>
 
-            {/* Terms of Delivery Card */}
+
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
               <h4 className="text-xs font-semibold text-blue-600 mb-3">Terms of Delivery</h4>
               <p className="text-xs text-gray-700 leading-relaxed font-medium">
@@ -487,7 +475,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </div>
         </div>
 
-        {/* Section: Items */}
+
         <div className="px-6 py-4">
           <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Items</h3>
           <div className="overflow-hidden border border-gray-100 rounded-xl">
@@ -520,7 +508,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </div>
         </div>
 
-        {/* Section: Narration & Totals */}
+
         <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row justify-between gap-6">
           <div className="flex-1 min-w-50">
             <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Narration</p>
@@ -558,7 +546,7 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </div>
         </div>
 
-        {/* Footer */}
+
         <div className="px-6 py-4 border-t border-gray-100 flex justify-end bg-white rounded-b-xl">
           <button
             onClick={onClose}
@@ -834,7 +822,7 @@ const handlePrint = () => {
     );
   }
 
-  // ===== OPEN PRINT =====
+
 
   const blobURL =
     doc.output("bloburl");
@@ -950,9 +938,9 @@ const handlePrint = () => {
     doc.save(`Debit_Notes_Report_${today}.pdf`);
   };
 
-  // ----------------------------------------------------------------
-  // Fetch Live Data
-  // ----------------------------------------------------------------
+
+
+
   useEffect(() => {
     if (!finalCompanyId) return;
 
@@ -973,9 +961,9 @@ const handlePrint = () => {
     fetchCompanyDetails();
   }, [finalCompanyId]);
 
-  // ----------------------------------------------------------------
-  // Delete Debit Note
-  // ----------------------------------------------------------------
+
+
+
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
       title: "Delete?",

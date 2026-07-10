@@ -8,12 +8,12 @@ import { FaEdit, FaTrash, FaFileExcel, FaFilePdf, FaDownload, FaUpload, FaArrowL
 
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
 
-// Create axios instance
+
 const api = axios.create({
   baseURL: API_BASE_URL
 });
 
-// Add request interceptor to include token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -27,7 +27,7 @@ api.interceptors.request.use(
   }
 );
 
-// SWR fetcher function
+
 const fetcher = (url) => api.get(url).then(res => res.data);
 
 const SupplierList = () => {
@@ -48,7 +48,7 @@ const SupplierList = () => {
     contact_person: ''
   });
 
-  // Fetch suppliers using SWR
+
   const { data: suppliersData, error, isLoading } = useSWR(
     '/api/tenant/supplier',
     fetcher,
@@ -58,10 +58,10 @@ const SupplierList = () => {
     }
   );
 
-  // Get suppliers from data or empty array
+
   const suppliers = suppliersData?.success ? suppliersData.data || [] : [];
 
-  // Filter suppliers based on search term
+
   const filteredSuppliers = suppliers.filter(supplier =>
     supplier.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     supplier.phone?.includes(searchTerm) ||
@@ -101,7 +101,7 @@ const SupplierList = () => {
           autoClose: 3000,
         });
         
-        // Invalidate SWR cache to refresh data
+
         mutate('/api/tenant/supplier');
         
         setShowDeleteModal(false);
@@ -133,7 +133,7 @@ const SupplierList = () => {
           autoClose: 3000,
         });
         
-        // Invalidate SWR cache to refresh data
+
         mutate('/api/tenant/supplier');
         
         setShowEditModal(false);
@@ -190,11 +190,11 @@ const SupplierList = () => {
     }));
   };
 
-  // Supplier List View
+
   if (!selectedSupplier) {
     return (
       <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-8 px-4">
-        {/* Toast Notification Container */}
+
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -209,7 +209,7 @@ const SupplierList = () => {
         />
 
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
+
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">Supplier Management</h1>
             <p className="text-lg text-gray-600">View and manage all suppliers</p>
@@ -217,7 +217,7 @@ const SupplierList = () => {
             
           </div>
 
-          {/* Export Buttons and Search */}
+
           <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="flex gap-3">
@@ -261,7 +261,7 @@ const SupplierList = () => {
             </div>
           </div>
 
-          {/* Suppliers Table */}
+
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             {isLoading ? (
               <div className="text-center py-16">
@@ -376,7 +376,7 @@ const SupplierList = () => {
           </div>
         </div>
 
-        {/* Delete Confirmation Modal */}
+
         {showDeleteModal && supplierToDelete && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
@@ -425,7 +425,7 @@ const SupplierList = () => {
           </div>
         )}
 
-        {/* Edit Modal */}
+
         {showEditModal && selectedSupplier && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl">
@@ -561,10 +561,10 @@ const SupplierList = () => {
     );
   }
 
-  // Ledger Details View
+
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-4">
-      {/* Toast Notification Container */}
+
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -579,7 +579,7 @@ const SupplierList = () => {
       />
 
       <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100">
-        {/* Header */}
+
         <div className="px-6 py-5 border-b border-gray-100">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -611,7 +611,7 @@ const SupplierList = () => {
           </div>
         </div>
 
-        {/* Supplier Information */}
+
         <div className="p-6 border-b border-gray-100">
           <h2 className="text-lg font-medium text-gray-800 mb-4">Supplier Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -651,7 +651,7 @@ const SupplierList = () => {
           </div>
         </div>
 
-        {/* Ledger Information */}
+
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium text-gray-800">Ledger Transactions</h2>

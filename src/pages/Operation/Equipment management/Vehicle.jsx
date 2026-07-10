@@ -135,9 +135,9 @@ const Vehicle = () => {
 
   return (
     <div className="p-5 bg-white rounded-xl shadow-md border border-gray-200">
-      {/* Form Section */}
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-50 p-4 rounded-lg">
-        {/* Vehicle Name */}
+
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-700 mb-1">Vehicle Name</label>
           <input
@@ -151,7 +151,7 @@ const Vehicle = () => {
           />
         </div>
 
-        {/* Mileage */}
+
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-700 mb-1">Mileage (ltr)</label>
           <input
@@ -165,7 +165,7 @@ const Vehicle = () => {
           />
         </div>
 
-        {/* Odometer Start */}
+
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-700 mb-1">Odometer Start</label>
           <input
@@ -179,7 +179,7 @@ const Vehicle = () => {
           />
         </div>
 
-        {/* Odometer End */}
+
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-700 mb-1">Odometer End</label>
           <input
@@ -193,7 +193,7 @@ const Vehicle = () => {
           />
         </div>
 
-        {/* Cost */}
+
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-700 mb-1">Cost</label>
           <input
@@ -207,7 +207,7 @@ const Vehicle = () => {
           />
         </div>
 
-        {/* Number Plate */}
+
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-700 mb-1">Number Plate</label>
           <input
@@ -221,7 +221,7 @@ const Vehicle = () => {
           />
         </div>
 
-        {/* Fuel Type */}
+
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-700 mb-1">Fuel Type</label>
           <select
@@ -239,7 +239,7 @@ const Vehicle = () => {
           </select>
         </div>
 
-        {/* Add / Update Button */}
+
         <div className="flex flex-col justify-end">
           <button
             onClick={editingId ? handleUpdate : handleAddVehicle}
@@ -251,7 +251,7 @@ const Vehicle = () => {
         </div>
       </div>
 
-      {/* Table */}
+
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
           <thead className="bg-blue-50">

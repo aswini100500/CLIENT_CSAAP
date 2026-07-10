@@ -55,7 +55,7 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Experience handlers
+
   const addExperience = () => {
     setExperienceList((prev) => [
       ...prev,
@@ -102,7 +102,7 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
     setLoading(true);
 
     try {
-      // 1️⃣ Check if applicant already exists as an ex-employee
+
       const checkRes = await axios.post(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/ex-employee/check`,
         {
@@ -127,18 +127,18 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
 
         if (!result.isConfirmed) {
           setLoading(false);
-          return; // Stop the submission
+          return;
         }
       }
 
-      // 2️⃣ Proceed with applicant submission
+
       const data = new FormData();
-      // Basic fields
+
       Object.keys(formData).forEach((key) => {
         if (formData[key]) data.append(key, formData[key]);
       });
       data.append("company_id", company_id);
-      // Experience list as JSON
+
       data.append("experienceList", JSON.stringify(experienceList));
       if (uploadedResume) data.append("resume", uploadedResume);
 
@@ -169,7 +169,7 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
   const renderBasicInfo = () => (
     <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Personal & Contact */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Full Name *
