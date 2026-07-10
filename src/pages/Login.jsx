@@ -1000,6 +1000,17 @@ const Login = () => {
                   </>
                 )}
               </motion.button>
+
+              {!isEmployeeLogin && (
+                <div className="text-center mt-4">
+                  <Link
+                    to="/employee/login"
+                    className="inline-block text-xs font-semibold text-slate-400 hover:text-slate-500 hover:underline transition-colors duration-200"
+                  >
+                    Want to sign in as an employee?
+                  </Link>
+                </div>
+              )}
             </form>
           </div>
 
