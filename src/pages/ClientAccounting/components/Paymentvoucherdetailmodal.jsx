@@ -143,7 +143,7 @@ const PaymentVoucherDetailModal = ({
               </div>
               <div className="w-full">
                 <p className="text-xs text-gray-500 mb-0.5">Payment mode</p>
-                <span className="inline-flex items-start gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg bg-green-50 text-green-700 border border-green-100 break-words text-left max-w-full">
+                <span className="inline-flex items-start gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg bg-green-50 text-green-700 border border-green-100 wrap-break-word text-left max-w-full">
                   <CreditCard size={13} className="shrink-0 mt-0.5" />
                   <span style={{ wordBreak: "break-word" }}>{paymentMode}</span>
                 </span>

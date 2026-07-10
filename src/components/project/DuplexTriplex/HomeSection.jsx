@@ -652,7 +652,7 @@ export const HomeSection = ({
 
                         <div className="space-y-3">
                           <div>
-                            <label className="block text-xs font-medium text-slate-600 mb-1 flex items-center gap-1">
+                            <label className="block text-xs font-medium text-slate-600 mb-1 items-center gap-1">
                               <FaRulerCombined size={10} />
                               Plot Area (sq.ft)
                             </label>
@@ -672,7 +672,7 @@ export const HomeSection = ({
                           </div>
 
                           <div>
-                            <label className="block text-xs font-medium text-slate-600 mb-1 flex items-center gap-1">
+                            <label className="block text-xs font-medium text-slate-600 mb-1 items-center gap-1">
                               <FaHashtag size={10} />
                               Entry Plot Number
                             </label>
@@ -692,7 +692,7 @@ export const HomeSection = ({
                           </div>
 
                           <div>
-                            <label className="block text-xs font-medium text-slate-600 mb-1 flex items-center gap-1">
+                            <label className="block text-xs font-medium text-slate-600 mb-1 items-center gap-1">
                               <FaFileAlt size={10} />
                               Khata Number
                             </label>
@@ -712,7 +712,7 @@ export const HomeSection = ({
                           </div>
 
                           <div>
-                            <label className="block text-xs font-medium text-slate-600 mb-1 flex items-center gap-1">
+                            <label className="block text-xs font-medium text-slate-600 mb-1 items-center gap-1">
                               <FaPaperclip size={10} />
                               Attachment
                             </label>

@@ -203,7 +203,7 @@ const EnhancedUnitDetailsPanel = ({
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="group">
-                  <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center">
+                  <label className="block text-sm font-bold text-gray-700 mb-2 items-center">
                     <FaBed className="inline mr-2 text-indigo-600" />
                     Bedrooms
                   </label>
@@ -223,7 +223,7 @@ const EnhancedUnitDetailsPanel = ({
                 </div>
 
                 <div className="group">
-                  <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center">
+                  <label className="block text-sm font-bold text-gray-700 mb-2 items-center">
                     <FaBath className="inline mr-2 text-blue-600" />
                     Bathrooms
                   </label>
@@ -243,7 +243,7 @@ const EnhancedUnitDetailsPanel = ({
                 </div>
 
                 <div className="group">
-                  <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center">
+                  <label className="block text-sm font-bold text-gray-700 mb-2 items-center">
                     <FaHome className="inline mr-2 text-green-600" />
                     Balconies
                   </label>
@@ -371,7 +371,7 @@ const EnhancedUnitDetailsPanel = ({
                       key={index}
                       className="bg-white rounded-xl p-4 shadow-md border-2 border-indigo-100 hover:border-indigo-300 transition-all transform hover:scale-105"
                     >
-                      <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center">
+                      <label className="block text-sm font-bold text-gray-700 mb-2 items-center">
                         <span className="bg-indigo-100 text-indigo-700 rounded-full w-6 h-6 flex items-center justify-center mr-2 text-xs font-bold">
                           {index + 1}
                         </span>
@@ -434,7 +434,7 @@ const EnhancedUnitDetailsPanel = ({
                       key={index}
                       className="bg-white rounded-xl p-4 shadow-md border-2 border-blue-100 hover:border-blue-300 transition-all transform hover:scale-105"
                     >
-                      <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center">
+                      <label className="block text-sm font-bold text-gray-700 mb-2 items-center">
                         <span className="bg-blue-100 text-blue-700 rounded-full w-6 h-6 flex items-center justify-center mr-2 text-xs font-bold">
                           {index + 1}
                         </span>
@@ -497,7 +497,7 @@ const EnhancedUnitDetailsPanel = ({
                       key={index}
                       className="bg-white rounded-xl p-4 shadow-md border-2 border-green-100 hover:border-green-300 transition-all transform hover:scale-105"
                     >
-                      <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center">
+                      <label className="block text-sm font-bold text-gray-700 mb-2 items-center">
                         <span className="bg-green-100 text-green-700 rounded-full w-6 h-6 flex items-center justify-center mr-2 text-xs font-bold">
                           {index + 1}
                         </span>

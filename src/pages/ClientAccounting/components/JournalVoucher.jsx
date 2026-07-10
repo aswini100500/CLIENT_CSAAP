@@ -68,7 +68,7 @@ const SearchableLedgerSelect = ({
       </div>
 
       {isOpen && (
-        <div className="absolute z-[9999] mt-1 w-full bg-white border border-slate-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-9999 mt-1 w-full bg-white border border-slate-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
           {filtered.length > 0 ? (
             filtered.map((l) => (
               <div
