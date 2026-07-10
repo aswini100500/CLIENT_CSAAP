@@ -1,6 +1,5 @@
 import React from "react";
 
-
 import {
   Document,
   Page,
@@ -39,12 +38,38 @@ const numberToWords = (num) => {
   if (amount === 0) return "Zero";
 
   const units = [
-    "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
-    "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-    "Seventeen", "Eighteen", "Nineteen",
+    "",
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
   ];
   const tens = [
-    "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety",
+    "",
+    "",
+    "Twenty",
+    "Thirty",
+    "Forty",
+    "Fifty",
+    "Sixty",
+    "Seventy",
+    "Eighty",
+    "Ninety",
   ];
 
   const convertLessThanThousand = (n) => {
@@ -303,19 +328,19 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-
         <View style={styles.headerContainer}>
           <View style={styles.headerLeft}>
             <Text style={styles.companyName}>
               {(companyName || "Company").toUpperCase()}
             </Text>
-            <Text style={styles.companySubtitle}>Authorized Transaction Voucher</Text>
+            <Text style={styles.companySubtitle}>
+              Authorized Transaction Voucher
+            </Text>
           </View>
           <View style={styles.headerRight}>
             <Text style={styles.voucherTitle}>Payment Voucher</Text>
           </View>
         </View>
-
 
         <View style={styles.infoGrid}>
           <View style={styles.infoCol}>
@@ -332,9 +357,7 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
           </View>
           <View style={styles.infoCol}>
             <Text style={styles.infoLabel}>Customer</Text>
-            <Text style={styles.infoValue}>
-              {customer?.name || "N/A"}
-            </Text>
+            <Text style={styles.infoValue}>{customer?.name || "N/A"}</Text>
           </View>
           <View style={styles.infoCol}>
             <Text style={styles.infoLabel}>Total Amount</Text>
@@ -343,7 +366,9 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
           <View style={styles.infoCol}>
             <Text style={styles.infoLabel}>Payment Mode</Text>
             <Text style={styles.infoValue}>
-              {modeLabels[payment.payment_mode] || payment.payment_mode || "N/A"}
+              {modeLabels[payment.payment_mode] ||
+                payment.payment_mode ||
+                "N/A"}
             </Text>
           </View>
           <View style={styles.infoCol}>
@@ -355,11 +380,12 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
           {payment.cleanNote ? (
             <View style={[styles.infoCol, { width: "100%", marginTop: 4 }]}>
               <Text style={[styles.infoLabel, { width: "19.2%" }]}>Note</Text>
-              <Text style={[styles.infoValue, { width: "80.8%" }]}>{payment.cleanNote}</Text>
+              <Text style={[styles.infoValue, { width: "80.8%" }]}>
+                {payment.cleanNote}
+              </Text>
             </View>
           ) : null}
         </View>
-
 
         <Text style={styles.sectionTitle}>Slab-wise Allocation</Text>
         <View style={styles.table}>
@@ -382,7 +408,10 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
                   {seg.stage_name || "—"}
                 </Text>
                 <Text
-                  style={[styles.tdCellBold, { width: "30%", textAlign: "right", color: "#065f46" }]}
+                  style={[
+                    styles.tdCellBold,
+                    { width: "30%", textAlign: "right", color: "#065f46" },
+                  ]}
                 >
                   {formatINR(seg.amount)}
                 </Text>
@@ -391,13 +420,10 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
           })}
         </View>
 
-
         <View style={styles.totalSection}>
           <View style={styles.wordsContainer}>
             <Text style={styles.wordsLabel}>Amount in Words</Text>
-            <Text style={styles.wordsText}>
-              ({numberToWords(totalAmount)})
-            </Text>
+            <Text style={styles.wordsText}>({numberToWords(totalAmount)})</Text>
           </View>
           <View style={styles.totalBoxContainer}>
             <View style={styles.totalBox}>
@@ -407,11 +433,10 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
           </View>
         </View>
 
-
         <Text style={styles.statementText}>
-          This is a computer generated payment voucher, hence no signature is required.
+          This is a computer generated payment voucher, hence no signature is
+          required.
         </Text>
-
 
         <View style={styles.footerContainer}>
           <Text style={styles.footerCompany}>
@@ -426,14 +451,14 @@ const PaymentVoucherDocument = ({ customer, payment, companyName }) => {
 export const downloadPaymentVoucher = async (
   customer,
   mergedPayment,
-  companyName
+  companyName,
 ) => {
   const blob = await pdf(
     <PaymentVoucherDocument
       customer={customer}
       payment={mergedPayment}
       companyName={companyName}
-    />
+    />,
   ).toBlob();
   const custName = (customer?.name || "customer").replace(/\s+/g, "_");
   const dateStr = mergedPayment.payment_date

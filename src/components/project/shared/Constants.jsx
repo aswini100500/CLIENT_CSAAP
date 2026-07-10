@@ -41,7 +41,13 @@ export const PROJECT_TYPES = {
   CUSTOM: "custom",
 };
 
-export const COMMERCIAL_TYPES = ["office space", "shop", "showroom", "land", "godown"];
+export const COMMERCIAL_TYPES = [
+  "office space",
+  "shop",
+  "showroom",
+  "land",
+  "godown",
+];
 
 export const BROKER_LIST = [
   { id: 1, name: "John Smith", phone: "+1 (555) 123-4567" },

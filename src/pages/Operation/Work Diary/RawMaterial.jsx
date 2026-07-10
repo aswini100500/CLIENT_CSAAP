@@ -10,7 +10,6 @@ const RawMaterial = ({ projectSetup }) => {
   const [type, setType] = useState("store");
   const [isLoading, setIsLoading] = useState(false);
 
-
   useEffect(() => {
     if (projectSetup) {
       fetchEquipment();
@@ -21,8 +20,10 @@ const RawMaterial = ({ projectSetup }) => {
     try {
       setIsLoading(true);
       const res = await operationApi.getRawMaterials();
-      const details = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-      const existingData = details.filter(d => d.project_setup_id === projectSetup.id);
+      const details = Array.isArray(res.data) ? res.data : res.data?.data || [];
+      const existingData = details.filter(
+        (d) => d.project_setup_id === projectSetup.id,
+      );
       if (existingData.length > 0) {
         setEquipmentList(existingData);
       }
@@ -32,7 +33,6 @@ const RawMaterial = ({ projectSetup }) => {
       setIsLoading(false);
     }
   };
-
 
   const addEquipment = async () => {
     if (!name.trim() || !quantity) {
@@ -46,12 +46,15 @@ const RawMaterial = ({ projectSetup }) => {
         item_name: name,
         quantity: quantity,
         source_type: type,
-        unit: "Nos"
+        unit: "Nos",
       };
-      
+
       await operationApi.createRawMaterial(submissionData);
-      
-      setEquipmentList(prev => [...prev, { ...submissionData, id: Date.now() }]);
+
+      setEquipmentList((prev) => [
+        ...prev,
+        { ...submissionData, id: Date.now() },
+      ]);
       setName("");
       setQuantity("");
       Swal.fire("Success", "Equipment added successfully.", "success");
@@ -63,10 +66,8 @@ const RawMaterial = ({ projectSetup }) => {
     }
   };
 
-
   const removeEquipment = async (id) => {
-
-    setEquipmentList(prev => prev.filter(eq => eq.id !== id));
+    setEquipmentList((prev) => prev.filter((eq) => eq.id !== id));
   };
 
   return (
@@ -74,7 +75,6 @@ const RawMaterial = ({ projectSetup }) => {
       <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
         <FaWarehouse className="text-blue-600" /> Equipment & Raw Materials
       </h2>
-
 
       <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
         <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2 mb-4">
@@ -118,11 +118,16 @@ const RawMaterial = ({ projectSetup }) => {
             disabled={isLoading || !projectSetup}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors disabled:bg-gray-400"
           >
-            {isLoading ? "Adding..." : <><FaPlus /> Add</>}
+            {isLoading ? (
+              "Adding..."
+            ) : (
+              <>
+                <FaPlus /> Add
+              </>
+            )}
           </button>
         </div>
       </div>
-
 
       {equipmentList.length > 0 ? (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -138,14 +143,25 @@ const RawMaterial = ({ projectSetup }) => {
             </thead>
             <tbody>
               {equipmentList.map((eq, index) => (
-                <tr key={eq.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                <tr
+                  key={eq.id}
+                  className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                >
                   <td className="p-4 text-gray-500">{index + 1}</td>
-                  <td className="p-4 font-medium text-gray-800">{eq.item_name}</td>
-                  <td className="p-4 text-gray-600">{eq.quantity} {eq.unit}</td>
+                  <td className="p-4 font-medium text-gray-800">
+                    {eq.item_name}
+                  </td>
+                  <td className="p-4 text-gray-600">
+                    {eq.quantity} {eq.unit}
+                  </td>
                   <td className="p-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      eq.source_type === "store" ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"
-                    }`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        eq.source_type === "store"
+                          ? "bg-amber-100 text-amber-700"
+                          : "bg-blue-100 text-blue-700"
+                      }`}
+                    >
                       {eq.source_type}
                     </span>
                   </td>
@@ -164,8 +180,10 @@ const RawMaterial = ({ projectSetup }) => {
         </div>
       ) : (
         <div className="text-center py-12 bg-white rounded-xl border-2 border-dashed border-gray-200">
-           <FaWarehouse className="mx-auto text-gray-300 mb-2" size={48} />
-           <p className="text-gray-500">No equipment added yet for this project.</p>
+          <FaWarehouse className="mx-auto text-gray-300 mb-2" size={48} />
+          <p className="text-gray-500">
+            No equipment added yet for this project.
+          </p>
         </div>
       )}
     </div>

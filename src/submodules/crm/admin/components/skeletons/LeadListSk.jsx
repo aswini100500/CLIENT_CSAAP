@@ -19,7 +19,6 @@ const LeadListSk = () => {
         `}
       </style>
       <div className="max-w-7xl mx-auto space-y-6">
-
         <div className="rounded-xl border border-slate-200 bg-white p-4">
           <div className="flex flex-col md:flex-row gap-4 justify-between md:items-center">
             <div className={`h-8 w-48 rounded-lg ${shimmerClass}`}></div>
@@ -29,7 +28,6 @@ const LeadListSk = () => {
             </div>
           </div>
         </div>
-
 
         <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
           <div className="px-4 py-3 border-b border-slate-200 bg-linear-to-t from-slate-100 to-white">
@@ -62,9 +60,15 @@ const LeadListSk = () => {
                           className={`size-8  rounded-full shrink-0 mr-3 ${softClass}`}
                         ></div>
                         <div className="space-y-2">
-                          <div className={`h-4 w-32 rounded ${shimmerClass}`}></div>
-                          <div className={`h-3 w-24 rounded ${softClass}`}></div>
-                          <div className={`h-3 w-40 rounded ${softClass}`}></div>
+                          <div
+                            className={`h-4 w-32 rounded ${shimmerClass}`}
+                          ></div>
+                          <div
+                            className={`h-3 w-24 rounded ${softClass}`}
+                          ></div>
+                          <div
+                            className={`h-3 w-40 rounded ${softClass}`}
+                          ></div>
                         </div>
                       </div>
                     </td>
@@ -81,7 +85,9 @@ const LeadListSk = () => {
                       <div className={`h-4 w-16 rounded ${softClass}`}></div>
                     </td>
                     <td className="px-4 py-3">
-                      <div className={`h-7 w-20 rounded-md ${shimmerClass}`}></div>
+                      <div
+                        className={`h-7 w-20 rounded-md ${shimmerClass}`}
+                      ></div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center">
@@ -89,8 +95,12 @@ const LeadListSk = () => {
                           className={`size-6  rounded mr-2 ${softClass}`}
                         ></div>
                         <div className="space-y-1.5">
-                          <div className={`h-3 w-20 rounded ${softClass}`}></div>
-                          <div className={`h-2.5 w-16 rounded ${softClass}`}></div>
+                          <div
+                            className={`h-3 w-20 rounded ${softClass}`}
+                          ></div>
+                          <div
+                            className={`h-2.5 w-16 rounded ${softClass}`}
+                          ></div>
                         </div>
                       </div>
                     </td>

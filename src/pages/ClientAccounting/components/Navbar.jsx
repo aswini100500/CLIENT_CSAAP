@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect, useRef } from "react";
 import {
   Search,
@@ -17,8 +14,6 @@ import { useCompany } from "../context/CompanyContext";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-
-
 const Navbar = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,19 +28,16 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const userMenuRef = useRef(null);
   const { setCompanyId } = useCompany();
-  const { setcompanyName } = useCompany()
+  const { setcompanyName } = useCompany();
   const [selectedCompanyId, setSelectedCompanyId] = useState(() => {
-
     const saved = sessionStorage.getItem("selectedCompanyId");
     return saved ? parseInt(saved, 10) : null;
   });
   const { userId, user, setUserId, setUser, logout } = useUser();
-  const [selectedCompanyName, setSelectedCompanyName] = useState()
-
+  const [selectedCompanyName, setSelectedCompanyName] = useState();
 
   const handleLogout = async () => {
     await logout();
-
 
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userId");
@@ -55,27 +47,20 @@ const Navbar = () => {
     setCompanyId(null);
     setShowUserMenu(false);
 
-
     navigate("/login");
   };
 
   const getCompanies = async () => {
     try {
-
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${userId}`);
-
-
-
-
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${userId}`,
+      );
 
       const companies = res.data;
 
-
-
       setCompanies(companies);
     } catch (err) {
-
-      console.error('Error fetching companies:', err);
+      console.error("Error fetching companies:", err);
     }
   };
 
@@ -83,45 +68,20 @@ const Navbar = () => {
     getCompanies();
   }, []);
 
-
   useEffect(() => {
-
-
     if (selectedCompanyId) {
       sessionStorage.setItem("selectedCompanyId", selectedCompanyId.toString());
       setCompanyId(selectedCompanyId);
       setcompanyName(selectedCompany);
-      setSelectedCompanyName(selectedCompany)
+      setSelectedCompanyName(selectedCompany);
     } else {
       sessionStorage.removeItem("selectedCompanyId");
     }
   }, [selectedCompanyId, setCompanyId]);
 
-
   const selectedCompany = selectedCompanyId
     ? companies.find((c) => c.id === selectedCompanyId)?.name || ""
     : "";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -130,19 +90,20 @@ const Navbar = () => {
     }
 
     const timer = setTimeout(() => {
-      const filtered = companies.filter((c) =>
-        (c.name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-        (c.gst?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-        (c.email?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-        (c.admin_phone?.toLowerCase() || "").includes(searchQuery.toLowerCase())
+      const filtered = companies.filter(
+        (c) =>
+          (c.name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+          (c.gst?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+          (c.email?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+          (c.admin_phone?.toLowerCase() || "").includes(
+            searchQuery.toLowerCase(),
+          ),
       );
       setFilteredCompanies(filtered);
     }, 300);
 
     return () => clearTimeout(timer);
   }, [searchQuery, companies]);
-
-
 
   useEffect(() => {
     const handler = (e) => {
@@ -160,10 +121,7 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-
-
   const handleCompanySelect = (company) => {
-
     setSelectedCompanyId(company.id);
 
     setSearchQuery("");
@@ -171,14 +129,10 @@ const Navbar = () => {
     setFilteredCompanies([]);
   };
 
-  const selectedCompanyData = companies.find(
-    (c) => c.id === selectedCompanyId
-  );
+  const selectedCompanyData = companies.find((c) => c.id === selectedCompanyId);
 
   return (
     <div className="navbar no-print w-full lg:w-[82vw] ml-auto bg-linear-to-r from-blue-800 to-blue-900 text-white shadow-lg rounded-bl-xl sticky top-0 z-50">
-
-
       <div className="lg:hidden flex justify-between items-center px-4 py-3">
         <h1 className="text-lg font-bold truncate">Cloudsat Pvt Ltd</h1>
         <button
@@ -189,12 +143,10 @@ const Navbar = () => {
         </button>
       </div>
 
-
       <div
         className={`px-4 py-3 space-y-4 lg:space-y-0 
         ${mobileMenuOpen ? "block" : "hidden lg:flex lg:items-center lg:justify-between"}`}
       >
-
         <div className="flex items-center gap-3">
           <div className="bg-white/10 p-2 rounded-xl">
             <Building2 size={30} className="text-blue-200" />
@@ -207,8 +159,10 @@ const Navbar = () => {
           </div>
         </div>
 
-
-        <div className="relative max-w-full sm:max-w-xs w-full" ref={dropdownRef}>
+        <div
+          className="relative max-w-full sm:max-w-xs w-full"
+          ref={dropdownRef}
+        >
           <div
             onClick={() => setShowCompanyDropdown(!showCompanyDropdown)}
             className="flex items-center gap-3 px-4 py-2 bg-white/10 rounded-xl 
@@ -231,14 +185,17 @@ const Navbar = () => {
 
             <ChevronDown
               size={20}
-              className={`transition-transform duration-300 ${showCompanyDropdown ? "rotate-180" : ""
-                }`}
+              className={`transition-transform duration-300 ${
+                showCompanyDropdown ? "rotate-180" : ""
+              }`}
             />
           </div>
 
           {showCompanyDropdown && (
-            <div className="absolute text-blue-600 left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border z-50
-            max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+            <div
+              className="absolute text-blue-600 left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border z-50
+            max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300"
+            >
               {companies.map((c) => (
                 <div
                   key={c.id}
@@ -259,7 +216,6 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
 
         <div className="relative max-w-full sm:max-w-xs w-full" ref={searchRef}>
           <Search size={18} className="absolute left-3 top-3 text-blue-300" />
@@ -285,8 +241,10 @@ const Navbar = () => {
           )}
 
           {isSearchFocused && filteredCompanies.length > 0 && (
-            <div className="absolute text-blue-800 left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border 
-            max-h-72 overflow-y-auto z-50 scrollbar-thin scrollbar-thumb-gray-300">
+            <div
+              className="absolute text-blue-800 left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border 
+            max-h-72 overflow-y-auto z-50 scrollbar-thin scrollbar-thumb-gray-300"
+            >
               {filteredCompanies.map((c) => (
                 <div
                   key={c.id}
@@ -303,7 +261,6 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
 
         <div className="relative" ref={userMenuRef}>
           <div
@@ -325,11 +282,11 @@ const Navbar = () => {
 
             <ChevronDown
               size={18}
-              className={`transition-transform duration-300 ${showUserMenu ? "rotate-180" : ""
-                }`}
+              className={`transition-transform duration-300 ${
+                showUserMenu ? "rotate-180" : ""
+              }`}
             />
           </div>
-
 
           {showUserMenu && (
             <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border z-50 overflow-hidden">
@@ -351,7 +308,6 @@ const Navbar = () => {
           )}
         </div>
       </div>
-
 
       {selectedCompany && (
         <div className="bg-green-700/20 border-t border-green-600/40 px-4 py-2">
@@ -375,11 +331,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-
-
-
-
-

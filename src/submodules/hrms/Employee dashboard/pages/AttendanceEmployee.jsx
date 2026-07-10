@@ -54,7 +54,8 @@ const DailyAttendanceModal = ({ record, onClose }) => {
               {record.date ? formatDateLabel(record.date) : "Attendance record"}
             </h2>
             <p className="mt-1 text-sm text-slate-500">
-              {raw.employee_name || "Employee"} {raw.employee_id ? ` · ID ${raw.employee_id}` : ""}
+              {raw.employee_name || "Employee"}{" "}
+              {raw.employee_id ? ` · ID ${raw.employee_id}` : ""}
             </p>
           </div>
           <button
@@ -73,15 +74,21 @@ const DailyAttendanceModal = ({ record, onClose }) => {
             <div className="mt-4 space-y-3 text-sm text-slate-700">
               <p className="flex items-start justify-between gap-4">
                 <span className="text-slate-500">Status</span>
-                <span className="font-bold text-slate-900">{record.status}</span>
+                <span className="font-bold text-slate-900">
+                  {record.status}
+                </span>
               </p>
               <p className="flex items-start justify-between gap-4">
                 <span className="text-slate-500">Shift</span>
-                <span className="font-bold text-slate-900">{record.shift || "General"}</span>
+                <span className="font-bold text-slate-900">
+                  {record.shift || "General"}
+                </span>
               </p>
               <p className="flex items-start justify-between gap-4">
                 <span className="text-slate-500">Total hours</span>
-                <span className="font-mono font-bold text-slate-900">{record.totalHours || "N/A"}</span>
+                <span className="font-mono font-bold text-slate-900">
+                  {record.totalHours || "N/A"}
+                </span>
               </p>
               <p className="flex items-start justify-between gap-4">
                 <span className="text-slate-500">Check in</span>
@@ -242,7 +249,6 @@ const MonthlyAttendanceOverview = ({ monthData, year, onClose }) => {
   );
 };
 
-
 const currentIndiaDate = getCurrentIndiaDate();
 const [currentIndiaYear] = currentIndiaDate.split("-").map(Number);
 
@@ -267,11 +273,9 @@ const EmployeeYearlyAttendance = () => {
   const [selectedYear, setSelectedYear] = useState(currentIndiaYear);
   const [holidayDates, setHolidayDates] = useState([]);
 
-
   const [showFilter, setShowFilter] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedShift, setSelectedShift] = useState("all");
-
 
   const [selectedAttendanceRecord, setSelectedAttendanceRecord] =
     useState(null);
@@ -293,7 +297,6 @@ const EmployeeYearlyAttendance = () => {
     currentIndiaYear,
     currentIndiaYear - 1,
   ];
-
 
   const panelClass =
     "bg-white rounded-3xl shadow-sm ring-1 ring-slate-200 overflow-hidden transition-all hover:shadow-md";
@@ -336,7 +339,6 @@ const EmployeeYearlyAttendance = () => {
     try {
       setLoading(true);
 
-
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/attendance/${slug}/employee/${employeeId}/year/${year}`,
       );
@@ -361,7 +363,6 @@ const EmployeeYearlyAttendance = () => {
       setHolidayDates(fetchedHolidayDates);
       const fetchedHolidaySet = new Set(fetchedHolidayDates);
 
-
       const processedYear = monthNames.map((monthName, monthIndex) => ({
         monthIndex,
         monthName,
@@ -370,25 +371,21 @@ const EmployeeYearlyAttendance = () => {
         summary: { present: 0, absent: 0, halfDay: 0, late: 0 },
       }));
 
-
       allYearRecords.forEach((record) => {
         const date = getAttendanceDateValue(record);
         if (!date) return;
-        if (fetchedHolidaySet.has(date) || isSunday(date) || isFutureDate(date)) return;
-
+        if (fetchedHolidaySet.has(date) || isSunday(date) || isFutureDate(date))
+          return;
 
         const recordMonthIndex = parseInt(date.split("-")[1], 10) - 1;
-
 
         if (recordMonthIndex < 0 || recordMonthIndex > 11) return;
 
         const isHalfDay = Number(record.is_half_day || 0);
         const isLate = Number(record.is_late || 0);
 
-
         processedYear[recordMonthIndex].attendance[date] =
           createAttendanceEntryFromRecord(record);
-
 
         if (isHalfDay) processedYear[recordMonthIndex].summary.halfDay++;
         else processedYear[recordMonthIndex].summary.present++;
@@ -396,13 +393,16 @@ const EmployeeYearlyAttendance = () => {
         if (isLate) processedYear[recordMonthIndex].summary.late++;
       });
 
-
       processedYear.forEach((monthData) => {
         let elapsedWorkingDays = 0;
         for (let day = 1; day <= monthData.daysInMonth; day++) {
           const dateStr = `${year}-${String(monthData.monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-          if (!isSunday(dateStr) && !fetchedHolidaySet.has(dateStr) && !isFutureDate(dateStr)) {
+          if (
+            !isSunday(dateStr) &&
+            !fetchedHolidaySet.has(dateStr) &&
+            !isFutureDate(dateStr)
+          ) {
             elapsedWorkingDays++;
           }
         }
@@ -553,29 +553,26 @@ const EmployeeYearlyAttendance = () => {
     );
   }
 
-
   const dayColumns = Array.from({ length: 31 }, (_, i) => i + 1);
 
   return (
     <div className="min-h-screen w-full mx-auto p-4 md:p-8 bg-transparent font-sans">
       <div className="mx-auto max-w-full space-y-8">
-
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-emerald-50 text-emerald-600 rounded-sm">
-                  <Calendar className="w-4 h-4" />
-                </div>
-                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-                  Attendance Report
-                </h1>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-emerald-50 text-emerald-600 rounded-sm">
+                <Calendar className="w-4 h-4" />
               </div>
-              <p className="text-slate-500 text-xs font-medium ml-1">
-                Monthly and per-day attendance summary for {selectedYear}.
-              </p>
+              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+                Attendance Report
+              </h1>
             </div>
+            <p className="text-slate-500 text-xs font-medium ml-1">
+              Monthly and per-day attendance summary for {selectedYear}.
+            </p>
+          </div>
         </div>
-
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {[
@@ -634,7 +631,6 @@ const EmployeeYearlyAttendance = () => {
             </div>
           ))}
         </div>
-
 
         <div className={`${panelClass} p-3 md:p-4 bg-white`}>
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
@@ -695,7 +691,6 @@ const EmployeeYearlyAttendance = () => {
             </div>
           </div>
 
-
           {showFilter && (
             <div
               ref={filterPanelRef}
@@ -750,152 +745,146 @@ const EmployeeYearlyAttendance = () => {
           )}
         </div>
 
-
         <div
           className={`${panelClass} flex h-[calc(100vh-320px)] flex-col bg-slate-50 overflow-hidden`}
         >
           <div className="flex-1 min-h-0 overflow-auto">
-          <table className="min-w-full border-separate border-spacing-0">
-            <thead className="sticky top-0 z-30 bg-slate-50">
-              <tr>
-                <th className="sticky left-0 z-40 min-w-32 border-b border-r border-slate-200 bg-slate-50 px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500 shadow-sm">
-                  Month
-                </th>
-                {dayColumns.map((day) => (
-                  <th
-                    key={`head-${day}`}
-                    className="min-w-15 border-b border-slate-200 bg-slate-50 px-2 py-3 text-center"
-                  >
-                    <span className="text-sm font-bold text-slate-900">
-                      {day}
-                    </span>
+            <table className="min-w-full border-separate border-spacing-0">
+              <thead className="sticky top-0 z-30 bg-slate-50">
+                <tr>
+                  <th className="sticky left-0 z-40 min-w-32 border-b border-r border-slate-200 bg-slate-50 px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500 shadow-sm">
+                    Month
                   </th>
-                ))}
-                <th className="sticky right-0 z-40 min-w-24 border-b border-l border-slate-200 bg-slate-50 px-4 py-3 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500 shadow-sm">
-                  Summary / View
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white">
-              {yearData.map((monthData) => {
-                return (
-                  <tr
-                    key={`row-${monthData.monthIndex}`}
-                    className="group hover:bg-slate-50 transition-colors"
-                  >
+                  {dayColumns.map((day) => (
+                    <th
+                      key={`head-${day}`}
+                      className="min-w-15 border-b border-slate-200 bg-slate-50 px-2 py-3 text-center"
+                    >
+                      <span className="text-sm font-bold text-slate-900">
+                        {day}
+                      </span>
+                    </th>
+                  ))}
+                  <th className="sticky right-0 z-40 min-w-24 border-b border-l border-slate-200 bg-slate-50 px-4 py-3 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500 shadow-sm">
+                    Summary / View
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {yearData.map((monthData) => {
+                  return (
+                    <tr
+                      key={`row-${monthData.monthIndex}`}
+                      className="group hover:bg-slate-50 transition-colors"
+                    >
+                      <td className="sticky left-0 z-20 min-w-32 border-b border-r border-slate-100 px-4 py-3 bg-white group-hover:bg-slate-50 transition-colors">
+                        <div className="font-bold text-slate-900">
+                          {monthData.monthName}
+                        </div>
+                        <div className="text-[10px] text-slate-500 mt-1 font-medium">
+                          {monthData.summary.present} Present ·{" "}
+                          {monthData.summary.absent} Absent
+                        </div>
+                      </td>
 
-                    <td className="sticky left-0 z-20 min-w-32 border-b border-r border-slate-100 px-4 py-3 bg-white group-hover:bg-slate-50 transition-colors">
-                      <div className="font-bold text-slate-900">
-                        {monthData.monthName}
-                      </div>
-                      <div className="text-[10px] text-slate-500 mt-1 font-medium">
-                        {monthData.summary.present} Present ·{" "}
-                        {monthData.summary.absent} Absent
-                      </div>
-                    </td>
+                      {dayColumns.map((day) => {
+                        const isValidDay = day <= monthData.daysInMonth;
+                        const dateStr = isValidDay
+                          ? `${selectedYear}-${String(monthData.monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
+                          : null;
 
+                        const dayRecord = isValidDay
+                          ? monthData.attendance[dateStr]
+                          : null;
+                        const isSundayDate = isValidDay
+                          ? isSunday(dateStr)
+                          : false;
+                        const isHolidayDate = isValidDay
+                          ? isHoliday(dateStr)
+                          : false;
+                        const isFuture = isValidDay
+                          ? isFutureDate(dateStr)
+                          : false;
 
-                    {dayColumns.map((day) => {
-                      const isValidDay = day <= monthData.daysInMonth;
-                      const dateStr = isValidDay
-                        ? `${selectedYear}-${String(monthData.monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
-                        : null;
-
-
-                      const dayRecord = isValidDay
-                        ? monthData.attendance[dateStr]
-                        : null;
-                      const isSundayDate = isValidDay
-                        ? isSunday(dateStr)
-                        : false;
-                      const isHolidayDate = isValidDay
-                        ? isHoliday(dateStr)
-                        : false;
-                      const isFuture = isValidDay
-                        ? isFutureDate(dateStr)
-                        : false;
-
-
-                      let isVisibleByFilter = true;
-                      if (dayRecord) {
-                        if (
+                        let isVisibleByFilter = true;
+                        if (dayRecord) {
+                          if (
+                            selectedStatus !== "all" &&
+                            dayRecord.status !== selectedStatus
+                          )
+                            isVisibleByFilter = false;
+                          if (
+                            selectedShift !== "all" &&
+                            dayRecord.shift !== selectedShift
+                          )
+                            isVisibleByFilter = false;
+                        } else if (
                           selectedStatus !== "all" &&
-                          dayRecord.status !== selectedStatus
-                        )
+                          selectedStatus !== "Absent"
+                        ) {
                           isVisibleByFilter = false;
-                        if (
-                          selectedShift !== "all" &&
-                          dayRecord.shift !== selectedShift
-                        )
-                          isVisibleByFilter = false;
-                      } else if (
-                        selectedStatus !== "all" &&
-                        selectedStatus !== "Absent"
-                      ) {
-                        isVisibleByFilter = false;
-                      }
+                        }
 
-                      return (
-                        <td
-                          key={`cell-${monthData.monthIndex}-${day}`}
-                          className="min-w-15 border-b border-r border-slate-100 px-1 py-2 text-center last:border-r-0"
-                        >
-                          <div className="flex flex-col items-center justify-center gap-1.5 h-full min-h-10">
-                            {!isValidDay ? (
-                              getStatusBadge("Disabled")
-                            ) : isSundayDate || isFuture ? (
-                              getStatusBadge("Muted")
-                            ) : isHolidayDate ? (
-                              getStatusBadge("Holiday")
-                            ) : !isVisibleByFilter ? (
-                              <div className="opacity-20">
-                                {dayRecord
-                                  ? getStatusBadge(
-                                      dayRecord.status,
-                                      dayRecord.totalHours,
-                                    )
-                                  : getStatusBadge("Absent")}
-                              </div>
-                            ) : dayRecord ? (
-                              <button
-                                onClick={() =>
-                                  setSelectedAttendanceRecord(dayRecord)
-                                }
-                                className="rounded-xl transition-all hover:scale-105 p-1"
-                              >
-                                {getStatusBadge(
-                                  dayRecord.status,
-                                  dayRecord.totalHours,
-                                )}
-                              </button>
-                            ) : (
-                              getStatusBadge("Absent")
-                            )}
-                          </div>
-                        </td>
-                      );
-                    })}
+                        return (
+                          <td
+                            key={`cell-${monthData.monthIndex}-${day}`}
+                            className="min-w-15 border-b border-r border-slate-100 px-1 py-2 text-center last:border-r-0"
+                          >
+                            <div className="flex flex-col items-center justify-center gap-1.5 h-full min-h-10">
+                              {!isValidDay ? (
+                                getStatusBadge("Disabled")
+                              ) : isSundayDate || isFuture ? (
+                                getStatusBadge("Muted")
+                              ) : isHolidayDate ? (
+                                getStatusBadge("Holiday")
+                              ) : !isVisibleByFilter ? (
+                                <div className="opacity-20">
+                                  {dayRecord
+                                    ? getStatusBadge(
+                                        dayRecord.status,
+                                        dayRecord.totalHours,
+                                      )
+                                    : getStatusBadge("Absent")}
+                                </div>
+                              ) : dayRecord ? (
+                                <button
+                                  onClick={() =>
+                                    setSelectedAttendanceRecord(dayRecord)
+                                  }
+                                  className="rounded-xl transition-all hover:scale-105 p-1"
+                                >
+                                  {getStatusBadge(
+                                    dayRecord.status,
+                                    dayRecord.totalHours,
+                                  )}
+                                </button>
+                              ) : (
+                                getStatusBadge("Absent")
+                              )}
+                            </div>
+                          </td>
+                        );
+                      })}
 
-
-                    <td className="sticky right-0 z-20 whitespace-nowrap border-b border-l border-slate-100 px-4 py-3 bg-white group-hover:bg-slate-50">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => {
-                            setSelectedMonthData(monthData);
-                            setShowTimesheet(true);
-                          }}
-                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-slate-400 hover:border-slate-200 hover:bg-white hover:text-slate-900"
-                          title="Monthly Report"
-                        >
-                          <FileText className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                      <td className="sticky right-0 z-20 whitespace-nowrap border-b border-l border-slate-100 px-4 py-3 bg-white group-hover:bg-slate-50">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedMonthData(monthData);
+                              setShowTimesheet(true);
+                            }}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-slate-400 hover:border-slate-200 hover:bg-white hover:text-slate-900"
+                            title="Monthly Report"
+                          >
+                            <FileText className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -20,7 +20,6 @@ const superAdminSlice = createSlice({
   },
 });
 
-export const { setSuperAdmin, clearSuperAdmin } =
-  superAdminSlice.actions;
+export const { setSuperAdmin, clearSuperAdmin } = superAdminSlice.actions;
 
 export default superAdminSlice.reducer;

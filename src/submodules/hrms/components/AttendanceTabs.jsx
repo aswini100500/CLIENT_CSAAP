@@ -63,14 +63,16 @@ const AttendanceTabs = () => {
 
   const filteredTabs = tabs.filter((tab) => {
     if (tab.id === "attendance") return hasAccess("hrms.attendance");
-    if (tab.id === "attendance_review") return hasAccess("hrms.attendance.review");
+    if (tab.id === "attendance_review")
+      return hasAccess("hrms.attendance.review");
     if (tab.id === "requests") return hasAccess("hrms.attendance.requests");
     if (tab.id === "mispunch") return hasAccess("hrms.attendance.mispunch");
     if (tab.id === "leave") return hasAccess("hrms.attendance.leave");
     return true;
   });
 
-  const activeTabData = filteredTabs.find((tab) => tab.id === activeTab) || filteredTabs[0];
+  const activeTabData =
+    filteredTabs.find((tab) => tab.id === activeTab) || filteredTabs[0];
 
   useEffect(() => {
     setIsLoading(true);

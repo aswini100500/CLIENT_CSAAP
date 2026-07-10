@@ -1,814 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-    
-
-
-
-
-
-    
-
-
-
-
-    
-
-
-
-    
-
-
-
-
-    
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-    
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-    
-
-
-
-
-
-
-    
-
-
-
-
-
-
-    
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { useCompany } from '../context/CompanyContext';
-import Swal from 'sweetalert2';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { useCompany } from "../context/CompanyContext";
+import Swal from "sweetalert2";
 import {
   ArrowLeft,
   FileText,
@@ -828,14 +22,14 @@ import {
   Loader2,
   Eye,
   Trash2,
-  Edit
-} from 'lucide-react';
+  Edit,
+} from "lucide-react";
 
 const Cheque = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { companyId } = useCompany();
-  const [isEditMode, setIsEditMode] = useState(id && id !== 'new');
+  const [isEditMode, setIsEditMode] = useState(id && id !== "new");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [printMode, setPrintMode] = useState(false);
@@ -844,115 +38,114 @@ const Cheque = () => {
   const [selectedBankData, setSelectedBankData] = useState(null);
 
   const [chequeData, setChequeData] = useState({
+    chequeNumber: "",
+    chequeDate: new Date().toISOString().split("T")[0],
+    chequeType: "issued",
+    amount: "",
+    amountInWords: "",
 
-    chequeNumber: '',
-    chequeDate: new Date().toISOString().split('T')[0],
-    chequeType: 'issued',
-    amount: '',
-    amountInWords: '',
-    
+    payeeName: "",
+    payeeAddress: "",
+    payeeContact: "",
+    payeePAN: "",
 
-    payeeName: '',
-    payeeAddress: '',
-    payeeContact: '',
-    payeePAN: '',
-    
+    bankId: "",
+    bankName: "",
+    branchName: "",
+    accountNumber: "",
+    ifscCode: "",
 
-    bankId: '',
-    bankName: '',
-    branchName: '',
-    accountNumber: '',
-    ifscCode: '',
-    
+    dateIssued: new Date().toISOString().split("T")[0],
+    datePresented: "",
+    dateCleared: "",
 
-    dateIssued: new Date().toISOString().split('T')[0],
-    datePresented: '',
-    dateCleared: '',
-    
+    status: "pending",
+    statusDate: "",
 
-    status: 'pending',
-    statusDate: '',
-    
+    purpose: "",
+    referenceNumber: "",
+    narration: "",
 
-    purpose: '',
-    referenceNumber: '',
-    narration: '',
-    
+    tdsDeducted: "0",
+    tdsAmount: "0",
 
-    tdsDeducted: '0',
-    tdsAmount: '0',
-    
-
-    attachmentUrl: '',
-    chequeImage: ''
+    attachmentUrl: "",
+    chequeImage: "",
   });
 
   const [errors, setErrors] = useState({});
 
-
   const fetchBankAccounts = async () => {
     if (!companyId) return;
-    
+
     setLoadingBanks(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`,
       );
-      
+
       if (response.data.success) {
         setBankAccounts(response.data.accounts || []);
       } else {
-        Swal.fire('Error', response.data.message || 'Failed to fetch bank accounts', 'error');
+        Swal.fire(
+          "Error",
+          response.data.message || "Failed to fetch bank accounts",
+          "error",
+        );
       }
     } catch (error) {
-      console.error('Error fetching bank accounts:', error);
-      Swal.fire('Error', 'Failed to fetch bank accounts', 'error');
+      console.error("Error fetching bank accounts:", error);
+      Swal.fire("Error", "Failed to fetch bank accounts", "error");
     } finally {
       setLoadingBanks(false);
     }
   };
 
-
   const fetchChequeData = async () => {
-    if (!id || id === 'new') return;
-    
+    if (!id || id === "new") return;
+
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/item/${id}`
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/item/${id}`,
       );
-      
+
       if (response.data.success) {
         const data = response.data.data;
 
         const formattedData = {
           ...data,
-          chequeDate: data.chequeDate ? data.chequeDate.split('T')[0] : '',
-          dateIssued: data.dateIssued ? data.dateIssued.split('T')[0] : '',
-          datePresented: data.datePresented ? data.datePresented.split('T')[0] : '',
-          dateCleared: data.dateCleared ? data.dateCleared.split('T')[0] : '',
-          statusDate: data.statusDate ? data.statusDate.split('T')[0] : '',
-          tdsDeducted: data.tdsDeducted?.toString() || '0',
-          tdsAmount: data.tdsAmount?.toString() || '0',
-          amount: data.amount?.toString() || ''
+          chequeDate: data.chequeDate ? data.chequeDate.split("T")[0] : "",
+          dateIssued: data.dateIssued ? data.dateIssued.split("T")[0] : "",
+          datePresented: data.datePresented
+            ? data.datePresented.split("T")[0]
+            : "",
+          dateCleared: data.dateCleared ? data.dateCleared.split("T")[0] : "",
+          statusDate: data.statusDate ? data.statusDate.split("T")[0] : "",
+          tdsDeducted: data.tdsDeducted?.toString() || "0",
+          tdsAmount: data.tdsAmount?.toString() || "0",
+          amount: data.amount?.toString() || "",
         };
-        
+
         setChequeData(formattedData);
         setIsEditMode(true);
-        
 
         if (data.bankId && bankAccounts.length > 0) {
-          const bank = bankAccounts.find(b => b.id === data.bankId);
+          const bank = bankAccounts.find((b) => b.id === data.bankId);
           if (bank) setSelectedBankData(bank);
         }
       } else {
-        Swal.fire('Error', response.data.message || 'Failed to fetch cheque data', 'error');
-        navigate('/cheque-register');
+        Swal.fire(
+          "Error",
+          response.data.message || "Failed to fetch cheque data",
+          "error",
+        );
+        navigate("/cheque-register");
       }
     } catch (error) {
-      console.error('Error fetching cheque:', error);
-      Swal.fire('Error', 'Failed to fetch cheque data', 'error');
-      navigate('/cheque-register');
+      console.error("Error fetching cheque:", error);
+      Swal.fire("Error", "Failed to fetch cheque data", "error");
+      navigate("/cheque-register");
     } finally {
       setLoading(false);
     }
@@ -965,7 +158,7 @@ const Cheque = () => {
   }, [companyId]);
 
   useEffect(() => {
-    if (id && id !== 'new' && bankAccounts.length > 0) {
+    if (id && id !== "new" && bankAccounts.length > 0) {
       fetchChequeData();
     }
   }, [id, bankAccounts]);
@@ -974,87 +167,93 @@ const Cheque = () => {
     const { name, value } = e.target;
     const updatedChequeData = {
       ...chequeData,
-      [name]: value
+      [name]: value,
     };
 
-
-    if (name === 'bankId' && value) {
-      const selectedBank = bankAccounts.find(bank => bank.id.toString() === value);
+    if (name === "bankId" && value) {
+      const selectedBank = bankAccounts.find(
+        (bank) => bank.id.toString() === value,
+      );
       if (selectedBank) {
-        updatedChequeData.bankName = selectedBank.bankName || '';
-        updatedChequeData.branchName = selectedBank.branchName || '';
-        updatedChequeData.accountNumber = selectedBank.accountNumber || '';
-        updatedChequeData.ifscCode = selectedBank.ifscCode || '';
+        updatedChequeData.bankName = selectedBank.bankName || "";
+        updatedChequeData.branchName = selectedBank.branchName || "";
+        updatedChequeData.accountNumber = selectedBank.accountNumber || "";
+        updatedChequeData.ifscCode = selectedBank.ifscCode || "";
         setSelectedBankData(selectedBank);
       }
     }
 
-
-    if (name === 'amount' || name === 'tdsDeducted') {
+    if (name === "amount" || name === "tdsDeducted") {
       const amount = parseFloat(updatedChequeData.amount) || 0;
       const tdsPercentage = parseFloat(updatedChequeData.tdsDeducted) || 0;
       updatedChequeData.tdsAmount = ((amount * tdsPercentage) / 100).toFixed(2);
     }
 
     setChequeData(updatedChequeData);
-    
 
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
 
   const handleAmountChange = (e) => {
     const value = e.target.value;
-    setChequeData(prev => ({
+    setChequeData((prev) => ({
       ...prev,
-      amount: value
+      amount: value,
     }));
-    
 
     if (value && !isNaN(value)) {
       const amountInWords = convertToWords(value);
-      setChequeData(prev => ({
+      setChequeData((prev) => ({
         ...prev,
-        amountInWords
+        amountInWords,
       }));
     }
   };
 
   const convertToWords = (num) => {
     const amount = parseFloat(num);
-    if (amount === 0) return 'Zero Only';
-    
+    if (amount === 0) return "Zero Only";
 
-    return 'Rupees ' + amount.toLocaleString('en-IN', { maximumFractionDigits: 2 }) + ' Only';
+    return (
+      "Rupees " +
+      amount.toLocaleString("en-IN", { maximumFractionDigits: 2 }) +
+      " Only"
+    );
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
-    if (!chequeData.chequeNumber) newErrors.chequeNumber = 'Cheque number is required';
-    if (!chequeData.amount) newErrors.amount = 'Amount is required';
-    if (!chequeData.payeeName) newErrors.payeeName = 'Payee name is required';
-    
 
-    if (chequeData.chequeType === 'issued') {
-      if (!chequeData.bankId) newErrors.bankId = 'Bank selection is required';
-      if (!chequeData.accountNumber) newErrors.accountNumber = 'Account number is required';
+    if (!chequeData.chequeNumber)
+      newErrors.chequeNumber = "Cheque number is required";
+    if (!chequeData.amount) newErrors.amount = "Amount is required";
+    if (!chequeData.payeeName) newErrors.payeeName = "Payee name is required";
+
+    if (chequeData.chequeType === "issued") {
+      if (!chequeData.bankId) newErrors.bankId = "Bank selection is required";
+      if (!chequeData.accountNumber)
+        newErrors.accountNumber = "Account number is required";
     }
-    
+
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
-    
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      Swal.fire('Validation Error', 'Please fill all required fields', 'warning');
+      Swal.fire(
+        "Validation Error",
+        "Please fill all required fields",
+        "warning",
+      );
       return;
     }
 
@@ -1064,47 +263,47 @@ const Cheque = () => {
         ...chequeData,
         amount: parseFloat(chequeData.amount),
         tdsDeducted: parseFloat(chequeData.tdsDeducted) || 0,
-        tdsAmount: parseFloat(chequeData.tdsAmount) || 0
+        tdsAmount: parseFloat(chequeData.tdsAmount) || 0,
       };
 
       let response;
-      
-      if (isEditMode) {
 
+      if (isEditMode) {
         response = await axios.put(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${id}/update`,
-          payload
+          payload,
         );
       } else {
-
         response = await axios.post(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${companyId}/create`,
-          payload
+          payload,
         );
       }
 
       if (response.data.success) {
         Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          text: `Cheque ${isEditMode ? 'updated' : 'created'} successfully!`,
+          icon: "success",
+          title: "Success!",
+          text: `Cheque ${isEditMode ? "updated" : "created"} successfully!`,
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
-        
 
         setTimeout(() => {
-          navigate('/cheque-register');
+          navigate("/cheque-register");
         }, 1500);
       } else {
-        throw new Error(response.data.message || 'Failed to save cheque');
+        throw new Error(response.data.message || "Failed to save cheque");
       }
     } catch (error) {
-      console.error('Error saving cheque:', error);
+      console.error("Error saving cheque:", error);
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.response?.data?.message || error.message || 'Failed to save cheque',
+        icon: "error",
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to save cheque",
       });
     } finally {
       setSaving(false);
@@ -1112,58 +311,58 @@ const Cheque = () => {
   };
 
   const handleDeleteCheque = async () => {
-    if (!id || id === 'new') return;
-    
+    if (!id || id === "new") return;
+
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'This action cannot be undone!',
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "This action cannot be undone!",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
       try {
         const response = await axios.delete(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${id}/delete`
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${id}/delete`,
         );
 
         if (response.data.success) {
           Swal.fire({
-            icon: 'success',
-            title: 'Deleted!',
-            text: 'Cheque has been deleted.',
+            icon: "success",
+            title: "Deleted!",
+            text: "Cheque has been deleted.",
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
-          
+
           setTimeout(() => {
-            navigate('/cheque-register');
+            navigate("/cheque-register");
           }, 1500);
         }
       } catch (error) {
-        console.error('Error deleting cheque:', error);
+        console.error("Error deleting cheque:", error);
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.response?.data?.message || 'Failed to delete cheque',
+          icon: "error",
+          title: "Error",
+          text: error.response?.data?.message || "Failed to delete cheque",
         });
       }
     }
   };
 
   const handleChangeStatus = async (newStatus) => {
-    if (!id || id === 'new') return;
-    
+    if (!id || id === "new") return;
+
     const result = await Swal.fire({
-      title: 'Change Status',
+      title: "Change Status",
       text: `Change cheque status to "${newStatus}"?`,
-      icon: 'question',
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: 'Yes, change it',
-      cancelButtonText: 'Cancel'
+      confirmButtonText: "Yes, change it",
+      cancelButtonText: "Cancel",
     });
 
     if (result.isConfirmed) {
@@ -1172,31 +371,31 @@ const Cheque = () => {
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${id}/change-status`,
           {
             status: newStatus,
-            statusDate: new Date().toISOString().split('T')[0]
-          }
+            statusDate: new Date().toISOString().split("T")[0],
+          },
         );
 
         if (response.data.success) {
-          setChequeData(prev => ({
+          setChequeData((prev) => ({
             ...prev,
             status: newStatus,
-            statusDate: new Date().toISOString().split('T')[0]
+            statusDate: new Date().toISOString().split("T")[0],
           }));
-          
+
           Swal.fire({
-            icon: 'success',
-            title: 'Status Updated!',
+            icon: "success",
+            title: "Status Updated!",
             text: `Cheque status changed to ${newStatus}`,
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
         }
       } catch (error) {
-        console.error('Error changing status:', error);
+        console.error("Error changing status:", error);
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.response?.data?.message || 'Failed to change status',
+          icon: "error",
+          title: "Error",
+          text: error.response?.data?.message || "Failed to change status",
         });
       }
     }
@@ -1212,52 +411,47 @@ const Cheque = () => {
 
   const handleDownloadCheque = () => {
     const dataStr = JSON.stringify(chequeData, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
     const exportFileDefaultName = `cheque-${chequeData.chequeNumber}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
   };
 
   const getStatusBadge = (status = chequeData.status) => {
     const statusConfig = {
-      cleared: { color: 'bg-green-100 text-green-800', icon: <CheckCircle className="w-5 h-5" /> },
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: <Clock className="w-5 h-5" /> },
-      bounced: { color: 'bg-red-100 text-red-800', icon: <XCircle className="w-5 h-5" /> },
-      cancelled: { color: 'bg-gray-100 text-gray-800', icon: <XCircle className="w-5 h-5" /> }
+      cleared: {
+        color: "bg-green-100 text-green-800",
+        icon: <CheckCircle className="w-5 h-5" />,
+      },
+      pending: {
+        color: "bg-yellow-100 text-yellow-800",
+        icon: <Clock className="w-5 h-5" />,
+      },
+      bounced: {
+        color: "bg-red-100 text-red-800",
+        icon: <XCircle className="w-5 h-5" />,
+      },
+      cancelled: {
+        color: "bg-gray-100 text-gray-800",
+        icon: <XCircle className="w-5 h-5" />,
+      },
     };
-    
+
     const config = statusConfig[status] || statusConfig.pending;
-    
+
     return (
-      <div className={`inline-flex items-center px-4 py-2 rounded-lg ${config.color}`}>
+      <div
+        className={`inline-flex items-center px-4 py-2 rounded-lg ${config.color}`}
+      >
         {config.icon}
         <span className="ml-2 font-medium capitalize">{status}</span>
       </div>
     );
   };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   if (loading) {
     return (
@@ -1269,19 +463,20 @@ const Cheque = () => {
   }
 
   return (
-    <div className={`min-h-screen ${printMode ? 'bg-white' : 'bg-gray-50'} p-1 `}>
+    <div
+      className={`min-h-screen ${printMode ? "bg-white" : "bg-gray-50"} p-1 `}
+    >
       <div className=" mx-auto">
-
         {!printMode && (
           <div className="mb-8">
             <button
-              onClick={() => navigate('/cheque-register')}
+              onClick={() => navigate("/cheque-register")}
               className="flex items-center text-blue-600 hover:text-blue-800 mb-4"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               Back to Cheque Register
             </button>
-            
+
             <div className="bg-linear-to-r from-blue-600 to-indigo-700 rounded-xl p-2 shadow-lg">
               <div className="flex flex-col md:flex-row md:items-center justify-between">
                 <div className="flex items-center mb-4 md:mb-0">
@@ -1290,10 +485,12 @@ const Cheque = () => {
                   </div>
                   <div>
                     <h1 className="text-2xl md:text-3xl font-bold text-white">
-                      {isEditMode ? 'Edit Cheque' : 'Create New Cheque'}
+                      {isEditMode ? "Edit Cheque" : "Create New Cheque"}
                     </h1>
                     <p className="text-blue-100 mt-1">
-                      {isEditMode ? `Cheque: ${chequeData.chequeNumber}` : 'Add cheque details'}
+                      {isEditMode
+                        ? `Cheque: ${chequeData.chequeNumber}`
+                        : "Add cheque details"}
                     </p>
                   </div>
                 </div>
@@ -1327,23 +524,19 @@ const Cheque = () => {
           </div>
         )}
 
-
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <form onSubmit={handleSubmit}>
-
             {!printMode && (
               <div className="bg-gray-50 border-b border-gray-200 p-4 flex justify-between items-center">
                 <div className="flex items-center space-x-4">
-
                   <div className="text-sm text-gray-500">
-                    {isEditMode ? `Last updated: Today` : 'New Cheque'}
+                    {isEditMode ? `Last updated: Today` : "New Cheque"}
                   </div>
-
                 </div>
                 <div className="flex space-x-3">
                   <button
                     type="button"
-                    onClick={() => navigate('/cheque-register')}
+                    onClick={() => navigate("/cheque-register")}
                     className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                   >
                     Cancel
@@ -1361,7 +554,7 @@ const Cheque = () => {
                     ) : (
                       <>
                         <Save className="w-5 h-5 mr-2" />
-                        {isEditMode ? 'Update Cheque' : 'Save Cheque'}
+                        {isEditMode ? "Update Cheque" : "Save Cheque"}
                       </>
                     )}
                   </button>
@@ -1370,15 +563,13 @@ const Cheque = () => {
             )}
 
             <div className="p-6">
-
               <div className="mb-8">
                 <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                   <FileText className="w-6 h-6 mr-2 text-blue-600" />
                   Basic Information
                 </h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Cheque Type
@@ -1389,7 +580,7 @@ const Cheque = () => {
                           type="radio"
                           name="chequeType"
                           value="issued"
-                          checked={chequeData.chequeType === 'issued'}
+                          checked={chequeData.chequeType === "issued"}
                           onChange={handleChange}
                           className="h-4 w-4 text-blue-600"
                         />
@@ -1400,7 +591,7 @@ const Cheque = () => {
                           type="radio"
                           name="chequeType"
                           value="received"
-                          checked={chequeData.chequeType === 'received'}
+                          checked={chequeData.chequeType === "received"}
                           onChange={handleChange}
                           className="h-4 w-4 text-blue-600"
                         />
@@ -1408,7 +599,6 @@ const Cheque = () => {
                       </label>
                     </div>
                   </div>
-                  
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1421,14 +611,17 @@ const Cheque = () => {
                       onChange={handleChange}
                       placeholder="Enter cheque number"
                       className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none ${
-                        errors.chequeNumber ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
+                        errors.chequeNumber
+                          ? "border-red-300 focus:ring-red-500"
+                          : "border-gray-300 focus:ring-blue-500"
                       }`}
                     />
                     {errors.chequeNumber && (
-                      <p className="mt-1 text-sm text-red-600">{errors.chequeNumber}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.chequeNumber}
+                      </p>
                     )}
                   </div>
-                  
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1442,7 +635,6 @@ const Cheque = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1456,14 +648,17 @@ const Cheque = () => {
                       placeholder="Enter amount"
                       step="0.01"
                       className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none ${
-                        errors.amount ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
+                        errors.amount
+                          ? "border-red-300 focus:ring-red-500"
+                          : "border-gray-300 focus:ring-blue-500"
                       }`}
                     />
                     {errors.amount && (
-                      <p className="mt-1 text-sm text-red-600">{errors.amount}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.amount}
+                      </p>
                     )}
                   </div>
-                  
 
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1481,17 +676,21 @@ const Cheque = () => {
                 </div>
               </div>
 
-
               <div className="mb-8">
                 <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                   <User className="w-6 h-6 mr-2 text-green-600" />
-                  {chequeData.chequeType === 'issued' ? 'Payee Details' : 'Drawer Details'}
+                  {chequeData.chequeType === "issued"
+                    ? "Payee Details"
+                    : "Drawer Details"}
                 </h2>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {chequeData.chequeType === 'issued' ? 'Payee Name' : 'Drawer Name'} *
+                      {chequeData.chequeType === "issued"
+                        ? "Payee Name"
+                        : "Drawer Name"}{" "}
+                      *
                     </label>
                     <input
                       type="text"
@@ -1500,14 +699,18 @@ const Cheque = () => {
                       onChange={handleChange}
                       placeholder="Enter name"
                       className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none ${
-                        errors.payeeName ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
+                        errors.payeeName
+                          ? "border-red-300 focus:ring-red-500"
+                          : "border-gray-300 focus:ring-blue-500"
                       }`}
                     />
                     {errors.payeeName && (
-                      <p className="mt-1 text-sm text-red-600">{errors.payeeName}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.payeeName}
+                      </p>
                     )}
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       PAN Number
@@ -1521,7 +724,7 @@ const Cheque = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  
+
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Address
@@ -1535,7 +738,7 @@ const Cheque = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Contact Number
@@ -1552,16 +755,14 @@ const Cheque = () => {
                 </div>
               </div>
 
-
-              {chequeData.chequeType === 'issued' && (
+              {chequeData.chequeType === "issued" && (
                 <div className="mb-8">
                   <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                     <Landmark className="w-6 h-6 mr-2 text-purple-600" />
                     Bank Details
                   </h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Select Bank Account *
@@ -1570,15 +771,17 @@ const Cheque = () => {
                         {loadingBanks ? (
                           <div className="flex items-center px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
                             <Loader2 className="w-5 h-5 mr-2 animate-spin text-gray-400" />
-                            <span className="text-gray-500">Loading banks...</span>
+                            <span className="text-gray-500">
+                              Loading banks...
+                            </span>
                           </div>
                         ) : bankAccounts.length === 0 ? (
                           <div className="px-4 py-2 border border-gray-300 rounded-lg bg-yellow-50">
                             <p className="text-yellow-700 text-sm">
-                              No bank accounts found. 
+                              No bank accounts found.
                               <button
                                 type="button"
-                                onClick={() => navigate('/bank-activities')}
+                                onClick={() => navigate("/bank-activities")}
                                 className="ml-1 text-blue-600 hover:underline"
                               >
                                 Add bank account first
@@ -1591,13 +794,16 @@ const Cheque = () => {
                             value={chequeData.bankId}
                             onChange={handleChange}
                             className={`w-full px-4 py-2 border rounded-lg appearance-none focus:ring-2 focus:outline-none ${
-                              errors.bankId ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
+                              errors.bankId
+                                ? "border-red-300 focus:ring-red-500"
+                                : "border-gray-300 focus:ring-blue-500"
                             }`}
                           >
                             <option value="">Select Bank Account</option>
                             {bankAccounts.map((bank) => (
                               <option key={bank.id} value={bank.id}>
-                                {bank.bankName} - {bank.accountNumber} ({bank.accountName})
+                                {bank.bankName} - {bank.accountNumber} (
+                                {bank.accountName})
                               </option>
                             ))}
                           </select>
@@ -1605,10 +811,11 @@ const Cheque = () => {
                         <ChevronDown className="absolute right-3 top-3 w-5 h-5 text-gray-400 pointer-events-none" />
                       </div>
                       {errors.bankId && (
-                        <p className="mt-1 text-sm text-red-600">{errors.bankId}</p>
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.bankId}
+                        </p>
                       )}
                     </div>
-
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1622,7 +829,7 @@ const Cheque = () => {
                         className="w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded-lg"
                       />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Branch Name
@@ -1635,7 +842,7 @@ const Cheque = () => {
                         className="w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded-lg"
                       />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Account Number *
@@ -1646,14 +853,18 @@ const Cheque = () => {
                         value={chequeData.accountNumber}
                         readOnly
                         className={`w-full px-4 py-2 border rounded-lg bg-gray-50 ${
-                          errors.accountNumber ? 'border-red-300' : 'border-gray-300'
+                          errors.accountNumber
+                            ? "border-red-300"
+                            : "border-gray-300"
                         }`}
                       />
                       {errors.accountNumber && (
-                        <p className="mt-1 text-sm text-red-600">{errors.accountNumber}</p>
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.accountNumber}
+                        </p>
                       )}
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         IFSC Code
@@ -1666,23 +877,31 @@ const Cheque = () => {
                         className="w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded-lg"
                       />
                     </div>
-                    
 
                     {selectedBankData && (
                       <div className="md:col-span-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
                         <div className="flex items-center">
                           <Landmark className="w-5 h-5 text-blue-600 mr-2" />
-                          <h4 className="font-medium text-blue-800">Selected Bank Account</h4>
+                          <h4 className="font-medium text-blue-800">
+                            Selected Bank Account
+                          </h4>
                         </div>
                         <div className="mt-2 grid grid-cols-2 gap-3 text-sm">
                           <div>
                             <span className="text-gray-600">Account Name:</span>
-                            <span className="ml-2 font-medium">{selectedBankData.accountName}</span>
+                            <span className="ml-2 font-medium">
+                              {selectedBankData.accountName}
+                            </span>
                           </div>
                           <div>
-                            <span className="text-gray-600">Current Balance:</span>
+                            <span className="text-gray-600">
+                              Current Balance:
+                            </span>
                             <span className="ml-2 font-medium text-green-600">
-                              ₹{parseFloat(selectedBankData.currentBalance || 0).toLocaleString('en-IN')}
+                              ₹
+                              {parseFloat(
+                                selectedBankData.currentBalance || 0,
+                              ).toLocaleString("en-IN")}
                             </span>
                           </div>
                         </div>
@@ -1692,14 +911,13 @@ const Cheque = () => {
                 </div>
               )}
 
-
-              {chequeData.chequeType === 'received' && (
+              {chequeData.chequeType === "received" && (
                 <div className="mb-8">
                   <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                     <Landmark className="w-6 h-6 mr-2 text-purple-600" />
                     Drawer Bank Details
                   </h2>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1714,7 +932,7 @@ const Cheque = () => {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Account Number
@@ -1732,13 +950,12 @@ const Cheque = () => {
                 </div>
               )}
 
-
               <div className="mb-8">
                 <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                   <Calendar className="w-6 h-6 mr-2 text-orange-600" />
                   Dates & Status
                 </h2>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1752,7 +969,7 @@ const Cheque = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Date Presented
@@ -1765,7 +982,7 @@ const Cheque = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Date Cleared
@@ -1781,13 +998,12 @@ const Cheque = () => {
                 </div>
               </div>
 
-
               <div className="mb-8">
                 <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                   <Copy className="w-6 h-6 mr-2 text-red-600" />
                   Additional Details
                 </h2>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1809,7 +1025,7 @@ const Cheque = () => {
                       <option value="other">Other</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Reference Number
@@ -1823,7 +1039,7 @@ const Cheque = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  
+
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Narration / Remarks
@@ -1837,7 +1053,7 @@ const Cheque = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       TDS Deducted (%)
@@ -1852,7 +1068,7 @@ const Cheque = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       TDS Amount (₹)
@@ -1871,54 +1087,65 @@ const Cheque = () => {
           </form>
         </div>
 
-
         {!printMode && (
           <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Cheque Preview</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              Cheque Preview
+            </h3>
             <div className="bg-white border-2 border-gray-300 rounded-xl p-8 shadow-inner">
               <div className="grid grid-cols-2 gap-8">
                 <div>
-                  <h4 className="font-bold text-gray-800 mb-4">Cheque Details</h4>
+                  <h4 className="font-bold text-gray-800 mb-4">
+                    Cheque Details
+                  </h4>
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Cheque Number:</span>
-                      <span className="font-semibold">{chequeData.chequeNumber || '---'}</span>
+                      <span className="font-semibold">
+                        {chequeData.chequeNumber || "---"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Date:</span>
-                      <span>{chequeData.chequeDate || '---'}</span>
+                      <span>{chequeData.chequeDate || "---"}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Pay to:</span>
-                      <span className="font-medium">{chequeData.payeeName || '---'}</span>
+                      <span className="font-medium">
+                        {chequeData.payeeName || "---"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Amount:</span>
                       <span className="text-xl font-bold">
-                        {chequeData.amount ? `₹${parseFloat(chequeData.amount).toLocaleString('en-IN')}` : '---'}
+                        {chequeData.amount
+                          ? `₹${parseFloat(chequeData.amount).toLocaleString("en-IN")}`
+                          : "---"}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Type:</span>
-                      <span className="font-medium capitalize">{chequeData.chequeType || '---'}</span>
+                      <span className="font-medium capitalize">
+                        {chequeData.chequeType || "---"}
+                      </span>
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="font-bold text-gray-800 mb-4">Bank Details</h4>
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Bank:</span>
-                      <span>{chequeData.bankName || '---'}</span>
+                      <span>{chequeData.bankName || "---"}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Account:</span>
-                      <span>{chequeData.accountNumber || '---'}</span>
+                      <span>{chequeData.accountNumber || "---"}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">IFSC:</span>
-                      <span>{chequeData.ifscCode || '---'}</span>
+                      <span>{chequeData.ifscCode || "---"}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Status:</span>
@@ -1927,7 +1154,6 @@ const Cheque = () => {
                   </div>
                 </div>
               </div>
-              
 
               {chequeData.amountInWords && (
                 <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -1944,953 +1170,3 @@ const Cheque = () => {
 };
 
 export default Cheque;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-    
-
-
-
-
-
-
-    
-
-
-
-
-    
-
-
-
-    
-
-
-
-
-    
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-    
-
-
-
-    
-
-
-
-
-
-    
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

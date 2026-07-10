@@ -1,9 +1,12 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faTimesCircle, faDownload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheckCircle,
+  faTimesCircle,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Payment = () => {
-
   const payments = [
     {
       id: 1,

@@ -46,7 +46,6 @@ const TaskTabs = () => {
 
   return (
     <div className="w-full font-sans">
-
       <div className="mb-6 flex justify-center">
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
           {tabs.map((tab) => {
@@ -87,7 +86,6 @@ const TaskTabs = () => {
           })}
         </div>
       </div>
-
 
       <div className="w-full">
         <AnimatePresence mode="wait">

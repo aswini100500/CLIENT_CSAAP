@@ -4,7 +4,6 @@ import React, { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePermission } from "../../../hooks/usePermission";
 
-
 const Input = ({
   label,
   name,
@@ -181,7 +180,6 @@ const RecruitmentProcess = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-
   const handleChange = useCallback((e, section) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -196,10 +194,11 @@ const RecruitmentProcess = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!has("hrms.job.interview.schedule")) {
-      alert("Access Denied: You do not have permission to submit interview reports.");
+      alert(
+        "Access Denied: You do not have permission to submit interview reports.",
+      );
       return;
     }
-
 
     if (!formData.candidateInfo.candidateName || !formData.jobInfo.jobTitle) {
       alert("Please fill in Candidate Name and Job Title.");
@@ -217,7 +216,6 @@ const RecruitmentProcess = () => {
     setError(null);
 
     try {
-
       await axios.post(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/recruitments/`,
         formData,
@@ -252,7 +250,6 @@ const RecruitmentProcess = () => {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-10">
-
           <section>
             <h2 className="text-xl font-semibold mb-3">
               Candidate Information
@@ -266,7 +263,6 @@ const RecruitmentProcess = () => {
               required
             />
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Job Information</h2>
@@ -317,7 +313,6 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-
           <section>
             <h2 className="text-xl font-semibold mb-3">Job Summary</h2>
             <Textarea
@@ -357,7 +352,6 @@ const RecruitmentProcess = () => {
             />
           </section>
 
-
           <section>
             <h2 className="text-xl font-semibold mb-3">Job Challenges</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -392,7 +386,6 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-
           <section>
             <h2 className="text-xl font-semibold mb-3">Hierarchy</h2>
             <Textarea
@@ -403,7 +396,6 @@ const RecruitmentProcess = () => {
               onChange={(e) => handleChange(e, "hierarchy")}
             />
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Qualification</h2>
@@ -431,7 +423,6 @@ const RecruitmentProcess = () => {
               />
             </div>
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Working Conditions</h2>
@@ -495,7 +486,6 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-
           <section>
             <h2 className="text-xl font-semibold mb-3">Responsibilities</h2>
             <Textarea
@@ -520,7 +510,6 @@ const RecruitmentProcess = () => {
               onChange={(e) => handleChange(e, "responsibilities")}
             />
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Competencies</h2>
@@ -548,7 +537,6 @@ const RecruitmentProcess = () => {
               />
             </div>
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Promotion & Hiring</h2>
@@ -583,7 +571,6 @@ const RecruitmentProcess = () => {
               />
             </div>
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Cultural Fit</h2>
@@ -689,7 +676,6 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-
           <section>
             <h2 className="text-xl font-semibold mb-3">Evaluation</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -716,7 +702,6 @@ const RecruitmentProcess = () => {
               />
             </div>
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Background & History</h2>
@@ -772,7 +757,6 @@ const RecruitmentProcess = () => {
               />
             </div>
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Soft Skills</h2>
@@ -906,7 +890,6 @@ const RecruitmentProcess = () => {
             </div>
           </section>
 
-
           <section>
             <h2 className="text-xl font-semibold mb-3">Hard Skills</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -933,7 +916,6 @@ const RecruitmentProcess = () => {
               />
             </div>
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Background Check</h2>
@@ -968,7 +950,6 @@ const RecruitmentProcess = () => {
               />
             </div>
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">
@@ -1089,7 +1070,6 @@ const RecruitmentProcess = () => {
               />
             </div>
           </section>
-
 
           <section>
             <h2 className="text-xl font-semibold mb-3">Final Conclusion</h2>

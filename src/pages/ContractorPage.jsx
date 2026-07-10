@@ -31,14 +31,11 @@ import useSWR, { mutate } from "swr";
 import axios from "axios";
 import { getAuthToken } from "../store/authSession";
 
-
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
-
 
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
-
 
 api.interceptors.request.use(
   (config) => {
@@ -50,38 +47,35 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
-
 
 const fetcher = (url) => api.get(url).then((res) => res.data);
 
 const ContractorPage = () => {
-
-  const { data, error, isLoading } = useSWR("/api/tenant/contractors", fetcher, {
-    revalidateOnFocus: false,
-  });
-
+  const { data, error, isLoading } = useSWR(
+    "/api/tenant/contractors",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    },
+  );
 
   const contractors = data?.contractors || [];
-  
 
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [workOrderFile, setWorkOrderFile] = useState(null);
-  
 
   const [showEquipmentEditModal, setShowEquipmentEditModal] = useState(false);
   const [editingEquipment, setEditingEquipment] = useState("");
   const [editingField, setEditingField] = useState("");
-  
 
   const [notification, setNotification] = useState({
     show: false,
-    type: '',
-    message: '',
-    title: ''
+    type: "",
+    message: "",
+    title: "",
   });
-  
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -96,260 +90,274 @@ const ContractorPage = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingContractor, setEditingContractor] = useState(null);
   const [editProfilePhoto, setEditProfilePhoto] = useState(null);
   const [editWorkOrderFile, setEditWorkOrderFile] = useState(null);
 
-
   const [newContractor, setNewContractor] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    alt_phone: '',
-    company: '',
-    project_name: '',
-    project_allotted: '',
-    total_contracted_sqft: '',
-    advance_amount: '',
-    status: 'Active',
-    report: '',
-    workmanship: 'Verified',
-    employees: '',
-    representatives: [
-      { name: '', position: '', phone: '' }
-    ],
-    equipment_owned: '',
-    equipment_from_store: '',
+    name: "",
+    email: "",
+    phone: "",
+    alt_phone: "",
+    company: "",
+    project_name: "",
+    project_allotted: "",
+    total_contracted_sqft: "",
+    advance_amount: "",
+    status: "Active",
+    report: "",
+    workmanship: "Verified",
+    employees: "",
+    representatives: [{ name: "", position: "", phone: "" }],
+    equipment_owned: "",
+    equipment_from_store: "",
   });
-
 
   const showNotification = (type, title, message) => {
     setNotification({
       show: true,
       type,
       title,
-      message
+      message,
     });
-    
 
     setTimeout(() => {
-      setNotification({ show: false, type: '', message: '', title: '' });
+      setNotification({ show: false, type: "", message: "", title: "" });
     }, 3000);
   };
-
 
   const handleFileChange = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
-
     if (file.size > 5 * 1024 * 1024) {
-      showNotification('error', 'File Size Error', 'File size exceeds 5MB limit.');
+      showNotification(
+        "error",
+        "File Size Error",
+        "File size exceeds 5MB limit.",
+      );
       return;
     }
 
-
-    if (type === 'profilePhoto') {
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (type === "profilePhoto") {
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!allowedTypes.includes(file.type)) {
-        showNotification('error', 'Invalid File Type', 'Only JPG and PNG allowed for profile photo.');
+        showNotification(
+          "error",
+          "Invalid File Type",
+          "Only JPG and PNG allowed for profile photo.",
+        );
         return;
       }
       setProfilePhoto(file);
-    } else if (type === 'workOrder') {
+    } else if (type === "workOrder") {
       const allowedTypes = [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       ];
       if (!allowedTypes.includes(file.type)) {
-        showNotification('error', 'Invalid File Type', 'Only PDF and DOC files allowed for work order.');
+        showNotification(
+          "error",
+          "Invalid File Type",
+          "Only PDF and DOC files allowed for work order.",
+        );
         return;
       }
       setWorkOrderFile(file);
     }
   };
 
-
   const handleEditFileChange = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
-
     if (file.size > 5 * 1024 * 1024) {
-      showNotification('error', 'File Size Error', 'File size exceeds 5MB limit.');
+      showNotification(
+        "error",
+        "File Size Error",
+        "File size exceeds 5MB limit.",
+      );
       return;
     }
 
-
-    if (type === 'profilePhoto') {
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (type === "profilePhoto") {
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!allowedTypes.includes(file.type)) {
-        showNotification('error', 'Invalid File Type', 'Only JPG and PNG allowed for profile photo.');
+        showNotification(
+          "error",
+          "Invalid File Type",
+          "Only JPG and PNG allowed for profile photo.",
+        );
         return;
       }
       setEditProfilePhoto(file);
-    } else if (type === 'workOrder') {
+    } else if (type === "workOrder") {
       const allowedTypes = [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       ];
       if (!allowedTypes.includes(file.type)) {
-        showNotification('error', 'Invalid File Type', 'Only PDF and DOC files allowed for work order.');
+        showNotification(
+          "error",
+          "Invalid File Type",
+          "Only PDF and DOC files allowed for work order.",
+        );
         return;
       }
       setEditWorkOrderFile(file);
     }
   };
 
-
   const openEditModal = (contractor) => {
     setEditingContractor({
       ...contractor,
-      representatives: contractor.representatives || [{ name: '', position: '', phone: '' }]
+      representatives: contractor.representatives || [
+        { name: "", position: "", phone: "" },
+      ],
     });
     setShowEditModal(true);
   };
 
-
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
-    
 
-    if (name.startsWith('representative_')) {
-      const [_, idx, field] = name.split('_');
+    if (name.startsWith("representative_")) {
+      const [_, idx, field] = name.split("_");
       const index = parseInt(idx, 10);
       const updatedReps = [...editingContractor.representatives];
       updatedReps[index][field] = value;
       setEditingContractor({
         ...editingContractor,
-        representatives: updatedReps
+        representatives: updatedReps,
       });
     } else {
       setEditingContractor({
         ...editingContractor,
-        [name]: value
+        [name]: value,
       });
     }
   };
 
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
+    try {
+      const formData = new FormData();
 
-const handleEditSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-
-  try {
-    const formData = new FormData();
-    
-
-    Object.keys(editingContractor).forEach(key => {
-
-      if (key === 'created_at' || key === 'updated_at' || key === 'id') {
-        return;
-      }
-      
-      if (key === 'representatives') {
-        formData.append('representatives', JSON.stringify(editingContractor.representatives));
-      } else if (editingContractor[key] !== '' && editingContractor[key] !== null && editingContractor[key] !== undefined) {
-
-        if (key === 'project_allotted' && editingContractor[key]) {
-
-          const date = new Date(editingContractor[key]);
-          if (!isNaN(date.getTime())) {
-            formData.append(key, date.toISOString().split('T')[0]);
-          }
-        } else {
-          formData.append(key, editingContractor[key]);
+      Object.keys(editingContractor).forEach((key) => {
+        if (key === "created_at" || key === "updated_at" || key === "id") {
+          return;
         }
+
+        if (key === "representatives") {
+          formData.append(
+            "representatives",
+            JSON.stringify(editingContractor.representatives),
+          );
+        } else if (
+          editingContractor[key] !== "" &&
+          editingContractor[key] !== null &&
+          editingContractor[key] !== undefined
+        ) {
+          if (key === "project_allotted" && editingContractor[key]) {
+            const date = new Date(editingContractor[key]);
+            if (!isNaN(date.getTime())) {
+              formData.append(key, date.toISOString().split("T")[0]);
+            }
+          } else {
+            formData.append(key, editingContractor[key]);
+          }
+        }
+      });
+
+      if (editProfilePhoto) {
+        formData.append("profilePhoto", editProfilePhoto);
       }
-    });
-
-
-    if (editProfilePhoto) {
-      formData.append('profilePhoto', editProfilePhoto);
-    }
-    if (editWorkOrderFile) {
-      formData.append('workOrder', editWorkOrderFile);
-    }
-
-
-
-    for (let pair of formData.entries()) {
-
-    }
-
-    const response = await api.put(`/api/tenant/contractors/${editingContractor.id}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    if (response.data.success) {
-
-      mutate('/api/tenant/contractors');
-      
-
-      setEditingContractor(null);
-      setEditProfilePhoto(null);
-      setEditWorkOrderFile(null);
-      setShowEditModal(false);
-      
-
-      if (selectedContractor?.id === editingContractor.id) {
-        setSelectedContractor(response.data.data);
+      if (editWorkOrderFile) {
+        formData.append("workOrder", editWorkOrderFile);
       }
-      
-      showNotification('success', 'Success!', 'Contractor updated successfully!');
-    }
-  } catch (error) {
-    console.error('Error updating contractor:', error);
-    console.error('Error response:', error.response?.data);
-    
 
-    let errorMessage = 'Failed to update contractor. Please try again.';
-    if (error.response?.data?.message) {
-      errorMessage = error.response.data.message;
-    } else if (error.response?.data?.error) {
-      errorMessage = error.response.data.error;
-    }
-    
-    showNotification('error', 'Update Failed', errorMessage);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+      for (let pair of formData.entries()) {
+      }
 
+      const response = await api.put(
+        `/api/tenant/contractors/${editingContractor.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      if (response.data.success) {
+        mutate("/api/tenant/contractors");
+
+        setEditingContractor(null);
+        setEditProfilePhoto(null);
+        setEditWorkOrderFile(null);
+        setShowEditModal(false);
+
+        if (selectedContractor?.id === editingContractor.id) {
+          setSelectedContractor(response.data.data);
+        }
+
+        showNotification(
+          "success",
+          "Success!",
+          "Contractor updated successfully!",
+        );
+      }
+    } catch (error) {
+      console.error("Error updating contractor:", error);
+      console.error("Error response:", error.response?.data);
+
+      let errorMessage = "Failed to update contractor. Please try again.";
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      }
+
+      showNotification("error", "Update Failed", errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-
   const searchContractors = async (query) => {
     try {
-      const response = await api.get(`/api/tenant/contractors/search?name=${query}`);
+      const response = await api.get(
+        `/api/tenant/contractors/search?name=${query}`,
+      );
       return response.data.data;
     } catch (error) {
       console.error("Search error:", error);
-      showNotification('error', 'Search Error', 'Failed to search contractors.');
+      showNotification(
+        "error",
+        "Search Error",
+        "Failed to search contractors.",
+      );
       return contractors;
     }
   };
-
 
   const filteredContractors = contractors.filter((contractor) => {
     const matchesSearch =
       contractor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       contractor.project_name.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesStatus =
       statusFilter === "All" || contractor.status === statusFilter;
-    
 
     let matchesDate = true;
     if (fromDate && contractor.project_allotted) {
@@ -357,11 +365,11 @@ const handleEditSubmit = async (e) => {
     }
     if (toDate && contractor.project_allotted) {
       matchesDate =
-        matchesDate && new Date(contractor.project_allotted) <= new Date(toDate);
+        matchesDate &&
+        new Date(contractor.project_allotted) <= new Date(toDate);
     }
     return matchesSearch && matchesStatus && matchesDate;
   });
-
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -371,12 +379,11 @@ const handleEditSubmit = async (e) => {
     setSortConfig({ key, direction });
   };
 
-
   const sortedContractors = [...filteredContractors].sort((a, b) => {
     if (sortConfig.key) {
       const aValue = a[sortConfig.key];
       const bValue = b[sortConfig.key];
-      
+
       if (aValue < bValue) {
         return sortConfig.direction === "ascending" ? -1 : 1;
       }
@@ -387,28 +394,25 @@ const handleEditSubmit = async (e) => {
     return 0;
   });
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
 
-    if (name.startsWith('representative_')) {
-      const [_, idx, field] = name.split('_');
+    if (name.startsWith("representative_")) {
+      const [_, idx, field] = name.split("_");
       const index = parseInt(idx, 10);
       const updatedReps = [...newContractor.representatives];
       updatedReps[index][field] = value;
       setNewContractor({
         ...newContractor,
-        representatives: updatedReps
+        representatives: updatedReps,
       });
     } else {
       setNewContractor({
         ...newContractor,
-        [name]: value
+        [name]: value,
       });
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -416,78 +420,80 @@ const handleEditSubmit = async (e) => {
 
     try {
       const formData = new FormData();
-      
 
-      Object.keys(newContractor).forEach(key => {
-        if (key === 'representatives') {
-          formData.append('representatives', JSON.stringify(newContractor.representatives));
-        } else if (newContractor[key] !== '' && newContractor[key] !== null) {
+      Object.keys(newContractor).forEach((key) => {
+        if (key === "representatives") {
+          formData.append(
+            "representatives",
+            JSON.stringify(newContractor.representatives),
+          );
+        } else if (newContractor[key] !== "" && newContractor[key] !== null) {
           formData.append(key, newContractor[key]);
         }
       });
 
-
       if (profilePhoto) {
-        formData.append('profilePhoto', profilePhoto);
+        formData.append("profilePhoto", profilePhoto);
       }
       if (workOrderFile) {
-        formData.append('workOrder', workOrderFile);
+        formData.append("workOrder", workOrderFile);
       }
 
-      const response = await api.post('/api/tenant/contractors', formData, {
+      const response = await api.post("/api/tenant/contractors", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
 
       if (response.data.contractor) {
-
-        mutate('/api/tenant/contractors');
-        
+        mutate("/api/tenant/contractors");
 
         setNewContractor({
-          name: '',
-          email: '',
-          phone: '',
-          alt_phone: '',
-          company: '',
-          project_name: '',
-          project_allotted: 'null',
-          total_contracted_sqft: '',
-          advance_amount: '',
-          status: 'Active',
-          report: '',
-          workmanship: 'Verified',
-          employees: '',
-          representatives: [{ name: '', position: '', phone: '' }],
-          equipment_owned: '',
-          equipment_from_store: '',
+          name: "",
+          email: "",
+          phone: "",
+          alt_phone: "",
+          company: "",
+          project_name: "",
+          project_allotted: "null",
+          total_contracted_sqft: "",
+          advance_amount: "",
+          status: "Active",
+          report: "",
+          workmanship: "Verified",
+          employees: "",
+          representatives: [{ name: "", position: "", phone: "" }],
+          equipment_owned: "",
+          equipment_from_store: "",
         });
         setProfilePhoto(null);
         setWorkOrderFile(null);
         setShowAddForm(false);
-        
-        showNotification('success', 'Success!', 'Contractor created successfully!');
+
+        showNotification(
+          "success",
+          "Success!",
+          "Contractor created successfully!",
+        );
       }
     } catch (error) {
-      console.error('Error creating contractor:', error);
-      const errorMessage = error.response?.data?.message || 'Failed to create contractor. Please try again.';
-      showNotification('error', 'Creation Failed', errorMessage);
+      console.error("Error creating contractor:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to create contractor. Please try again.";
+      showNotification("error", "Creation Failed", errorMessage);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-
   const handleUpdateContractor = async (id, updatedData) => {
     try {
       const formData = new FormData();
-      
 
-      Object.keys(updatedData).forEach(key => {
+      Object.keys(updatedData).forEach((key) => {
         if (updatedData[key] !== null && updatedData[key] !== undefined) {
-
-          if (typeof updatedData[key] === 'object') {
+          if (typeof updatedData[key] === "object") {
             formData.append(key, JSON.stringify(updatedData[key]));
           } else {
             formData.append(key, updatedData[key]);
@@ -495,39 +501,51 @@ const handleEditSubmit = async (e) => {
         }
       });
 
-      const response = await api.put(`/api/tenant/contractors/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      const response = await api.put(
+        `/api/tenant/contractors/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
 
       if (response.data.success) {
-        mutate('/api/tenant/contractors');
-        showNotification('success', 'Updated!', 'Contractor updated successfully!');
+        mutate("/api/tenant/contractors");
+        showNotification(
+          "success",
+          "Updated!",
+          "Contractor updated successfully!",
+        );
         return response.data.data;
       }
     } catch (error) {
-      console.error('Error updating contractor:', error);
-      const errorMessage = error.response?.data?.message || 'Failed to update contractor.';
-      showNotification('error', 'Update Failed', errorMessage);
+      console.error("Error updating contractor:", error);
+      const errorMessage =
+        error.response?.data?.message || "Failed to update contractor.";
+      showNotification("error", "Update Failed", errorMessage);
       throw error;
     }
   };
 
-
   const handleDeleteContractor = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this contractor?')) return;
+    if (!window.confirm("Are you sure you want to delete this contractor?"))
+      return;
 
     setIsDeleting(true);
     try {
       const response = await api.delete(`/api/tenant/contractors/${id}`);
-      
-      if (response.data.success) {
 
-        mutate('/api/tenant/contractors');
-        
-        showNotification('success', 'Deleted!', 'Contractor deleted successfully!');
-        
+      if (response.data.success) {
+        mutate("/api/tenant/contractors");
+
+        showNotification(
+          "success",
+          "Deleted!",
+          "Contractor deleted successfully!",
+        );
+
         if (selectedContractor?.id === id) {
           setShowDetailModal(false);
           setSelectedContractor(null);
@@ -538,14 +556,14 @@ const handleEditSubmit = async (e) => {
         }
       }
     } catch (error) {
-      console.error('Error deleting contractor:', error);
-      const errorMessage = error.response?.data?.message || 'Failed to delete contractor.';
-      showNotification('error', 'Deletion Failed', errorMessage);
+      console.error("Error deleting contractor:", error);
+      const errorMessage =
+        error.response?.data?.message || "Failed to delete contractor.";
+      showNotification("error", "Deletion Failed", errorMessage);
     } finally {
       setIsDeleting(false);
     }
   };
-
 
   const formatCurrency = (amount) => {
     if (!amount) return "₹0";
@@ -556,12 +574,10 @@ const handleEditSubmit = async (e) => {
     }).format(amount);
   };
 
-
   const formatSqft = (sqft) => {
     if (!sqft) return "0";
     return new Intl.NumberFormat("en-US").format(sqft);
   };
-
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -576,7 +592,6 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-
   const getWorkmanshipClass = (workmanship) => {
     switch (workmanship) {
       case "Verified":
@@ -590,7 +605,6 @@ const handleEditSubmit = async (e) => {
     }
   };
 
-
   const exportData = () => {
     const dataStr = JSON.stringify(contractors, null, 2);
     const dataUri =
@@ -602,20 +616,22 @@ const handleEditSubmit = async (e) => {
     linkElement.click();
   };
 
-
   const viewContractorDetails = (contractor) => {
     setSelectedContractor(contractor);
     setShowDetailModal(true);
   };
 
-
   const calculateTotals = () => {
     const totalContractors = contractors.length;
-    const totalSqft = contractors.reduce((total, contractor) => 
-      total + (contractor.total_contracted_sqft || 0), 0);
-    const totalAdvance = contractors.reduce((total, contractor) => 
-      total + (contractor.advance_amount || 0), 0);
-    
+    const totalSqft = contractors.reduce(
+      (total, contractor) => total + (contractor.total_contracted_sqft || 0),
+      0,
+    );
+    const totalAdvance = contractors.reduce(
+      (total, contractor) => total + (contractor.advance_amount || 0),
+      0,
+    );
+
     return { totalContractors, totalSqft, totalAdvance };
   };
 
@@ -641,48 +657,55 @@ const handleEditSubmit = async (e) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-
       {notification.show && (
-        <div className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
-          notification.type === 'success' 
-            ? 'bg-green-50 border-l-4 border-green-500' 
-            : notification.type === 'error'
-            ? 'bg-red-50 border-l-4 border-red-500'
-            : 'bg-blue-50 border-l-4 border-blue-500'
-        } p-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out`}>
+        <div
+          className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
+            notification.type === "success"
+              ? "bg-green-50 border-l-4 border-green-500"
+              : notification.type === "error"
+                ? "bg-red-50 border-l-4 border-red-500"
+                : "bg-blue-50 border-l-4 border-blue-500"
+          } p-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out`}
+        >
           <div className="flex items-start">
-            <div className={`shrink-0 ${
-              notification.type === 'success' 
-                ? 'text-green-600' 
-                : notification.type === 'error'
-                ? 'text-red-600'
-                : 'text-blue-600'
-            }`}>
-              {notification.type === 'success' ? (
+            <div
+              className={`shrink-0 ${
+                notification.type === "success"
+                  ? "text-green-600"
+                  : notification.type === "error"
+                    ? "text-red-600"
+                    : "text-blue-600"
+              }`}
+            >
+              {notification.type === "success" ? (
                 <CheckCircle size={24} />
-              ) : notification.type === 'error' ? (
+              ) : notification.type === "error" ? (
                 <X size={24} />
               ) : (
                 <CheckCircle size={24} />
               )}
             </div>
             <div className="ml-3">
-              <p className={`text-sm font-medium ${
-                notification.type === 'success' 
-                  ? 'text-green-800' 
-                  : notification.type === 'error'
-                  ? 'text-red-800'
-                  : 'text-blue-800'
-              }`}>
+              <p
+                className={`text-sm font-medium ${
+                  notification.type === "success"
+                    ? "text-green-800"
+                    : notification.type === "error"
+                      ? "text-red-800"
+                      : "text-blue-800"
+                }`}
+              >
                 {notification.title}
               </p>
-              <p className={`mt-1 text-sm ${
-                notification.type === 'success' 
-                  ? 'text-green-700' 
-                  : notification.type === 'error'
-                  ? 'text-red-700'
-                  : 'text-blue-700'
-              }`}>
+              <p
+                className={`mt-1 text-sm ${
+                  notification.type === "success"
+                    ? "text-green-700"
+                    : notification.type === "error"
+                      ? "text-red-700"
+                      : "text-blue-700"
+                }`}
+              >
                 {notification.message}
               </p>
             </div>
@@ -713,7 +736,6 @@ const handleEditSubmit = async (e) => {
           Export Data
         </button>
       </div>
-      
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
@@ -769,17 +791,15 @@ const handleEditSubmit = async (e) => {
                 Active Projects
               </h3>
               <p className="text-2xl font-bold text-gray-800">
-                {contractors.filter(c => c.status === 'Active').length}
+                {contractors.filter((c) => c.status === "Active").length}
               </p>
             </div>
           </div>
         </div>
       </div>
 
-
       <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
-
           <div className="flex gap-2 items-center mb-2 md:mb-0">
             <label className="text-sm text-gray-700">From:</label>
             <input
@@ -821,7 +841,6 @@ const handleEditSubmit = async (e) => {
         </div>
       </div>
 
-
       {showAddForm && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-6 border border-gray-100">
           <div className="flex justify-between items-center mb-4">
@@ -858,7 +877,7 @@ const handleEditSubmit = async (e) => {
                 <input
                   type="file"
                   accept=".jpg,.jpeg,.png"
-                  onChange={(e) => handleFileChange(e, 'profilePhoto')}
+                  onChange={(e) => handleFileChange(e, "profilePhoto")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {profilePhoto && (
@@ -936,7 +955,6 @@ const handleEditSubmit = async (e) => {
                 />
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Total Contracted Sq Ft
@@ -996,7 +1014,10 @@ const handleEditSubmit = async (e) => {
                   Representatives
                 </label>
                 {newContractor.representatives.map((rep, idx) => (
-                  <div key={idx} className="mb-2 grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
+                  <div
+                    key={idx}
+                    className="mb-2 grid grid-cols-1 md:grid-cols-3 gap-2 items-center"
+                  >
                     <input
                       type="text"
                       name={`representative_${idx}_name`}
@@ -1031,8 +1052,8 @@ const handleEditSubmit = async (e) => {
                       ...newContractor,
                       representatives: [
                         ...newContractor.representatives,
-                        { name: '', position: '', phone: '' }
-                      ]
+                        { name: "", position: "", phone: "" },
+                      ],
                     });
                   }}
                 >
@@ -1103,7 +1124,7 @@ const handleEditSubmit = async (e) => {
               <input
                 type="file"
                 accept=".pdf,.doc,.docx"
-                onChange={(e) => handleFileChange(e, 'workOrder')}
+                onChange={(e) => handleFileChange(e, "workOrder")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {workOrderFile && (
@@ -1125,13 +1146,12 @@ const handleEditSubmit = async (e) => {
                 disabled={isSubmitting}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Adding...' : 'Add Contractor'}
+                {isSubmitting ? "Adding..." : "Add Contractor"}
               </button>
             </div>
           </form>
         </div>
       )}
-
 
       <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
         <div className="overflow-x-auto">
@@ -1272,10 +1292,7 @@ const handleEditSubmit = async (e) => {
                           </a>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Phone
-                            size={16}
-                            className="text-gray-400 shrink-0"
-                          />
+                          <Phone size={16} className="text-gray-400 shrink-0" />
                           <a
                             href={`tel:${contractor.phone}`}
                             className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
@@ -1285,7 +1302,7 @@ const handleEditSubmit = async (e) => {
                           <a
                             href={`https://wa.me/${contractor.phone.replace(
                               /\D/g,
-                              ""
+                              "",
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -1307,7 +1324,9 @@ const handleEditSubmit = async (e) => {
                       {contractor.project_allotted && (
                         <div className="text-xs text-gray-500 flex items-center gap-1">
                           <Calendar size={12} />
-                          {new Date(contractor.project_allotted).toLocaleDateString()}
+                          {new Date(
+                            contractor.project_allotted,
+                          ).toLocaleDateString()}
                         </div>
                       )}
                     </td>
@@ -1333,7 +1352,7 @@ const handleEditSubmit = async (e) => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(
-                          contractor.status
+                          contractor.status,
                         )}`}
                       >
                         {contractor.status}
@@ -1400,7 +1419,6 @@ const handleEditSubmit = async (e) => {
         </div>
       </div>
 
-
       {showEditModal && editingContractor && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -1425,7 +1443,7 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="text"
                       name="name"
-                      value={editingContractor.name || ''}
+                      value={editingContractor.name || ""}
                       onChange={handleEditInputChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -1439,17 +1457,20 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="file"
                       accept=".jpg,.jpeg,.png"
-                      onChange={(e) => handleEditFileChange(e, 'profilePhoto')}
+                      onChange={(e) => handleEditFileChange(e, "profilePhoto")}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {editProfilePhoto ? (
                       <p className="text-sm text-green-600 mt-1">
                         {editProfilePhoto.name}
                       </p>
-                    ) : editingContractor.profile_photo && (
-                      <p className="text-sm text-gray-500 mt-1">
-                        Current: {editingContractor.profile_photo.split('/').pop()}
-                      </p>
+                    ) : (
+                      editingContractor.profile_photo && (
+                        <p className="text-sm text-gray-500 mt-1">
+                          Current:{" "}
+                          {editingContractor.profile_photo.split("/").pop()}
+                        </p>
+                      )
                     )}
                   </div>
                   <div>
@@ -1459,7 +1480,7 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="email"
                       name="email"
-                      value={editingContractor.email || ''}
+                      value={editingContractor.email || ""}
                       onChange={handleEditInputChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -1473,7 +1494,7 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="tel"
                       name="phone"
-                      value={editingContractor.phone || ''}
+                      value={editingContractor.phone || ""}
                       onChange={handleEditInputChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -1487,7 +1508,7 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="tel"
                       name="alt_phone"
-                      value={editingContractor.alt_phone || ''}
+                      value={editingContractor.alt_phone || ""}
                       onChange={handleEditInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter alternate phone"
@@ -1500,7 +1521,7 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="text"
                       name="company"
-                      value={editingContractor.company || ''}
+                      value={editingContractor.company || ""}
                       onChange={handleEditInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter company name"
@@ -1513,7 +1534,7 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="text"
                       name="project_name"
-                      value={editingContractor.project_name || ''}
+                      value={editingContractor.project_name || ""}
                       onChange={handleEditInputChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -1527,7 +1548,11 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="date"
                       name="project_allotted"
-                      value={editingContractor.project_allotted ? editingContractor.project_allotted.split('T')[0] : ''}
+                      value={
+                        editingContractor.project_allotted
+                          ? editingContractor.project_allotted.split("T")[0]
+                          : ""
+                      }
                       onChange={handleEditInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
@@ -1539,7 +1564,7 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="number"
                       name="total_contracted_sqft"
-                      value={editingContractor.total_contracted_sqft || ''}
+                      value={editingContractor.total_contracted_sqft || ""}
                       onChange={handleEditInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter square footage"
@@ -1552,7 +1577,7 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="number"
                       name="advance_amount"
-                      value={editingContractor.advance_amount || ''}
+                      value={editingContractor.advance_amount || ""}
                       onChange={handleEditInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter advance amount"
@@ -1564,7 +1589,7 @@ const handleEditSubmit = async (e) => {
                     </label>
                     <select
                       name="status"
-                      value={editingContractor.status || 'Active'}
+                      value={editingContractor.status || "Active"}
                       onChange={handleEditInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
@@ -1580,7 +1605,7 @@ const handleEditSubmit = async (e) => {
                     <input
                       type="number"
                       name="employees"
-                      value={editingContractor.employees || ''}
+                      value={editingContractor.employees || ""}
                       onChange={handleEditInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter number of employees"
@@ -1591,11 +1616,14 @@ const handleEditSubmit = async (e) => {
                       Representatives
                     </label>
                     {editingContractor.representatives.map((rep, idx) => (
-                      <div key={idx} className="mb-2 grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
+                      <div
+                        key={idx}
+                        className="mb-2 grid grid-cols-1 md:grid-cols-3 gap-2 items-center"
+                      >
                         <input
                           type="text"
                           name={`representative_${idx}_name`}
-                          value={rep.name || ''}
+                          value={rep.name || ""}
                           onChange={handleEditInputChange}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="Name"
@@ -1603,7 +1631,7 @@ const handleEditSubmit = async (e) => {
                         <input
                           type="text"
                           name={`representative_${idx}_position`}
-                          value={rep.position || ''}
+                          value={rep.position || ""}
                           onChange={handleEditInputChange}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="Position"
@@ -1611,7 +1639,7 @@ const handleEditSubmit = async (e) => {
                         <input
                           type="tel"
                           name={`representative_${idx}_phone`}
-                          value={rep.phone || ''}
+                          value={rep.phone || ""}
                           onChange={handleEditInputChange}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="Phone"
@@ -1626,8 +1654,8 @@ const handleEditSubmit = async (e) => {
                           ...editingContractor,
                           representatives: [
                             ...editingContractor.representatives,
-                            { name: '', position: '', phone: '' }
-                          ]
+                            { name: "", position: "", phone: "" },
+                          ],
                         });
                       }}
                     >
@@ -1642,7 +1670,7 @@ const handleEditSubmit = async (e) => {
                     </label>
                     <textarea
                       name="report"
-                      value={editingContractor.report || ''}
+                      value={editingContractor.report || ""}
                       onChange={handleEditInputChange}
                       rows={2}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -1655,7 +1683,7 @@ const handleEditSubmit = async (e) => {
                     </label>
                     <select
                       name="workmanship"
-                      value={editingContractor.workmanship || 'Verified'}
+                      value={editingContractor.workmanship || "Verified"}
                       onChange={handleEditInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
@@ -1670,7 +1698,7 @@ const handleEditSubmit = async (e) => {
                     </label>
                     <textarea
                       name="equipment_owned"
-                      value={editingContractor.equipment_owned || ''}
+                      value={editingContractor.equipment_owned || ""}
                       onChange={handleEditInputChange}
                       rows={2}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -1683,7 +1711,7 @@ const handleEditSubmit = async (e) => {
                     </label>
                     <textarea
                       name="equipment_from_store"
-                      value={editingContractor.equipment_from_store || ''}
+                      value={editingContractor.equipment_from_store || ""}
                       onChange={handleEditInputChange}
                       rows={2}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -1698,17 +1726,20 @@ const handleEditSubmit = async (e) => {
                   <input
                     type="file"
                     accept=".pdf,.doc,.docx"
-                    onChange={(e) => handleEditFileChange(e, 'workOrder')}
+                    onChange={(e) => handleEditFileChange(e, "workOrder")}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   {editWorkOrderFile ? (
                     <p className="text-sm text-green-600 mt-1">
                       {editWorkOrderFile.name}
                     </p>
-                  ) : editingContractor.work_order_file && (
-                    <p className="text-sm text-gray-500 mt-1">
-                      Current: {editingContractor.work_order_file.split('/').pop()}
-                    </p>
+                  ) : (
+                    editingContractor.work_order_file && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        Current:{" "}
+                        {editingContractor.work_order_file.split("/").pop()}
+                      </p>
+                    )
                   )}
                 </div>
               </div>
@@ -1725,14 +1756,13 @@ const handleEditSubmit = async (e) => {
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? 'Updating...' : 'Update Contractor'}
+                  {isSubmitting ? "Updating..." : "Update Contractor"}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
 
       {showDetailModal && selectedContractor && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -1750,7 +1780,6 @@ const handleEditSubmit = async (e) => {
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">
                     Work Order
@@ -1846,11 +1875,16 @@ const handleEditSubmit = async (e) => {
                           <div className="text-sm font-medium text-gray-700 mb-1">
                             Representatives:
                           </div>
-                          {selectedContractor.representatives.map((rep, idx) => (
-                            <div key={idx} className="text-sm text-gray-600 ml-2">
-                              {rep.name} ({rep.position}) - {rep.phone}
-                            </div>
-                          ))}
+                          {selectedContractor.representatives.map(
+                            (rep, idx) => (
+                              <div
+                                key={idx}
+                                className="text-sm text-gray-600 ml-2"
+                              >
+                                {rep.name} ({rep.position}) - {rep.phone}
+                              </div>
+                            ),
+                          )}
                         </div>
                       )}
                     </div>
@@ -1868,7 +1902,10 @@ const handleEditSubmit = async (e) => {
                       {selectedContractor.project_allotted && (
                         <div className="text-sm text-gray-500 flex items-center">
                           <Calendar size={14} className="mr-1" />
-                          Allotted: {new Date(selectedContractor.project_allotted).toLocaleDateString()}
+                          Allotted:{" "}
+                          {new Date(
+                            selectedContractor.project_allotted,
+                          ).toLocaleDateString()}
                         </div>
                       )}
                     </div>
@@ -1877,7 +1914,10 @@ const handleEditSubmit = async (e) => {
                         <div className="flex justify-between">
                           <span className="text-sm">Contracted Area:</span>
                           <span className="text-sm font-medium">
-                            {formatSqft(selectedContractor.total_contracted_sqft)} sq ft
+                            {formatSqft(
+                              selectedContractor.total_contracted_sqft,
+                            )}{" "}
+                            sq ft
                           </span>
                         </div>
                       )}
@@ -1893,7 +1933,7 @@ const handleEditSubmit = async (e) => {
                         <span className="text-sm">Status:</span>
                         <span
                           className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(
-                            selectedContractor.status
+                            selectedContractor.status,
                           )}`}
                         >
                           {selectedContractor.status}
@@ -1903,7 +1943,7 @@ const handleEditSubmit = async (e) => {
                         <span className="text-sm">Workmanship:</span>
                         <span
                           className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getWorkmanshipClass(
-                            selectedContractor.workmanship
+                            selectedContractor.workmanship,
                           )}`}
                         >
                           {selectedContractor.workmanship}
@@ -1917,7 +1957,6 @@ const handleEditSubmit = async (e) => {
                     Equipment Details
                   </h4>
                   <div className="bg-gray-50 p-4 rounded-lg">
-
                     <div className="mb-3">
                       <div className="text-sm font-medium text-gray-700 mb-1">
                         Equipment Owned:
@@ -1928,9 +1967,12 @@ const handleEditSubmit = async (e) => {
                           className="flex items-center border border-blue-700 px-2 py-1 text-sm rounded hover:bg-blue-100 transition-colors"
                           onClick={async () => {
                             try {
-                              const updated = await handleUpdateContractor(selectedContractor.id, {
-                                equipment_verified: true
-                              });
+                              const updated = await handleUpdateContractor(
+                                selectedContractor.id,
+                                {
+                                  equipment_verified: true,
+                                },
+                              );
                               if (updated) {
                                 setSelectedContractor(updated);
                               }
@@ -1944,7 +1986,9 @@ const handleEditSubmit = async (e) => {
                         <button
                           className="flex items-center border border-gray-400 px-2 py-1 text-sm rounded hover:bg-gray-100 transition-colors"
                           onClick={() => {
-                            setEditingEquipment(selectedContractor.equipment_owned || "");
+                            setEditingEquipment(
+                              selectedContractor.equipment_owned || "",
+                            );
                             setShowEquipmentEditModal(true);
                             setEditingField("owned");
                           }}
@@ -1959,11 +2003,14 @@ const handleEditSubmit = async (e) => {
                         Equipment from Store:
                       </div>
                       <div className="text-sm text-gray-600 flex items-center gap-2">
-                        {selectedContractor.equipment_from_store || "Not specified"}
+                        {selectedContractor.equipment_from_store ||
+                          "Not specified"}
                         <button
                           className="flex items-center border border-gray-400 px-2 py-1 text-sm rounded hover:bg-gray-100 transition-colors"
                           onClick={() => {
-                            setEditingEquipment(selectedContractor.equipment_from_store || "");
+                            setEditingEquipment(
+                              selectedContractor.equipment_from_store || "",
+                            );
                             setShowEquipmentEditModal(true);
                             setEditingField("store");
                           }}
@@ -2000,7 +2047,7 @@ const handleEditSubmit = async (e) => {
                 disabled={isDeleting}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors disabled:opacity-50"
               >
-                {isDeleting ? 'Deleting...' : 'Delete Contractor'}
+                {isDeleting ? "Deleting..." : "Delete Contractor"}
               </button>
               <button
                 onClick={() => setShowDetailModal(false)}
@@ -2013,13 +2060,13 @@ const handleEditSubmit = async (e) => {
         </div>
       )}
 
-
       {showEquipmentEditModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-800">
-                Edit Equipment {editingField === "owned" ? "Owned" : "from Store"}
+                Edit Equipment{" "}
+                {editingField === "owned" ? "Owned" : "from Store"}
               </h3>
               <button
                 onClick={() => setShowEquipmentEditModal(false)}
@@ -2053,8 +2100,11 @@ const handleEditSubmit = async (e) => {
                     } else {
                       updateData.equipment_from_store = editingEquipment;
                     }
-                    
-                    const updated = await handleUpdateContractor(selectedContractor.id, updateData);
+
+                    const updated = await handleUpdateContractor(
+                      selectedContractor.id,
+                      updateData,
+                    );
                     if (updated) {
                       setSelectedContractor(updated);
                       setShowEquipmentEditModal(false);

@@ -54,7 +54,6 @@ export default function EarlyGoingReport() {
 
   const daysInMonth = getDaysInMonth();
 
-
   const summary = {
     totalEmployees: earlyGoingData.length,
     totalEarlyGoingDays: earlyGoingData.reduce(
@@ -76,11 +75,9 @@ export default function EarlyGoingReport() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Monthly Early Going Report
         </h1>
-
 
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
@@ -137,10 +134,8 @@ export default function EarlyGoingReport() {
           </form>
         </div>
 
-
         {showReport && (
           <div className="bg-white rounded-2xl shadow-lg p-6 animate-fadeIn">
-
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm">
                 <thead>
@@ -163,7 +158,6 @@ export default function EarlyGoingReport() {
                     <th className="border border-gray-200 px-6 py-4 font-medium text-gray-700">
                       Location
                     </th>
-
 
                     {Array.from({ length: daysInMonth }, (_, i) => (
                       <th
@@ -200,7 +194,6 @@ export default function EarlyGoingReport() {
                         {employee.location}
                       </td>
 
-
                       {(employee.days || [])
                         .slice(0, daysInMonth)
                         .map((day) => (
@@ -223,7 +216,6 @@ export default function EarlyGoingReport() {
           </div>
         )}
       </div>
-
 
       <style jsx>{`
         @keyframes fadeIn {

@@ -1,199 +1,36 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  <th className="border p-2 text-center">Actions</th>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<th className="border p-2 text-center">Actions</th>;
 
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
-import { Download, Edit, Trash2, FileDown, FileSpreadsheet, Printer, Eye, X, Clock, Calendar, FileText, Building2, CheckCircle, XCircle, UserRound } from "lucide-react";
+import {
+  Download,
+  Edit,
+  Trash2,
+  FileDown,
+  FileSpreadsheet,
+  Printer,
+  Eye,
+  X,
+  Clock,
+  Calendar,
+  FileText,
+  Building2,
+  CheckCircle,
+  XCircle,
+  UserRound,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { addReportHeader, addWorkbookHeader, getCompanyAddress } from "../utils/exportReportUtils";
+import {
+  addReportHeader,
+  addWorkbookHeader,
+  getCompanyAddress,
+} from "../utils/exportReportUtils";
 
 const API = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes`;
 
@@ -244,15 +81,15 @@ const NoteDetailModal = ({ note, items, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 pt-10 overflow-y-auto">
       <div className="bg-white rounded-xl border border-gray-200 w-full max-w-3xl shadow-xl my-8">
-
-
         <div className="flex justify-between items-start px-6 py-5 border-b border-gray-100">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-xl font-bold text-gray-900 capitalize">
                 {note.note_type} Note Details
               </h2>
-              <span className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${statusBadgeStyle(note.status)}`}>
+              <span
+                className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${statusBadgeStyle(note.status)}`}
+              >
                 {statusIcon(note.status)}
                 {note.status || "Pending"}
               </span>
@@ -265,7 +102,13 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               <span>•</span>
               <span className="flex items-center gap-1">
                 <Calendar size={14} className="text-gray-400" />
-                {note.date ? new Date(note.date).toLocaleDateString("en-IN", { day: '2-digit', month: 'short', year: 'numeric' }) : "—"}
+                {note.date
+                  ? new Date(note.date).toLocaleDateString("en-IN", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "—"}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
@@ -274,80 +117,127 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </span>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 border border-gray-200 hover:bg-gray-50 rounded-lg shadow-sm transition">
+          <button
+            onClick={onClose}
+            className="p-2 border border-gray-200 hover:bg-gray-50 rounded-lg shadow-sm transition"
+          >
             <X size={18} className="text-gray-600" />
           </button>
         </div>
 
-
         <div className="px-6 py-4">
-          <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Party & Ledger</h3>
+          <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+            Party & Ledger
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
               <p className="text-xs text-gray-500 mb-1">Party ledger</p>
-              <p className="text-base font-semibold text-gray-900">{note.partyLedgerName || note.PartyLedger || "—"}</p>
+              <p className="text-base font-semibold text-gray-900">
+                {note.partyLedgerName || note.PartyLedger || "—"}
+              </p>
             </div>
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <p className="text-xs text-gray-500 mb-1">Purchase / sales ledger</p>
-              <p className="text-base font-semibold text-gray-900">{note.purchaseLedgerName || note.PurchaseLedger || "—"}</p>
+              <p className="text-xs text-gray-500 mb-1">
+                Purchase / sales ledger
+              </p>
+              <p className="text-base font-semibold text-gray-900">
+                {note.purchaseLedgerName || note.PurchaseLedger || "—"}
+              </p>
             </div>
           </div>
         </div>
 
-
         <div className="px-6 py-4">
-          <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2.5">Billing & Dispatch</h3>
+          <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2.5">
+            Billing & Dispatch
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">Party / Billing Details</h4>
+              <h4 className="text-xs font-semibold text-blue-600 mb-3">
+                Party / Billing Details
+              </h4>
               <div className="space-y-2 text-xs leading-relaxed text-gray-800">
                 <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-medium">Mailing Name</span>
-                  <span className="font-semibold">{note.mailingName || "—"}</span>
+                  <span className="text-gray-400 block text-[10px] uppercase font-medium">
+                    Mailing Name
+                  </span>
+                  <span className="font-semibold">
+                    {note.mailingName || "—"}
+                  </span>
                 </div>
                 <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-medium">Address</span>
-                  <span className="font-semibold wrap-break-word">{note.address || "—"}</span>
+                  <span className="text-gray-400 block text-[10px] uppercase font-medium">
+                    Address
+                  </span>
+                  <span className="font-semibold wrap-break-word">
+                    {note.address || "—"}
+                  </span>
                 </div>
                 <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-medium">State</span>
-                  <span className="font-semibold">{note.state || "—"} {note.country ? `(${note.country})` : ""}</span>
+                  <span className="text-gray-400 block text-[10px] uppercase font-medium">
+                    State
+                  </span>
+                  <span className="font-semibold">
+                    {note.state || "—"}{" "}
+                    {note.country ? `(${note.country})` : ""}
+                  </span>
                 </div>
                 {note.gstin && (
                   <div>
-                    <span className="text-gray-400 block text-[10px] uppercase font-medium">GSTIN</span>
-                    <span className="font-semibold font-mono">{note.gstin}</span>
+                    <span className="text-gray-400 block text-[10px] uppercase font-medium">
+                      GSTIN
+                    </span>
+                    <span className="font-semibold font-mono">
+                      {note.gstin}
+                    </span>
                   </div>
                 )}
               </div>
             </div>
 
-
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">Consignee (Ship To)</h4>
+              <h4 className="text-xs font-semibold text-blue-600 mb-3">
+                Consignee (Ship To)
+              </h4>
               <div className="space-y-2 text-xs leading-relaxed text-gray-800">
                 {note.consigneeSameAsBilling ? (
-                  <div className="text-gray-500 italic py-2">Same as Party / Billing Details</div>
+                  <div className="text-gray-500 italic py-2">
+                    Same as Party / Billing Details
+                  </div>
                 ) : (
                   <>
                     <div>
-                      <span className="text-gray-400 block text-[10px] uppercase font-medium">Name</span>
-                      <span className="font-semibold">{note.consigneeName || "—"}</span>
+                      <span className="text-gray-400 block text-[10px] uppercase font-medium">
+                        Name
+                      </span>
+                      <span className="font-semibold">
+                        {note.consigneeName || "—"}
+                      </span>
                     </div>
                     <div>
-                      <span className="text-gray-400 block text-[10px] uppercase font-medium">Address</span>
-                      <span className="font-semibold wrap-break-word">{note.consigneeAddress || "—"}</span>
+                      <span className="text-gray-400 block text-[10px] uppercase font-medium">
+                        Address
+                      </span>
+                      <span className="font-semibold wrap-break-word">
+                        {note.consigneeAddress || "—"}
+                      </span>
                     </div>
                     <div>
-                      <span className="text-gray-400 block text-[10px] uppercase font-medium">State</span>
-                      <span className="font-semibold">{note.consigneeState || "—"}</span>
+                      <span className="text-gray-400 block text-[10px] uppercase font-medium">
+                        State
+                      </span>
+                      <span className="font-semibold">
+                        {note.consigneeState || "—"}
+                      </span>
                     </div>
                     {note.consigneeGSTIN && (
                       <div>
-                        <span className="text-gray-400 block text-[10px] uppercase font-medium">GSTIN</span>
-                        <span className="font-semibold font-mono">{note.consigneeGSTIN}</span>
+                        <span className="text-gray-400 block text-[10px] uppercase font-medium">
+                          GSTIN
+                        </span>
+                        <span className="font-semibold font-mono">
+                          {note.consigneeGSTIN}
+                        </span>
                       </div>
                     )}
                   </>
@@ -355,76 +245,98 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               </div>
             </div>
 
-
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">Invoice & Order Info</h4>
+              <h4 className="text-xs font-semibold text-blue-600 mb-3">
+                Invoice & Order Info
+              </h4>
               <div className="space-y-2 text-xs leading-relaxed text-gray-800">
                 <div className="flex justify-between">
                   <span className="text-gray-400">Original Invoice No.</span>
-                  <span className="font-semibold">{note.paymentTerms || "—"}</span>
+                  <span className="font-semibold">
+                    {note.paymentTerms || "—"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Original Invoice Date</span>
-                  <span className="font-semibold">{formatDate(note.deliveryNoteDate)}</span>
+                  <span className="font-semibold">
+                    {formatDate(note.deliveryNoteDate)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Buyer Order No.</span>
-                  <span className="font-semibold">{note.buyerOrderNo || "—"}</span>
+                  <span className="font-semibold">
+                    {note.buyerOrderNo || "—"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Order Date</span>
-                  <span className="font-semibold">{formatDate(note.buyerOrderDate)}</span>
+                  <span className="font-semibold">
+                    {formatDate(note.buyerOrderDate)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Reference No.</span>
-                  <span className="font-semibold">{note.referenceNo || "—"}</span>
+                  <span className="font-semibold">
+                    {note.referenceNo || "—"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Reference Date</span>
-                  <span className="font-semibold">{formatDate(note.referenceDate)}</span>
+                  <span className="font-semibold">
+                    {formatDate(note.referenceDate)}
+                  </span>
                 </div>
               </div>
             </div>
 
-
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50 lg:col-span-2">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">Dispatch details</h4>
+              <h4 className="text-xs font-semibold text-blue-600 mb-3">
+                Dispatch details
+              </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs text-gray-800">
-
                 <div className="flex justify-between">
                   <span className="text-gray-400">Dispatch Doc No.</span>
-                  <span className="font-semibold">{note.dispatchDocNo || "—"}</span>
+                  <span className="font-semibold">
+                    {note.dispatchDocNo || "—"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Dispatched Through</span>
-                  <span className="font-semibold">{note.dispatchedThrough || "—"}</span>
+                  <span className="font-semibold">
+                    {note.dispatchedThrough || "—"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Destination</span>
-                  <span className="font-semibold">{note.destination || "—"}</span>
+                  <span className="font-semibold">
+                    {note.destination || "—"}
+                  </span>
                 </div>
 
                 <div className="flex justify-between">
                   <span className="text-gray-400">Other Reference</span>
-                  <span className="font-semibold">{note.otherReferences || "—"}</span>
+                  <span className="font-semibold">
+                    {note.otherReferences || "—"}
+                  </span>
                 </div>
               </div>
             </div>
 
-
             <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">Terms of Delivery</h4>
+              <h4 className="text-xs font-semibold text-blue-600 mb-3">
+                Terms of Delivery
+              </h4>
               <p className="text-xs text-gray-700 leading-relaxed font-medium">
                 {note.termsOfDelivery || "—"}
               </p>
             </div>
-
           </div>
         </div>
 
-
         <div className="px-6 py-4">
-          <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Items</h3>
+          <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+            Items
+          </h3>
           <div className="overflow-hidden border border-gray-100 rounded-xl">
             <table className="w-full text-xs text-left">
               <thead className="bg-gray-50 border-b border-gray-100 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
@@ -441,13 +353,27 @@ const NoteDetailModal = ({ note, items, onClose }) => {
               <tbody className="divide-y divide-gray-100">
                 {items.map((item, i) => (
                   <tr key={i} className="hover:bg-gray-50/80 transition">
-                    <td className="px-4 py-3 text-center text-gray-400 font-medium">{i + 1}</td>
-                    <td className="px-4 py-3 font-semibold text-gray-900">{item.itemName || "—"}</td>
-                    <td className="px-4 py-3 text-center text-gray-500 font-mono">{item.hsn_code || "—"}</td>
-                    <td className="px-4 py-3 text-center font-semibold text-gray-950">{item.qty} {item.per || "pcs"}</td>
-                    <td className="px-4 py-3 text-right font-mono text-gray-700">₹{fmt(item.rate)}</td>
-                    <td className="px-4 py-3 text-right font-mono text-gray-500">{item.discount ? `${item.discount}%` : "—"}</td>
-                    <td className="px-4 py-3 text-right font-semibold font-mono text-gray-950">₹{fmt(item.amount)}</td>
+                    <td className="px-4 py-3 text-center text-gray-400 font-medium">
+                      {i + 1}
+                    </td>
+                    <td className="px-4 py-3 font-semibold text-gray-900">
+                      {item.itemName || "—"}
+                    </td>
+                    <td className="px-4 py-3 text-center text-gray-500 font-mono">
+                      {item.hsn_code || "—"}
+                    </td>
+                    <td className="px-4 py-3 text-center font-semibold text-gray-950">
+                      {item.qty} {item.per || "pcs"}
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-gray-700">
+                      ₹{fmt(item.rate)}
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-gray-500">
+                      {item.discount ? `${item.discount}%` : "—"}
+                    </td>
+                    <td className="px-4 py-3 text-right font-semibold font-mono text-gray-950">
+                      ₹{fmt(item.amount)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -455,10 +381,11 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           </div>
         </div>
 
-
         <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row justify-between gap-6">
           <div className="flex-1 min-w-50">
-            <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">Narration</p>
+            <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+              Narration
+            </p>
             <p className="text-xs text-gray-600 bg-white p-3 rounded-lg border border-gray-100 italic leading-relaxed shadow-sm">
               {note.narration || "No narration provided."}
             </p>
@@ -466,33 +393,42 @@ const NoteDetailModal = ({ note, items, onClose }) => {
           <div className="w-full md:w-80 space-y-2.5 text-xs text-gray-700 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
             <div className="flex justify-between">
               <span className="text-gray-500">Subtotal</span>
-              <span className="font-mono font-medium">₹{fmt(note.subtotal)}</span>
+              <span className="font-mono font-medium">
+                ₹{fmt(note.subtotal)}
+              </span>
             </div>
             {note.cgst_amount > 0 && (
               <div className="flex justify-between">
                 <span className="text-gray-500">CGST ({note.cgst_rate}%)</span>
-                <span className="font-mono font-medium">₹{fmt(note.cgst_amount)}</span>
+                <span className="font-mono font-medium">
+                  ₹{fmt(note.cgst_amount)}
+                </span>
               </div>
             )}
             {note.sgst_amount > 0 && (
               <div className="flex justify-between">
                 <span className="text-gray-500">SGST ({note.sgst_rate}%)</span>
-                <span className="font-mono font-medium">₹{fmt(note.sgst_amount)}</span>
+                <span className="font-mono font-medium">
+                  ₹{fmt(note.sgst_amount)}
+                </span>
               </div>
             )}
             {note.igst_amount > 0 && (
               <div className="flex justify-between">
                 <span className="text-gray-500">IGST ({note.igst_rate}%)</span>
-                <span className="font-mono font-medium">₹{fmt(note.igst_amount)}</span>
+                <span className="font-mono font-medium">
+                  ₹{fmt(note.igst_amount)}
+                </span>
               </div>
             )}
             <div className="flex justify-between text-sm font-bold text-blue-600 border-t border-dashed border-gray-200 pt-2.5">
               <span>Grand Total</span>
-              <span className="font-mono text-base">₹{fmt(note.grand_total)}</span>
+              <span className="font-mono text-base">
+                ₹{fmt(note.grand_total)}
+              </span>
             </div>
           </div>
         </div>
-
 
         <div className="px-6 py-4 border-t border-gray-100 flex justify-end bg-white rounded-b-xl">
           <button
@@ -502,7 +438,6 @@ const NoteDetailModal = ({ note, items, onClose }) => {
             Close
           </button>
         </div>
-
       </div>
     </div>
   );
@@ -515,8 +450,8 @@ const CreditNoteList = () => {
   const { companyId, companyName, employees } = useCompany();
 
   const getEmployeeName = (id) => {
-    const emp = employees?.find(e => e.id == id);
-    return emp ? (emp.name || emp.first_name || "Employee") : "Unknown Employee";
+    const emp = employees?.find((e) => e.id == id);
+    return emp ? emp.name || emp.first_name || "Employee" : "Unknown Employee";
   };
 
   const navigate = useNavigate();
@@ -529,9 +464,14 @@ const CreditNoteList = () => {
 
   const filteredCreditNotes = creditNotes.filter((n) => {
     if (loggedInRole === "employee") {
-      if (n.employee_id != loggedInEmployeeId || n.role?.toLowerCase() !== 'employee') return false;
+      if (
+        n.employee_id != loggedInEmployeeId ||
+        n.role?.toLowerCase() !== "employee"
+      )
+        return false;
     } else {
-      const isCreatedByEmployee = n.employee_id && n.role?.toLowerCase() === 'employee';
+      const isCreatedByEmployee =
+        n.employee_id && n.role?.toLowerCase() === "employee";
       if (showEmployeeActivity) {
         if (!isCreatedByEmployee) return false;
       } else {
@@ -541,250 +481,145 @@ const CreditNoteList = () => {
     return true;
   });
 
-const handlePrint = () => {
+  const handlePrint = () => {
+    if (filteredCreditNotes.length === 0) {
+      Swal.fire("Info", "No data to print", "info");
 
-  if (filteredCreditNotes.length === 0) {
+      return;
+    }
 
-    Swal.fire(
-      "Info",
-      "No data to print",
-      "info"
+    const doc = new jsPDF();
+
+    const today = new Date().toLocaleDateString("en-IN");
+
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
+
+    const companyAddress = getCompanyAddress(companyDetails);
+
+    const totalAmount = filteredCreditNotes.reduce(
+      (acc, n) => acc + Number(n.grand_total || 0),
+      0,
     );
 
-    return;
-  }
+    const formatAmount = (amount) =>
+      `Rs. ${Number(amount || 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
 
-  const doc = new jsPDF();
+    const { company, summaryY, tableStartY } = addReportHeader(doc, {
+      companyName: companyNameForExport,
 
-  const today =
-    new Date().toLocaleDateString(
-      "en-IN"
-    );
+      companyAddress,
 
-  const companyNameForExport =
-    companyDetails?.name ||
-    companyName ||
-    "Company";
+      reportTitle: "Credit Note Report",
 
-  const companyAddress =
-    getCompanyAddress(
-      companyDetails
-    );
+      generatedOn: today,
+    });
 
-  const totalAmount =
-    filteredCreditNotes.reduce(
-      (acc, n) =>
-        acc +
-        Number(
-          n.grand_total || 0
-        ),
-      0
-    );
+    doc.setFontSize(10);
 
-  const formatAmount =
-    (amount) =>
-      `Rs. ${Number(
-        amount || 0
-      ).toLocaleString(
-        "en-IN",
-        {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }
-      )}`;
+    doc.setTextColor(40);
 
-  const {
-    company,
-    summaryY,
-    tableStartY,
-  } = addReportHeader(doc, {
+    doc.text(`Total Notes: ${filteredCreditNotes.length}`, 14, summaryY);
 
-    companyName:
-      companyNameForExport,
+    doc.setFont("helvetica", "bold");
 
-    companyAddress,
+    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, {
+      align: "right",
+    });
 
-    reportTitle:
-      "Credit Note Report",
+    autoTable(doc, {
+      startY: tableStartY,
 
-    generatedOn: today,
-  });
+      head: [["#", "Date", "Voucher No.", "Party", "Amount", "Status"]],
 
-  doc.setFontSize(10);
+      body: filteredCreditNotes.map((n, index) => [
+        index + 1,
 
-  doc.setTextColor(40);
+        n.date ? new Date(n.date).toLocaleDateString("en-IN") : "-",
 
-  doc.text(
-    `Total Notes: ${filteredCreditNotes.length}`,
-    14,
-    summaryY
-  );
+        n.voucherNo || n.id,
 
-  doc.setFont(
-    "helvetica",
-    "bold"
-  );
+        n.PartyLedger || "-",
 
-  doc.text(
-    `Total Amount: ${formatAmount(totalAmount)}`,
-    195,
-    summaryY,
-    { align: "right" }
-  );
+        formatAmount(n.grand_total),
 
-  autoTable(doc, {
+        n.status || "Pending",
+      ]),
 
-    startY: tableStartY,
+      foot: [["", "", "", "TOTAL", formatAmount(totalAmount), ""]],
 
-    head: [[
-      "#",
-      "Date",
-      "Voucher No.",
-      "Party",
-      "Amount",
-      "Status",
-    ]],
+      theme: "striped",
 
-    body:
-      filteredCreditNotes.map(
-        (n, index) => [
-          index + 1,
+      styles: {
+        fontSize: 9,
+        cellPadding: 5,
+        valign: "middle",
+      },
 
-          n.date
-            ? new Date(
-                n.date
-              ).toLocaleDateString(
-                "en-IN"
-              )
-            : "-",
-
-          n.voucherNo ||
-            n.id,
-
-          n.PartyLedger ||
-            "-",
-
-          formatAmount(
-            n.grand_total
-          ),
-
-          n.status ||
-            "Pending",
-        ]
-      ),
-
-    foot: [[
-      "",
-      "",
-      "",
-      "TOTAL",
-      formatAmount(
-        totalAmount
-      ),
-      "",
-    ]],
-
-    theme: "striped",
-
-    styles: {
-      fontSize: 9,
-      cellPadding: 5,
-      valign: "middle",
-    },
-
-    headStyles: {
-      fillColor: [
-        37, 99, 235,
-      ],
-      textColor: [
-        255, 255, 255,
-      ],
-      fontStyle: "bold",
-      halign: "center",
-    },
-
-    footStyles: {
-      fillColor: [
-        240, 240, 240,
-      ],
-      textColor: [
-        15, 23, 42,
-      ],
-      fontStyle: "bold",
-    },
-
-    columnStyles: {
-      0: {
+      headStyles: {
+        fillColor: [37, 99, 235],
+        textColor: [255, 255, 255],
+        fontStyle: "bold",
         halign: "center",
-        cellWidth: 12,
       },
-      4: {
-        halign: "right",
-        cellWidth: 35,
+
+      footStyles: {
+        fillColor: [240, 240, 240],
+        textColor: [15, 23, 42],
+        fontStyle: "bold",
       },
-    },
-  });
 
-  const pageCount =
-    doc.internal.getNumberOfPages();
+      columnStyles: {
+        0: {
+          halign: "center",
+          cellWidth: 12,
+        },
+        4: {
+          halign: "right",
+          cellWidth: 35,
+        },
+      },
+    });
 
-  for (
-    let i = 1;
-    i <= pageCount;
-    i++
-  ) {
+    const pageCount = doc.internal.getNumberOfPages();
 
-    doc.setPage(i);
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
 
-    doc.setDrawColor(230);
+      doc.setDrawColor(230);
 
-    doc.line(
-      14,
-      285,
-      195,
-      285
-    );
+      doc.line(14, 285, 195, 285);
 
-    doc.setFontSize(8);
+      doc.setFontSize(8);
 
-    doc.setTextColor(120);
+      doc.setTextColor(120);
 
-    doc.text(
-      `${company} - Credit Note Report`,
-      14,
-      290
-    );
+      doc.text(`${company} - Credit Note Report`, 14, 290);
 
-    doc.text(
-      `Page ${i} of ${pageCount}`,
-      195,
-      290,
-      {
+      doc.text(`Page ${i} of ${pageCount}`, 195, 290, {
         align: "right",
-      }
-    );
-  }
+      });
+    }
 
+    const blobURL = doc.output("bloburl");
 
+    const printWindow = window.open(blobURL);
 
-  const blobURL =
-    doc.output("bloburl");
-
-  const printWindow =
-    window.open(blobURL);
-
-  printWindow.onload =
-    () => {
-
+    printWindow.onload = () => {
       printWindow.focus();
 
       printWindow.print();
     };
-};
+  };
 
   const fetchCompanyDetails = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`,
+      );
       setCompanyDetails(res.data);
     } catch (err) {
       console.error("Error fetching company details:", err);
@@ -797,14 +632,15 @@ const handlePrint = () => {
       return;
     }
     const today = new Date().toLocaleDateString("en-IN");
-    const companyNameForExport = companyDetails?.name || companyName || "Company";
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
     const companyAddress = getCompanyAddress(companyDetails);
-    const exportData = filteredCreditNotes.map(n => ({
+    const exportData = filteredCreditNotes.map((n) => ({
       "Voucher No": n.voucherNo,
       Date: n.date,
       Party: n.PartyLedger,
       Amount: n.grand_total,
-      Status: n.status || "Pending"
+      Status: n.status || "Pending",
     }));
     const ws = XLSX.utils.json_to_sheet(exportData, { origin: "A6" });
     addWorkbookHeader(XLSX, ws, {
@@ -826,9 +662,13 @@ const handlePrint = () => {
 
     const doc = new jsPDF();
     const today = new Date().toLocaleDateString("en-IN");
-    const companyNameForExport = companyDetails?.name || companyName || "Company";
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
     const companyAddress = getCompanyAddress(companyDetails);
-    const totalAmount = filteredCreditNotes.reduce((acc, n) => acc + Number(n.grand_total || 0), 0);
+    const totalAmount = filteredCreditNotes.reduce(
+      (acc, n) => acc + Number(n.grand_total || 0),
+      0,
+    );
     const formatAmount = (amount) =>
       `Rs. ${Number(amount || 0).toLocaleString("en-IN", {
         minimumFractionDigits: 2,
@@ -846,7 +686,9 @@ const handlePrint = () => {
     doc.setTextColor(40);
     doc.text(`Total Notes: ${filteredCreditNotes.length}`, 14, summaryY);
     doc.setFont("helvetica", "bold");
-    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, { align: "right" });
+    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, {
+      align: "right",
+    });
 
     autoTable(doc, {
       startY: tableStartY,
@@ -862,9 +704,21 @@ const handlePrint = () => {
       foot: [["", "", "", "TOTAL", formatAmount(totalAmount), ""]],
       theme: "striped",
       styles: { fontSize: 9, cellPadding: 5, valign: "middle" },
-      headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: "bold", halign: "center" },
-      footStyles: { fillColor: [240, 240, 240], textColor: [15, 23, 42], fontStyle: "bold" },
-      columnStyles: { 0: { halign: "center", cellWidth: 12 }, 4: { halign: "right", cellWidth: 35 } },
+      headStyles: {
+        fillColor: [37, 99, 235],
+        textColor: [255, 255, 255],
+        fontStyle: "bold",
+        halign: "center",
+      },
+      footStyles: {
+        fillColor: [240, 240, 240],
+        textColor: [15, 23, 42],
+        fontStyle: "bold",
+      },
+      columnStyles: {
+        0: { halign: "center", cellWidth: 12 },
+        4: { halign: "right", cellWidth: 35 },
+      },
     });
 
     const pageCount = doc.internal.getNumberOfPages();
@@ -881,7 +735,6 @@ const handlePrint = () => {
     doc.save(`Credit_Notes_Report_${today}.pdf`);
   };
 
-
   useEffect(() => {
     if (companyId) {
       fetchCreditNotes();
@@ -893,14 +746,12 @@ const handlePrint = () => {
     try {
       const res = await axios.get(`${API}/getAllCreditNotes/${companyId}`);
 
-
       setCreditNotes(res.data.data || []);
     } catch (error) {
       console.error(error);
       Swal.fire("Error", "Failed to fetch credit notes!", "error");
     }
   };
-
 
   const _handleAccept = async (id) => {
     Swal.fire({
@@ -924,7 +775,6 @@ const handlePrint = () => {
     });
   };
 
-
   const _handleReject = async (id) => {
     Swal.fire({
       title: "Reject Credit Note?",
@@ -947,7 +797,6 @@ const handlePrint = () => {
     });
   };
 
-
   const handleDelete = async (id) => {
     Swal.fire({
       title: "Delete Credit Note?",
@@ -959,7 +808,9 @@ const handlePrint = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/delete/${id}`);
+          await axios.delete(
+            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/delete/${id}`,
+          );
           fetchCreditNotes();
           Swal.fire("Deleted!", "Credit Note deleted!", "success");
         } catch (err) {
@@ -972,7 +823,9 @@ const handlePrint = () => {
 
   const handleViewDetails = async (id) => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/single/${id}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/single/${id}`,
+      );
       if (!res.data.success) {
         throw new Error(res.data.message || "Failed to fetch details");
       }
@@ -1013,10 +866,10 @@ const handlePrint = () => {
             </button>
             {loggedInRole !== "employee" && (
               <button
-                onClick={() => setShowEmployeeActivity(prev => !prev)}
+                onClick={() => setShowEmployeeActivity((prev) => !prev)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-all text-[12px] font-medium shadow-sm border ${
-                  showEmployeeActivity 
-                    ? "bg-slate-900 text-white border-slate-900" 
+                  showEmployeeActivity
+                    ? "bg-slate-900 text-white border-slate-900"
                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                 }`}
               >
@@ -1049,17 +902,19 @@ const handlePrint = () => {
               filteredCreditNotes.map((note) => (
                 <tr key={note.id}>
                   <td className="border p-2">{note.voucherNo}</td>
-                  <td className="border p-2">{note.date ? new Date(note.date).toLocaleDateString() : "-"}</td>
+                  <td className="border p-2">
+                    {note.date ? new Date(note.date).toLocaleDateString() : "-"}
+                  </td>
                   <td className="border p-2">{note.PartyLedger}</td>
                   <td className="border p-2 text-right">
                     ₹ {Number(note.grand_total || 0).toFixed(2)}
                   </td>
                   {showEmployeeActivity && (
-                        <td className="px-4 py-2 truncate max-w-37.5">
-                          {getEmployeeName(note.employee_id)}
-                        </td>
-                      )}
-                      <td className="border p-2 text-center flex items-center justify-center gap-3">
+                    <td className="px-4 py-2 truncate max-w-37.5">
+                      {getEmployeeName(note.employee_id)}
+                    </td>
+                  )}
+                  <td className="border p-2 text-center flex items-center justify-center gap-3">
                     <button
                       onClick={() => handleViewDetails(note.id)}
                       className="text-blue-600 hover:text-blue-800 transition"
@@ -1070,9 +925,14 @@ const handlePrint = () => {
                     <button
                       onClick={async () => {
                         try {
-                          const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/generate-pdf/${note.id}`);
+                          const res = await axios.get(
+                            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/generate-pdf/${note.id}`,
+                          );
                           if (res.data.success) {
-                            window.open(`${import.meta.env.VITE_ACCOUNTING_URL}${res.data.pdfPath}`, "_blank");
+                            window.open(
+                              `${import.meta.env.VITE_ACCOUNTING_URL}${res.data.pdfPath}`,
+                              "_blank",
+                            );
                           }
                         } catch (error) {
                           console.error("Error generating PDF:", error);
@@ -1085,7 +945,9 @@ const handlePrint = () => {
                       <Download size={18} />
                     </button>
                     <button
-                      onClick={() => navigate(`/accounting/client/creditNote/${note.id}`)}
+                      onClick={() =>
+                        navigate(`/accounting/client/creditNote/${note.id}`)
+                      }
                       className="p-1 text-blue-600 hover:text-blue-800 transition"
                       title="Edit"
                     >

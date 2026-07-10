@@ -17,7 +17,7 @@ import {
   Save,
   Search,
   UserCheck,
-  X
+  X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
@@ -42,7 +42,6 @@ const AcceptedEmployees = () => {
   const entriesPerPage = 10;
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const fetchAcceptedEmployees = async () => {
       try {
@@ -53,7 +52,6 @@ const AcceptedEmployees = () => {
         );
         if (res.data.success) {
           setEmployees(res.data.data || getSampleAcceptedEmployees());
-
 
           const uniqueDepts = [
             ...new Set(
@@ -79,7 +77,6 @@ const AcceptedEmployees = () => {
 
     fetchAcceptedEmployees();
   }, []);
-
 
   const getSampleAcceptedEmployees = () => [
     {
@@ -123,7 +120,6 @@ const AcceptedEmployees = () => {
     },
   ];
 
-
   const filteredData = employees.filter((employee) => {
     const matchesSearch =
       employee.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -138,7 +134,6 @@ const AcceptedEmployees = () => {
     return matchesSearch && matchesDepartment;
   });
 
-
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
   const currentData = filteredData.slice(
@@ -146,14 +141,12 @@ const AcceptedEmployees = () => {
     startIndex + entriesPerPage,
   );
 
-
   const calculatePayrollComponents = (basicSalary) => {
     const basic = basicSalary * 0.5;
     const hra = basicSalary * 0.25;
     const conveyance = 1600;
     const medical = 1250;
     const specialAllowance = basicSalary - (basic + hra + conveyance + medical);
-
 
     const pf = basic * 0.12;
     const esi = basicSalary * 0.0075;
@@ -178,10 +171,8 @@ const AcceptedEmployees = () => {
     };
   };
 
-
   const recalculatePayroll = (currentPayroll, field, value) => {
     let updatedPayroll = { ...currentPayroll, [field]: parseFloat(value) || 0 };
-
 
     updatedPayroll.grossSalary =
       updatedPayroll.basic +
@@ -190,20 +181,16 @@ const AcceptedEmployees = () => {
       updatedPayroll.medical +
       updatedPayroll.specialAllowance;
 
-
     updatedPayroll.pf = updatedPayroll.basic * 0.12;
-
 
     updatedPayroll.totalDeductions =
       updatedPayroll.pf + updatedPayroll.esi + updatedPayroll.professionalTax;
-
 
     updatedPayroll.netSalary =
       updatedPayroll.grossSalary - updatedPayroll.totalDeductions;
 
     return updatedPayroll;
   };
-
 
   const initializePayrollData = (employee) => {
     const components = calculatePayrollComponents(employee.salary);
@@ -219,7 +206,6 @@ const AcceptedEmployees = () => {
     };
   };
 
-
   const handleEditPayroll = (employee) => {
     if (!canSetup) {
       alert("You do not have permission to setup candidate payroll");
@@ -230,21 +216,18 @@ const AcceptedEmployees = () => {
     setEditingPayroll(employee.id);
   };
 
-
   const handleSavePayroll = async (employeeId) => {
     if (!canSetup) {
       alert("You do not have permission to setup candidate payroll");
       return;
     }
     try {
-
       await axios.put(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/employees/${employeeId}/payroll`,
         {
           payroll: payrollData[employeeId],
         },
       );
-
 
       setEmployees((prev) =>
         prev.map((emp) =>
@@ -265,14 +248,12 @@ const AcceptedEmployees = () => {
     }
   };
 
-
   const handlePayrollChange = (employeeId, field, value) => {
     setPayrollData((prev) => ({
       ...prev,
       [employeeId]: recalculatePayroll(prev[employeeId], field, value),
     }));
   };
-
 
   const downloadPayslip = (employee) => {
     const payroll = payrollData[employee.id];
@@ -282,7 +263,6 @@ const AcceptedEmployees = () => {
     }
 
     const doc = new jsPDF();
-
 
     doc.setFontSize(20);
     doc.setTextColor(40, 40, 40);
@@ -297,17 +277,14 @@ const AcceptedEmployees = () => {
       { align: "center" },
     );
 
-
     doc.setFontSize(8);
     doc.text("Company Name: Your Company Inc.", 14, 40);
     doc.text("Address: 123 Business Street, City, State - 12345", 14, 46);
-
 
     doc.text(`Employee Name: ${employee.name}`, 14, 58);
     doc.text(`Employee ID: ${employee.employeeId}`, 14, 64);
     doc.text(`Department: ${employee.department}`, 14, 70);
     doc.text(`Designation: ${employee.position}`, 14, 76);
-
 
     autoTable(doc, {
       startY: 85,
@@ -323,7 +300,6 @@ const AcceptedEmployees = () => {
       headStyles: { fillColor: [59, 130, 246] },
     });
 
-
     autoTable(doc, {
       startY: doc.lastAutoTable.finalY + 10,
       head: [["Deductions", "Amount (₹)"]],
@@ -335,7 +311,6 @@ const AcceptedEmployees = () => {
       theme: "grid",
       headStyles: { fillColor: [239, 68, 68] },
     });
-
 
     const finalY = doc.lastAutoTable.finalY + 15;
     doc.setFillColor(243, 244, 246);
@@ -362,7 +337,6 @@ const AcceptedEmployees = () => {
       finalY + 12,
     );
 
-
     doc.setFontSize(8);
     doc.setTextColor(100, 100, 100);
     doc.text(
@@ -376,7 +350,6 @@ const AcceptedEmployees = () => {
       `payslip-${employee.employeeId}-${new Date().getMonth() + 1}-${new Date().getFullYear()}.pdf`,
     );
   };
-
 
   const StatusBadge = ({ status }) => (
     <span className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border bg-green-100 text-green-800 border-green-200">
@@ -400,7 +373,6 @@ const AcceptedEmployees = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto">
-
         <div className="mb-6">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
             Accepted Employees
@@ -409,7 +381,6 @@ const AcceptedEmployees = () => {
             Manage payroll and employee details for accepted candidates
           </p>
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-white rounded-xl shadow-sm p-6">
@@ -482,7 +453,6 @@ const AcceptedEmployees = () => {
           </div>
         </div>
 
-
         <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-6">
           <div className="flex flex-col md:flex-row gap-4 justify-between">
             <div className="relative flex-1 max-w-md">
@@ -520,7 +490,6 @@ const AcceptedEmployees = () => {
             </div>
           </div>
         </div>
-
 
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
@@ -706,7 +675,6 @@ const AcceptedEmployees = () => {
             </table>
           </div>
 
-
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between">
             <div className="text-sm text-gray-700 mb-4 sm:mb-0">
               Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
@@ -742,7 +710,6 @@ const AcceptedEmployees = () => {
           </div>
         </div>
 
-
         {editingPayroll && payrollData[editingPayroll] && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -774,7 +741,6 @@ const AcceptedEmployees = () => {
           </div>
         )}
 
-
         {selectedEmployee && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl">
@@ -801,7 +767,6 @@ const AcceptedEmployees = () => {
   );
 };
 
-
 const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
   const [activeTab, setActiveTab] = useState("salary");
 
@@ -827,7 +792,6 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
 
   return (
     <div className="space-y-6">
-
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
           <button
@@ -862,7 +826,6 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
           </button>
         </nav>
       </div>
-
 
       {activeTab === "salary" && (
         <div className="space-y-6">
@@ -972,7 +935,6 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
         </div>
       )}
 
-
       {activeTab === "bank" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -1037,7 +999,6 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
         </div>
       )}
 
-
       {activeTab === "preview" && (
         <div className="space-y-6">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -1097,7 +1058,6 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
         </div>
       )}
 
-
       <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
         <button
           onClick={onCancel}
@@ -1116,7 +1076,6 @@ const PayrollForm = ({ payroll, employee, onChange, onSave, onCancel }) => {
     </div>
   );
 };
-
 
 const EmployeeDetails = ({ employee }) => {
   return (

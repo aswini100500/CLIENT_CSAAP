@@ -17,7 +17,6 @@ function VoucherForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("Voucher Recorded Successfully!");
-
   };
 
   return (

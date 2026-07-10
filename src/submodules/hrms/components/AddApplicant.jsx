@@ -38,7 +38,6 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
   const { user } = useAuth();
   const company_id = user.company_id;
 
-
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -54,7 +53,6 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
 
   const addExperience = () => {
     setExperienceList((prev) => [
@@ -102,7 +100,6 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
     setLoading(true);
 
     try {
-
       const checkRes = await axios.post(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/ex-employee/check`,
         {
@@ -130,7 +127,6 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
           return;
         }
       }
-
 
       const data = new FormData();
 
@@ -169,7 +165,6 @@ const AddApplicant = ({ basePath = "/superadmin/hrms" }) => {
   const renderBasicInfo = () => (
     <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Full Name *

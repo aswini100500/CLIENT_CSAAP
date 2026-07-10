@@ -10,7 +10,6 @@ const SuggestionOfEmployee = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { user } = useAuth();
 
-
   const [suggestions, setSuggestions] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -66,7 +65,6 @@ const SuggestionOfEmployee = () => {
     setShowAddForm(false);
   };
 
-
   const filteredSuggestions = suggestions.filter(
     (suggestion) =>
       suggestion.suggestion.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -113,7 +111,6 @@ const SuggestionOfEmployee = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
-
         <div className="mb-8">
           <div className="flex justify-between items-center">
             <div>
@@ -150,7 +147,6 @@ const SuggestionOfEmployee = () => {
             )}
           </div>
         </div>
-
 
         {showAddForm && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
@@ -217,10 +213,8 @@ const SuggestionOfEmployee = () => {
           </div>
         )}
 
-
         {!showAddForm && (
           <div className="space-y-6">
-
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div className="flex items-center gap-4">
@@ -270,15 +264,12 @@ const SuggestionOfEmployee = () => {
               </div>
             </div>
 
-
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                 <h3 className="text-lg font-semibold text-gray-800">
                   All Suggestions
                 </h3>
               </div>
-
 
               <div className="overflow-x-auto">
                 <table className="min-w-full">
@@ -377,7 +368,6 @@ const SuggestionOfEmployee = () => {
                   </tbody>
                 </table>
               </div>
-
 
               {paginatedSuggestions.length > 0 && (
                 <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">

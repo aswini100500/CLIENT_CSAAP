@@ -13,7 +13,8 @@ import { FILE_UPLOAD_CONFIG } from "./constants";
 const API_BASE = import.meta.env.VITE_HRMS_BASE_URL;
 
 const getFileIcon = (fileType) => {
-  if (fileType === "photo") return <Image size={20} className="text-(--brand)" />;
+  if (fileType === "photo")
+    return <Image size={20} className="text-(--brand)" />;
   if (
     fileType === "educationalCertificates" ||
     fileType === "termandconditionCertificates"
@@ -97,12 +98,15 @@ const DocumentsTab = ({
           className="border border-(--border-soft) rounded-xl p-4 bg-(--bg-app)/30 hover:shadow-sm transition-all duration-200"
         >
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-bold text-sm text-(--text-strong)">{config.label}</h3>
+            <h3 className="font-bold text-sm text-(--text-strong)">
+              {config.label}
+            </h3>
             {getFileIcon(config.type)}
           </div>
 
-          <p className="text-xs text-(--text-soft) mb-4">{config.description}</p>
-
+          <p className="text-xs text-(--text-soft) mb-4">
+            {config.description}
+          </p>
 
           <div className="mb-3">
             <label className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-(--border-strong) rounded-xl hover:border-(--brand) hover:bg-white text-(--text-soft) hover:text-(--brand) cursor-pointer transition-all duration-200 bg-white">
@@ -119,7 +123,6 @@ const DocumentsTab = ({
             </label>
           </div>
 
-
           {uploadProgress[config.type] > 0 && (
             <div className="w-full bg-gray-100 rounded-full h-1.5 mb-3 overflow-hidden">
               <div
@@ -128,7 +131,6 @@ const DocumentsTab = ({
               ></div>
             </div>
           )}
-
 
           <div className="space-y-2">
             {config.type === "educationalCertificates" ||
@@ -150,7 +152,6 @@ const DocumentsTab = ({
         </div>
       ))}
     </div>
-
 
     {isUploading && (
       <div className="mt-4 p-3 bg-emerald-50/50 border border-emerald-200 rounded-xl">

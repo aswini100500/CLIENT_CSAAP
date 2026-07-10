@@ -100,4 +100,4 @@ const AttachementContractor = () => {
   );
 };
 
-export default AttachementContractor
+export default AttachementContractor;

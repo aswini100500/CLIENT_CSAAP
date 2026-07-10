@@ -28,8 +28,6 @@ const Vehicle = () => {
       setLoading(true);
       const response = await operationApi.getVehicles();
       setVehicles(response.data.data || []);
-
-      
     } catch (error) {
       console.error("Error fetching vehicles:", error);
     } finally {
@@ -135,11 +133,11 @@ const Vehicle = () => {
 
   return (
     <div className="p-5 bg-white rounded-xl shadow-md border border-gray-200">
-
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-50 p-4 rounded-lg">
-
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-700 mb-1">Vehicle Name</label>
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Vehicle Name
+          </label>
           <input
             type="text"
             placeholder="Vehicle Name"
@@ -151,9 +149,10 @@ const Vehicle = () => {
           />
         </div>
 
-
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-700 mb-1">Mileage (ltr)</label>
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Mileage (ltr)
+          </label>
           <input
             type="text"
             placeholder="e.g., 10 ltr"
@@ -165,9 +164,10 @@ const Vehicle = () => {
           />
         </div>
 
-
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-700 mb-1">Odometer Start</label>
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Odometer Start
+          </label>
           <input
             type="number"
             placeholder="Odometer Start"
@@ -179,9 +179,10 @@ const Vehicle = () => {
           />
         </div>
 
-
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-700 mb-1">Odometer End</label>
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Odometer End
+          </label>
           <input
             type="number"
             placeholder="Odometer End"
@@ -192,7 +193,6 @@ const Vehicle = () => {
             className="border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-400 outline-none"
           />
         </div>
-
 
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-700 mb-1">Cost</label>
@@ -207,9 +207,10 @@ const Vehicle = () => {
           />
         </div>
 
-
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-700 mb-1">Number Plate</label>
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Number Plate
+          </label>
           <input
             type="text"
             placeholder="Number Plate"
@@ -221,9 +222,10 @@ const Vehicle = () => {
           />
         </div>
 
-
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-700 mb-1">Fuel Type</label>
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Fuel Type
+          </label>
           <select
             value={newVehicle.fuel_type}
             onChange={(e) =>
@@ -239,7 +241,6 @@ const Vehicle = () => {
           </select>
         </div>
 
-
         <div className="flex flex-col justify-end">
           <button
             onClick={editingId ? handleUpdate : handleAddVehicle}
@@ -251,21 +252,34 @@ const Vehicle = () => {
         </div>
       </div>
 
-
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
           <thead className="bg-blue-50">
             <tr>
               <th className="border border-gray-200 p-2 text-left">#</th>
-              <th className="border border-gray-200 p-2 text-left">Vehicle Name</th>
+              <th className="border border-gray-200 p-2 text-left">
+                Vehicle Name
+              </th>
               <th className="border border-gray-200 p-2 text-left">Mileage</th>
-              <th className="border border-gray-200 p-2 text-left">Odometer Start</th>
-              <th className="border border-gray-200 p-2 text-left">Odometer End</th>
-              <th className="border border-gray-200 p-2 text-left">Total KM Run</th>
+              <th className="border border-gray-200 p-2 text-left">
+                Odometer Start
+              </th>
+              <th className="border border-gray-200 p-2 text-left">
+                Odometer End
+              </th>
+              <th className="border border-gray-200 p-2 text-left">
+                Total KM Run
+              </th>
               <th className="border border-gray-200 p-2 text-left">Cost</th>
-              <th className="border border-gray-200 p-2 text-left">Number Plate</th>
-              <th className="border border-gray-200 p-2 text-left">Fuel Type</th>
-              <th className="border border-gray-200 p-2 text-center">Actions</th>
+              <th className="border border-gray-200 p-2 text-left">
+                Number Plate
+              </th>
+              <th className="border border-gray-200 p-2 text-left">
+                Fuel Type
+              </th>
+              <th className="border border-gray-200 p-2 text-center">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -275,18 +289,30 @@ const Vehicle = () => {
                 return (
                   <tr key={vehicle.id} className="hover:bg-gray-50">
                     <td className="border border-gray-200 p-2">{index + 1}</td>
-                    <td className="border border-gray-200 p-2">{vehicle.name}</td>
-                    <td className="border border-gray-200 p-2">{vehicle.mileage} km/ltr</td>
-                    <td className="border border-gray-200 p-2">{vehicle.odometerStart} km</td>
-                    <td className="border border-gray-200 p-2">{vehicle.odometerEnd} km</td>
+                    <td className="border border-gray-200 p-2">
+                      {vehicle.name}
+                    </td>
+                    <td className="border border-gray-200 p-2">
+                      {vehicle.mileage} km/ltr
+                    </td>
+                    <td className="border border-gray-200 p-2">
+                      {vehicle.odometerStart} km
+                    </td>
+                    <td className="border border-gray-200 p-2">
+                      {vehicle.odometerEnd} km
+                    </td>
                     <td className="border border-gray-200 p-2 font-semibold text-blue-700">
                       {vehicle.totalKm} km
                     </td>
                     <td className="border border-gray-200 p-2">
                       ₹{vehicle.cost?.toLocaleString()}
                     </td>
-                    <td className="border border-gray-200 p-2">{vehicle.numberPlate}</td>
-                    <td className="border border-gray-200 p-2">{vehicle.fuelType}</td>
+                    <td className="border border-gray-200 p-2">
+                      {vehicle.numberPlate}
+                    </td>
+                    <td className="border border-gray-200 p-2">
+                      {vehicle.fuelType}
+                    </td>
                     <td className="border border-gray-200 p-2 text-center">
                       <button
                         onClick={() => handleEdit(vehicle.id)}

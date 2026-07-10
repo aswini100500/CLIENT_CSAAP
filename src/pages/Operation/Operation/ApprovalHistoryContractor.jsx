@@ -57,4 +57,4 @@ const ApprovalHistoryContractor = () => {
   );
 };
 
-export default ApprovalHistoryContractor
+export default ApprovalHistoryContractor;

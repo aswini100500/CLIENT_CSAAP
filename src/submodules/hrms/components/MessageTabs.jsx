@@ -5,16 +5,16 @@ import MessageToEmployee from "./Employee Management/MessageToEmployee";
 import ComplaintsManagement from "./ComplaintsManagement";
 import EmployeeServiceReq from "./EmployeeServiceReq";
 import Announcement from "./Announcement";
-import { 
-  Mail, 
-  AlertTriangle, 
-  Settings, 
+import {
+  Mail,
+  AlertTriangle,
+  Settings,
   Megaphone,
   ArrowRight,
   TrendingUp,
   Clock,
   CheckCircle2,
-  Users
+  Users,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -23,7 +23,6 @@ import { usePermission } from "../../../hooks/usePermission";
 const MessageTabs = () => {
   const { user } = useAuth();
   const { hasAccess } = usePermission();
-  
 
   const [activeTab, setActiveTab] = useState(() => {
     if (hasAccess("hrms.message")) return "message-to-employee";
@@ -37,25 +36,32 @@ const MessageTabs = () => {
     messages: 0,
     complaints: 0,
     serviceRequests: 0,
-    announcements: 0
+    announcements: 0,
   });
   const [notifications, setNotifications] = useState({
     messages: 0,
     complaints: 0,
     serviceRequests: 0,
-    announcements: 0
+    announcements: 0,
   });
 
   const fetchCounts = async () => {
     if (!user?.slug) return;
     try {
       const [msgRes, compRes, servRes, annRes] = await Promise.all([
+        axios.get(
+          `${import.meta.env.VITE_HRMS_BASE_URL}/api/messages/company/all?company_id=${user.company_id}&slug=${user.slug}`,
+        ),
+        axios.get(
+          `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/`,
+        ),
 
-        axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/messages/company/all?company_id=${user.company_id}&slug=${user.slug}`),
-        axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/`),
-
-        axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/company-search?company_id=${user.company_id}&slug=${user.slug}`),
-        axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/announcements?company_id=${user.company_id}&slug=${user.slug}&status=active`)
+        axios.get(
+          `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/company-search?company_id=${user.company_id}&slug=${user.slug}`,
+        ),
+        axios.get(
+          `${import.meta.env.VITE_HRMS_BASE_URL}/api/announcements?company_id=${user.company_id}&slug=${user.slug}&status=active`,
+        ),
       ]);
 
       const msgs = Array.isArray(msgRes.data) ? msgRes.data : [];
@@ -67,27 +73,38 @@ const MessageTabs = () => {
         messages: msgs.length,
         complaints: comps.length,
         serviceRequests: servs.length,
-        announcements: anns.length
+        announcements: anns.length,
       });
 
+      const getLastChecked = (key) =>
+        localStorage.getItem(`hrms_last_checked_${key}`) || "1970-01-01";
 
-      const getLastChecked = (key) => localStorage.getItem(`hrms_last_checked_${key}`) || '1970-01-01';
-      
       const newNotifications = {
-        messages: msgs.filter(m => (m.created_at || m.date) > getLastChecked('messages')).length,
-        complaints: comps.filter(c => c.status === 'Pending' && c.created_at > getLastChecked('complaints')).length,
-        serviceRequests: servs.filter(s => s.status === 'Pending' && s.created_at > getLastChecked('serviceRequests')).length,
-        announcements: anns.filter(a => a.created_at > getLastChecked('announcements')).length
+        messages: msgs.filter(
+          (m) => (m.created_at || m.date) > getLastChecked("messages"),
+        ).length,
+        complaints: comps.filter(
+          (c) =>
+            c.status === "Pending" &&
+            c.created_at > getLastChecked("complaints"),
+        ).length,
+        serviceRequests: servs.filter(
+          (s) =>
+            s.status === "Pending" &&
+            s.created_at > getLastChecked("serviceRequests"),
+        ).length,
+        announcements: anns.filter(
+          (a) => a.created_at > getLastChecked("announcements"),
+        ).length,
       };
-
 
       const tabToKey = {
         "message-to-employee": "messages",
-        "complaints": "complaints",
+        complaints: "complaints",
         "service-request": "serviceRequests",
-        "announcement": "announcements"
+        announcement: "announcements",
       };
-      
+
       if (tabToKey[activeTab]) {
         newNotifications[tabToKey[activeTab]] = 0;
       }
@@ -106,9 +123,12 @@ const MessageTabs = () => {
     else if (tabId === "announcement") keyToClear = "announcements";
 
     if (keyToClear) {
-      setNotifications(prev => ({ ...prev, [keyToClear]: 0 }));
+      setNotifications((prev) => ({ ...prev, [keyToClear]: 0 }));
 
-      localStorage.setItem(`hrms_last_checked_${keyToClear}`, new Date().toISOString());
+      localStorage.setItem(
+        `hrms_last_checked_${keyToClear}`,
+        new Date().toISOString(),
+      );
     }
   };
 
@@ -127,7 +147,7 @@ const MessageTabs = () => {
       description: "Direct employee communication",
       color: "bg-emerald-600",
       textColor: "text-emerald-600",
-      component: <MessageToEmployee />
+      component: <MessageToEmployee />,
     },
     {
       id: "complaints",
@@ -139,7 +159,7 @@ const MessageTabs = () => {
       description: "Grievance management",
       color: "bg-emerald-600",
       textColor: "text-emerald-600",
-      component: <ComplaintsManagement />
+      component: <ComplaintsManagement />,
     },
     {
       id: "service-request",
@@ -151,7 +171,7 @@ const MessageTabs = () => {
       description: "Support & fulfillment",
       color: "bg-emerald-600",
       textColor: "text-emerald-600",
-      component: <EmployeeServiceReq />
+      component: <EmployeeServiceReq />,
     },
     {
       id: "announcement",
@@ -163,17 +183,16 @@ const MessageTabs = () => {
       description: "Company-wide updates",
       color: "bg-emerald-600",
       textColor: "text-emerald-600",
-      component: <Announcement />
+      component: <Announcement />,
     },
   ];
 
-  const tabs = allTabs.filter(tab => hasAccess(tab.permission));
+  const tabs = allTabs.filter((tab) => hasAccess(tab.permission));
 
   const activeTabData = tabs.find((tab) => tab.id === activeTab) || tabs[0];
 
   return (
     <div className="w-full min-h-screen bg-[#f8fafc] p-4 lg:p-6 font-sans">
-
       <div className="flex justify-start mb-8">
         <nav className="flex p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm">
           {tabs.map((tab) => {
@@ -188,7 +207,6 @@ const MessageTabs = () => {
                   ${isActive ? "text-white" : "text-slate-500 hover:text-slate-800"}
                 `}
               >
-
                 {isActive && (
                   <motion.div
                     layoutId="activeTabBackground"
@@ -197,11 +215,12 @@ const MessageTabs = () => {
                   />
                 )}
 
-                <span className={`relative z-10 text-base ${!isActive && tab.textColor}`}>
+                <span
+                  className={`relative z-10 text-base ${!isActive && tab.textColor}`}
+                >
                   {tab.icon}
                 </span>
                 <span className="relative z-10">{tab.label}</span>
-
 
                 {tab.notification > 0 && (
                   <span className="relative z-10 ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
@@ -214,9 +233,7 @@ const MessageTabs = () => {
         </nav>
       </div>
 
-
       <div className="w-full bg-white rounded-4xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden">
-
         <div className="w-full min-h-150 relative">
           <AnimatePresence mode="wait">
             <motion.div
@@ -226,7 +243,7 @@ const MessageTabs = () => {
               exit={{ opacity: 0, y: -10 }}
               transition={{
                 duration: 0.3,
-                ease: [0.4, 0, 0.2, 1]
+                ease: [0.4, 0, 0.2, 1],
               }}
               className="w-full h-full p-4 sm:p-6"
             >

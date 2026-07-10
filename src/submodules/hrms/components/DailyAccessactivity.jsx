@@ -90,7 +90,6 @@ const DailyAccessActivity = () => {
 
   const exportToExcel = () => {
     alert("Exporting MIS Punch data to Excel...");
-
   };
 
   const closePage = () => {
@@ -122,7 +121,6 @@ const DailyAccessActivity = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
-
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="mb-3 lg:mb-0">
@@ -133,7 +131,6 @@ const DailyAccessActivity = () => {
                 Fingerprint Machine Access Activity & MIS Punch Records
               </p>
             </div>
-
 
             <div className="flex items-center space-x-3">
               <label
@@ -153,10 +150,8 @@ const DailyAccessActivity = () => {
           </div>
         </div>
 
-
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Department
@@ -179,7 +174,6 @@ const DailyAccessActivity = () => {
               </select>
             </div>
 
-
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Status
@@ -199,7 +193,6 @@ const DailyAccessActivity = () => {
                   ))}
               </select>
             </div>
-
 
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -222,7 +215,6 @@ const DailyAccessActivity = () => {
                   ))}
               </select>
             </div>
-
 
             <div className="flex items-end space-x-2">
               <button
@@ -267,7 +259,6 @@ const DailyAccessActivity = () => {
             </div>
           </div>
         </div>
-
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
@@ -355,7 +346,6 @@ const DailyAccessActivity = () => {
             </table>
           </div>
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mt-4">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3">

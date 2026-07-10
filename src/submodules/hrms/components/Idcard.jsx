@@ -37,11 +37,7 @@ export default function IDCardMaker() {
 
   return (
     <div className="p-8 flex flex-row gap-8 max-w-6xl mx-auto min-h-screen">
-
-
-
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-8 rounded-2xl shadow-xl">
-
         <div className="flex flex-col">
           <label
             htmlFor="name"
@@ -58,7 +54,6 @@ export default function IDCardMaker() {
             className="border border-gray-300 p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition-all duration-300 bg-white hover:bg-gray-50 placeholder-gray-400"
           />
         </div>
-
 
         <div className="flex flex-col">
           <label
@@ -77,7 +72,6 @@ export default function IDCardMaker() {
           />
         </div>
 
-
         <div className="flex flex-col">
           <label
             htmlFor="email"
@@ -94,7 +88,6 @@ export default function IDCardMaker() {
             className="border border-gray-300 p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition-all duration-300 bg-white hover:bg-gray-50 placeholder-gray-400"
           />
         </div>
-
 
         <div className="flex flex-col">
           <label
@@ -113,7 +106,6 @@ export default function IDCardMaker() {
           />
         </div>
 
-
         <div className="flex flex-col">
           <label
             htmlFor="role"
@@ -130,7 +122,6 @@ export default function IDCardMaker() {
             className="border border-gray-300 p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition-all duration-300 bg-white hover:bg-gray-50 placeholder-gray-400"
           />
         </div>
-
 
         <div className="flex flex-col">
           <label
@@ -155,7 +146,6 @@ export default function IDCardMaker() {
           />
         </div>
 
-
         <div className="flex flex-col">
           <label
             htmlFor="joinDate"
@@ -171,7 +161,6 @@ export default function IDCardMaker() {
             className="border border-gray-300 p-3 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition-all duration-300 bg-white hover:bg-gray-50 placeholder-gray-400"
           />
         </div>
-
 
         <div className="flex flex-col">
           <label
@@ -189,7 +178,6 @@ export default function IDCardMaker() {
           />
         </div>
 
-
         <div className="flex flex-col col-span-2">
           <label
             htmlFor="terms"
@@ -206,7 +194,6 @@ export default function IDCardMaker() {
           />
         </div>
 
-
         <div className="col-span-2 flex justify-end">
           <button
             onClick={handleDownload}
@@ -218,7 +205,6 @@ export default function IDCardMaker() {
       </div>
 
       <div className="flex flex-col gap-8 w-1/2">
-
         <div
           ref={cardRef}
           className="relative w-120 h-100 border shadow-xl flex font-sans rounded-2xl overflow-hidden gap-4 bg-white"
@@ -248,7 +234,6 @@ export default function IDCardMaker() {
               <p>Phone: {phone}</p>
             </div>
           </div>
-
 
           <div className="relative w-1/2 h-full">
             <img

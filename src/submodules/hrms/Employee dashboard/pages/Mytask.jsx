@@ -495,7 +495,6 @@ const MyTask = () => {
         );
       })
       .catch((err) => {
-
         showSnackbar("Failed to fetch tasks", "error");
       });
   };
@@ -517,7 +516,6 @@ const MyTask = () => {
 
   useEffect(() => {
     if (!user?.token) {
-
       return;
     }
 
@@ -543,19 +541,16 @@ const MyTask = () => {
 
   useEffect(() => {
     if (!helpRequests?.length) {
-
       return;
     }
 
     const taskIds = helpRequests.map((r) => Number(r.taskId));
-
 
     axios
       .get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/tasks/by-ids`, {
         params: { ids: taskIds.join(",") },
       })
       .then((res) => {
-
         const normalizedNewTasks = res.data
           .map((task) =>
             normalizeTask(
@@ -566,7 +561,6 @@ const MyTask = () => {
             ),
           )
           .filter((task) => task.canViewInMyTasks);
-
 
         setTasks((prev) => {
           const existingIds = prev.map((t) => t.id);
@@ -583,9 +577,7 @@ const MyTask = () => {
           });
         });
       })
-      .catch((err) => {
-
-      });
+      .catch((err) => {});
   }, [helpRequests, emp_id]);
 
   useEffect(() => {
@@ -635,7 +627,6 @@ const MyTask = () => {
         },
       );
 
-
       const employeesData = response.data.data || [];
       setEmployees(employeesData);
 
@@ -651,8 +642,6 @@ const MyTask = () => {
       return;
     }
     try {
-
-
       const taskToComplete = tasks.find((t) => t.id === taskId);
       const updatedSubtasks = (taskToComplete?.subtasks || []).map((st) => ({
         ...st,
@@ -688,8 +677,6 @@ const MyTask = () => {
           subtasks: updatedSubtasks,
         }));
       }
-
-
     } catch (error) {
       console.error("Error completing task:", error);
     }
@@ -697,7 +684,10 @@ const MyTask = () => {
 
   const toggleSubtask = async (taskId, subtaskIndex) => {
     if (!canUpdate) {
-      showSnackbar("You do not have permission to update task subtasks", "error");
+      showSnackbar(
+        "You do not have permission to update task subtasks",
+        "error",
+      );
       return;
     }
     try {
@@ -710,7 +700,8 @@ const MyTask = () => {
       const loggedInEmpId = emp_id;
       const userRole = String(user?.role || "").toLowerCase();
       const isAdmin = userRole === "admin" || userRole === "superadmin";
-      const isCreator = task.assignedBy && String(loggedInEmpId) === String(task.assignedBy);
+      const isCreator =
+        task.assignedBy && String(loggedInEmpId) === String(task.assignedBy);
       const subtaskAssignee = subtask.assigned_to || subtask.assignedTo;
 
       let canToggle = false;
@@ -734,8 +725,8 @@ const MyTask = () => {
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/tasks/${taskId}/subtask/${subtask.id}`,
         {
           userId: loggedInEmpId,
-          role: user?.role
-        }
+          role: user?.role,
+        },
       );
 
       fetchMyTasks();
@@ -783,7 +774,10 @@ const MyTask = () => {
 
   const handleExtensionRequest = async () => {
     if (!canUpdate) {
-      showSnackbar("You do not have permission to request task extensions", "error");
+      showSnackbar(
+        "You do not have permission to request task extensions",
+        "error",
+      );
       return;
     }
     if (selectedTask && extensionReason.trim()) {
@@ -1315,7 +1309,6 @@ const MyTask = () => {
 
   return (
     <div className="w-full">
-
       {snackbar.open && (
         <div className="fixed top-4 left-0 right-0 flex justify-center z-100 pointer-events-none px-4">
           <div
@@ -1349,7 +1342,6 @@ const MyTask = () => {
         </div>
       )}
 
-
       {showConversationModal &&
         selectedTask &&
         helpReplies[selectedTask.id] && (
@@ -1361,7 +1353,6 @@ const MyTask = () => {
               transition={{ type: "spring", duration: 0.3 }}
               className="app-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto flex flex-col"
             >
-
               <div className="bg-white px-6 py-4 border-b border-(--border-soft) flex justify-between items-center sticky top-0 z-10">
                 <div>
                   <h3 className="modal-title flex items-center gap-2">
@@ -1381,11 +1372,9 @@ const MyTask = () => {
               </div>
 
               <div className="p-6 space-y-6 flex-1 overflow-y-auto">
-
                 {selectedTask.helpRequests &&
                   selectedTask.helpRequests.map((hr, idx) => (
                     <div key={idx} className="space-y-4">
-
                       <div className="flex items-start gap-3">
                         <div className="w-8 h-8 rounded-full bg-(--brand-soft) flex items-center justify-center shrink-0">
                           <span className="text-xs font-semibold text-(--brand)">
@@ -1408,7 +1397,6 @@ const MyTask = () => {
                           </div>
                         </div>
                       </div>
-
 
                       {hr.reply && (
                         <div className="flex items-start gap-3 ml-8">
@@ -1437,7 +1425,6 @@ const MyTask = () => {
                     </div>
                   ))}
 
-
                 <div className="pt-4 border-t border-(--border-soft)">
                   <div className="flex gap-2">
                     <input
@@ -1464,7 +1451,6 @@ const MyTask = () => {
           </div>
         )}
 
-
       {showReceiveHelpModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <motion.div
@@ -1474,7 +1460,6 @@ const MyTask = () => {
             transition={{ type: "spring", duration: 0.3 }}
             className="app-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto flex flex-col"
           >
-
             <div className="bg-white px-6 py-4 border-b border-(--border-soft) flex justify-between items-center sticky top-0 z-10">
               <div>
                 <h3 className="modal-title flex items-center gap-2">
@@ -1499,7 +1484,6 @@ const MyTask = () => {
             </div>
 
             <div className="p-6 space-y-6 flex-1 overflow-y-auto">
-
               <div className="p-4 rounded-xl border border-(--border-soft) bg-(--bg-subtle)/30">
                 <div className="flex items-center gap-2 mb-3">
                   <MessageCircle className="w-4 h-4 text-(--brand)" />
@@ -1525,7 +1509,6 @@ const MyTask = () => {
                   )}
                 </div>
 
-
                 {selectedTask.helpRequestDate && (
                   <div className="mt-3 flex items-center gap-4 text-xs font-semibold text-(--brand)">
                     <span className="flex items-center gap-1">
@@ -1541,7 +1524,6 @@ const MyTask = () => {
                   </div>
                 )}
               </div>
-
 
               {helpReplies[selectedTask.id] &&
                 helpReplies[selectedTask.id].length > 0 && (
@@ -1568,7 +1550,6 @@ const MyTask = () => {
                   </div>
                 )}
 
-
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-semibold text-(--text-strong) flex items-center gap-2">
@@ -1594,7 +1575,6 @@ const MyTask = () => {
                   placeholder="Type your response here... Be specific and helpful ✨"
                 />
 
-
                 <div className="flex justify-end">
                   <div
                     className={`h-1 w-20 rounded-full transition-all duration-300 ${
@@ -1611,7 +1591,6 @@ const MyTask = () => {
                 </div>
               </div>
 
-
               <div className="space-y-4">
                 <label className="text-sm font-semibold text-(--text-strong) flex items-center gap-2">
                   <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -1619,7 +1598,6 @@ const MyTask = () => {
                   </div>
                   Attachments (Optional)
                 </label>
-
 
                 <div className="relative">
                   <input
@@ -1645,7 +1623,8 @@ const MyTask = () => {
                   >
                     <Upload className="w-8 h-8 text-(--text-faint) group-hover:text-(--brand) mb-2 transition-colors" />
                     <p className="text-sm text-(--text-soft) group-hover:text-(--text-strong)">
-                      <span className="font-semibold">Click to upload</span> or drag and drop
+                      <span className="font-semibold">Click to upload</span> or
+                      drag and drop
                     </p>
                     <p className="text-xs text-(--text-faint) mt-1">
                       PNG, JPG, GIF, PDF, DOC up to 10MB
@@ -1653,15 +1632,14 @@ const MyTask = () => {
                   </label>
                 </div>
 
-
                 {(receiveHelpFiles.length > 0 ||
                   receiveHelpImages.length > 0) && (
                   <div className="bg-(--bg-subtle)/40 rounded-xl p-4 space-y-4 border border-(--border-soft)">
                     <h6 className="text-xs font-semibold text-(--text-strong) flex items-center gap-1">
                       <FileText className="w-4 h-4 text-blue-500" />
-                      Selected Files ({receiveHelpFiles.length + receiveHelpImages.length})
+                      Selected Files (
+                      {receiveHelpFiles.length + receiveHelpImages.length})
                     </h6>
-
 
                     {receiveHelpImages.length > 0 && (
                       <div className="space-y-2">
@@ -1690,7 +1668,6 @@ const MyTask = () => {
                         </div>
                       </div>
                     )}
-
 
                     {receiveHelpFiles.length > 0 && (
                       <div className="space-y-2">
@@ -1733,7 +1710,6 @@ const MyTask = () => {
                 )}
               </div>
 
-
               <div className="bg-(--bg-subtle)/30 p-4 rounded-xl border border-(--border-soft)">
                 <p className="text-xs font-semibold text-(--text-soft) mb-2">
                   Quick responses:
@@ -1755,7 +1731,6 @@ const MyTask = () => {
                   ))}
                 </div>
               </div>
-
 
               <div className="flex gap-3 pt-4 border-t border-(--border-soft)">
                 <button
@@ -1781,7 +1756,6 @@ const MyTask = () => {
                 </button>
               </div>
 
-
               <p className="text-xs text-center text-(--text-faint)">
                 Your reply will be sent to{" "}
                 {selectedTask.assignedBy || "the requester"} immediately
@@ -1791,10 +1765,8 @@ const MyTask = () => {
         </div>
       )}
 
-
       <div className="w-full transition-all duration-300">
         <div className="max-w-7xl mx-auto">
-
           <div className="mb-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
               <div className="mt-4 md:mt-0 flex items-center gap-3"></div>
@@ -1881,7 +1853,6 @@ const MyTask = () => {
             </div>
           </div>
 
-
           <div className="app-panel p-4 mb-6">
             <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1">
@@ -1897,7 +1868,6 @@ const MyTask = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-
                 <button
                   onClick={() => setShowMoreFilters(!showMoreFilters)}
                   className={`app-btn-secondary min-h-0 py-2 text-[13px] flex items-center gap-2 px-4 rounded-xl border transition-all duration-200 font-medium ${showMoreFilters ? "bg-(--brand-soft) border-(--border-strong) text-(--brand)" : ""}`}
@@ -1905,7 +1875,6 @@ const MyTask = () => {
                   <Filter className="w-4 h-4" />
                   More Filter
                 </button>
-
 
                 {(searchTerm ||
                   selectedCategory !== "All Projects" ||
@@ -1931,10 +1900,8 @@ const MyTask = () => {
               </div>
             </div>
 
-
             {showMoreFilters && (
               <div className="mt-4 pt-4 border-t border-(--border-soft) grid grid-cols-1 md:grid-cols-5 gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
-
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
                     Assigned By
@@ -1953,7 +1920,6 @@ const MyTask = () => {
                   </select>
                 </div>
 
-
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
                     Status
@@ -1971,7 +1937,6 @@ const MyTask = () => {
                   </select>
                 </div>
 
-
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
                     Deadline Date
@@ -1983,7 +1948,6 @@ const MyTask = () => {
                     className="app-input w-full py-1.5 text-[13px]"
                   />
                 </div>
-
 
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
@@ -2002,7 +1966,6 @@ const MyTask = () => {
                   </select>
                 </div>
 
-
                 <div>
                   <label className="app-label block mb-1.5 uppercase tracking-wider">
                     Assigned Date
@@ -2017,8 +1980,6 @@ const MyTask = () => {
               </div>
             )}
           </div>
-
-
 
           <div className="app-panel overflow-hidden mb-6">
             <div className="overflow-x-auto">
@@ -2136,7 +2097,9 @@ const MyTask = () => {
                     <tr>
                       <td colSpan="7" className="px-4 py-12 text-center">
                         <Frown className="size-8 mx-auto mb-3 text-(--text-faint)" />
-                        <p className="text-[14px] font-bold text-(--text-strong)">No tasks found</p>
+                        <p className="text-[14px] font-bold text-(--text-strong)">
+                          No tasks found
+                        </p>
                         <p className="text-[13px] mt-1 text-(--text-soft) mb-4">
                           Try adjusting your search or filters
                         </p>
@@ -2162,7 +2125,6 @@ const MyTask = () => {
           </div>
         </div>
       </div>
-
 
       <div
         className={`fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform transition-transform duration-300 ${showChat ? "translate-x-0" : "translate-x-full"} z-40 border-l border-gray-200 flex flex-col`}
@@ -2233,7 +2195,6 @@ const MyTask = () => {
         </div>
       </div>
 
-
       {showWantHelpModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-lg w-full max-h-[90vh] overflow-y-auto">
@@ -2265,13 +2226,14 @@ const MyTask = () => {
               <div className="space-y-6">
                 <div>
                   <p className="text-(--text-body) text-sm mb-2">
-                    <span className="font-semibold text-(--text-strong)">Task:</span>{" "}
+                    <span className="font-semibold text-(--text-strong)">
+                      Task:
+                    </span>{" "}
                     <span className="wrap-break-word">
                       {getPlainText(selectedTask.task || selectedTask.title)}
                     </span>
                   </p>
                 </div>
-
 
                 <div>
                   <label className="block text-sm font-semibold text-(--text-strong) mb-2">
@@ -2287,7 +2249,9 @@ const MyTask = () => {
                     >
                       <span
                         className={
-                          wantHelpEmployee ? "text-(--text-strong)" : "text-(--text-faint)"
+                          wantHelpEmployee
+                            ? "text-(--text-strong)"
+                            : "text-(--text-faint)"
                         }
                       >
                         {wantHelpEmployee || "Choose a team member"}
@@ -2309,8 +2273,8 @@ const MyTask = () => {
                             <div
                               key={employee.id}
                               onClick={() => {
-                                  setWantHelpEmployee(employee.name);
-                                  setShowWantHelpEmployeeList(false);
+                                setWantHelpEmployee(employee.name);
+                                setShowWantHelpEmployeeList(false);
                               }}
                               className="flex items-center gap-2.5 p-2.5 hover:bg-(--brand-soft) cursor-pointer border-b border-gray-100 last:border-0"
                             >
@@ -2338,7 +2302,6 @@ const MyTask = () => {
                   </div>
                 </div>
 
-
                 <div>
                   <label className="block text-sm font-semibold text-(--text-strong) mb-2">
                     What help do you need? *
@@ -2352,7 +2315,6 @@ const MyTask = () => {
                     required
                   />
                 </div>
-
 
                 <div>
                   <label className="block text-sm font-semibold text-(--text-strong) mb-2">
@@ -2384,13 +2346,11 @@ const MyTask = () => {
                   </div>
                 </div>
 
-
                 {(wantHelpFiles.length > 0 || wantHelpImages.length > 0) && (
                   <div className="space-y-3">
                     <h4 className="font-bold text-(--text-strong) text-sm">
                       Attached Files
                     </h4>
-
 
                     {wantHelpImages.length > 0 && (
                       <div>
@@ -2419,7 +2379,6 @@ const MyTask = () => {
                         </div>
                       </div>
                     )}
-
 
                     {wantHelpFiles.length > 0 && (
                       <div>
@@ -2486,16 +2445,13 @@ const MyTask = () => {
         </div>
       )}
 
-
       {showTaskDetails && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto flex flex-col">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6 pb-4 border-b border-(--border-soft)">
                 <div>
-                  <h3 className="modal-title">
-                    Task Details
-                  </h3>
+                  <h3 className="modal-title">Task Details</h3>
                 </div>
                 <button
                   onClick={() => setShowTaskDetails(false)}
@@ -2504,7 +2460,6 @@ const MyTask = () => {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-
 
               {selectedTask && (
                 <div className="space-y-4">
@@ -2611,7 +2566,6 @@ const MyTask = () => {
                     </div>
                   </div>
 
-
                   {(selectedTask.description || selectedTask.remark) && (
                     <div className="border-t border-(--border-soft) pt-3">
                       <label className="text-[11px] font-extrabold uppercase tracking-widest text-(--text-soft) mb-2 block">
@@ -2666,7 +2620,6 @@ const MyTask = () => {
                     </div>
                   )}
 
-
                   {selectedTask.subtasks &&
                     selectedTask.subtasks.length > 0 && (
                       <div className="border-t border-(--border-soft) pt-3">
@@ -2689,24 +2642,39 @@ const MyTask = () => {
                             const isCompleted = !!subtask.completed;
 
                             const loggedInEmpId = emp_id;
-                            const userRole = String(user?.role || "").toLowerCase();
-                            const isAdmin = userRole === "admin" || userRole === "superadmin";
-                            const isCreator = selectedTask.assignedBy && String(loggedInEmpId) === String(selectedTask.assignedBy);
-                            const subtaskAssignee = subtask.assigned_to || subtask.assignedTo;
+                            const userRole = String(
+                              user?.role || "",
+                            ).toLowerCase();
+                            const isAdmin =
+                              userRole === "admin" || userRole === "superadmin";
+                            const isCreator =
+                              selectedTask.assignedBy &&
+                              String(loggedInEmpId) ===
+                                String(selectedTask.assignedBy);
+                            const subtaskAssignee =
+                              subtask.assigned_to || subtask.assignedTo;
 
                             let canToggle = false;
                             if (isAdmin || isCreator) {
                               canToggle = true;
                             } else if (subtaskAssignee) {
-                              canToggle = String(loggedInEmpId) === String(subtaskAssignee);
+                              canToggle =
+                                String(loggedInEmpId) ===
+                                String(subtaskAssignee);
                             } else {
-                              const parentAssignees = Array.isArray(selectedTask.assignedTo)
+                              const parentAssignees = Array.isArray(
+                                selectedTask.assignedTo,
+                              )
                                 ? selectedTask.assignedTo.map(String)
                                 : [];
-                              canToggle = parentAssignees.includes(String(loggedInEmpId));
+                              canToggle = parentAssignees.includes(
+                                String(loggedInEmpId),
+                              );
                             }
 
-                            const assigneeName = subtaskAssignee ? getEmployeeName(subtaskAssignee) : "";
+                            const assigneeName = subtaskAssignee
+                              ? getEmployeeName(subtaskAssignee)
+                              : "";
 
                             return (
                               <div
@@ -2725,9 +2693,16 @@ const MyTask = () => {
                                   className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all duration-200 ${
                                     isCompleted
                                       ? "bg-(--brand) border-(--brand) text-white"
-                                      : "bg-white border-gray-300 " + (canToggle ? "group-hover:border-(--brand) cursor-pointer" : "cursor-not-allowed opacity-50")
+                                      : "bg-white border-gray-300 " +
+                                        (canToggle
+                                          ? "group-hover:border-(--brand) cursor-pointer"
+                                          : "cursor-not-allowed opacity-50")
                                   }`}
-                                  title={!canToggle ? "You are not authorized to toggle this subtask" : ""}
+                                  title={
+                                    !canToggle
+                                      ? "You are not authorized to toggle this subtask"
+                                      : ""
+                                  }
                                 >
                                   {isCompleted && (
                                     <Check className="w-3 h-3 stroke-3" />
@@ -2754,7 +2729,6 @@ const MyTask = () => {
                       </div>
                     )}
 
-
                   {selectedTask.helpRequests &&
                     selectedTask.helpRequests.length > 0 && (
                       <div className="border-t border-(--border-soft) pt-4 mt-4">
@@ -2767,7 +2741,6 @@ const MyTask = () => {
                         <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                           {selectedTask.helpRequests.map((hr, idx) => (
                             <div key={idx} className="space-y-3">
-
                               <div className="flex flex-col items-start max-w-[90%]">
                                 <div className="flex items-center gap-2 mb-1 px-1">
                                   <span className="text-[10px] font-bold text-(--text-faint) uppercase tracking-wider">
@@ -2786,7 +2759,6 @@ const MyTask = () => {
                                   </p>
                                 </div>
                               </div>
-
 
                               {hr.reply && (
                                 <div className="flex flex-col items-end w-full">
@@ -2813,7 +2785,6 @@ const MyTask = () => {
                         </div>
                       </div>
                     )}
-
 
                   {(selectedTask.attachedFiles?.length > 0 ||
                     selectedTask.images?.length > 0) && (
@@ -2869,70 +2840,71 @@ const MyTask = () => {
                     </div>
                   )}
 
-                      <div className="pt-3.5 border-t border-(--border-soft) space-y-3">
-                        {canUpdate && (
-                          <div className="grid grid-cols-3 gap-2">
-                            <button
-                              onClick={() => {
-                                setShowTaskDetails(false);
-                                handleComplete(selectedTask.id);
-                              }}
-                              className="app-btn-primary min-h-0 py-2.5 flex items-center justify-center text-center font-bold"
-                            >
-                              Complete
-                            </button>
-                            <button
-                              onClick={() => {
-                                setShowTaskDetails(false);
-                                setShowCannotCompleteModal(true);
-                              }}
-                              className="app-btn-secondary border-red-200 text-red-600 hover:border-red-400 hover:bg-red-50/50 min-h-0 py-2.5 flex items-center justify-center text-center font-bold"
-                            >
-                              Cannot Complete
-                            </button>
-                            <button
-                              onClick={() => {
-                                setShowTaskDetails(false);
-                                setShowExtensionModal(true);
-                              }}
-                              className="app-btn-secondary min-h-0 py-2.5 flex items-center justify-center text-center font-bold"
-                            >
-                              Extend
-                            </button>
-                          </div>
-                        )}
-                        <div className="flex flex-wrap gap-2 justify-end">
-                          <button
-                            onClick={() => {
-                              setShowTaskDetails(false);
-                              setShowUploadModal(true);
-                            }}
-                            className="flex items-center gap-1.5 px-3.5 py-2 bg-violet-50 border border-violet-200 text-violet-750 hover:bg-violet-100 rounded-xl text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
-                          >
-                            <Upload className="w-3.5 h-3.5" /> Upload Files
-                          </button>
-                          <button
-                            onClick={() => {
-                              setShowTaskDetails(false);
-                              setShowWantHelpModal(true);
-                            }}
-                            className="flex items-center gap-1.5 px-3.5 py-2 bg-teal-50 border border-teal-200 text-teal-750 hover:bg-teal-100 rounded-xl text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
-                          >
-                            <MessageSquare className="w-3.5 h-3.5" /> Ask for Help
-                          </button>
-                          {selectedTask.isHelpRequestForMe && (
-                            <button
-                              onClick={() => {
-                                setShowTaskDetails(false);
-                                setShowReceiveHelpModal(true);
-                              }}
-                              className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-50 border border-emerald-200 text-emerald-750 hover:bg-emerald-100 rounded-xl text-xs font-bold transition-all shadow-3xs active:scale-[0.98] animate-pulse"
-                            >
-                              <MessageSquare className="w-3.5 h-3.5" /> Reply to Help
-                            </button>
-                          )}
-                        </div>
+                  <div className="pt-3.5 border-t border-(--border-soft) space-y-3">
+                    {canUpdate && (
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => {
+                            setShowTaskDetails(false);
+                            handleComplete(selectedTask.id);
+                          }}
+                          className="app-btn-primary min-h-0 py-2.5 flex items-center justify-center text-center font-bold"
+                        >
+                          Complete
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowTaskDetails(false);
+                            setShowCannotCompleteModal(true);
+                          }}
+                          className="app-btn-secondary border-red-200 text-red-600 hover:border-red-400 hover:bg-red-50/50 min-h-0 py-2.5 flex items-center justify-center text-center font-bold"
+                        >
+                          Cannot Complete
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowTaskDetails(false);
+                            setShowExtensionModal(true);
+                          }}
+                          className="app-btn-secondary min-h-0 py-2.5 flex items-center justify-center text-center font-bold"
+                        >
+                          Extend
+                        </button>
                       </div>
+                    )}
+                    <div className="flex flex-wrap gap-2 justify-end">
+                      <button
+                        onClick={() => {
+                          setShowTaskDetails(false);
+                          setShowUploadModal(true);
+                        }}
+                        className="flex items-center gap-1.5 px-3.5 py-2 bg-violet-50 border border-violet-200 text-violet-750 hover:bg-violet-100 rounded-xl text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
+                      >
+                        <Upload className="w-3.5 h-3.5" /> Upload Files
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowTaskDetails(false);
+                          setShowWantHelpModal(true);
+                        }}
+                        className="flex items-center gap-1.5 px-3.5 py-2 bg-teal-50 border border-teal-200 text-teal-750 hover:bg-teal-100 rounded-xl text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5" /> Ask for Help
+                      </button>
+                      {selectedTask.isHelpRequestForMe && (
+                        <button
+                          onClick={() => {
+                            setShowTaskDetails(false);
+                            setShowReceiveHelpModal(true);
+                          }}
+                          className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-50 border border-emerald-200 text-emerald-750 hover:bg-emerald-100 rounded-xl text-xs font-bold transition-all shadow-3xs active:scale-[0.98] animate-pulse"
+                        >
+                          <MessageSquare className="w-3.5 h-3.5" /> Reply to
+                          Help
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -2940,16 +2912,13 @@ const MyTask = () => {
         </div>
       )}
 
-
       {showCannotCompleteModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-md w-full">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6 pb-4 border-b border-(--border-soft)">
                 <div>
-                  <h3 className="modal-title">
-                    Cannot Complete Task
-                  </h3>
+                  <h3 className="modal-title">Cannot Complete Task</h3>
                   <p className="modal-subtitle mt-1">
                     Provide a reason why this task cannot be completed
                   </p>
@@ -2965,7 +2934,9 @@ const MyTask = () => {
               <div className="space-y-4">
                 <div className="mb-4">
                   <p className="text-(--text-body) text-sm">
-                    <span className="font-semibold text-(--text-strong)">Task:</span>{" "}
+                    <span className="font-semibold text-(--text-strong)">
+                      Task:
+                    </span>{" "}
                     <span className="wrap-break-word">
                       {getPlainText(selectedTask.task || selectedTask.title)}
                     </span>
@@ -3010,16 +2981,13 @@ const MyTask = () => {
         </div>
       )}
 
-
       {showExtensionModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-md w-full">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6 pb-4 border-b border-(--border-soft)">
                 <div>
-                  <h3 className="modal-title">
-                    Request Extension
-                  </h3>
+                  <h3 className="modal-title">Request Extension</h3>
                   <p className="modal-subtitle mt-1">
                     Request more time to complete this task
                   </p>
@@ -3035,7 +3003,9 @@ const MyTask = () => {
               <div className="space-y-4">
                 <div className="mb-4">
                   <p className="text-(--text-body) text-sm">
-                    <span className="font-semibold text-(--text-strong)">Current Deadline:</span>{" "}
+                    <span className="font-semibold text-(--text-strong)">
+                      Current Deadline:
+                    </span>{" "}
                     {formatDate(
                       selectedTask.deadlineDate || selectedTask.dueDate,
                     )}
@@ -3080,16 +3050,13 @@ const MyTask = () => {
         </div>
       )}
 
-
       {showUploadModal && selectedTask && (
         <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-50 bg-[rgba(27,36,47,0.28)] backdrop-blur-xs">
           <div className="app-modal max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6 pb-4 border-b border-(--border-soft)">
                 <div>
-                  <h3 className="modal-title">
-                    Upload Files
-                  </h3>
+                  <h3 className="modal-title">Upload Files</h3>
                   <p className="modal-subtitle mt-1">
                     Upload documents and images for this task
                   </p>
@@ -3105,13 +3072,14 @@ const MyTask = () => {
               <div className="space-y-6">
                 <div>
                   <p className="text-(--text-body) text-sm mb-2">
-                    <span className="font-semibold text-(--text-strong)">Task:</span>{" "}
+                    <span className="font-semibold text-(--text-strong)">
+                      Task:
+                    </span>{" "}
                     <span className="wrap-break-word">
                       {getPlainText(selectedTask.task || selectedTask.title)}
                     </span>
                   </p>
                 </div>
-
 
                 <div>
                   <label className="block text-sm font-semibold text-(--text-strong) mb-2">
@@ -3125,7 +3093,6 @@ const MyTask = () => {
                     placeholder="Brief description of uploaded files..."
                   />
                 </div>
-
 
                 <div className="border-2 border-dashed border-(--border-strong) rounded-lg p-4 text-center hover:border-(--brand) hover:bg-(--brand-soft) transition-all duration-200">
                   <input
@@ -3147,18 +3114,17 @@ const MyTask = () => {
                       or drag and drop
                     </div>
                     <p className="text-[10px] text-(--text-faint) mt-1">
-                      Images (PNG, JPG, GIF) and documents (PDF, DOC, XLS) up to 10MB
+                      Images (PNG, JPG, GIF) and documents (PDF, DOC, XLS) up to
+                      10MB
                     </p>
                   </label>
                 </div>
-
 
                 {(uploadedFiles.length > 0 || uploadedImages.length > 0) && (
                   <div className="space-y-3">
                     <h4 className="font-bold text-(--text-strong) text-sm">
                       Selected Files
                     </h4>
-
 
                     {uploadedImages.length > 0 && (
                       <div>
@@ -3188,7 +3154,6 @@ const MyTask = () => {
                         </div>
                       </div>
                     )}
-
 
                     {uploadedFiles.length > 0 && (
                       <div>
@@ -3255,7 +3220,6 @@ const MyTask = () => {
           </div>
         </div>
       )}
-
 
       <style jsx>{`
         .no-scrollbar::-webkit-scrollbar {

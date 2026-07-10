@@ -71,7 +71,6 @@ const PayrollPage = () => {
   const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
 
-
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -87,9 +86,7 @@ const PayrollPage = () => {
   const [selectedEntries, setSelectedEntries] = useState([]);
   const [processingBulkAction, setProcessingBulkAction] = useState(null);
 
-
   const [tdsValues, setTdsValues] = useState({});
-
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -124,10 +121,8 @@ const PayrollPage = () => {
 
   const entriesPerPage = 10;
 
-
   const yearRange = [];
   for (let y = 2020; y <= now.getFullYear() + 1; y++) yearRange.push(y);
-
 
   const fetchPayrollConfig = useCallback(async () => {
     if (!companySlug) return;
@@ -145,7 +140,6 @@ const PayrollPage = () => {
       console.error("Error fetching payroll config:", err);
     }
   }, [companyId, companySlug]);
-
 
   const fetchPayrollData = useCallback(async () => {
     if (!companyId) return;
@@ -185,14 +179,12 @@ const PayrollPage = () => {
     fetchPayrollConfig();
   }, [fetchPayrollData, fetchPayrollConfig]);
 
-
   useEffect(() => {
     if (!showActionMenu) return;
     const close = () => setShowActionMenu(null);
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
   }, [showActionMenu]);
-
 
   const payrollRecords = useMemo(
     () =>
@@ -353,7 +345,6 @@ const PayrollPage = () => {
     [employees, tdsValues, payrollExists],
   );
 
-
   const filteredRecords = useMemo(() => {
     const term = searchTerm.toLowerCase();
     if (!term) return payrollRecords;
@@ -366,14 +357,12 @@ const PayrollPage = () => {
     );
   }, [payrollRecords, searchTerm]);
 
-
   const totalPages = Math.ceil(filteredRecords.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
   const currentData = filteredRecords.slice(
     startIndex,
     startIndex + entriesPerPage,
   );
-
 
   const totals = useMemo(
     () =>
@@ -404,7 +393,6 @@ const PayrollPage = () => {
       ),
     [payrollRecords],
   );
-
 
   const handleTdsChange = (empId, value) => {
     setTdsValues((prev) => ({ ...prev, [empId]: parseFloat(value) || 0 }));
@@ -740,7 +728,6 @@ const PayrollPage = () => {
   return (
     <div className="crm-module-root app-shell p-4">
       <div className="max-w-7xl mx-auto space-y-6">
-
         {successMessage && (
           <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl border border-emerald-700 shadow-lg z-50 flex items-center gap-2 animate-in fade-in slide-in-from-top duration-200">
             <CheckCircle size={16} />
@@ -748,18 +735,14 @@ const PayrollPage = () => {
           </div>
         )}
 
-
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="app-title">
-              Payroll Management
-            </h1>
+            <h1 className="app-title">Payroll Management</h1>
             <p className="app-subtitle mt-1">
               {MONTH_NAMES[selectedMonth - 1]} {selectedYear} •{" "}
               {totals.totalEmployees} employees
             </p>
           </div>
-
 
           <div className="flex flex-wrap items-center gap-2">
             <select
@@ -798,24 +781,26 @@ const PayrollPage = () => {
             >
               <RefreshCw size={15} /> Refresh
             </button>
-            {canProcess && payrollExists && payrollRun?.status !== "PAID" && !loading && (
-              <button
-                onClick={() => setShowDiscardModal(true)}
-                disabled={discarding}
-                className="app-btn-secondary border-red-200 text-red-600 hover:bg-red-50 min-h-9.5 h-9.5 py-1 px-3 flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
-                title="Discard this payroll run"
-              >
-                {discarding ? (
-                  <RefreshCw size={15} className="animate-spin" />
-                ) : (
-                  <Trash2 size={15} />
-                )}
-                Discard
-              </button>
-            )}
+            {canProcess &&
+              payrollExists &&
+              payrollRun?.status !== "PAID" &&
+              !loading && (
+                <button
+                  onClick={() => setShowDiscardModal(true)}
+                  disabled={discarding}
+                  className="app-btn-secondary border-red-200 text-red-600 hover:bg-red-50 min-h-9.5 h-9.5 py-1 px-3 flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
+                  title="Discard this payroll run"
+                >
+                  {discarding ? (
+                    <RefreshCw size={15} className="animate-spin" />
+                  ) : (
+                    <Trash2 size={15} />
+                  )}
+                  Discard
+                </button>
+              )}
           </div>
         </div>
-
 
         {(canConfig || canDownload) && (
           <div className="app-panel p-4">
@@ -826,7 +811,8 @@ const PayrollPage = () => {
                     onClick={() => setShowConfigModal(true)}
                     className="app-btn-secondary min-h-9.5 h-9.5 py-1 px-3 flex items-center gap-1.5"
                   >
-                    <Calculator size={16} className="text-(--text-soft)" /> Config
+                    <Calculator size={16} className="text-(--text-soft)" />{" "}
+                    Config
                   </button>
                 )}
               </div>
@@ -840,7 +826,8 @@ const PayrollPage = () => {
                       }}
                       className="app-btn-secondary min-h-9.5 h-9.5 py-1 px-3 flex items-center gap-1.5"
                     >
-                      <FileSpreadsheet size={16} className="text-(--brand)" /> Excel
+                      <FileSpreadsheet size={16} className="text-(--brand)" />{" "}
+                      Excel
                     </button>
                     <button
                       onClick={() => {
@@ -863,7 +850,8 @@ const PayrollPage = () => {
                       }}
                       className="app-btn-secondary min-h-9.5 h-9.5 py-1 px-3 flex items-center gap-1.5"
                     >
-                      <Banknote size={16} className="text-emerald-600" /> Transfer File
+                      <Banknote size={16} className="text-emerald-600" />{" "}
+                      Transfer File
                     </button>
                   </>
                 )}
@@ -871,7 +859,6 @@ const PayrollPage = () => {
             </div>
           </div>
         )}
-
 
         <div className="app-grid-5 gap-4">
           <div className="app-panel p-4">
@@ -902,7 +889,9 @@ const PayrollPage = () => {
             <p className="text-[26px] font-extrabold leading-none text-rose-700 mt-2.5">
               {formatINR(totals.totalDeductions)}
             </p>
-            <p className="text-[11px] text-(--text-faint) mt-2">EPF, ESI, Professional Tax, TDS</p>
+            <p className="text-[11px] text-(--text-faint) mt-2">
+              EPF, ESI, Professional Tax, TDS
+            </p>
           </div>
           <div className="app-panel p-4">
             <p className="app-label text-[11px] uppercase tracking-wider">
@@ -959,12 +948,13 @@ const PayrollPage = () => {
                 >
                   {s.label}
                 </p>
-                <p className="text-[11px] text-(--text-soft) font-medium mt-2">{s.sub}</p>
+                <p className="text-[11px] text-(--text-soft) font-medium mt-2">
+                  {s.sub}
+                </p>
               </div>
             );
           })()}
         </div>
-
 
         <div className="app-panel p-4 flex flex-col md:flex-row items-center gap-3">
           <div className="relative flex-1 max-w-sm">
@@ -995,30 +985,36 @@ const PayrollPage = () => {
             </button>
           )}
           <div className="ml-auto flex flex-wrap items-center gap-2">
-            {canProcess && !payrollExists && employees.length > 0 && !loading && (
-              <button
-                onClick={handleInitiatePayroll}
-                disabled={initiating}
-                className="app-btn-primary flex items-center gap-1.5 h-9.5 min-h-9.5 py-1 px-3 disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                <Play size={16} />
-                {initiating ? "Initiating..." : "Initiate Payroll"}
-              </button>
-            )}
-            {canProcess && payrollExists && payrollRun?.status === "DRAFT" && !loading && (
-              <button
-                onClick={() => setShowApproveModal(true)}
-                disabled={approving}
-                className="app-btn-primary flex items-center gap-1.5 h-9.5 min-h-9.5 py-1 px-3 disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {approving ? (
-                  <RefreshCw size={16} className="animate-spin" />
-                ) : (
-                  <CheckCircle size={16} />
-                )}
-                {approving ? "Approving..." : "Approve Payroll"}
-              </button>
-            )}
+            {canProcess &&
+              !payrollExists &&
+              employees.length > 0 &&
+              !loading && (
+                <button
+                  onClick={handleInitiatePayroll}
+                  disabled={initiating}
+                  className="app-btn-primary flex items-center gap-1.5 h-9.5 min-h-9.5 py-1 px-3 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <Play size={16} />
+                  {initiating ? "Initiating..." : "Initiate Payroll"}
+                </button>
+              )}
+            {canProcess &&
+              payrollExists &&
+              payrollRun?.status === "DRAFT" &&
+              !loading && (
+                <button
+                  onClick={() => setShowApproveModal(true)}
+                  disabled={approving}
+                  className="app-btn-primary flex items-center gap-1.5 h-9.5 min-h-9.5 py-1 px-3 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {approving ? (
+                    <RefreshCw size={16} className="animate-spin" />
+                  ) : (
+                    <CheckCircle size={16} />
+                  )}
+                  {approving ? "Approving..." : "Approve Payroll"}
+                </button>
+              )}
             {canProcess &&
               payrollExists &&
               payrollRun?.status === "APPROVED" &&
@@ -1051,55 +1047,57 @@ const PayrollPage = () => {
                   </button>
                 </>
               )}
-            {canProcess && payrollExists && payrollRun?.status === "APPROVED" && !loading && (
-              <>
-                <button
-                  onClick={() => setShowRevertModal(true)}
-                  disabled={revertingPayroll}
-                  className="app-btn-secondary border-amber-300 text-amber-700 hover:bg-amber-50 h-9.5 min-h-9.5 py-1 px-3 flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {revertingPayroll ? (
-                    <RefreshCw size={16} className="animate-spin" />
-                  ) : (
-                    <Edit size={16} />
-                  )}
-                  {revertingPayroll ? "Returning..." : "Return to Draft"}
-                </button>
-                <button
-                  onClick={() => setShowFinalizeModal(true)}
-                  disabled={
-                    finalizingPayroll ||
-                    payrollRecords.some(
-                      (r) =>
-                        (r.payroll.paymentStatus ||
-                          payrollStatuses[r.id] ||
-                          "pending") === "pending",
-                    )
-                  }
-                  title={
-                    payrollRecords.some(
-                      (r) =>
-                        (r.payroll.paymentStatus ||
-                          payrollStatuses[r.id] ||
-                          "pending") === "pending",
-                    )
-                      ? "All entries must be marked as paid or failed"
-                      : ""
-                  }
-                  className="app-btn-primary flex items-center gap-1.5 h-9.5 min-h-9.5 py-1 px-3 disabled:bg-slate-400 disabled:opacity-60 disabled:border-slate-300 disabled:cursor-not-allowed"
-                >
-                  {finalizingPayroll ? (
-                    <RefreshCw size={16} className="animate-spin" />
-                  ) : (
-                    <CheckCircle size={16} />
-                  )}
-                  {finalizingPayroll ? "Finalizing..." : "Finalize Payroll"}
-                </button>
-              </>
-            )}
+            {canProcess &&
+              payrollExists &&
+              payrollRun?.status === "APPROVED" &&
+              !loading && (
+                <>
+                  <button
+                    onClick={() => setShowRevertModal(true)}
+                    disabled={revertingPayroll}
+                    className="app-btn-secondary border-amber-300 text-amber-700 hover:bg-amber-50 h-9.5 min-h-9.5 py-1 px-3 flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {revertingPayroll ? (
+                      <RefreshCw size={16} className="animate-spin" />
+                    ) : (
+                      <Edit size={16} />
+                    )}
+                    {revertingPayroll ? "Returning..." : "Return to Draft"}
+                  </button>
+                  <button
+                    onClick={() => setShowFinalizeModal(true)}
+                    disabled={
+                      finalizingPayroll ||
+                      payrollRecords.some(
+                        (r) =>
+                          (r.payroll.paymentStatus ||
+                            payrollStatuses[r.id] ||
+                            "pending") === "pending",
+                      )
+                    }
+                    title={
+                      payrollRecords.some(
+                        (r) =>
+                          (r.payroll.paymentStatus ||
+                            payrollStatuses[r.id] ||
+                            "pending") === "pending",
+                      )
+                        ? "All entries must be marked as paid or failed"
+                        : ""
+                    }
+                    className="app-btn-primary flex items-center gap-1.5 h-9.5 min-h-9.5 py-1 px-3 disabled:bg-slate-400 disabled:opacity-60 disabled:border-slate-300 disabled:cursor-not-allowed"
+                  >
+                    {finalizingPayroll ? (
+                      <RefreshCw size={16} className="animate-spin" />
+                    ) : (
+                      <CheckCircle size={16} />
+                    )}
+                    {finalizingPayroll ? "Finalizing..." : "Finalize Payroll"}
+                  </button>
+                </>
+              )}
           </div>
         </div>
-
 
         {error && (
           <div className="bg-rose-50/50 border border-rose-200 text-rose-700 rounded-xl p-4 flex items-center gap-2">
@@ -1113,7 +1111,6 @@ const PayrollPage = () => {
             </button>
           </div>
         )}
-
 
         <div className="app-panel overflow-hidden">
           <div className="overflow-x-auto">
@@ -1212,14 +1209,19 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-
                         <td
                           className={`px-4 py-3 align-top ${isFailed ? "opacity-50" : ""}`}
                         >
                           <div className="text-xs space-y-0.5 font-medium text-(--text-body)">
                             <div className="flex items-center gap-1">
-                              <Calendar size={12} className="text-(--text-faint)" />
-                              Present: <span className="font-bold text-(--text-strong)">{payroll.uiPresentDays}</span>
+                              <Calendar
+                                size={12}
+                                className="text-(--text-faint)"
+                              />
+                              Present:{" "}
+                              <span className="font-bold text-(--text-strong)">
+                                {payroll.uiPresentDays}
+                              </span>
                             </div>
                             {payroll.halfDays > 0 && (
                               <div className="text-orange-600 font-semibold">
@@ -1265,30 +1267,21 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-
                         <td
                           className={`px-4 py-3 align-top text-right ${isFailed ? "opacity-50" : ""}`}
                         >
                           <div className="text-xs space-y-0.5 font-medium text-(--text-soft)">
                             {payroll.basic > 0 && (
-                              <div>
-                                Basic: {formatINR(payroll.basic)}
-                              </div>
+                              <div>Basic: {formatINR(payroll.basic)}</div>
                             )}
                             {payroll.hra > 0 && (
-                              <div>
-                                HRA: {formatINR(payroll.hra)}
-                              </div>
+                              <div>HRA: {formatINR(payroll.hra)}</div>
                             )}
                             {payroll.ta > 0 && (
-                              <div>
-                                TA: {formatINR(payroll.ta)}
-                              </div>
+                              <div>TA: {formatINR(payroll.ta)}</div>
                             )}
                             {payroll.da > 0 && (
-                              <div>
-                                DA: {formatINR(payroll.da)}
-                              </div>
+                              <div>DA: {formatINR(payroll.da)}</div>
                             )}
                             {payroll.specialAllowance > 0 && (
                               <div>
@@ -1301,9 +1294,7 @@ const PayrollPage = () => {
                               .map(
                                 (comp, idx) =>
                                   comp.amount > 0 && (
-                                    <div
-                                      key={`o-earn-${idx}`}
-                                    >
+                                    <div key={`o-earn-${idx}`}>
                                       {comp.name}: +{formatINR(comp.amount)}
                                     </div>
                                   ),
@@ -1319,13 +1310,10 @@ const PayrollPage = () => {
                                   Base Gross: {formatINR(payroll.baseGross)}
                                 </div>
 
-
                                 {payroll.extraEarnings?.map(
                                   (comp, idx) =>
                                     comp.amount > 0 && (
-                                      <div
-                                        key={`e-earn-${idx}`}
-                                      >
+                                      <div key={`e-earn-${idx}`}>
                                         {comp.name}: +{formatINR(comp.amount)}
                                       </div>
                                     ),
@@ -1347,41 +1335,29 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-
                         <td
                           className={`px-4 py-3 align-top text-right ${isFailed ? "opacity-50" : ""}`}
                         >
                           <div className="text-xs space-y-0.5 font-medium text-(--text-soft)">
                             {payroll.epf > 0 && (
-                              <div>
-                                EPF: {formatINR(payroll.epf)}
-                              </div>
+                              <div>EPF: {formatINR(payroll.epf)}</div>
                             )}
                             {payroll.esi > 0 && (
-                              <div>
-                                ESI: {formatINR(payroll.esi)}
-                              </div>
+                              <div>ESI: {formatINR(payroll.esi)}</div>
                             )}
                             {payroll.pt > 0 && (
-                              <div>
-                                PT: {formatINR(payroll.pt)}
-                              </div>
+                              <div>PT: {formatINR(payroll.pt)}</div>
                             )}
                             {payroll.lwf > 0 && (
-                              <div>
-                                LWF: {formatINR(payroll.lwf)}
-                              </div>
+                              <div>LWF: {formatINR(payroll.lwf)}</div>
                             )}
-
 
                             {payroll.otherComponents
                               ?.filter((c) => c.type === "deduction")
                               .map(
                                 (comp, idx) =>
                                   comp.amount > 0 && (
-                                    <div
-                                      key={`o-ded-${idx}`}
-                                    >
+                                    <div key={`o-ded-${idx}`}>
                                       {comp.name}: {formatINR(comp.amount)}
                                     </div>
                                   ),
@@ -1390,9 +1366,7 @@ const PayrollPage = () => {
                             {payroll.extraDeductions?.map(
                               (comp, idx) =>
                                 comp.amount > 0 && (
-                                  <div
-                                    key={`e-ded-${idx}`}
-                                  >
+                                  <div key={`e-ded-${idx}`}>
                                     {comp.name}: {formatINR(comp.amount)}
                                   </div>
                                 ),
@@ -1421,7 +1395,6 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-
                         <td
                           className={`px-4 py-3 align-top text-right ${isFailed ? "opacity-50" : ""}`}
                         >
@@ -1433,11 +1406,9 @@ const PayrollPage = () => {
                           </div>
                         </td>
 
-
                         <td className="px-4 py-3 align-top text-center">
                           <PayrollStatusBadge status={currentStatus} />
                         </td>
-
 
                         <td className="px-4 py-3 align-top text-right">
                           <div className="flex items-center justify-end gap-2 text-left">
@@ -1448,7 +1419,8 @@ const PayrollPage = () => {
                               <Eye size={14} /> View
                             </button>
 
-                            {canEdit && payrollExists &&
+                            {canEdit &&
+                              payrollExists &&
                               payrollRun?.status === "DRAFT" && (
                                 <button
                                   className="app-btn-secondary min-h-8 h-8 px-2.5 py-1 text-xs flex items-center gap-1"
@@ -1458,7 +1430,8 @@ const PayrollPage = () => {
                                 </button>
                               )}
 
-                            {canProcess && payrollExists &&
+                            {canProcess &&
+                              payrollExists &&
                               payrollRun?.status === "APPROVED" &&
                               payroll.paymentStatus === "pending" && (
                                 <>
@@ -1501,7 +1474,8 @@ const PayrollPage = () => {
                                 </>
                               )}
 
-                            {canProcess && payrollExists &&
+                            {canProcess &&
+                              payrollExists &&
                               payrollRun?.status === "APPROVED" &&
                               payroll.paymentStatus !== "pending" && (
                                 <button
@@ -1566,18 +1540,24 @@ const PayrollPage = () => {
             </table>
           </div>
 
-
           {filteredRecords.length > 0 && (
             <div className="px-4 py-3 bg-(--bg-panel) border-t border-(--border-soft) flex flex-col sm:flex-row items-center justify-between text-xs text-(--text-soft)">
               <div className="mb-2 sm:mb-0 font-medium">
-                Showing <span className="font-bold text-(--text-strong)">{startIndex + 1}</span> to{" "}
+                Showing{" "}
+                <span className="font-bold text-(--text-strong)">
+                  {startIndex + 1}
+                </span>{" "}
+                to{" "}
                 <span className="font-bold text-(--text-strong)">
                   {Math.min(
                     startIndex + entriesPerPage,
                     filteredRecords.length,
                   )}
                 </span>{" "}
-                of <span className="font-bold text-(--text-strong)">{filteredRecords.length}</span>
+                of{" "}
+                <span className="font-bold text-(--text-strong)">
+                  {filteredRecords.length}
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <button
@@ -1605,7 +1585,6 @@ const PayrollPage = () => {
             </div>
           )}
         </div>
-
 
         {selectedEmployee && (
           <EmployeeDetailsModal
@@ -1723,16 +1702,13 @@ const PayrollPage = () => {
             );
           })()}
 
-
         {showApproveModal && (
           <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="app-modal w-full max-w-md overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center gap-3 text-amber-600 mb-4">
                   <AlertCircle size={24} />
-                  <h3 className="modal-title">
-                    Approve Payroll
-                  </h3>
+                  <h3 className="modal-title">Approve Payroll</h3>
                 </div>
                 <p className="text-(--text-soft) text-sm mb-6">
                   Are you sure you want to approve the payroll for{" "}
@@ -1763,16 +1739,13 @@ const PayrollPage = () => {
           </div>
         )}
 
-
         {showFinalizeModal && (
           <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="app-modal w-full max-w-md overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center gap-3 text-rose-600 mb-4">
                   <AlertCircle size={24} />
-                  <h3 className="modal-title">
-                    Finalize Payroll
-                  </h3>
+                  <h3 className="modal-title">Finalize Payroll</h3>
                 </div>
                 <p className="text-(--text-soft) text-sm mb-6">
                   Are you sure you want to finalize this payroll?{" "}
@@ -1805,16 +1778,13 @@ const PayrollPage = () => {
           </div>
         )}
 
-
         {showRevertModal && (
           <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="app-modal w-full max-w-md overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center gap-3 text-amber-600 mb-4">
                   <AlertCircle size={24} />
-                  <h3 className="modal-title">
-                    Return Payroll To Draft
-                  </h3>
+                  <h3 className="modal-title">Return Payroll To Draft</h3>
                 </div>
                 <p className="text-(--text-soft) text-sm mb-6">
                   Are you sure you want to move this payroll back to draft?
@@ -1848,16 +1818,13 @@ const PayrollPage = () => {
           </div>
         )}
 
-
         {showDiscardModal && (
           <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="app-modal w-full max-w-md overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center gap-3 text-rose-600 mb-4">
                   <AlertCircle size={24} />
-                  <h3 className="modal-title">
-                    Discard Payroll
-                  </h3>
+                  <h3 className="modal-title">Discard Payroll</h3>
                 </div>
                 <p className="text-(--text-soft) text-sm mb-6">
                   Are you sure you want to discard this payroll run? All data

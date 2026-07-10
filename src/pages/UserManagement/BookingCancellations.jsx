@@ -6,7 +6,7 @@ import {
   Loader2,
   Percent,
   Search,
-  XCircle
+  XCircle,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -20,12 +20,10 @@ const BookingCancellations = () => {
   const token = user?.token;
   const companyId = user?.company_id || user?.tenant_id;
 
-
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState("pending_admin");
   const [searchQuery, setSearchQuery] = useState("");
-
 
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
@@ -93,7 +91,6 @@ const BookingCancellations = () => {
 
       if (res.data && res.data.success) {
         toast.success("Cancellation approved and booking terminated.");
-
 
         const responseData = res.data.data;
         if (responseData && responseData.project_id && responseData.unit_id) {
@@ -186,7 +183,6 @@ const BookingCancellations = () => {
     }
   };
 
-
   const syncUnitInventory = async (compositeProjectId, unitId) => {
     let projectType = "apartment";
     let projectId = compositeProjectId;
@@ -202,24 +198,19 @@ const BookingCancellations = () => {
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-
       const bookingRes = await axios.get(
         `${import.meta.env.VITE_CSAAP_URL}/api/tenant/type/${projectType}/${projectId}/booking-status`,
         { headers },
       );
 
-
       const isBooked = checkIfUnitBooked(bookingRes.data, unitId);
 
-
       if (isBooked) {
-
         await axios.put(
           `${import.meta.env.VITE_CSAAP_URL}/api/tenant/type/${projectType}/${projectId}/items/${unitId}/toggle-booking-status`,
           {},
           { headers },
         );
-
       }
     } catch (err) {
       console.error(
@@ -258,7 +249,6 @@ const BookingCancellations = () => {
     return false;
   };
 
-
   const calculatedDeduction = selectedRequest
     ? Math.round(
         Number(selectedRequest.verified_paid_amount) *
@@ -273,7 +263,6 @@ const BookingCancellations = () => {
       ) / 100
     : 0;
 
-
   const filteredRequests = requests.filter((r) => {
     const matchesStatus = r.overall_status === statusFilter;
     const matchesSearch =
@@ -282,7 +271,6 @@ const BookingCancellations = () => {
       r.project_id?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesStatus && matchesSearch;
   });
-
 
   const pendingCount = requests.filter(
     (r) => r.overall_status === "pending_admin",
@@ -300,7 +288,6 @@ const BookingCancellations = () => {
 
       <div className="app-shell p-4 space-y-6">
         <div className="max-w-7xl mx-auto space-y-6">
-
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h1 className="app-title">Booking Cancellation</h1>
@@ -310,7 +297,6 @@ const BookingCancellations = () => {
               </p>
             </div>
           </div>
-
 
           <div className="sticky top-0 z-20 -mx-4 px-4 py-3 border-b border-(--border-soft) flex justify-between items-center bg-slate-50/50 backdrop-blur-md">
             <div className="flex items-center gap-2 overflow-x-auto">
@@ -398,7 +384,6 @@ const BookingCancellations = () => {
             </div>
           </div>
 
-
           <div className="app-panel p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
             <div className="relative max-w-md w-full">
               <input
@@ -411,7 +396,6 @@ const BookingCancellations = () => {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-(--text-faint) size-4" />
             </div>
           </div>
-
 
           <div className="app-panel overflow-hidden shadow-sm">
             <div className="app-section-bar px-4 py-3 flex items-center justify-between">
@@ -546,13 +530,11 @@ const BookingCancellations = () => {
         </div>
       </div>
 
-
       {showApprovalModal &&
         selectedRequest &&
         createPortal(
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-md">
             <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
-
               <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
                 <div className="flex items-start gap-3 min-w-0">
                   <div className="size-11 rounded-2xl flex items-center justify-center bg-(--brand-soft) border border-(--border-soft) shrink-0">
@@ -574,9 +556,7 @@ const BookingCancellations = () => {
                 </button>
               </div>
 
-
               <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-[#f8faf8]/40">
-
                 <div className="app-panel-muted p-4 space-y-2.5 text-xs text-(--text-body)">
                   <div className="flex justify-between">
                     <span className="font-semibold text-(--text-soft)">
@@ -636,7 +616,6 @@ const BookingCancellations = () => {
                   )}
                 </div>
 
-
                 <div className="space-y-2.5">
                   <label className="modal-label block uppercase tracking-wider">
                     Admin Settlement Calculations
@@ -658,7 +637,6 @@ const BookingCancellations = () => {
                     />
                   </div>
 
-
                   <div className="grid grid-cols-2 gap-3.5 pt-1.5">
                     <div className="bg-rose-50/50 border border-rose-100 p-3.5 rounded-xl">
                       <p className="text-[10px] text-rose-500 font-bold uppercase tracking-wider">
@@ -679,7 +657,6 @@ const BookingCancellations = () => {
                   </div>
                 </div>
 
-
                 <div className="space-y-1.5">
                   <label className="modal-label block uppercase tracking-wider">
                     Admin Action Notes / Reason
@@ -692,7 +669,6 @@ const BookingCancellations = () => {
                   />
                 </div>
               </div>
-
 
               <div className="px-5 py-4 border-t border-(--border-soft) bg-white flex items-center justify-end gap-3">
                 <button

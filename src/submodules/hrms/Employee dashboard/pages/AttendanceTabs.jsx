@@ -57,7 +57,7 @@ const AttendanceTabs = ({ defaultTab = "attendance" }) => {
     },
   ];
 
-  const tabs = allTabs.filter(tab => hasAccess(tab.permission));
+  const tabs = allTabs.filter((tab) => hasAccess(tab.permission));
 
   const activeTabData = tabs.find((tab) => tab.id === activeTab);
 
@@ -73,7 +73,9 @@ const AttendanceTabs = ({ defaultTab = "attendance" }) => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative z-10 flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-bold transition-colors duration-300 ${
-                  isActive ? "text-white" : "text-slate-500 hover:text-slate-800"
+                  isActive
+                    ? "text-white"
+                    : "text-slate-500 hover:text-slate-800"
                 }`}
               >
                 {isActive && (
@@ -84,10 +86,14 @@ const AttendanceTabs = ({ defaultTab = "attendance" }) => {
                   />
                 )}
 
-                <span className={`relative z-20 text-lg ${!isActive ? tab.iconColor : ""}`}>
+                <span
+                  className={`relative z-20 text-lg ${!isActive ? tab.iconColor : ""}`}
+                >
                   {tab.icon}
                 </span>
-                <span className="relative z-20 whitespace-nowrap">{tab.label}</span>
+                <span className="relative z-20 whitespace-nowrap">
+                  {tab.label}
+                </span>
               </button>
             );
           })}

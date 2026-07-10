@@ -20,30 +20,34 @@ import {
 
 import { LEAD_SOURCES, normalizeUnits } from "./leadUtils";
 
-const inputClass =
-  "app-input w-full rounded-xl px-4 py-2.5 text-[14px]";
-
+const inputClass = "app-input w-full rounded-xl px-4 py-2.5 text-[14px]";
 
 const checkIfBooked = (responseData, targetItemId) => {
   if (!responseData) return false;
-  
+
   if (typeof responseData === "boolean") return responseData;
-  
-  const data = responseData.data !== undefined ? responseData.data : responseData;
+
+  const data =
+    responseData.data !== undefined ? responseData.data : responseData;
   if (!data) return false;
 
   if (Array.isArray(data)) {
-    return data.some(item => {
+    return data.some((item) => {
       if (item === null || item === undefined) return false;
       if (String(item) === String(targetItemId)) return true;
-      
-      const itemId = item.itemId ?? item.item_id ?? item.id ?? item.unitId ?? item.unit_id;
+
+      const itemId =
+        item.itemId ?? item.item_id ?? item.id ?? item.unitId ?? item.unit_id;
       if (itemId !== undefined && String(itemId) === String(targetItemId)) {
         const isBooked = item.isBooked ?? item.is_booked ?? item.booked;
         if (isBooked !== undefined) {
-          return typeof isBooked === "boolean" ? isBooked : String(isBooked).toLowerCase() === "booked";
+          return typeof isBooked === "boolean"
+            ? isBooked
+            : String(isBooked).toLowerCase() === "booked";
         }
-        const status = String(item.booking_status ?? item.status ?? "").toLowerCase();
+        const status = String(
+          item.booking_status ?? item.status ?? "",
+        ).toLowerCase();
         return status === "booked" || status === "sold";
       }
       return false;
@@ -58,12 +62,19 @@ const checkIfBooked = (responseData, targetItemId) => {
     if (data[targetItemId] !== undefined) {
       const val = data[targetItemId];
       if (typeof val === "boolean") return val;
-      if (typeof val === "string") return val.toLowerCase() === "booked" || val.toLowerCase() === "sold";
+      if (typeof val === "string")
+        return val.toLowerCase() === "booked" || val.toLowerCase() === "sold";
       if (typeof val === "object" && val !== null) {
-        return !!(val.isBooked ?? val.is_booked ?? val.booked ?? (String(val.booking_status ?? val.status ?? "").toLowerCase() === "booked"));
+        return !!(
+          val.isBooked ??
+          val.is_booked ??
+          val.booked ??
+          String(val.booking_status ?? val.status ?? "").toLowerCase() ===
+            "booked"
+        );
       }
     }
-    
+
     for (const key of Object.keys(data)) {
       if (Array.isArray(data[key])) {
         const found = checkIfBooked(data[key], targetItemId);
@@ -75,19 +86,30 @@ const checkIfBooked = (responseData, targetItemId) => {
   return false;
 };
 
-
 const getUnitStatusChip = (status, isBooked) => {
   if (isBooked) {
-    return { label: "Booked", style: "text-amber-700 bg-amber-50 border-amber-200" };
+    return {
+      label: "Booked",
+      style: "text-amber-700 bg-amber-50 border-amber-200",
+    };
   }
   const s = (status || "Pending").toLowerCase().trim();
   if (s === "ready to move" || s === "completed") {
-    return { label: s === "completed" ? "Completed" : "Ready to Move", style: "text-emerald-700 bg-emerald-50 border-emerald-200" };
+    return {
+      label: s === "completed" ? "Completed" : "Ready to Move",
+      style: "text-emerald-700 bg-emerald-50 border-emerald-200",
+    };
   }
   if (s === "in progress") {
-    return { label: "In Progress", style: "text-sky-700 bg-sky-50 border-sky-200" };
+    return {
+      label: "In Progress",
+      style: "text-sky-700 bg-sky-50 border-sky-200",
+    };
   }
-  return { label: "Pending", style: "text-slate-500 bg-slate-50 border-slate-200" };
+  return {
+    label: "Pending",
+    style: "text-slate-500 bg-slate-50 border-slate-200",
+  };
 };
 
 const LeadFormModal = ({
@@ -105,14 +127,12 @@ const LeadFormModal = ({
   const [projectDropdownStyle, setProjectDropdownStyle] = useState(null);
   const { token, companyId } = useAuth();
 
-
   const [brokerSearch, setBrokerSearch] = useState("");
   const [showBrokerDropdown, setShowBrokerDropdown] = useState(false);
   const brokerDropdownRef = useRef(null);
   const brokerAnchorRef = useRef(null);
   const brokerPortalDropdownRef = useRef(null);
   const [brokerDropdownStyle, setBrokerDropdownStyle] = useState(null);
-
 
   const [unitSearch, setUnitSearch] = useState("");
   const [showUnitDropdown, setShowUnitDropdown] = useState(false);
@@ -124,19 +144,24 @@ const LeadFormModal = ({
   const { data: projectOptions = [], isLoading: isLoadingProjects } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
-      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`, {
-        params: { company_id: companyId },
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
+        {
+          params: { company_id: companyId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const projects = response.data?.data || [];
       return projects.map((p) => ({
         project_id: p.id,
         composite_key: p.id,
         name: p.project_name,
         display_type: p.project_code || p.status || "",
-        location: p.client_company_name ? `Client: ${p.client_company_name}` : "",
+        location: p.client_company_name
+          ? `Client: ${p.client_company_name}`
+          : "",
       }));
     },
     enabled: !!token && !!companyId,
@@ -145,11 +170,14 @@ const LeadFormModal = ({
   const { data: brokerOptions = [], isLoading: isLoadingBrokers } = useQuery({
     queryKey: ["broker-options", token],
     queryFn: async () => {
-      const response = await axios.get("https://csaapnodeapi.csaap.com/api/tenant/broker", {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        "https://csaapnodeapi.csaap.com/api/tenant/broker",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       return response.data.data || [];
     },
     enabled: !!token,
@@ -157,34 +185,40 @@ const LeadFormModal = ({
 
   const selectedProject = useMemo(
     () =>
-      projectOptions.find((project) => project.project_id === leadForm.project_id) ||
-      null,
+      projectOptions.find(
+        (project) => project.project_id === leadForm.project_id,
+      ) || null,
     [projectOptions, leadForm.project_id],
   );
 
-  const { data: projectDetails, isLoading: isLoadingProjectDetails } = useQuery({
-    queryKey: ["project-details", leadForm.project_id, token],
-    queryFn: async () => {
-      if (!leadForm.project_id || !token) return [];
-      let projectType = "apartment";
-      let projectId = leadForm.project_id;
-      if (typeof leadForm.project_id === "string" && leadForm.project_id.includes(":")) {
-        const parts = leadForm.project_id.split(":");
-        projectType = parts[0];
-        projectId = parts[1];
-      }
-      const response = await axios.get(
-        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/type/${projectType}/${projectId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+  const { data: projectDetails, isLoading: isLoadingProjectDetails } = useQuery(
+    {
+      queryKey: ["project-details", leadForm.project_id, token],
+      queryFn: async () => {
+        if (!leadForm.project_id || !token) return [];
+        let projectType = "apartment";
+        let projectId = leadForm.project_id;
+        if (
+          typeof leadForm.project_id === "string" &&
+          leadForm.project_id.includes(":")
+        ) {
+          const parts = leadForm.project_id.split(":");
+          projectType = parts[0];
+          projectId = parts[1];
         }
-      );
-      return response.data?.data || [];
+        const response = await axios.get(
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/type/${projectType}/${projectId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        return response.data?.data || [];
+      },
+      enabled: !!leadForm.project_id && !!token,
     },
-    enabled: !!leadForm.project_id && !!token,
-  });
+  );
 
   const { data: bookingStatuses = [] } = useQuery({
     queryKey: ["project-booking-status", leadForm.project_id, token],
@@ -192,7 +226,10 @@ const LeadFormModal = ({
       if (!leadForm.project_id || !token) return [];
       let projectType = "apartment";
       let projectId = leadForm.project_id;
-      if (typeof leadForm.project_id === "string" && leadForm.project_id.includes(":")) {
+      if (
+        typeof leadForm.project_id === "string" &&
+        leadForm.project_id.includes(":")
+      ) {
         const parts = leadForm.project_id.split(":");
         projectType = parts[0];
         projectId = parts[1];
@@ -204,7 +241,7 @@ const LeadFormModal = ({
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         return response.data?.data || [];
       } catch (err) {
@@ -217,7 +254,10 @@ const LeadFormModal = ({
 
   const availableUnits = useMemo(() => {
     if (!projectDetails || !selectedProject) return [];
-    const normalized = normalizeUnits(projectDetails, selectedProject.property_type);
+    const normalized = normalizeUnits(
+      projectDetails,
+      selectedProject.property_type,
+    );
     return normalized.map((unit) => ({
       ...unit,
       isBooked: checkIfBooked(bookingStatuses, unit.unit_id),
@@ -227,40 +267,38 @@ const LeadFormModal = ({
   const filteredUnits = useMemo(() => {
     const term = unitSearch.trim().toLowerCase();
 
-
-    const selectedDisplay = leadForm.unit_name ? leadForm.unit_name.trim().toLowerCase() : "";
+    const selectedDisplay = leadForm.unit_name
+      ? leadForm.unit_name.trim().toLowerCase()
+      : "";
 
     if (!term || term === selectedDisplay) return availableUnits;
 
     return availableUnits.filter((unit) =>
-      String(unit.unit_name).toLowerCase().includes(term)
+      String(unit.unit_name).toLowerCase().includes(term),
     );
   }, [availableUnits, unitSearch, leadForm.unit_name]);
 
   const selectedBroker = useMemo(
     () =>
-      brokerOptions.find((broker) => String(broker.id) === String(leadForm.broker_id)) ||
-      null,
+      brokerOptions.find(
+        (broker) => String(broker.id) === String(leadForm.broker_id),
+      ) || null,
     [brokerOptions, leadForm.broker_id],
   );
 
   const filteredProjects = useMemo(() => {
     const term = projectSearch.trim().toLowerCase();
 
-
     const selectedDisplay = selectedProject
-      ? `${selectedProject.name}${selectedProject.location ? ` - ${selectedProject.location}` : ""}`.trim().toLowerCase()
+      ? `${selectedProject.name}${selectedProject.location ? ` - ${selectedProject.location}` : ""}`
+          .trim()
+          .toLowerCase()
       : "";
 
     if (!term || term === selectedDisplay) return projectOptions;
 
     return projectOptions.filter((project) =>
-      [
-        project.name,
-        project.location,
-        project.display_type,
-        project.project_id,
-      ]
+      [project.name, project.location, project.display_type, project.project_id]
         .filter(Boolean)
         .some((value) => value.toLowerCase().includes(term)),
     );
@@ -269,7 +307,6 @@ const LeadFormModal = ({
   const filteredBrokers = useMemo(() => {
     const term = brokerSearch.trim().toLowerCase();
 
-
     const selectedDisplay = selectedBroker
       ? selectedBroker.name.trim().toLowerCase()
       : "";
@@ -277,11 +314,7 @@ const LeadFormModal = ({
     if (!term || term === selectedDisplay) return brokerOptions;
 
     return brokerOptions.filter((broker) =>
-      [
-        broker.name,
-        broker.email,
-        broker.phone,
-      ]
+      [broker.name, broker.email, broker.phone]
         .filter(Boolean)
         .some((value) => value.toLowerCase().includes(term)),
     );
@@ -451,7 +484,12 @@ const LeadFormModal = ({
   }, [showUnitDropdown]);
 
   const handleProjectSelect = (project) => {
-    setLeadForm({ ...leadForm, project_id: project.project_id, unit_id: "", unit_name: "" });
+    setLeadForm({
+      ...leadForm,
+      project_id: project.project_id,
+      unit_id: "",
+      unit_name: "",
+    });
     setProjectSearch(
       `${project.name}${project.location ? ` - ${project.location}` : ""}`,
     );
@@ -526,9 +564,7 @@ const LeadFormModal = ({
           <div className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="modal-label mb-1.5 block">
-                  Name *
-                </label>
+                <label className="modal-label mb-1.5 block">Name *</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-(--text-faint)" />
                   <input
@@ -545,9 +581,7 @@ const LeadFormModal = ({
               </div>
 
               <div>
-                <label className="modal-label mb-1.5 block">
-                  Phone *
-                </label>
+                <label className="modal-label mb-1.5 block">Phone *</label>
                 <div className="relative">
                   <Phone className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-(--text-faint)" />
                   <input
@@ -565,9 +599,7 @@ const LeadFormModal = ({
             </div>
 
             <div>
-              <label className="modal-label mb-1.5 block">
-                Email
-              </label>
+              <label className="modal-label mb-1.5 block">Email</label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-(--text-faint)" />
                 <input
@@ -584,9 +616,7 @@ const LeadFormModal = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="modal-label mb-1.5 block">
-                  Location
-                </label>
+                <label className="modal-label mb-1.5 block">Location</label>
                 <div className="relative">
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-(--text-faint)" />
                   <input
@@ -602,9 +632,7 @@ const LeadFormModal = ({
               </div>
 
               <div>
-                <label className="modal-label mb-1.5 block">
-                  Source
-                </label>
+                <label className="modal-label mb-1.5 block">Source</label>
                 <div className="relative">
                   <Info className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-(--text-faint) pointer-events-none" />
                   <select
@@ -643,20 +671,28 @@ const LeadFormModal = ({
             {leadForm.source === "BROKER" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="modal-label mb-1.5 block">
-                    Broker *
-                  </label>
+                  <label className="modal-label mb-1.5 block">Broker *</label>
                   <div className="relative" ref={brokerDropdownRef}>
                     <div className="relative" ref={brokerAnchorRef}>
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-(--text-faint)" />
                       <input
                         type="text"
-                        value={showBrokerDropdown ? brokerSearch : (selectedBroker ? selectedBroker.name : "")}
+                        value={
+                          showBrokerDropdown
+                            ? brokerSearch
+                            : selectedBroker
+                              ? selectedBroker.name
+                              : ""
+                        }
                         onChange={(event) => {
                           setBrokerSearch(event.target.value);
                           setShowBrokerDropdown(true);
                           if (leadForm.broker_id) {
-                            setLeadForm({ ...leadForm, broker_id: "", commission: "" });
+                            setLeadForm({
+                              ...leadForm,
+                              broker_id: "",
+                              commission: "",
+                            });
                           }
                         }}
                         onFocus={handleBrokerInputFocus}
@@ -667,7 +703,13 @@ const LeadFormModal = ({
                       {isLoadingBrokers ? (
                         <Loader2 className="absolute right-12 top-1/2 -translate-y-1/2 size-4 text-(--text-faint) animate-spin" />
                       ) : null}
-                      {(showBrokerDropdown ? brokerSearch : (selectedBroker ? selectedBroker.name : "")) ? (
+                      {(
+                        showBrokerDropdown
+                          ? brokerSearch
+                          : selectedBroker
+                            ? selectedBroker.name
+                            : ""
+                      ) ? (
                         <button
                           type="button"
                           onClick={clearBrokerSelection}
@@ -708,10 +750,13 @@ const LeadFormModal = ({
                                       )}
                                     </div>
                                     <div className="text-[11px] text-(--text-faint) truncate mt-0.5">
-                                      {broker.phone || broker.email || "No contact info"}
+                                      {broker.phone ||
+                                        broker.email ||
+                                        "No contact info"}
                                     </div>
                                   </div>
-                                  {String(leadForm.broker_id) === String(broker.id) ? (
+                                  {String(leadForm.broker_id) ===
+                                  String(broker.id) ? (
                                     <Check className="size-4 text-(--brand) shrink-0 mt-0.5" />
                                   ) : null}
                                 </button>
@@ -738,7 +783,10 @@ const LeadFormModal = ({
                       step="0.01"
                       value={leadForm.commission}
                       onChange={(event) =>
-                        setLeadForm({ ...leadForm, commission: event.target.value })
+                        setLeadForm({
+                          ...leadForm,
+                          commission: event.target.value,
+                        })
                       }
                       className={inputClass}
                       placeholder="Commission percentage (e.g. 2.50)"
@@ -749,20 +797,25 @@ const LeadFormModal = ({
             )}
 
             <div>
-              <label className="modal-label mb-1.5 block">
-                Project
-              </label>
+              <label className="modal-label mb-1.5 block">Project</label>
               <div className="relative" ref={projectDropdownRef}>
                 <div className="relative" ref={projectAnchorRef}>
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-(--text-faint)" />
                   <input
                     type="text"
-                    value={showProjectDropdown ? projectSearch : projectDisplayValue}
+                    value={
+                      showProjectDropdown ? projectSearch : projectDisplayValue
+                    }
                     onChange={(event) => {
                       setProjectSearch(event.target.value);
                       setShowProjectDropdown(true);
                       if (leadForm.project_id) {
-                        setLeadForm({ ...leadForm, project_id: "", unit_id: "", unit_name: "" });
+                        setLeadForm({
+                          ...leadForm,
+                          project_id: "",
+                          unit_id: "",
+                          unit_name: "",
+                        });
                         setUnitSearch("");
                       }
                     }}
@@ -773,7 +826,9 @@ const LeadFormModal = ({
                   {isLoadingProjects ? (
                     <Loader2 className="absolute right-12 top-1/2 -translate-y-1/2 size-4 text-(--text-faint) animate-spin" />
                   ) : null}
-                  {(showProjectDropdown ? projectSearch : projectDisplayValue) ? (
+                  {(
+                    showProjectDropdown ? projectSearch : projectDisplayValue
+                  ) ? (
                     <button
                       type="button"
                       onClick={clearProjectSelection}
@@ -785,92 +840,108 @@ const LeadFormModal = ({
                   ) : (
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-(--text-faint) pointer-events-none" />
                   )}
-
                 </div>
 
                 {showProjectDropdown && projectDropdownStyle
                   ? createPortal(
-                  <div
-                    ref={projectPortalDropdownRef}
-                    style={projectDropdownStyle}
-                    className="app-floating bg-white rounded-2xl max-h-64 overflow-y-auto custom-scrollbar py-1 shadow-lg border border-(--border-soft)"
-                  >
-                    {filteredProjects.length > 0 ? (
-                      filteredProjects.map((project) => (
-                        <button
-                          key={project.composite_key}
-                          type="button"
-                          onClick={() => handleProjectSelect(project)}
-                          className="w-full px-4 py-2.5 flex items-start gap-3 hover:bg-(--bg-subtle) transition-colors text-left"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <div className="text-[13px] font-medium text-(--text-strong) truncate">
-                                {project.name}
+                      <div
+                        ref={projectPortalDropdownRef}
+                        style={projectDropdownStyle}
+                        className="app-floating bg-white rounded-2xl max-h-64 overflow-y-auto custom-scrollbar py-1 shadow-lg border border-(--border-soft)"
+                      >
+                        {filteredProjects.length > 0 ? (
+                          filteredProjects.map((project) => (
+                            <button
+                              key={project.composite_key}
+                              type="button"
+                              onClick={() => handleProjectSelect(project)}
+                              className="w-full px-4 py-2.5 flex items-start gap-3 hover:bg-(--bg-subtle) transition-colors text-left"
+                            >
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <div className="text-[13px] font-medium text-(--text-strong) truncate">
+                                    {project.name}
+                                  </div>
+                                  <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide text-(--text-soft) bg-(--bg-subtle) px-2 py-0.5 rounded-lg">
+                                    {project.display_type}
+                                  </span>
+                                </div>
+                                <div className="text-[11px] text-(--text-faint) truncate mt-0.5">
+                                  {project.location || "Location unavailable"}
+                                </div>
                               </div>
-                              <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide text-(--text-soft) bg-(--bg-subtle) px-2 py-0.5 rounded-lg">
-                                {project.display_type}
-                              </span>
-                            </div>
-                            <div className="text-[11px] text-(--text-faint) truncate mt-0.5">
-                              {project.location || "Location unavailable"}
-                            </div>
+                              {leadForm.project_id === project.project_id ? (
+                                <Check className="size-4 text-(--brand) shrink-0 mt-0.5" />
+                              ) : null}
+                            </button>
+                          ))
+                        ) : (
+                          <div className="px-4 py-6 text-center text-[12px] text-(--text-faint)">
+                            No projects found
                           </div>
-                          {leadForm.project_id === project.project_id ? (
-                            <Check className="size-4 text-(--brand) shrink-0 mt-0.5" />
-                          ) : null}
-                        </button>
-                      ))
-                    ) : (
-                      <div className="px-4 py-6 text-center text-[12px] text-(--text-faint)">
-                        No projects found
-                      </div>
-                    )}
-                  </div>,
-                  document.body,
-                )
+                        )}
+                      </div>,
+                      document.body,
+                    )
                   : null}
               </div>
             </div>
 
             {leadForm.project_id && (
               <div>
-                <label className="modal-label mb-1.5 block">
-                  Select Unit
-                </label>
+                <label className="modal-label mb-1.5 block">Select Unit</label>
                 <div className="relative" ref={unitDropdownRef}>
                   <div className="relative" ref={unitAnchorRef}>
                     <Building className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-(--text-faint)" />
                     <input
                       type="text"
-                      value={showUnitDropdown ? unitSearch : (leadForm.unit_name || "")}
+                      value={
+                        showUnitDropdown ? unitSearch : leadForm.unit_name || ""
+                      }
                       onChange={(event) => {
                         setUnitSearch(event.target.value);
                         setShowUnitDropdown(true);
                         if (leadForm.unit_id) {
-                          setLeadForm({ ...leadForm, unit_id: "", unit_name: "" });
+                          setLeadForm({
+                            ...leadForm,
+                            unit_id: "",
+                            unit_name: "",
+                          });
                         }
                       }}
                       onFocus={handleUnitInputFocus}
                       className={`${inputClass} pl-10 pr-28`}
-                      placeholder={isLoadingProjectDetails ? "Loading units..." : "Search by unit name"}
+                      placeholder={
+                        isLoadingProjectDetails
+                          ? "Loading units..."
+                          : "Search by unit name"
+                      }
                       disabled={isLoadingProjectDetails}
                     />
                     {isLoadingProjectDetails ? (
                       <Loader2 className="absolute right-12 top-1/2 -translate-y-1/2 size-4 text-(--text-faint) animate-spin" />
                     ) : null}
-                    {leadForm.unit_id && !showUnitDropdown && (() => {
-                      const matched = availableUnits.find(u => u.unit_id === leadForm.unit_id);
-                      if (!matched) return null;
-                      const chipData = getUnitStatusChip(matched.possession_status, matched.isBooked);
-                      return (
-                        <div className="absolute right-10 top-1/2 -translate-y-1/2 pointer-events-none">
-                          <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border whitespace-nowrap ${chipData.style}`}>
-                            {chipData.label}
-                          </span>
-                        </div>
-                      );
-                    })()}
+                    {leadForm.unit_id &&
+                      !showUnitDropdown &&
+                      (() => {
+                        const matched = availableUnits.find(
+                          (u) => u.unit_id === leadForm.unit_id,
+                        );
+                        if (!matched) return null;
+                        const chipData = getUnitStatusChip(
+                          matched.possession_status,
+                          matched.isBooked,
+                        );
+                        return (
+                          <div className="absolute right-10 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <span
+                              className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border whitespace-nowrap ${chipData.style}`}
+                            >
+                              {chipData.label}
+                            </span>
+                          </div>
+                        );
+                      })()}
                     {(showUnitDropdown ? unitSearch : leadForm.unit_name) ? (
                       <button
                         type="button"
@@ -884,7 +955,7 @@ const LeadFormModal = ({
                       <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-(--text-faint) pointer-events-none" />
                     )}
                   </div>
- 
+
                   {showUnitDropdown && unitDropdownStyle
                     ? createPortal(
                         <div
@@ -894,8 +965,12 @@ const LeadFormModal = ({
                         >
                           {filteredUnits.length > 0 ? (
                             filteredUnits.map((unit) => {
-                              const chipData = getUnitStatusChip(unit.possession_status, unit.isBooked);
-                              const isSelected = leadForm.unit_id === unit.unit_id;
+                              const chipData = getUnitStatusChip(
+                                unit.possession_status,
+                                unit.isBooked,
+                              );
+                              const isSelected =
+                                leadForm.unit_id === unit.unit_id;
                               return (
                                 <button
                                   key={unit.unit_id}
@@ -908,7 +983,9 @@ const LeadFormModal = ({
                                     {unit.unit_name}
                                   </span>
                                   <div className="flex items-center gap-2 shrink-0">
-                                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border whitespace-nowrap ${chipData.style}`}>
+                                    <span
+                                      className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border whitespace-nowrap ${chipData.style}`}
+                                    >
                                       {chipData.label}
                                     </span>
                                     {isSelected ? (

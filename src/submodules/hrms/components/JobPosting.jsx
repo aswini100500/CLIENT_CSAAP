@@ -113,12 +113,20 @@ const JobPosting = () => {
     e.preventDefault();
     if (isEditing) {
       if (!has("hrms.job.posting.edit")) {
-        swal("Access Denied", "You do not have permission to edit job postings.", "error");
+        swal(
+          "Access Denied",
+          "You do not have permission to edit job postings.",
+          "error",
+        );
         return;
       }
     } else {
       if (!has("hrms.job.posting.create")) {
-        swal("Access Denied", "You do not have permission to create job postings.", "error");
+        swal(
+          "Access Denied",
+          "You do not have permission to create job postings.",
+          "error",
+        );
         return;
       }
     }
@@ -141,7 +149,11 @@ const JobPosting = () => {
 
   const handleEdit = (job) => {
     if (!has("hrms.job.posting.edit")) {
-      swal("Access Denied", "You do not have permission to edit job postings.", "error");
+      swal(
+        "Access Denied",
+        "You do not have permission to edit job postings.",
+        "error",
+      );
       return;
     }
     setFormData({ ...job });
@@ -153,7 +165,11 @@ const JobPosting = () => {
 
   const handleDelete = async (id) => {
     if (!has("hrms.job.posting.edit")) {
-      swal("Access Denied", "You do not have permission to delete job postings.", "error");
+      swal(
+        "Access Denied",
+        "You do not have permission to delete job postings.",
+        "error",
+      );
       return;
     }
     swal({
@@ -195,7 +211,6 @@ const JobPosting = () => {
 
   return (
     <div className="font-sans">
-
       <div className="flex justify-between items-center p-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Job Postings</h1>
@@ -217,7 +232,6 @@ const JobPosting = () => {
           </button>
         )}
       </div>
-
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
@@ -347,7 +361,6 @@ const JobPosting = () => {
           </table>
         </div>
 
-
         {jobs.length > itemsPerPage && (
           <div className="px-5 py-3 border-t border-gray-100 flex items-center justify-between">
             <p className="text-xs text-gray-400">
@@ -385,11 +398,9 @@ const JobPosting = () => {
         )}
       </div>
 
-
       {viewJob && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden">
-
             <div className="px-6 py-5 border-b border-gray-100 flex items-start justify-between">
               <div>
                 <h2 className="text-lg font-bold text-gray-900">
@@ -419,9 +430,7 @@ const JobPosting = () => {
               </button>
             </div>
 
-
             <div className="overflow-y-auto flex-1 px-6 py-5 space-y-6">
-
               <div className="grid grid-cols-3 gap-3">
                 {[
                   { label: "Vacancies", value: viewJob.noOfVacancies },
@@ -440,7 +449,6 @@ const JobPosting = () => {
                 ))}
               </div>
 
-
               <div>
                 <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                   Important Dates
@@ -453,7 +461,6 @@ const JobPosting = () => {
                   <Field label="Closing Date" value={viewJob.closingDate} />
                 </div>
               </div>
-
 
               <div>
                 <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
@@ -472,7 +479,6 @@ const JobPosting = () => {
                 </div>
               </div>
 
-
               {viewJob.jobDescription && (
                 <div>
                   <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
@@ -483,7 +489,6 @@ const JobPosting = () => {
                   </p>
                 </div>
               )}
-
 
               {viewJob.jobResponsibility && (
                 <div>
@@ -496,7 +501,6 @@ const JobPosting = () => {
                 </div>
               )}
 
-
               {viewJob.preferedSkills && (
                 <div>
                   <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
@@ -507,7 +511,6 @@ const JobPosting = () => {
                   </p>
                 </div>
               )}
-
 
               <div>
                 <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
@@ -522,10 +525,7 @@ const JobPosting = () => {
                   )}
                   {viewJob.contactPhone && (
                     <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <Phone
-                        size={14}
-                        className="text-gray-400 shrink-0"
-                      />
+                      <Phone size={14} className="text-gray-400 shrink-0" />
                       {viewJob.contactPhone}
                     </div>
                   )}
@@ -541,7 +541,6 @@ const JobPosting = () => {
                 </div>
               </div>
             </div>
-
 
             <div className="px-6 py-4 border-t border-gray-100 flex justify-end gap-2">
               <button
@@ -563,7 +562,6 @@ const JobPosting = () => {
         </div>
       )}
 
-
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
@@ -583,7 +581,6 @@ const JobPosting = () => {
               onSubmit={handleSubmit}
               className="overflow-y-auto flex-1 px-6 py-5"
             >
-
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Basic Information
               </p>
@@ -659,7 +656,6 @@ const JobPosting = () => {
                   </select>
                 </div>
               </div>
-
 
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Job Details
@@ -750,7 +746,6 @@ const JobPosting = () => {
                 </div>
               </div>
 
-
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Application Dates
               </p>
@@ -778,7 +773,6 @@ const JobPosting = () => {
                   />
                 </div>
               </div>
-
 
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Job Content
@@ -818,7 +812,6 @@ const JobPosting = () => {
                   />
                 </div>
               </div>
-
 
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
                 Contact Information

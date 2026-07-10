@@ -93,9 +93,7 @@ const DailyAttendanceModal = ({
               <CalendarDays className="h-5 w-5" />
             </div>
             <div className="min-w-0">
-              <h2 className="modal-title">
-                Daily Attendance Record
-              </h2>
+              <h2 className="modal-title">Daily Attendance Record</h2>
               <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
                 <span className="truncate text-slate-900 normal-case tracking-normal">
                   {selectedAttendanceEmployee?.employee_name || "Employee"}

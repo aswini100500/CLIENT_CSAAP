@@ -1,252 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useEffect, useState, useRef } from "react";
 import { Calendar, Plus, Search, Trash2, UserPlus } from "lucide-react";
 
@@ -257,8 +8,13 @@ import BulkImportButton from "./BulkImportButton";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
-
-const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew, disabled = false, }) => {
+const SearchableLedgerSelect = ({
+  ledgers,
+  value,
+  onSelect,
+  onCreateNew,
+  disabled = false,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -272,7 +28,7 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew, disable
   }, [selectedLedger]);
 
   const filtered = ledgers.filter((l) =>
-    l.name.toLowerCase().includes(searchTerm.toLowerCase())
+    l.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   useEffect(() => {
@@ -324,7 +80,9 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew, disable
               </div>
             ))
           ) : (
-            <div className="px-3 py-2 text-sm text-slate-500 italic">No matches found</div>
+            <div className="px-3 py-2 text-sm text-slate-500 italic">
+              No matches found
+            </div>
           )}
 
           <div
@@ -364,35 +122,49 @@ const ReceiveVouchers = () => {
   const [narration, setNarration] = useState("");
 
   const [entries, setEntries] = useState([
-    { ledgerId: "", amount: "", openingBalance: 0, closingBalance: 0, remainingBalance: 0, balanceType: "Credit" }
+    {
+      ledgerId: "",
+      amount: "",
+      openingBalance: 0,
+      closingBalance: 0,
+      remainingBalance: 0,
+      balanceType: "Credit",
+    },
   ]);
 
   useEffect(() => {
     const loadLedgers = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
         );
         const allLedgers = res.data || [];
         setLedgers(allLedgers);
 
         try {
-          const bankRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`);
+          const bankRes = await axios.get(
+            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`,
+          );
           const banks = bankRes.data.accounts || [];
           const contraOptions = banks.map((b) => ({
             id: `bank_${b.id}`,
-            name: b.bankName ? `${b.accountName} (${b.bankName})` : b.accountName,
+            name: b.bankName
+              ? `${b.accountName} (${b.bankName})`
+              : b.accountName,
           }));
 
           const cashLedger = allLedgers.find(
             (l) =>
               l.name?.toLowerCase().includes("cash") ||
               l.underGroup === "Cash-in-Hand" ||
-              l.under === "Cash-in-Hand"
+              l.under === "Cash-in-Hand",
           );
 
           if (cashLedger) {
-            contraOptions.push({ id: `ledger_${cashLedger.id}`, name: cashLedger.name });
+            contraOptions.push({
+              id: `ledger_${cashLedger.id}`,
+              name: cashLedger.name,
+            });
           } else {
             contraOptions.push({ id: "cash", name: "Cash" });
           }
@@ -401,13 +173,18 @@ const ReceiveVouchers = () => {
         } catch (err) {
           console.error("Error fetching banks:", err);
           setReceiptLedgers(
-            allLedgers.filter(l => l.groupName === "Bank Accounts" || l.groupName === "Cash-in-Hand")
+            allLedgers.filter(
+              (l) =>
+                l.groupName === "Bank Accounts" ||
+                l.groupName === "Cash-in-Hand",
+            ),
           );
         }
 
-        const groupRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`);
+        const groupRes = await axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`,
+        );
         setGroups(groupRes.data || []);
-
 
         const savedState = sessionStorage.getItem("receiptVoucherState");
         if (savedState) {
@@ -425,7 +202,7 @@ const ReceiveVouchers = () => {
             text: "Your voucher progress has been restored.",
             icon: "info",
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
         }
       } catch (error) {
@@ -437,25 +214,31 @@ const ReceiveVouchers = () => {
       if (!id) return;
       try {
         setIsEditMode(true);
-        const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/${id}`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/${id}`,
+        );
         const vData = res.data;
         if (vData) {
           setVoucherNo(vData.voucherId || "");
-          setDate(vData.date ? new Date(vData.date).toISOString().split('T')[0] : "");
+          setDate(
+            vData.date ? new Date(vData.date).toISOString().split("T")[0] : "",
+          );
           setReceiptAccountId(vData.receiptAccountId || "");
           setInstrumentType(vData.instrumentType || "");
           setReferenceNo(vData.referenceNo || "");
           setNarration(vData.narration || "");
 
           if (vData.items && vData.items.length > 0) {
-            setEntries(vData.items.map(i => ({
-              ledgerId: i.ledgerId,
-              amount: i.amount,
-              openingBalance: 0,
-              closingBalance: 0,
-              remainingBalance: 0,
-              balanceType: "Credit"
-            })));
+            setEntries(
+              vData.items.map((i) => ({
+                ledgerId: i.ledgerId,
+                amount: i.amount,
+                openingBalance: 0,
+                closingBalance: 0,
+                remainingBalance: 0,
+                balanceType: "Credit",
+              })),
+            );
           }
         }
       } catch (err) {
@@ -469,8 +252,11 @@ const ReceiveVouchers = () => {
       if (id) {
         fetchVoucher();
       } else {
-        axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/receipt`)
-          .then(res => setVoucherNo(res.data.nextNumber))
+        axios
+          .get(
+            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/receipt`,
+          )
+          .then((res) => setVoucherNo(res.data.nextNumber))
           .catch(console.error);
       }
     }
@@ -488,7 +274,17 @@ const ReceiveVouchers = () => {
   };
 
   const addRow = () => {
-    setEntries([...entries, { ledgerId: "", amount: "", openingBalance: 0, closingBalance: 0, remainingBalance: 0, balanceType: "Credit" }]);
+    setEntries([
+      ...entries,
+      {
+        ledgerId: "",
+        amount: "",
+        openingBalance: 0,
+        closingBalance: 0,
+        remainingBalance: 0,
+        balanceType: "Credit",
+      },
+    ]);
   };
 
   const removeRow = (index) => {
@@ -508,8 +304,6 @@ const ReceiveVouchers = () => {
     updated[index].balanceType = type;
 
     const amt = parseFloat(updated[index].amount) || 0;
-
-
 
     if (type === "Credit") {
       updated[index].remainingBalance = closing + amt;
@@ -544,7 +338,7 @@ const ReceiveVouchers = () => {
       referenceNo,
       narration,
       entries,
-      editingIndex: index
+      editingIndex: index,
     };
     sessionStorage.setItem("receiptVoucherState", JSON.stringify(stateToSave));
 
@@ -554,13 +348,23 @@ const ReceiveVouchers = () => {
       const userObj = JSON.parse(userStr);
       role = userObj.role || "admin";
     }
-    const basePath = role === "employee" ? "/employee/hr/accounting/client" : "/accounting/client";
-    const redirectPath = id ? `${basePath}/receptVoucher/${id}` : `${basePath}/receptVoucher`;
+    const basePath =
+      role === "employee"
+        ? "/employee/hr/accounting/client"
+        : "/accounting/client";
+    const redirectPath = id
+      ? `${basePath}/receptVoucher/${id}`
+      : `${basePath}/receptVoucher`;
 
-    navigate(`${basePath}/ledger?redirect=${redirectPath}&name=${encodeURIComponent(initialName)}`);
+    navigate(
+      `${basePath}/ledger?redirect=${redirectPath}&name=${encodeURIComponent(initialName)}`,
+    );
   };
 
-  const totalAmount = entries.reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
+  const totalAmount = entries.reduce(
+    (sum, r) => sum + (parseFloat(r.amount) || 0),
+    0,
+  );
 
   const resetForm = () => {
     setVoucherNo(String(Number(voucherNo) + 1));
@@ -568,14 +372,29 @@ const ReceiveVouchers = () => {
     setReceiptAccountId("");
     setInstrumentType("");
     setReferenceNo("");
-    setEntries([{ ledgerId: "", amount: "", openingBalance: 0, closingBalance: 0, remainingBalance: 0, balanceType: "Credit" }]);
+    setEntries([
+      {
+        ledgerId: "",
+        amount: "",
+        openingBalance: 0,
+        closingBalance: 0,
+        remainingBalance: 0,
+        balanceType: "Credit",
+      },
+    ]);
     setNarration("");
   };
 
   const saveVoucher = async () => {
     if (!date) return Swal.fire("Error", "Please choose a date.", "error");
-    if (!receiptAccountId) return Swal.fire("Error", "Please select Account Type (Bank/Cash).", "error");
-    if (!entries.every((r) => r.ledgerId)) return Swal.fire("Error", "Please select all party ledgers.", "error");
+    if (!receiptAccountId)
+      return Swal.fire(
+        "Error",
+        "Please select Account Type (Bank/Cash).",
+        "error",
+      );
+    if (!entries.every((r) => r.ledgerId))
+      return Swal.fire("Error", "Please select all party ledgers.", "error");
 
     const employeeId = user?.employee_id || null;
     const role = user?.role || "admin";
@@ -592,7 +411,7 @@ const ReceiveVouchers = () => {
       companyId,
       items: entries.map((r) => ({
         ledgerId: r.ledgerId,
-        amount: parseFloat(r.amount) || 0
+        amount: parseFloat(r.amount) || 0,
       })),
       ...(employeeId && { employee_id: employeeId }),
       role,
@@ -602,7 +421,7 @@ const ReceiveVouchers = () => {
       if (isEditMode) {
         await axios.put(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/update/${id}`,
-          payload
+          payload,
         );
         Swal.fire("Success", "Receipt Voucher Updated!", "success");
         if (!searchParams.get("redirect")) {
@@ -615,7 +434,7 @@ const ReceiveVouchers = () => {
       } else {
         await axios.post(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/createReciptVoucher/${companyId}`,
-          payload
+          payload,
         );
         Swal.fire("Success", "Receipt Voucher Saved!", "success");
         resetForm();
@@ -626,7 +445,6 @@ const ReceiveVouchers = () => {
         }
       }
     } catch (err) {
-
       if (err.response && err.response.status === 409) {
         Swal.fire("Warning", "Voucher Number Already Exists!", "warning");
       } else {
@@ -639,17 +457,19 @@ const ReceiveVouchers = () => {
     try {
       const grouped = {};
 
-      data.forEach(row => {
+      data.forEach((row) => {
         const voucherNo = row.VoucherNo || "Unknown";
         if (!grouped[voucherNo]) {
           grouped[voucherNo] = {
             voucherNo,
-            date: row.Date ? new Date(row.Date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+            date: row.Date
+              ? new Date(row.Date).toISOString().split("T")[0]
+              : new Date().toISOString().split("T")[0],
             accountName: row.AccountName || "Cash",
             instrumentType: row.InstrumentType || "Cash",
             referenceNo: row.RefNo || "",
             narration: row.Narration || "",
-            items: []
+            items: [],
           };
         }
         grouped[voucherNo].items.push({
@@ -658,14 +478,22 @@ const ReceiveVouchers = () => {
         });
       });
 
-      const vouchers = Object.values(grouped).map(v => {
-        const receiptAcc = ledgers.find(l => (l.ledgerName || l.name).toLowerCase() === (v.accountName || "").toLowerCase());
-        const items = v.items.map(i => {
-          const ledgerObj = ledgers.find(l => (l.ledgerName || l.name).toLowerCase() === (i.payerName || "").toLowerCase());
+      const vouchers = Object.values(grouped).map((v) => {
+        const receiptAcc = ledgers.find(
+          (l) =>
+            (l.ledgerName || l.name).toLowerCase() ===
+            (v.accountName || "").toLowerCase(),
+        );
+        const items = v.items.map((i) => {
+          const ledgerObj = ledgers.find(
+            (l) =>
+              (l.ledgerName || l.name).toLowerCase() ===
+              (i.payerName || "").toLowerCase(),
+          );
           return {
             ledgerId: ledgerObj ? ledgerObj.id : null,
             amount: i.amount,
-            payerName: i.payerName
+            payerName: i.payerName,
           };
         });
 
@@ -680,11 +508,13 @@ const ReceiveVouchers = () => {
           narration: v.narration,
           totalAmount,
           items,
-          accountName: v.accountName
+          accountName: v.accountName,
         };
       });
 
-      const missingPayers = vouchers.flatMap(v => v.items.filter(i => !i.ledgerId).map(i => i.payerName));
+      const missingPayers = vouchers.flatMap((v) =>
+        v.items.filter((i) => !i.ledgerId).map((i) => i.payerName),
+      );
       const uniqueMissing = [...new Set(missingPayers)];
 
       if (uniqueMissing.length > 0) {
@@ -699,46 +529,71 @@ const ReceiveVouchers = () => {
 
         if (result.isConfirmed) {
           try {
-            const debtorGroup = groups.find(g => g.groupName === "Sundry Debtors");
+            const debtorGroup = groups.find(
+              (g) => g.groupName === "Sundry Debtors",
+            );
 
             if (!debtorGroup) {
-              Swal.fire("Error", "Sundry Debtors group not found in system.", "error");
+              Swal.fire(
+                "Error",
+                "Sundry Debtors group not found in system.",
+                "error",
+              );
               return;
             }
 
             let createdCount = 0;
             for (const name of uniqueMissing) {
-              await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`, {
-                name: name,
-                under: JSON.stringify({ name: "Sundry Debtors", id: debtorGroup.id }),
-                mailingName: name,
-                openingBalance: 0,
-                state: "Not Applicable",
-                country: "India",
-                registrationType: "Regular",
-                companyId
-              });
+              await axios.post(
+                `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`,
+                {
+                  name: name,
+                  under: JSON.stringify({
+                    name: "Sundry Debtors",
+                    id: debtorGroup.id,
+                  }),
+                  mailingName: name,
+                  openingBalance: 0,
+                  state: "Not Applicable",
+                  country: "India",
+                  registrationType: "Regular",
+                  companyId,
+                },
+              );
               createdCount++;
             }
 
-            Swal.fire("Success", `${createdCount} Ledgers created. Retrying import...`, "success");
+            Swal.fire(
+              "Success",
+              `${createdCount} Ledgers created. Retrying import...`,
+              "success",
+            );
 
-            const ledgerRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`);
+            const ledgerRes = await axios.get(
+              `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
+            );
             const newLedgers = ledgerRes.data || [];
             setLedgers(newLedgers);
 
-            vouchers.forEach(v => {
-              v.items.forEach(i => {
+            vouchers.forEach((v) => {
+              v.items.forEach((i) => {
                 if (!i.ledgerId) {
-                  const l = newLedgers.find(led => (led.ledgerName || led.name).toLowerCase() === (i.payerName || "").toLowerCase());
+                  const l = newLedgers.find(
+                    (led) =>
+                      (led.ledgerName || led.name).toLowerCase() ===
+                      (i.payerName || "").toLowerCase(),
+                  );
                   if (l) i.ledgerId = l.id;
                 }
               });
             });
-
           } catch (err) {
             console.error(err);
-            Swal.fire("Error", "Failed to create ledgers automatically.", "error");
+            Swal.fire(
+              "Error",
+              "Failed to create ledgers automatically.",
+              "error",
+            );
             return;
           }
         } else {
@@ -746,31 +601,50 @@ const ReceiveVouchers = () => {
         }
       }
 
-      const invalidVouchersIds = vouchers.flatMap(v => v.items.filter(i => !i.ledgerId));
+      const invalidVouchersIds = vouchers.flatMap((v) =>
+        v.items.filter((i) => !i.ledgerId),
+      );
       if (invalidVouchersIds.length > 0) {
-        Swal.fire("Error", "Some ledgers are still missing after attempt to create.", "error");
+        Swal.fire(
+          "Error",
+          "Some ledgers are still missing after attempt to create.",
+          "error",
+        );
         return;
       }
 
-      const missingAccounts = vouchers.filter(v => !v.receiptAccountId);
+      const missingAccounts = vouchers.filter((v) => !v.receiptAccountId);
       if (missingAccounts.length > 0) {
-        Swal.fire("Error", `Receipt Account (Cash/Bank) not found: ${[...new Set(missingAccounts.map(v => v.accountName))].join(", ")}`, "error");
+        Swal.fire(
+          "Error",
+          `Receipt Account (Cash/Bank) not found: ${[...new Set(missingAccounts.map((v) => v.accountName))].join(", ")}`,
+          "error",
+        );
         return;
       }
 
       if (vouchers.length === 0) return;
 
-      const res = await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/bulk-create`, {
-        companyId,
-        vouchers: vouchers.map(v => ({
-          ...v,
-          items: v.items.map(i => ({ ledgerId: i.ledgerId, amount: i.amount }))
-        }))
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/bulk-create`,
+        {
+          companyId,
+          vouchers: vouchers.map((v) => ({
+            ...v,
+            items: v.items.map((i) => ({
+              ledgerId: i.ledgerId,
+              amount: i.amount,
+            })),
+          })),
+        },
+      );
 
-      Swal.fire("Success", res.data.message || "Bulk Import Successful", "success");
+      Swal.fire(
+        "Success",
+        res.data.message || "Bulk Import Successful",
+        "success",
+      );
       window.location.reload();
-
     } catch (error) {
       console.error("Bulk Import Error", error);
       Swal.fire("Error", "Bulk Import Failed", "error");
@@ -785,11 +659,14 @@ const ReceiveVouchers = () => {
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-6 mx-auto">
-
       <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
         <div className="flex items-center gap-2">
           <h1 className="text-base font-semibold text-slate-800">
-            {isViewMode ? "View Receipt Voucher" : isEditMode ? "Edit Receipt Voucher" : "Receipt Voucher"}
+            {isViewMode
+              ? "View Receipt Voucher"
+              : isEditMode
+                ? "Edit Receipt Voucher"
+                : "Receipt Voucher"}
           </h1>
           <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700">
             RV
@@ -797,7 +674,6 @@ const ReceiveVouchers = () => {
         </div>
         {!isViewMode && <BulkImportButton onDataParsed={handleBulkImport} />}
       </div>
-
 
       <div className="flex flex-col gap-1 mb-5">
         <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
@@ -817,7 +693,6 @@ const ReceiveVouchers = () => {
           ))}
         </select>
       </div>
-
 
       <div className="grid grid-cols-2 gap-4 mb-5">
         <div className="flex flex-col gap-1">
@@ -845,7 +720,6 @@ const ReceiveVouchers = () => {
           />
         </div>
       </div>
-
 
       <div className="grid grid-cols-2 gap-4 mb-5">
         <div className="flex flex-col gap-1">
@@ -880,20 +754,26 @@ const ReceiveVouchers = () => {
         </div>
       </div>
 
-
       <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-2">
         Transaction Details
       </p>
-
 
       <div className="rounded-lg border border-slate-200 overflow-visible mb-3">
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-left">Party Ledger</th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">Opening Balance</th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">Amount (₹)</th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">Closing Balance</th>
+              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-left">
+                Party Ledger
+              </th>
+              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
+                Opening Balance
+              </th>
+              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
+                Amount (₹)
+              </th>
+              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
+                Closing Balance
+              </th>
               <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-center w-10"></th>
             </tr>
           </thead>
@@ -904,7 +784,6 @@ const ReceiveVouchers = () => {
                 key={index}
                 className="border-b border-slate-100 last:border-b-0 hover:bg-slate-50 transition-colors relative hover:z-50"
               >
-
                 <td className="px-2 py-1">
                   <SearchableLedgerSelect
                     ledgers={ledgers}
@@ -915,11 +794,11 @@ const ReceiveVouchers = () => {
                   />
                 </td>
 
-
                 <td className="px-3 py-2 text-right text-slate-500 text-sm">
-                  {row.ledgerId ? formatBalance(row.closingBalance, row.balanceType) : "0.00"}
+                  {row.ledgerId
+                    ? formatBalance(row.closingBalance, row.balanceType)
+                    : "0.00"}
                 </td>
-
 
                 <td className="px-2 py-1">
                   <input
@@ -934,11 +813,11 @@ const ReceiveVouchers = () => {
                   />
                 </td>
 
-
                 <td className="px-3 py-2 text-right text-slate-800 font-medium text-sm">
-                  {row.ledgerId ? formatBalance(row.remainingBalance, row.balanceType) : "0.00"}
+                  {row.ledgerId
+                    ? formatBalance(row.remainingBalance, row.balanceType)
+                    : "0.00"}
                 </td>
-
 
                 <td className="px-2 py-1 text-center">
                   {!isViewMode && entries.length > 1 && (
@@ -954,7 +833,6 @@ const ReceiveVouchers = () => {
               </tr>
             ))}
           </tbody>
-
 
           <tfoot>
             <tr className="bg-slate-50 border-t border-slate-200">
@@ -972,7 +850,6 @@ const ReceiveVouchers = () => {
         </table>
       </div>
 
-
       {!isViewMode && (
         <div className="px-3 py-2 border-t border-slate-100 bg-slate-50 rounded-b-lg">
           <button
@@ -984,7 +861,6 @@ const ReceiveVouchers = () => {
         </div>
       )}
 
-
       <div className="flex justify-end mb-5">
         <div className="bg-slate-50 rounded-lg px-5 py-3 flex flex-col items-end gap-1 min-w-48">
           <div className="flex justify-between w-full text-sm font-semibold text-slate-800 gap-8">
@@ -993,7 +869,6 @@ const ReceiveVouchers = () => {
           </div>
         </div>
       </div>
-
 
       <div className="flex flex-col gap-1 mb-5">
         <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
@@ -1007,7 +882,6 @@ const ReceiveVouchers = () => {
           disabled={isViewMode}
         ></textarea>
       </div>
-
 
       <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-100">
         <button

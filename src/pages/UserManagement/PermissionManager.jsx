@@ -1,58 +1,75 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import useSWR, { mutate } from 'swr';
+import React, { useState } from "react";
+import axios from "axios";
+import useSWR, { mutate } from "swr";
 import {
-  Key, Search, Edit2, Trash2, Plus, Save, X, Loader2, Layers, Shield
-} from 'lucide-react';
-import toast, { Toaster } from 'react-hot-toast';
-import { hrmsPermissions } from '../../utils/hrmsPermissions';
-import useAuth from '../../hooks/useAuth';
+  Key,
+  Search,
+  Edit2,
+  Trash2,
+  Plus,
+  Save,
+  X,
+  Loader2,
+  Layers,
+  Shield,
+} from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
+import { hrmsPermissions } from "../../utils/hrmsPermissions";
+import useAuth from "../../hooks/useAuth";
 
-const API_URL = import.meta.env.VITE_CSAAP_URL?.replace(/\/$/, '');
+const API_URL = import.meta.env.VITE_CSAAP_URL?.replace(/\/$/, "");
 
-const fetcher = ([url, token]) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } }).then((res) => res.data);
+const fetcher = ([url, token]) =>
+  axios
+    .get(url, { headers: { Authorization: `Bearer ${token}` } })
+    .then((res) => res.data);
 
-const getPermissionCode = (permission) => (
-  permission.code || `${permission.module.toLowerCase()}.${permission.action.toLowerCase()}`
-);
+const getPermissionCode = (permission) =>
+  permission.code ||
+  `${permission.module.toLowerCase()}.${permission.action.toLowerCase()}`;
 
-const getRoleName = (role) => role.role_name || role.name || 'Untitled Role';
+const getRoleName = (role) => role.role_name || role.name || "Untitled Role";
 const EMPTY_ARRAY = [];
 
 const PermissionManager = () => {
   const { token } = useAuth();
-  const getAuthHeaders = () => ({ headers: { Authorization: `Bearer ${token}` } });
-
+  const getAuthHeaders = () => ({
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
   const permissionsApiUrl = `${API_URL}/api/tenant/permissions`;
   const rolesApiUrl = `${API_URL}/api/tenant/departments/roles`;
 
-  const { data: permsData, isLoading: isPermsLoading } = useSWR(token ? [permissionsApiUrl, token] : null, fetcher);
-  const { data: rolesData } = useSWR(token ? [rolesApiUrl, token] : null, fetcher);
+  const { data: permsData, isLoading: isPermsLoading } = useSWR(
+    token ? [permissionsApiUrl, token] : null,
+    fetcher,
+  );
+  const { data: rolesData } = useSWR(
+    token ? [rolesApiUrl, token] : null,
+    fetcher,
+  );
 
   const permissions = permsData?.data || EMPTY_ARRAY;
   const roles = rolesData?.data || EMPTY_ARRAY;
 
-
-
-  const [formData, setFormData] = useState({ module: '', action: '', code: '', description: '' });
+  const [formData, setFormData] = useState({
+    module: "",
+    action: "",
+    code: "",
+    description: "",
+  });
   const [editingPermId, setEditingPermId] = useState(null);
 
-
-  const [selectedRoleId, setSelectedRoleId] = useState('');
-  const [selectedModule, setSelectedModule] = useState('All');
+  const [selectedRoleId, setSelectedRoleId] = useState("");
+  const [selectedModule, setSelectedModule] = useState("All");
   const [assignedCodes, setAssignedCodes] = useState([]);
 
-
-  const [masterSearch, setMasterSearch] = useState('');
-  const [matrixSearch, setMatrixSearch] = useState('');
-
+  const [masterSearch, setMasterSearch] = useState("");
+  const [matrixSearch, setMatrixSearch] = useState("");
 
   const [isSubmittingPerm, setIsSubmittingPerm] = useState(false);
   const [isLoadingRolePerms, setIsLoadingRolePerms] = useState(false);
   const [isSavingRolePerms, setIsSavingRolePerms] = useState(false);
-
-
 
   const groupedPermissions = React.useMemo(() => {
     return permissions.reduce((acc, perm) => {
@@ -62,25 +79,24 @@ const PermissionManager = () => {
     }, {});
   }, [permissions]);
 
-
   const filteredMasterPermissions = React.useMemo(() => {
     if (!masterSearch) return groupedPermissions;
     const search = masterSearch.toLowerCase();
     return Object.keys(groupedPermissions).reduce((acc, module) => {
-      const filtered = groupedPermissions[module].filter(perm =>
-        perm.action.toLowerCase().includes(search) ||
-        perm.code.toLowerCase().includes(search) ||
-        perm.description?.toLowerCase().includes(search)
+      const filtered = groupedPermissions[module].filter(
+        (perm) =>
+          perm.action.toLowerCase().includes(search) ||
+          perm.code.toLowerCase().includes(search) ||
+          perm.description?.toLowerCase().includes(search),
       );
       if (filtered.length > 0) acc[module] = filtered;
       return acc;
     }, {});
   }, [groupedPermissions, masterSearch]);
 
-
   const filteredMatrixPermissions = React.useMemo(() => {
-    const activeModules = Object.keys(groupedPermissions).filter(module =>
-      selectedModule === 'All' || module === selectedModule
+    const activeModules = Object.keys(groupedPermissions).filter(
+      (module) => selectedModule === "All" || module === selectedModule,
     );
 
     if (!matrixSearch) {
@@ -92,34 +108,35 @@ const PermissionManager = () => {
 
     const search = matrixSearch.toLowerCase();
     return activeModules.reduce((acc, module) => {
-      const filtered = groupedPermissions[module].filter(perm =>
-        perm.action.toLowerCase().includes(search) ||
-        perm.code.toLowerCase().includes(search) ||
-        perm.description?.toLowerCase().includes(search)
+      const filtered = groupedPermissions[module].filter(
+        (perm) =>
+          perm.action.toLowerCase().includes(search) ||
+          perm.code.toLowerCase().includes(search) ||
+          perm.description?.toLowerCase().includes(search),
       );
       if (filtered.length > 0) acc[module] = filtered;
       return acc;
     }, {});
   }, [groupedPermissions, matrixSearch, selectedModule]);
 
-
-
   React.useEffect(() => {
     if (!editingPermId && formData.module && formData.action) {
       const generated = `${formData.module.toLowerCase()}.${formData.action.toLowerCase()}`;
-      setFormData(prev => ({ ...prev, code: generated }));
+      setFormData((prev) => ({ ...prev, code: generated }));
     }
   }, [formData.module, formData.action, editingPermId]);
 
-
   React.useEffect(() => {
     if (!selectedRoleId) return;
-    setSelectedModule('All');
+    setSelectedModule("All");
 
     const fetchRolePerms = async () => {
       setIsLoadingRolePerms(true);
       try {
-        const response = await axios.get(`${permissionsApiUrl}/role/${selectedRoleId}`, getAuthHeaders());
+        const response = await axios.get(
+          `${permissionsApiUrl}/role/${selectedRoleId}`,
+          getAuthHeaders(),
+        );
         setAssignedCodes(response.data?.permissions || []);
       } catch (error) {
         console.error("Failed to fetch role permissions", error);
@@ -131,9 +148,6 @@ const PermissionManager = () => {
     fetchRolePerms();
   }, [selectedRoleId, permissionsApiUrl]);
 
-
-
-
   const handlePermSubmit = async (e) => {
     e.preventDefault();
     if (!formData.module || !formData.action) {
@@ -141,46 +155,64 @@ const PermissionManager = () => {
     }
 
     setIsSubmittingPerm(true);
-    const toastId = toast.loading(editingPermId ? "Updating permission..." : "Adding permission...");
+    const toastId = toast.loading(
+      editingPermId ? "Updating permission..." : "Adding permission...",
+    );
 
     try {
-
       const payload = {
         module: formData.module,
         action: formData.action,
         code: formData.code,
-        description: formData.description
+        description: formData.description,
       };
 
       if (editingPermId) {
-        await axios.put(`${permissionsApiUrl}/${editingPermId}`, payload, getAuthHeaders());
+        await axios.put(
+          `${permissionsApiUrl}/${editingPermId}`,
+          payload,
+          getAuthHeaders(),
+        );
         toast.success("Permission updated successfully!", { id: toastId });
       } else {
         await axios.post(permissionsApiUrl, payload, getAuthHeaders());
         toast.success("Permission created successfully!", { id: toastId });
       }
-      setFormData({ module: '', action: '', code: '', description: '' });
+      setFormData({ module: "", action: "", code: "", description: "" });
       setEditingPermId(null);
       mutate(permissionsApiUrl);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to save permission.", { id: toastId });
+      toast.error(
+        error.response?.data?.message || "Failed to save permission.",
+        { id: toastId },
+      );
     } finally {
       setIsSubmittingPerm(false);
     }
   };
 
   const handleEditPerm = (perm) => {
-    setFormData({ module: perm.module, action: perm.action, code: perm.code, description: perm.description || '' });
+    setFormData({
+      module: perm.module,
+      action: perm.action,
+      code: perm.code,
+      description: perm.description || "",
+    });
     setEditingPermId(perm.id);
   };
 
   const cancelEditPerm = () => {
-    setFormData({ module: '', action: '', code: '', description: '' });
+    setFormData({ module: "", action: "", code: "", description: "" });
     setEditingPermId(null);
   };
 
   const handleDeletePerm = async (id) => {
-    if (!window.confirm("WARNING: This will permanently remove this permission from all roles. Continue?")) return;
+    if (
+      !window.confirm(
+        "WARNING: This will permanently remove this permission from all roles. Continue?",
+      )
+    )
+      return;
 
     const toastId = toast.loading("Deleting permission...");
     try {
@@ -188,12 +220,20 @@ const PermissionManager = () => {
       toast.success("Permission deleted.", { id: toastId });
       mutate(permissionsApiUrl);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to delete permission.", { id: toastId });
+      toast.error(
+        error.response?.data?.message || "Failed to delete permission.",
+        { id: toastId },
+      );
     }
   };
 
   const handleSeedHrmsPermissions = async () => {
-    if (!window.confirm("This will add all HRMS permissions to the database. Continue?")) return;
+    if (
+      !window.confirm(
+        "This will add all HRMS permissions to the database. Continue?",
+      )
+    )
+      return;
     setIsSubmittingPerm(true);
     const toastId = toast.loading("Seeding HRMS permissions...");
     try {
@@ -206,7 +246,9 @@ const PermissionManager = () => {
           console.warn(`Failed to seed ${perm.code}`, err);
         }
       }
-      toast.success(`Successfully seeded ${successCount} HRMS permissions!`, { id: toastId });
+      toast.success(`Successfully seeded ${successCount} HRMS permissions!`, {
+        id: toastId,
+      });
       mutate(permissionsApiUrl);
     } catch (error) {
       toast.error("An error occurred during seeding.", { id: toastId });
@@ -215,12 +257,9 @@ const PermissionManager = () => {
     }
   };
 
-
-
-
   const handleToggleCode = (code) => {
-    setAssignedCodes(prev =>
-      prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]
+    setAssignedCodes((prev) =>
+      prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code],
     );
   };
 
@@ -231,31 +270,52 @@ const PermissionManager = () => {
     const toastId = toast.loading("Saving role permissions...");
 
     try {
-      await axios.put(`${permissionsApiUrl}/role/${selectedRoleId}`, { permissions: assignedCodes }, getAuthHeaders());
+      await axios.put(
+        `${permissionsApiUrl}/role/${selectedRoleId}`,
+        { permissions: assignedCodes },
+        getAuthHeaders(),
+      );
       toast.success("Role permissions saved successfully!", { id: toastId });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to save role permissions.", { id: toastId });
+      toast.error(
+        error.response?.data?.message || "Failed to save role permissions.",
+        { id: toastId },
+      );
     } finally {
       setIsSavingRolePerms(false);
     }
   };
 
   const handleSelectAllInModule = (moduleName, customCodes = null) => {
-    const moduleCodes = customCodes || groupedPermissions[moduleName].map(getPermissionCode);
-    const allAssigned = moduleCodes.every(code => assignedCodes.includes(code));
+    const moduleCodes =
+      customCodes || groupedPermissions[moduleName].map(getPermissionCode);
+    const allAssigned = moduleCodes.every((code) =>
+      assignedCodes.includes(code),
+    );
 
     if (allAssigned) {
-      setAssignedCodes(prev => prev.filter(code => !moduleCodes.includes(code)));
+      setAssignedCodes((prev) =>
+        prev.filter((code) => !moduleCodes.includes(code)),
+      );
     } else {
-      setAssignedCodes(prev => [...new Set([...prev, ...moduleCodes])]);
+      setAssignedCodes((prev) => [...new Set([...prev, ...moduleCodes])]);
     }
   };
 
-
   return (
     <div className="p-6 lg:p-10 bg-[#FDFDFF] min-h-screen relative font-sans">
-      <Toaster position="top-center" toastOptions={{ style: { borderRadius: '1rem', background: '#333', color: '#fff', fontWeight: 'bold', fontSize: '14px' } }} />
-
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            borderRadius: "1rem",
+            background: "#333",
+            color: "#fff",
+            fontWeight: "bold",
+            fontSize: "14px",
+          },
+        }}
+      />
 
       <div className="mb-8">
         <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
@@ -268,13 +328,7 @@ const PermissionManager = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-
-
-
         <div className="lg:col-span-4 flex flex-col gap-6">
-
-
           <div className="bg-white rounded-4xl shadow-sm border border-slate-100 p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -285,8 +339,8 @@ const PermissionManager = () => {
                   {editingPermId ? "Edit Master Key" : "New Master Key"}
                 </h2>
               </div>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={handleSeedHrmsPermissions}
                 disabled={isSubmittingPerm}
                 className="px-3 py-1.5 bg-green-100 hover:bg-green-200 text-green-700 text-xs font-bold rounded-lg transition-colors"
@@ -297,21 +351,34 @@ const PermissionManager = () => {
             </div>
 
             <form onSubmit={handlePermSubmit} className="space-y-4">
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Module</label>
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Module
+                  </label>
                   <input
-                    type="text" value={formData.module} onChange={(e) => setFormData({ ...formData, module: e.target.value })}
-                    placeholder="e.g., Projects" required
+                    type="text"
+                    value={formData.module}
+                    onChange={(e) =>
+                      setFormData({ ...formData, module: e.target.value })
+                    }
+                    placeholder="e.g., Projects"
+                    required
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-300 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Action</label>
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Action
+                  </label>
                   <input
-                    type="text" value={formData.action} onChange={(e) => setFormData({ ...formData, action: e.target.value })}
-                    placeholder="e.g., Create" required
+                    type="text"
+                    value={formData.action}
+                    onChange={(e) =>
+                      setFormData({ ...formData, action: e.target.value })
+                    }
+                    placeholder="e.g., Create"
+                    required
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-300 outline-none transition-all"
                   />
                 </div>
@@ -319,34 +386,59 @@ const PermissionManager = () => {
 
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 flex justify-between">
-                  Unique Code <span className="text-indigo-400 font-normal italic lowercase">Auto-generated</span>
+                  Unique Code{" "}
+                  <span className="text-indigo-400 font-normal italic lowercase">
+                    Auto-generated
+                  </span>
                 </label>
                 <input
-                  type="text" value={formData.code} onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                  placeholder="e.g., projects.create" required
+                  type="text"
+                  value={formData.code}
+                  onChange={(e) =>
+                    setFormData({ ...formData, code: e.target.value })
+                  }
+                  placeholder="e.g., projects.create"
+                  required
                   className="w-full px-4 py-3 bg-indigo-50/50 border border-indigo-100 rounded-xl text-sm font-bold text-indigo-900 focus:ring-4 focus:ring-indigo-50 outline-none transition-all"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Description (Optional)</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                  Description (Optional)
+                </label>
                 <textarea
-                  value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="What does this allow the user to do?" rows="2"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  placeholder="What does this allow the user to do?"
+                  rows="2"
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-300 outline-none transition-all resize-none"
                 />
               </div>
 
               <div className="flex gap-3 pt-2">
                 <button
-                  type="submit" disabled={isSubmittingPerm}
+                  type="submit"
+                  disabled={isSubmittingPerm}
                   className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:shadow-none"
                 >
-                  {isSubmittingPerm ? <Loader2 size={16} className="animate-spin" /> : (editingPermId ? <Save size={16} /> : <Plus size={16} />)}
-                  {editingPermId ? 'Update Key' : 'Create Key'}
+                  {isSubmittingPerm ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : editingPermId ? (
+                    <Save size={16} />
+                  ) : (
+                    <Plus size={16} />
+                  )}
+                  {editingPermId ? "Update Key" : "Create Key"}
                 </button>
                 {editingPermId && (
-                  <button type="button" onClick={cancelEditPerm} className="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all active:scale-95">
+                  <button
+                    type="button"
+                    onClick={cancelEditPerm}
+                    className="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all active:scale-95"
+                  >
                     <X size={16} />
                   </button>
                 )}
@@ -354,17 +446,21 @@ const PermissionManager = () => {
             </form>
           </div>
 
-
           <div className="bg-white rounded-4xl shadow-sm border border-slate-100 overflow-hidden flex-1">
             <div className="p-5 border-b border-slate-50 bg-slate-50/50 space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="text-sm font-black text-slate-800 tracking-tight">Master Directory</h2>
+                <h2 className="text-sm font-black text-slate-800 tracking-tight">
+                  Master Directory
+                </h2>
                 <div className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
                   {permissions.length} Keys
                 </div>
               </div>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={14}
+                />
                 <input
                   type="text"
                   placeholder="Search directory..."
@@ -376,27 +472,55 @@ const PermissionManager = () => {
             </div>
             <div className="p-3 max-h-100 overflow-y-auto">
               {isPermsLoading ? (
-                <div className="py-10 text-center"><Loader2 className="animate-spin mx-auto text-indigo-600" size={24} /></div>
+                <div className="py-10 text-center">
+                  <Loader2
+                    className="animate-spin mx-auto text-indigo-600"
+                    size={24}
+                  />
+                </div>
               ) : Object.keys(filteredMasterPermissions).length === 0 ? (
                 <div className="py-10 text-center text-sm font-bold text-slate-400">
-                  {masterSearch ? "No matches found." : "No permissions created yet."}
+                  {masterSearch
+                    ? "No matches found."
+                    : "No permissions created yet."}
                 </div>
               ) : (
-                Object.keys(filteredMasterPermissions).map(module => (
+                Object.keys(filteredMasterPermissions).map((module) => (
                   <div key={module} className="mb-4 last:mb-0">
-                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">{module}</h3>
+                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">
+                      {module}
+                    </h3>
                     <div className="flex flex-col gap-1">
-                      {filteredMasterPermissions[module].map(perm => {
+                      {filteredMasterPermissions[module].map((perm) => {
                         const code = getPermissionCode(perm);
                         return (
-                          <div key={perm.id} className="flex items-center justify-between p-2 hover:bg-slate-50 rounded-lg group transition-colors">
+                          <div
+                            key={perm.id}
+                            className="flex items-center justify-between p-2 hover:bg-slate-50 rounded-lg group transition-colors"
+                          >
                             <div>
-                              <p className="text-xs font-bold text-slate-700">{perm.action}</p>
-                              <p className="text-[9px] font-mono text-indigo-400 mt-0.5">{code}</p>
+                              <p className="text-xs font-bold text-slate-700">
+                                {perm.action}
+                              </p>
+                              <p className="text-[9px] font-mono text-indigo-400 mt-0.5">
+                                {code}
+                              </p>
                             </div>
                             <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                              <button onClick={() => handleEditPerm(perm)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Edit"><Edit2 size={12} /></button>
-                              <button onClick={() => handleDeletePerm(perm.id)} className="p-1.5 text-rose-600 hover:bg-rose-50 rounded" title="Delete"><Trash2 size={12} /></button>
+                              <button
+                                onClick={() => handleEditPerm(perm)}
+                                className="p-1.5 text-blue-600 hover:bg-blue-50 rounded"
+                                title="Edit"
+                              >
+                                <Edit2 size={12} />
+                              </button>
+                              <button
+                                onClick={() => handleDeletePerm(perm.id)}
+                                className="p-1.5 text-rose-600 hover:bg-rose-50 rounded"
+                                title="Delete"
+                              >
+                                <Trash2 size={12} />
+                              </button>
                             </div>
                           </div>
                         );
@@ -409,39 +533,43 @@ const PermissionManager = () => {
           </div>
         </div>
 
-
-
-
         <div className="lg:col-span-8 bg-white rounded-4xl shadow-sm border border-slate-100 flex flex-col h-full min-h-150">
-
-
           <div className="p-6 sm:p-8 border-b border-slate-50 flex flex-col gap-6 bg-slate-50/30 rounded-t-4xl">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 className="text-lg font-black text-slate-800">Role Policy Matrix</h2>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Assign permissions to roles</p>
+                <h2 className="text-lg font-black text-slate-800">
+                  Role Policy Matrix
+                </h2>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                  Assign permissions to roles
+                </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-
                 <div className="w-full sm:w-64">
                   <select
                     value={selectedRoleId}
                     onChange={(e) => setSelectedRoleId(e.target.value)}
                     className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:ring-4 focus:ring-amber-50 focus:border-amber-300 outline-none transition-all cursor-pointer shadow-sm"
                   >
-                    <option value="" disabled>-- Select a Role --</option>
-                    {roles.map(role => {
-                      const isGlobal = !role.department_id && role.department_name === 'Global';
+                    <option value="" disabled>
+                      -- Select a Role --
+                    </option>
+                    {roles.map((role) => {
+                      const isGlobal =
+                        !role.department_id &&
+                        role.department_name === "Global";
                       return (
                         <option key={role.id} value={role.id}>
-                          {getRoleName(role)} {isGlobal ? '(Global)' : `(${role.department_name || 'Department'})`}
+                          {getRoleName(role)}{" "}
+                          {isGlobal
+                            ? "(Global)"
+                            : `(${role.department_name || "Department"})`}
                         </option>
                       );
                     })}
                   </select>
                 </div>
-
 
                 <div className="w-full sm:w-48">
                   <select
@@ -451,17 +579,25 @@ const PermissionManager = () => {
                     className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-300 outline-none transition-all cursor-pointer shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="All">All Modules</option>
-                    {Object.keys(groupedPermissions).sort().map(module => (
-                      <option key={module} value={module}>{module}</option>
-                    ))}
+                    {Object.keys(groupedPermissions)
+                      .sort()
+                      .map((module) => (
+                        <option key={module} value={module}>
+                          {module}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
             </div>
 
-
-            <div className={`relative transition-all ${selectedRoleId ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <div
+              className={`relative transition-all ${selectedRoleId ? "opacity-100" : "opacity-50 pointer-events-none"}`}
+            >
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                size={18}
+              />
               <input
                 type="text"
                 placeholder="Search permissions by action, code, or description..."
@@ -472,42 +608,60 @@ const PermissionManager = () => {
             </div>
           </div>
 
-
           <div className="p-6 sm:p-8 flex-1 overflow-y-auto bg-slate-50/10">
             {!selectedRoleId ? (
               <div className="h-full flex flex-col items-center justify-center text-slate-400 opacity-50 pt-10">
                 <Layers size={64} className="mb-4" />
                 <h3 className="text-lg font-black">Select a Role</h3>
-                <p className="text-sm font-medium">Choose a role from the dropdown to edit its permissions.</p>
+                <p className="text-sm font-medium">
+                  Choose a role from the dropdown to edit its permissions.
+                </p>
               </div>
             ) : isLoadingRolePerms ? (
-              <div className="py-20 text-center"><Loader2 className="animate-spin mx-auto text-amber-500" size={32} /></div>
+              <div className="py-20 text-center">
+                <Loader2
+                  className="animate-spin mx-auto text-amber-500"
+                  size={32}
+                />
+              </div>
             ) : Object.keys(filteredMatrixPermissions).length === 0 ? (
               <div className="py-20 text-center font-bold text-slate-400">
-                {matrixSearch ? "No matching permissions found." : "No master permissions available. Create some first!"}
+                {matrixSearch
+                  ? "No matching permissions found."
+                  : "No master permissions available. Create some first!"}
               </div>
             ) : (
               <div className="space-y-8">
                 {(() => {
                   const allModules = Object.keys(filteredMatrixPermissions);
-                  return allModules.map(module => {
-                    const moduleCodes = filteredMatrixPermissions[module].map(getPermissionCode);
+                  return allModules.map((module) => {
+                    const moduleCodes =
+                      filteredMatrixPermissions[module].map(getPermissionCode);
                     return (
                       <div key={module}>
                         <div className="flex items-center gap-3 mb-3">
                           <input
                             type="checkbox"
-                            checked={moduleCodes.every(code => assignedCodes.includes(code))}
-                            onChange={() => handleSelectAllInModule(module, moduleCodes)}
+                            checked={moduleCodes.every((code) =>
+                              assignedCodes.includes(code),
+                            )}
+                            onChange={() =>
+                              handleSelectAllInModule(module, moduleCodes)
+                            }
                             className="w-4 h-4 cursor-pointer"
                           />
-                          <h3 className="text-sm font-black text-slate-700">{module}</h3>
+                          <h3 className="text-sm font-black text-slate-700">
+                            {module}
+                          </h3>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-7">
-                          {filteredMatrixPermissions[module].map(perm => {
+                          {filteredMatrixPermissions[module].map((perm) => {
                             const code = getPermissionCode(perm);
                             return (
-                              <label key={perm.id} className="flex items-start gap-3 p-3 hover:bg-white rounded-lg cursor-pointer transition-colors">
+                              <label
+                                key={perm.id}
+                                className="flex items-start gap-3 p-3 hover:bg-white rounded-lg cursor-pointer transition-colors"
+                              >
                                 <input
                                   type="checkbox"
                                   checked={assignedCodes.includes(code)}
@@ -515,9 +669,17 @@ const PermissionManager = () => {
                                   className="w-4 h-4 mt-1 cursor-pointer"
                                 />
                                 <div>
-                                  <p className="text-sm font-bold text-slate-700">{perm.action}</p>
-                                  <p className="text-xs text-slate-500 font-mono">{code}</p>
-                                  {perm.description && <p className="text-xs text-slate-400 mt-1">{perm.description}</p>}
+                                  <p className="text-sm font-bold text-slate-700">
+                                    {perm.action}
+                                  </p>
+                                  <p className="text-xs text-slate-500 font-mono">
+                                    {code}
+                                  </p>
+                                  {perm.description && (
+                                    <p className="text-xs text-slate-400 mt-1">
+                                      {perm.description}
+                                    </p>
+                                  )}
                                 </div>
                               </label>
                             );
@@ -531,7 +693,6 @@ const PermissionManager = () => {
             )}
           </div>
 
-
           <div className="p-6 border-t border-slate-100 bg-white rounded-b-4xl flex justify-end items-center gap-4">
             <span className="text-xs font-bold text-slate-400">
               {assignedCodes.length} permissions granted
@@ -541,13 +702,15 @@ const PermissionManager = () => {
               disabled={!selectedRoleId || isSavingRolePerms}
               className="py-3 px-8 bg-amber-500 hover:bg-amber-600 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-amber-200 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:shadow-none"
             >
-              {isSavingRolePerms ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+              {isSavingRolePerms ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Save size={16} />
+              )}
               Save Role Matrix
             </button>
           </div>
-
         </div>
-
       </div>
     </div>
   );

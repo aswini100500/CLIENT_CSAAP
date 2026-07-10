@@ -11,7 +11,6 @@ const AttachmentPage = () => {
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef(null);
 
-
   const fileIcons = {
     pdf: "📄",
     doc: "📝",
@@ -26,20 +25,20 @@ const AttachmentPage = () => {
     gif: "🖼️",
     txt: "📃",
     zip: "📦",
-    default: "📎"
+    default: "📎",
   };
 
   const getFileIcon = (fileName) => {
-    const extension = fileName.split('.').pop().toLowerCase();
+    const extension = fileName.split(".").pop().toLowerCase();
     return fileIcons[extension] || fileIcons.default;
   };
 
   const formatFileSize = (bytes) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const handleDrag = (e) => {
@@ -56,7 +55,7 @@ const AttachmentPage = () => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const droppedFile = e.dataTransfer.files[0];
       validateAndSetFile(droppedFile);
@@ -64,27 +63,30 @@ const AttachmentPage = () => {
   };
 
   const validateAndSetFile = (selectedFile) => {
-
     const maxSize = 10 * 1024 * 1024;
     if (selectedFile.size > maxSize) {
       alert("File size too large. Maximum size is 10MB.");
       return;
     }
 
-
     const allowedTypes = [
-      'image/jpeg', 'image/jpg', 'image/png', 'image/gif',
-      'application/pdf', 
-      'application/msword', 
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'application/vnd.ms-excel',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'text/plain',
-      'application/zip'
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "text/plain",
+      "application/zip",
     ];
 
     if (!allowedTypes.includes(selectedFile.type)) {
-      alert("File type not supported. Please upload images, PDFs, documents, or text files.");
+      alert(
+        "File type not supported. Please upload images, PDFs, documents, or text files.",
+      );
       return;
     }
 
@@ -100,9 +102,9 @@ const AttachmentPage = () => {
   const simulateUpload = () => {
     setIsUploading(true);
     setUploadProgress(0);
-    
+
     const interval = setInterval(() => {
-      setUploadProgress(prev => {
+      setUploadProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsUploading(false);
@@ -126,29 +128,27 @@ const AttachmentPage = () => {
 
     simulateUpload();
 
-
     setTimeout(() => {
       const newAttachment = {
         id: Date.now(),
         name: file.name,
         size: file.size,
         type: file.type,
-        uploadedOn: new Date().toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
+        uploadedOn: new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
         }),
         remark: remark.trim(),
-        url: URL.createObjectURL(file)
+        url: URL.createObjectURL(file),
       };
-      
-      setAttachments(prev => [newAttachment, ...prev]);
+
+      setAttachments((prev) => [newAttachment, ...prev]);
       setFile(null);
       setRemark("");
       setUploadProgress(0);
-      
 
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -158,42 +158,43 @@ const AttachmentPage = () => {
 
   const handleDelete = (attachmentId) => {
     if (window.confirm("Are you sure you want to delete this attachment?")) {
-      setAttachments(prev => prev.filter(att => att.id !== attachmentId));
+      setAttachments((prev) => prev.filter((att) => att.id !== attachmentId));
     }
   };
 
-  const filteredAttachments = attachments.filter(att =>
-    att.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    att.remark.toLowerCase().includes(searchTerm.toLowerCase())
-  ).sort((a, b) => {
-    switch (sortBy) {
-      case "name":
-        return a.name.localeCompare(b.name);
-      case "size":
-        return a.size - b.size;
-      case "date":
-      default:
-        return new Date(b.uploadedOn) - new Date(a.uploadedOn);
-    }
-  });
+  const filteredAttachments = attachments
+    .filter(
+      (att) =>
+        att.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        att.remark.toLowerCase().includes(searchTerm.toLowerCase()),
+    )
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "name":
+          return a.name.localeCompare(b.name);
+        case "size":
+          return a.size - b.size;
+        case "date":
+        default:
+          return new Date(b.uploadedOn) - new Date(a.uploadedOn);
+      }
+    });
 
   const totalSize = attachments.reduce((sum, att) => sum + att.size, 0);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-6xl mx-auto">
-
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Attachments</h2>
           <p className="text-gray-600">Upload and manage project files</p>
         </div>
 
-
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-              dragActive 
-                ? "border-blue-500 bg-blue-50" 
+              dragActive
+                ? "border-blue-500 bg-blue-50"
                 : "border-gray-300 hover:border-gray-400"
             }`}
             onDragEnter={handleDrag}
@@ -207,9 +208,10 @@ const AttachmentPage = () => {
                 Drag and drop your files here
               </p>
               <p className="text-gray-500 text-sm mb-4">
-                or click to browse (Max: 10MB, Supported: Images, PDF, Documents)
+                or click to browse (Max: 10MB, Supported: Images, PDF,
+                Documents)
               </p>
-              
+
               <input
                 ref={fileInputRef}
                 type="file"
@@ -226,7 +228,6 @@ const AttachmentPage = () => {
             </div>
           </div>
 
-
           {(file || isUploading) && (
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
               {file && (
@@ -235,7 +236,9 @@ const AttachmentPage = () => {
                     <span className="text-2xl">{getFileIcon(file.name)}</span>
                     <div>
                       <p className="font-medium text-gray-800">{file.name}</p>
-                      <p className="text-sm text-gray-500">{formatFileSize(file.size)}</p>
+                      <p className="text-sm text-gray-500">
+                        {formatFileSize(file.size)}
+                      </p>
                     </div>
                   </div>
                   <button
@@ -286,12 +289,11 @@ const AttachmentPage = () => {
           )}
         </div>
 
-
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
           <div className="text-sm text-gray-600">
             {attachments.length} files • {formatFileSize(totalSize)} total
           </div>
-          
+
           <div className="flex space-x-4">
             <div className="relative">
               <input
@@ -305,7 +307,7 @@ const AttachmentPage = () => {
                 🔍
               </span>
             </div>
-            
+
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -318,32 +320,54 @@ const AttachmentPage = () => {
           </div>
         </div>
 
-
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           {filteredAttachments.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left font-medium text-gray-700">File</th>
-                    <th className="px-6 py-3 text-left font-medium text-gray-700">Size</th>
-                    <th className="px-6 py-3 text-left font-medium text-gray-700">Uploaded On</th>
-                    <th className="px-6 py-3 text-left font-medium text-gray-700">Remark</th>
-                    <th className="px-6 py-3 text-left font-medium text-gray-700">Actions</th>
+                    <th className="px-6 py-3 text-left font-medium text-gray-700">
+                      File
+                    </th>
+                    <th className="px-6 py-3 text-left font-medium text-gray-700">
+                      Size
+                    </th>
+                    <th className="px-6 py-3 text-left font-medium text-gray-700">
+                      Uploaded On
+                    </th>
+                    <th className="px-6 py-3 text-left font-medium text-gray-700">
+                      Remark
+                    </th>
+                    <th className="px-6 py-3 text-left font-medium text-gray-700">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {filteredAttachments.map((att) => (
-                    <tr key={att.id} className="hover:bg-gray-50 transition-colors">
+                    <tr
+                      key={att.id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-3">
-                          <span className="text-xl">{getFileIcon(att.name)}</span>
-                          <span className="font-medium text-gray-800">{att.name}</span>
+                          <span className="text-xl">
+                            {getFileIcon(att.name)}
+                          </span>
+                          <span className="font-medium text-gray-800">
+                            {att.name}
+                          </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-600">{formatFileSize(att.size)}</td>
-                      <td className="px-6 py-4 text-gray-600">{att.uploadedOn}</td>
-                      <td className="px-6 py-4 text-gray-600 max-w-xs truncate">{att.remark}</td>
+                      <td className="px-6 py-4 text-gray-600">
+                        {formatFileSize(att.size)}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600">
+                        {att.uploadedOn}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600 max-w-xs truncate">
+                        {att.remark}
+                      </td>
                       <td className="px-6 py-4">
                         <div className="flex space-x-3">
                           <a
@@ -372,11 +396,13 @@ const AttachmentPage = () => {
             <div className="text-center py-12">
               <div className="text-6xl mb-4">📁</div>
               <p className="text-gray-500 text-lg mb-2">
-                {attachments.length === 0 ? "No attachments yet" : "No files match your search"}
+                {attachments.length === 0
+                  ? "No attachments yet"
+                  : "No files match your search"}
               </p>
               <p className="text-gray-400 text-sm">
-                {attachments.length === 0 
-                  ? "Upload your first file to get started" 
+                {attachments.length === 0
+                  ? "Upload your first file to get started"
                   : "Try adjusting your search terms"}
               </p>
             </div>

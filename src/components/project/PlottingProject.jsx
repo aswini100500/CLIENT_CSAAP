@@ -1,3902 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import {
   FaPlus,
@@ -3927,7 +28,7 @@ import {
   FaSave as FaSaveIcon,
   FaLongArrowAltLeft,
   FaCalendarAlt,
-  FaCogs
+  FaCogs,
 } from "react-icons/fa";
 import axios from "axios";
 import projectService from "./projectService";
@@ -3962,7 +63,7 @@ const PlottingProject = ({
   initialParsedPlotsData = [],
   initialParsedRevenuePlotsData = [],
   initialTab = "project-info",
-  isSubtype = false
+  isSubtype = false,
 }) => {
   const { user } = useAuth();
 
@@ -3973,8 +74,10 @@ const PlottingProject = ({
 
   const [selectedPlots, setSelectedPlots] = useState([]);
   const [isCornerPlot, setIsCornerPlot] = useState(false);
-  const [priceDetails, setPriceDetails] = useState({ expectedPrice: "", tokenAmount: "" });
-
+  const [priceDetails, setPriceDetails] = useState({
+    expectedPrice: "",
+    tokenAmount: "",
+  });
 
   const [propertyFeatures, setPropertyFeatures] = useState({
     landArea: initialLandArea,
@@ -3987,10 +90,14 @@ const PlottingProject = ({
     openSides: "",
     roadWidth: "",
     boundaryWall: "",
-    gatedColony: ""
+    gatedColony: "",
   });
 
-  const [areaDetails, setAreaDetails] = useState({ plotArea: "", plotLength: "", plotBreadth: "" });
+  const [areaDetails, setAreaDetails] = useState({
+    plotArea: "",
+    plotLength: "",
+    plotBreadth: "",
+  });
   const [kissama, setKissama] = useState("");
   const [purchaser, setPurchaser] = useState("");
   const [constructor, setConstructor] = useState("");
@@ -3998,9 +105,7 @@ const PlottingProject = ({
 
   const [attachment, setAttachment] = useState(null);
 
-
   const [manualPlotCount, setManualPlotCount] = useState(0);
-
 
   const [boundary, setBoundary] = useState("");
   const [reference, setReference] = useState("");
@@ -4008,12 +113,12 @@ const PlottingProject = ({
 
   const [loanProvider, setLoanProvider] = useState("");
   const [plotCustomFacilities, setPlotCustomFacilities] = useState([]);
-  const [approvalStatus, setApprovalStatus] = useState([{ authority: "", status: "" }]);
+  const [approvalStatus, setApprovalStatus] = useState([
+    { authority: "", status: "" },
+  ]);
   const [broker, setBroker] = useState("");
   const [contractorsList, setContractorsList] = useState([]);
   const [loadingContractors, setLoadingContractors] = useState(false);
-
-
 
   const [editingPlotIdInternal, setEditingPlotIdInternal] = useState(null);
   const [currentPlotData, setCurrentPlotData] = useState(null);
@@ -4025,14 +130,15 @@ const PlottingProject = ({
   }, [initialParsedPlotsData]);
 
   useEffect(() => {
-    if (initialParsedRevenuePlotsData && initialParsedRevenuePlotsData.length > 0) {
+    if (
+      initialParsedRevenuePlotsData &&
+      initialParsedRevenuePlotsData.length > 0
+    ) {
       setPlotsData(initialParsedRevenuePlotsData);
     }
   }, [initialParsedRevenuePlotsData]);
 
-
   const [activeTab, setActiveTab] = useState(initialTab);
-
 
   const FACILITIES = [
     { key: "parking", label: "Parking" },
@@ -4043,22 +149,14 @@ const PlottingProject = ({
     { key: "elevator", label: "Elevator" },
   ];
 
-
   useEffect(() => {
-
-
-
-
-
-
     if (selectedProject && editingProjectId) {
       const projectData = selectedProject;
-
 
       if (projectData.plots_data && initialParsedPlotsData.length === 0) {
         try {
           let parsedPlots = [];
-          if (typeof projectData.plots_data === 'string') {
+          if (typeof projectData.plots_data === "string") {
             parsedPlots = JSON.parse(projectData.plots_data);
           } else if (Array.isArray(projectData.plots_data)) {
             parsedPlots = projectData.plots_data;
@@ -4066,18 +164,19 @@ const PlottingProject = ({
 
           if (parsedPlots.length > 0) {
             setPlots(parsedPlots);
-
           }
         } catch (error) {
           console.error("Error parsing plots_data:", error);
         }
       }
 
-
-      if (projectData.revenue_plots_data && initialParsedRevenuePlotsData.length === 0) {
+      if (
+        projectData.revenue_plots_data &&
+        initialParsedRevenuePlotsData.length === 0
+      ) {
         try {
           let parsedRevenuePlots = [];
-          if (typeof projectData.revenue_plots_data === 'string') {
+          if (typeof projectData.revenue_plots_data === "string") {
             parsedRevenuePlots = JSON.parse(projectData.revenue_plots_data);
           } else if (Array.isArray(projectData.revenue_plots_data)) {
             parsedRevenuePlots = projectData.revenue_plots_data;
@@ -4085,28 +184,22 @@ const PlottingProject = ({
 
           if (parsedRevenuePlots.length > 0) {
             setPlotsData(parsedRevenuePlots);
-
           }
         } catch (error) {
           console.error("Error parsing revenue_plots_data:", error);
         }
       }
 
-
       if (projectData.revenue_plots && revenuePlots === 0) {
         setRevenuePlots(projectData.revenue_plots);
-
       }
-
 
       if (projectData.land_area && !propertyFeatures.landArea) {
-        setPropertyFeatures(prev => ({
+        setPropertyFeatures((prev) => ({
           ...prev,
-          landArea: projectData.land_area
+          landArea: projectData.land_area,
         }));
-
       }
-
 
       if (projectData.broker) {
         setBroker(projectData.broker);
@@ -4115,9 +208,8 @@ const PlottingProject = ({
         setConstructor(projectData.constructor);
       }
 
-
       if (editingPlotId && plots.length > 0) {
-        const plotToEdit = plots.find(p => p.id === editingPlotId);
+        const plotToEdit = plots.find((p) => p.id === editingPlotId);
         if (plotToEdit) {
           setCurrentPlotData(plotToEdit);
           loadPlotDataForEditing(plotToEdit);
@@ -4130,30 +222,32 @@ const PlottingProject = ({
       }
     }
 
-
     if (initialParsedPlotsData.length > 0 && plots.length === 0) {
       setPlots(initialParsedPlotsData);
-
     }
 
     if (initialParsedRevenuePlotsData.length > 0 && plotsData.length === 0) {
       setPlotsData(initialParsedRevenuePlotsData);
-
     }
-
-  }, [selectedProject, editingProjectId, editingPlotId, initialParsedPlotsData, initialParsedRevenuePlotsData, initialRevenuePlots, initialLandArea]);
-
+  }, [
+    selectedProject,
+    editingProjectId,
+    editingPlotId,
+    initialParsedPlotsData,
+    initialParsedRevenuePlotsData,
+    initialRevenuePlots,
+    initialLandArea,
+  ]);
 
   useEffect(() => {
     if (editingPlotIdInternal) {
-      const plotToEdit = plots.find(p => p.id === editingPlotIdInternal);
+      const plotToEdit = plots.find((p) => p.id === editingPlotIdInternal);
       if (plotToEdit) {
         setCurrentPlotData(plotToEdit);
         loadPlotDataForEditing(plotToEdit);
       }
     }
   }, [editingPlotIdInternal, plots]);
-
 
   useEffect(() => {
     const fetchBrokers = async () => {
@@ -4184,10 +278,7 @@ const PlottingProject = ({
     fetchContractors();
   }, []);
 
-
-
   const generateId = () => Date.now() + Math.floor(Math.random() * 1000);
-
 
   const handleApprovalChange = (index, field, value) => {
     const updatedApprovals = [...approvalStatus];
@@ -4195,11 +286,9 @@ const PlottingProject = ({
     setApprovalStatus(updatedApprovals);
   };
 
-
   const addApprovalAuthority = () => {
     setApprovalStatus([...approvalStatus, { authority: "", status: "" }]);
   };
-
 
   const removeApprovalAuthority = (index) => {
     setApprovalStatus(approvalStatus.filter((_, i) => i !== index));
@@ -4228,9 +317,7 @@ const PlottingProject = ({
             <option key={item.id} value={item.id}>
               {item.name}
             </option>
-          ))
-        }
-
+          ))}
       </select>
     </div>
   );
@@ -4258,22 +345,18 @@ const PlottingProject = ({
             <option key={item.id} value={item.id}>
               {item.name}
             </option>
-          ))
-        }
-
+          ))}
       </select>
     </div>
   );
-
-
 
   const loadPlotDataForEditing = (plot) => {
     setIsCornerPlot(plot.isCornerPlot || false);
     setPriceDetails({
       expectedPrice: plot.priceDetails?.expectedPrice || "",
-      tokenAmount: plot.priceDetails?.tokenAmount || ""
+      tokenAmount: plot.priceDetails?.tokenAmount || "",
     });
-    setPropertyFeatures(prev => ({
+    setPropertyFeatures((prev) => ({
       ...prev,
       landArea: plot.propertyFeatures?.landArea || prev.landArea,
       propertyStatus: plot.propertyFeatures?.propertyStatus || "",
@@ -4290,14 +373,13 @@ const PlottingProject = ({
     setAreaDetails({
       plotArea: plot.areaDetails?.plotArea || "",
       plotLength: plot.areaDetails?.plotLength || "",
-      plotBreadth: plot.areaDetails?.plotBreadth || ""
+      plotBreadth: plot.areaDetails?.plotBreadth || "",
     });
     setKissama(plot.kissama || "");
     setPurchaser(plot.purchaser || "");
     setConstructor(plot.constructor || "");
     setBroker(plot.broker || "");
   };
-
 
   const handleSaveProject = async () => {
     if (!projectName || !projectType) {
@@ -4306,7 +388,6 @@ const PlottingProject = ({
     }
 
     try {
-
       const projectData = {
         id: editingProjectId,
         name: projectName,
@@ -4320,14 +401,10 @@ const PlottingProject = ({
         revenuePlots: revenuePlots || 0,
         plotsData: plotsData,
         broker: broker || null,
-        constructor: constructor || ""
+        constructor: constructor || "",
       };
 
-
-
       if (isSubtype) {
-
-
         onSaveProject?.(projectData);
         return;
       }
@@ -4337,14 +414,11 @@ const PlottingProject = ({
       }
 
       alert("Project saved successfully!");
-
     } catch (error) {
       console.error("❌ Error saving plotting project:", error);
       alert("Failed to save project.");
     }
   };
-
-
 
   const addMultiplePlots = () => {
     if (manualPlotCount <= 0) {
@@ -4373,12 +447,12 @@ const PlottingProject = ({
           openSides: "",
           roadWidth: "",
           boundaryWall: "",
-          gatedColony: ""
+          gatedColony: "",
         },
         areaDetails: { plotArea: "", plotLength: "", plotBreadth: "" },
         kissama: "",
         purchaser: "",
-        broker:"",
+        broker: "",
         constructor: "",
         isComplete: false,
         status: "draft",
@@ -4393,11 +467,9 @@ const PlottingProject = ({
     alert(`Added ${manualPlotCount} plots successfully!`);
   };
 
-
   const handlePlotClick = (plot) => {
     if (selectedPlots.includes(plot.id)) {
-
-      const newSelection = selectedPlots.filter(id => id !== plot.id);
+      const newSelection = selectedPlots.filter((id) => id !== plot.id);
       setSelectedPlots(newSelection);
       if (newSelection.length === 0) setCurrentPlotData(null);
     } else {
@@ -4410,7 +482,6 @@ const PlottingProject = ({
   const togglePlotSelection = (plot) => {
     handlePlotClick(plot);
   };
-
 
   const savePlotChanges = (plotIds) => {
     if (!plotIds || plotIds.length === 0) return;
@@ -4444,16 +515,14 @@ const PlottingProject = ({
     alert(`Plot details saved to ${plotIds.length} plot(s)!`);
   };
 
-
   const removePlot = (plotId) => {
     if (window.confirm("Are you sure you want to remove this plot?")) {
-      const updatedPlots = plots.filter(plot => plot.id !== plotId);
+      const updatedPlots = plots.filter((plot) => plot.id !== plotId);
       setPlots(updatedPlots);
-      setSelectedPlots(prev => prev.filter(id => id !== plotId));
+      setSelectedPlots((prev) => prev.filter((id) => id !== plotId));
       alert("Plot removed successfully!");
     }
   };
-
 
   const handlePlotChange = (index, field, value) => {
     const updatedPlotsData = [...plotsData];
@@ -4482,16 +551,14 @@ const PlottingProject = ({
 
   const getFilledPlotsCount = () => {
     return plotsData.filter(
-      (plot) => plot && (plot.area || plot.entryPlotNo || plot.khataNo)
+      (plot) => plot && (plot.area || plot.entryPlotNo || plot.khataNo),
     ).length;
   };
-
 
   const handleSaveRevenuePlots = () => {
     alert("Revenue plots saved successfully!");
     setActiveTab("plots");
   };
-
 
   const NavigationTabs = () => {
     const tabs = [
@@ -4508,12 +575,15 @@ const PlottingProject = ({
             <button
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`flex items-center gap-1.5 px-3 pb-3 pt-2 text-sm font-semibold border-b-2 -mb-px transition-colors ${active
-                ? "border-emerald-600 text-slate-900 rounded-b-lg"
-                : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-                }`}
+              className={`flex items-center gap-1.5 px-3 pb-3 pt-2 text-sm font-semibold border-b-2 -mb-px transition-colors ${
+                active
+                  ? "border-emerald-600 text-slate-900 rounded-b-lg"
+                  : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+              }`}
             >
-              <Icon className={`w-4 h-4 ${active ? "text-emerald-600" : "text-slate-400"}`} />
+              <Icon
+                className={`w-4 h-4 ${active ? "text-emerald-600" : "text-slate-400"}`}
+              />
               {label}
             </button>
           );
@@ -4522,12 +592,8 @@ const PlottingProject = ({
     );
   };
 
-
   const renderProjectInfo = () => (
     <div className="space-y-6">
-
-
-
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <h2 className="text-lg font-semibold mb-4 text-slate-800 flex items-center">
@@ -4627,7 +693,12 @@ const PlottingProject = ({
                   type="number"
                   min="0"
                   value={propertyFeatures.landArea}
-                  onChange={(e) => setPropertyFeatures({ ...propertyFeatures, landArea: e.target.value })}
+                  onChange={(e) =>
+                    setPropertyFeatures({
+                      ...propertyFeatures,
+                      landArea: e.target.value,
+                    })
+                  }
                   className="w-full border border-slate-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
                   placeholder="Enter total land area"
                 />
@@ -4637,10 +708,9 @@ const PlottingProject = ({
         </div>
       </div>
 
-
       <div className="pt-6">
         <button
-          onClick={() => setActiveTab('revenue-plots')}
+          onClick={() => setActiveTab("revenue-plots")}
           className="w-full bg-linear-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center space-x-2 shadow-lg transition-all duration-200"
         >
           <span>Continue to Revenue Plots</span>
@@ -4650,12 +720,10 @@ const PlottingProject = ({
     </div>
   );
 
-
   const renderRevenuePlots = () => (
     <div className="space-y-2">
-
       <button
-        onClick={() => setActiveTab('project-info')}
+        onClick={() => setActiveTab("project-info")}
         className="flex items-center text-slate-600 hover:text-slate-800 hover:bg-slate-100 px-2 py-1 rounded-xl transition-all duration-200"
       >
         <FaArrowLeft className="mr-2 h-4 w-4" />
@@ -4689,7 +757,6 @@ const PlottingProject = ({
                   }
                   setPlotsData(newPlotsData);
                 } else if (newCount < plotsData.length) {
-
                   setPlotsData(plotsData.slice(0, newCount));
                 }
               }}
@@ -4722,7 +789,8 @@ const PlottingProject = ({
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 mt-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-slate-800">
-                Revenue Plot Details ({revenuePlots} {revenuePlots === 1 ? "Plot" : "Plots"})
+                Revenue Plot Details ({revenuePlots}{" "}
+                {revenuePlots === 1 ? "Plot" : "Plots"})
               </h3>
               <span className="text-sm text-slate-500">
                 {getFilledPlotsCount()} of {revenuePlots} plots filled
@@ -4747,7 +815,9 @@ const PlottingProject = ({
                       </div>
                       <button
                         onClick={() => {
-                          const newPlots = plotsData.filter((_, i) => i !== index);
+                          const newPlots = plotsData.filter(
+                            (_, i) => i !== index,
+                          );
                           setPlotsData(newPlots);
                           setRevenuePlots(newPlots.length);
                         }}
@@ -4826,11 +896,15 @@ const PlottingProject = ({
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-slate-500">No revenue plots configured yet.</p>
-                <p className="text-sm text-slate-400 mt-1">Adjust the number of revenue plots above to start adding details.</p>
+                <p className="text-slate-500">
+                  No revenue plots configured yet.
+                </p>
+                <p className="text-sm text-slate-400 mt-1">
+                  Adjust the number of revenue plots above to start adding
+                  details.
+                </p>
               </div>
             )}
-
 
             <div className="mt-6 p-4 bg-linear-to-r from-emerald-50 to-blue-50 rounded-2xl border border-emerald-200">
               <div className="flex items-center justify-between">
@@ -4839,7 +913,11 @@ const PlottingProject = ({
                     Summary
                   </h4>
                   <p className="text-sm text-emerald-600 mt-1">
-                    Total Plots Area: <span className="font-bold">{calculateTotalPlotsArea()}</span> sq. ft
+                    Total Plots Area:{" "}
+                    <span className="font-bold">
+                      {calculateTotalPlotsArea()}
+                    </span>{" "}
+                    sq. ft
                   </p>
                   <p className="text-sm text-slate-600 mt-1">
                     {getFilledPlotsCount()} of {revenuePlots} plots filled
@@ -4859,11 +937,10 @@ const PlottingProject = ({
           </div>
         )}
 
-
         {revenuePlots === 0 && (
           <div className="pt-6">
             <button
-              onClick={() => setActiveTab('plots')}
+              onClick={() => setActiveTab("plots")}
               className="w-full bg-linear-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center space-x-2 shadow-lg transition-all duration-200"
             >
               <span>Continue to Plots & Details</span>
@@ -4875,29 +952,19 @@ const PlottingProject = ({
     </div>
   );
 
-
   const renderPlots = () => {
-
-
     return (
       <div className="space-y-6">
-
         <button
-          onClick={() => setActiveTab('revenue-plots')}
+          onClick={() => setActiveTab("revenue-plots")}
           className="flex items-center text-slate-600 hover:text-slate-800 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all duration-200"
         >
           <FaArrowLeft className="mr-2 h-4 w-4" />
           Back to Revenue Plots
         </button>
 
-
-
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
           <div className="lg:col-span-1 space-y-6">
-
-
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               <h3 className="text-lg font-semibold mb-4 text-slate-800 flex items-center">
                 <FaSortAmountUp className="mr-2 text-emerald-600 h-5 w-5" />
@@ -4914,7 +981,9 @@ const PlottingProject = ({
                       min="1"
                       max="50"
                       value={manualPlotCount}
-                      onChange={(e) => setManualPlotCount(parseInt(e.target.value) || 0)}
+                      onChange={(e) =>
+                        setManualPlotCount(parseInt(e.target.value) || 0)
+                      }
                       className="flex-1 border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Enter number of plots"
                     />
@@ -4930,20 +999,25 @@ const PlottingProject = ({
               </div>
             </div>
 
-
             <div className="space-y-2">
               {plots.length === 0 ? (
                 <div className="bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 p-12 text-center">
                   <FaTable className="mx-auto h-16 w-16 text-slate-300 mb-4" />
-                  <h3 className="text-lg font-semibold text-slate-700 mb-2">No Plots Created</h3>
-                  <p className="text-slate-500 mb-4">Start by adding plots to the project</p>
+                  <h3 className="text-lg font-semibold text-slate-700 mb-2">
+                    No Plots Created
+                  </h3>
+                  <p className="text-slate-500 mb-4">
+                    Start by adding plots to the project
+                  </p>
                   <div className="flex items-center justify-center space-x-4">
                     <input
                       type="number"
                       min="1"
                       max="50"
                       value={manualPlotCount}
-                      onChange={(e) => setManualPlotCount(parseInt(e.target.value) || 0)}
+                      onChange={(e) =>
+                        setManualPlotCount(parseInt(e.target.value) || 0)
+                      }
                       className="w-32 border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
                       placeholder="Number"
                     />
@@ -4960,12 +1034,15 @@ const PlottingProject = ({
                 <>
                   <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                      <input 
-                        type="checkbox" 
-                        checked={plots.length > 0 && selectedPlots.length === plots.length}
+                      <input
+                        type="checkbox"
+                        checked={
+                          plots.length > 0 &&
+                          selectedPlots.length === plots.length
+                        }
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setSelectedPlots(plots.map(p => p.id));
+                            setSelectedPlots(plots.map((p) => p.id));
                             if (plots.length > 0) {
                               setCurrentPlotData(plots[0]);
                               loadPlotDataForEditing(plots[0]);
@@ -4977,23 +1054,27 @@ const PlottingProject = ({
                         }}
                         className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                       />
-                      <span className="text-sm font-medium text-slate-700">Select All Plots</span>
+                      <span className="text-sm font-medium text-slate-700">
+                        Select All Plots
+                      </span>
                     </label>
-                    <span className="text-xs text-slate-500 font-medium">{selectedPlots.length} selected</span>
+                    <span className="text-xs text-slate-500 font-medium">
+                      {selectedPlots.length} selected
+                    </span>
                   </div>
                   {plots.map((plot) => (
                     <div
                       key={plot.id}
                       onClick={() => handlePlotClick(plot)}
-                      className={`cursor-pointer bg-white rounded-2xl border-2 shadow-sm overflow-hidden transition-all duration-200 ${selectedPlots.includes(plot.id)
-                        ? 'border-emerald-500 shadow-md ring-2 ring-emerald-100'
-                        : 'border-slate-200 hover:border-slate-300 hover:shadow-md'
-                        }`}
+                      className={`cursor-pointer bg-white rounded-2xl border-2 shadow-sm overflow-hidden transition-all duration-200 ${
+                        selectedPlots.includes(plot.id)
+                          ? "border-emerald-500 shadow-md ring-2 ring-emerald-100"
+                          : "border-slate-200 hover:border-slate-300 hover:shadow-md"
+                      }`}
                     >
-
                       <div className="flex items-center justify-between p-3 bg-linear-to-r from-slate-50 to-white">
                         <div className="flex items-center space-x-4">
-                          <input 
+                          <input
                             type="checkbox"
                             checked={selectedPlots.includes(plot.id)}
                             onChange={(e) => {
@@ -5002,58 +1083,70 @@ const PlottingProject = ({
                             }}
                             className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
                           />
-                        <div className={`p-2 rounded-xl ${plot.isComplete ? 'bg-emerald-100' : 'bg-emerald-100'}`}>
-                          <FaTable className={`h-4 w-4 ${plot.isComplete ? 'text-emerald-600' : 'text-emerald-600'}`} />
-                        </div>
-                        <div>
-                          <div className="flex items-center space-x-3">
-                            <h3 className="text-md font-semibold text-slate-900">{plot.name}</h3>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${plot.isComplete ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'
-                              }`}>
-                              {plot.isComplete ? 'Complete' : 'In Progress'}
-                            </span>
+                          <div
+                            className={`p-2 rounded-xl ${plot.isComplete ? "bg-emerald-100" : "bg-emerald-100"}`}
+                          >
+                            <FaTable
+                              className={`h-4 w-4 ${plot.isComplete ? "text-emerald-600" : "text-emerald-600"}`}
+                            />
                           </div>
-                          <div className="text-sm text-slate-500 mt-1">
-                            Area: {plot.areaDetails?.plotArea || '0'} Sq-yd
+                          <div>
+                            <div className="flex items-center space-x-3">
+                              <h3 className="text-md font-semibold text-slate-900">
+                                {plot.name}
+                              </h3>
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  plot.isComplete
+                                    ? "bg-emerald-100 text-emerald-800"
+                                    : "bg-blue-100 text-blue-800"
+                                }`}
+                              >
+                                {plot.isComplete ? "Complete" : "In Progress"}
+                              </span>
+                            </div>
+                            <div className="text-sm text-slate-500 mt-1">
+                              Area: {plot.areaDetails?.plotArea || "0"} Sq-yd
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handlePlotClick(plot);
-                          }}
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
-                          title="Edit this plot"
-                        >
-                          <FaPen size={12} />
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePlotClick(plot);
+                            }}
+                            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+                            title="Edit this plot"
+                          >
+                            <FaPen size={12} />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
                 </>
               )}
             </div>
           </div>
 
-
           <div className="lg:col-span-2">
             {selectedPlots.length > 0 ? (
               <div className="flex flex-col h-full space-y-4">
                 {(() => {
-                  const plot = plots.find(p => p.id === selectedPlots[0]);
+                  const plot = plots.find((p) => p.id === selectedPlots[0]);
                   return plot ? renderPlotDetailsPanel(true, plot) : null;
                 })()}
-                
+
                 <div className="flex justify-end">
                   <button
                     onClick={() => savePlotChanges(selectedPlots)}
                     className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl transition-all duration-200 flex items-center font-semibold shadow-md"
                   >
                     <FaCheck className="mr-2" />
-                    {selectedPlots.length > 1 ? `Save to ${selectedPlots.length} Plots` : "Save Plot Details"}
+                    {selectedPlots.length > 1
+                      ? `Save to ${selectedPlots.length} Plots`
+                      : "Save Plot Details"}
                   </button>
                 </div>
               </div>
@@ -5073,7 +1166,6 @@ const PlottingProject = ({
           </div>
         </div>
 
-
         <div className="pt-6">
           <button
             onClick={handleSaveProject}
@@ -5087,7 +1179,6 @@ const PlottingProject = ({
     );
   };
 
-
   const renderPlotDetailsPanel = (isInEditMode = false, plot = null) => {
     const currentPlot = plot || currentPlotData;
 
@@ -5097,12 +1188,12 @@ const PlottingProject = ({
           <div className="text-center py-12">
             <FaBuilding className="mx-auto h-16 w-16 text-emerald-300 mb-4" />
             <h3 className="text-lg font-semibold text-slate-900 mb-2">
-              {isInEditMode ? 'No Plot Selected' : 'Select a Plot'}
+              {isInEditMode ? "No Plot Selected" : "Select a Plot"}
             </h3>
             <p className="text-slate-500 mb-4">
               {isInEditMode
-                ? 'Return to table view to select a plot'
-                : 'Select a plot from the list to view and edit details'}
+                ? "Return to table view to select a plot"
+                : "Select a plot from the list to view and edit details"}
             </p>
           </div>
         </div>
@@ -5115,23 +1206,33 @@ const PlottingProject = ({
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-xl font-bold text-slate-900">
-                {selectedPlots.length > 1 ? `Editing ${selectedPlots.length} Plots` : currentPlot.name}
+                {selectedPlots.length > 1
+                  ? `Editing ${selectedPlots.length} Plots`
+                  : currentPlot.name}
               </h2>
               <p className="text-slate-500 text-sm">
-                {selectedPlots.length > 1 ? 'Changes will apply to all selected plots' : `Plot ID: ${currentPlot.id}`}
+                {selectedPlots.length > 1
+                  ? "Changes will apply to all selected plots"
+                  : `Plot ID: ${currentPlot.id}`}
               </p>
             </div>
             <div className="flex items-center space-x-2">
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${currentPlot.isComplete
-                ? "bg-emerald-100 text-emerald-800"
-                : "bg-emerald-100 text-emerald-800"
-                }`}>
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  currentPlot.isComplete
+                    ? "bg-emerald-100 text-emerald-800"
+                    : "bg-emerald-100 text-emerald-800"
+                }`}
+              >
                 {currentPlot.isComplete ? "Complete" : "In Progress"}
               </span>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${isCornerPlot
-                ? "bg-amber-100 text-amber-800"
-                : "bg-blue-100 text-blue-800"
-                }`}>
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  isCornerPlot
+                    ? "bg-amber-100 text-amber-800"
+                    : "bg-blue-100 text-blue-800"
+                }`}
+              >
                 {isCornerPlot ? "Corner Plot" : "Regular Plot"}
               </span>
             </div>
@@ -5139,7 +1240,6 @@ const PlottingProject = ({
         )}
 
         <div className="space-y-6">
-
           <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
             <h3 className="text-sm font-semibold mb-3 text-slate-800 flex items-center">
               <FaQuestionCircle className="mr-2 text-emerald-600 h-4 w-4" />
@@ -5173,7 +1273,6 @@ const PlottingProject = ({
               </div>
             </div>
           </div>
-
 
           <div className="border-t border-slate-200 pt-6">
             <h3 className="text-lg font-semibold mb-4 text-emerald-700 flex items-center">
@@ -5211,7 +1310,6 @@ const PlottingProject = ({
               </div>
             </div>
 
-
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Land Area (sqft)
@@ -5230,9 +1328,7 @@ const PlottingProject = ({
               />
             </div>
 
-
             <div className="grid grid-cols-1 md:grid-cols-2 mb-4">
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Outhouse Available
@@ -5292,35 +1388,38 @@ const PlottingProject = ({
                 )}
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Possession Status
                 </label>
                 <div className="flex flex-wrap gap-4">
-                  {["Ready to Move", "In Progress", "Completed", "Pending"].map((status) => (
-                    <label key={status} className="inline-flex items-center cursor-pointer">
-                      <input
-                        type="radio"
-                        name="possessionStatus"
-                        checked={propertyFeatures.possessionStatus === status}
-                        onChange={() =>
-                          setPropertyFeatures({
-                            ...propertyFeatures,
-                            possessionStatus: status,
-                          })
-                        }
-                        className="text-emerald-600 focus:ring-emerald-500 rounded"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">
-                        {status}
-                      </span>
-                    </label>
-                  ))}
+                  {["Ready to Move", "In Progress", "Completed", "Pending"].map(
+                    (status) => (
+                      <label
+                        key={status}
+                        className="inline-flex items-center cursor-pointer"
+                      >
+                        <input
+                          type="radio"
+                          name="possessionStatus"
+                          checked={propertyFeatures.possessionStatus === status}
+                          onChange={() =>
+                            setPropertyFeatures({
+                              ...propertyFeatures,
+                              possessionStatus: status,
+                            })
+                          }
+                          className="text-emerald-600 focus:ring-emerald-500 rounded"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">
+                          {status}
+                        </span>
+                      </label>
+                    ),
+                  )}
                 </div>
               </div>
             </div>
-
 
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -5364,7 +1463,7 @@ const PlottingProject = ({
                   <option value="">Year</option>
                   {Array.from(
                     { length: 10 },
-                    (_, i) => new Date().getFullYear() + i
+                    (_, i) => new Date().getFullYear() + i,
                   ).map((year) => (
                     <option key={year} value={year}>
                       {year}
@@ -5373,7 +1472,6 @@ const PlottingProject = ({
                 </select>
               </div>
             </div>
-
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               <div>
@@ -5454,7 +1552,6 @@ const PlottingProject = ({
               </div>
             </div>
 
-
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Facilities
@@ -5505,7 +1602,7 @@ const PlottingProject = ({
                       className="ml-2 text-gray-500"
                       onClick={() =>
                         setPlotCustomFacilities(
-                          plotCustomFacilities.filter((f) => f !== facility)
+                          plotCustomFacilities.filter((f) => f !== facility),
                         )
                       }
                     >
@@ -5534,7 +1631,7 @@ const PlottingProject = ({
                     if (
                       propertyFeatures.newFacility &&
                       !plotCustomFacilities.includes(
-                        propertyFeatures.newFacility.trim()
+                        propertyFeatures.newFacility.trim(),
                       )
                     ) {
                       setPlotCustomFacilities([
@@ -5553,7 +1650,6 @@ const PlottingProject = ({
               </div>
             </div>
           </div>
-
 
           <div className="border-t border-slate-200 pt-4">
             <h3 className="text-sm font-semibold mb-3 text-slate-800 flex items-center">
@@ -5635,14 +1731,12 @@ const PlottingProject = ({
             </div>
           </div>
 
-
           <div className="border-t border-slate-200 pt-6">
             <h3 className="text-lg font-semibold mb-4 text-emerald-700">
               Additional Information
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Kissama
@@ -5655,7 +1749,6 @@ const PlottingProject = ({
                   placeholder="Enter Kissama details"
                 />
               </div>
-
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -5675,11 +1768,7 @@ const PlottingProject = ({
                 </select>
               </div>
 
-
-              <div>
-                {renderBrokerSelect()}
-              </div>
-
+              <div>{renderBrokerSelect()}</div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -5694,11 +1783,7 @@ const PlottingProject = ({
                 />
               </div>
 
-
-              <div>
-                {renderContractorSelect()}
-              </div>
-
+              <div>{renderContractorSelect()}</div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -5712,7 +1797,6 @@ const PlottingProject = ({
                   placeholder="Enter staff name or ID"
                 />
               </div>
-
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -5728,7 +1812,6 @@ const PlottingProject = ({
               </div>
             </div>
           </div>
-
 
           <div className="border-t border-slate-200 pt-6">
             <h3 className="text-lg font-semibold mb-4 text-emerald-700">
@@ -5794,7 +1877,6 @@ const PlottingProject = ({
             </div>
           </div>
 
-
           <div className=" border-t border-slate-200 pt-4">
             <h3 className="text-sm font-semibold mb-3 text-slate-800 flex items-center">
               <FaMoneyBill className="mr-2 text-emerald-600 h-4 w-4" />
@@ -5837,18 +1919,14 @@ const PlottingProject = ({
                 />
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
     );
   };
 
-
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-white p-4 relative md:p-6">
-
       {onClose && (
         <button
           onClick={onClose}
@@ -5863,10 +1941,7 @@ const PlottingProject = ({
         </button>
       )}
       <div className="max-w-7xl mx-auto space-y-6 ">
-
-
         <NavigationTabs />
-
 
         {activeTab === "project-info" && renderProjectInfo()}
         {activeTab === "revenue-plots" && renderRevenuePlots()}

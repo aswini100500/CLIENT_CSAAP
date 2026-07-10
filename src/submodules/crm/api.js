@@ -1,11 +1,9 @@
-import axios from 'axios';
-import { store } from '../../store/store';
-
+import axios from "axios";
+import { store } from "../../store/store";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_CRM_BASE_URL,
 });
-
 
 api.interceptors.request.use(
   (config) => {
@@ -15,7 +13,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 export default api;

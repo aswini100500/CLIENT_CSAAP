@@ -1,18 +1,25 @@
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, KeyRound, Loader2, Mail, ShieldCheck, Fingerprint, LockKeyhole } from "lucide-react";
+import {
+  ArrowLeft,
+  KeyRound,
+  Loader2,
+  Mail,
+  ShieldCheck,
+  Fingerprint,
+  LockKeyhole,
+} from "lucide-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
 
-
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -26,7 +33,7 @@ const ForgotPassword = () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_CSAAP_URL}/api/builder-companies/forgot-password`,
-        { adminEmail: email }
+        { adminEmail: email },
       );
 
       if (response.data.success) {
@@ -36,7 +43,9 @@ const ForgotPassword = () => {
         setError(response.data.message || "Failed to send OTP.");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to send OTP. Please try again.");
+      setError(
+        err.response?.data?.message || "Failed to send OTP. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +64,7 @@ const ForgotPassword = () => {
           adminEmail: email,
           otp,
           newPassword,
-        }
+        },
       );
 
       if (response.data.success) {
@@ -67,7 +76,10 @@ const ForgotPassword = () => {
         setError(response.data.message || "Failed to reset password.");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid OTP or failed to reset password.");
+      setError(
+        err.response?.data?.message ||
+          "Invalid OTP or failed to reset password.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -75,21 +87,26 @@ const ForgotPassword = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#f4f7f4] flex items-center justify-center p-4 md:p-8 font-body relative overflow-hidden">
-      
-
       <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
         <motion.div
-          animate={{ x: [0, 50, -20, 0], y: [0, -40, 30, 0], scale: [1, 1.1, 0.9, 1] }}
+          animate={{
+            x: [0, 50, -20, 0],
+            y: [0, -40, 30, 0],
+            scale: [1, 1.1, 0.9, 1],
+          }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-[-10%] left-[-5%] w-[60vw] h-[60vw] rounded-full bg-linear-to-br from-emerald-400/20 via-green-300/10 to-transparent blur-[120px]"
         />
         <motion.div
-          animate={{ x: [0, -60, 40, 0], y: [0, 50, -30, 0], scale: [1, 0.8, 1.1, 1] }}
+          animate={{
+            x: [0, -60, 40, 0],
+            y: [0, 50, -30, 0],
+            scale: [1, 0.8, 1.1, 1],
+          }}
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
           className="absolute bottom-[-10%] right-[-5%] w-[50vw] h-[50vw] rounded-full bg-linear-to-tl from-emerald-300/20 via-teal-200/10 to-transparent blur-[100px]"
         />
       </div>
-
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -97,14 +114,11 @@ const ForgotPassword = () => {
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="relative z-10 w-full max-w-5xl min-h-150 grid grid-cols-1 lg:grid-cols-2 rounded-3xl bg-white shadow-[0_32px_64px_-12px_rgba(16,185,129,0.08)] border border-white/60 overflow-hidden"
       >
-        
-
         <div className="hidden lg:flex relative bg-emerald-900 overflow-hidden flex-col justify-between p-12 text-white">
           <div className="absolute inset-0 bg-linear-to-br from-emerald-800 to-emerald-950 z-0"></div>
-          
 
           <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
-          
+
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
@@ -114,7 +128,9 @@ const ForgotPassword = () => {
           <div className="relative z-10">
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full mb-8">
               <ShieldCheck className="w-5 h-5 text-emerald-300" />
-              <span className="text-sm font-semibold tracking-wider text-emerald-50 uppercase">Secure Recovery</span>
+              <span className="text-sm font-semibold tracking-wider text-emerald-50 uppercase">
+                Secure Recovery
+              </span>
             </div>
             <h1 className="text-4xl lg:text-5xl font-extrabold leading-tight mb-6">
               Lost your <br />
@@ -123,7 +139,8 @@ const ForgotPassword = () => {
               </span>
             </h1>
             <p className="text-emerald-100/80 text-lg max-w-sm leading-relaxed">
-              Don't worry. Our secure, encrypted recovery protocol will help you regain access to your workspace in seconds.
+              Don't worry. Our secure, encrypted recovery protocol will help you
+              regain access to your workspace in seconds.
             </p>
           </div>
 
@@ -135,7 +152,6 @@ const ForgotPassword = () => {
             </div>
           </div>
         </div>
-
 
         <div className="relative z-10 flex flex-col p-8 sm:p-12 lg:p-16 justify-center bg-white">
           <Link
@@ -166,12 +182,17 @@ const ForgotPassword = () => {
                       Password Reset
                     </h2>
                     <p className="text-slate-500 leading-relaxed text-sm">
-                      Enter the email address associated with your administrator account and we will send you a secure OTP code.
+                      Enter the email address associated with your administrator
+                      account and we will send you a secure OTP code.
                     </p>
                   </div>
 
                   {error && (
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-semibold flex items-center gap-3">
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-semibold flex items-center gap-3"
+                    >
                       <div className="w-2 h-2 rounded-full bg-red-500 shrink-0 animate-pulse"></div>
                       {error}
                     </motion.div>
@@ -204,7 +225,11 @@ const ForgotPassword = () => {
                     >
                       <div className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
                       <span className="relative flex items-center justify-center gap-2">
-                        {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Request Secure Link"}
+                        {isLoading ? (
+                          <Loader2 className="h-5 w-5 animate-spin" />
+                        ) : (
+                          "Request Secure Link"
+                        )}
                       </span>
                     </button>
                   </form>
@@ -225,18 +250,27 @@ const ForgotPassword = () => {
                       Verify & Reset
                     </h2>
                     <p className="text-slate-500 leading-relaxed text-sm">
-                      We've sent a 6-digit code to <strong className="text-slate-700">{email}</strong>.
+                      We've sent a 6-digit code to{" "}
+                      <strong className="text-slate-700">{email}</strong>.
                     </p>
                   </div>
 
                   {error && (
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-semibold flex items-center gap-3">
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-semibold flex items-center gap-3"
+                    >
                       <div className="w-2 h-2 rounded-full bg-red-500 shrink-0 animate-pulse"></div>
                       {error}
                     </motion.div>
                   )}
                   {success && (
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-semibold flex items-center gap-3">
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-semibold flex items-center gap-3"
+                    >
                       <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></div>
                       {success}
                     </motion.div>
@@ -252,7 +286,9 @@ const ForgotPassword = () => {
                         required
                         maxLength={6}
                         value={otp}
-                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                        onChange={(e) =>
+                          setOtp(e.target.value.replace(/\D/g, ""))
+                        }
                         className="block w-full px-4 py-4 border border-slate-200 rounded-xl text-center text-3xl tracking-[0.4em] transition-all bg-slate-50 hover:bg-white focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-slate-800 font-black shadow-sm"
                         placeholder="••••••"
                       />
@@ -284,7 +320,11 @@ const ForgotPassword = () => {
                     >
                       <div className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
                       <span className="relative flex items-center justify-center gap-2">
-                        {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Confirm New Password"}
+                        {isLoading ? (
+                          <Loader2 className="h-5 w-5 animate-spin" />
+                        ) : (
+                          "Confirm New Password"
+                        )}
                       </span>
                     </button>
                   </form>

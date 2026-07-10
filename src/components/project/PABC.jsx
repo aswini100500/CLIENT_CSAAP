@@ -20,7 +20,7 @@ import {
   FaTable,
   FaTimes,
   FaTimesCircle,
-  FaTrash
+  FaTrash,
 } from "react-icons/fa";
 import ApartmentProject from "./ApartmentProject";
 import CommercialProject from "./CommercialProject";
@@ -33,7 +33,6 @@ import * as XLSX from "xlsx";
 import projectService from "./projectService";
 import useAuth from "../../hooks/useAuth";
 
-
 import { getProjectOverallStatus } from "./shared/utils";
 import CustomizeSelect from "./CustomizeSelect";
 import {
@@ -42,7 +41,6 @@ import {
   FACING_OPTIONS,
   PROJECT_TYPES,
 } from "./shared/Constants";
-
 
 const DUPLEX_TRIPLEX_CONSTANTS = {
   FACILITIES: FACILITIES || [],
@@ -77,7 +75,6 @@ const PABC = () => {
     lastSynced: null,
   });
 
-
   const [showPlotEditingOverview, setShowPlotEditingOverview] = useState(false);
   const [selectedProjectForEditing, setSelectedProjectForEditing] =
     useState(null);
@@ -90,8 +87,10 @@ const PABC = () => {
     let status = item.possessionStatus || item.possession_status;
     if (!status && item.propertyFeatures) {
       let features = item.propertyFeatures;
-      if (typeof features === 'string') {
-        try { features = JSON.parse(features); } catch (e) { }
+      if (typeof features === "string") {
+        try {
+          features = JSON.parse(features);
+        } catch (e) {}
       }
       status = features?.possessionStatus;
     }
@@ -105,7 +104,6 @@ const PABC = () => {
   const [landZone, setLandZone] = useState("");
   const [commercialSubType, setCommercialSubType] = useState("");
   const [editingProjectId, setEditingProjectId] = useState(null);
-
 
   const [landArea, setLandArea] = useState("");
   const [revenuePlots, setRevenuePlots] = useState("");
@@ -122,19 +120,16 @@ const PABC = () => {
   const [unitOverviewProject, setUnitOverviewProject] = useState(null);
   const [unitOverviewUnits, setUnitOverviewUnits] = useState([]);
 
-
   const [showApartmentOverview, setShowApartmentOverview] = useState(false);
   const [apartmentOverviewProject, setApartmentOverviewProject] =
     useState(null);
   const [apartmentOverviewBlocks, setApartmentOverviewBlocks] = useState([]);
-
 
   const [showCommercialEditingOverview, setShowCommercialEditingOverview] =
     useState(false);
   const [commercialOverviewProject, setCommercialOverviewProject] =
     useState(null);
   const [commercialOverviewUnits, setCommercialOverviewUnits] = useState([]);
-
 
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -144,10 +139,8 @@ const PABC = () => {
   const [customOverviewProject, setCustomOverviewProject] = useState(null);
   const [customOverviewData, setCustomOverviewData] = useState({});
 
-
   useEffect(() => {
     if (showForm && editingProjectId) {
-
       const project = projects.find((p) => p.id === editingProjectId);
       if (
         (project?.type === "duplex" || project?.type === "triplex") &&
@@ -159,7 +152,6 @@ const PABC = () => {
               ? JSON.parse(project.units_data)
               : project.units_data;
           if (units && units.length > 0) {
-
             const shouldShow =
               window.location.hash === "#unit-overview" ||
               localStorage.getItem(`show_unit_overview_${editingProjectId}`);
@@ -174,7 +166,6 @@ const PABC = () => {
       }
     }
   }, [showForm, editingProjectId, projects]);
-
 
   useEffect(() => {
     loadAllProjects();
@@ -213,11 +204,9 @@ const PABC = () => {
     setShowApartmentOverview(true);
   };
 
-
   const loadAllProjects = async () => {
     try {
       setApiLoading(true);
-
 
       const savedProjects = localStorage.getItem("local_projects");
       let localProjects = [];
@@ -230,12 +219,8 @@ const PABC = () => {
         }
       }
 
-
       let serverProjects = [];
       try {
-
-
-
         const fetchResults = await Promise.allSettled([
           projectService.getAllApartments(),
           projectService.getAllCommercials(),
@@ -256,7 +241,6 @@ const PABC = () => {
 
         const processResult = (result, type, label) => {
           if (result.status === "fulfilled" && Array.isArray(result.value)) {
-
             return result.value.map((p) => ({ ...p, source: "server", type }));
           } else {
             if (result.status === "rejected") {
@@ -283,15 +267,11 @@ const PABC = () => {
             "custom projects",
           ),
         ];
-
-
       } catch (apiError) {
         console.error("Critical error in loadAllProjects API fetch:", apiError);
       }
 
-
       const allProjects = [...serverProjects];
-
 
       localProjects.forEach((localProject) => {
         const existsOnServer = allProjects.some(
@@ -302,7 +282,6 @@ const PABC = () => {
         }
       });
 
-
       allProjects.sort((a, b) => {
         const dateA = new Date(a.created_at || a.createdAt || 0);
         const dateB = new Date(b.created_at || b.createdAt || 0);
@@ -310,7 +289,6 @@ const PABC = () => {
       });
 
       setProjects(allProjects);
-
 
       setSyncStatus({
         local: localProjects.length,
@@ -325,43 +303,7 @@ const PABC = () => {
     }
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   useEffect(() => {
-
     const localProjects = projects.filter(
       (p) => p.source === "local" || !p.source,
     );
@@ -371,7 +313,6 @@ const PABC = () => {
       localStorage.removeItem("local_projects");
     }
   }, [projects]);
-
 
   useEffect(() => {
     if (!showForm && editingPlotId) {
@@ -418,22 +359,14 @@ const PABC = () => {
 
   const handleSaveProject = useCallback(
     async (projectData) => {
-
-
-
       projectData?.blocks?.forEach((block, blockIndex) => {
         block.floors?.forEach((floor, floorIndex) => {
-          floor.units?.forEach((unit, unitIndex) => {
-
-          });
+          floor.units?.forEach((unit, unitIndex) => {});
         });
       });
 
       {
-
       }
-
-
 
       if (projectType === PROJECT_TYPES.CUSTOM) {
         projectData.type = PROJECT_TYPES.CUSTOM;
@@ -445,14 +378,12 @@ const PABC = () => {
         let savedProject;
 
         if (projectData.id) {
-
           let mergedData = { ...projectData };
 
           if (editingProjectId) {
             const existingProject = projects.find(
               (p) => p.id === editingProjectId,
             );
-
 
             if (existingProject?.units_data) {
               let existingUnits = existingProject.units_data;
@@ -479,7 +410,6 @@ const PABC = () => {
                 }
 
                 if (Array.isArray(incomingUnits)) {
-
                   const mergedUnits = existingUnits.map((u) => {
                     const updated = incomingUnits.find((iu) => iu.id === u.id);
                     return updated ? { ...u, ...updated } : u;
@@ -493,9 +423,7 @@ const PABC = () => {
                   projectData.units_data = mergedUnits;
                 }
               }
-            }
-
-            else if (existingProject?.units?.length) {
+            } else if (existingProject?.units?.length) {
               const incomingUnits = projectData.units || [];
 
               const mergedUnits = existingProject.units.map((u) => {
@@ -515,16 +443,14 @@ const PABC = () => {
               mergedData.source ||
               (editingProjectId
                 ? projects.find((p) => p.id === editingProjectId)?.source ||
-                "local"
+                  "local"
                 : "server"),
           };
 
           if (editingProjectId) {
-
             if (savedProject.source === "server") {
               try {
                 if (savedProject.type === PROJECT_TYPES.CUSTOM) {
-
                   const subProjectKeys = [
                     "plots",
                     "plots_data",
@@ -565,25 +491,50 @@ const PABC = () => {
                     configuration: customConfiguration,
                   });
                   alert("Custom project updated!");
-                } else if (savedProject.type === "apartment" || savedProject.type === PROJECT_TYPES.APARTMENT) {
-                  await projectService.updateApartment(editingProjectId, mergedData);
-                } else if (savedProject.type === "commercial" || savedProject.type === PROJECT_TYPES.COMMERCIAL) {
-                  await projectService.updateCommercial(editingProjectId, mergedData);
-                } else if (savedProject.type === "plotting" || savedProject.type === PROJECT_TYPES.PLOTTING) {
-                  await projectService.updatePlotting(editingProjectId, mergedData);
-                } else if (savedProject.type === "duplex" || savedProject.type === PROJECT_TYPES.DUPLEX) {
-                  await projectService.updateDuplex(editingProjectId, mergedData);
-                } else if (savedProject.type === "triplex" || savedProject.type === PROJECT_TYPES.TRIPLEX) {
-                  await projectService.updateTriplex(editingProjectId, mergedData);
+                } else if (
+                  savedProject.type === "apartment" ||
+                  savedProject.type === PROJECT_TYPES.APARTMENT
+                ) {
+                  await projectService.updateApartment(
+                    editingProjectId,
+                    mergedData,
+                  );
+                } else if (
+                  savedProject.type === "commercial" ||
+                  savedProject.type === PROJECT_TYPES.COMMERCIAL
+                ) {
+                  await projectService.updateCommercial(
+                    editingProjectId,
+                    mergedData,
+                  );
+                } else if (
+                  savedProject.type === "plotting" ||
+                  savedProject.type === PROJECT_TYPES.PLOTTING
+                ) {
+                  await projectService.updatePlotting(
+                    editingProjectId,
+                    mergedData,
+                  );
+                } else if (
+                  savedProject.type === "duplex" ||
+                  savedProject.type === PROJECT_TYPES.DUPLEX
+                ) {
+                  await projectService.updateDuplex(
+                    editingProjectId,
+                    mergedData,
+                  );
+                } else if (
+                  savedProject.type === "triplex" ||
+                  savedProject.type === PROJECT_TYPES.TRIPLEX
+                ) {
+                  await projectService.updateTriplex(
+                    editingProjectId,
+                    mergedData,
+                  );
                 }
               } catch (apiError) {
-                console.error(
-                  "Failed to update project on server:",
-                  apiError,
-                );
-                alert(
-                  "Failed to update project on server. Updating locally.",
-                );
+                console.error("Failed to update project on server:", apiError);
+                alert("Failed to update project on server. Updating locally.");
               }
             }
 
@@ -601,9 +552,7 @@ const PABC = () => {
             alert("Project saved successfully!");
           }
         } else {
-
           try {
-
             let serverResponse;
             switch (projectData.type) {
               case "apartment":
@@ -626,7 +575,6 @@ const PABC = () => {
                   await projectService.createTriplex(projectData);
                 break;
               case PROJECT_TYPES.CUSTOM:
-
                 const subProjectKeysForCreate = [
                   "plots",
                   "plots_data",
@@ -699,8 +647,6 @@ const PABC = () => {
             alert("Project saved locally!");
           }
         }
-
-
 
         loadAllProjects();
       } catch (error) {
@@ -783,7 +729,6 @@ const PABC = () => {
             setSelectedProjectForEditing(null);
             setShowPlotEditingOverview(false);
           }
-
 
           setSelectedProjects((prev) => prev.filter((pId) => pId !== id));
 
@@ -885,7 +830,6 @@ const PABC = () => {
     if (result.isConfirmed) {
       const { success, failed } = result.value;
 
-
       setProjects((prev) => {
         const updated = prev.filter(
           (p) => !success.some((sId) => String(sId) === String(p.id)),
@@ -893,7 +837,6 @@ const PABC = () => {
 
         return updated;
       });
-
 
       setSelectedProjects([]);
       setSelectAll(false);
@@ -946,7 +889,7 @@ const PABC = () => {
           allowOutsideClick: false,
           didOpen: () => {
             Swal.showLoading();
-          }
+          },
         });
 
         let freshProject = null;
@@ -967,7 +910,9 @@ const PABC = () => {
             freshProject = await projectService.getTriplexById(project.id);
             break;
           case "custom":
-            freshProject = await projectService.getCustomProjectById(project.id);
+            freshProject = await projectService.getCustomProjectById(
+              project.id,
+            );
             break;
           default:
             break;
@@ -975,7 +920,11 @@ const PABC = () => {
 
         if (freshProject) {
           projectToEdit = { ...project, ...freshProject };
-          setProjects(prev => prev.map(p => String(p.id) === String(project.id) ? projectToEdit : p));
+          setProjects((prev) =>
+            prev.map((p) =>
+              String(p.id) === String(project.id) ? projectToEdit : p,
+            ),
+          );
         }
         Swal.close();
       } catch (error) {
@@ -985,35 +934,27 @@ const PABC = () => {
           title: "Fetch Failed",
           text: "Could not load latest project details. Using cached local data.",
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
       }
     }
 
-
-
-
-
-
-
-
     let updatedProject = { ...projectToEdit };
 
-
-
-    if (updatedProject.type === PROJECT_TYPES.CUSTOM && updatedProject.configuration) {
+    if (
+      updatedProject.type === PROJECT_TYPES.CUSTOM &&
+      updatedProject.configuration
+    ) {
       try {
         const config =
           typeof updatedProject.configuration === "string"
             ? JSON.parse(updatedProject.configuration)
             : updatedProject.configuration;
         updatedProject = { ...updatedProject, ...config };
-
       } catch (e) {
         console.error("Failed to parse project configuration:", e);
       }
     }
-
 
     if (updatedProject.units && Array.isArray(updatedProject.units)) {
       updatedProject = {
@@ -1029,13 +970,11 @@ const PABC = () => {
     setLocality(updatedProject.locality || "");
     setLandZone(updatedProject.land_zone || "");
 
-
     setLandArea(updatedProject.land_area || updatedProject.landArea || "");
 
-
-    const revPlots = updatedProject.revenue_plots || updatedProject.revenuePlots || 0;
+    const revPlots =
+      updatedProject.revenue_plots || updatedProject.revenuePlots || 0;
     setRevenuePlots(revPlots);
-
 
     let parsedPlots = [];
     const plotsToParse = updatedProject.plots_data || updatedProject.plots;
@@ -1052,7 +991,6 @@ const PABC = () => {
       }
     }
     setParsedPlotsData(parsedPlots);
-
 
     let parsedRevenuePlots = [];
     const revPlotsToParse =
@@ -1076,14 +1014,16 @@ const PABC = () => {
     setAddRevenuePlotNumber(updatedProject.addRevenuePlotNumber || "");
     setAttachment(updatedProject.attachment || null);
 
-
     if (plotId) {
       setEditingPlotId(plotId);
     }
 
     if (updatedProject.type === PROJECT_TYPES.CUSTOM) {
-
-      if (updatedProject.configuration && !updatedProject.subTypes && !updatedProject.sub_types) {
+      if (
+        updatedProject.configuration &&
+        !updatedProject.subTypes &&
+        !updatedProject.sub_types
+      ) {
         try {
           const config =
             typeof updatedProject.configuration === "string"
@@ -1117,7 +1057,6 @@ const PABC = () => {
       setProjectType(PROJECT_TYPES.CUSTOM);
       setShowCustomizeSelect(false);
     }
-
 
     if (updatedProject.type === PROJECT_TYPES.APARTMENT) {
       setSelectedProject(updatedProject);
@@ -1157,8 +1096,6 @@ const PABC = () => {
   };
 
   const handleCustomizeTypeSelect = (payload) => {
-
-
     const typesArray = Array.isArray(payload.customTypes)
       ? payload.customTypes
       : [];
@@ -1182,10 +1119,8 @@ const PABC = () => {
     );
   };
 
-
   const openPlotEditingOverview = (project) => {
     setSelectedProjectForEditing(project);
-
 
     let projectPlots = [];
     if (project.plots_data) {
@@ -1246,7 +1181,6 @@ const PABC = () => {
 
   const openCustomEditingOverview = (project) => {
     setCustomOverviewProject(project);
-
 
     let expandedProject = { ...project };
     if (project.configuration) {
@@ -1321,7 +1255,6 @@ const PABC = () => {
     setShowCustomEditingOverview(true);
   };
 
-
   const navigateToPlotEditFromOverview = (plotId) => {
     if (!selectedProjectForEditing) return;
 
@@ -1329,13 +1262,11 @@ const PABC = () => {
     editProject(selectedProjectForEditing, plotId);
   };
 
-
   const completeAllPlotEditing = () => {
     if (!selectedProjectForEditing) return;
 
     const updatedProjects = projects.map((project) => {
       if (project.id === selectedProjectForEditing.id) {
-
         let existingPlots = [];
         if (project.plots_data) {
           try {
@@ -1349,7 +1280,6 @@ const PABC = () => {
             existingPlots = [];
           }
         }
-
 
         const updatedPlots = existingPlots.map((plot) => ({
           ...plot,
@@ -1428,13 +1358,17 @@ const PABC = () => {
         }
 
         const updatedBlocks = existingBlocks.map((block) => {
-          const updatedFloors = Array.isArray(block.floors) ? block.floors.map(floor => {
-            const updatedUnits = Array.isArray(floor.units) ? floor.units.map(unit => ({
-              ...unit,
-              isBeingEdited: false
-            })) : [];
-            return { ...floor, units: updatedUnits };
-          }) : [];
+          const updatedFloors = Array.isArray(block.floors)
+            ? block.floors.map((floor) => {
+                const updatedUnits = Array.isArray(floor.units)
+                  ? floor.units.map((unit) => ({
+                      ...unit,
+                      isBeingEdited: false,
+                    }))
+                  : [];
+                return { ...floor, units: updatedUnits };
+              })
+            : [];
           return { ...block, floors: updatedFloors };
         });
 
@@ -1453,13 +1387,11 @@ const PABC = () => {
     alert("All apartment editing completed!");
   };
 
-
   const renderPlotEditingOverview = () => {
     if (!selectedProjectForEditing) return null;
 
     const project = selectedProjectForEditing;
     const projectPlots = editingPlots;
-
 
     const stats = {
       total: projectPlots.length,
@@ -1473,7 +1405,6 @@ const PABC = () => {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-
           <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-6 z-10">
             <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
@@ -1491,7 +1422,6 @@ const PABC = () => {
                     </p>
                   </div>
                 </div>
-
 
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
                   <div className="bg-gray-50 rounded-xl p-3">
@@ -1547,7 +1477,6 @@ const PABC = () => {
           </div>
 
           <div className="p-6">
-
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -1580,42 +1509,46 @@ const PABC = () => {
                     {projectPlots.map((plot) => (
                       <tr
                         key={plot.id}
-                        className={`hover:bg-gray-50 transition-colors ${plot.isBeingEdited
+                        className={`hover:bg-gray-50 transition-colors ${
+                          plot.isBeingEdited
                             ? "bg-blue-50"
                             : plot.lastSaved
                               ? "bg-emerald-50"
                               : "bg-gray-50/30"
-                          }`}
+                        }`}
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div className="shrink-0 h-10 w-10">
                               <div
-                                className={`h-10 w-10 rounded-full flex items-center justify-center ${plot.isBeingEdited
+                                className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                                  plot.isBeingEdited
                                     ? "bg-blue-100"
                                     : plot.lastSaved
                                       ? "bg-emerald-100"
                                       : "bg-gray-200"
-                                  }`}
+                                }`}
                               >
                                 <FaTable
-                                  className={`h-5 w-5 ${plot.isBeingEdited
+                                  className={`h-5 w-5 ${
+                                    plot.isBeingEdited
                                       ? "text-blue-600"
                                       : plot.lastSaved
                                         ? "text-emerald-600"
                                         : "text-gray-400"
-                                    }`}
+                                  }`}
                                 />
                               </div>
                             </div>
                             <div className="ml-4">
                               <div
-                                className={`text-sm font-medium ${plot.isBeingEdited
+                                className={`text-sm font-medium ${
+                                  plot.isBeingEdited
                                     ? "text-blue-900 font-bold"
                                     : plot.lastSaved
                                       ? "text-gray-900"
                                       : "text-gray-500 italic"
-                                  }`}
+                                }`}
                               >
                                 {plot.name}
                               </div>
@@ -1629,10 +1562,11 @@ const PABC = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div
-                            className={`text-sm ${plot.areaDetails?.plotArea
+                            className={`text-sm ${
+                              plot.areaDetails?.plotArea
                                 ? "text-gray-900"
                                 : "text-gray-500 italic"
-                              }`}
+                            }`}
                           >
                             {plot.areaDetails?.plotArea
                               ? `${plot.areaDetails.plotArea} sq-yd`
@@ -1648,10 +1582,11 @@ const PABC = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div
-                            className={`text-sm ${plot.priceDetails?.expectedPrice
+                            className={`text-sm ${
+                              plot.priceDetails?.expectedPrice
                                 ? "text-gray-900"
                                 : "text-gray-500 italic"
-                              }`}
+                            }`}
                           >
                             {plot.priceDetails?.expectedPrice
                               ? `₹${parseInt(plot.priceDetails.expectedPrice).toLocaleString()}`
@@ -1669,12 +1604,13 @@ const PABC = () => {
                         <td className="px-6 py-4">
                           <div className="flex flex-col gap-1 items-start">
                             <span
-                              className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${plot.isBeingEdited
+                              className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
+                                plot.isBeingEdited
                                   ? "bg-blue-100 text-blue-800"
                                   : plot.lastSaved
                                     ? "bg-emerald-100 text-emerald-800"
                                     : "bg-gray-100 text-gray-500 italic"
-                                }`}
+                              }`}
                             >
                               {plot.isBeingEdited
                                 ? "Being Edited"
@@ -1690,11 +1626,11 @@ const PABC = () => {
                         <td className="px-6 py-4 text-sm text-gray-500">
                           {plot.lastSaved
                             ? new Date(plot.lastSaved).toLocaleDateString() +
-                            " " +
-                            new Date(plot.lastSaved).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
+                              " " +
+                              new Date(plot.lastSaved).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
                             : "Never"}
                         </td>
                         <td className="px-6 py-4">
@@ -1755,7 +1691,6 @@ const PABC = () => {
               )}
             </div>
 
-
             <div className="mt-6 flex justify-between items-center">
               <div className="text-sm text-gray-500">
                 Showing {projectPlots.length} plot(s)
@@ -1796,13 +1731,13 @@ const PABC = () => {
       beingEdited: units.filter((u) => u.isBeingEdited).length,
       saved: units.filter((u) => u.lastSaved && !u.isBeingEdited).length,
       notEdited: units.filter((u) => !u.lastSaved && !u.isBeingEdited).length,
-      complete: units.filter((u) => getPossessionStatus(u) === "Completed").length,
+      complete: units.filter((u) => getPossessionStatus(u) === "Completed")
+        .length,
     };
 
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-
           <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-6 z-10">
             <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
@@ -1815,31 +1750,43 @@ const PABC = () => {
                       Unit Editing Overview
                     </h2>
                     <p className="text-sm text-gray-600">
-                      Project: <span className="font-semibold">{unitOverviewProject.name}</span>
+                      Project:{" "}
+                      <span className="font-semibold">
+                        {unitOverviewProject.name}
+                      </span>
                     </p>
                   </div>
                 </div>
 
-
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
                   <div className="bg-gray-50 rounded-xl p-3">
-                    <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+                    <div className="text-2xl font-bold text-gray-900">
+                      {stats.total}
+                    </div>
                     <div className="text-xs text-gray-500">Total Units</div>
                   </div>
                   <div className="bg-blue-50 rounded-xl p-3">
-                    <div className="text-2xl font-bold text-blue-700">{stats.beingEdited}</div>
+                    <div className="text-2xl font-bold text-blue-700">
+                      {stats.beingEdited}
+                    </div>
                     <div className="text-xs text-blue-600">Being Edited</div>
                   </div>
                   <div className="bg-emerald-50 rounded-xl p-3">
-                    <div className="text-2xl font-bold text-emerald-700">{stats.saved}</div>
+                    <div className="text-2xl font-bold text-emerald-700">
+                      {stats.saved}
+                    </div>
                     <div className="text-xs text-emerald-600">Saved</div>
                   </div>
                   <div className="bg-amber-50 rounded-xl p-3">
-                    <div className="text-2xl font-bold text-amber-700">{stats.notEdited}</div>
+                    <div className="text-2xl font-bold text-amber-700">
+                      {stats.notEdited}
+                    </div>
                     <div className="text-xs text-amber-600">Not Edited</div>
                   </div>
                   <div className="bg-indigo-50 rounded-xl p-3">
-                    <div className="text-2xl font-bold text-indigo-700">{stats.complete}</div>
+                    <div className="text-2xl font-bold text-indigo-700">
+                      {stats.complete}
+                    </div>
                     <div className="text-xs text-indigo-600">Complete</div>
                   </div>
                 </div>
@@ -1864,7 +1811,6 @@ const PABC = () => {
             </div>
           </div>
 
-
           <div className="p-6">
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
@@ -1887,11 +1833,18 @@ const PABC = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {units.map((unit) => (
-                      <tr key={unit.id} className="hover:bg-gray-50 transition-colors">
+                      <tr
+                        key={unit.id}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold">
-                              {unit.unitNo ? unit.unitNo.charAt(0) : unit.name ? unit.name.charAt(0) : "U"}
+                              {unit.unitNo
+                                ? unit.unitNo.charAt(0)
+                                : unit.name
+                                  ? unit.name.charAt(0)
+                                  : "U"}
                             </div>
                             <div className="font-medium text-gray-900">
                               {unit.unitNo || unit.name || "Unnamed Unit"}
@@ -1901,12 +1854,13 @@ const PABC = () => {
                         <td className="px-6 py-4">
                           <div className="flex flex-col gap-1 items-start">
                             <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${unit.isBeingEdited
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                unit.isBeingEdited
                                   ? "bg-blue-100 text-blue-800"
                                   : unit.lastSaved
                                     ? "bg-emerald-100 text-emerald-800"
                                     : "bg-gray-100 text-gray-500 italic"
-                                }`}
+                              }`}
                             >
                               {unit.isBeingEdited
                                 ? "Being Edited"
@@ -1922,11 +1876,11 @@ const PABC = () => {
                         <td className="px-6 py-4 text-sm text-gray-500">
                           {unit.lastSaved
                             ? new Date(unit.lastSaved).toLocaleDateString() +
-                            " " +
-                            new Date(unit.lastSaved).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
+                              " " +
+                              new Date(unit.lastSaved).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
                             : "Never"}
                         </td>
                         <td className="px-6 py-4 text-right">
@@ -1971,7 +1925,6 @@ const PABC = () => {
     const project = apartmentOverviewProject;
     const blocks = apartmentOverviewBlocks;
 
-
     const allUnits = blocks.flatMap((block) => {
       let units = [];
       if (block.units_data) {
@@ -1996,13 +1949,13 @@ const PABC = () => {
       saved: allUnits.filter((u) => u.lastSaved && !u.isBeingEdited).length,
       notEdited: allUnits.filter((u) => !u.lastSaved && !u.isBeingEdited)
         .length,
-      complete: allUnits.filter((u) => getPossessionStatus(u) === "Completed").length,
+      complete: allUnits.filter((u) => getPossessionStatus(u) === "Completed")
+        .length,
     };
 
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-
           <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-6 z-10">
             <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
@@ -2020,7 +1973,6 @@ const PABC = () => {
                     </p>
                   </div>
                 </div>
-
 
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mt-6">
                   <div className="bg-gray-50 rounded-xl p-3">
@@ -2082,11 +2034,9 @@ const PABC = () => {
           </div>
 
           <div className="p-6">
-
             <div className="space-y-6">
               {blocks.map((block) => {
                 let blockUnits = [];
-
 
                 if (block.units_data) {
                   try {
@@ -2122,7 +2072,6 @@ const PABC = () => {
                     key={block.id}
                     className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm"
                   >
-
                     <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
@@ -2154,7 +2103,6 @@ const PABC = () => {
                       </div>
                     </div>
 
-
                     <div className="p-6">
                       {blockUnits.length === 0 ? (
                         <div className="text-center py-8">
@@ -2168,40 +2116,44 @@ const PABC = () => {
                           {blockUnits.map((unit) => (
                             <div
                               key={unit.id}
-                              className={`p-4 rounded-lg border transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${unit.isBeingEdited
+                              className={`p-4 rounded-lg border transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${
+                                unit.isBeingEdited
                                   ? "border-blue-300 bg-blue-50"
                                   : unit.lastSaved
                                     ? "border-emerald-200 bg-emerald-50"
                                     : "border-gray-200 bg-gray-50 opacity-70"
-                                }`}
+                              }`}
                             >
                               <div className="flex justify-between items-start mb-3">
                                 <div className="flex items-center gap-2">
                                   <div
-                                    className={`p-2 rounded-lg ${unit.isBeingEdited
+                                    className={`p-2 rounded-lg ${
+                                      unit.isBeingEdited
                                         ? "bg-blue-100"
                                         : unit.lastSaved
                                           ? "bg-emerald-100"
                                           : "bg-gray-100"
-                                      }`}
+                                    }`}
                                   >
                                     <FaHome
-                                      className={`h-4 w-4 ${unit.isBeingEdited
+                                      className={`h-4 w-4 ${
+                                        unit.isBeingEdited
                                           ? "text-blue-600"
                                           : unit.lastSaved
                                             ? "text-emerald-600"
                                             : "text-gray-400"
-                                        }`}
+                                      }`}
                                     />
                                   </div>
                                   <div>
                                     <div
-                                      className={`font-medium ${unit.isBeingEdited
+                                      className={`font-medium ${
+                                        unit.isBeingEdited
                                           ? "text-blue-900"
                                           : unit.lastSaved
                                             ? "text-gray-900"
                                             : "text-gray-500"
-                                        }`}
+                                      }`}
                                     >
                                       {unit.unitNo || unit.name || "Unit"}
                                     </div>
@@ -2213,12 +2165,13 @@ const PABC = () => {
                                   </div>
                                 </div>
                                 <span
-                                  className={`text-xs px-2 py-1 rounded-full ${unit.isBeingEdited
+                                  className={`text-xs px-2 py-1 rounded-full ${
+                                    unit.isBeingEdited
                                       ? "bg-blue-100 text-blue-800"
                                       : unit.lastSaved
                                         ? "bg-emerald-100 text-emerald-800"
                                         : "bg-gray-100 text-gray-500 italic"
-                                    }`}
+                                  }`}
                                 >
                                   {unit.isBeingEdited
                                     ? "Editing"
@@ -2228,17 +2181,16 @@ const PABC = () => {
                                 </span>
                               </div>
 
-
                               <div className="space-y-2">
                                 {(unit.area ||
                                   unit.area_details?.carpet_area) && (
-                                    <div className="text-sm text-gray-600">
-                                      Area:{" "}
-                                      {unit.area ||
-                                        unit.area_details?.carpet_area}{" "}
-                                      sqft
-                                    </div>
-                                  )}
+                                  <div className="text-sm text-gray-600">
+                                    Area:{" "}
+                                    {unit.area ||
+                                      unit.area_details?.carpet_area}{" "}
+                                    sqft
+                                  </div>
+                                )}
                                 <div className="text-sm text-gray-600">
                                   Status: {getPossessionStatus(unit)}
                                 </div>
@@ -2246,12 +2198,13 @@ const PABC = () => {
 
                               <div className="mt-4 flex justify-end">
                                 <button
-                                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${unit.isBeingEdited
+                                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                    unit.isBeingEdited
                                       ? "bg-blue-600 hover:bg-blue-700 text-white"
                                       : unit.lastSaved
                                         ? "bg-indigo-600 hover:bg-indigo-700 text-white"
                                         : "bg-gray-200 hover:bg-gray-300 text-gray-700"
-                                    }`}
+                                  }`}
                                   onClick={() => {
                                     setShowApartmentOverview(false);
                                     editProject(project, unit.id);
@@ -2271,7 +2224,6 @@ const PABC = () => {
                 );
               })}
             </div>
-
 
             <div className="mt-6 flex justify-between items-center pt-6 border-t border-gray-200">
               <div className="text-sm text-gray-500">
@@ -2314,13 +2266,13 @@ const PABC = () => {
       beingEdited: units.filter((u) => u.isBeingEdited).length,
       saved: units.filter((u) => u.lastSaved && !u.isBeingEdited).length,
       notEdited: units.filter((u) => !u.lastSaved && !u.isBeingEdited).length,
-      complete: units.filter((u) => getPossessionStatus(u) === "Completed").length,
+      complete: units.filter((u) => getPossessionStatus(u) === "Completed")
+        .length,
     };
 
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-
           <div className="sticky top-0 bg-white border-b p-6 z-10">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">
@@ -2330,11 +2282,7 @@ const PABC = () => {
                 <FaTimes />
               </button>
             </div>
-
-
-
           </div>
-
 
           <div className="p-6">
             <table className="w-full">
@@ -2366,12 +2314,13 @@ const PABC = () => {
                     <td className="px-6 py-4">
                       <div className="flex flex-col gap-1 items-start">
                         <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${unit.isBeingEdited
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            unit.isBeingEdited
                               ? "bg-blue-100 text-blue-800"
                               : unit.lastSaved
                                 ? "bg-emerald-100 text-emerald-800"
                                 : "bg-gray-100 text-gray-500 italic"
-                            }`}
+                          }`}
                         >
                           {unit.isBeingEdited
                             ? "Being Edited"
@@ -2411,7 +2360,6 @@ const PABC = () => {
     const project = customOverviewProject;
     const customTypes = project.custom_selected_types || [];
 
-
     const totalItems = Object.values(customOverviewData).reduce(
       (sum, type) => sum + type.count,
       0,
@@ -2424,7 +2372,6 @@ const PABC = () => {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
         <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-
           <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-6 z-10">
             <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
@@ -2442,7 +2389,6 @@ const PABC = () => {
                     </p>
                   </div>
                 </div>
-
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                   <div className="bg-gray-50 rounded-xl p-3">
@@ -2486,7 +2432,6 @@ const PABC = () => {
           </div>
 
           <div className="p-6">
-
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
               <div className="flex items-start gap-3">
                 <FaExclamationCircle className="text-blue-600 mt-1 shrink-0" />
@@ -2511,7 +2456,6 @@ const PABC = () => {
               </div>
             </div>
 
-
             <div className="space-y-6">
               {customTypes.map((type) => {
                 const typeData = customOverviewData[type] || {
@@ -2534,7 +2478,6 @@ const PABC = () => {
                       setCurrentCustomType(type);
                     }}
                   >
-
                     <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
@@ -2555,7 +2498,6 @@ const PABC = () => {
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
-
                           <div className="flex items-center gap-2 min-w-37.5">
                             <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                               <div
@@ -2571,7 +2513,6 @@ const PABC = () => {
                       </div>
                     </div>
 
-
                     <div className="p-6">
                       {typeData.items.length === 0 ? (
                         <div className="text-center py-8">
@@ -2585,23 +2526,26 @@ const PABC = () => {
                           {typeData.items.map((item) => (
                             <div
                               key={item.id}
-                              className={`p-4 rounded-lg border transition-all flex items-center justify-between ${item.isBeingEdited || item.lastSaved
+                              className={`p-4 rounded-lg border transition-all flex items-center justify-between ${
+                                item.isBeingEdited || item.lastSaved
                                   ? "border-emerald-200 bg-emerald-50"
                                   : "border-gray-200 bg-gray-50 opacity-70"
-                                }`}
+                              }`}
                             >
                               <div className="flex items-center gap-3 flex-1">
                                 <div
-                                  className={`p-2 rounded-lg ${item.isBeingEdited || item.lastSaved
+                                  className={`p-2 rounded-lg ${
+                                    item.isBeingEdited || item.lastSaved
                                       ? "bg-emerald-100"
                                       : "bg-gray-100"
-                                    }`}
+                                  }`}
                                 >
                                   <FaCheck
-                                    className={`h-4 w-4 ${item.isBeingEdited || item.lastSaved
+                                    className={`h-4 w-4 ${
+                                      item.isBeingEdited || item.lastSaved
                                         ? "text-emerald-600"
                                         : "text-gray-400"
-                                      }`}
+                                    }`}
                                   />
                                 </div>
                                 <div>
@@ -2616,10 +2560,11 @@ const PABC = () => {
                                 </div>
                               </div>
                               <span
-                                className={`text-xs px-2.5 py-1 rounded-full ${item.isBeingEdited || item.lastSaved
+                                className={`text-xs px-2.5 py-1 rounded-full ${
+                                  item.isBeingEdited || item.lastSaved
                                     ? "bg-emerald-100 text-emerald-800"
                                     : "bg-gray-100 text-gray-500"
-                                  }`}
+                                }`}
                               >
                                 {item.isBeingEdited
                                   ? "Editing"
@@ -2636,7 +2581,6 @@ const PABC = () => {
                 );
               })}
             </div>
-
 
             <div className="mt-6 flex justify-between items-center pt-6 border-t border-gray-200">
               <div className="text-sm text-gray-500">
@@ -2668,76 +2612,10 @@ const PABC = () => {
     );
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const renderProjectForm = () => {
     if (showCustomizeSelect) {
       return (
         <div className="p-8">
-
           <CustomizeSelect
             initialSelected={selectedCustomTypes}
             onBack={() => setShowCustomizeSelect(false)}
@@ -2805,7 +2683,6 @@ const PABC = () => {
       ? projects.find((p) => p.id === editingProjectId)
       : null;
 
-
     if (
       selectedProjectVal &&
       selectedProjectVal.type === PROJECT_TYPES.CUSTOM &&
@@ -2863,14 +2740,12 @@ const PABC = () => {
         : [],
       showUnitOverviewOnLoad: !!editingProjectId,
 
-
       onClose: () => {
         resetForm();
         setShowForm(false);
         setEditingProjectId(null);
       },
     };
-
 
     const plottingProps = {
       ...commonProps,
@@ -2882,7 +2757,6 @@ const PABC = () => {
       initialParsedPlotsData: parsedPlotsData,
       initialParsedRevenuePlotsData: parsedRevenuePlotsData,
       initialTab: editingProjectId ? "plots" : "project-info",
-
 
       onClose: () => {
         resetForm();
@@ -2897,17 +2771,16 @@ const PABC = () => {
     ) {
       return (
         <div className="relative space-y-4 p-6">
-
-
           <div className="flex gap-2 flex-wrap">
             {selectedCustomTypes.map((type) => (
               <button
                 key={type}
                 onClick={() => setCurrentCustomType(type)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${currentCustomType === type
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  currentCustomType === type
                     ? "bg-indigo-600 text-white shadow-md"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                }`}
               >
                 {type}
               </button>
@@ -2915,7 +2788,6 @@ const PABC = () => {
           </div>
           <div className="p-4 border border-gray-100 rounded-xl bg-gray-50/50">
             {(() => {
-
               const subtypeProject = selectedProjectVal;
 
               if (currentCustomType === "plotting") {
@@ -3133,7 +3005,6 @@ const PABC = () => {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {projects.map((project) => {
-
                       let projectPlots = [];
                       let totalPlots = 0;
                       let editingPlotsCount = 0;
@@ -3167,12 +3038,13 @@ const PABC = () => {
                             <td className="px-6 py-4">
                               <button
                                 onClick={() => toggleSelectProject(project.id)}
-                                className={`transition-colors ${selectedProjects.some(
-                                  (id) => String(id) === String(project.id),
-                                )
+                                className={`transition-colors ${
+                                  selectedProjects.some(
+                                    (id) => String(id) === String(project.id),
+                                  )
                                     ? "text-indigo-600"
                                     : "text-slate-300 hover:text-indigo-400"
-                                  }`}
+                                }`}
                               >
                                 {selectedProjects.some(
                                   (id) => String(id) === String(project.id),
@@ -3222,16 +3094,25 @@ const PABC = () => {
                               {(() => {
                                 const status = getProjectOverallStatus(project);
                                 return status ? (
-                                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${status === "Completed" ? "bg-emerald-100 text-emerald-700" :
-                                      status === "Pending" ? "bg-amber-100 text-amber-700" :
-                                        status === "In Progress" ? "bg-blue-100 text-blue-700" :
-                                          status === "Ready to Move" ? "bg-indigo-100 text-indigo-700" :
-                                            "bg-slate-100 text-slate-600"
-                                    }`}>
+                                  <span
+                                    className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                      status === "Completed"
+                                        ? "bg-emerald-100 text-emerald-700"
+                                        : status === "Pending"
+                                          ? "bg-amber-100 text-amber-700"
+                                          : status === "In Progress"
+                                            ? "bg-blue-100 text-blue-700"
+                                            : status === "Ready to Move"
+                                              ? "bg-indigo-100 text-indigo-700"
+                                              : "bg-slate-100 text-slate-600"
+                                    }`}
+                                  >
                                     {status}
                                   </span>
                                 ) : (
-                                  <span className="text-slate-400 text-xs">-</span>
+                                  <span className="text-slate-400 text-xs">
+                                    -
+                                  </span>
                                 );
                               })()}
                             </td>
@@ -3243,7 +3124,6 @@ const PABC = () => {
                             </td>
                             <td className="px-6 py-4 text-right">
                               <div className="flex items-center justify-end gap-2">
-
                                 {(project.type === "duplex" ||
                                   project.type === "triplex") &&
                                   (() => {
@@ -3273,13 +3153,10 @@ const PABC = () => {
                                     ) : null;
                                   })()}
 
-
                                 {project.type === "apartment" && (
                                   <button
                                     onClick={() => {
-
                                       openApartmentEditingOverview(project);
-
 
                                       setTimeout(() => {
                                         window.dispatchEvent(
@@ -3296,7 +3173,6 @@ const PABC = () => {
                                   </button>
                                 )}
 
-
                                 {project.type === "commercial" && (
                                   <button
                                     onClick={() =>
@@ -3308,7 +3184,6 @@ const PABC = () => {
                                     <FaTable />
                                   </button>
                                 )}
-
 
                                 {project.type === "plotting" && (
                                   <button
@@ -3322,7 +3197,6 @@ const PABC = () => {
                                   </button>
                                 )}
 
-
                                 {project.type === "custom" && (
                                   <button
                                     onClick={() =>
@@ -3334,11 +3208,6 @@ const PABC = () => {
                                     <FaTable />
                                   </button>
                                 )}
-
-
-
-
-
 
                                 <button
                                   onClick={() => handleViewProject(project)}
@@ -3356,7 +3225,6 @@ const PABC = () => {
                                   <FaEdit />
                                 </button>
 
-
                                 <button
                                   onClick={() => deleteProject(project.id)}
                                   className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
@@ -3364,7 +3232,6 @@ const PABC = () => {
                                 >
                                   <FaTrash />
                                 </button>
-
 
                                 <button
                                   onClick={() =>
@@ -3404,7 +3271,6 @@ const PABC = () => {
                                   </div>
 
                                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
                                     <div className="space-y-4">
                                       <div className="flex items-center gap-3 mb-3">
                                         <div className="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
@@ -3446,7 +3312,7 @@ const PABC = () => {
                                           <p className="font-semibold text-slate-700">
                                             {formatDate(
                                               project.created_at ||
-                                              project.createdAt,
+                                                project.createdAt,
                                             )}
                                           </p>
                                         </div>
@@ -3457,13 +3323,12 @@ const PABC = () => {
                                           <p className="font-semibold text-slate-700">
                                             {formatDate(
                                               project.updated_at ||
-                                              project.updatedAt,
+                                                project.updatedAt,
                                             )}
                                           </p>
                                         </div>
                                       </div>
                                     </div>
-
 
                                     <div className="space-y-4">
                                       <div className="flex items-center gap-3 mb-3">
@@ -3512,7 +3377,6 @@ const PABC = () => {
                                     </div>
                                   </div>
 
-
                                   <div className="mt-6 pt-6 border-t border-slate-200">
                                     <div className="flex items-center gap-3 mb-4">
                                       <div className="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
@@ -3546,7 +3410,6 @@ const PABC = () => {
                                       </div>
                                     </div>
 
-
                                     {project.type === "plotting" && (
                                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
@@ -3578,8 +3441,8 @@ const PABC = () => {
                                                   ? typeof project.plots_data ===
                                                     "string"
                                                     ? JSON.parse(
-                                                      project.plots_data,
-                                                    )
+                                                        project.plots_data,
+                                                      )
                                                     : project.plots_data
                                                   : [];
                                                 return plots.length || 0;
@@ -3592,97 +3455,95 @@ const PABC = () => {
                                       </div>
                                     )}
 
-
                                     {(project.type === "duplex" ||
                                       project.type === "triplex") && (
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                          <div>
-                                            <label className="text-xs font-bold text-slate-400 uppercase">
-                                              Land Area
-                                            </label>
-                                            <p className="font-semibold text-slate-700">
-                                              {project.land_area
-                                                ? `${project.land_area} sq.ft`
-                                                : "Not specified"}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <label className="text-xs font-bold text-slate-400 uppercase">
-                                              Total Units
-                                            </label>
-                                            <p className="font-semibold text-slate-700">
-                                              {(() => {
-                                                try {
-                                                  const units = project.units_data
-                                                    ? typeof project.units_data ===
-                                                      "string"
-                                                      ? JSON.parse(
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                          <label className="text-xs font-bold text-slate-400 uppercase">
+                                            Land Area
+                                          </label>
+                                          <p className="font-semibold text-slate-700">
+                                            {project.land_area
+                                              ? `${project.land_area} sq.ft`
+                                              : "Not specified"}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <label className="text-xs font-bold text-slate-400 uppercase">
+                                            Total Units
+                                          </label>
+                                          <p className="font-semibold text-slate-700">
+                                            {(() => {
+                                              try {
+                                                const units = project.units_data
+                                                  ? typeof project.units_data ===
+                                                    "string"
+                                                    ? JSON.parse(
                                                         project.units_data,
                                                       )
-                                                      : project.units_data
-                                                    : [];
-                                                  return units.length || 0;
-                                                } catch {
-                                                  return project.num_units || 0;
-                                                }
-                                              })()}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <label className="text-xs font-bold text-slate-400 uppercase">
-                                              Unit Prefix
+                                                    : project.units_data
+                                                  : [];
+                                                return units.length || 0;
+                                              } catch {
+                                                return project.num_units || 0;
+                                              }
+                                            })()}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <label className="text-xs font-bold text-slate-400 uppercase">
+                                            Unit Prefix
+                                          </label>
+                                          <p className="font-semibold text-slate-700">
+                                            {project.unit_prefix ||
+                                              "Not specified"}
+                                          </p>
+                                        </div>
+                                        {project.facilities && (
+                                          <div className="col-span-3">
+                                            <label className="text-xs font-bold text-slate-400 uppercase mb-2 block">
+                                              Facilities
                                             </label>
-                                            <p className="font-semibold text-slate-700">
-                                              {project.unit_prefix ||
-                                                "Not specified"}
-                                            </p>
-                                          </div>
-                                          {project.facilities && (
-                                            <div className="col-span-3">
-                                              <label className="text-xs font-bold text-slate-400 uppercase mb-2 block">
-                                                Facilities
-                                              </label>
-                                              <div className="flex flex-wrap gap-2">
-                                                {(() => {
-                                                  try {
-                                                    const facilities =
-                                                      project.facilities
-                                                        ? typeof project.facilities ===
-                                                          "string"
-                                                          ? JSON.parse(
+                                            <div className="flex flex-wrap gap-2">
+                                              {(() => {
+                                                try {
+                                                  const facilities =
+                                                    project.facilities
+                                                      ? typeof project.facilities ===
+                                                        "string"
+                                                        ? JSON.parse(
                                                             project.facilities,
                                                           )
-                                                          : project.facilities
-                                                        : {};
-                                                    return Object.entries(
-                                                      facilities,
+                                                        : project.facilities
+                                                      : {};
+                                                  return Object.entries(
+                                                    facilities,
+                                                  )
+                                                    .filter(
+                                                      ([key, value]) =>
+                                                        value === true,
                                                     )
-                                                      .filter(
-                                                        ([key, value]) =>
-                                                          value === true,
-                                                      )
-                                                      .map(([key]) => (
-                                                        <span
-                                                          key={key}
-                                                          className="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full font-medium"
-                                                        >
-                                                          {key.replace(/_/g, " ")}
-                                                        </span>
-                                                      ));
-                                                  } catch {
-                                                    return (
-                                                      <span className="text-slate-500 text-sm">
-                                                        No facilities
+                                                    .map(([key]) => (
+                                                      <span
+                                                        key={key}
+                                                        className="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full font-medium"
+                                                      >
+                                                        {key.replace(/_/g, " ")}
                                                       </span>
-                                                    );
-                                                  }
-                                                })()}
-                                              </div>
+                                                    ));
+                                                } catch {
+                                                  return (
+                                                    <span className="text-slate-500 text-sm">
+                                                      No facilities
+                                                    </span>
+                                                  );
+                                                }
+                                              })()}
                                             </div>
-                                          )}
-                                        </div>
-                                      )}
-
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
 
                                     {project.type === "apartment" && (
                                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -3708,7 +3569,6 @@ const PABC = () => {
                                         </div>
                                       </div>
                                     )}
-
 
                                     {project.type === "commercial" && (
                                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -3744,7 +3604,6 @@ const PABC = () => {
                                       </div>
                                     )}
 
-
                                     {project.type === "custom" && (
                                       <div className="space-y-3">
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -3777,7 +3636,6 @@ const PABC = () => {
                                     )}
                                   </div>
 
-
                                   <div className="mt-6 pt-6 border-t border-slate-200">
                                     <div className="flex items-center justify-between">
                                       <div>
@@ -3788,7 +3646,7 @@ const PABC = () => {
                                           Last saved:{" "}
                                           {formatDate(
                                             project.updated_at ||
-                                            project.updatedAt,
+                                              project.updatedAt,
                                           )}
                                         </p>
                                       </div>
@@ -3827,7 +3685,6 @@ const PABC = () => {
             <div className="">
               {!projectType && !showCustomizeSelect ? (
                 <div className="max-w-2xl mx-auto p-8 relative">
-
                   <button
                     onClick={() => {
                       resetForm();

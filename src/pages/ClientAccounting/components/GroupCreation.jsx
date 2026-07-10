@@ -1,331 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
@@ -347,7 +19,6 @@ const GroupCreation = () => {
   const [selectedId, setSelectedId] = useState("");
   const [editMode, setEditMode] = useState(false);
 
-
   useEffect(() => {
     if (companyId) fetchGroups();
   }, [companyId]);
@@ -356,8 +27,6 @@ const GroupCreation = () => {
     const res = await axios.get(`${API}/all/${companyId}`);
     setGroups(res.data);
   };
-
-
 
   useEffect(() => {
     if (selectedId) {
@@ -388,7 +57,6 @@ const GroupCreation = () => {
     setFormData({ ...formData, [field]: value });
   };
 
-
   const handleSubmit = async () => {
     try {
       if (!companyId) {
@@ -408,27 +76,18 @@ const GroupCreation = () => {
       resetForm();
       setSelectedId("");
     } catch (err) {
-
       alert("❌ Error saving group");
     }
   };
 
   return (
     <div className="min-h-screen w-full bg-white font-[monospace] flex justify-center px-3 py-6">
-
       <div className="w-full max-w-3xl bg-white shadow-lg rounded-md p-6 border border-gray-300">
-
         <h2 className="text-center text-lg md:text-xl text-blue-800 font-semibold mb-6">
           Group Creation {editMode && "(Editing)"}
         </h2>
 
-
-
-
-
         <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-y-4 gap-x-4 items-center">
-
-
           <label className="md:text-right text-gray-700">Name :</label>
           <input
             type="text"
@@ -436,7 +95,6 @@ const GroupCreation = () => {
             onChange={(e) => handleChange("groupName", e.target.value)}
             className="border border-gray-400 p-2 w-full rounded-sm text-sm focus:ring-1 focus:ring-blue-400"
           />
-
 
           <label className="md:text-right text-gray-700">Alias :</label>
           <input
@@ -446,11 +104,9 @@ const GroupCreation = () => {
             className="border border-gray-400 p-2 w-full rounded-sm text-sm"
           />
 
-
-
-
-
-          <label className="md:text-right text-gray-700">Nature of Group :</label>
+          <label className="md:text-right text-gray-700">
+            Nature of Group :
+          </label>
           <select
             value={formData.nature}
             onChange={(e) => handleChange("nature", e.target.value)}
@@ -463,8 +119,9 @@ const GroupCreation = () => {
             <option value="Expenses">Expenses</option>
           </select>
 
-
-          <label className="md:text-right text-gray-700">Behaves like a Sub-Ledger :</label>
+          <label className="md:text-right text-gray-700">
+            Behaves like a Sub-Ledger :
+          </label>
           <select
             value={formData.subLedger}
             onChange={(e) => handleChange("subLedger", e.target.value)}
@@ -492,7 +149,6 @@ const GroupCreation = () => {
             No
           </button>
         </div>
-
       </div>
     </div>
   );

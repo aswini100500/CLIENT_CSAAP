@@ -17,7 +17,6 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
   });
 
   const handleChange = (field, value, isNumber = true) => {
-
     if (isNumber && value.startsWith("-")) {
       return;
     }
@@ -42,7 +41,6 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
   };
 
   const handleKeyDown = (e) => {
-
     if (["e", "E", "+", "-"].includes(e.key)) {
       e.preventDefault();
     }
@@ -69,10 +67,11 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
         </div>
 
         <div className="p-4 space-y-4">
-
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="modal-label text-(--text-body)">OT Rate Is Fixed</label>
+              <label className="modal-label text-(--text-body)">
+                OT Rate Is Fixed
+              </label>
               <button
                 type="button"
                 onClick={() => handleToggle("is_ot_rate_fixed")}
@@ -84,7 +83,6 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
               </button>
             </div>
           </div>
-
 
           {localConfig.is_ot_rate_fixed ? (
             <div>
@@ -106,7 +104,9 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
             </div>
           ) : (
             <div>
-              <label className="modal-label block text-(--text-body) mb-1.5">OT Multiplier</label>
+              <label className="modal-label block text-(--text-body) mb-1.5">
+                OT Multiplier
+              </label>
               <input
                 type="number"
                 step="0.01"
@@ -123,7 +123,9 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
           )}
 
           <div>
-            <label className="modal-label block text-(--text-body) mb-1.5">Denominator Days</label>
+            <label className="modal-label block text-(--text-body) mb-1.5">
+              Denominator Days
+            </label>
             <input
               type="number"
               step="1"
@@ -141,7 +143,9 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
           </div>
 
           <div>
-            <label className="modal-label block text-(--text-body) mb-1.5">Hours Per Day</label>
+            <label className="modal-label block text-(--text-body) mb-1.5">
+              Hours Per Day
+            </label>
             <input
               type="number"
               step="0.01"
@@ -157,10 +161,14 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
           </div>
 
           <div className="app-panel p-3 space-y-3 bg-(--bg-subtle)/30 border border-(--border-soft)">
-            <p className="text-(--text-strong) font-bold text-xs uppercase tracking-wider">Weekly Offs</p>
+            <p className="text-(--text-strong) font-bold text-xs uppercase tracking-wider">
+              Weekly Offs
+            </p>
 
             <div className="flex items-center justify-between">
-              <label className="modal-label text-(--text-body)">Saturday Off</label>
+              <label className="modal-label text-(--text-body)">
+                Saturday Off
+              </label>
               <button
                 type="button"
                 onClick={() => handleToggle("saturday_off")}
@@ -173,7 +181,9 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
             </div>
 
             <div className="flex items-center justify-between">
-              <label className="modal-label text-(--text-body)">Sunday Off</label>
+              <label className="modal-label text-(--text-body)">
+                Sunday Off
+              </label>
               <button
                 type="button"
                 onClick={() => handleToggle("sunday_off")}
@@ -187,11 +197,15 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
           </div>
 
           <div className="app-panel p-3 space-y-3 bg-(--bg-subtle)/30 border border-(--border-soft)">
-            <p className="text-(--text-strong) font-bold text-xs uppercase tracking-wider">Penalties</p>
+            <p className="text-(--text-strong) font-bold text-xs uppercase tracking-wider">
+              Penalties
+            </p>
 
             <div className="flex items-center justify-between">
               <div>
-                <label className="modal-label text-(--text-body)">Late Penalty</label>
+                <label className="modal-label text-(--text-body)">
+                  Late Penalty
+                </label>
                 <p className="text-xs text-(--text-faint) mt-0.5">
                   3 consecutive late days = last day as half-day
                 </p>
@@ -209,7 +223,9 @@ const PayrollConfigModal = ({ config, onSave, onCancel }) => {
 
             <div className="flex items-center justify-between">
               <div>
-                <label className="modal-label text-(--text-body)">Sandwich Leave</label>
+                <label className="modal-label text-(--text-body)">
+                  Sandwich Leave
+                </label>
                 <p className="text-xs text-(--text-faint) mt-0.5">
                   Absences around holidays/offs count those offs as LOP
                 </p>

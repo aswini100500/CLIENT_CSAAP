@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Building2, Users, DollarSign, AlertCircle } from 'lucide-react';
-import ProjectsTable from './ProjectsTable';
-import useAuth from '../hooks/useAuth';
+import React, { useState, useEffect } from "react";
+import { Building2, Users, DollarSign, AlertCircle } from "lucide-react";
+import ProjectsTable from "./ProjectsTable";
+import useAuth from "../hooks/useAuth";
 
 const StatCard = ({ title, value, icon: Icon, tone, loading }) => {
   const toneClasses = {
     blue: {
-      bg: 'bg-blue-50/60 border border-blue-100',
-      icon: 'text-blue-600'
+      bg: "bg-blue-50/60 border border-blue-100",
+      icon: "text-blue-600",
     },
     green: {
-      bg: 'bg-emerald-50/60 border border-emerald-100',
-      icon: 'text-emerald-600'
+      bg: "bg-emerald-50/60 border border-emerald-100",
+      icon: "text-emerald-600",
     },
     purple: {
-      bg: 'bg-purple-50/60 border border-purple-100',
-      icon: 'text-purple-600'
-    }
+      bg: "bg-purple-50/60 border border-purple-100",
+      icon: "text-purple-600",
+    },
   };
 
   const selectedTone = toneClasses[tone] || toneClasses.blue;
@@ -25,7 +25,9 @@ const StatCard = ({ title, value, icon: Icon, tone, loading }) => {
     <div className="app-panel p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-[12px] font-bold text-(--text-soft) truncate">{title}</p>
+          <p className="text-[12px] font-bold text-(--text-soft) truncate">
+            {title}
+          </p>
           {loading ? (
             <div className="h-8 w-20 bg-gray-100 rounded-xl animate-pulse mt-2"></div>
           ) : (
@@ -34,7 +36,9 @@ const StatCard = ({ title, value, icon: Icon, tone, loading }) => {
             </div>
           )}
         </div>
-        <div className={`size-10 rounded-2xl flex items-center justify-center shrink-0 ${selectedTone.bg}`}>
+        <div
+          className={`size-10 rounded-2xl flex items-center justify-center shrink-0 ${selectedTone.bg}`}
+        >
           <Icon className={`size-5 ${selectedTone.icon}`} />
         </div>
       </div>
@@ -44,7 +48,8 @@ const StatCard = ({ title, value, icon: Icon, tone, loading }) => {
 
 const DashboardHome = () => {
   const { user, token, companyId } = useAuth();
-  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
+  const API_BASE_URL =
+    import.meta.env.VITE_CSAAP_URL || "https://csaapnodeapi.csaap.com";
   const [stats, setStats] = useState({
     activeProjects: 0,
     totalEmployees: 0,
@@ -56,7 +61,7 @@ const DashboardHome = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (!companyId) {
-        setError('Company ID not found. Please check your user settings.');
+        setError("Company ID not found. Please check your user settings.");
         setLoading(false);
         return;
       }
@@ -65,43 +70,35 @@ const DashboardHome = () => {
         setLoading(true);
         setError(null);
 
-
         const headers = {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         };
 
-
         if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-
-
+          headers["Authorization"] = `Bearer ${token}`;
         }
 
-        const subdomain = user?.slug || user?.company_slug || '';
-
+        const subdomain = user?.slug || user?.company_slug || "";
 
         const projectsResponse = await fetch(
           `${API_BASE_URL}/api/tenant/clprojects?company_id=${companyId}`,
-          { method: 'GET', headers }
+          { method: "GET", headers },
         );
-
 
         const employeesResponse = await fetch(
           `${API_BASE_URL}/api/tenant/hrms/all-employees`,
-          { method: 'GET', headers }
+          { method: "GET", headers },
         );
-
 
         let projects = [];
         if (projectsResponse.ok) {
           const projectsData = await projectsResponse.json();
           projects = projectsData.data || projectsData.projects || [];
         } else if (projectsResponse.status === 401) {
-          console.warn('Authentication required for projects API');
+          console.warn("Authentication required for projects API");
         } else {
           console.warn(`Projects API error: ${projectsResponse.status}`);
         }
-
 
         let employees = [];
         if (employeesResponse.ok) {
@@ -110,23 +107,26 @@ const DashboardHome = () => {
             ? employeesData
             : employeesData.data || employeesData.employees || [];
         } else if (employeesResponse.status === 401) {
-          console.warn('Authentication required for employees API');
+          console.warn("Authentication required for employees API");
         } else {
           console.warn(`Employees API error: ${employeesResponse.status}`);
         }
 
-
         const activeProjects = projects.filter(
-          p => p.status?.toLowerCase() !== 'completed' && p.status?.toLowerCase() !== 'cancelled'
+          (p) =>
+            p.status?.toLowerCase() !== "completed" &&
+            p.status?.toLowerCase() !== "cancelled",
         ).length;
 
         const totalEmployees = employees.length;
 
-
         let totalRevenue = 0;
-        projects.forEach(project => {
-          const budget = project.budget || project.project_budget || project.cost || '0';
-          const numericValue = parseFloat(String(budget).replace(/[^0-9.-]+/g, ''));
+        projects.forEach((project) => {
+          const budget =
+            project.budget || project.project_budget || project.cost || "0";
+          const numericValue = parseFloat(
+            String(budget).replace(/[^0-9.-]+/g, ""),
+          );
           if (!isNaN(numericValue)) {
             totalRevenue += numericValue;
           }
@@ -135,12 +135,12 @@ const DashboardHome = () => {
         setStats({
           activeProjects: activeProjects || projects.length,
           totalEmployees: totalEmployees,
-          totalRevenue: totalRevenue > 0 ? `₹${(totalRevenue / 100000).toFixed(1)}L` : '₹0',
+          totalRevenue:
+            totalRevenue > 0 ? `₹${(totalRevenue / 100000).toFixed(1)}L` : "₹0",
         });
-
       } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-        setError('Failed to load dashboard statistics. Please try again.');
+        console.error("Error fetching dashboard data:", err);
+        setError("Failed to load dashboard statistics. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -149,20 +149,19 @@ const DashboardHome = () => {
     fetchDashboardData();
   }, [companyId, token, user]);
 
-
   const showError = error && !loading;
 
   return (
     <div className="crm-module-root">
       <div className="space-y-6">
-
         <div>
           <h1 className="app-title max-w-3xl">Superadmin Overview</h1>
           <p className="app-subtitle mt-1">
-            {loading ? 'Loading dashboard data...' : "Welcome back! Here's what's happening with your projects."}
+            {loading
+              ? "Loading dashboard data..."
+              : "Welcome back! Here's what's happening with your projects."}
           </p>
         </div>
-
 
         {showError && (
           <div className="bg-rose-50 border border-rose-100 text-rose-800 p-4 rounded-2xl flex items-start gap-3">
@@ -179,7 +178,6 @@ const DashboardHome = () => {
             </div>
           </div>
         )}
-
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <StatCard
@@ -204,7 +202,6 @@ const DashboardHome = () => {
             loading={loading}
           />
         </div>
-
 
         <div className="mt-8">
           <ProjectsTable />

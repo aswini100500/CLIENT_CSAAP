@@ -13,7 +13,7 @@ import {
   User,
   Building,
   CheckCircle,
-  X
+  X,
 } from "lucide-react";
 import ReactDOM from "react-dom";
 
@@ -37,12 +37,11 @@ const TransferPage = () => {
     remarks: "",
     effectiveDate: "",
     salaryAdjustment: "",
-    reportingManager: ""
+    reportingManager: "",
   });
   const [loading, setLoading] = useState(false);
   const [showActionMenu, setShowActionMenu] = useState(null);
   const [transferHistory, setTransferHistory] = useState([]);
-
 
   const mockEmployees = [
     {
@@ -54,7 +53,7 @@ const TransferPage = () => {
       email: "john.doe@company.com",
       phone: "9876543210",
       joinDate: "2023-01-15",
-      status: "Active"
+      status: "Active",
     },
     {
       id: 2,
@@ -65,7 +64,7 @@ const TransferPage = () => {
       email: "jane.smith@company.com",
       phone: "9123456780",
       joinDate: "2023-03-10",
-      status: "Active"
+      status: "Active",
     },
     {
       id: 3,
@@ -76,7 +75,7 @@ const TransferPage = () => {
       email: "michael.j@company.com",
       phone: "9988776655",
       joinDate: "2022-11-20",
-      status: "Active"
+      status: "Active",
     },
     {
       id: 4,
@@ -87,7 +86,7 @@ const TransferPage = () => {
       email: "sarah.wilson@company.com",
       phone: "9456781230",
       joinDate: "2023-06-18",
-      status: "Active"
+      status: "Active",
     },
     {
       id: 5,
@@ -98,10 +97,9 @@ const TransferPage = () => {
       email: "robert.b@company.com",
       phone: "9678904321",
       joinDate: "2023-02-12",
-      status: "Active"
-    }
+      status: "Active",
+    },
   ];
-
 
   const mockTransferHistory = [
     {
@@ -114,7 +112,7 @@ const TransferPage = () => {
       transferDate: "2024-01-15",
       effectiveDate: "2024-02-01",
       reason: "Project Requirements",
-      status: "Completed"
+      status: "Completed",
     },
     {
       id: 2,
@@ -126,12 +124,11 @@ const TransferPage = () => {
       transferDate: "2024-02-20",
       effectiveDate: "2024-03-01",
       reason: "Team Restructuring",
-      status: "Pending"
-    }
+      status: "Pending",
+    },
   ];
 
   useEffect(() => {
-
     setLoading(true);
     setTimeout(() => {
       setEmployees(mockEmployees);
@@ -145,26 +142,29 @@ const TransferPage = () => {
     let filtered = employees;
 
     if (searchTerm) {
-      filtered = filtered.filter(emp =>
-        emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        emp.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        emp.department.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (emp) =>
+          emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          emp.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          emp.department.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     if (departmentFilter) {
-      filtered = filtered.filter(emp => emp.department === departmentFilter);
+      filtered = filtered.filter((emp) => emp.department === departmentFilter);
     }
 
     if (locationFilter) {
-      filtered = filtered.filter(emp => emp.currentLocation === locationFilter);
+      filtered = filtered.filter(
+        (emp) => emp.currentLocation === locationFilter,
+      );
     }
 
     setFilteredEmployees(filtered);
   }, [searchTerm, departmentFilter, locationFilter, employees]);
 
-  const departments = [...new Set(employees.map(emp => emp.department))];
-  const locations = [...new Set(employees.map(emp => emp.currentLocation))];
+  const departments = [...new Set(employees.map((emp) => emp.department))];
+  const locations = [...new Set(employees.map((emp) => emp.currentLocation))];
 
   const handleInitiateTransfer = (employee) => {
     setSelectedEmployee(employee);
@@ -173,12 +173,12 @@ const TransferPage = () => {
       newDepartment: "",
       currentLocation: employee.currentLocation,
       newLocation: "",
-      transferDate: new Date().toISOString().split('T')[0],
+      transferDate: new Date().toISOString().split("T")[0],
       reason: "",
       remarks: "",
       effectiveDate: "",
       salaryAdjustment: "",
-      reportingManager: ""
+      reportingManager: "",
     });
     setShowTransferModal(true);
     setShowActionMenu(null);
@@ -187,7 +187,6 @@ const TransferPage = () => {
   const handleTransferSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
 
     setTimeout(() => {
       const newTransfer = {
@@ -200,34 +199,44 @@ const TransferPage = () => {
         transferDate: transferData.transferDate,
         effectiveDate: transferData.effectiveDate,
         reason: transferData.reason,
-        status: "Pending Approval"
+        status: "Pending Approval",
       };
 
-      setTransferHistory(prev => [newTransfer, ...prev]);
+      setTransferHistory((prev) => [newTransfer, ...prev]);
 
-
-      setEmployees(prev => prev.map(emp =>
-        emp.id === selectedEmployee.id
-          ? {
-            ...emp,
-            department: transferData.newDepartment,
-            currentLocation: transferData.newLocation
-          }
-          : emp
-      ));
+      setEmployees((prev) =>
+        prev.map((emp) =>
+          emp.id === selectedEmployee.id
+            ? {
+                ...emp,
+                department: transferData.newDepartment,
+                currentLocation: transferData.newLocation,
+              }
+            : emp,
+        ),
+      );
 
       setLoading(false);
       setShowTransferModal(false);
       setSelectedEmployee(null);
-
 
       alert(`Transfer initiated successfully for ${selectedEmployee.name}`);
     }, 2000);
   };
 
   const downloadTransferReport = () => {
-    const headers = ["Employee Name", "From Department", "To Department", "From Location", "To Location", "Transfer Date", "Effective Date", "Reason", "Status"];
-    const rows = transferHistory.map(transfer => [
+    const headers = [
+      "Employee Name",
+      "From Department",
+      "To Department",
+      "From Location",
+      "To Location",
+      "Transfer Date",
+      "Effective Date",
+      "Reason",
+      "Status",
+    ];
+    const rows = transferHistory.map((transfer) => [
       transfer.employeeName,
       transfer.fromDepartment,
       transfer.toDepartment,
@@ -236,10 +245,12 @@ const TransferPage = () => {
       transfer.transferDate,
       transfer.effectiveDate,
       transfer.reason,
-      transfer.status
+      transfer.status,
     ]);
 
-    const csv = [headers.join(","), ...rows.map(row => row.join(","))].join("\n");
+    const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join(
+      "\n",
+    );
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -252,14 +263,16 @@ const TransferPage = () => {
 
   const StatusBadge = ({ status }) => {
     const config = {
-      "Completed": "bg-green-100 text-green-800 border-green-200",
-      "Pending": "bg-yellow-100 text-yellow-800 border-yellow-200",
+      Completed: "bg-green-100 text-green-800 border-green-200",
+      Pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
       "Pending Approval": "bg-blue-100 text-blue-800 border-blue-200",
-      "Rejected": "bg-red-100 text-red-800 border-red-200"
+      Rejected: "bg-red-100 text-red-800 border-red-200",
     };
 
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${config[status] || "bg-gray-100 text-gray-800"}`}>
+      <span
+        className={`px-3 py-1 rounded-full text-xs font-medium border ${config[status] || "bg-gray-100 text-gray-800"}`}
+      >
         {status}
       </span>
     );
@@ -268,7 +281,6 @@ const TransferPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-4">
             <button
@@ -279,17 +291,24 @@ const TransferPage = () => {
               Back
             </button>
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Employee Transfer Management</h1>
-          <p className="text-gray-600 mt-1">Manage employee transfers between departments and locations</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+            Employee Transfer Management
+          </h1>
+          <p className="text-gray-600 mt-1">
+            Manage employee transfers between departments and locations
+          </p>
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Employees</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{employees.length}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Employees
+                </p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  {employees.length}
+                </p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
                 <User className="w-6 h-6 text-blue-600" />
@@ -300,9 +319,17 @@ const TransferPage = () => {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Pending Transfers</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Pending Transfers
+                </p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {transferHistory.filter(t => t.status === "Pending" || t.status === "Pending Approval").length}
+                  {
+                    transferHistory.filter(
+                      (t) =>
+                        t.status === "Pending" ||
+                        t.status === "Pending Approval",
+                    ).length
+                  }
                 </p>
               </div>
               <div className="p-3 bg-yellow-100 rounded-lg">
@@ -314,9 +341,14 @@ const TransferPage = () => {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Completed Transfers</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Completed Transfers
+                </p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {transferHistory.filter(t => t.status === "Completed").length}
+                  {
+                    transferHistory.filter((t) => t.status === "Completed")
+                      .length
+                  }
                 </p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -329,7 +361,9 @@ const TransferPage = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Departments</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{departments.length}</p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  {departments.length}
+                </p>
               </div>
               <div className="p-3 bg-purple-100 rounded-lg">
                 <Building className="w-6 h-6 text-purple-600" />
@@ -339,10 +373,11 @@ const TransferPage = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 md:mb-0">Employees List</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4 md:mb-0">
+                Employees List
+              </h2>
 
               <div className="flex gap-3">
                 <button
@@ -355,10 +390,12 @@ const TransferPage = () => {
               </div>
             </div>
 
-
             <div className="flex flex-col md:flex-row gap-4 mb-6">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
                 <input
                   type="text"
                   placeholder="Search employees..."
@@ -374,8 +411,10 @@ const TransferPage = () => {
                 onChange={(e) => setDepartmentFilter(e.target.value)}
               >
                 <option value="">All Departments</option>
-                {departments.map(dept => (
-                  <option key={dept} value={dept}>{dept}</option>
+                {departments.map((dept) => (
+                  <option key={dept} value={dept}>
+                    {dept}
+                  </option>
                 ))}
               </select>
 
@@ -385,34 +424,52 @@ const TransferPage = () => {
                 onChange={(e) => setLocationFilter(e.target.value)}
               >
                 <option value="">All Locations</option>
-                {locations.map(location => (
-                  <option key={location} value={location}>{location}</option>
+                {locations.map((location) => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
                 ))}
               </select>
             </div>
-
 
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Employee
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Department
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Location
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredEmployees.map((employee) => (
-                    <tr key={employee.id} className="hover:bg-gray-50 transition-colors">
+                    <tr
+                      key={employee.id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{employee.name}</div>
-                          <div className="text-sm text-gray-500">{employee.position}</div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {employee.name}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {employee.position}
+                          </div>
                         </div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{employee.department}</div>
+                        <div className="text-sm text-gray-900">
+                          {employee.department}
+                        </div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-1 text-sm text-gray-900">
@@ -424,42 +481,56 @@ const TransferPage = () => {
                         <div className="relative">
                           <button
                             onClick={(e) => {
-                              const rect = e.currentTarget.getBoundingClientRect();
-                              setShowActionMenu(showActionMenu?.id === employee.id ? null : {
-                                id: employee.id,
-                                top: rect.bottom + window.scrollY,
-                                left: rect.left + window.scrollX
-                              });
+                              const rect =
+                                e.currentTarget.getBoundingClientRect();
+                              setShowActionMenu(
+                                showActionMenu?.id === employee.id
+                                  ? null
+                                  : {
+                                      id: employee.id,
+                                      top: rect.bottom + window.scrollY,
+                                      left: rect.left + window.scrollX,
+                                    },
+                              );
                             }}
                             className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                           >
                             Actions
-                            {showActionMenu?.id === employee.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                            {showActionMenu?.id === employee.id ? (
+                              <ChevronUp size={14} />
+                            ) : (
+                              <ChevronDown size={14} />
+                            )}
                           </button>
 
-                          {showActionMenu?.id === employee.id && ReactDOM.createPortal(
-                            <div
-                              className="absolute z-50 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1"
-                              style={{
-                                top: showActionMenu.top,
-                                left: Math.max(showActionMenu.left - 100, 10),
-                              }}
-                            >
-                              <button
-                                onClick={() => handleInitiateTransfer(employee)}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                          {showActionMenu?.id === employee.id &&
+                            ReactDOM.createPortal(
+                              <div
+                                className="absolute z-50 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1"
+                                style={{
+                                  top: showActionMenu.top,
+                                  left: Math.max(showActionMenu.left - 100, 10),
+                                }}
                               >
-                                Initiate Transfer
-                              </button>
-                              <button
-                                onClick={() => navigate(`/employee-details/${employee.id}`)}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                              >
-                                View Details
-                              </button>
-                            </div>,
-                            document.body
-                          )}
+                                <button
+                                  onClick={() =>
+                                    handleInitiateTransfer(employee)
+                                  }
+                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                >
+                                  Initiate Transfer
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    navigate(`/employee-details/${employee.id}`)
+                                  }
+                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                >
+                                  View Details
+                                </button>
+                              </div>,
+                              document.body,
+                            )}
                         </div>
                       </td>
                     </tr>
@@ -469,23 +540,33 @@ const TransferPage = () => {
 
               {filteredEmployees.length === 0 && (
                 <div className="text-center py-8">
-                  <div className="text-gray-400 text-lg">No employees found</div>
-                  <p className="text-gray-500">Try adjusting your search criteria</p>
+                  <div className="text-gray-400 text-lg">
+                    No employees found
+                  </div>
+                  <p className="text-gray-500">
+                    Try adjusting your search criteria
+                  </p>
                 </div>
               )}
             </div>
           </div>
 
-
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">Transfer History</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-6">
+              Transfer History
+            </h2>
 
             <div className="space-y-4 max-h-96 overflow-y-auto">
               {transferHistory.map((transfer) => (
-                <div key={transfer.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+                <div
+                  key={transfer.id}
+                  className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
+                >
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-medium text-gray-900">{transfer.employeeName}</h3>
+                      <h3 className="font-medium text-gray-900">
+                        {transfer.employeeName}
+                      </h3>
                       <p className="text-sm text-gray-500">
                         {new Date(transfer.transferDate).toLocaleDateString()}
                       </p>
@@ -515,14 +596,17 @@ const TransferPage = () => {
 
               {transferHistory.length === 0 && (
                 <div className="text-center py-8">
-                  <div className="text-gray-400 text-lg">No transfer history</div>
-                  <p className="text-gray-500">Initiate transfers to see history</p>
+                  <div className="text-gray-400 text-lg">
+                    No transfer history
+                  </div>
+                  <p className="text-gray-500">
+                    Initiate transfers to see history
+                  </p>
                 </div>
               )}
             </div>
           </div>
         </div>
-
 
         {showTransferModal && selectedEmployee && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -539,21 +623,26 @@ const TransferPage = () => {
                 </button>
               </div>
 
-
               <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                <h3 className="font-medium text-blue-900 mb-2">Employee Details</h3>
+                <h3 className="font-medium text-blue-900 mb-2">
+                  Employee Details
+                </h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-blue-700">Name:</span> {selectedEmployee.name}
+                    <span className="text-blue-700">Name:</span>{" "}
+                    {selectedEmployee.name}
                   </div>
                   <div>
-                    <span className="text-blue-700">Position:</span> {selectedEmployee.position}
+                    <span className="text-blue-700">Position:</span>{" "}
+                    {selectedEmployee.position}
                   </div>
                   <div>
-                    <span className="text-blue-700">Current Dept:</span> {selectedEmployee.department}
+                    <span className="text-blue-700">Current Dept:</span>{" "}
+                    {selectedEmployee.department}
                   </div>
                   <div>
-                    <span className="text-blue-700">Current Location:</span> {selectedEmployee.currentLocation}
+                    <span className="text-blue-700">Current Location:</span>{" "}
+                    {selectedEmployee.currentLocation}
                   </div>
                 </div>
               </div>
@@ -567,13 +656,22 @@ const TransferPage = () => {
                     <select
                       required
                       value={transferData.newDepartment}
-                      onChange={(e) => setTransferData(prev => ({ ...prev, newDepartment: e.target.value }))}
+                      onChange={(e) =>
+                        setTransferData((prev) => ({
+                          ...prev,
+                          newDepartment: e.target.value,
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Select Department</option>
-                      {departments.filter(dept => dept !== selectedEmployee.department).map(dept => (
-                        <option key={dept} value={dept}>{dept}</option>
-                      ))}
+                      {departments
+                        .filter((dept) => dept !== selectedEmployee.department)
+                        .map((dept) => (
+                          <option key={dept} value={dept}>
+                            {dept}
+                          </option>
+                        ))}
                     </select>
                   </div>
 
@@ -584,13 +682,24 @@ const TransferPage = () => {
                     <select
                       required
                       value={transferData.newLocation}
-                      onChange={(e) => setTransferData(prev => ({ ...prev, newLocation: e.target.value }))}
+                      onChange={(e) =>
+                        setTransferData((prev) => ({
+                          ...prev,
+                          newLocation: e.target.value,
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Select Location</option>
-                      {locations.filter(loc => loc !== selectedEmployee.currentLocation).map(loc => (
-                        <option key={loc} value={loc}>{loc}</option>
-                      ))}
+                      {locations
+                        .filter(
+                          (loc) => loc !== selectedEmployee.currentLocation,
+                        )
+                        .map((loc) => (
+                          <option key={loc} value={loc}>
+                            {loc}
+                          </option>
+                        ))}
                     </select>
                   </div>
 
@@ -602,7 +711,12 @@ const TransferPage = () => {
                       type="date"
                       required
                       value={transferData.transferDate}
-                      onChange={(e) => setTransferData(prev => ({ ...prev, transferDate: e.target.value }))}
+                      onChange={(e) =>
+                        setTransferData((prev) => ({
+                          ...prev,
+                          transferDate: e.target.value,
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
@@ -615,7 +729,12 @@ const TransferPage = () => {
                       type="date"
                       required
                       value={transferData.effectiveDate}
-                      onChange={(e) => setTransferData(prev => ({ ...prev, effectiveDate: e.target.value }))}
+                      onChange={(e) =>
+                        setTransferData((prev) => ({
+                          ...prev,
+                          effectiveDate: e.target.value,
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
@@ -628,16 +747,27 @@ const TransferPage = () => {
                   <select
                     required
                     value={transferData.reason}
-                    onChange={(e) => setTransferData(prev => ({ ...prev, reason: e.target.value }))}
+                    onChange={(e) =>
+                      setTransferData((prev) => ({
+                        ...prev,
+                        reason: e.target.value,
+                      }))
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Select Reason</option>
-                    <option value="Project Requirements">Project Requirements</option>
-                    <option value="Team Restructuring">Team Restructuring</option>
+                    <option value="Project Requirements">
+                      Project Requirements
+                    </option>
+                    <option value="Team Restructuring">
+                      Team Restructuring
+                    </option>
                     <option value="Career Growth">Career Growth</option>
                     <option value="Performance">Performance</option>
                     <option value="Employee Request">Employee Request</option>
-                    <option value="Organizational Needs">Organizational Needs</option>
+                    <option value="Organizational Needs">
+                      Organizational Needs
+                    </option>
                   </select>
                 </div>
 
@@ -647,7 +777,12 @@ const TransferPage = () => {
                   </label>
                   <textarea
                     value={transferData.remarks}
-                    onChange={(e) => setTransferData(prev => ({ ...prev, remarks: e.target.value }))}
+                    onChange={(e) =>
+                      setTransferData((prev) => ({
+                        ...prev,
+                        remarks: e.target.value,
+                      }))
+                    }
                     placeholder="Add any additional remarks or notes..."
                     rows="3"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"

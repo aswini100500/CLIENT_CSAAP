@@ -1,11 +1,9 @@
-
-import axios from 'axios';
-import { getAuthToken } from '../store/authSession';
+import axios from "axios";
+import { getAuthToken } from "../store/authSession";
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_CSAAP_URL,
 });
-
 
 client.interceptors.request.use(
   (config) => {
@@ -17,7 +15,7 @@ client.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 export default client;

@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Eye, Edit, Trash2, Download, Printer, Search, UserRound, FileSpreadsheet, FileDown } from "lucide-react";
+import {
+  Eye,
+  Edit,
+  Trash2,
+  Download,
+  Printer,
+  Search,
+  UserRound,
+  FileSpreadsheet,
+  FileDown,
+} from "lucide-react";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -24,8 +34,8 @@ const ReciptVouchersList = () => {
   const { companyId, companyName, employees } = useCompany();
 
   const getEmployeeName = (id) => {
-    const emp = employees?.find(e => e.id == id);
-    return emp ? (emp.name || emp.first_name || "Employee") : "Unknown Employee";
+    const emp = employees?.find((e) => e.id == id);
+    return emp ? emp.name || emp.first_name || "Employee" : "Unknown Employee";
   };
 
   const loggedInRole = user?.role?.toLowerCase() || "admin";
@@ -52,7 +62,9 @@ const ReciptVouchersList = () => {
 
   const fetchCompanyDetails = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`,
+      );
       setCompanyDetails(res.data);
     } catch (err) {
       console.error("Error fetching company details:", err);
@@ -63,7 +75,7 @@ const ReciptVouchersList = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/getReceiptVoucher/${companyId}`
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/getReceiptVoucher/${companyId}`,
       );
 
       const sortedVouchers = (res.data.data || []).slice().sort((a, b) => {
@@ -90,24 +102,34 @@ const ReciptVouchersList = () => {
   const fetchLedgers = async () => {
     try {
       const [ledgersRes, banksRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`),
-        axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`)
+        axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
+        ),
+        axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`,
+        ),
       ]);
 
       const map = {};
-      const ledgers = Array.isArray(ledgersRes.data) ? ledgersRes.data : ledgersRes.data.data || [];
-      ledgers.forEach(l => {
+      const ledgers = Array.isArray(ledgersRes.data)
+        ? ledgersRes.data
+        : ledgersRes.data.data || [];
+      ledgers.forEach((l) => {
         map[l.id] = l.name;
         map[`ledger_${l.id}`] = l.name;
       });
 
       const banks = banksRes.data.accounts || [];
-      banks.forEach(b => {
-        map[b.id] = b.bankName ? `${b.accountName} (${b.bankName})` : b.accountName;
-        map[`bank_${b.id}`] = b.bankName ? `${b.accountName} (${b.bankName})` : b.accountName;
+      banks.forEach((b) => {
+        map[b.id] = b.bankName
+          ? `${b.accountName} (${b.bankName})`
+          : b.accountName;
+        map[`bank_${b.id}`] = b.bankName
+          ? `${b.accountName} (${b.bankName})`
+          : b.accountName;
       });
 
-      map['cash'] = 'Cash';
+      map["cash"] = "Cash";
       setLedgerMap(map);
     } catch (err) {
       console.error("Error fetching ledgers:", err);
@@ -115,7 +137,11 @@ const ReciptVouchersList = () => {
   };
 
   const getReceiptInto = (receiptAccountId) => {
-    if (receiptAccountId === null || receiptAccountId === undefined || receiptAccountId === "") {
+    if (
+      receiptAccountId === null ||
+      receiptAccountId === undefined ||
+      receiptAccountId === ""
+    ) {
       return "—";
     }
 
@@ -145,16 +171,22 @@ const ReciptVouchersList = () => {
 
   const handleEdit = (voucherId) => {
     if (loggedInRole === "employee") {
-      navigate(`/employee/hr/accounting/client/receptVoucher/${encodeURIComponent(voucherId)}`);
+      navigate(
+        `/employee/hr/accounting/client/receptVoucher/${encodeURIComponent(voucherId)}`,
+      );
     } else {
-      navigate(`/accounting/client/receptVoucher/${encodeURIComponent(voucherId)}`);
+      navigate(
+        `/accounting/client/receptVoucher/${encodeURIComponent(voucherId)}`,
+      );
     }
   };
 
   const handleViewDetails = async (voucherId) => {
     try {
       setLoading(true);
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/${voucherId}?companyId=${companyId}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/${voucherId}?companyId=${companyId}`,
+      );
       setSelectedVoucher(res.data);
     } catch (error) {
       console.error(error);
@@ -177,7 +209,9 @@ const ReciptVouchersList = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/delete/${encodeURIComponent(id)}?companyId=${companyId}`);
+        await axios.delete(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/delete/${encodeURIComponent(id)}?companyId=${companyId}`,
+        );
         Swal.fire("Deleted!", "Voucher has been deleted.", "success");
         fetchVouchers();
       } catch {
@@ -217,7 +251,7 @@ const ReciptVouchersList = () => {
       { wch: 16 },
       { wch: 25 },
       { wch: 25 },
-      { wch: 14 }
+      { wch: 14 },
     ];
 
     const wb = XLSX.utils.book_new();
@@ -229,7 +263,11 @@ const ReciptVouchersList = () => {
     if (filteredVouchers.length === 0) return;
 
     const doc = new jsPDF();
-    const company = (companyDetails?.name || companyName || "Company").toUpperCase();
+    const company = (
+      companyDetails?.name ||
+      companyName ||
+      "Company"
+    ).toUpperCase();
     const today = new Date().toLocaleDateString("en-IN");
 
     const formatAmount = (amount) => {
@@ -254,7 +292,6 @@ const ReciptVouchersList = () => {
       }
     };
 
-
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(15, 23, 42);
@@ -274,8 +311,10 @@ const ReciptVouchersList = () => {
     doc.setDrawColor(220);
     doc.line(14, headerBottomY, 195, headerBottomY);
 
-
-    const totalAmount = filteredVouchers.reduce((acc, v) => acc + Number(v.totalDebit || v.amount || 0), 0);
+    const totalAmount = filteredVouchers.reduce(
+      (acc, v) => acc + Number(v.totalDebit || v.amount || 0),
+      0,
+    );
 
     doc.setFontSize(10);
     doc.setTextColor(40);
@@ -283,8 +322,9 @@ const ReciptVouchersList = () => {
     doc.text(`Total Vouchers: ${filteredVouchers.length}`, 14, summaryY);
 
     doc.setFont("helvetica", "bold");
-    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, { align: "right" });
-
+    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, {
+      align: "right",
+    });
 
     const tableData = filteredVouchers.map((v, i) => [
       i + 1,
@@ -297,7 +337,9 @@ const ReciptVouchersList = () => {
 
     autoTable(doc, {
       startY: summaryY + 8,
-      head: [["#", "Date", "Voucher No.", "Customer", "Receipt Into", "Amount"]],
+      head: [
+        ["#", "Date", "Voucher No.", "Customer", "Receipt Into", "Amount"],
+      ],
       body: tableData,
       foot: [["", "", "", "", "TOTAL", formatAmount(totalAmount)]],
       theme: "striped",
@@ -321,9 +363,8 @@ const ReciptVouchersList = () => {
         3: { cellWidth: 45 },
         4: { cellWidth: 45 },
         5: { halign: "right", cellWidth: 35 },
-      }
+      },
     });
-
 
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
@@ -356,12 +397,16 @@ const ReciptVouchersList = () => {
     generatePDF(true);
   };
 
-
   const filteredVouchers = vouchers.filter((v) => {
     if (loggedInRole === "employee") {
-      if (v.employee_id != loggedInEmployeeId || v.role?.toLowerCase() !== 'employee') return false;
+      if (
+        v.employee_id != loggedInEmployeeId ||
+        v.role?.toLowerCase() !== "employee"
+      )
+        return false;
     } else {
-      const isCreatedByEmployee = v.employee_id && v.role?.toLowerCase() === 'employee';
+      const isCreatedByEmployee =
+        v.employee_id && v.role?.toLowerCase() === "employee";
       if (showEmployeeActivity) {
         if (!isCreatedByEmployee) return false;
       } else {
@@ -371,7 +416,9 @@ const ReciptVouchersList = () => {
 
     const narration = v.narration?.toLowerCase() || "";
     const voucherNo = v.voucherNo?.toString() || "";
-    const customer = (ledgerMap[v.customer] || v.customer || "").toString().toLowerCase();
+    const customer = (ledgerMap[v.customer] || v.customer || "")
+      .toString()
+      .toLowerCase();
     const query = searchQuery.toLowerCase();
 
     return (
@@ -383,21 +430,18 @@ const ReciptVouchersList = () => {
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-[monospace]">
-
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
-
-
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Receipt Vouchers
           </h1>
 
-
           <div className="flex items-center gap-2.5 flex-wrap">
-
-
             <div className="relative">
-              <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search
+                size={15}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+              />
               <input
                 type="text"
                 placeholder="Search Narration / Voucher No."
@@ -407,17 +451,29 @@ const ReciptVouchersList = () => {
               />
             </div>
 
-
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
-                  const basePath = loggedInRole === "employee" ? "/employee/hr/accounting/client" : "/accounting/client";
+                  const basePath =
+                    loggedInRole === "employee"
+                      ? "/employee/hr/accounting/client"
+                      : "/accounting/client";
                   navigate(`${basePath}/receptVoucher`);
                 }}
                 className="flex items-center gap-1.5 bg-[#1a56db] hover:bg-blue-600 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap"
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Create
               </button>
@@ -429,7 +485,6 @@ const ReciptVouchersList = () => {
                 <Printer size={14} /> Print
               </button>
 
-
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -437,8 +492,18 @@ const ReciptVouchersList = () => {
                   className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <FileDown size={14} /> Export
-                  <svg className="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className="w-3 h-3 ml-0.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
 
@@ -451,7 +516,8 @@ const ReciptVouchersList = () => {
                       }}
                       className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
                     >
-                      <FileSpreadsheet size={14} className="text-green-600" /> Excel
+                      <FileSpreadsheet size={14} className="text-green-600" />{" "}
+                      Excel
                     </button>
                     <button
                       onClick={() => {
@@ -468,21 +534,23 @@ const ReciptVouchersList = () => {
 
               {loggedInRole !== "employee" && (
                 <button
-                  onClick={() => setShowEmployeeActivity(prev => !prev)}
-                  className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap border ${showEmployeeActivity
-                    ? "bg-slate-900 text-white border-slate-900"
-                    : "bg-white/10 text-white border-white/20 hover:bg-white/20"
-                    }`}
+                  onClick={() => setShowEmployeeActivity((prev) => !prev)}
+                  className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap border ${
+                    showEmployeeActivity
+                      ? "bg-slate-900 text-white border-slate-900"
+                      : "bg-white/10 text-white border-white/20 hover:bg-white/20"
+                  }`}
                 >
                   <UserRound size={14} />
-                  {showEmployeeActivity ? "Back to Vouchers" : "Employee Activity"}
+                  {showEmployeeActivity
+                    ? "Back to Vouchers"
+                    : "Employee Activity"}
                 </button>
               )}
             </div>
           </div>
         </div>
       </div>
-
 
       <div className="max-w-6xl mx-auto mt-6 bg-white shadow rounded-lg border border-gray-300">
         <div className="overflow-x-auto">
@@ -494,14 +562,21 @@ const ReciptVouchersList = () => {
                 <th className="px-4 py-2 border-r">Customer</th>
                 <th className="px-4 py-2 border-r">Receipt Into</th>
                 <th className="px-4 py-2 border-r text-right">Amount (₹)</th>
-                {showEmployeeActivity && <th className="px-4 py-2 border-r text-left">Employee Name</th>}
+                {showEmployeeActivity && (
+                  <th className="px-4 py-2 border-r text-left">
+                    Employee Name
+                  </th>
+                )}
                 <th className="px-4 py-2 border-r text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={showEmployeeActivity ? 7 : 6} className="text-center py-6 text-gray-500 italic">
+                  <td
+                    colSpan={showEmployeeActivity ? 7 : 6}
+                    className="text-center py-6 text-gray-500 italic"
+                  >
                     Loading vouchers...
                   </td>
                 </tr>
@@ -509,16 +584,20 @@ const ReciptVouchersList = () => {
                 filteredVouchers.map((voucher, index) => (
                   <tr
                     key={index}
-                    className={`border-b border-gray-200 hover:bg-[#F9FCFF] transition ${index % 2 === 0 ? "bg-white" : "bg-[#F7F9FB]"
-                      }`}
+                    className={`border-b border-gray-200 hover:bg-[#F9FCFF] transition ${
+                      index % 2 === 0 ? "bg-white" : "bg-[#F7F9FB]"
+                    }`}
                   >
                     <td className="px-4 py-2">
                       {new Date(voucher.date).toLocaleDateString("en-IN")}
                     </td>
                     <td className="px-4 py-2">{voucher.voucherId}</td>
-                    <td className="px-4 py-2">{ledgerMap[voucher.customer] || voucher.customer}</td>
-                    <td className="px-4 py-2">{getReceiptInto(voucher.receiptAccountId)}</td>
-
+                    <td className="px-4 py-2">
+                      {ledgerMap[voucher.customer] || voucher.customer}
+                    </td>
+                    <td className="px-4 py-2">
+                      {getReceiptInto(voucher.receiptAccountId)}
+                    </td>
 
                     <td className="px-4 py-2 text-right">
                       {(voucher.totalDebit || voucher.amount || 0).toString()}
@@ -566,7 +645,10 @@ const ReciptVouchersList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={showEmployeeActivity ? 7 : 6} className="text-center py-6 text-gray-500 italic">
+                  <td
+                    colSpan={showEmployeeActivity ? 7 : 6}
+                    className="text-center py-6 text-gray-500 italic"
+                  >
                     No vouchers found.
                   </td>
                 </tr>
@@ -576,13 +658,15 @@ const ReciptVouchersList = () => {
         </div>
       </div>
 
-
       {selectedVoucher && (
         <ReceiveVoucherDetailModal
           voucher={selectedVoucher}
           ledgerMap={ledgerMap}
           onClose={() => setSelectedVoucher(null)}
-          onEdit={(id) => { setSelectedVoucher(null); handleEdit(id); }}
+          onEdit={(id) => {
+            setSelectedVoucher(null);
+            handleEdit(id);
+          }}
           onDownload={(v) => {
             const url = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/download/${v.id}?companyId=${companyId}`;
             window.open(url, "_blank");

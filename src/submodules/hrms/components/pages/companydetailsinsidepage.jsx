@@ -8,7 +8,6 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           Company Details
         </h2>
 
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -55,7 +54,6 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           </div>
         </div>
 
-
         <h3 className="text-lg font-semibold mt-8 mb-2 text-blue-600">
           Advanced Company Details
         </h3>
@@ -92,7 +90,6 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           </div>
         </div>
 
-
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1 block">
@@ -123,7 +120,6 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           </div>
         </div>
 
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1 block">
@@ -147,7 +143,6 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           </div>
         </div>
 
-
         <h3 className="text-lg font-semibold mt-8 mb-2 text-blue-600">
           Define Addition Heads
         </h3>
@@ -161,7 +156,6 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
             </div>
           ))}
         </div>
-
 
         <h3 className="text-lg font-semibold mt-8 mb-2 text-blue-600">
           Fixed Deduction Heads
@@ -177,7 +171,6 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
           ))}
         </div>
 
-
         <h3 className="text-lg font-semibold mt-8 mb-2 text-blue-600">
           Define Deduction Heads
         </h3>
@@ -191,7 +184,6 @@ export default function CompanyDetailsInsidePage({ selectedCompany }) {
             </div>
           ))}
         </div>
-
 
         <div className="flex gap-4 justify-center mt-8">
           <button className="bg-green-600 text-white px-6 py-2 rounded-lg">

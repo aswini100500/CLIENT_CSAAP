@@ -9,17 +9,12 @@ export default function LeaveApplicationList() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee`,
         );
-
-
 
         const formatted = res.data?.data?.map((emp) => ({
           id: emp.id,
@@ -91,7 +86,6 @@ export default function LeaveApplicationList() {
     filteredApplications.length > 0 &&
     selectedApplications.length === filteredApplications.length;
 
-
   const handleApprove = () => {
     if (selectedApplications.length === 0) {
       Swal.fire({
@@ -121,7 +115,6 @@ export default function LeaveApplicationList() {
       }
     });
   };
-
 
   const handleDelete = () => {
     if (selectedApplications.length === 0) {
@@ -169,9 +162,6 @@ export default function LeaveApplicationList() {
   const formatDate = (d) =>
     d ? new Date(d).toLocaleDateString("en-GB") : "---";
 
-
-
-
   if (loading)
     return (
       <div className="text-center py-20 text-xl font-semibold text-gray-600">
@@ -184,7 +174,6 @@ export default function LeaveApplicationList() {
       <div className="bg-blue-600 text-white px-4 py-3 font-semibold text-lg shadow">
         📋 Leave Application List
       </div>
-
 
       <div className="bg-white shadow p-4 rounded-md m-4">
         <div className="flex flex-wrap items-center gap-4">
@@ -212,7 +201,6 @@ export default function LeaveApplicationList() {
           </div>
         </div>
       </div>
-
 
       <div className="bg-white shadow rounded-md m-4 overflow-x-auto">
         <table className="w-full text-sm border">
@@ -263,7 +251,6 @@ export default function LeaveApplicationList() {
           </tbody>
         </table>
       </div>
-
 
       <div className="flex justify-center gap-4 my-6">
         <button

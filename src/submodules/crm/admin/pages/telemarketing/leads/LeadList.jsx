@@ -6,7 +6,6 @@ import { useEffect, useMemo, useState } from "react";
 import { usePermission } from "../../../../../../hooks/usePermission";
 import useAuth from "../../../../../../hooks/useAuth";
 
-
 import AssignLeadModal from "./AssignLeadModal";
 import LeadDetailsModal from "./LeadDetailsModal";
 import LeadFormModal from "./LeadFormModal";
@@ -55,7 +54,6 @@ const LeadList = () => {
 
   const [activeTab, setActiveTab] = useState(canViewAll ? "new" : "assigned");
 
-
   const canAssign = useMemo(() => {
     if (activeTab === "new") return has("crm.leads.new_leads.assign");
     if (activeTab === "assigned") return has("crm.leads.assigned.assign");
@@ -74,7 +72,10 @@ const LeadList = () => {
   }, [activeTab, has]);
 
   const canEdit = useMemo(() => {
-    if (activeTab === "new") return has("crm.leads.new_leads.edit") || has("crm.leads.new_leads.create");
+    if (activeTab === "new")
+      return (
+        has("crm.leads.new_leads.edit") || has("crm.leads.new_leads.create")
+      );
     if (activeTab === "assigned") return has("crm.leads.assigned.edit");
     if (activeTab === "followup") return has("crm.leads.followup.edit");
     if (activeTab === "accepted") return has("crm.leads.accepted.edit");
@@ -83,24 +84,28 @@ const LeadList = () => {
   }, [activeTab, has]);
 
   const canCreatePaymentSlab = useMemo(() => {
-    if (activeTab === "accepted") return has("crm.leads.accepted.payment_slab.create");
+    if (activeTab === "accepted")
+      return has("crm.leads.accepted.payment_slab.create");
     return false;
   }, [activeTab, has]);
 
   const canViewPaymentSlabs = useMemo(() => {
-    if (activeTab === "accepted") return has("crm.leads.accepted.payment_slab.view");
+    if (activeTab === "accepted")
+      return has("crm.leads.accepted.payment_slab.view");
     return false;
   }, [activeTab, has]);
 
   const canCreateProject = useMemo(() => {
-    if (activeTab === "accepted") return has("crm.leads.accepted.project.create");
+    if (activeTab === "accepted")
+      return has("crm.leads.accepted.project.create");
     return false;
   }, [activeTab, has]);
 
   const canProjectSetup = false;
 
   const canCustomerProfileSetup = useMemo(() => {
-    if (activeTab === "accepted") return has("crm.leads.accepted.customer.setup");
+    if (activeTab === "accepted")
+      return has("crm.leads.accepted.customer.setup");
     return false;
   }, [activeTab, has]);
 
@@ -131,8 +136,10 @@ const LeadList = () => {
 
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [createProjectLead, setCreateProjectLead] = useState(null);
-  const [showCustomerProfileSetup, setShowCustomerProfileSetup] = useState(false);
-  const [customerProfileSetupLead, setCustomerProfileSetupLead] = useState(null);
+  const [showCustomerProfileSetup, setShowCustomerProfileSetup] =
+    useState(false);
+  const [customerProfileSetupLead, setCustomerProfileSetupLead] =
+    useState(null);
   const [contentVisible, setContentVisible] = useState(false);
 
   useEffect(() => {
@@ -171,19 +178,24 @@ const LeadList = () => {
   const { data: projectOptions = [] } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
-      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`, {
-        params: { company_id: companyId },
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
+        {
+          params: { company_id: companyId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const projects = response.data?.data || [];
       return projects.map((p) => ({
         project_id: p.id,
         composite_key: p.id,
         name: p.project_name,
         display_type: p.project_code || p.status || "",
-        location: p.client_company_name ? `Client: ${p.client_company_name}` : "",
+        location: p.client_company_name
+          ? `Client: ${p.client_company_name}`
+          : "",
       }));
     },
     enabled: !!token && !!companyId,
@@ -231,7 +243,8 @@ const LeadList = () => {
   });
 
   const deleteLeadMutation = useMutation({
-    mutationFn: (id) => api.delete(`/api/leads/${id}`, { params: { company_id: companyId } }),
+    mutationFn: (id) =>
+      api.delete(`/api/leads/${id}`, { params: { company_id: companyId } }),
     onSuccess: () => {
       queryClient.invalidateQueries(["leads"]);
       alert("Lead deleted successfully!");
@@ -263,7 +276,8 @@ const LeadList = () => {
   });
 
   const assignLeadMutation = useMutation({
-    mutationFn: ({ id, payload }) => api.put(`/api/leads/${id}/assign`, payload),
+    mutationFn: ({ id, payload }) =>
+      api.put(`/api/leads/${id}/assign`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries(["leads"]);
       setShowAssignLead(false);
@@ -279,7 +293,8 @@ const LeadList = () => {
   });
 
   const transferLeadMutation = useMutation({
-    mutationFn: ({ id, payload }) => api.put(`/api/leads/${id}/transfer`, payload),
+    mutationFn: ({ id, payload }) =>
+      api.put(`/api/leads/${id}/transfer`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries(["leads"]);
       setShowTransferLead(false);
@@ -487,16 +502,13 @@ const LeadList = () => {
 
   return (
     <div
-      className={`app-shell p-4 transition-all duration-400 ease-out ${ contentVisible ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-sm translate-y-2" }`}
+      className={`app-shell p-4 transition-all duration-400 ease-out ${contentVisible ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-sm translate-y-2"}`}
     >
       <div className="max-w-7xl mx-auto space-y-6">
         {queryError && (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6">
             <div className="flex items-start gap-3">
-              <AlertCircle
-                size={16}
-                className="text-red-400 mt-0.5 shrink-0"
-              />
+              <AlertCircle size={16} className="text-red-400 mt-0.5 shrink-0" />
               <div>
                 <h3 className="text-sm font-semibold text-red-800">
                   Error loading leads
@@ -523,7 +535,9 @@ const LeadList = () => {
             activeTab={activeTab}
             leads={leads}
             onCreateLead={canCreate ? handleCreateLead : undefined}
-            onExportLeads={has("crm.leads.export") ? handleExportLeads : undefined}
+            onExportLeads={
+              has("crm.leads.export") ? handleExportLeads : undefined
+            }
             onViewDetails={handleViewDetails}
             onViewTimeline={handleViewTimeline}
             onReportEntry={canReportEntry ? handleReportEntry : undefined}
@@ -531,23 +545,39 @@ const LeadList = () => {
             onTransferLead={canTransfer ? handleTransferLead : undefined}
             onDeleteLead={canDelete ? handleDeleteLead : undefined}
             showAssignee={canViewAll}
-            onCreatePaymentSlab={canCreatePaymentSlab ? (lead) => {
-              setPaymentSlabLead(lead);
-              setShowPaymentSlab(true);
-            } : undefined}
-            onViewPaymentSlabs={canViewPaymentSlabs ? (lead) => {
-              setViewPaymentSlabLead(lead);
-              setShowViewPaymentSlab(true);
-            } : undefined}
+            onCreatePaymentSlab={
+              canCreatePaymentSlab
+                ? (lead) => {
+                    setPaymentSlabLead(lead);
+                    setShowPaymentSlab(true);
+                  }
+                : undefined
+            }
+            onViewPaymentSlabs={
+              canViewPaymentSlabs
+                ? (lead) => {
+                    setViewPaymentSlabLead(lead);
+                    setShowViewPaymentSlab(true);
+                  }
+                : undefined
+            }
             onProjectSetup={undefined}
-            onCreateProject={canCreateProject ? (lead) => {
-              setCreateProjectLead(lead);
-              setShowCreateProject(true);
-            } : undefined}
-            onCustomerProfileSetup={canCustomerProfileSetup ? (lead) => {
-              setCustomerProfileSetupLead(lead);
-              setShowCustomerProfileSetup(true);
-            } : undefined}
+            onCreateProject={
+              canCreateProject
+                ? (lead) => {
+                    setCreateProjectLead(lead);
+                    setShowCreateProject(true);
+                  }
+                : undefined
+            }
+            onCustomerProfileSetup={
+              canCustomerProfileSetup
+                ? (lead) => {
+                    setCustomerProfileSetupLead(lead);
+                    setShowCustomerProfileSetup(true);
+                  }
+                : undefined
+            }
           />
         ) : null}
 
@@ -558,10 +588,14 @@ const LeadList = () => {
               setShowLeadDetails(false);
               setViewingLead(null);
             }}
-            onEdit={canEdit ? () => {
-              setShowLeadDetails(false);
-              handleEdit(viewingLead);
-            } : undefined}
+            onEdit={
+              canEdit
+                ? () => {
+                    setShowLeadDetails(false);
+                    handleEdit(viewingLead);
+                  }
+                : undefined
+            }
             onReportEntry={() => {
               setShowLeadDetails(false);
               handleReportEntry(viewingLead);
@@ -643,7 +677,11 @@ const LeadList = () => {
         {showPaymentSlab && paymentSlabLead && (
           <CreatePaymentSlabModal
             lead={paymentSlabLead}
-            projectName={projectOptionsMap.get(paymentSlabLead.project_id) || paymentSlabLead.project_id || "Default Project"}
+            projectName={
+              projectOptionsMap.get(paymentSlabLead.project_id) ||
+              paymentSlabLead.project_id ||
+              "Default Project"
+            }
             onClose={() => {
               setShowPaymentSlab(false);
               setPaymentSlabLead(null);
@@ -657,7 +695,11 @@ const LeadList = () => {
         {showViewPaymentSlab && viewPaymentSlabLead && (
           <ViewPaymentSlabsModal
             lead={viewPaymentSlabLead}
-            projectName={projectOptionsMap.get(viewPaymentSlabLead.project_id) || viewPaymentSlabLead.project_id || "Default Project"}
+            projectName={
+              projectOptionsMap.get(viewPaymentSlabLead.project_id) ||
+              viewPaymentSlabLead.project_id ||
+              "Default Project"
+            }
             onClose={() => {
               setShowViewPaymentSlab(false);
               setViewPaymentSlabLead(null);
@@ -671,8 +713,6 @@ const LeadList = () => {
             }}
           />
         )}
-
-
 
         {showCreateProject && createProjectLead && (
           <CreateProjectModal

@@ -69,7 +69,6 @@ const DownloadOfferLetter = () => {
     alert("Email functionality would be implemented here");
   };
 
-
   const getSalutation = (name) => {
     if (name.includes("Miss.")) return "Miss.";
     if (name.includes("Mrs.")) return "Mrs.";
@@ -84,7 +83,6 @@ const DownloadOfferLetter = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-
         <div className="mb-6">
           <button
             onClick={() => navigate(-1)}
@@ -125,7 +123,6 @@ const DownloadOfferLetter = () => {
             </div>
           </div>
         </div>
-
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
@@ -187,7 +184,6 @@ const DownloadOfferLetter = () => {
           </div>
         </div>
 
-
         <div
           ref={printRef}
           style={{
@@ -196,7 +192,6 @@ const DownloadOfferLetter = () => {
             margin: "0 auto",
           }}
         >
-
           <div
             style={{
               backgroundColor: "#2563eb",
@@ -219,20 +214,16 @@ const DownloadOfferLetter = () => {
             </p>
           </div>
 
-
           <div style={{ padding: "2rem", color: "#374151", lineHeight: "1.6" }}>
-
             <div style={{ textAlign: "right", marginBottom: "2rem" }}>
               Ref:{" "}
               <span style={{ fontWeight: "600" }}>{formData.refNumber}</span>
             </div>
 
-
             <p>{getSalutation(employee.name)}</p>
             <h2 style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
               {getNameWithoutTitle(employee.name)}
             </h2>
-
 
             <h3
               style={{
@@ -244,7 +235,6 @@ const DownloadOfferLetter = () => {
             >
               Letter of Offer for Employment
             </h3>
-
 
             <p>
               Dear {getSalutation(employee.name)}{" "}
@@ -259,7 +249,6 @@ const DownloadOfferLetter = () => {
               failing which this offer shall stand null and void. Following are
               the details of this offer of employment:
             </p>
-
 
             <table
               style={{
@@ -346,7 +335,6 @@ const DownloadOfferLetter = () => {
               We look forward to a mutually fulfilling professional association.
             </p>
 
-
             <div style={{ marginTop: "4rem" }}>
               <p>Thanking You</p>
               <p style={{ fontWeight: "600", marginTop: "1rem" }}>
@@ -368,7 +356,6 @@ const DownloadOfferLetter = () => {
             </div>
           </div>
         </div>
-
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -422,7 +409,6 @@ const DownloadOfferLetter = () => {
           </div>
         </div>
       </div>
-
 
       <style>
         {`

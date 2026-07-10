@@ -43,9 +43,8 @@ const Contractor = () => {
     "Attachment",
     "Approval History",
     "Change History",
-    "Compliances"
+    "Compliances",
   ];
-
 
   const postingInfoData = [
     {
@@ -106,7 +105,6 @@ const Contractor = () => {
     },
   ];
 
-
   const attachmentData = [
     {
       id: 1,
@@ -117,7 +115,6 @@ const Contractor = () => {
       remark: "",
     },
   ];
-
 
   const documentChainData = [
     {
@@ -176,15 +173,14 @@ const Contractor = () => {
     const { name, value } = e.target;
     setFormData((prevState) => {
       const newState = { ...prevState, [name]: value };
-      
 
       if (name === "contractor_id") {
-        const selected = contractors.find(c => c.id === parseInt(value));
+        const selected = contractors.find((c) => c.id === parseInt(value));
         if (selected) {
           newState.contractorName = selected.name;
         }
       }
-      
+
       return newState;
     });
   };
@@ -194,7 +190,6 @@ const Contractor = () => {
     try {
       setLoading(true);
       const payload = new FormData();
-      
 
       const mapping = {
         businessUnit: "business_unit",
@@ -210,7 +205,7 @@ const Contractor = () => {
         periodTo: "period_to",
         narration: "narration",
         financialYear: "financial_year",
-        documentDate: "document_date"
+        documentDate: "document_date",
       };
 
       Object.entries(mapping).forEach(([localKey, apiKey]) => {
@@ -224,11 +219,19 @@ const Contractor = () => {
       }
 
       await operationApi.createContractorCompliance(payload);
-      Swal.fire("Success!", "Contractor bill submitted successfully.", "success");
+      Swal.fire(
+        "Success!",
+        "Contractor bill submitted successfully.",
+        "success",
+      );
       handleCancel();
     } catch (error) {
       console.error("Error submitting contractor bill:", error);
-      Swal.fire("Error", error.response?.data?.message || "Failed to submit bill", "error");
+      Swal.fire(
+        "Error",
+        error.response?.data?.message || "Failed to submit bill",
+        "error",
+      );
     } finally {
       setLoading(false);
     }
@@ -249,7 +252,7 @@ const Contractor = () => {
       periodFrom: "",
       narration: "",
       financialYear: "",
-      documentDate: new Date().toISOString().split('T')[0],
+      documentDate: new Date().toISOString().split("T")[0],
       parentContractor: "",
       billInward: "",
       invoiceDate: "",
@@ -258,7 +261,6 @@ const Contractor = () => {
     });
     setClearanceFile(null);
   };
-
 
   const approvalHistory = [
     {
@@ -275,18 +277,15 @@ const Contractor = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <h1 className="text-xl font-semibold text-gray-900">
               Contractor Management
             </h1>
-           
           </div>
         </div>
       </div>
-
 
       <div className="bg-gray-200">
         <div className="max-w-7xl mx-auto">
@@ -308,7 +307,6 @@ const Contractor = () => {
         </div>
       </div>
 
-
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-6">
@@ -321,12 +319,9 @@ const Contractor = () => {
               </div>
             </div>
 
-
             {activeTab === "Main Info" && (
               <form onSubmit={handleSubmit}>
-
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Business Unit <span className="text-red-500">*</span>
@@ -344,7 +339,6 @@ const Contractor = () => {
                       <option value="unit3">Business Unit 3</option>
                     </select>
                   </div>
-
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -364,7 +358,6 @@ const Contractor = () => {
                     </select>
                   </div>
 
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Document No <span className="text-red-500">*</span>
@@ -381,9 +374,7 @@ const Contractor = () => {
                   </div>
                 </div>
 
-
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Contractor Name <span className="text-red-500">*</span>
@@ -396,12 +387,13 @@ const Contractor = () => {
                       required
                     >
                       <option value="">Select Contractor</option>
-                      {contractors.map(c => (
-                        <option key={c.id} value={c.id}>{c.name}</option>
+                      {contractors.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
                       ))}
                     </select>
                   </div>
-
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -416,7 +408,6 @@ const Contractor = () => {
                       placeholder="Enter work order number"
                     />
                   </div>
-
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -439,9 +430,7 @@ const Contractor = () => {
                   </div>
                 </div>
 
-
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Invoice Number
@@ -455,7 +444,6 @@ const Contractor = () => {
                       placeholder="Enter invoice number"
                     />
                   </div>
-
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -477,7 +465,6 @@ const Contractor = () => {
                     </div>
                   </div>
 
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Billing Type
@@ -497,9 +484,7 @@ const Contractor = () => {
                   </div>
                 </div>
 
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Period From
@@ -527,12 +512,9 @@ const Contractor = () => {
                   </div>
                 </div>
 
-
                 <div className="border-t border-gray-200 my-8"></div>
 
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Financial Year <span className="text-red-500">*</span>
@@ -551,7 +533,6 @@ const Contractor = () => {
                     </select>
                   </div>
 
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Document Date <span className="text-red-500">*</span>
@@ -567,12 +548,9 @@ const Contractor = () => {
                   </div>
                 </div>
 
-
                 <div className="border-t border-gray-200 my-8"></div>
 
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Parent Contractor
@@ -589,7 +567,6 @@ const Contractor = () => {
                       <option value="parent3">Parent Contractor 3</option>
                     </select>
                   </div>
-
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -611,12 +588,9 @@ const Contractor = () => {
                   </div>
                 </div>
 
-
                 <div className="border-t border-gray-200 my-8"></div>
 
-
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Invoice Date
@@ -630,7 +604,6 @@ const Contractor = () => {
                     />
                   </div>
 
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Due Date
@@ -643,9 +616,6 @@ const Contractor = () => {
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
-
-
-
                 </div>
 
                 <div>
@@ -674,7 +644,6 @@ const Contractor = () => {
                   />
                 </div>
 
-
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-8 border-t border-gray-200">
                   <div className="text-sm text-gray-500">
                     <span className="text-red-500">*</span> indicates required
@@ -700,12 +669,10 @@ const Contractor = () => {
                 </div>
               </form>
             )}
-            {activeTab === "Compliances" && (<Compliances />)}
+            {activeTab === "Compliances" && <Compliances />}
             {activeTab === "Attachment" && <AttachementContractor />}
             {activeTab === "Approval History" && <ApprovalHistoryContractor />}
-             {activeTab === "Change History" && <ChangeHistoryContractor />}
-
-
+            {activeTab === "Change History" && <ChangeHistoryContractor />}
           </div>
         </div>
       </div>

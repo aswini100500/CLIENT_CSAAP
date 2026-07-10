@@ -48,20 +48,21 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
   const [hoveredItem, setHoveredItem] = useState(null);
   const [hoveredPos, setHoveredPos] = useState({ top: 0, left: 0 });
 
-
   const [companyData, setCompanyData] = useState(null);
   const [companyLoading, setCompanyLoading] = useState(true);
   const [logoError, setLogoError] = useState(false);
 
-
-  const companyId = user?.company_id || 
-                    user?.companyId || 
-                    user?.master_company_id ||
-                    user?.masterCompanyId;
+  const companyId =
+    user?.company_id ||
+    user?.companyId ||
+    user?.master_company_id ||
+    user?.masterCompanyId;
 
   const employeeProfileId = user?.employee_id || user?.employeeId || user?.id;
 
-  const [activePermissions, setActivePermissions] = useState(() => permissions || []);
+  const [activePermissions, setActivePermissions] = useState(
+    () => permissions || [],
+  );
 
   useEffect(() => {
     if (permissions) {
@@ -71,28 +72,26 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
   const hasPermission = (permissionCode) => {
     if (Array.isArray(permissionCode)) {
-      return permissionCode.some(p => hasAccess(p));
+      return permissionCode.some((p) => hasAccess(p));
     }
     return hasAccess(permissionCode);
   };
-
 
   useEffect(() => {
     const fetchCompanyData = async () => {
       try {
         const tokenVal = token;
-        
+
         if (!tokenVal || !companyId) {
           setCompanyLoading(false);
           return;
         }
 
-
         const response = await axios.get(
           `https://csaapnodeapi.csaap.com/api/builder-companies/${companyId}`,
           {
             headers: { Authorization: `Bearer ${tokenVal}` },
-          }
+          },
         );
 
         if (response.data && response.data.success) {
@@ -113,7 +112,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     fetchCompanyData();
   }, [token, companyId]);
 
-
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
@@ -125,7 +123,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
           `https://csaapnodeapi.csaap.com/api/tenant/permissions/employee-access/${employeeProfileId}`,
           {
             headers: { Authorization: `Bearer ${tokenVal}` },
-          }
+          },
         );
 
         let freshPermissions = [];
@@ -138,33 +136,31 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         dispatch(updatePermissions(freshPermissions));
 
         setActivePermissions(freshPermissions);
-        window.dispatchEvent(new CustomEvent("permissionsUpdated", { detail: freshPermissions }));
+        window.dispatchEvent(
+          new CustomEvent("permissionsUpdated", { detail: freshPermissions }),
+        );
       } catch (err) {
-        console.warn("Failed to dynamically fetch permissions in sidebar:", err.message);
+        console.warn(
+          "Failed to dynamically fetch permissions in sidebar:",
+          err.message,
+        );
       }
     };
 
     fetchPermissions();
   }, [token, employeeProfileId, dispatch]);
 
-
-  const companyName = companyData?.master_company_name ||
+  const companyName =
+    companyData?.master_company_name ||
     companyData?.company_name ||
     companyData?.name ||
     "BuilderERP PRO";
 
-
   const companyLogo = companyData?.logo_path
     ? `https://csaapnodeapi.csaap.com/${companyData.logo_path}`
-    : companyData?.logo ||
-    companyData?.company_logo ||
-    companyData?.image_url;
+    : companyData?.logo || companyData?.company_logo || companyData?.image_url;
 
   const companyLogoText = companyName.charAt(0).toUpperCase();
-
-
-
-
 
   const toggleMenu = (id) => {
     setExpandedMenus((prev) => ({
@@ -207,7 +203,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       navigate("/");
     }
   };
-
 
   const sidebarItems = useMemo(() => {
     const rawItems = [
@@ -276,7 +271,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
     const items = rawItems.filter((item) => hasPermission(item.permission));
 
-
     const hrmsChildren = [
       {
         id: "hr_dashboard",
@@ -343,7 +337,9 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       },
     ];
 
-    const filteredHrmsChildren = hrmsChildren.filter((child) => hasPermission(child.permission));
+    const filteredHrmsChildren = hrmsChildren.filter((child) =>
+      hasPermission(child.permission),
+    );
 
     if (filteredHrmsChildren.length > 0) {
       items.push({
@@ -354,7 +350,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         children: filteredHrmsChildren,
       });
     }
-
 
     const accountingChildren = [
       {
@@ -372,7 +367,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         path: "/employee/hr/accounting/client/gst-details",
         icon: <LayoutDashboard size={16} className="text-green-700 " />,
       },
-      
+
       {
         id: "client-group-creation",
         permission: "accounting.company",
@@ -409,34 +404,104 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         icon: <FileText size={16} className="text-green-700 " />,
       },
 
-
       {
         id: "client-vouchers",
         permission: "accounting.vouchers",
         label: "Vouchers",
         icon: <FileText size={16} className="text-green-700 " />,
         children: [
-          { id: "client-contra", label: "Contra Voucher", path: "/employee/hr/accounting/client/contravoucher" },
-          { id: "client-contra-list", label: "List Of Contra Voucher", path: "/employee/hr/accounting/client/listOfContraVoucher" },
-          { id: "client-payment", label: "Payment Voucher", path: "/employee/hr/accounting/client/paymentVoucher" },
-          { id: "client-payment-list", label: "List Of Payment Voucher", path: "/employee/hr/accounting/client/listOfPaymentVoucher" },
-          { id: "client-receipt", label: "Receipt Voucher", path: "/employee/hr/accounting/client/receptVoucher" },
-          { id: "client-receipt-list", label: "List Of Receipt Voucher", path: "/employee/hr/accounting/client/listOfReciptVoucher" },
-          { id: "client-journal", label: "Journal Voucher", path: "/employee/hr/accounting/client/journalvoucher" },
-          { id: "client-journal-list", label: "List Of Journal Voucher", path: "/employee/hr/accounting/client/listOfJournalVoucher" },
-          { id: "client-manufacturing", label: "Manufacturing", path: "/employee/hr/accounting/client/manfacturing" },
-          { id: "client-manufacturing-list", label: "Manufacturing List", path: "/employee/hr/accounting/client/manfacturinglist" },
-          { id: "client-sale", label: "Sale Voucher", path: "/employee/hr/accounting/client/salevoucher" },
-          { id: "client-sale-list", label: "List Of Sale Voucher", path: "/employee/hr/accounting/client/listOfSaleVoucher" },
-          { id: "client-purchase", label: "Purchase Voucher", path: "/employee/hr/accounting/client/purchasevoucher" },
-          { id: "client-purchase-list", label: "List Of Purchase Voucher", path: "/employee/hr/accounting/client/listOfPurchaseVoucher" },
-          { id: "client-debit", label: "Debit Note", path: "/employee/hr/accounting/client/debitNote" },
-          { id: "client-debit-list", label: "Debit Note List", path: "/employee/hr/accounting/client/debitNotesList" },
-          { id: "client-credit", label: "Credit Note", path: "/employee/hr/accounting/client/creditNote" },
-          { id: "client-credit-list", label: "Credit Note List", path: "/employee/hr/accounting/client/creditNotesList" },
+          {
+            id: "client-contra",
+            label: "Contra Voucher",
+            path: "/employee/hr/accounting/client/contravoucher",
+          },
+          {
+            id: "client-contra-list",
+            label: "List Of Contra Voucher",
+            path: "/employee/hr/accounting/client/listOfContraVoucher",
+          },
+          {
+            id: "client-payment",
+            label: "Payment Voucher",
+            path: "/employee/hr/accounting/client/paymentVoucher",
+          },
+          {
+            id: "client-payment-list",
+            label: "List Of Payment Voucher",
+            path: "/employee/hr/accounting/client/listOfPaymentVoucher",
+          },
+          {
+            id: "client-receipt",
+            label: "Receipt Voucher",
+            path: "/employee/hr/accounting/client/receptVoucher",
+          },
+          {
+            id: "client-receipt-list",
+            label: "List Of Receipt Voucher",
+            path: "/employee/hr/accounting/client/listOfReciptVoucher",
+          },
+          {
+            id: "client-journal",
+            label: "Journal Voucher",
+            path: "/employee/hr/accounting/client/journalvoucher",
+          },
+          {
+            id: "client-journal-list",
+            label: "List Of Journal Voucher",
+            path: "/employee/hr/accounting/client/listOfJournalVoucher",
+          },
+          {
+            id: "client-manufacturing",
+            label: "Manufacturing",
+            path: "/employee/hr/accounting/client/manfacturing",
+          },
+          {
+            id: "client-manufacturing-list",
+            label: "Manufacturing List",
+            path: "/employee/hr/accounting/client/manfacturinglist",
+          },
+          {
+            id: "client-sale",
+            label: "Sale Voucher",
+            path: "/employee/hr/accounting/client/salevoucher",
+          },
+          {
+            id: "client-sale-list",
+            label: "List Of Sale Voucher",
+            path: "/employee/hr/accounting/client/listOfSaleVoucher",
+          },
+          {
+            id: "client-purchase",
+            label: "Purchase Voucher",
+            path: "/employee/hr/accounting/client/purchasevoucher",
+          },
+          {
+            id: "client-purchase-list",
+            label: "List Of Purchase Voucher",
+            path: "/employee/hr/accounting/client/listOfPurchaseVoucher",
+          },
+          {
+            id: "client-debit",
+            label: "Debit Note",
+            path: "/employee/hr/accounting/client/debitNote",
+          },
+          {
+            id: "client-debit-list",
+            label: "Debit Note List",
+            path: "/employee/hr/accounting/client/debitNotesList",
+          },
+          {
+            id: "client-credit",
+            label: "Credit Note",
+            path: "/employee/hr/accounting/client/creditNote",
+          },
+          {
+            id: "client-credit-list",
+            label: "Credit Note List",
+            path: "/employee/hr/accounting/client/creditNotesList",
+          },
         ],
       },
-
 
       {
         id: "client-banking",
@@ -444,9 +509,21 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         label: "Banking",
         icon: <Wallet size={16} className="text-green-700" />,
         children: [
-          { id: "client-bank-activities", label: "Bank Activities", path: "/employee/hr/accounting/client/bank-activities" },
-          { id: "client-cheque", label: "Cheque", path: "/employee/hr/accounting/client/cheque" },
-          { id: "client-cheque-register", label: "Cheque Register", path: "/employee/hr/accounting/client/cheque-register" },
+          {
+            id: "client-bank-activities",
+            label: "Bank Activities",
+            path: "/employee/hr/accounting/client/bank-activities",
+          },
+          {
+            id: "client-cheque",
+            label: "Cheque",
+            path: "/employee/hr/accounting/client/cheque",
+          },
+          {
+            id: "client-cheque-register",
+            label: "Cheque Register",
+            path: "/employee/hr/accounting/client/cheque-register",
+          },
         ],
       },
 
@@ -479,15 +556,22 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         icon: <FileText size={16} className="text-green-700 " />,
       },
 
-
       {
         id: "client-inventory",
         permission: "accounting.inventory",
         label: "Inventory Book",
         icon: <Warehouse size={16} className="text-green-700" />,
         children: [
-          { id: "client-stock-item", label: "Stock Item Creation", path: "/employee/hr/accounting/client/stockItemCreation" },
-          { id: "client-stock-group", label: "Stock Group Summary", path: "/employee/hr/accounting/client/stockGroupSummery" },
+          {
+            id: "client-stock-item",
+            label: "Stock Item Creation",
+            path: "/employee/hr/accounting/client/stockItemCreation",
+          },
+          {
+            id: "client-stock-group",
+            label: "Stock Group Summary",
+            path: "/employee/hr/accounting/client/stockGroupSummery",
+          },
           {
             id: "client-gst-summary",
             label: "GST Summary",
@@ -506,7 +590,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         children: accountingChildren,
       });
     }
-
 
     const crmChildren = [
       {
@@ -552,7 +635,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     return items;
   }, [activePermissions]);
 
-
   const renderItem = (item, level = 0) => {
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedMenus[item.id];
@@ -561,14 +643,14 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
     const textSize = level === 0 ? "text-[13px]" : "text-[12.5px]";
     const iconSize = level === 0 ? 19 : 17;
 
-
     if (isCollapsed) {
       const isInactiveFolder = hasChildren && !isExpanded;
       return (
         <div
           key={`${item.id}-col`}
-          className={`flex flex-col items-center w-full ${isInactiveFolder ? "mb-2.5" : "mb-0.5"
-            }`}
+          className={`flex flex-col items-center w-full ${
+            isInactiveFolder ? "mb-2.5" : "mb-0.5"
+          }`}
         >
           <NavLink
             to={item.path || "#"}
@@ -591,38 +673,41 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
               });
             }}
             onMouseLeave={() => setHoveredItem(null)}
-            className={`flex items-center justify-center ${level > 0 ? "p-2" : "p-2.5"
-              } rounded-lg transition-all duration-200 group w-full relative`}
+            className={`flex items-center justify-center ${
+              level > 0 ? "p-2" : "p-2.5"
+            } rounded-lg transition-all duration-200 group w-full relative`}
           >
             {({ isActive }) => {
               const isFolderExpanded = hasChildren && isExpanded;
               const isItemActive = isActive && item.path && item.path !== "#";
               const stackShadow = isInactiveFolder
                 ? {
-                  boxShadow:
-                    "0 3px 0 -1px #fff, 0 3px 0 0 #e2e8f0, 0 6px 0 -1px #f8fafc, 0 6px 0 0 #e2e8f080",
-                }
+                    boxShadow:
+                      "0 3px 0 -1px #fff, 0 3px 0 0 #e2e8f0, 0 6px 0 -1px #f8fafc, 0 6px 0 0 #e2e8f080",
+                  }
                 : {};
               return (
                 <>
                   <div
-                    className={`absolute inset-0 rounded-lg transition-all duration-200 ${isItemActive && !hasChildren
-                      ? "bg-linear-to-r from-green-600 to-emerald-500 shadow-md shadow-green-100"
-                      : isFolderExpanded
-                        ? "bg-white shadow-sm ring-1 ring-slate-200"
-                        : isInactiveFolder
-                          ? "bg-white border border-slate-200"
-                          : "bg-transparent group-hover:bg-slate-50"
-                      }`}
+                    className={`absolute inset-0 rounded-lg transition-all duration-200 ${
+                      isItemActive && !hasChildren
+                        ? "bg-linear-to-r from-green-600 to-emerald-500 shadow-md shadow-green-100"
+                        : isFolderExpanded
+                          ? "bg-white shadow-sm ring-1 ring-slate-200"
+                          : isInactiveFolder
+                            ? "bg-white border border-slate-200"
+                            : "bg-transparent group-hover:bg-slate-50"
+                    }`}
                     style={stackShadow}
                   />
                   <span
-                    className={`relative z-10 transition-colors duration-200 ${isItemActive && !hasChildren
-                      ? "[&_svg]:text-white!"
-                      : isFolderExpanded
-                        ? "[&_svg]:text-green-600!"
-                        : "text-slate-500 group-hover:text-green-600"
-                      }`}
+                    className={`relative z-10 transition-colors duration-200 ${
+                      isItemActive && !hasChildren
+                        ? "[&_svg]:text-white!"
+                        : isFolderExpanded
+                          ? "[&_svg]:text-green-600!"
+                          : "text-slate-500 group-hover:text-green-600"
+                    }`}
                   >
                     {item.icon ? (
                       React.cloneElement(item.icon, {
@@ -630,10 +715,11 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                       })
                     ) : (
                       <div
-                        className={`flex items-center justify-center font-bold uppercase ${level > 0
-                          ? "w-4 h-4 text-[9px]"
-                          : "w-5 h-5 text-[10px]"
-                          }`}
+                        className={`flex items-center justify-center font-bold uppercase ${
+                          level > 0
+                            ? "w-4 h-4 text-[9px]"
+                            : "w-5 h-5 text-[10px]"
+                        }`}
                       >
                         {item.label.charAt(0)}
                       </div>
@@ -655,25 +741,26 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       );
     }
 
-
     return (
       <div key={`${item.id}-exp`} className="mb-1.5">
         {hasChildren ? (
           <div className="space-y-1">
             <button
               onClick={() => toggleMenu(item.id)}
-              className={`w-full flex items-center justify-between transition-all duration-200 py-2 outline-none rounded-lg border border-transparent ${paddingLeft} ${textSize} ${isExpanded
-                ? "bg-slate-100 text-slate-900 font-semibold shadow-sm border-slate-100"
-                : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:border-slate-100"
-                }`}
+              className={`w-full flex items-center justify-between transition-all duration-200 py-2 outline-none rounded-lg border border-transparent ${paddingLeft} ${textSize} ${
+                isExpanded
+                  ? "bg-slate-100 text-slate-900 font-semibold shadow-sm border-slate-100"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:border-slate-100"
+              }`}
             >
               <div className="flex items-center min-w-0">
                 {item.icon && (
                   <span
-                    className={`mr-3 transition-colors duration-200 shrink-0 ${isExpanded
-                      ? "text-green-600"
-                      : "text-slate-400 group-hover:text-green-600"
-                      }`}
+                    className={`mr-3 transition-colors duration-200 shrink-0 ${
+                      isExpanded
+                        ? "text-green-600"
+                        : "text-slate-400 group-hover:text-green-600"
+                    }`}
                   >
                     {React.cloneElement(item.icon, {
                       size: iconSize,
@@ -682,24 +769,27 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                   </span>
                 )}
                 <span
-                  className={`truncate text-left ${item.isMainFolder ? "tracking-tight" : ""
-                    }`}
+                  className={`truncate text-left ${
+                    item.isMainFolder ? "tracking-tight" : ""
+                  }`}
                 >
                   {item.label}
                 </span>
               </div>
               <ChevronRight
                 size={14}
-                className={`transition-transform duration-300 ${isExpanded ? "rotate-90 text-green-600" : "text-slate-300"
-                  }`}
+                className={`transition-transform duration-300 ${
+                  isExpanded ? "rotate-90 text-green-600" : "text-slate-300"
+                }`}
               />
             </button>
 
             <div
-              className={`transition-all duration-300 ease-out overflow-hidden ${isExpanded
-                ? "max-h-500 opacity-100 mt-1 mb-2 bg-slate-50/50 rounded-lg p-0.5"
-                : "max-h-0 opacity-0"
-                }`}
+              className={`transition-all duration-300 ease-out overflow-hidden ${
+                isExpanded
+                  ? "max-h-500 opacity-100 mt-1 mb-2 bg-slate-50/50 rounded-lg p-0.5"
+                  : "max-h-0 opacity-0"
+              }`}
             >
               <div className="ml-3.5 border-l border-slate-100 pl-1 py-1 space-y-1">
                 {item.children.map((child) => renderItem(child, level + 1))}
@@ -716,10 +806,11 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
             }}
             className={({ isActive }) => {
               const isItemActive = isActive && item.path && item.path !== "#";
-              return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${isItemActive
-                ? "bg-linear-to-r from-green-600 to-emerald-500 text-white font-medium shadow-md shadow-green-100 border-green-500/50"
-                : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:translate-x-1 hover:border-slate-100"
-                }`;
+              return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${
+                isItemActive
+                  ? "bg-linear-to-r from-green-600 to-emerald-500 text-white font-medium shadow-md shadow-green-100 border-green-500/50"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:translate-x-1 hover:border-slate-100"
+              }`;
             }}
           >
             {({ isActive }) => {
@@ -728,10 +819,11 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                 <>
                   {item.icon && (
                     <span
-                      className={`mr-3 transition-colors duration-200 shrink-0 ${isItemActive
-                        ? "text-white"
-                        : "text-slate-400 group-hover:text-green-600"
-                        }`}
+                      className={`mr-3 transition-colors duration-200 shrink-0 ${
+                        isItemActive
+                          ? "text-white"
+                          : "text-slate-400 group-hover:text-green-600"
+                      }`}
                     >
                       {React.cloneElement(item.icon, {
                         size: iconSize,
@@ -748,7 +840,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       </div>
     );
   };
-
 
   if (companyLoading) {
     return (
@@ -794,7 +885,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       `}
       </style>
 
-
       {isCollapsed ? (
         <div className="h-16 flex flex-col items-center justify-center border-b border-slate-100 shrink-0 bg-white">
           <button
@@ -813,7 +903,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
             onClick={handleItemClick}
             className="flex-1 flex items-center min-w-0 gap-3"
           >
-
             {companyLogo && !logoError ? (
               <img
                 src={companyLogo}
@@ -821,15 +910,12 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                 crossOrigin="anonymous"
                 className="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0"
                 onError={() => {
-                  console.error('Logo failed to load in expanded mode');
+                  console.error("Logo failed to load in expanded mode");
                   setLogoError(true);
                 }}
               />
             ) : (
-
-              <div
-                className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0"
-              >
+              <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0">
                 {companyLogoText}
               </div>
             )}
@@ -845,13 +931,11 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         </div>
       )}
 
-
       <div className="flex-1 overflow-y-auto px-3 py-4 custom-scrollbar">
         <nav className="space-y-1">
           {sidebarItems.map((item) => renderItem(item))}
         </nav>
       </div>
-
 
       <div className="border-t border-slate-100 p-3 shrink-0">
         {isCollapsed ? (
@@ -888,7 +972,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
           </button>
         )}
       </div>
-
 
       {isCollapsed && hoveredItem && (
         <div

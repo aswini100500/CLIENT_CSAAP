@@ -1,1889 +1,21 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
 import BulkImportButton from "./BulkImportButton";
 import { useParams, useNavigate } from "react-router-dom";
-import { Search, UserPlus } from 'lucide-react';
+import { Search, UserPlus } from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
 
 const API = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher`;
 
-
-const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew, placeholder = "Search or add ledger..." }) => {
+const SearchableLedgerSelect = ({
+  ledgers,
+  value,
+  onSelect,
+  onCreateNew,
+  placeholder = "Search or add ledger...",
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -1897,14 +29,17 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew, placeho
   }, [selectedLedger]);
 
   const filtered = ledgers.filter((l) =>
-    (l.name || l.ledgerName || "").toLowerCase().includes(searchTerm.toLowerCase())
+    (l.name || l.ledgerName || "")
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase()),
   );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
-        if (selectedLedger) setSearchTerm(selectedLedger.name || selectedLedger.ledgerName);
+        if (selectedLedger)
+          setSearchTerm(selectedLedger.name || selectedLedger.ledgerName);
         else setSearchTerm("");
       }
     };
@@ -1948,7 +83,9 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew, placeho
               </div>
             ))
           ) : (
-            <div className="px-4 py-2.5 text-sm text-gray-500 italic">No matches found</div>
+            <div className="px-4 py-2.5 text-sm text-gray-500 italic">
+              No matches found
+            </div>
           )}
 
           <div
@@ -1965,7 +102,6 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew, placeho
     </div>
   );
 };
-
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
@@ -2291,9 +427,16 @@ const styles = `
   hr.pv-hr { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
 `;
 
-
 const FieldRow = ({ label, children }) => (
-  <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "120px 1fr",
+      alignItems: "center",
+      gap: "10px",
+      marginBottom: "10px",
+    }}
+  >
     <span className="pv-detail-label">{label}</span>
     <div>{children}</div>
   </div>
@@ -2351,7 +494,14 @@ const PurchaseVoucher = () => {
     items: [{ itemName: "", hsn_code: "", qty: 1, rate: 0, amount: 0 }],
   });
 
-  const [gst, setGst] = useState({ applied: false, percentage: 0, amount: 0, igst: 0, cgst: 0, sgst: 0 });
+  const [gst, setGst] = useState({
+    applied: false,
+    percentage: 0,
+    amount: 0,
+    igst: 0,
+    cgst: 0,
+    sgst: 0,
+  });
   const [ledgers, setLedgers] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -2367,20 +517,18 @@ const PurchaseVoucher = () => {
           body: JSON.stringify({
             country: "India",
           }),
-        }
+        },
       );
 
       const data = await res.json();
       setStates(data.data.states);
-    } catch (err) {
-
-    }
+    } catch (err) {}
   };
 
   const fetchCountries = async () => {
     try {
       const res = await fetch(
-        "https://restcountries.com/v3.1/all?fields=name,cca2,flags"
+        "https://restcountries.com/v3.1/all?fields=name,cca2,flags",
       );
 
       const data = await res.json();
@@ -2394,9 +542,7 @@ const PurchaseVoucher = () => {
         .sort((a, b) => a.name.localeCompare(b.name));
 
       setCountries(formatted);
-    } catch (err) {
-
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -2404,9 +550,10 @@ const PurchaseVoucher = () => {
     fetchCountries();
     const fetchData = async () => {
       try {
-        const res2 = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`);
+        const res2 = await axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
+        );
         setLedgers(res2.data);
-
 
         const savedState = sessionStorage.getItem("purchaseVoucherState");
         if (savedState) {
@@ -2419,7 +566,7 @@ const PurchaseVoucher = () => {
             text: "Your voucher progress has been restored.",
             icon: "info",
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
         }
         if (id) {
@@ -2437,40 +584,75 @@ const PurchaseVoucher = () => {
               address: v.address || "",
               state: v.state || "Not Applicable",
               country: v.country || "India",
-              gstRegistrationType: v.gstRegistrationType || "Unregistered/Consumer",
+              gstRegistrationType:
+                v.gstRegistrationType || "Unregistered/Consumer",
               gstin: v.gstin || "",
               placeOfSupply: v.placeOfSupply || "Not Applicable",
               deliveryNoteNo: v.deliveryNoteNo || "",
-              deliveryNoteDate: v.deliveryNoteDate ? new Date(v.deliveryNoteDate).toISOString().split("T")[0] : "",
+              deliveryNoteDate: v.deliveryNoteDate
+                ? new Date(v.deliveryNoteDate).toISOString().split("T")[0]
+                : "",
               paymentTerms: v.paymentTerms || "",
               otherReferences: v.otherReferences || "",
               referenceNo: v.referenceNo || "",
-              referenceDate: v.referenceDate ? new Date(v.referenceDate).toISOString().split("T")[0] : "",
+              referenceDate: v.referenceDate
+                ? new Date(v.referenceDate).toISOString().split("T")[0]
+                : "",
               buyerOrderNo: v.buyerOrderNo || "",
-              buyerOrderDate: v.buyerOrderDate ? new Date(v.buyerOrderDate).toISOString().split("T")[0] : "",
+              buyerOrderDate: v.buyerOrderDate
+                ? new Date(v.buyerOrderDate).toISOString().split("T")[0]
+                : "",
               dispatchDocNo: v.dispatchDocNo || "",
               dispatchedThrough: v.dispatchedThrough || "",
               destination: v.destination || "",
               carrierName: v.carrierName || "",
               billOfLading: v.billOfLading || "",
-              billOfLadingDate: v.billOfLadingDate ? new Date(v.billOfLadingDate).toISOString().split("T")[0] : "",
+              billOfLadingDate: v.billOfLadingDate
+                ? new Date(v.billOfLadingDate).toISOString().split("T")[0]
+                : "",
               motorVehicleNo: v.motorVehicleNo || "",
-              dispatchDate: v.dispatchDate ? new Date(v.dispatchDate).toISOString().split("T")[0] : "",
+              dispatchDate: v.dispatchDate
+                ? new Date(v.dispatchDate).toISOString().split("T")[0]
+                : "",
               receiptNoteNo: v.receiptNoteNo || "",
-              receiptDate: v.receiptDate ? new Date(v.receiptDate).toISOString().split("T")[0] : "",
+              receiptDate: v.receiptDate
+                ? new Date(v.receiptDate).toISOString().split("T")[0]
+                : "",
               receiptDocNo: v.receiptDocNo || "",
               supplierInvoiceNo: v.supplierInvoiceNo || "",
-              supplierInvoiceDate: v.supplierInvoiceDate ? new Date(v.supplierInvoiceDate).toISOString().split("T")[0] : "",
+              supplierInvoiceDate: v.supplierInvoiceDate
+                ? new Date(v.supplierInvoiceDate).toISOString().split("T")[0]
+                : "",
               termsOfDelivery: v.termsOfDelivery || v.delivery_terms || "",
-              consigneeSameAsBilling: v.consigneeSameAsBilling !== undefined ? Boolean(v.consigneeSameAsBilling) : true,
+              consigneeSameAsBilling:
+                v.consigneeSameAsBilling !== undefined
+                  ? Boolean(v.consigneeSameAsBilling)
+                  : true,
               consigneeName: v.consigneeName || "",
               consigneeGSTIN: v.consigneeGSTIN || "",
               consigneeAddress: v.consigneeAddress || "",
               consigneeState: v.consigneeState || "Not Applicable",
               consigneePincode: v.consigneePincode || "",
-              items: v.items?.length > 0
-                ? v.items.map(i => ({ itemName: i.item_name || i.item || i.itemName || "", hsn_code: i.hsn_code || "", qty: Number(i.qty) || 1, per: i.per || i.unit || "", rate: Number(i.rate) || 0, amount: Number(i.amount) || 0 }))
-                : [{ itemName: "", hsn_code: "", qty: 1, per: "Nos", rate: 0, amount: 0 }],
+              items:
+                v.items?.length > 0
+                  ? v.items.map((i) => ({
+                      itemName: i.item_name || i.item || i.itemName || "",
+                      hsn_code: i.hsn_code || "",
+                      qty: Number(i.qty) || 1,
+                      per: i.per || i.unit || "",
+                      rate: Number(i.rate) || 0,
+                      amount: Number(i.amount) || 0,
+                    }))
+                  : [
+                      {
+                        itemName: "",
+                        hsn_code: "",
+                        qty: 1,
+                        per: "Nos",
+                        rate: 0,
+                        amount: 0,
+                      },
+                    ],
             });
             setGst({
               applied: Number(v.gst_percentage || v.gstPercentage || 0) > 0,
@@ -2487,13 +669,20 @@ const PurchaseVoucher = () => {
             });
           }
         }
-      } catch (err) { console.error(err); }
+      } catch (err) {
+        console.error(err);
+      }
     };
     if (companyId) fetchData();
 
     if (companyId && !id) {
-      axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/purchase`)
-        .then(res => setVoucher(prev => ({ ...prev, invoiceNo: res.data.nextNumber })))
+      axios
+        .get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/purchase`,
+        )
+        .then((res) =>
+          setVoucher((prev) => ({ ...prev, invoiceNo: res.data.nextNumber })),
+        )
         .catch(console.error);
     }
   }, [companyId, id]);
@@ -2509,12 +698,29 @@ const PurchaseVoucher = () => {
     setVoucher({ ...voucher, items: updated });
   };
 
-  const addRow = () => setVoucher({ ...voucher, items: [...voucher.items, { itemName: "", hsn_code: "", qty: 1, per: "Nos", rate: 0, amount: 0 }] });
-  const removeRow = (i) => { setVoucher({ ...voucher, items: voucher.items.filter((_, idx) => idx !== i) }); };
+  const addRow = () =>
+    setVoucher({
+      ...voucher,
+      items: [
+        ...voucher.items,
+        { itemName: "", hsn_code: "", qty: 1, per: "Nos", rate: 0, amount: 0 },
+      ],
+    });
+  const removeRow = (i) => {
+    setVoucher({
+      ...voucher,
+      items: voucher.items.filter((_, idx) => idx !== i),
+    });
+  };
 
-  const totalAmount = voucher.items.reduce((sum, r) => sum + Number(r.amount || 0), 0);
-  const effectiveGstRate = Number(gst.igst || 0) + Number(gst.cgst || 0) + Number(gst.sgst || 0);
-  const gstAmount = (totalAmount * (gst.percentage || effectiveGstRate || 0)) / 100;
+  const totalAmount = voucher.items.reduce(
+    (sum, r) => sum + Number(r.amount || 0),
+    0,
+  );
+  const effectiveGstRate =
+    Number(gst.igst || 0) + Number(gst.cgst || 0) + Number(gst.sgst || 0);
+  const gstAmount =
+    (totalAmount * (gst.percentage || effectiveGstRate || 0)) / 100;
   const grandTotal = totalAmount + gstAmount;
 
   const handleAutoGST = () => {
@@ -2524,7 +730,7 @@ const PurchaseVoucher = () => {
       igst: 0,
       cgst: 9,
       sgst: 9,
-      amount: 0
+      amount: 0,
     });
 
     Swal.fire({
@@ -2537,29 +743,57 @@ const PurchaseVoucher = () => {
   };
 
   const handleManualGST = async () => {
-    const { value } = await Swal.fire({ title: "Enter GST Percentage", input: "number", inputAttributes: { min: 0, max: 100, step: 0.1 }, confirmButtonText: "Apply", showCancelButton: true });
+    const { value } = await Swal.fire({
+      title: "Enter GST Percentage",
+      input: "number",
+      inputAttributes: { min: 0, max: 100, step: 0.1 },
+      confirmButtonText: "Apply",
+      showCancelButton: true,
+    });
     if (value) {
       const rate = parseFloat(value);
 
       const { value: type } = await Swal.fire({
         title: "Tax Type",
         input: "select",
-        inputOptions: { intra: "Intra-state (CGST+SGST)", inter: "Inter-state (IGST)" },
-        confirmButtonText: "Select"
+        inputOptions: {
+          intra: "Intra-state (CGST+SGST)",
+          inter: "Inter-state (IGST)",
+        },
+        confirmButtonText: "Select",
       });
 
       if (type === "inter") {
-        setGst({ ...gst, applied: true, percentage: rate, igst: rate, cgst: 0, sgst: 0 });
+        setGst({
+          ...gst,
+          applied: true,
+          percentage: rate,
+          igst: rate,
+          cgst: 0,
+          sgst: 0,
+        });
       } else {
-        setGst({ ...gst, applied: true, percentage: rate, igst: 0, cgst: rate / 2, sgst: rate / 2 });
+        setGst({
+          ...gst,
+          applied: true,
+          percentage: rate,
+          igst: 0,
+          cgst: rate / 2,
+          sgst: rate / 2,
+        });
       }
-      Swal.fire({ icon: "success", title: "GST Added", text: `${value}% GST applied`, timer: 1600, showConfirmButton: false });
+      Swal.fire({
+        icon: "success",
+        title: "GST Added",
+        text: `${value}% GST applied`,
+        timer: 1600,
+        showConfirmButton: false,
+      });
     }
   };
 
   const handleBulkImport = async (data) => {
     try {
-
       if (!data || data.length === 0) {
         Swal.fire("Error", "No data found in file", "error");
         return;
@@ -2567,114 +801,75 @@ const PurchaseVoucher = () => {
 
       const grouped = {};
 
-
       data.forEach((row) => {
-
-        const invoiceNo =
-          row.InvoiceNo ||
-          row.VoucherNo ||
-          `PUR-${Date.now()}`;
+        const invoiceNo = row.InvoiceNo || row.VoucherNo || `PUR-${Date.now()}`;
 
         if (!grouped[invoiceNo]) {
-
           grouped[invoiceNo] = {
-
             date: row.Date
               ? new Date(row.Date).toISOString().split("T")[0]
               : new Date().toISOString().split("T")[0],
 
             invoiceNo,
 
-            customer:
-              row.Customer ||
-              row.PartyName ||
-              "",
+            customer: row.Customer || row.PartyName || "",
 
-            narration:
-              row.Narration || "",
+            narration: row.Narration || "",
 
-            supplierInvoiceNo:
-              row.SupplierInvoiceNo || "",
+            supplierInvoiceNo: row.SupplierInvoiceNo || "",
 
-            supplierInvoiceDate:
-              row.SupplierInvoiceDate || "",
+            supplierInvoiceDate: row.SupplierInvoiceDate || "",
 
-            mailingName:
-              row.MailingName ||
-              row.Customer ||
-              "",
+            mailingName: row.MailingName || row.Customer || "",
 
-            address:
-              row.Address || "",
+            address: row.Address || "",
 
-            state:
-              row.State || "Not Applicable",
+            state: row.State || "Not Applicable",
 
-            country:
-              row.Country || "India",
+            country: row.Country || "India",
 
-            gstin:
-              row.GSTIN || "",
+            gstin: row.GSTIN || "",
 
-            placeOfSupply:
-              row.PlaceOfSupply || "Not Applicable",
+            placeOfSupply: row.PlaceOfSupply || "Not Applicable",
 
-            paymentTerms:
-              row.PaymentTerms || "",
+            paymentTerms: row.PaymentTerms || "",
 
-            deliveryNoteNo:
-              row.DeliveryNoteNo || "",
+            deliveryNoteNo: row.DeliveryNoteNo || "",
 
-            deliveryNoteDate:
-              row.DeliveryNoteDate || "",
+            deliveryNoteDate: row.DeliveryNoteDate || "",
 
-            dispatchDocNo:
-              row.DispatchDocNo || "",
+            dispatchDocNo: row.DispatchDocNo || "",
 
-            destination:
-              row.Destination || "",
+            destination: row.Destination || "",
 
-            carrierName:
-              row.CarrierName || "",
+            carrierName: row.CarrierName || "",
 
-            gst_percentage:
-              parseFloat(row.GST || 0),
+            gst_percentage: parseFloat(row.GST || 0),
 
-            igst:
-              parseFloat(row.IGST || 0),
+            igst: parseFloat(row.IGST || 0),
 
-            cgst:
-              parseFloat(row.CGST || 0),
+            cgst: parseFloat(row.CGST || 0),
 
-            sgst:
-              parseFloat(row.SGST || 0),
+            sgst: parseFloat(row.SGST || 0),
 
             items: [],
           };
         }
 
-
         grouped[invoiceNo].items.push({
+          itemName: row.ItemName || "",
 
-          itemName:
-            row.ItemName || "",
+          hsn_code: row.HSN || "",
 
-          hsn_code:
-            row.HSN || "",
+          qty: parseFloat(row.Qty || 1),
 
-          qty:
-            parseFloat(row.Qty || 1),
-
-          rate:
-            parseFloat(row.Rate || 0),
+          rate: parseFloat(row.Rate || 0),
 
           amount:
             parseFloat(row.Amount || 0) ||
-            parseFloat(row.Qty || 1) *
-            parseFloat(row.Rate || 0),
+            parseFloat(row.Qty || 1) * parseFloat(row.Rate || 0),
         });
       });
-
 
       const firstVoucher = Object.values(grouped)[0];
 
@@ -2683,17 +878,12 @@ const PurchaseVoucher = () => {
         return;
       }
 
-
       let ledgerId = "";
       let finalLedgerList = ledgers;
       let ledgerObj = ledgers.find(
         (l) =>
-          (l.name || "")
-            .toLowerCase()
-            .trim() ===
-          (firstVoucher.customer || "")
-            .toLowerCase()
-            .trim()
+          (l.name || "").toLowerCase().trim() ===
+          (firstVoucher.customer || "").toLowerCase().trim(),
       );
 
       if (ledgerObj) {
@@ -2705,37 +895,55 @@ const PurchaseVoucher = () => {
           icon: "warning",
           showCancelButton: true,
           confirmButtonText: "Yes, Create",
-          cancelButtonText: "No, Skip Selecting Ledger"
+          cancelButtonText: "No, Skip Selecting Ledger",
         });
 
         if (confirmCreate.isConfirmed) {
           try {
-            const groupRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`);
-            const creditorsGroup = groupRes.data.find(g => g.groupName === "Sundry Creditors");
+            const groupRes = await axios.get(
+              `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`,
+            );
+            const creditorsGroup = groupRes.data.find(
+              (g) => g.groupName === "Sundry Creditors",
+            );
 
             if (!creditorsGroup) {
-              Swal.fire("Error", "Sundry Creditors group not found in system.", "error");
+              Swal.fire(
+                "Error",
+                "Sundry Creditors group not found in system.",
+                "error",
+              );
             } else {
-              await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`, {
-                name: firstVoucher.customer,
-                under: JSON.stringify({ name: "Sundry Creditors", id: creditorsGroup.id }),
-                mailingName: firstVoucher.customer,
-                openingBalance: 0,
-                state: firstVoucher.state || "Not Applicable",
-                country: firstVoucher.country || "India",
-                registrationType: firstVoucher.gstin ? "Regular" : "Unregistered/Consumer",
-                gstin: firstVoucher.gstin || "",
-                companyId
-              });
+              await axios.post(
+                `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`,
+                {
+                  name: firstVoucher.customer,
+                  under: JSON.stringify({
+                    name: "Sundry Creditors",
+                    id: creditorsGroup.id,
+                  }),
+                  mailingName: firstVoucher.customer,
+                  openingBalance: 0,
+                  state: firstVoucher.state || "Not Applicable",
+                  country: firstVoucher.country || "India",
+                  registrationType: firstVoucher.gstin
+                    ? "Regular"
+                    : "Unregistered/Consumer",
+                  gstin: firstVoucher.gstin || "",
+                  companyId,
+                },
+              );
 
-
-              const ledgerRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`);
+              const ledgerRes = await axios.get(
+                `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
+              );
               finalLedgerList = ledgerRes.data || [];
               setLedgers(finalLedgerList);
 
-
               const newLedger = finalLedgerList.find(
-                (l) => (l.name || "").toLowerCase().trim() === (firstVoucher.customer || "").toLowerCase().trim()
+                (l) =>
+                  (l.name || "").toLowerCase().trim() ===
+                  (firstVoucher.customer || "").toLowerCase().trim(),
               );
               if (newLedger) {
                 ledgerId = newLedger.id;
@@ -2748,9 +956,7 @@ const PurchaseVoucher = () => {
         }
       }
 
-
       setVoucher((prev) => ({
-
         ...prev,
 
         date: firstVoucher.date,
@@ -2763,63 +969,42 @@ const PurchaseVoucher = () => {
 
         narration: firstVoucher.narration,
 
-        supplierInvoiceNo:
-          firstVoucher.supplierInvoiceNo,
+        supplierInvoiceNo: firstVoucher.supplierInvoiceNo,
 
-        supplierInvoiceDate:
-          firstVoucher.supplierInvoiceDate,
+        supplierInvoiceDate: firstVoucher.supplierInvoiceDate,
 
-        mailingName:
-          firstVoucher.mailingName,
+        mailingName: firstVoucher.mailingName,
 
-        address:
-          firstVoucher.address,
+        address: firstVoucher.address,
 
-        state:
-          firstVoucher.state,
+        state: firstVoucher.state,
 
-        country:
-          firstVoucher.country,
+        country: firstVoucher.country,
 
-        gstin:
-          firstVoucher.gstin,
+        gstin: firstVoucher.gstin,
 
-        placeOfSupply:
-          firstVoucher.placeOfSupply,
+        placeOfSupply: firstVoucher.placeOfSupply,
 
-        paymentTerms:
-          firstVoucher.paymentTerms,
+        paymentTerms: firstVoucher.paymentTerms,
 
-        deliveryNoteNo:
-          firstVoucher.deliveryNoteNo,
+        deliveryNoteNo: firstVoucher.deliveryNoteNo,
 
-        deliveryNoteDate:
-          firstVoucher.deliveryNoteDate,
+        deliveryNoteDate: firstVoucher.deliveryNoteDate,
 
-        dispatchDocNo:
-          firstVoucher.dispatchDocNo,
+        dispatchDocNo: firstVoucher.dispatchDocNo,
 
-        destination:
-          firstVoucher.destination,
+        destination: firstVoucher.destination,
 
-        carrierName:
-          firstVoucher.carrierName,
+        carrierName: firstVoucher.carrierName,
 
-        items:
-          firstVoucher.items,
+        items: firstVoucher.items,
       }));
-
 
       const effectiveRate =
         firstVoucher.gst_percentage ||
-        (
-          firstVoucher.igst +
-          firstVoucher.cgst +
-          firstVoucher.sgst
-        );
+        firstVoucher.igst + firstVoucher.cgst + firstVoucher.sgst;
 
       setGst({
-
         applied: effectiveRate > 0,
 
         percentage: effectiveRate,
@@ -2838,18 +1023,12 @@ const PurchaseVoucher = () => {
         title: "Import Successful",
         text: "Purchase voucher loaded successfully",
         timer: 1800,
-        showConfirmButton: false
+        showConfirmButton: false,
       });
-
     } catch (err) {
-
       console.error(err);
 
-      Swal.fire(
-        "Error",
-        "Failed to import file",
-        "error"
-      );
+      Swal.fire("Error", "Failed to import file", "error");
     }
   };
 
@@ -2872,13 +1051,13 @@ const PurchaseVoucher = () => {
         sgst_rate: Number(gst.sgst || 0),
         grand_total: grandTotal,
         narration: voucher.narration,
-        items: voucher.items.map(i => ({
+        items: voucher.items.map((i) => ({
           item: i.itemName,
           hsn_code: i.hsn_code,
           qty: i.qty,
           per: i.per,
           rate: i.rate,
-          amount: i.amount
+          amount: i.amount,
         })),
         ...(employeeId && { employee_id: employeeId }),
         role,
@@ -2889,89 +1068,85 @@ const PurchaseVoucher = () => {
         navigate("/accounting/client/listOfPurchaseVoucher");
       } else {
         const res = await axios.post(API, payload);
-        Swal.fire({ 
-          icon: "success", 
-          title: "Saved Successfully", 
-          showCancelButton: true, 
-          confirmButtonText: "Download PDF", 
-          cancelButtonText: "Close" 
-        }).then(r => { 
-          if (r.isConfirmed && res.data?.pdf_path) { 
+        Swal.fire({
+          icon: "success",
+          title: "Saved Successfully",
+          showCancelButton: true,
+          confirmButtonText: "Download PDF",
+          cancelButtonText: "Close",
+        }).then((r) => {
+          if (r.isConfirmed && res.data?.pdf_path) {
             const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
             window.open(pdfUrl, "_blank");
             fetch(pdfUrl)
-              .then(response => response.blob())
-              .then(blob => {
+              .then((response) => response.blob())
+              .then((blob) => {
                 const blobUrl = window.URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.href = blobUrl;
-                link.download = res.data.pdf_path.split("/").pop() || "PurchaseVoucher.pdf";
+                link.download =
+                  res.data.pdf_path.split("/").pop() || "PurchaseVoucher.pdf";
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(blobUrl);
               })
-              .catch(err => console.error("Error downloading PDF:", err));
-          } 
+              .catch((err) => console.error("Error downloading PDF:", err));
+          }
         });
       }
-    } catch (err) { 
+    } catch (err) {
       if (err.response && err.response.status === 409) {
         Swal.fire("Warning", "Invoice Number Already Exists!", "warning");
       } else {
-        Swal.fire("Error", err?.response?.data?.message || err?.response?.data?.error || `Something went wrong while ${isEditMode ? "updating" : "saving"}!`, "error"); 
+        Swal.fire(
+          "Error",
+          err?.response?.data?.message ||
+            err?.response?.data?.error ||
+            `Something went wrong while ${isEditMode ? "updating" : "saving"}!`,
+          "error",
+        );
       }
     }
   };
 
-
   const handleQuickCreateLedger = async (initialName) => {
     const stateToSave = {
       voucher,
-      gst
+      gst,
     };
     sessionStorage.setItem("purchaseVoucherState", JSON.stringify(stateToSave));
-    navigate(`/accounting/client/ledger?redirect=/accounting/client/purchasevoucher&name=${encodeURIComponent(initialName)}`);
+    navigate(
+      `/accounting/client/ledger?redirect=/accounting/client/purchasevoucher&name=${encodeURIComponent(initialName)}`,
+    );
   };
 
-  const set = (key, val) => setVoucher(v => ({ ...v, [key]: val }));
+  const set = (key, val) => setVoucher((v) => ({ ...v, [key]: val }));
 
   return (
     <>
       <style>{styles}</style>
 
       <div className="pv-wrap">
-
-
         <div className="pv-header">
-
-
           <div className="pv-header-left">
-            <p className="pv-eyebrow">
-              Accounts Payable
-            </p>
+            <p className="pv-eyebrow">Accounts Payable</p>
 
-            <h1 className="pv-title">
-              Purchase Voucher
-            </h1>
+            <h1 className="pv-title">Purchase Voucher</h1>
           </div>
-
 
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: "12px",
-              flexWrap: "wrap"
+              flexWrap: "wrap",
             }}
           >
-
-
             <span
-              className={`pv-badge ${isEditMode
-                  ? "pv-badge-edit"
-                  : "pv-badge-new"
-                }`}
+              className={`pv-badge ${
+                isEditMode ? "pv-badge-edit" : "pv-badge-new"
+              }`}
             >
               <span
                 style={{
@@ -2979,61 +1154,86 @@ const PurchaseVoucher = () => {
                   height: 6,
                   borderRadius: "50%",
                   background: "currentColor",
-                  display: "inline-block"
+                  display: "inline-block",
                 }}
               />
 
-              {isEditMode
-                ? "Edit Mode"
-                : "New Voucher"}
+              {isEditMode ? "Edit Mode" : "New Voucher"}
             </span>
-
 
             <BulkImportButton
               onImport={handleBulkImport}
               buttonLabel="Import Excel / CSV"
             />
-
           </div>
         </div>
-
 
         <div className="pv-card">
           <p className="pv-card-title">Voucher Details</p>
           <div className="pv-grid-3">
             <div className="pv-field">
               <label className="pv-label">Voucher No</label>
-              <input className="pv-input" placeholder="e.g. PUR-001" value={voucher.invoiceNo} onChange={e => set("invoiceNo", e.target.value)} />
+              <input
+                className="pv-input"
+                placeholder="e.g. PUR-001"
+                value={voucher.invoiceNo}
+                onChange={(e) => set("invoiceNo", e.target.value)}
+              />
             </div>
             <div className="pv-field">
-              <label className="pv-label">Date <span className="req">*</span></label>
-              <input type="date" className="pv-input" value={voucher.date} onChange={e => set("date", e.target.value)} />
+              <label className="pv-label">
+                Date <span className="req">*</span>
+              </label>
+              <input
+                type="date"
+                className="pv-input"
+                value={voucher.date}
+                onChange={(e) => set("date", e.target.value)}
+              />
             </div>
             <div className="pv-field">
-              <label className="pv-label">Party Name <span className="req">*</span></label>
-              <input className="pv-input" placeholder="Enter supplier / party" value={voucher.customer} onChange={e => set("customer", e.target.value)} />
+              <label className="pv-label">
+                Party Name <span className="req">*</span>
+              </label>
+              <input
+                className="pv-input"
+                placeholder="Enter supplier / party"
+                value={voucher.customer}
+                onChange={(e) => set("customer", e.target.value)}
+              />
             </div>
           </div>
 
           <div className="pv-grid-3" style={{ marginTop: 14 }}>
             <div className="pv-field">
               <label className="pv-label">Supplier Invoice No.</label>
-              <input className="pv-input" placeholder="e.g. ABC/123" value={voucher.supplierInvoiceNo} onChange={e => set("supplierInvoiceNo", e.target.value)} />
+              <input
+                className="pv-input"
+                placeholder="e.g. ABC/123"
+                value={voucher.supplierInvoiceNo}
+                onChange={(e) => set("supplierInvoiceNo", e.target.value)}
+              />
             </div>
             <div className="pv-field">
               <label className="pv-label">Supplier Invoice Date</label>
-              <input type="date" className="pv-input" value={voucher.supplierInvoiceDate} onChange={e => set("supplierInvoiceDate", e.target.value)} />
+              <input
+                type="date"
+                className="pv-input"
+                value={voucher.supplierInvoiceDate}
+                onChange={(e) => set("supplierInvoiceDate", e.target.value)}
+              />
             </div>
             <div className="pv-field">
-              <label className="pv-label">Purchase Ledger <span className="req">*</span></label>
-
+              <label className="pv-label">
+                Purchase Ledger <span className="req">*</span>
+              </label>
 
               <SearchableLedgerSelect
                 ledgers={ledgers}
                 value={voucher.ledger}
                 onSelect={(ledgerId) => {
                   const selectedLedger = ledgers.find(
-                    (l) => String(l.id) === String(ledgerId)
+                    (l) => String(l.id) === String(ledgerId),
                   );
                   setVoucher((prev) => ({
                     ...prev,
@@ -3043,7 +1243,9 @@ const PurchaseVoucher = () => {
                     address: selectedLedger?.address || "",
                     state: selectedLedger?.state || "Not Applicable",
                     country: selectedLedger?.country || "India",
-                    gstRegistrationType: selectedLedger?.registrationType || "Unregistered/Consumer",
+                    gstRegistrationType:
+                      selectedLedger?.registrationType ||
+                      "Unregistered/Consumer",
                     gstin: selectedLedger?.gstin || "",
                     placeOfSupply: selectedLedger?.state || "Not Applicable",
                   }));
@@ -3055,54 +1257,113 @@ const PurchaseVoucher = () => {
           </div>
         </div>
 
-
         <div className="pv-card">
           <div className="pv-tabs">
-
-            <button className={`pv-tab ${activeDetailTab === "party" ? "active" : ""}`} onClick={() => setActiveDetailTab("party")}>Party Details</button>
-            <button className={`pv-tab ${activeDetailTab === "receipt" ? "active" : ""}`} onClick={() => setActiveDetailTab("receipt")}>Purchase Details</button>
+            <button
+              className={`pv-tab ${activeDetailTab === "party" ? "active" : ""}`}
+              onClick={() => setActiveDetailTab("party")}
+            >
+              Party Details
+            </button>
+            <button
+              className={`pv-tab ${activeDetailTab === "receipt" ? "active" : ""}`}
+              onClick={() => setActiveDetailTab("receipt")}
+            >
+              Purchase Details
+            </button>
           </div>
 
           {activeDetailTab === "party" && (
             <div className="pv-grid-2">
               <div>
                 <FieldRow label="Supplier (Bill from)">
-                  <input className="pv-input readonly" readOnly value={ledgers.find(l => String(l.id) === String(voucher.ledger))?.name || ""} placeholder="Auto-filled from ledger" />
+                  <input
+                    className="pv-input readonly"
+                    readOnly
+                    value={
+                      ledgers.find(
+                        (l) => String(l.id) === String(voucher.ledger),
+                      )?.name || ""
+                    }
+                    placeholder="Auto-filled from ledger"
+                  />
                 </FieldRow>
                 <FieldRow label="Mailing Name">
-                  <input className="pv-input" value={voucher.mailingName} onChange={e => set("mailingName", e.target.value)} />
+                  <input
+                    className="pv-input"
+                    value={voucher.mailingName}
+                    onChange={(e) => set("mailingName", e.target.value)}
+                  />
                 </FieldRow>
                 <FieldRow label="State">
-                  <select className="pv-select" value={voucher.state} onChange={e => set("state", e.target.value)}>
+                  <select
+                    className="pv-select"
+                    value={voucher.state}
+                    onChange={(e) => set("state", e.target.value)}
+                  >
                     <option value="Not Applicable">Not Applicable</option>
-                    {states.map((s, idx) => <option key={idx} value={s.name}>{s.name}</option>)}
+                    {states.map((s, idx) => (
+                      <option key={idx} value={s.name}>
+                        {s.name}
+                      </option>
+                    ))}
                   </select>
                 </FieldRow>
                 <FieldRow label="Country">
-                  <select className="pv-select" value={voucher.country} onChange={e => set("country", e.target.value)}>
+                  <select
+                    className="pv-select"
+                    value={voucher.country}
+                    onChange={(e) => set("country", e.target.value)}
+                  >
                     <option value="India">India</option>
-                    {countries.map((c, idx) => <option key={idx} value={c.name}>{c.name}</option>)}
+                    {countries.map((c, idx) => (
+                      <option key={idx} value={c.name}>
+                        {c.name}
+                      </option>
+                    ))}
                   </select>
                 </FieldRow>
               </div>
               <div>
                 <FieldRow label="Address">
-                  <textarea className="pv-textarea" rows={3} value={voucher.address} onChange={e => set("address", e.target.value)} />
+                  <textarea
+                    className="pv-textarea"
+                    rows={3}
+                    value={voucher.address}
+                    onChange={(e) => set("address", e.target.value)}
+                  />
                 </FieldRow>
                 <FieldRow label="GST Reg. Type">
-                  <select className="pv-select" value={voucher.gstRegistrationType} onChange={e => set("gstRegistrationType", e.target.value)}>
+                  <select
+                    className="pv-select"
+                    value={voucher.gstRegistrationType}
+                    onChange={(e) => set("gstRegistrationType", e.target.value)}
+                  >
                     <option>Unregistered/Consumer</option>
                     <option>Regular</option>
                     <option>Composition</option>
                   </select>
                 </FieldRow>
                 <FieldRow label="GSTIN/UIN">
-                  <input className="pv-input" placeholder="22AAAAA0000A1Z5" value={voucher.gstin} onChange={e => set("gstin", e.target.value)} />
+                  <input
+                    className="pv-input"
+                    placeholder="22AAAAA0000A1Z5"
+                    value={voucher.gstin}
+                    onChange={(e) => set("gstin", e.target.value)}
+                  />
                 </FieldRow>
                 <FieldRow label="Place of Supply">
-                  <select className="pv-select" value={voucher.placeOfSupply} onChange={e => set("placeOfSupply", e.target.value)}>
+                  <select
+                    className="pv-select"
+                    value={voucher.placeOfSupply}
+                    onChange={(e) => set("placeOfSupply", e.target.value)}
+                  >
                     <option value="Not Applicable">Not Applicable</option>
-                    {states.map((s, idx) => <option key={idx} value={s.name}>{s.name}</option>)}
+                    {states.map((s, idx) => (
+                      <option key={idx} value={s.name}>
+                        {s.name}
+                      </option>
+                    ))}
                   </select>
                 </FieldRow>
               </div>
@@ -3112,103 +1373,254 @@ const PurchaseVoucher = () => {
           {activeDetailTab === "receipt" && (
             <div className="animate-in fade-in duration-300">
               <div className="pv-grid-3">
-
                 <div>
                   <FieldRow label="Purchase Note No(s)">
-                    <input className="pv-input" value={voucher.receiptNoteNo} onChange={e => set("receiptNoteNo", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.receiptNoteNo}
+                      onChange={(e) => set("receiptNoteNo", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Purchase Date">
-                    <input type="date" className="pv-input" value={voucher.receiptDate} onChange={e => set("receiptDate", e.target.value)} />
+                    <input
+                      type="date"
+                      className="pv-input"
+                      value={voucher.receiptDate}
+                      onChange={(e) => set("receiptDate", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Purchase Doc No.">
-                    <input className="pv-input" value={voucher.receiptDocNo} onChange={e => set("receiptDocNo", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.receiptDocNo}
+                      onChange={(e) => set("receiptDocNo", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Delivery Note">
-                    <input className="pv-input" value={voucher.deliveryNoteNo} onChange={e => set("deliveryNoteNo", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.deliveryNoteNo}
+                      onChange={(e) => set("deliveryNoteNo", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Delivery Date">
-                    <input type="date" className="pv-input" value={voucher.deliveryNoteDate} onChange={e => set("deliveryNoteDate", e.target.value)} />
+                    <input
+                      type="date"
+                      className="pv-input"
+                      value={voucher.deliveryNoteDate}
+                      onChange={(e) => set("deliveryNoteDate", e.target.value)}
+                    />
                   </FieldRow>
                 </div>
-
 
                 <div>
                   <FieldRow label="Dispatched through">
-                    <input className="pv-input" value={voucher.dispatchedThrough} onChange={e => set("dispatchedThrough", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.dispatchedThrough}
+                      onChange={(e) => set("dispatchedThrough", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Destination">
-                    <input className="pv-input" value={voucher.destination} onChange={e => set("destination", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.destination}
+                      onChange={(e) => set("destination", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Carrier Name/Agent">
-                    <input className="pv-input" value={voucher.carrierName} onChange={e => set("carrierName", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.carrierName}
+                      onChange={(e) => set("carrierName", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Bill of Lading">
-                    <input className="pv-input" value={voucher.billOfLading} onChange={e => set("billOfLading", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.billOfLading}
+                      onChange={(e) => set("billOfLading", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Lading Date">
-                    <input type="date" className="pv-input" value={voucher.billOfLadingDate} onChange={e => set("billOfLadingDate", e.target.value)} />
+                    <input
+                      type="date"
+                      className="pv-input"
+                      value={voucher.billOfLadingDate}
+                      onChange={(e) => set("billOfLadingDate", e.target.value)}
+                    />
                   </FieldRow>
                 </div>
-
 
                 <div>
                   <FieldRow label="Motor Vehicle No.">
-                    <input className="pv-input" value={voucher.motorVehicleNo} onChange={e => set("motorVehicleNo", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.motorVehicleNo}
+                      onChange={(e) => set("motorVehicleNo", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Reference No.">
-                    <input className="pv-input" value={voucher.referenceNo} onChange={e => set("referenceNo", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.referenceNo}
+                      onChange={(e) => set("referenceNo", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Reference Date">
-                    <input type="date" className="pv-input" value={voucher.referenceDate} onChange={e => set("referenceDate", e.target.value)} />
+                    <input
+                      type="date"
+                      className="pv-input"
+                      value={voucher.referenceDate}
+                      onChange={(e) => set("referenceDate", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Order No.">
-                    <input className="pv-input" value={voucher.buyerOrderNo} onChange={e => set("buyerOrderNo", e.target.value)} />
+                    <input
+                      className="pv-input"
+                      value={voucher.buyerOrderNo}
+                      onChange={(e) => set("buyerOrderNo", e.target.value)}
+                    />
                   </FieldRow>
                   <FieldRow label="Order Date">
-                    <input type="date" className="pv-input" value={voucher.buyerOrderDate} onChange={e => set("buyerOrderDate", e.target.value)} />
+                    <input
+                      type="date"
+                      className="pv-input"
+                      value={voucher.buyerOrderDate}
+                      onChange={(e) => set("buyerOrderDate", e.target.value)}
+                    />
                   </FieldRow>
                 </div>
               </div>
 
-
               <div className="pv-grid-2 mt-4 pt-4 border-t border-gray-100">
                 <FieldRow label="Payment Terms">
-                  <input className="pv-input" placeholder="e.g. Net 30" value={voucher.paymentTerms} onChange={e => set("paymentTerms", e.target.value)} />
+                  <input
+                    className="pv-input"
+                    placeholder="e.g. Net 30"
+                    value={voucher.paymentTerms}
+                    onChange={(e) => set("paymentTerms", e.target.value)}
+                  />
                 </FieldRow>
                 <FieldRow label="Other References">
-                  <input className="pv-input" value={voucher.otherReferences} onChange={e => set("otherReferences", e.target.value)} />
+                  <input
+                    className="pv-input"
+                    value={voucher.otherReferences}
+                    onChange={(e) => set("otherReferences", e.target.value)}
+                  />
                 </FieldRow>
                 <FieldRow label="Terms of Delivery">
-                  <textarea className="pv-input" rows={2} value={voucher.termsOfDelivery} onChange={e => set("termsOfDelivery", e.target.value)} style={{ resize: "none" }} />
+                  <textarea
+                    className="pv-input"
+                    rows={2}
+                    value={voucher.termsOfDelivery}
+                    onChange={(e) => set("termsOfDelivery", e.target.value)}
+                    style={{ resize: "none" }}
+                  />
                 </FieldRow>
               </div>
 
-
               <div className="mt-8 pt-8 border-t border-dashed border-gray-200">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                  <h4 style={{ fontSize: 11, fontWeight: 700, color: "var(--ink-muted)", textTransform: "uppercase", letterSpacing: ".1em", margin: 0 }}>Consignee (Ship To)</h4>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
-                    <span style={{ fontSize: 10, fontWeight: 700, color: "var(--ink-muted)", textTransform: "uppercase" }}>Same as Billing?</span>
-                    <input type="checkbox" checked={voucher.consigneeSameAsBilling} onChange={e => set("consigneeSameAsBilling", e.target.checked)} style={{ width: 14, height: 14 }} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: 16,
+                  }}
+                >
+                  <h4
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: "var(--ink-muted)",
+                      textTransform: "uppercase",
+                      letterSpacing: ".1em",
+                      margin: 0,
+                    }}
+                  >
+                    Consignee (Ship To)
+                  </h4>
+                  <label
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 10,
+                        fontWeight: 700,
+                        color: "var(--ink-muted)",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Same as Billing?
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={voucher.consigneeSameAsBilling}
+                      onChange={(e) =>
+                        set("consigneeSameAsBilling", e.target.checked)
+                      }
+                      style={{ width: 14, height: 14 }}
+                    />
                   </label>
                 </div>
 
                 {!voucher.consigneeSameAsBilling && (
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "12px 24px", padding: 20, background: "var(--bg-faint)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-faint)" }}>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns:
+                        "repeat(auto-fit, minmax(280px, 1fr))",
+                      gap: "12px 24px",
+                      padding: 20,
+                      background: "var(--bg-faint)",
+                      borderRadius: "var(--radius-md)",
+                      border: "1px solid var(--border-faint)",
+                    }}
+                  >
                     <FieldRow label="Name">
-                      <input className="pv-input" value={voucher.consigneeName} onChange={e => set("consigneeName", e.target.value)} />
+                      <input
+                        className="pv-input"
+                        value={voucher.consigneeName}
+                        onChange={(e) => set("consigneeName", e.target.value)}
+                      />
                     </FieldRow>
                     <FieldRow label="GSTIN">
-                      <input className="pv-input uppercase" value={voucher.consigneeGSTIN} onChange={e => set("consigneeGSTIN", e.target.value)} />
+                      <input
+                        className="pv-input uppercase"
+                        value={voucher.consigneeGSTIN}
+                        onChange={(e) => set("consigneeGSTIN", e.target.value)}
+                      />
                     </FieldRow>
                     <FieldRow label="State">
-                      <select className="pv-select" value={voucher.consigneeState} onChange={e => set("consigneeState", e.target.value)}>
+                      <select
+                        className="pv-select"
+                        value={voucher.consigneeState}
+                        onChange={(e) => set("consigneeState", e.target.value)}
+                      >
                         <option value="Not Applicable">Not Applicable</option>
-                        {states.map((s, idx) => <option key={idx} value={s.name}>{s.name}</option>)}
+                        {states.map((s, idx) => (
+                          <option key={idx} value={s.name}>
+                            {s.name}
+                          </option>
+                        ))}
                       </select>
                     </FieldRow>
                     <FieldRow label="Address">
-                      <textarea className="pv-input" rows={2} value={voucher.consigneeAddress} onChange={e => set("consigneeAddress", e.target.value)} style={{ resize: "none" }} />
+                      <textarea
+                        className="pv-input"
+                        rows={2}
+                        value={voucher.consigneeAddress}
+                        onChange={(e) =>
+                          set("consigneeAddress", e.target.value)
+                        }
+                        style={{ resize: "none" }}
+                      />
                     </FieldRow>
                   </div>
                 )}
@@ -3217,10 +1629,18 @@ const PurchaseVoucher = () => {
           )}
         </div>
 
-
         <div className="pv-card">
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <p className="pv-card-title" style={{ margin: 0 }}>Line Items</p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 16,
+            }}
+          >
+            <p className="pv-card-title" style={{ margin: 0 }}>
+              Line Items
+            </p>
             <div style={{ display: "flex", gap: 8 }}>
               <BulkImportButton onDataParsed={handleBulkImport} />
             </div>
@@ -3232,10 +1652,21 @@ const PurchaseVoucher = () => {
                 <tr>
                   <th style={{ width: "36%", paddingLeft: 14 }}>Item Name</th>
                   <th style={{ width: "14%" }}>HSN Code</th>
-                  <th className="right" style={{ width: "12%" }}>Qty</th>
-                  <th className="center" style={{ width: "8%" }}>Unit</th>
-                  <th className="right" style={{ width: "16%" }}>Rate (₹)</th>
-                  <th className="right" style={{ width: "16%", paddingRight: 14 }}>Amount (₹)</th>
+                  <th className="right" style={{ width: "12%" }}>
+                    Qty
+                  </th>
+                  <th className="center" style={{ width: "8%" }}>
+                    Unit
+                  </th>
+                  <th className="right" style={{ width: "16%" }}>
+                    Rate (₹)
+                  </th>
+                  <th
+                    className="right"
+                    style={{ width: "16%", paddingRight: 14 }}
+                  >
+                    Amount (₹)
+                  </th>
                   <th style={{ width: "6%" }}></th>
                 </tr>
               </thead>
@@ -3274,26 +1705,75 @@ const PurchaseVoucher = () => {
                 {voucher.items.map((row, index) => (
                   <tr key={index} className="relative hover:z-50">
                     <td style={{ paddingLeft: 10 }}>
-                      <input className="pv-table-input" placeholder="Item description" value={row.itemName} onChange={e => handleItemChange(index, "itemName", e.target.value)} />
+                      <input
+                        className="pv-table-input"
+                        placeholder="Item description"
+                        value={row.itemName}
+                        onChange={(e) =>
+                          handleItemChange(index, "itemName", e.target.value)
+                        }
+                      />
                     </td>
                     <td>
-                      <input className="pv-table-input" placeholder="0000" value={row.hsn_code} onChange={e => handleItemChange(index, "hsn_code", e.target.value)} />
+                      <input
+                        className="pv-table-input"
+                        placeholder="0000"
+                        value={row.hsn_code}
+                        onChange={(e) =>
+                          handleItemChange(index, "hsn_code", e.target.value)
+                        }
+                      />
                     </td>
                     <td>
-                      <input type="number" className="pv-table-input number" value={row.qty} onChange={e => handleItemChange(index, "qty", e.target.value)} />
+                      <input
+                        type="number"
+                        className="pv-table-input number"
+                        value={row.qty}
+                        onChange={(e) =>
+                          handleItemChange(index, "qty", e.target.value)
+                        }
+                      />
                     </td>
                     <td>
-                      <input list="unit-options" className="pv-table-input" style={{ textAlign: "center" }} value={row.per} onChange={e => handleItemChange(index, "per", e.target.value)} />
+                      <input
+                        list="unit-options"
+                        className="pv-table-input"
+                        style={{ textAlign: "center" }}
+                        value={row.per}
+                        onChange={(e) =>
+                          handleItemChange(index, "per", e.target.value)
+                        }
+                      />
                     </td>
                     <td>
-                      <input type="number" className="pv-table-input number" value={row.rate} onChange={e => handleItemChange(index, "rate", e.target.value)} />
+                      <input
+                        type="number"
+                        className="pv-table-input number"
+                        value={row.rate}
+                        onChange={(e) =>
+                          handleItemChange(index, "rate", e.target.value)
+                        }
+                      />
                     </td>
                     <td className="pv-amount-cell">
                       {Number(row.amount).toFixed(2)}
                     </td>
                     <td>
-                      <button className="pv-remove-btn" onClick={() => removeRow(index)} title="Remove item">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                      <button
+                        className="pv-remove-btn"
+                        onClick={() => removeRow(index)}
+                        title="Remove item"
+                      >
+                        <svg
+                          width="14"
+                          height="14"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M18 6L6 18M6 6l12 12" />
+                        </svg>
                       </button>
                     </td>
                   </tr>
@@ -3303,52 +1783,174 @@ const PurchaseVoucher = () => {
           </div>
 
           <button className="pv-add-row" onClick={addRow}>
-            <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
+            <svg
+              width="13"
+              height="13"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
             Add line item
           </button>
         </div>
 
-
         <div className="pv-card">
           <p className="pv-card-title">Tax & Totals</p>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 24, flexWrap: "wrap" }}>
-
-
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              gap: 24,
+              flexWrap: "wrap",
+            }}
+          >
             <div style={{ flex: "1 1 320px" }}>
-              <p style={{ fontSize: 12, fontWeight: 600, color: "var(--ink-muted)", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 12 }}>Apply GST</p>
+              <p
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: "var(--ink-muted)",
+                  letterSpacing: ".08em",
+                  textTransform: "uppercase",
+                  marginBottom: 12,
+                }}
+              >
+                Apply GST
+              </p>
               <div className="pv-gst-buttons" style={{ marginBottom: 20 }}>
                 <button className="pv-btn pv-btn-green" onClick={handleAutoGST}>
-                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+                  <svg
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                  </svg>
                   Auto GST
                 </button>
-                <button className="pv-btn pv-btn-amber" onClick={handleManualGST}>
-                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+                <button
+                  className="pv-btn pv-btn-amber"
+                  onClick={handleManualGST}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg>
                   Manual GST
                 </button>
               </div>
 
               {gst.applied && (
-                <div style={{ background: "var(--green-light)", border: "1px solid #a7f3d0", borderRadius: "var(--radius-sm)", padding: "10px 14px", display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--green)", fontWeight: 500, marginBottom: 16 }}>
-                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" /></svg>
-                  {gst.percentage}% GST applied — ₹{Number(gst.amount || 0).toFixed(2)}
+                <div
+                  style={{
+                    background: "var(--green-light)",
+                    border: "1px solid #a7f3d0",
+                    borderRadius: "var(--radius-sm)",
+                    padding: "10px 14px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontSize: 13,
+                    color: "var(--green)",
+                    fontWeight: 500,
+                    marginBottom: 16,
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    viewBox="0 0 24 24"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  {gst.percentage}% GST applied — ₹
+                  {Number(gst.amount || 0).toFixed(2)}
                 </div>
               )}
 
-              <p style={{ fontSize: 12, fontWeight: 600, color: "var(--ink-muted)", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 10 }}>Component Breakdown</p>
+              <p
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: "var(--ink-muted)",
+                  letterSpacing: ".08em",
+                  textTransform: "uppercase",
+                  marginBottom: 10,
+                }}
+              >
+                Component Breakdown
+              </p>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                {[["IGST", "igst"], ["CGST", "cgst"], ["SGST", "sgst"]].map(([label, key]) => (
-                  <div key={key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <span style={{ fontSize: 11, fontWeight: 600, color: "var(--ink-muted)", letterSpacing: ".06em" }}>{label} (%)</span>
-                      <span style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)" }}>₹ {((totalAmount * Number(gst[key] || 0)) / 100).toFixed(2)}</span>
+                {[
+                  ["IGST", "igst"],
+                  ["CGST", "cgst"],
+                  ["SGST", "sgst"],
+                ].map(([label, key]) => (
+                  <div
+                    key={key}
+                    style={{ display: "flex", flexDirection: "column", gap: 4 }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 600,
+                          color: "var(--ink-muted)",
+                          letterSpacing: ".06em",
+                        }}
+                      >
+                        {label} (%)
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 700,
+                          color: "var(--accent)",
+                        }}
+                      >
+                        ₹{" "}
+                        {((totalAmount * Number(gst[key] || 0)) / 100).toFixed(
+                          2,
+                        )}
+                      </span>
                     </div>
-                    <input type="number" className="pv-gst-input" placeholder="Rate %" value={gst[key]} onChange={e => setGst(g => ({ ...g, [key]: e.target.value }))} />
+                    <input
+                      type="number"
+                      className="pv-gst-input"
+                      placeholder="Rate %"
+                      value={gst[key]}
+                      onChange={(e) =>
+                        setGst((g) => ({ ...g, [key]: e.target.value }))
+                      }
+                    />
                   </div>
                 ))}
               </div>
             </div>
-
 
             <div className="pv-totals" style={{ flex: "0 0 auto" }}>
               <div className="pv-totals-row">
@@ -3363,9 +1965,30 @@ const PurchaseVoucher = () => {
                   </span>
                 </div>
               )}
-              {Number(gst.igst) > 0 && <div className="pv-totals-row"><span>IGST ({gst.igst}%)</span><span className="val">₹ {((totalAmount * Number(gst.igst)) / 100).toFixed(2)}</span></div>}
-              {Number(gst.cgst) > 0 && <div className="pv-totals-row"><span>CGST ({gst.cgst}%)</span><span className="val">₹ {((totalAmount * Number(gst.cgst)) / 100).toFixed(2)}</span></div>}
-              {Number(gst.sgst) > 0 && <div className="pv-totals-row"><span>SGST ({gst.sgst}%)</span><span className="val">₹ {((totalAmount * Number(gst.sgst)) / 100).toFixed(2)}</span></div>}
+              {Number(gst.igst) > 0 && (
+                <div className="pv-totals-row">
+                  <span>IGST ({gst.igst}%)</span>
+                  <span className="val">
+                    ₹ {((totalAmount * Number(gst.igst)) / 100).toFixed(2)}
+                  </span>
+                </div>
+              )}
+              {Number(gst.cgst) > 0 && (
+                <div className="pv-totals-row">
+                  <span>CGST ({gst.cgst}%)</span>
+                  <span className="val">
+                    ₹ {((totalAmount * Number(gst.cgst)) / 100).toFixed(2)}
+                  </span>
+                </div>
+              )}
+              {Number(gst.sgst) > 0 && (
+                <div className="pv-totals-row">
+                  <span>SGST ({gst.sgst}%)</span>
+                  <span className="val">
+                    ₹ {((totalAmount * Number(gst.sgst)) / 100).toFixed(2)}
+                  </span>
+                </div>
+              )}
               <div className="pv-totals-row grand">
                 <span>Grand Total</span>
                 <span className="val">₹ {grandTotal.toFixed(2)}</span>
@@ -3374,31 +1997,58 @@ const PurchaseVoucher = () => {
           </div>
         </div>
 
-
         <div className="pv-card">
           <p className="pv-card-title">Narration</p>
-          <textarea className="pv-textarea" rows={3} placeholder="Add internal notes or narration for this voucher…" value={voucher.narration} onChange={e => set("narration", e.target.value)} />
+          <textarea
+            className="pv-textarea"
+            rows={3}
+            placeholder="Add internal notes or narration for this voucher…"
+            value={voucher.narration}
+            onChange={(e) => set("narration", e.target.value)}
+          />
         </div>
-
 
         <div className="pv-footer">
           <div style={{ fontSize: 13, color: "var(--ink-muted)" }}>
-            {isEditMode
-              ? <span>Editing voucher <strong style={{ color: "var(--ink)" }}>{voucher.invoiceNo || id}</strong></span>
-              : <span>All fields marked <span style={{ color: "var(--red)" }}>*</span> are required</span>
-            }
+            {isEditMode ? (
+              <span>
+                Editing voucher{" "}
+                <strong style={{ color: "var(--ink)" }}>
+                  {voucher.invoiceNo || id}
+                </strong>
+              </span>
+            ) : (
+              <span>
+                All fields marked <span style={{ color: "var(--red)" }}>*</span>{" "}
+                are required
+              </span>
+            )}
           </div>
           <button className="pv-btn pv-btn-primary" onClick={saveVoucher}>
-            <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-              {isEditMode
-                ? <><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" /></>
-                : <><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></>
-              }
+            <svg
+              width="15"
+              height="15"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              viewBox="0 0 24 24"
+            >
+              {isEditMode ? (
+                <>
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </>
+              ) : (
+                <>
+                  <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+                  <polyline points="17 21 17 13 7 13 7 21" />
+                  <polyline points="7 3 7 8 15 8" />
+                </>
+              )}
             </svg>
             {isEditMode ? "Update Voucher" : "Save Voucher"}
           </button>
         </div>
-
       </div>
     </>
   );

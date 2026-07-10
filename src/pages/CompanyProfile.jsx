@@ -1,17 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Building2, Mail, Phone, MapPin, Calendar, Users, Hash, 
-  Globe, FileText, BadgeCheck, Settings, Briefcase, Award, 
-  Clock, Loader2, AlertCircle, User, Edit3, Link2, 
-  CreditCard, Store, FileCheck, Eye, Download, Trash2,
-  CheckCircle, XCircle, AlertTriangle, Info, Copy, 
-  ExternalLink, MoreVertical, ChevronDown
-} from 'lucide-react';
-import useAuth from '../hooks/useAuth';
+import React, { useState, useEffect } from "react";
+import {
+  Building2,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Users,
+  Hash,
+  Globe,
+  FileText,
+  BadgeCheck,
+  Settings,
+  Briefcase,
+  Award,
+  Clock,
+  Loader2,
+  AlertCircle,
+  User,
+  Edit3,
+  Link2,
+  CreditCard,
+  Store,
+  FileCheck,
+  Eye,
+  Download,
+  Trash2,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Info,
+  Copy,
+  ExternalLink,
+  MoreVertical,
+  ChevronDown,
+} from "lucide-react";
+import useAuth from "../hooks/useAuth";
 
 const CompanyProfilePage = () => {
   const { companyId } = useAuth();
-  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
+  const API_BASE_URL =
+    import.meta.env.VITE_CSAAP_URL || "https://csaapnodeapi.csaap.com";
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,32 +48,34 @@ const CompanyProfilePage = () => {
   useEffect(() => {
     const fetchCompanyData = async () => {
       if (!companyId) {
-        setError('No company ID found. Please ensure you are logged in.');
+        setError("No company ID found. Please ensure you are logged in.");
         setLoading(false);
         return;
       }
 
       try {
         setLoading(true);
-        const response = await fetch(`${API_BASE_URL}/api/builder-companies/${companyId}`);
-        
+        const response = await fetch(
+          `${API_BASE_URL}/api/builder-companies/${companyId}`,
+        );
+
         if (!response.ok) {
           throw new Error(`API returned status: ${response.status}`);
         }
-        
+
         const result = await response.json();
-        
+
         if (result.success && result.data) {
           setCompanyData(result.data);
           setError(null);
-
-
         } else {
-          throw new Error('Invalid data structure received from API');
+          throw new Error("Invalid data structure received from API");
         }
       } catch (err) {
-        console.error('Error fetching company data:', err);
-        setError(err.message || 'Failed to load company data. Please try again later.');
+        console.error("Error fetching company data:", err);
+        setError(
+          err.message || "Failed to load company data. Please try again later.",
+        );
       } finally {
         setLoading(false);
       }
@@ -54,70 +84,69 @@ const CompanyProfilePage = () => {
     fetchCompanyData();
   }, [companyId]);
 
-
   const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
+    if (!dateString) return "N/A";
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
-
   const getStatusColor = (status) => {
     switch (status) {
-      case 'active':
-      case 'approved':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-      case 'pending':
-        return 'bg-amber-50 text-amber-700 border-amber-200';
-      case 'inactive':
-      case 'rejected':
-        return 'bg-rose-50 text-rose-700 border-rose-200';
+      case "active":
+      case "approved":
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      case "pending":
+        return "bg-amber-50 text-amber-700 border-amber-200";
+      case "inactive":
+      case "rejected":
+        return "bg-rose-50 text-rose-700 border-rose-200";
       default:
-        return 'bg-slate-50 text-slate-700 border-slate-200';
+        return "bg-slate-50 text-slate-700 border-slate-200";
     }
   };
 
-
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'active':
-      case 'approved':
+      case "active":
+      case "approved":
         return <CheckCircle className="h-3.5 w-3.5" />;
-      case 'pending':
+      case "pending":
         return <AlertTriangle className="h-3.5 w-3.5" />;
-      case 'inactive':
-      case 'rejected':
+      case "inactive":
+      case "rejected":
         return <XCircle className="h-3.5 w-3.5" />;
       default:
         return <Info className="h-3.5 w-3.5" />;
     }
   };
 
-  const logoUrl = companyData?.logo_path 
+  const logoUrl = companyData?.logo_path
     ? `${API_BASE_URL}/${companyData.logo_path}`
     : null;
 
-
-  const companyName = companyData?.company_name || companyData?.master_company_name || "Company";
+  const companyName =
+    companyData?.company_name || companyData?.master_company_name || "Company";
   const companyLogoText = companyName.charAt(0).toUpperCase();
-
 
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f8faf8] flex items-center justify-center">
         <div className="bg-white p-8 rounded-2xl shadow-lg border border-[#e2f2e9] text-center max-w-md">
           <Loader2 className="h-12 w-12 text-[#00a651] animate-spin mx-auto mb-4" />
-          <p className="text-[#1e293b] text-lg font-medium">Loading company profile...</p>
-          <p className="text-[#475569] text-sm mt-1">Please wait while we fetch your company details</p>
+          <p className="text-[#1e293b] text-lg font-medium">
+            Loading company profile...
+          </p>
+          <p className="text-[#475569] text-sm mt-1">
+            Please wait while we fetch your company details
+          </p>
         </div>
       </div>
     );
   }
-
 
   if (error) {
     return (
@@ -126,10 +155,12 @@ const CompanyProfilePage = () => {
           <div className="w-16 h-16 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="h-8 w-8 text-rose-600" />
           </div>
-          <h3 className="text-xl font-bold text-[#042f2e] mb-2">Unable to Load Profile</h3>
+          <h3 className="text-xl font-bold text-[#042f2e] mb-2">
+            Unable to Load Profile
+          </h3>
           <p className="text-[#475569] mb-6">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#00a651] hover:bg-[#008c44] text-white font-medium transition duration-200"
           >
             Retry
@@ -139,7 +170,6 @@ const CompanyProfilePage = () => {
     );
   }
 
-
   if (!companyData) {
     return (
       <div className="min-h-screen bg-[#f8faf8] flex items-center justify-center p-4">
@@ -147,18 +177,20 @@ const CompanyProfilePage = () => {
           <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-[#e2f2e9] flex items-center justify-center mx-auto mb-4">
             <Building2 className="h-8 w-8 text-[#94a3b8]" />
           </div>
-          <h3 className="text-xl font-bold text-[#042f2e] mb-2">No Company Data</h3>
-          <p className="text-[#475569]">Unable to find company information. Please contact support.</p>
+          <h3 className="text-xl font-bold text-[#042f2e] mb-2">
+            No Company Data
+          </h3>
+          <p className="text-[#475569]">
+            Unable to find company information. Please contact support.
+          </p>
         </div>
       </div>
     );
   }
 
-
   return (
     <div className="app-shell p-4 min-h-screen bg-[#f8faf8]">
       <div className="max-w-7xl mx-auto space-y-6">
-
         <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
           <div className="px-6 py-5 border-b border-[#e2f2e9] bg-linear-to-r from-[#f8faf8] to-[#f0fdf4]">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -172,14 +204,30 @@ const CompanyProfilePage = () => {
                 <p className="text-[#475569] text-sm mt-1 flex items-center gap-2">
                   <span>Company Profile</span>
                   <span className="w-1 h-1 rounded-full bg-[#94a3b8]"></span>
-                  <span className="text-[#94a3b8]">ID: {companyData.id || companyData.master_company_id}</span>
+                  <span className="text-[#94a3b8]">
+                    ID: {companyData.id || companyData.master_company_id}
+                  </span>
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border ${getStatusColor(companyData.status || companyData.master_status)}`}>
-                  {getStatusIcon(companyData.status || companyData.master_status)}
-                  {(companyData.status || companyData.master_status || 'unknown').charAt(0).toUpperCase() + 
-                   (companyData.status || companyData.master_status || 'unknown').slice(1)}
+                <div
+                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border ${getStatusColor(companyData.status || companyData.master_status)}`}
+                >
+                  {getStatusIcon(
+                    companyData.status || companyData.master_status,
+                  )}
+                  {(
+                    companyData.status ||
+                    companyData.master_status ||
+                    "unknown"
+                  )
+                    .charAt(0)
+                    .toUpperCase() +
+                    (
+                      companyData.status ||
+                      companyData.master_status ||
+                      "unknown"
+                    ).slice(1)}
                 </div>
                 <button className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-[#e2f2e9] hover:border-[#00a651] hover:bg-[#f0fdf4] text-[#1e293b] font-medium transition duration-200">
                   <Edit3 className="h-4 w-4" />
@@ -189,24 +237,22 @@ const CompanyProfilePage = () => {
             </div>
           </div>
 
-
           <div className="px-6 py-5">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
               <div className="relative">
                 <div className="w-24 h-24 rounded-2xl bg-linear-to-br from-[#f0fdf4] to-[#ecfdf5] border-2 border-[#e2f2e9] flex items-center justify-center overflow-hidden shadow-sm">
                   {logoUrl && !logoError ? (
-                    <img 
+                    <img
                       src={logoUrl}
                       alt={companyName}
                       crossOrigin="anonymous"
                       className="w-full h-full object-cover"
                       onError={() => {
-                        console.error('Logo failed to load in profile page');
+                        console.error("Logo failed to load in profile page");
                         setLogoError(true);
                       }}
                     />
                   ) : (
-
                     <div className="w-full h-full bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-3xl font-bold">
                       {companyLogoText}
                     </div>
@@ -215,27 +261,36 @@ const CompanyProfilePage = () => {
               </div>
               <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Company Name</p>
-                  <p className="text-[14px] font-bold text-[#042f2e] mt-1">{companyName}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Company Name
+                  </p>
+                  <p className="text-[14px] font-bold text-[#042f2e] mt-1">
+                    {companyName}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Subdomain</p>
-                  <p className="text-[14px] font-bold text-[#042f2e] mt-1">{companyData.subdomain}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Subdomain
+                  </p>
+                  <p className="text-[14px] font-bold text-[#042f2e] mt-1">
+                    {companyData.subdomain}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Slug</p>
-                  <p className="text-[14px] font-bold text-[#042f2e] mt-1">{companyData.slug}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Slug
+                  </p>
+                  <p className="text-[14px] font-bold text-[#042f2e] mt-1">
+                    {companyData.slug}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
           <div className="lg:col-span-2 space-y-6">
-
             <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
               <div className="px-6 py-3.5 border-b border-[#e2f2e9] bg-[#f8faf8]">
                 <h2 className="text-[15px] font-bold text-[#042f2e] flex items-center gap-2">
@@ -245,32 +300,55 @@ const CompanyProfilePage = () => {
               </div>
               <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Company Size</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.company_size || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Company Size
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.company_size || "N/A"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Year Established</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.year_established || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Year Established
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.year_established || "N/A"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Registration Number</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.registration_number || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Registration Number
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.registration_number || "N/A"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">GST Number</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.gst_number || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    GST Number
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.gst_number || "N/A"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">PAN Number</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.pan_number || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    PAN Number
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.pan_number || "N/A"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Database Name</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.db_name || companyData.master_db_name}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Database Name
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.db_name || companyData.master_db_name}
+                  </p>
                 </div>
               </div>
             </div>
-
 
             <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
               <div className="px-6 py-3.5 border-b border-[#e2f2e9] bg-[#f8faf8]">
@@ -281,28 +359,42 @@ const CompanyProfilePage = () => {
               </div>
               <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Street Address</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.street_address || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Street Address
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.street_address || "N/A"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">City</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.city || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    City
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.city || "N/A"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">State</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.state || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    State
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.state || "N/A"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Zip Code</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.zip_code || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Zip Code
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.zip_code || "N/A"}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-
           <div className="space-y-6">
-
             <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
               <div className="px-6 py-3.5 border-b border-[#e2f2e9] bg-[#f8faf8]">
                 <h2 className="text-[15px] font-bold text-[#042f2e] flex items-center gap-2">
@@ -312,20 +404,31 @@ const CompanyProfilePage = () => {
               </div>
               <div className="p-6 space-y-4">
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Email</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1 break-all">{companyData.company_email}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Email
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1 break-all">
+                    {companyData.company_email}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Phone</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.company_phone}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Phone
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.company_phone}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Website</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.website || 'N/A'}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Website
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.website || "N/A"}
+                  </p>
                 </div>
               </div>
             </div>
-
 
             <div className="bg-white rounded-2xl border border-[#e2f2e9] shadow-sm overflow-hidden">
               <div className="px-6 py-3.5 border-b border-[#e2f2e9] bg-[#f8faf8]">
@@ -336,20 +439,31 @@ const CompanyProfilePage = () => {
               </div>
               <div className="p-6 space-y-4">
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Name</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.admin_name}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Name
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.admin_name}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Email</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1 break-all">{companyData.admin_email}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Email
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1 break-all">
+                    {companyData.admin_email}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">Phone</p>
-                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">{companyData.admin_phone}</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Phone
+                  </p>
+                  <p className="text-[14px] font-semibold text-[#1e293b] mt-1">
+                    {companyData.admin_phone}
+                  </p>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>

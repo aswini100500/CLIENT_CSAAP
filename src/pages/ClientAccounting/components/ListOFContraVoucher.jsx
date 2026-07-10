@@ -1,6 +1,17 @@
-
 import React, { useState, useEffect } from "react";
-import { Calendar, Search, FileText, Printer, FileSpreadsheet, FileDown, Eye, Edit, Trash2, Download, UserRound } from "lucide-react";
+import {
+  Calendar,
+  Search,
+  FileText,
+  Printer,
+  FileSpreadsheet,
+  FileDown,
+  Eye,
+  Edit,
+  Trash2,
+  Download,
+  UserRound,
+} from "lucide-react";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
 import { useNavigate } from "react-router-dom";
@@ -24,8 +35,8 @@ const ListOFContraVoucher = () => {
   const { companyId, companyName, employees } = useCompany();
 
   const getEmployeeName = (id) => {
-    const emp = employees?.find(e => e.id == id);
-    return emp ? (emp.name || emp.first_name || "Employee") : "Unknown Employee";
+    const emp = employees?.find((e) => e.id == id);
+    return emp ? emp.name || emp.first_name || "Employee" : "Unknown Employee";
   };
 
   const Api = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/contra-voucher`;
@@ -40,9 +51,6 @@ const ListOFContraVoucher = () => {
     }
   };
 
-
-
-
   useEffect(() => {
     if (companyId) {
       fetchContraVouchers();
@@ -53,13 +61,16 @@ const ListOFContraVoucher = () => {
   const loggedInRole = role?.toLowerCase() || "admin";
   const loggedInEmployeeId = user?.employee_id || null;
 
-
   const filteredVouchers = vouchers.filter((v) => {
-
     if (loggedInRole === "employee") {
-      if (v.employee_id != loggedInEmployeeId || v.role?.toLowerCase() !== 'employee') return false;
+      if (
+        v.employee_id != loggedInEmployeeId ||
+        v.role?.toLowerCase() !== "employee"
+      )
+        return false;
     } else {
-      const isCreatedByEmployee = v.employee_id && v.role?.toLowerCase() === 'employee';
+      const isCreatedByEmployee =
+        v.employee_id && v.role?.toLowerCase() === "employee";
       if (showEmployeeActivity) {
         if (!isCreatedByEmployee) return false;
       } else {
@@ -69,20 +80,30 @@ const ListOFContraVoucher = () => {
 
     const query = searchQuery.toLowerCase();
 
-
-    const hasMatchingTransaction = v.transactions?.some(t => {
-      const fromAcc = (t.fromAccountName || t.fromAccount || "").toString().toLowerCase();
-      const toAcc = (t.toAccountName || t.toAccount || "").toString().toLowerCase();
+    const hasMatchingTransaction = v.transactions?.some((t) => {
+      const fromAcc = (t.fromAccountName || t.fromAccount || "")
+        .toString()
+        .toLowerCase();
+      const toAcc = (t.toAccountName || t.toAccount || "")
+        .toString()
+        .toLowerCase();
       const amount = (t.amount || "").toString().toLowerCase();
 
-      return fromAcc.includes(query) || toAcc.includes(query) || amount.includes(query);
+      return (
+        fromAcc.includes(query) ||
+        toAcc.includes(query) ||
+        amount.includes(query)
+      );
     });
 
     const voucherNoStr = (v.voucherNo || v.id || "").toString().toLowerCase();
 
-    return hasMatchingTransaction || voucherNoStr.includes(query) || (v.transactions?.length === 0 && query === "");
+    return (
+      hasMatchingTransaction ||
+      voucherNoStr.includes(query) ||
+      (v.transactions?.length === 0 && query === "")
+    );
   });
-
 
   const totalAmount = filteredVouchers.reduce((acc, v) => {
     const amt = parseFloat(v.transactions?.[0]?.amount || 0);
@@ -91,7 +112,9 @@ const ListOFContraVoucher = () => {
 
   const fetchCompanyDetails = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`,
+      );
       setCompanyDetails(res.data);
     } catch (err) {
       console.error("Error fetching company details:", err);
@@ -100,7 +123,11 @@ const ListOFContraVoucher = () => {
 
   const generatePDF = (shouldPrint = false) => {
     const doc = new jsPDF();
-    const company = (companyDetails?.name || companyName || "Company").toUpperCase();
+    const company = (
+      companyDetails?.name ||
+      companyName ||
+      "Company"
+    ).toUpperCase();
 
     const today = new Date().toLocaleDateString("en-IN");
 
@@ -126,7 +153,6 @@ const ListOFContraVoucher = () => {
       }
     };
 
-
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(15, 23, 42);
@@ -139,13 +165,6 @@ const ListOFContraVoucher = () => {
 
     let headerBottomY = 32;
 
-
-
-
-
-
-
-
     doc.setFontSize(8);
     doc.setTextColor(120);
     doc.text(`Generated on: ${today}`, 195, 18, { align: "right" });
@@ -153,16 +172,19 @@ const ListOFContraVoucher = () => {
     doc.setDrawColor(220);
     doc.line(14, headerBottomY, 195, headerBottomY);
 
-
-    const totalAmount = filteredVouchers.reduce((acc, v) => acc + (Number(v.transactions?.[0]?.amount || 0)), 0);
+    const totalAmount = filteredVouchers.reduce(
+      (acc, v) => acc + Number(v.transactions?.[0]?.amount || 0),
+      0,
+    );
     doc.setFontSize(10);
     doc.setTextColor(40);
     const summaryY = headerBottomY + 8;
     doc.text(`Total Vouchers: ${filteredVouchers.length}`, 14, summaryY);
 
     doc.setFont("helvetica", "bold");
-    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, { align: "right" });
-
+    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, {
+      align: "right",
+    });
 
     const tableData = filteredVouchers.map((v, i) => {
       const t = v.transactions?.[0] || {};
@@ -173,13 +195,23 @@ const ListOFContraVoucher = () => {
         t.fromAccountName || t.fromAccount || "-",
         t.toAccountName || t.toAccount || "-",
         formatAmount(t.amount),
-        v.narration || "-"
+        v.narration || "-",
       ];
     });
 
     autoTable(doc, {
       startY: summaryY + 8,
-      head: [["#", "Date", "Voucher No.", "From Account", "To Account", "Amount", "Narration"]],
+      head: [
+        [
+          "#",
+          "Date",
+          "Voucher No.",
+          "From Account",
+          "To Account",
+          "Amount",
+          "Narration",
+        ],
+      ],
       body: tableData,
       foot: [["", "", "", "", "TOTAL", formatAmount(totalAmount), ""]],
       theme: "striped",
@@ -203,10 +235,9 @@ const ListOFContraVoucher = () => {
         3: { cellWidth: 35 },
         4: { cellWidth: 35 },
         5: { halign: "right", cellWidth: 28 },
-        6: { cellWidth: 32 }
-      }
+        6: { cellWidth: 32 },
+      },
     });
-
 
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
@@ -241,7 +272,11 @@ const ListOFContraVoucher = () => {
 
   const handleExportExcel = () => {
     if (filteredVouchers.length === 0) return;
-    const company = companyDetails?.name || companyName || filteredVouchers[0]?.companyName || "Company";
+    const company =
+      companyDetails?.name ||
+      companyName ||
+      filteredVouchers[0]?.companyName ||
+      "Company";
 
     const today = new Date().toLocaleDateString("en-IN");
     const exportData = [];
@@ -304,7 +339,6 @@ const ListOFContraVoucher = () => {
     navigate(`/accounting/client/contravoucher/${id}`);
   };
 
-
   const handleViewDetails = (v) => setSelectedVoucher(v);
 
   const handleDelete = async (id) => {
@@ -329,23 +363,15 @@ const ListOFContraVoucher = () => {
     }
   };
 
-
   return (
     <div className="p-2 bg-gray-50 min-h-screen font-[Inter]">
-
-
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
-
-
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Contra Vouchers
           </h1>
 
-
           <div className="flex items-center gap-2.5 flex-wrap">
-
-
             <div className="relative">
               <Search
                 size={15}
@@ -360,19 +386,29 @@ const ListOFContraVoucher = () => {
               />
             </div>
 
-
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
-                  const basePath = loggedInRole === "employee"
-                    ? "/employee/hr/accounting/client"
-                    : "/accounting/client";
+                  const basePath =
+                    loggedInRole === "employee"
+                      ? "/employee/hr/accounting/client"
+                      : "/accounting/client";
                   navigate(`${basePath}/contravoucher`);
                 }}
                 className="flex items-center gap-1.5 bg-[#1a56db] hover:bg-blue-600 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap"
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Create
               </button>
@@ -384,7 +420,6 @@ const ListOFContraVoucher = () => {
                 <Printer size={14} /> Print
               </button>
 
-
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -392,8 +427,18 @@ const ListOFContraVoucher = () => {
                   className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <FileDown size={14} /> Export
-                  <svg className="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className="w-3 h-3 ml-0.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
 
@@ -406,7 +451,8 @@ const ListOFContraVoucher = () => {
                       }}
                       className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
                     >
-                      <FileSpreadsheet size={14} className="text-green-600" /> Excel
+                      <FileSpreadsheet size={14} className="text-green-600" />{" "}
+                      Excel
                     </button>
                     <button
                       onClick={() => {
@@ -423,23 +469,23 @@ const ListOFContraVoucher = () => {
 
               {loggedInRole !== "employee" && (
                 <button
-                  onClick={() => setShowEmployeeActivity(prev => !prev)}
-                  className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap border ${showEmployeeActivity
+                  onClick={() => setShowEmployeeActivity((prev) => !prev)}
+                  className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap border ${
+                    showEmployeeActivity
                       ? "bg-slate-900 text-white border-slate-900"
                       : "bg-white/10 text-white border-white/20 hover:bg-white/20"
-                    }`}
+                  }`}
                 >
                   <UserRound size={14} />
-                  {showEmployeeActivity ? "Back to Vouchers" : "Employee Activity"}
+                  {showEmployeeActivity
+                    ? "Back to Vouchers"
+                    : "Employee Activity"}
                 </button>
               )}
             </div>
           </div>
         </div>
       </div>
-
-
-
 
       <div className="mt-6 bg-white rounded-xl shadow-md overflow-x-auto [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
         <table className="w-full border-collapse min-w-max">
@@ -451,7 +497,9 @@ const ListOFContraVoucher = () => {
               <th className="text-left px-2 py-2 ">To Account</th>
               <th className="text-right px-2 py-2 ">Amount (₹)</th>
               <th className="text-left px-2 py-2 ">Narration</th>
-              {showEmployeeActivity && <th className="text-left px-2 py-2 ">Employee Name</th>}
+              {showEmployeeActivity && (
+                <th className="text-left px-2 py-2 ">Employee Name</th>
+              )}
               <th className="px-4 py-2 ">Action</th>
             </tr>
           </thead>
@@ -464,8 +512,12 @@ const ListOFContraVoucher = () => {
                     key={v.id}
                     className="hover:bg-blue-50 transition-colors duration-150"
                   >
-                    <td className="px-4 py-2">{new Date(v.date).toLocaleDateString()}</td>
-                    <td className="px-4 py-2 font-medium text-blue-700">{v.voucherNo || v.id}</td>
+                    <td className="px-4 py-2">
+                      {new Date(v.date).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-2 font-medium text-blue-700">
+                      {v.voucherNo || v.id}
+                    </td>
                     <td className="px-4 py-2">
                       {v.transactions?.map((t, i) => (
                         <div key={i} className="whitespace-nowrap">
@@ -481,9 +533,13 @@ const ListOFContraVoucher = () => {
                       ))}
                     </td>
                     <td className="px-4 py-2 text-right font-semibold">
-                      {Number(v.totalAmount).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      {Number(v.totalAmount).toLocaleString("en-IN", {
+                        minimumFractionDigits: 2,
+                      })}
                     </td>
-                    <td className="px-4 py-2 truncate max-w-37.5">{v.narration || "-"}</td>
+                    <td className="px-4 py-2 truncate max-w-37.5">
+                      {v.narration || "-"}
+                    </td>
                     {showEmployeeActivity && (
                       <td className="px-4 py-2 truncate max-w-37.5">
                         {getEmployeeName(v.employee_id)}
@@ -517,10 +573,11 @@ const ListOFContraVoucher = () => {
                             const url = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/contra-voucher/download/${v.id}`;
 
                             fetch(url)
-                              .then(response => response.blob())
-                              .then(blob => {
-                                const blobUrl = window.URL.createObjectURL(blob);
-                                const link = document.createElement('a');
+                              .then((response) => response.blob())
+                              .then((blob) => {
+                                const blobUrl =
+                                  window.URL.createObjectURL(blob);
+                                const link = document.createElement("a");
                                 link.href = blobUrl;
                                 link.download = `Contra_Voucher_${v.voucherNo || v.id}.pdf`;
                                 document.body.appendChild(link);
@@ -528,8 +585,8 @@ const ListOFContraVoucher = () => {
                                 document.body.removeChild(link);
                                 window.URL.revokeObjectURL(blobUrl);
                               })
-                              .catch(err => {
-                                console.error('Error downloading:', err);
+                              .catch((err) => {
+                                console.error("Error downloading:", err);
                                 window.open(url, "_blank");
                               });
                           }}
@@ -545,7 +602,10 @@ const ListOFContraVoucher = () => {
               })
             ) : (
               <tr>
-                <td colSpan={7} className="text-center py-10 text-gray-400 italic">
+                <td
+                  colSpan={7}
+                  className="text-center py-10 text-gray-400 italic"
+                >
                   No contra vouchers found for the selected criteria.
                 </td>
               </tr>
@@ -554,30 +614,32 @@ const ListOFContraVoucher = () => {
         </table>
       </div>
 
-
       <div className="max-w-7xl mx-auto mt-4 bg-[#E6EEF8] p-4 rounded-lg flex justify-between items-center shadow-inner border border-blue-200">
         <div className="flex items-center gap-2 text-blue-800 font-bold">
           <FileText size={20} />
           <span>TOTAL VOUCHERS: {filteredVouchers.length}</span>
         </div>
         <div className="text-lg font-black text-blue-900 tracking-wider">
-          TOTAL AMOUNT: ₹ {totalAmount.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+          TOTAL AMOUNT: ₹{" "}
+          {totalAmount.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
         </div>
       </div>
-
 
       {selectedVoucher && (
         <ContraVoucherDetailModal
           voucher={selectedVoucher}
           onClose={() => setSelectedVoucher(null)}
-          onEdit={(id) => { setSelectedVoucher(null); handleEdit(id); }}
+          onEdit={(id) => {
+            setSelectedVoucher(null);
+            handleEdit(id);
+          }}
           onDownload={(v) => {
             const url = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/contra-voucher/download/${v.id}`;
             fetch(url)
-              .then(response => response.blob())
-              .then(blob => {
+              .then((response) => response.blob())
+              .then((blob) => {
                 const blobUrl = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
+                const link = document.createElement("a");
                 link.href = blobUrl;
                 link.download = `Contra_Voucher_${v.voucherNo || v.id}.pdf`;
                 document.body.appendChild(link);
@@ -585,8 +647,8 @@ const ListOFContraVoucher = () => {
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(blobUrl);
               })
-              .catch(err => {
-                console.error('Error downloading:', err);
+              .catch((err) => {
+                console.error("Error downloading:", err);
                 window.open(url, "_blank");
               });
           }}

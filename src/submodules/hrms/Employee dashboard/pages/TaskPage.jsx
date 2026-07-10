@@ -9,12 +9,12 @@ const TaskPage = ({ canAssignTask }) => {
   return (
     <div className="app-shell p-4">
       <div className="max-w-7xl mx-auto space-y-6">
-
         <div>
           <h1 className="app-title max-w-3xl">Task Management</h1>
-          <p className="app-subtitle mt-1">Manage all your team and personal tasks here</p>
+          <p className="app-subtitle mt-1">
+            Manage all your team and personal tasks here
+          </p>
         </div>
-
 
         <div className="flex gap-6 border-b border-(--border-soft) mb-6 pb-px">
           <button
@@ -52,7 +52,6 @@ const TaskPage = ({ canAssignTask }) => {
             </button>
           )}
         </div>
-
 
         <div className="w-full">
           {activeTab === "my" && <MyTask />}

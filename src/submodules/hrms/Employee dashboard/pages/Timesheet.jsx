@@ -15,7 +15,13 @@ import {
   Clock,
   Zap,
 } from "lucide-react";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import useAuth from "../../../../hooks/useAuth";
 import {
   calculateAttendanceDuration,
@@ -62,13 +68,17 @@ const renderDateCard = (dateString) => {
   if (!dateString) return null;
   const parsed = new Date(`${dateString}T12:00:00+05:30`);
   if (Number.isNaN(parsed.getTime())) return null;
-  
+
   const day = parsed.getDate().toString().padStart(2, "0");
-  const month = parsed.toLocaleString("en-IN", { month: "short" }).toUpperCase();
-  
+  const month = parsed
+    .toLocaleString("en-IN", { month: "short" })
+    .toUpperCase();
+
   return (
     <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-linear-to-br from-indigo-50 to-blue-50 ring-1 ring-indigo-100 transition-transform group-hover:scale-105">
-      <span className="text-lg font-black leading-none text-indigo-700">{day}</span>
+      <span className="text-lg font-black leading-none text-indigo-700">
+        {day}
+      </span>
       <span className="mt-0.5 text-[9px] font-bold tracking-widest text-indigo-400">
         {month}
       </span>
@@ -247,39 +257,43 @@ const Timesheet = ({ hideHeader = false }) => {
 
   const API_BASE = import.meta.env.VITE_HRMS_BASE_URL;
 
-  const normalizeRecord = useCallback((item) => {
-    const date = String(item.date || "").slice(0, 10);
-    const monthKey = getMonthKey(date);
-    const punchIn = formatAttendanceTime24(item.punch_in);
-    const punchOut = formatAttendanceTime24(item.punch_out);
-    const totalHours =
-      item.total_hours || calculateAttendanceDuration(item.punch_in, item.punch_out);
+  const normalizeRecord = useCallback(
+    (item) => {
+      const date = String(item.date || "").slice(0, 10);
+      const monthKey = getMonthKey(date);
+      const punchIn = formatAttendanceTime24(item.punch_in);
+      const punchOut = formatAttendanceTime24(item.punch_out);
+      const totalHours =
+        item.total_hours ||
+        calculateAttendanceDuration(item.punch_in, item.punch_out);
 
-    return {
-      id: `${date}-${item.punch_in || ""}-${item.punch_out || ""}`,
-      date,
-      monthKey,
-      employeeId,
-      department: item.department || item.employee_department || "",
-      punchIn,
-      punchOut,
-      totalHours,
-      totalHoursLabel: formatDurationLabel(totalHours),
-      isHalfDay: Number(item.is_half_day || 0) === 1,
-      isLate: Number(item.is_late || 0) === 1,
-      isEarlyLeave: Number(item.is_early_leave || 0) === 1,
-      timesheetDetails: String(item.timesheet_details || "").trim(),
-      timesheetStatus: item.timesheet_status || "Pending",
-      shiftStart: item.shift_start || "",
-      shiftEnd: item.shift_end || "",
-      overtime: item.overtime || "",
-      otClaimed: Number(item.employee_ot_claim || 0) === 1,
-      otApproved: Number(item.ot_approved || 0) === 1,
-      otEligible: Boolean(item.ot_eligible),
-      isExempt: Boolean(item.isExempt),
-      exemptionType: item.exemptionType || "",
-    };
-  }, [employeeId]);
+      return {
+        id: `${date}-${item.punch_in || ""}-${item.punch_out || ""}`,
+        date,
+        monthKey,
+        employeeId,
+        department: item.department || item.employee_department || "",
+        punchIn,
+        punchOut,
+        totalHours,
+        totalHoursLabel: formatDurationLabel(totalHours),
+        isHalfDay: Number(item.is_half_day || 0) === 1,
+        isLate: Number(item.is_late || 0) === 1,
+        isEarlyLeave: Number(item.is_early_leave || 0) === 1,
+        timesheetDetails: String(item.timesheet_details || "").trim(),
+        timesheetStatus: item.timesheet_status || "Pending",
+        shiftStart: item.shift_start || "",
+        shiftEnd: item.shift_end || "",
+        overtime: item.overtime || "",
+        otClaimed: Number(item.employee_ot_claim || 0) === 1,
+        otApproved: Number(item.ot_approved || 0) === 1,
+        otEligible: Boolean(item.ot_eligible),
+        isExempt: Boolean(item.isExempt),
+        exemptionType: item.exemptionType || "",
+      };
+    },
+    [employeeId],
+  );
 
   const fetchTimesheetData = useCallback(async () => {
     try {
@@ -326,7 +340,11 @@ const Timesheet = ({ hideHeader = false }) => {
   }, [showFilter]);
 
   const years = useMemo(() => {
-    const yearSet = new Set([currentIndiaYear - 1, currentIndiaYear, currentIndiaYear + 1]);
+    const yearSet = new Set([
+      currentIndiaYear - 1,
+      currentIndiaYear,
+      currentIndiaYear + 1,
+    ]);
     records.forEach((record) => {
       if (record.date) yearSet.add(Number(record.date.slice(0, 4)));
     });
@@ -336,11 +354,14 @@ const Timesheet = ({ hideHeader = false }) => {
   const filteredRecords = useMemo(() => {
     let nextRecords = [...records];
 
-    nextRecords = nextRecords.filter((record) => Number(record.date.slice(0, 4)) === Number(selectedYear));
+    nextRecords = nextRecords.filter(
+      (record) => Number(record.date.slice(0, 4)) === Number(selectedYear),
+    );
 
     if (selectedMonth !== "all") {
       nextRecords = nextRecords.filter(
-        (record) => MONTHS[Number(record.date.slice(5, 7)) - 1] === selectedMonth,
+        (record) =>
+          MONTHS[Number(record.date.slice(5, 7)) - 1] === selectedMonth,
       );
     }
 
@@ -389,16 +410,24 @@ const Timesheet = ({ hideHeader = false }) => {
   const stats = useMemo(() => {
     return {
       entries: filteredRecords.length,
-      approved: filteredRecords.filter((item) => item.timesheetStatus === "Approved").length,
-      pending: filteredRecords.filter((item) => item.timesheetStatus === "Pending").length,
+      approved: filteredRecords.filter(
+        (item) => item.timesheetStatus === "Approved",
+      ).length,
+      pending: filteredRecords.filter(
+        (item) => item.timesheetStatus === "Pending",
+      ).length,
       otClaimed: filteredRecords.filter((item) => item.otClaimed).length,
     };
   }, [filteredRecords]);
 
   const totalPages = Math.max(1, Math.ceil(groupedRecords.length / 6));
-  const currentGroups = groupedRecords.slice((currentPage - 1) * 6, currentPage * 6);
+  const currentGroups = groupedRecords.slice(
+    (currentPage - 1) * 6,
+    currentPage * 6,
+  );
   const allVisibleOpen =
-    currentGroups.length > 0 && currentGroups.every((group) => openGroups[group.monthKey]);
+    currentGroups.length > 0 &&
+    currentGroups.every((group) => openGroups[group.monthKey]);
 
   const handleExport = () => {
     const csvContent = [
@@ -447,7 +476,9 @@ const Timesheet = ({ hideHeader = false }) => {
         <div className="space-y-4 text-center">
           <Loader2 className="mx-auto h-10 w-10 animate-spin text-slate-900" />
           <div>
-            <h3 className="text-lg font-bold text-slate-900">Loading Timesheet</h3>
+            <h3 className="text-lg font-bold text-slate-900">
+              Loading Timesheet
+            </h3>
             <p className="mt-1 text-sm font-medium text-slate-500">
               Please wait while we fetch your records
             </p>
@@ -472,7 +503,6 @@ const Timesheet = ({ hideHeader = false }) => {
                     <h1 className="text-3xl font-bold tracking-tight text-slate-900">
                       Timesheet
                     </h1>
-
                   </div>
                 </div>
               </div>
@@ -480,10 +510,30 @@ const Timesheet = ({ hideHeader = false }) => {
 
             <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
               {[
-                { label: "Records", value: stats.entries, icon: FileText, tone: "emerald" },
-                { label: "Approved", value: stats.approved, icon: Users, tone: "emerald" },
-                { label: "Pending", value: stats.pending, icon: Users, tone: "amber" },
-                { label: "OT Claimed", value: stats.otClaimed, icon: Users, tone: "rose" },
+                {
+                  label: "Records",
+                  value: stats.entries,
+                  icon: FileText,
+                  tone: "emerald",
+                },
+                {
+                  label: "Approved",
+                  value: stats.approved,
+                  icon: Users,
+                  tone: "emerald",
+                },
+                {
+                  label: "Pending",
+                  value: stats.pending,
+                  icon: Users,
+                  tone: "amber",
+                },
+                {
+                  label: "OT Claimed",
+                  value: stats.otClaimed,
+                  icon: Users,
+                  tone: "rose",
+                },
               ].map((stat) => {
                 const toneClasses = {
                   indigo: "bg-emerald-50 text-indigo-600 ring-indigo-100",
@@ -497,7 +547,9 @@ const Timesheet = ({ hideHeader = false }) => {
                     key={stat.label}
                     className="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-slate-200 transition-all hover:shadow-md"
                   >
-                    <div className={`shrink-0 rounded-full p-2 ring-1 ${toneClasses[stat.tone]}`}>
+                    <div
+                      className={`shrink-0 rounded-full p-2 ring-1 ${toneClasses[stat.tone]}`}
+                    >
                       <stat.icon className="h-4 w-4" />
                     </div>
                     <div>
@@ -522,7 +574,9 @@ const Timesheet = ({ hideHeader = false }) => {
                 <Calendar className="h-4 w-4 text-slate-500" />
                 <select
                   value={selectedYear}
-                  onChange={(event) => setSelectedYear(Number(event.target.value))}
+                  onChange={(event) =>
+                    setSelectedYear(Number(event.target.value))
+                  }
                   className="h-9 flex-1 appearance-none bg-transparent pl-3 pr-8 text-sm font-medium text-slate-700 outline-none"
                 >
                   {years.map((year) => (
@@ -647,7 +701,8 @@ const Timesheet = ({ hideHeader = false }) => {
                   Timesheet Ledger
                 </p>
                 <h2 className="text-sm font-bold text-slate-900">
-                  {selectedMonth === "all" ? "All Months" : selectedMonth} {selectedYear}
+                  {selectedMonth === "all" ? "All Months" : selectedMonth}{" "}
+                  {selectedYear}
                 </h2>
               </div>
             </div>
@@ -676,7 +731,9 @@ const Timesheet = ({ hideHeader = false }) => {
               <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-slate-100 shadow-sm">
                 <Users className="h-8 w-8 text-slate-400" />
               </div>
-              <h3 className="mb-2 text-xl font-bold text-slate-900">No Records Found</h3>
+              <h3 className="mb-2 text-xl font-bold text-slate-900">
+                No Records Found
+              </h3>
               <p className="mb-6 max-w-sm text-sm font-medium text-slate-500">
                 We couldn't find any timesheet entries for the current filters.
               </p>
@@ -731,49 +788,50 @@ const Timesheet = ({ hideHeader = false }) => {
                     {isOpen && (
                       <div className="space-y-2 border-t border-slate-100 bg-slate-50/50 p-4">
                         {group.records.map((record) => (
-                            <button
-                              key={record.id}
-                              type="button"
-                              onClick={() => setSelectedRecord(record)}
-                              className="group flex w-full flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 text-left transition-all hover:border-indigo-300 hover:bg-slate-50/50 xl:flex-row xl:items-center xl:justify-between"
-                            >
-                              <div className="flex min-w-0 items-center gap-4">
-                                {renderDateCard(record.date)}
-                                <div className="min-w-0">
-                                  <h3 className="truncate text-sm font-bold text-slate-900">
-                                    {formatDateLabel(record.date)}
-                                  </h3>
-                                  <div className="mt-2 flex flex-wrap items-center gap-2">
-                                    <span
-                                      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-bold ${
-                                        record.timesheetStatus === "Approved"
-                                          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                          : record.timesheetStatus === "Rejected"
-                                            ? "border-rose-200 bg-rose-50 text-rose-700"
-                                            : "border-amber-200 bg-amber-50 text-amber-700"
-                                      }`}
-                                    >
-                                      {record.timesheetStatus || "Pending"}
+                          <button
+                            key={record.id}
+                            type="button"
+                            onClick={() => setSelectedRecord(record)}
+                            className="group flex w-full flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 text-left transition-all hover:border-indigo-300 hover:bg-slate-50/50 xl:flex-row xl:items-center xl:justify-between"
+                          >
+                            <div className="flex min-w-0 items-center gap-4">
+                              {renderDateCard(record.date)}
+                              <div className="min-w-0">
+                                <h3 className="truncate text-sm font-bold text-slate-900">
+                                  {formatDateLabel(record.date)}
+                                </h3>
+                                <div className="mt-2 flex flex-wrap items-center gap-2">
+                                  <span
+                                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-bold ${
+                                      record.timesheetStatus === "Approved"
+                                        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                        : record.timesheetStatus === "Rejected"
+                                          ? "border-rose-200 bg-rose-50 text-rose-700"
+                                          : "border-amber-200 bg-amber-50 text-amber-700"
+                                    }`}
+                                  >
+                                    {record.timesheetStatus || "Pending"}
+                                  </span>
+
+                                  <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 text-[10px] font-bold text-slate-700">
+                                    <Clock className="h-2.5 w-2.5 text-slate-400" />
+                                    {record.totalHoursLabel}
+                                  </span>
+
+                                  {isOvertimeValue(record.overtime) && (
+                                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700">
+                                      <Zap className="h-2.5 w-2.5 text-emerald-400" />
+                                      OT {record.overtime}
                                     </span>
-                                    
-                                    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 text-[10px] font-bold text-slate-700">
-                                      <Clock className="h-2.5 w-2.5 text-slate-400" />
-                                      {record.totalHoursLabel}
-                                    </span>
-                                    
-                                    {isOvertimeValue(record.overtime) && (
-                                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700">
-                                        <Zap className="h-2.5 w-2.5 text-emerald-400" />
-                                        OT {record.overtime}
-                                      </span>
-                                    )}
-                                  </div>
+                                  )}
                                 </div>
                               </div>
+                            </div>
 
                             <div className="min-w-0 flex-1 xl:max-w-[48%]">
                               <p className="truncate text-sm font-medium text-slate-600">
-                                {record.timesheetDetails || "No timesheet note available."}
+                                {record.timesheetDetails ||
+                                  "No timesheet note available."}
                               </p>
                             </div>
                           </button>
@@ -793,14 +851,18 @@ const Timesheet = ({ hideHeader = false }) => {
               </p>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
+                  onClick={() =>
+                    setCurrentPage((page) => Math.max(page - 1, 1))
+                  }
                   disabled={currentPage === 1}
                   className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-all hover:bg-slate-50 disabled:opacity-50"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
                 <button
-                  onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
+                  onClick={() =>
+                    setCurrentPage((page) => Math.min(page + 1, totalPages))
+                  }
                   disabled={currentPage === totalPages}
                   className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-all hover:bg-slate-50 disabled:opacity-50"
                 >

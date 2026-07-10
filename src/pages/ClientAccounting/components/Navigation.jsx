@@ -40,7 +40,6 @@ function Navigation() {
     }
   }, [userId, user, navigate]);
 
-
   useEffect(() => {
     if (
       location.pathname.includes("purchasevoucher") ||
@@ -102,7 +101,6 @@ function Navigation() {
     },
   ];
 
-
   const handleRestrictedClick = (e, requiresSubscription) => {
     if (requiresSubscription && !hasActiveSubscription) {
       e.preventDefault();
@@ -110,17 +108,17 @@ function Navigation() {
     }
   };
 
-
   const NavLink = ({ path, label, icon, requiresSubscription = false }) => {
     const active = location.pathname === path;
     return (
       <Link
         to={path}
         onClick={(e) => handleRestrictedClick(e, requiresSubscription)}
-        className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 ${active
-          ? "bg-blue-100 text-blue-800 font-semibold"
-          : "hover:bg-blue-50 hover:text-blue-700"
-          }`}
+        className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 ${
+          active
+            ? "bg-blue-100 text-blue-800 font-semibold"
+            : "hover:bg-blue-50 hover:text-blue-700"
+        }`}
       >
         <span>{icon}</span>
         {isOpen && <span>{label}</span>}
@@ -130,7 +128,6 @@ function Navigation() {
 
   return (
     <div className=" sidebar  flex font-[monospace] no-print">
-
       <div
         className={`${isOpen ? "w-60" : "w-16"} 
     fixed left-0 top-0 h-screen 
@@ -141,8 +138,10 @@ function Navigation() {
     transition-all duration-300 
     scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200`}
       >
-
-        <div onClick={() => navigate('/')} className=" cursor-pointer flex items-center justify-between mb-1 top-0 bg-white pb-2 z-10">
+        <div
+          onClick={() => navigate("/")}
+          className=" cursor-pointer flex items-center justify-between mb-1 top-0 bg-white pb-2 z-10"
+        >
           {isOpen && (
             <h1 className="text-lg font-bold tracking-wide text-blue-800">
               Accounting
@@ -159,12 +158,10 @@ function Navigation() {
 
         <hr className="border-gray-300 mb-4" />
 
-
         <nav className="space-y-1">
           {links.map((item) => (
             <NavLink key={item.path} {...item} />
           ))}
-
 
           <div>
             <button
@@ -176,10 +173,11 @@ function Navigation() {
                 }
               }}
               className={`flex items-center w-full gap-3 px-3 py-2 rounded-md transition-all duration-200
-    ${location.pathname.includes("voucher")
-                  ? "bg-blue-100 text-blue-800 font-semibold"
-                  : "hover:bg-blue-50 hover:text-blue-700"
-                }`}
+    ${
+      location.pathname.includes("voucher")
+        ? "bg-blue-100 text-blue-800 font-semibold"
+        : "hover:bg-blue-50 hover:text-blue-700"
+    }`}
             >
               <Landmark size={20} />
 
@@ -196,60 +194,102 @@ function Navigation() {
 
             {voucherOpen && (
               <div className="ml-2 mt-1  space-y-1">
-                <NavLink path="/contravoucher" label="Contra Voucher" requiresSubscription={true} />
+                <NavLink
+                  path="/contravoucher"
+                  label="Contra Voucher"
+                  requiresSubscription={true}
+                />
                 <NavLink
                   path="/listOfContraVoucher"
                   label="List Of Contra Voucher"
                   requiresSubscription={true}
                 />
-                <NavLink path="/paymentVoucher" label="Payment Voucher" requiresSubscription={true} />
+                <NavLink
+                  path="/paymentVoucher"
+                  label="Payment Voucher"
+                  requiresSubscription={true}
+                />
                 <NavLink
                   path="/listOfPaymentVoucher"
                   label="List Of Payment Voucher"
                   requiresSubscription={true}
                 />
 
-                <NavLink path="/receptVoucher" label="Recipt Voucher" requiresSubscription={true} />
+                <NavLink
+                  path="/receptVoucher"
+                  label="Recipt Voucher"
+                  requiresSubscription={true}
+                />
                 <NavLink
                   path="/listOfReciptVoucher"
                   label="List Of Receipt Voucher"
                   requiresSubscription={true}
                 />
 
-                <NavLink path="/journalvoucher" label="Journal Voucher" requiresSubscription={true} />
+                <NavLink
+                  path="/journalvoucher"
+                  label="Journal Voucher"
+                  requiresSubscription={true}
+                />
                 <NavLink
                   path="/listOfJournalVoucher"
                   label="List Of Journal Voucher"
                   requiresSubscription={true}
                 />
-                <NavLink path="/manfacturing" label="Manufacturing" requiresSubscription={true} />
+                <NavLink
+                  path="/manfacturing"
+                  label="Manufacturing"
+                  requiresSubscription={true}
+                />
 
-                <NavLink path="/salevoucher" label="Sale Voucher" requiresSubscription={true} />
+                <NavLink
+                  path="/salevoucher"
+                  label="Sale Voucher"
+                  requiresSubscription={true}
+                />
                 <NavLink
                   path="/listOfSaleVoucher"
                   label="List Of Sale Voucher"
                   requiresSubscription={true}
                 />
 
-                <NavLink path="/purchasevoucher" label="Purchase Voucher" requiresSubscription={true} />
+                <NavLink
+                  path="/purchasevoucher"
+                  label="Purchase Voucher"
+                  requiresSubscription={true}
+                />
                 <NavLink
                   path="/listOfPurchaseVoucher"
                   label="List Of Purchase Voucher"
                   requiresSubscription={true}
                 />
 
-                <NavLink path="/debitNote" label="Debit Note" requiresSubscription={true} />
-                <NavLink path="/debitNotesList" label="Debit Note List" requiresSubscription={true} />
-                <NavLink path="/creditNote" label="Credit Note" requiresSubscription={true} />
+                <NavLink
+                  path="/debitNote"
+                  label="Debit Note"
+                  requiresSubscription={true}
+                />
+                <NavLink
+                  path="/debitNotesList"
+                  label="Debit Note List"
+                  requiresSubscription={true}
+                />
+                <NavLink
+                  path="/creditNote"
+                  label="Credit Note"
+                  requiresSubscription={true}
+                />
 
-                <NavLink path="/creditNotesList" label="Credit Note List" requiresSubscription={true} />
+                <NavLink
+                  path="/creditNotesList"
+                  label="Credit Note List"
+                  requiresSubscription={true}
+                />
               </div>
             )}
           </div>
 
-
           <div>
-
             <button
               onClick={(e) => {
                 if (!hasActiveSubscription) {
@@ -259,10 +299,11 @@ function Navigation() {
                 }
               }}
               className={`flex items-center w-full gap-3 px-3 py-2 rounded-md transition-all duration-200
-      ${location.pathname.includes("bank")
-                  ? "bg-blue-100 text-blue-800 font-semibold"
-                  : "hover:bg-blue-50 hover:text-blue-700"
-                }`}
+      ${
+        location.pathname.includes("bank")
+          ? "bg-blue-100 text-blue-800 font-semibold"
+          : "hover:bg-blue-50 hover:text-blue-700"
+      }`}
             >
               <Landmark size={20} />
 
@@ -277,14 +318,25 @@ function Navigation() {
               )}
             </button>
 
-
             {showBanking && (
               <div className="ml-4 mt-2 space-y-1">
-                <NavLink path="/bank-activities" label="Bank Activities" requiresSubscription={true} />
+                <NavLink
+                  path="/bank-activities"
+                  label="Bank Activities"
+                  requiresSubscription={true}
+                />
 
-                <NavLink path="/cheque" label="Cheque" requiresSubscription={true} />
+                <NavLink
+                  path="/cheque"
+                  label="Cheque"
+                  requiresSubscription={true}
+                />
 
-                <NavLink path="/cheque-register" label="Cheque Register" requiresSubscription={true} />
+                <NavLink
+                  path="/cheque-register"
+                  label="Cheque Register"
+                  requiresSubscription={true}
+                />
               </div>
             )}
           </div>
@@ -330,10 +382,11 @@ function Navigation() {
                 }
               }}
               className={`flex items-center w-full gap-3 px-3 py-2 rounded-md transition-all duration-200
-      ${location.pathname.includes("stock")
-                  ? "bg-blue-100 text-blue-800 font-semibold"
-                  : "hover:bg-blue-50 hover:text-blue-700"
-                }`}
+      ${
+        location.pathname.includes("stock")
+          ? "bg-blue-100 text-blue-800 font-semibold"
+          : "hover:bg-blue-50 hover:text-blue-700"
+      }`}
             >
               <Building2 size={20} />
 
@@ -381,20 +434,16 @@ function Navigation() {
           Logout <LogOut size={20} />
         </button>
 
-
         <div className="mt-auto border-t border-gray-200 pt-4 text-center text-md text-gray-500 sticky bottom-0 bg-white pb-2">
           {isOpen ? "© 2025 Cloudsat Pvt Ltd" : "©"}
         </div>
       </div>
 
-
       <div
-        className={`${isOpen ? "ml-60" : "ml-16"
-          } w-full transition-all duration-300`}
-      >
-
-      </div>
-
+        className={`${
+          isOpen ? "ml-60" : "ml-16"
+        } w-full transition-all duration-300`}
+      ></div>
 
       <SubscriptionModal
         isOpen={showSubscriptionModal}

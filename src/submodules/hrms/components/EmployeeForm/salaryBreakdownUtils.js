@@ -105,8 +105,6 @@ export const recalculateSalaryBreakdown = (
   const annualFixedPay = ctc - variablePay;
   const monthlyFixed = annualFixedPay / 12;
 
-
-
   const epfRateEffective =
     normalizedPolicy.basic_rate * normalizedPolicy.epf_employer_rate;
   const esiRate = normalizedPolicy.esi_employer_rate;
@@ -114,8 +112,6 @@ export const recalculateSalaryBreakdown = (
     normalizedPolicy.epf_statutory_limit * normalizedPolicy.epf_employer_rate;
 
   let grossMonthly = 0;
-
-
 
   const g1 =
     monthlyFixed /
@@ -129,8 +125,6 @@ export const recalculateSalaryBreakdown = (
   ) {
     grossMonthly = g1;
   } else {
-
-
     const g2 =
       (monthlyFixed - (toggles.epf ? epfCap : 0)) /
       (1 + (toggles.esi ? esiRate : 0));
@@ -144,8 +138,6 @@ export const recalculateSalaryBreakdown = (
     ) {
       grossMonthly = g2;
     } else {
-
-
       const g3 = monthlyFixed / (1 + (toggles.epf ? epfRateEffective : 0));
       const b3 = g3 * normalizedPolicy.basic_rate;
 
@@ -155,13 +147,10 @@ export const recalculateSalaryBreakdown = (
       ) {
         grossMonthly = g3;
       } else {
-
-
         grossMonthly = monthlyFixed - (toggles.epf ? epfCap : 0);
       }
     }
   }
-
 
   const basicMonthly = grossMonthly * normalizedPolicy.basic_rate;
 

@@ -15,15 +15,9 @@ import {
   RotateCcw,
   UserCheck,
   UserMinus,
-  XCircle
+  XCircle,
 } from "lucide-react";
-import {
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip
-} from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import useAuth from "../../../hooks/useAuth";
 import NoticePeriodAlertModal from "./NoticePeriodAlertModal";
 
@@ -34,7 +28,6 @@ const Dashboard = () => {
   const slug = user?.slug;
 
   const company_id = user?.id;
-
 
   const [stats, setStats] = useState({
     jobsListed: 0,
@@ -93,7 +86,6 @@ const Dashboard = () => {
       const alerts = res.data?.data || [];
       setNoticeAlerts(alerts);
 
-
       if (alerts.length > 0 && alerts.length !== lastAlertCount) {
         setIsNoticeModalOpen(true);
         setLastAlertCount(alerts.length);
@@ -110,7 +102,6 @@ const Dashboard = () => {
       let extraDays = customExtraDays || 0;
 
       if (action === "extend" && !customExtraDays) {
-
         const input = window.prompt(
           `Enter extension days for ${item.name}`,
           "7",
@@ -162,7 +153,6 @@ const Dashboard = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/ap/${company_id}`,
       );
-
 
       const totalApplicants = res.data?.data?.length || 0;
 
@@ -319,7 +309,6 @@ const Dashboard = () => {
     }
   };
 
-
   const attendancePercentage =
     stats.totalEmployees > 0
       ? Math.round((stats.attendanceCount / stats.totalEmployees) * 100)
@@ -354,9 +343,7 @@ const Dashboard = () => {
             Monitor HR operations and jump straight into task assignment.
           </p>
         </div>
-
       </div>
-
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
@@ -448,7 +435,6 @@ const Dashboard = () => {
               tasks.
             </p>
           </div>
-
         </div>
       </div>
 
@@ -545,7 +531,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-4 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-2">Attendance Overview</h2>
@@ -591,13 +576,9 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
       </div>
-
-
-
     </div>
   );
 };
-
 
 const colorMap = {
   blue: "bg-blue-100 text-blue-600",

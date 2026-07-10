@@ -5,21 +5,18 @@ const LeaveAssignmentTab = ({ formData, handleInputChange }) => {
   return (
     <div className="space-y-8">
       {LEAVE_ASSIGNMENT_FIELDS.map((section, idx) => (
-        <div
-          key={idx}
-          className="app-panel p-6"
-        >
+        <div key={idx} className="app-panel p-6">
           <h3 className="app-heading text-lg font-bold text-(--text-strong) mb-2">
             {section.section}
           </h3>
-          <p className="text-xs text-(--text-soft) mb-4">{section.description}</p>
+          <p className="text-xs text-(--text-soft) mb-4">
+            {section.description}
+          </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {section.fields.map((field) => (
               <div key={field.name}>
-                <label className="app-label block mb-1.5">
-                  {field.label}
-                </label>
+                <label className="app-label block mb-1.5">{field.label}</label>
 
                 {field.type === "checkbox" ? (
                   <div className="flex items-center">
@@ -60,13 +57,17 @@ const LeaveAssignmentTab = ({ formData, handleInputChange }) => {
                     step={field.step}
                     placeholder={field.placeholder}
                     className={`app-input w-full ${
-                      field.readOnly ? "bg-gray-50 cursor-not-allowed opacity-70" : ""
+                      field.readOnly
+                        ? "bg-gray-50 cursor-not-allowed opacity-70"
+                        : ""
                     }`}
                   />
                 )}
 
                 {field.helpText && !field.readOnly && (
-                  <p className="mt-1 text-xs text-(--text-faint)">{field.helpText}</p>
+                  <p className="mt-1 text-xs text-(--text-faint)">
+                    {field.helpText}
+                  </p>
                 )}
               </div>
             ))}

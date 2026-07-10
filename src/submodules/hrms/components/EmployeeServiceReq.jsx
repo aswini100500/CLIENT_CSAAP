@@ -5,7 +5,6 @@ import { usePermission } from "../../../hooks/usePermission";
 import useAuth from "../../../hooks/useAuth";
 
 const EmployeeServiceReq = () => {
-
   const [requests, setRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,19 +32,11 @@ const EmployeeServiceReq = () => {
 
   const { has } = usePermission();
 
-
   const { user, token: authToken } = useAuth();
   const token = authToken;
 
-
   const slug = user?.slug;
   const company_id = user?.company_id || user?.id;
-
-
-
-
-
-
 
   const showSnackbar = (message, type = "success") => {
     setSnackbar({ show: true, message, type });
@@ -54,7 +45,6 @@ const EmployeeServiceReq = () => {
       3000,
     );
   };
-
 
   const fetchEmployees = useCallback(async () => {
     try {
@@ -72,15 +62,14 @@ const EmployeeServiceReq = () => {
       });
       setEmployeeMap(mapping);
 
-        const uniqueDepts = [
-          ...new Set(empData.map((e) => e.department).filter(Boolean)),
-        ];
-        setDepartmentsList(uniqueDepts);
+      const uniqueDepts = [
+        ...new Set(empData.map((e) => e.department).filter(Boolean)),
+      ];
+      setDepartmentsList(uniqueDepts);
     } catch (error) {
       console.error("Error fetching employees:", error);
     }
   }, [token]);
-
 
   const fetchAllRequests = useCallback(async () => {
     if (!slug) {
@@ -100,12 +89,8 @@ const EmployeeServiceReq = () => {
       );
 
       if (response.data.success) {
+        response.data.data.forEach((req, index) => {});
 
-
-        response.data.data.forEach((req, index) => {
-
-        });
-        
         setRequests(response.data.data);
         showSnackbar("Requests loaded successfully");
       } else {
@@ -120,7 +105,6 @@ const EmployeeServiceReq = () => {
     }
   }, [slug, token, company_id]);
 
-
   useEffect(() => {
     if (slug) {
       fetchEmployees();
@@ -128,10 +112,8 @@ const EmployeeServiceReq = () => {
     }
   }, [slug, fetchAllRequests, fetchEmployees]);
 
-
   useEffect(() => {
     let filtered = [...requests];
-
 
     if (searchTerm) {
       filtered = filtered.filter(
@@ -153,15 +135,15 @@ const EmployeeServiceReq = () => {
             .includes(searchTerm.toLowerCase()) ||
           String(request.employee_id).includes(searchTerm) ||
           (request.reply_details &&
-            request.reply_details.toLowerCase().includes(searchTerm.toLowerCase()))
+            request.reply_details
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())),
       );
     }
-
 
     if (statusFilter !== "All") {
       filtered = filtered.filter((request) => request.status === statusFilter);
     }
-
 
     if (departmentFilter !== "All") {
       filtered = filtered.filter((request) => {
@@ -172,13 +154,11 @@ const EmployeeServiceReq = () => {
       });
     }
 
-
     if (priorityFilter !== "All") {
       filtered = filtered.filter(
         (request) => request.priority === priorityFilter,
       );
     }
-
 
     if (dateRange.start && dateRange.end) {
       filtered = filtered.filter((request) => {
@@ -205,31 +185,24 @@ const EmployeeServiceReq = () => {
 
   const handleUpdateStatus = async (id, newStatus, reply = null) => {
     if (!has("hrms.message.service_request.fulfill")) {
-      showSnackbar("Access Denied: You do not have permission to fulfill service requests.", "error");
+      showSnackbar(
+        "Access Denied: You do not have permission to fulfill service requests.",
+        "error",
+      );
       return;
     }
     try {
-
-
-
-
-
-      
       const payload = {
         slug,
         status: newStatus,
         reply_details: reply || "Updated by admin",
       };
 
-
-
       const response = await axios.put(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/update-status/${id}`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } },
       );
-
-
 
       if (response.data.success) {
         await fetchAllRequests();
@@ -245,7 +218,7 @@ const EmployeeServiceReq = () => {
       console.error("Error response:", error.response?.data);
       showSnackbar(
         error.response?.data?.message || "Failed to update request status",
-        "error"
+        "error",
       );
     }
   };
@@ -264,7 +237,10 @@ const EmployeeServiceReq = () => {
 
   const handleDeleteRequest = async (id) => {
     if (!has("hrms.message.service_request.fulfill")) {
-      showSnackbar("Access Denied: You do not have permission to delete service requests.", "error");
+      showSnackbar(
+        "Access Denied: You do not have permission to delete service requests.",
+        "error",
+      );
       return;
     }
     if (
@@ -346,10 +322,8 @@ const EmployeeServiceReq = () => {
     });
   };
 
-
   const priorities = ["All", "High", "Medium", "Low"];
   const statuses = ["All", "Pending", "In Progress", "Completed", "Rejected"];
-
 
   const totalPages = Math.ceil(filteredRequests.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
@@ -357,7 +331,6 @@ const EmployeeServiceReq = () => {
     startIndex,
     startIndex + entriesPerPage,
   );
-
 
   const stats = {
     total: requests.length,
@@ -370,7 +343,6 @@ const EmployeeServiceReq = () => {
 
   return (
     <div className="font-sans">
-
       {snackbar.show && (
         <div
           className={`fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slideIn ${
@@ -404,7 +376,6 @@ const EmployeeServiceReq = () => {
       )}
 
       <div className="w-full">
-
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <button
@@ -430,7 +401,6 @@ const EmployeeServiceReq = () => {
           </div>
         </div>
 
-
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-lg">
             <div className="flex items-center">
@@ -452,11 +422,9 @@ const EmployeeServiceReq = () => {
           </div>
         )}
 
-
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Filters</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-
             <div className="lg:col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Search
@@ -485,7 +453,6 @@ const EmployeeServiceReq = () => {
               </div>
             </div>
 
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Status
@@ -502,7 +469,6 @@ const EmployeeServiceReq = () => {
                 ))}
               </select>
             </div>
-
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -522,7 +488,6 @@ const EmployeeServiceReq = () => {
               </select>
             </div>
 
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Priority
@@ -539,11 +504,7 @@ const EmployeeServiceReq = () => {
                 ))}
               </select>
             </div>
-
-
-
           </div>
-
 
           <div className="flex justify-between items-center mt-4">
             <p className="text-sm text-gray-600">
@@ -579,14 +540,12 @@ const EmployeeServiceReq = () => {
           </div>
         </div>
 
-
         {loading && (
           <div className="text-center py-12 bg-white rounded-xl shadow-sm">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent"></div>
             <p className="mt-4 text-gray-600">Loading requests...</p>
           </div>
         )}
-
 
         {!loading && !error && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -730,7 +689,6 @@ const EmployeeServiceReq = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-
                             <button
                               onClick={() => openViewModal(request)}
                               className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
@@ -757,7 +715,6 @@ const EmployeeServiceReq = () => {
                               </svg>
                             </button>
 
-
                             {has("hrms.message.service_request.fulfill") && (
                               <button
                                 onClick={() => openReplyModal(request)}
@@ -779,7 +736,6 @@ const EmployeeServiceReq = () => {
                                 </svg>
                               </button>
                             )}
-
 
                             {has("hrms.message.service_request.fulfill") && (
                               <button
@@ -803,10 +759,11 @@ const EmployeeServiceReq = () => {
                               </button>
                             )}
 
-
                             <select
                               value={request.status}
-                              disabled={!has("hrms.message.service_request.fulfill")}
+                              disabled={
+                                !has("hrms.message.service_request.fulfill")
+                              }
                               onChange={(e) =>
                                 handleUpdateStatus(request.id, e.target.value)
                               }
@@ -825,7 +782,6 @@ const EmployeeServiceReq = () => {
                 </tbody>
               </table>
             </div>
-
 
             {filteredRequests.length > 0 && (
               <div className="px-6 py-4 border-t border-gray-200 bg-gray-50/50">
@@ -892,7 +848,6 @@ const EmployeeServiceReq = () => {
         )}
       </div>
 
-
       {showReplyModal && selectedRequest && (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
@@ -923,7 +878,6 @@ const EmployeeServiceReq = () => {
             </div>
 
             <div className="p-6 space-y-4">
-
               {selectedRequest.reply_details && (
                 <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
                   <p className="text-sm font-semibold text-blue-800 mb-2 flex items-center gap-2">
@@ -950,7 +904,6 @@ const EmployeeServiceReq = () => {
                   </p>
                 </div>
               )}
-
 
               <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                 <p className="text-sm text-gray-600">
@@ -1017,7 +970,6 @@ const EmployeeServiceReq = () => {
                 </p>
               </div>
 
-
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Your Reply <span className="text-red-500">*</span>
@@ -1030,7 +982,6 @@ const EmployeeServiceReq = () => {
                   placeholder="Type your reply here..."
                 />
               </div>
-
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -1052,7 +1003,6 @@ const EmployeeServiceReq = () => {
                   <option value="Rejected">Rejected</option>
                 </select>
               </div>
-
 
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <button
@@ -1076,7 +1026,6 @@ const EmployeeServiceReq = () => {
           </div>
         </div>
       )}
-
 
       {showViewModal && selectedViewRequest && (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -1107,7 +1056,6 @@ const EmployeeServiceReq = () => {
             </div>
 
             <div className="p-6 space-y-6">
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-5 rounded-xl border border-gray-100">
                 <div>
                   <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">
@@ -1168,7 +1116,6 @@ const EmployeeServiceReq = () => {
                 </div>
               </div>
 
-
               <div>
                 <p className="text-sm font-bold text-gray-800 mb-2">
                   Request Description
@@ -1179,7 +1126,6 @@ const EmployeeServiceReq = () => {
                   </p>
                 </div>
               </div>
-
 
               {selectedViewRequest.reply_details && (
                 <div>
@@ -1230,7 +1176,6 @@ const EmployeeServiceReq = () => {
                   </h4>
 
                   <div className="space-y-4">
-
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Update Status
@@ -1252,7 +1197,6 @@ const EmployeeServiceReq = () => {
                       </select>
                     </div>
 
-
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Your Response <span className="text-red-500">*</span>
@@ -1268,7 +1212,6 @@ const EmployeeServiceReq = () => {
                   </div>
                 </div>
               )}
-
 
               <div className="flex justify-end pt-6 border-t border-gray-200 gap-3">
                 {has("hrms.message.service_request.fulfill") && (
@@ -1301,7 +1244,6 @@ const EmployeeServiceReq = () => {
           </div>
         </div>
       )}
-
 
       <style jsx>{`
         @keyframes slideIn {

@@ -1,407 +1,26 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useMemo } from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
 
 import {
-  Search, Mail, Phone, Download, Send, CheckCircle, XCircle, Clock,
+  Search,
+  Mail,
+  Phone,
+  Download,
+  Send,
+  CheckCircle,
+  XCircle,
+  Clock,
   User,
   Edit,
   Delete,
   DeleteIcon,
   LucideDelete,
-  Trash
-} from 'lucide-react';
-import useAuth from '../../../hooks/useAuth';
-import { useParams } from 'react-router-dom';
-import { usePermission } from '../../../hooks/usePermission';
-
+  Trash,
+} from "lucide-react";
+import useAuth from "../../../hooks/useAuth";
+import { useParams } from "react-router-dom";
+import { usePermission } from "../../../hooks/usePermission";
 
 const StatsCard = ({ icon, title, count, bgColor }) => (
   <div className="bg-white rounded-lg shadow p-6">
@@ -415,27 +34,30 @@ const StatsCard = ({ icon, title, count, bgColor }) => (
   </div>
 );
 
-
 const EditCandidateModal = ({ candidate, onSave, onCancel }) => {
   const { user } = useAuth();
   const { has } = usePermission();
-  const company_id = user.company_id; 
+  const company_id = user.company_id;
   const [editingCandidate, setEditingCandidate] = useState(candidate);
 
-  const handleChange = (key, value) => setEditingCandidate(prev => ({ ...prev, [key]: value }));
+  const handleChange = (key, value) =>
+    setEditingCandidate((prev) => ({ ...prev, [key]: value }));
 
-  const handleSave = async () => {   
+  const handleSave = async () => {
     if (!has("hrms.job.shortlisted.action")) {
-      Swal.fire("Access Denied", "You do not have permission to perform candidate actions.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to perform candidate actions.",
+        "error",
+      );
       return;
     }
     try {
-
       const response = await axios.put(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/interview/${editingCandidate.id}/${company_id}`,
         {
-          status: editingCandidate.status
-        }
+          status: editingCandidate.status,
+        },
       );
 
       if (response.status === 200) {
@@ -445,10 +67,9 @@ const EditCandidateModal = ({ candidate, onSave, onCancel }) => {
           text: "Candidate status updated successfully!",
         });
 
-
         onSave({
           ...editingCandidate,
-          status: editingCandidate.status
+          status: editingCandidate.status,
         });
       } else {
         alert("Failed to update candidate.");
@@ -465,43 +86,53 @@ const EditCandidateModal = ({ candidate, onSave, onCancel }) => {
         <h2 className="text-2xl font-bold mb-6">Edit Candidate</h2>
         <div className="space-y-4 p-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Name
+            </label>
             <input
               type="text"
               value={editingCandidate.name}
-              onChange={e => handleChange('name', e.target.value)}
+              onChange={(e) => handleChange("name", e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Position</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Position
+            </label>
             <input
               type="text"
               value={editingCandidate.position}
-              onChange={e => handleChange('position', e.target.value)}
+              onChange={(e) => handleChange("position", e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               value={editingCandidate.email}
-              onChange={e => handleChange('email', e.target.value)}
+              onChange={(e) => handleChange("email", e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Phone</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Phone
+            </label>
             <input
               type="tel"
               value={editingCandidate.phone}
-              onChange={e => handleChange('phone', e.target.value)}
+              onChange={(e) => handleChange("phone", e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Status</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Status
+            </label>
             <select
               value={editingCandidate.status || ""}
               onChange={(e) => handleChange("status", e.target.value)}
@@ -515,10 +146,16 @@ const EditCandidateModal = ({ candidate, onSave, onCancel }) => {
           </div>
 
           <div className="flex space-x-4 mt-4">
-            <button onClick={handleSave} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+            <button
+              onClick={handleSave}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            >
               Save Changes
             </button>
-            <button onClick={onCancel} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400">
+            <button
+              onClick={onCancel}
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
+            >
               Cancel
             </button>
           </div>
@@ -528,17 +165,27 @@ const EditCandidateModal = ({ candidate, onSave, onCancel }) => {
   );
 };
 
-
 const DeleteModal = ({ candidate, onConfirm, onCancel }) => (
   <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
     <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
       <h3 className="text-lg font-bold text-gray-900 mb-2">Confirm Deletion</h3>
       <p className="text-gray-600 mb-4">
-        Are you sure you want to remove {candidate.name} from shortlisted candidates?
+        Are you sure you want to remove {candidate.name} from shortlisted
+        candidates?
       </p>
       <div className="flex justify-end space-x-3">
-        <button onClick={onCancel} className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Cancel</button>
-        <button onClick={onConfirm} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">Delete</button>
+        <button
+          onClick={onCancel}
+          className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={onConfirm}
+          className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+        >
+          Delete
+        </button>
       </div>
     </div>
   </div>
@@ -550,10 +197,16 @@ const ShortlistedCandidates = () => {
   const id = user.company_id;
   const [candidates, setCandidates] = useState([]);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [postFilter, setPostFilter] = useState('All');
-  const [filters, setFilters] = useState({ position: '', status: '', experience: '', location: '', acceptance: '' });
-  const [sortBy, setSortBy] = useState('date');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [postFilter, setPostFilter] = useState("All");
+  const [filters, setFilters] = useState({
+    position: "",
+    status: "",
+    experience: "",
+    location: "",
+    acceptance: "",
+  });
+  const [sortBy, setSortBy] = useState("date");
   const [editingCandidate, setEditingCandidate] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [candidateToDelete, setCandidateToDelete] = useState(null);
@@ -561,67 +214,88 @@ const ShortlistedCandidates = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const candidatesPerPage = 5;
 
-
   const uniquePositions = useMemo(() => {
-    if (!Array.isArray(candidates)) return ['All'];
-    const positions = candidates.map(c => c.position).filter(Boolean);
-    return ['All', ...new Set(positions)];
+    if (!Array.isArray(candidates)) return ["All"];
+    const positions = candidates.map((c) => c.position).filter(Boolean);
+    return ["All", ...new Set(positions)];
   }, [candidates]);
-
 
   useEffect(() => {
     const fetchCandidates = async () => {
       if (!id) return;
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getShortlistedApplicant/${id}`);
-        const applicants = (data.applicants || []).map(a => ({
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getShortlistedApplicant/${id}`,
+        );
+        const applicants = (data.applicants || []).map((a) => ({
           id: a.id,
-          name: a.candidate_name || '',
-          position: a.position_applied || a.job_title || '',
-          email: a.email || '',
-          phone: a.phone || '',
-          experience: a.Experience || '',
-          location: a.department || a.company || '',
-          status: a.status || 'Pending',
-          acceptance: a.acceptance || 'pending',
-          job_id: a.job_id ?? a.job_posting_id ?? a.jobposting_id ?? (a.job_posting && a.job_posting.id) ?? (a.job && a.job.id),
+          name: a.candidate_name || "",
+          position: a.position_applied || a.job_title || "",
+          email: a.email || "",
+          phone: a.phone || "",
+          experience: a.Experience || "",
+          location: a.department || a.company || "",
+          status: a.status || "Pending",
+          acceptance: a.acceptance || "pending",
+          job_id:
+            a.job_id ??
+            a.job_posting_id ??
+            a.jobposting_id ??
+            (a.job_posting && a.job_posting.id) ??
+            (a.job && a.job.id),
           raw: a,
           skills: a.skills ? JSON.parse(a.skills) : [],
           resume_url: a.resume_url || null,
-          notes: a.notes || ''
+          notes: a.notes || "",
         }));
 
         setCandidates(applicants);
         setFilteredCandidates(applicants);
       } catch (error) {
-        console.error('Error fetching candidates:', error);
+        console.error("Error fetching candidates:", error);
       }
     };
     fetchCandidates();
   }, [id]);
 
-
   useEffect(() => {
-    let result = candidates.filter(candidate => {
-      const matchesSearch = candidate.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            candidate.position?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesPosition = !filters.position || candidate.position === filters.position;
-      const matchesStatus = !filters.status || candidate.status === filters.status;
-      const matchesExperience = !filters.experience || candidate.experience === filters.experience;
-      const matchesLocation = !filters.location || candidate.location?.includes(filters.location);
-      const matchesAcceptance = !filters.acceptance || candidate.acceptance === filters.acceptance;
-      
+    let result = candidates.filter((candidate) => {
+      const matchesSearch =
+        candidate.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        candidate.position?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesPosition =
+        !filters.position || candidate.position === filters.position;
+      const matchesStatus =
+        !filters.status || candidate.status === filters.status;
+      const matchesExperience =
+        !filters.experience || candidate.experience === filters.experience;
+      const matchesLocation =
+        !filters.location || candidate.location?.includes(filters.location);
+      const matchesAcceptance =
+        !filters.acceptance || candidate.acceptance === filters.acceptance;
 
-      const matchesPost = postFilter === 'All' || candidate.position === postFilter;
+      const matchesPost =
+        postFilter === "All" || candidate.position === postFilter;
 
-      return matchesSearch && matchesPosition && matchesStatus && matchesExperience && matchesLocation && matchesAcceptance && matchesPost;
+      return (
+        matchesSearch &&
+        matchesPosition &&
+        matchesStatus &&
+        matchesExperience &&
+        matchesLocation &&
+        matchesAcceptance &&
+        matchesPost
+      );
     });
 
     result.sort((a, b) => {
       switch (sortBy) {
-        case 'name': return a.name.localeCompare(b.name);
-        case 'experience': return parseInt(b.experience || 0) - parseInt(a.experience || 0);
-        default: return 0;
+        case "name":
+          return a.name.localeCompare(b.name);
+        case "experience":
+          return parseInt(b.experience || 0) - parseInt(a.experience || 0);
+        default:
+          return 0;
       }
     });
 
@@ -629,30 +303,42 @@ const ShortlistedCandidates = () => {
     setCurrentPage(1);
   }, [candidates, searchTerm, postFilter, filters, sortBy]);
 
-
   const indexOfLastCandidate = currentPage * candidatesPerPage;
   const indexOfFirstCandidate = indexOfLastCandidate - candidatesPerPage;
-  const currentCandidates = filteredCandidates.slice(indexOfFirstCandidate, indexOfLastCandidate);
+  const currentCandidates = filteredCandidates.slice(
+    indexOfFirstCandidate,
+    indexOfLastCandidate,
+  );
   const totalPages = Math.ceil(filteredCandidates.length / candidatesPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const editCandidate = (candidate) => {
     if (!has("hrms.job.shortlisted.action")) {
-      Swal.fire("Access Denied", "You do not have permission to perform candidate actions.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to perform candidate actions.",
+        "error",
+      );
       return;
     }
     setEditingCandidate(candidate);
   };
 
   const saveCandidate = (updated) => {
-    setCandidates(prev => prev.map(c => (c.id === updated.id ? updated : c)));
+    setCandidates((prev) =>
+      prev.map((c) => (c.id === updated.id ? updated : c)),
+    );
     setEditingCandidate(null);
   };
 
   const deleteCandidate = (candidate) => {
     if (!has("hrms.job.shortlisted.action")) {
-      Swal.fire("Access Denied", "You do not have permission to perform candidate actions.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to perform candidate actions.",
+        "error",
+      );
       return;
     }
     setCandidateToDelete(candidate);
@@ -661,12 +347,20 @@ const ShortlistedCandidates = () => {
 
   const confirmDelete = async () => {
     if (!has("hrms.job.shortlisted.action")) {
-      Swal.fire("Access Denied", "You do not have permission to perform candidate actions.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to perform candidate actions.",
+        "error",
+      );
       return;
     }
     try {
-      await axios.delete(`${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/deleteShortlistedApplicant/${candidateToDelete.id}`);
-      setCandidates(prev => prev.filter(c => c.id !== candidateToDelete.id));
+      await axios.delete(
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/deleteShortlistedApplicant/${candidateToDelete.id}`,
+      );
+      setCandidates((prev) =>
+        prev.filter((c) => c.id !== candidateToDelete.id),
+      );
       Swal.fire({
         icon: "success",
         title: "Deleted!",
@@ -693,7 +387,6 @@ const ShortlistedCandidates = () => {
   return (
     <div className="bg-gray-50">
       <div className="max-w-7xl mx-auto">
-
         <div className="flex flex-wrap items-center gap-4 mb-4">
           <input
             type="text"
@@ -702,23 +395,21 @@ const ShortlistedCandidates = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-1 min-w-50 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
-          
 
           <select
             value={postFilter}
             onChange={(e) => setPostFilter(e.target.value)}
             className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500"
           >
-            {uniquePositions.map(pos => (
+            {uniquePositions.map((pos) => (
               <option key={pos} value={pos}>
-                {pos === 'All' ? 'All Posts' : pos}
+                {pos === "All" ? "All Posts" : pos}
               </option>
             ))}
           </select>
 
           <button
             onClick={() => {
-
               setSearchTerm(searchTerm);
             }}
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
@@ -726,7 +417,6 @@ const ShortlistedCandidates = () => {
             Search
           </button>
         </div>
-
 
         <div className="bg-white rounded-lg shadow overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -742,7 +432,7 @@ const ShortlistedCandidates = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {currentCandidates.map(candidate => (
+              {currentCandidates.map((candidate) => (
                 <tr key={candidate.id}>
                   <td className="px-4 py-2">{candidate.name}</td>
                   <td className="px-4 py-2">{candidate.position}</td>
@@ -765,10 +455,20 @@ const ShortlistedCandidates = () => {
                   </td>
                   <td className="px-4 py-2 flex space-x-2">
                     {has("hrms.job.shortlisted.action") && (
-                      <button onClick={() => editCandidate(candidate)} className="text-yellow-600 hover:underline"><Edit /></button>
+                      <button
+                        onClick={() => editCandidate(candidate)}
+                        className="text-yellow-600 hover:underline"
+                      >
+                        <Edit />
+                      </button>
                     )}
                     {has("hrms.job.shortlisted.action") && (
-                      <button onClick={() => deleteCandidate(candidate)} className="text-red-600 hover:underline"><Trash /></button>
+                      <button
+                        onClick={() => deleteCandidate(candidate)}
+                        className="text-red-600 hover:underline"
+                      >
+                        <Trash />
+                      </button>
                     )}
                   </td>
                 </tr>
@@ -776,19 +476,22 @@ const ShortlistedCandidates = () => {
             </tbody>
           </table>
           {filteredCandidates.length === 0 && (
-            <p className="text-center p-4 text-gray-500">No candidates found.</p>
+            <p className="text-center p-4 text-gray-500">
+              No candidates found.
+            </p>
           )}
         </div>
 
-
         {totalPages > 1 && (
           <div className="flex justify-center mt-4 space-x-2">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
                 onClick={() => paginate(page)}
                 className={`px-3 py-1 rounded-md border ${
-                  currentPage === page ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'
+                  currentPage === page
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-gray-700"
                 }`}
               >
                 {page}

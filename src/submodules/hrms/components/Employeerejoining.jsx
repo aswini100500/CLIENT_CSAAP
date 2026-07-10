@@ -7,7 +7,6 @@ export default function EmployeeRejoining() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="bg-white shadow-md rounded-md overflow-hidden border">
-
         <div className="bg-blue-600 text-white px-4 py-2 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <List className="w-4 h-4" />
@@ -16,14 +15,12 @@ export default function EmployeeRejoining() {
             </h2>
           </div>
 
-
           <input
             type="text"
             placeholder="Search"
             className="px-3 py-1 rounded border text-white text-sm outline-none"
           />
         </div>
-
 
         <div className="overflow-x-auto">
           {employees.length === 0 ? (
@@ -60,11 +57,9 @@ export default function EmployeeRejoining() {
           )}
         </div>
 
-
         <div className="bg-blue-600 text-white text-center font-medium py-2">
           Transfer To
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 bg-white">
           <div>
@@ -103,7 +98,6 @@ export default function EmployeeRejoining() {
             </select>
           </div>
         </div>
-
 
         <div className="flex justify-center gap-3 py-4 bg-white border-t">
           <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded text-sm">

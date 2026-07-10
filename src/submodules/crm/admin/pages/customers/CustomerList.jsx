@@ -47,22 +47,17 @@ export default function CustomerList() {
   const { user, companyId, token } = useAuth();
   const queryClient = useQueryClient();
 
-
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSource, setSelectedSource] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
-
   const [activeTab, setActiveTab] = useState("active");
-
 
   const [showCreateWizard, setShowCreateWizard] = useState(false);
 
-
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [viewingCustomer, setViewingCustomer] = useState(null);
-
 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancellingCustomer, setCancellingCustomer] = useState(null);
@@ -90,16 +85,21 @@ export default function CustomerList() {
 
     try {
       setSubmittingCancel(true);
-      const res = await accountingApi.post("/api/v1/bookings/cancellations/request", {
-        company_id: companyId,
-        company_slug: user?.company_slug || user?.slug || "default-slug",
-        customer_id: cancellingCustomer.id,
-        ledger_id: planId,
-        reason: cancelReason
-      });
+      const res = await accountingApi.post(
+        "/api/v1/bookings/cancellations/request",
+        {
+          company_id: companyId,
+          company_slug: user?.company_slug || user?.slug || "default-slug",
+          customer_id: cancellingCustomer.id,
+          ledger_id: planId,
+          reason: cancelReason,
+        },
+      );
 
       if (res.data && res.data.success) {
-        alert("Booking cancellation request successfully submitted to Accounting.");
+        alert(
+          "Booking cancellation request successfully submitted to Accounting.",
+        );
         setShowCancelModal(false);
         setCancellingCustomer(null);
         queryClient.invalidateQueries(["customers"]);
@@ -108,19 +108,19 @@ export default function CustomerList() {
       }
     } catch (err) {
       console.error("Error submitting cancellation request:", err);
-      alert(err.response?.data?.message || "Failed to submit cancellation request.");
+      alert(
+        err.response?.data?.message || "Failed to submit cancellation request.",
+      );
     } finally {
       setSubmittingCancel(false);
     }
   };
-
 
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setVisible(true);
   }, []);
-
 
   const {
     data: customers = [],
@@ -137,23 +137,27 @@ export default function CustomerList() {
     enabled: !!companyId,
   });
 
-
   const { data: projectOptions = [] } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
-      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`, {
-        params: { company_id: companyId },
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
+        {
+          params: { company_id: companyId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const projects = response.data?.data || [];
       return projects.map((p) => ({
         project_id: p.id,
         composite_key: p.id,
         name: p.project_name,
         display_type: p.project_code || p.status || "",
-        location: p.client_company_name ? `Client: ${p.client_company_name}` : "",
+        location: p.client_company_name
+          ? `Client: ${p.client_company_name}`
+          : "",
       }));
     },
     enabled: !!token && !!companyId,
@@ -169,15 +173,26 @@ export default function CustomerList() {
     return map;
   }, [projectOptions]);
 
-
-  const activeCount = useMemo(() => customers.filter(c => c.status !== "pending" && c.status !== "cancelled").length, [customers]);
-  const pendingCount = useMemo(() => customers.filter(c => c.status === "pending").length, [customers]);
-  const cancelledCount = useMemo(() => customers.filter(c => c.status === "cancelled").length, [customers]);
-
+  const activeCount = useMemo(
+    () =>
+      customers.filter(
+        (c) => c.status !== "pending" && c.status !== "cancelled",
+      ).length,
+    [customers],
+  );
+  const pendingCount = useMemo(
+    () => customers.filter((c) => c.status === "pending").length,
+    [customers],
+  );
+  const cancelledCount = useMemo(
+    () => customers.filter((c) => c.status === "cancelled").length,
+    [customers],
+  );
 
   const metrics = useMemo(() => {
-    const tabCustomers = customers.filter(c => {
-      if (activeTab === "active") return c.status !== "pending" && c.status !== "cancelled";
+    const tabCustomers = customers.filter((c) => {
+      if (activeTab === "active")
+        return c.status !== "pending" && c.status !== "cancelled";
       if (activeTab === "pending") return c.status === "pending";
       if (activeTab === "cancelled") return c.status === "cancelled";
       return false;
@@ -185,11 +200,11 @@ export default function CustomerList() {
     const total = tabCustomers.length;
     const totalDealValue = tabCustomers.reduce(
       (sum, c) => sum + (Number(c.total_deal_value) || 0),
-      0
+      0,
     );
     const totalCollected = tabCustomers.reduce(
       (sum, c) => sum + (Number(c.total_paid) || 0),
-      0
+      0,
     );
     const collectionRate =
       totalDealValue > 0
@@ -198,7 +213,6 @@ export default function CustomerList() {
     return { total, totalDealValue, totalCollected, collectionRate };
   }, [customers, activeTab]);
 
-
   const uniqueSources = useMemo(() => {
     const sources = [
       ...new Set(customers.map((c) => c.source).filter(Boolean)),
@@ -206,11 +220,13 @@ export default function CustomerList() {
     return sources.map((s) => ({ value: s, label: formatSource(s) || s }));
   }, [customers]);
 
-
   const filteredCustomers = useMemo(() => {
     return customers.filter((c) => {
-
-      if (activeTab === "active" && (c.status === "pending" || c.status === "cancelled")) return false;
+      if (
+        activeTab === "active" &&
+        (c.status === "pending" || c.status === "cancelled")
+      )
+        return false;
       if (activeTab === "pending" && c.status !== "pending") return false;
       if (activeTab === "cancelled" && c.status !== "cancelled") return false;
 
@@ -230,7 +246,6 @@ export default function CustomerList() {
       return true;
     });
   }, [customers, activeTab, searchTerm, selectedSource, selectedStatus]);
-
 
   const handleExportCSV = () => {
     if (filteredCustomers.length === 0) {
@@ -267,7 +282,7 @@ export default function CustomerList() {
     link.setAttribute("href", encodedUri);
     link.setAttribute(
       "download",
-      `customers_${new Date().toISOString().split("T")[0]}.csv`
+      `customers_${new Date().toISOString().split("T")[0]}.csv`,
     );
     document.body.appendChild(link);
     link.click();
@@ -278,17 +293,14 @@ export default function CustomerList() {
     <div className="crm-module-root size-full min-h-screen">
       <div
         className={`app-shell p-4 space-y-6 transition-all duration-300 ease-out ${
-          visible
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-2"
+          visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
         }`}
       >
-
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="app-title">Customers</h1>
             <p className="app-subtitle mt-1">
-              {activeTab === "active" 
+              {activeTab === "active"
                 ? "Clients who have made their first payment. Auto-created from accepted leads."
                 : activeTab === "pending"
                   ? "Directly created customers. Active page shows them after first payment."
@@ -307,7 +319,7 @@ export default function CustomerList() {
                 <span>Create Customer</span>
               </button>
             )}
-            
+
             {canExport && (
               <button
                 onClick={handleExportCSV}
@@ -321,10 +333,8 @@ export default function CustomerList() {
           </div>
         </div>
 
-
         <div className="sticky top-0 z-20 -mx-4 px-4 py-3 border-b border-(--border-soft) flex justify-between items-center bg-slate-50/50 backdrop-blur-md">
           <div className="flex items-center gap-2 overflow-x-auto">
-
             <button
               onClick={() => setActiveTab("active")}
               className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-bold tracking-[-0.02em] whitespace-nowrap transition-all cursor-pointer ${
@@ -335,19 +345,23 @@ export default function CustomerList() {
               style={
                 activeTab === "active"
                   ? {
-                      background: "linear-gradient(135deg, var(--brand), #00c853)",
+                      background:
+                        "linear-gradient(135deg, var(--brand), #00c853)",
                     }
                   : undefined
               }
             >
               <span>Active Customers</span>
-              <span className={`min-w-6 h-6 px-1.5 inline-flex items-center justify-center rounded-lg text-[11px] font-bold ${
-                activeTab === "active" ? "bg-white/16 text-white" : "bg-(--bg-subtle) text-(--text-soft)"
-              }`}>
+              <span
+                className={`min-w-6 h-6 px-1.5 inline-flex items-center justify-center rounded-lg text-[11px] font-bold ${
+                  activeTab === "active"
+                    ? "bg-white/16 text-white"
+                    : "bg-(--bg-subtle) text-(--text-soft)"
+                }`}
+              >
                 {activeCount}
               </span>
             </button>
-
 
             <button
               onClick={() => setActiveTab("pending")}
@@ -359,19 +373,23 @@ export default function CustomerList() {
               style={
                 activeTab === "pending"
                   ? {
-                      background: "linear-gradient(135deg, var(--brand), #00c853)",
+                      background:
+                        "linear-gradient(135deg, var(--brand), #00c853)",
                     }
                   : undefined
               }
             >
               <span>Pending Activation</span>
-              <span className={`min-w-6 h-6 px-1.5 inline-flex items-center justify-center rounded-lg text-[11px] font-bold ${
-                activeTab === "pending" ? "bg-white/16 text-white" : "bg-(--bg-subtle) text-(--text-soft)"
-              }`}>
+              <span
+                className={`min-w-6 h-6 px-1.5 inline-flex items-center justify-center rounded-lg text-[11px] font-bold ${
+                  activeTab === "pending"
+                    ? "bg-white/16 text-white"
+                    : "bg-(--bg-subtle) text-(--text-soft)"
+                }`}
+              >
                 {pendingCount}
               </span>
             </button>
-
 
             <button
               onClick={() => setActiveTab("cancelled")}
@@ -383,34 +401,46 @@ export default function CustomerList() {
               style={
                 activeTab === "cancelled"
                   ? {
-                      background: "linear-gradient(135deg, var(--brand), #00c853)",
+                      background:
+                        "linear-gradient(135deg, var(--brand), #00c853)",
                     }
                   : undefined
               }
             >
               <span>Cancelled Bookings</span>
-              <span className={`min-w-6 h-6 px-1.5 inline-flex items-center justify-center rounded-lg text-[11px] font-bold ${
-                activeTab === "cancelled" ? "bg-white/16 text-white" : "bg-(--bg-subtle) text-(--text-soft)"
-              }`}>
+              <span
+                className={`min-w-6 h-6 px-1.5 inline-flex items-center justify-center rounded-lg text-[11px] font-bold ${
+                  activeTab === "cancelled"
+                    ? "bg-white/16 text-white"
+                    : "bg-(--bg-subtle) text-(--text-soft)"
+                }`}
+              >
                 {cancelledCount}
               </span>
             </button>
           </div>
         </div>
 
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="app-panel p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[12px] font-bold text-(--text-soft)">
-                  {activeTab === "active" ? "Active Bookings" : activeTab === "pending" ? "Pending Activation" : "Cancelled Bookings"}
+                  {activeTab === "active"
+                    ? "Active Bookings"
+                    : activeTab === "pending"
+                      ? "Pending Activation"
+                      : "Cancelled Bookings"}
                 </p>
                 <div className="mt-2 text-[28px] font-extrabold leading-none text-(--text-strong)">
                   {metrics.total}
                 </div>
                 <p className="mt-2 text-[12px] font-medium text-(--text-faint)">
-                  {activeTab === "active" ? "Active paying clients" : activeTab === "pending" ? "Awaiting first payment" : "Cancelled clients"}
+                  {activeTab === "active"
+                    ? "Active paying clients"
+                    : activeTab === "pending"
+                      ? "Awaiting first payment"
+                      : "Cancelled clients"}
                 </p>
               </div>
               <div className="size-10 rounded-2xl bg-(--brand-soft) border border-(--border-soft) flex items-center justify-center shrink-0">
@@ -427,13 +457,17 @@ export default function CustomerList() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[12px] font-bold text-(--text-soft)">
-                  {activeTab === "active" ? "Total Deal Value" : "Pending Deal Value"}
+                  {activeTab === "active"
+                    ? "Total Deal Value"
+                    : "Pending Deal Value"}
                 </p>
                 <div className="mt-2 text-[28px] font-extrabold leading-none text-(--text-strong)">
                   {formatINR(metrics.totalDealValue)}
                 </div>
                 <p className="mt-2 text-[12px] font-medium text-(--text-faint)">
-                  {activeTab === "active" ? "Aggregate booked value" : "Unrealized booked value"}
+                  {activeTab === "active"
+                    ? "Aggregate booked value"
+                    : "Unrealized booked value"}
                 </p>
               </div>
               <div className="size-10 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center shrink-0">
@@ -446,13 +480,19 @@ export default function CustomerList() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[12px] font-bold text-(--text-soft)">
-                  {activeTab === "active" ? "Total Collected" : "Collected (Awaiting)"}
+                  {activeTab === "active"
+                    ? "Total Collected"
+                    : "Collected (Awaiting)"}
                 </p>
                 <div className="mt-2 text-[28px] font-extrabold leading-none text-(--text-strong)">
-                  {activeTab === "active" ? formatINR(metrics.totalCollected) : "₹0"}
+                  {activeTab === "active"
+                    ? formatINR(metrics.totalCollected)
+                    : "₹0"}
                 </div>
                 <p className="mt-2 text-[12px] font-medium text-(--text-faint)">
-                  {activeTab === "active" ? "Payments received" : "No payments logged"}
+                  {activeTab === "active"
+                    ? "Payments received"
+                    : "No payments logged"}
                 </p>
               </div>
               <div className="size-10 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0">
@@ -465,13 +505,17 @@ export default function CustomerList() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[12px] font-bold text-(--text-soft)">
-                  {activeTab === "active" ? "Collection Rate" : "Activation Progress"}
+                  {activeTab === "active"
+                    ? "Collection Rate"
+                    : "Activation Progress"}
                 </p>
                 <div className="mt-2 text-[28px] font-extrabold leading-none text-(--text-strong)">
                   {activeTab === "active" ? `${metrics.collectionRate}%` : "0%"}
                 </div>
                 <p className="mt-2 text-[12px] font-medium text-(--text-faint)">
-                  {activeTab === "active" ? "Paid vs deal value" : "Pending first deposit"}
+                  {activeTab === "active"
+                    ? "Paid vs deal value"
+                    : "Pending first deposit"}
                 </p>
               </div>
               <div className="size-10 rounded-2xl bg-violet-50 border border-violet-100 flex items-center justify-center shrink-0">
@@ -481,16 +525,13 @@ export default function CustomerList() {
           </div>
         </div>
 
-
         <div className="app-panel overflow-hidden shadow-sm">
           <div className="app-section-bar px-4 py-3 flex flex-wrap items-center justify-between gap-4">
             <h3 className="app-heading">
               Customers ({filteredCustomers.length})
             </h3>
 
-
             <div className="flex items-center gap-2">
-
               <div className="relative">
                 <input
                   type="text"
@@ -510,7 +551,6 @@ export default function CustomerList() {
                 )}
               </div>
 
-
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`app-icon-button p-2 border ${
@@ -524,7 +564,6 @@ export default function CustomerList() {
               </button>
             </div>
           </div>
-
 
           {showFilters && (
             <div className="bg-white/50 p-4 border-b border-(--border-soft) grid grid-cols-1 sm:grid-cols-3 gap-4 animate-sub-menu">
@@ -575,7 +614,6 @@ export default function CustomerList() {
             </div>
           )}
 
-
           {isLoading ? (
             <div className="p-12 text-center text-slate-500">
               <div className="animate-spin rounded-full size-8 border-b-2 border-emerald-600 mx-auto mb-3" />
@@ -596,7 +634,8 @@ export default function CustomerList() {
                     No active customers yet
                   </p>
                   <p className="text-[12px] mt-1 text-(--text-soft) max-w-sm mx-auto">
-                    Customers are automatically created when the first payment is recorded against an accepted lead's payment slab.
+                    Customers are automatically created when the first payment
+                    is recorded against an accepted lead's payment slab.
                   </p>
                 </>
               ) : activeTab === "pending" ? (
@@ -606,7 +645,8 @@ export default function CustomerList() {
                     No pending activation customers
                   </p>
                   <p className="text-[12px] mt-1 text-(--text-soft) max-w-sm mx-auto">
-                    Directly created customers will stay here until their first payment is recorded to move them to the active list.
+                    Directly created customers will stay here until their first
+                    payment is recorded to move them to the active list.
                   </p>
                 </>
               ) : (
@@ -616,11 +656,12 @@ export default function CustomerList() {
                     No cancelled bookings
                   </p>
                   <p className="text-[12px] mt-1 text-(--text-soft) max-w-sm mx-auto">
-                    This view displays clients whose bookings have been cancelled and settled.
+                    This view displays clients whose bookings have been
+                    cancelled and settled.
                   </p>
                 </>
               )}
-              {(searchTerm || selectedSource || selectedStatus) ? (
+              {searchTerm || selectedSource || selectedStatus ? (
                 <button
                   onClick={() => {
                     setSearchTerm("");
@@ -632,7 +673,8 @@ export default function CustomerList() {
                   Clear Filters
                 </button>
               ) : (
-                canCreate && activeTab === "pending" && (
+                canCreate &&
+                activeTab === "pending" && (
                   <button
                     onClick={() => setShowCreateWizard(true)}
                     className="app-btn-primary mt-4 text-xs py-1.5 min-h-8.5 hover:scale-98 cursor-pointer flex items-center gap-1.5 mx-auto"
@@ -682,10 +724,7 @@ export default function CustomerList() {
                     const paidVal = Number(customer.total_paid) || 0;
                     const progressPct =
                       dealVal > 0
-                        ? Math.min(
-                            Math.round((paidVal / dealVal) * 100),
-                            100
-                          )
+                        ? Math.min(Math.round((paidVal / dealVal) * 100), 100)
                         : 0;
 
                     return (
@@ -697,7 +736,6 @@ export default function CustomerList() {
                           setShowDetailsModal(true);
                         }}
                       >
-
                         <td className="px-4 py-3.5">
                           <div className="flex items-center gap-3">
                             <div className="size-8 rounded-xl bg-(--brand-soft) border border-(--border-soft) flex items-center justify-center shrink-0">
@@ -724,7 +762,6 @@ export default function CustomerList() {
                           </div>
                         </td>
 
-
                         <td className="px-4 py-3.5">
                           {customer.project_id ? (
                             <span className="text-[13px] font-semibold text-(--text-body)">
@@ -738,7 +775,6 @@ export default function CustomerList() {
                           )}
                         </td>
 
-
                         <td className="px-4 py-3.5">
                           {customer.source ? (
                             <span className="inline-block text-[11px] font-bold text-(--text-soft) bg-(--bg-subtle) px-2 py-0.5 rounded-md border border-(--border-soft)">
@@ -749,20 +785,17 @@ export default function CustomerList() {
                           )}
                         </td>
 
-
                         <td className="px-4 py-3.5 text-right">
                           <span className="text-[13px] font-semibold text-(--text-body)">
                             {formatINR(dealVal)}
                           </span>
                         </td>
 
-
                         <td className="px-4 py-3.5 text-right">
                           <span className="text-[13px] font-bold text-emerald-700">
                             {formatINR(paidVal)}
                           </span>
                         </td>
-
 
                         <td className="px-4 py-3.5 text-center">
                           <div className="flex items-center justify-center gap-2">
@@ -786,7 +819,6 @@ export default function CustomerList() {
                           </div>
                         </td>
 
-
                         <td className="px-4 py-3.5 text-center">
                           <span
                             className={`inline-block text-[11px] font-bold px-2 py-0.5 rounded border capitalize ${
@@ -800,7 +832,6 @@ export default function CustomerList() {
                             {customer.status}
                           </span>
                         </td>
-
 
                         <td
                           className="px-4 py-3.5 text-right"
@@ -822,9 +853,7 @@ export default function CustomerList() {
                             {canViewProfile && (
                               <button
                                 onClick={() =>
-                                  navigate(
-                                    `/crm/customers/${customer.id}`
-                                  )
+                                  navigate(`/crm/customers/${customer.id}`)
                                 }
                                 className="app-icon-button p-2 text-(--text-soft) hover:text-blue-700 hover:bg-blue-50"
                                 title="View Profile"
@@ -836,7 +865,7 @@ export default function CustomerList() {
                               <button
                                 onClick={() =>
                                   navigate(
-                                    `/crm/customers/${customer.id}/ledger`
+                                    `/crm/customers/${customer.id}/ledger`,
                                   )
                                 }
                                 className="app-icon-button p-2 text-(--text-soft) hover:text-violet-700 hover:bg-violet-50"
@@ -845,16 +874,18 @@ export default function CustomerList() {
                                 <CreditCard className="size-4" />
                               </button>
                             )}
-                            {customer.status !== "cancelled" && customer.payment_status !== "pending_cancellation" && customer.payment_status !== "cancelled" && (
-                              <button
-                                onClick={() => handleRequestCancel(customer)}
-                                className="app-icon-button p-2 text-(--text-soft) hover:text-rose-600 hover:bg-rose-50"
-                                title="Request Booking Cancellation"
-                              >
-                                <AlertTriangle className="size-4" />
-                              </button>
-                            )}
-
+                            {customer.status !== "cancelled" &&
+                              customer.payment_status !==
+                                "pending_cancellation" &&
+                              customer.payment_status !== "cancelled" && (
+                                <button
+                                  onClick={() => handleRequestCancel(customer)}
+                                  className="app-icon-button p-2 text-(--text-soft) hover:text-rose-600 hover:bg-rose-50"
+                                  title="Request Booking Cancellation"
+                                >
+                                  <AlertTriangle className="size-4" />
+                                </button>
+                              )}
                           </div>
                         </td>
                       </tr>
@@ -866,123 +897,141 @@ export default function CustomerList() {
           )}
         </div>
 
-
         {showDetailsModal && viewingCustomer && (
           <CustomerDetailsModal
             customer={viewingCustomer}
-            projectName={projectOptionsMap.get(viewingCustomer.project_id) || viewingCustomer.project_id || "—"}
+            projectName={
+              projectOptionsMap.get(viewingCustomer.project_id) ||
+              viewingCustomer.project_id ||
+              "—"
+            }
             onClose={() => {
               setShowDetailsModal(false);
               setViewingCustomer(null);
             }}
-            onViewProfile={canViewProfile ? () =>
-              navigate(`/crm/customers/${viewingCustomer.id}`) : undefined
+            onViewProfile={
+              canViewProfile
+                ? () => navigate(`/crm/customers/${viewingCustomer.id}`)
+                : undefined
             }
-            onViewLedger={canViewLedger ? () =>
-              navigate(`/crm/customers/${viewingCustomer.id}/ledger`) : undefined
+            onViewLedger={
+              canViewLedger
+                ? () => navigate(`/crm/customers/${viewingCustomer.id}/ledger`)
+                : undefined
             }
           />
         )}
 
-
-        {showCancelModal && cancellingCustomer && createPortal(
-          <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-md">
-            <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
-              
-
-              <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
-                <div className="flex items-start gap-3 min-w-0">
-                  <div className="size-11 rounded-2xl flex items-center justify-center bg-rose-50 border border-rose-100 shrink-0">
-                    <AlertTriangle className="size-5 text-red-600 animate-pulse" />
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="modal-title">Request Booking Cancellation</h3>
-                    <p className="modal-subtitle mt-0.5">
-                      Submit request to Accounting for approval
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  type="button"
-                  onClick={() => {
-                    setShowCancelModal(false);
-                    setCancellingCustomer(null);
-                  }}
-                  className="app-icon-button p-1.5 text-(--text-soft) hover:text-(--text-strong) hover:bg-(--bg-subtle) active:scale-95 transition-all cursor-pointer"
-                  aria-label="Close"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <form onSubmit={submitCancellation} className="flex flex-col min-h-0 overflow-hidden">
-
-                <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-[#f8faf8]/40">
-                  <div className="app-panel-muted p-4 space-y-2.5 text-xs text-(--text-body)">
-                    <div className="flex justify-between">
-                      <span className="font-semibold text-(--text-soft)">Customer:</span>
-                      <span className="font-bold text-(--text-strong)">{cancellingCustomer.name}</span>
+        {showCancelModal &&
+          cancellingCustomer &&
+          createPortal(
+            <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-md">
+              <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+                <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
+                  <div className="flex items-start gap-3 min-w-0">
+                    <div className="size-11 rounded-2xl flex items-center justify-center bg-rose-50 border border-rose-100 shrink-0">
+                      <AlertTriangle className="size-5 text-red-600 animate-pulse" />
                     </div>
-                    <div className="flex justify-between">
-                      <span className="font-semibold text-(--text-soft)">Unit / Project:</span>
-                      <span className="font-bold text-(--text-strong)">
-                        {cancellingCustomer.unit_name || `Unit ${cancellingCustomer.unit_id}`} ({projectOptionsMap.get(cancellingCustomer.project_id) || cancellingCustomer.project_id})
-                      </span>
+                    <div className="min-w-0">
+                      <h3 className="modal-title">
+                        Request Booking Cancellation
+                      </h3>
+                      <p className="modal-subtitle mt-0.5">
+                        Submit request to Accounting for approval
+                      </p>
                     </div>
                   </div>
-
-                  <div className="space-y-1.5">
-                    <label className="modal-label block uppercase tracking-wider">
-                      Reason for Cancellation
-                    </label>
-                    <textarea
-                      required
-                      value={cancelReason}
-                      onChange={(e) => setCancelReason(e.target.value)}
-                      placeholder="Please explain the cancellation reasons in detail..."
-                      className="app-input w-full min-h-24 resize-none"
-                    />
-                  </div>
-                </div>
-
-
-                <div className="px-5 py-4 border-t border-(--border-soft) bg-white flex items-center justify-end gap-3">
                   <button
                     type="button"
                     onClick={() => {
                       setShowCancelModal(false);
                       setCancellingCustomer(null);
                     }}
-                    className="app-btn-secondary text-xs min-h-9.5 py-2 px-4 shadow-xs"
+                    className="app-icon-button p-1.5 text-(--text-soft) hover:text-(--text-strong) hover:bg-(--bg-subtle) active:scale-95 transition-all cursor-pointer"
+                    aria-label="Close"
                   >
-                    Close
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={submittingCancel}
-                    className="app-btn-primary bg-red-600 hover:bg-red-700 text-white text-xs min-h-9.5 py-2 px-4 shadow-xs flex items-center gap-1.5 disabled:opacity-50"
-                  >
-                    {submittingCancel && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                    Submit Request
+                    ✕
                   </button>
                 </div>
-              </form>
-            </div>
-          </div>,
-          document.body
-        )}
 
+                <form
+                  onSubmit={submitCancellation}
+                  className="flex flex-col min-h-0 overflow-hidden"
+                >
+                  <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-[#f8faf8]/40">
+                    <div className="app-panel-muted p-4 space-y-2.5 text-xs text-(--text-body)">
+                      <div className="flex justify-between">
+                        <span className="font-semibold text-(--text-soft)">
+                          Customer:
+                        </span>
+                        <span className="font-bold text-(--text-strong)">
+                          {cancellingCustomer.name}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-semibold text-(--text-soft)">
+                          Unit / Project:
+                        </span>
+                        <span className="font-bold text-(--text-strong)">
+                          {cancellingCustomer.unit_name ||
+                            `Unit ${cancellingCustomer.unit_id}`}{" "}
+                          (
+                          {projectOptionsMap.get(
+                            cancellingCustomer.project_id,
+                          ) || cancellingCustomer.project_id}
+                          )
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="modal-label block uppercase tracking-wider">
+                        Reason for Cancellation
+                      </label>
+                      <textarea
+                        required
+                        value={cancelReason}
+                        onChange={(e) => setCancelReason(e.target.value)}
+                        placeholder="Please explain the cancellation reasons in detail..."
+                        className="app-input w-full min-h-24 resize-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="px-5 py-4 border-t border-(--border-soft) bg-white flex items-center justify-end gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowCancelModal(false);
+                        setCancellingCustomer(null);
+                      }}
+                      className="app-btn-secondary text-xs min-h-9.5 py-2 px-4 shadow-xs"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={submittingCancel}
+                      className="app-btn-primary bg-red-600 hover:bg-red-700 text-white text-xs min-h-9.5 py-2 px-4 shadow-xs flex items-center gap-1.5 disabled:opacity-50"
+                    >
+                      {submittingCancel && (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      )}
+                      Submit Request
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>,
+            document.body,
+          )}
 
         {showCreateWizard && (
           <CreateCustomerWizard
             onClose={() => setShowCreateWizard(false)}
-            onSaveSuccess={() => {
-
-            }}
+            onSaveSuccess={() => {}}
           />
         )}
-
-
       </div>
     </div>
   );

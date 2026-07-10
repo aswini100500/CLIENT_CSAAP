@@ -1,3406 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Plus,
@@ -3447,7 +44,7 @@ const Bill = () => {
           operationApi.getPlottings(),
           operationApi.getDuplexes(),
           operationApi.getTriplexes(),
-          operationApi.getCustomProjects()
+          operationApi.getCustomProjects(),
         ]);
 
         const allProjects = [
@@ -3456,12 +53,12 @@ const Bill = () => {
           ...(plots.data.data || []),
           ...(dup.data.data || []),
           ...(tri.data.data || []),
-          ...(custom.data.data || [])
-        ].map(p => ({
+          ...(custom.data.data || []),
+        ].map((p) => ({
           id: p.id,
-          name: p.project_name || p.name
+          name: p.project_name || p.name,
         }));
-        
+
         setProjects(allProjects);
       } catch (error) {
         console.error("Error fetching BOQ projects:", error);
@@ -3471,113 +68,147 @@ const Bill = () => {
     };
     fetchProjects();
   }, []);
-  
+
   const demoSublettingNames = [
-    "Land scaled", "Tree cutting", "Earth work", 
-    "Concrete", "Brick Work", "Stone masonary",
-    "Wood Work", "Hardware", " Plumbing", "Roof treatment",
-    "Floring specification","Glazing", "Landscape Development", "Marble Flooring", "Road and draining",
-    "Fire extinguisher", "Painting Work", "Quarry Tile Work", "Rain water harvesting",
-     "Elctrical", "Lift and other mechanicals", "Ventilation System",
-    "Ciling and Wall Lining",  "Demolation & Dismanting","Stand By Generate and allied Services", 
+    "Land scaled",
+    "Tree cutting",
+    "Earth work",
+    "Concrete",
+    "Brick Work",
+    "Stone masonary",
+    "Wood Work",
+    "Hardware",
+    " Plumbing",
+    "Roof treatment",
+    "Floring specification",
+    "Glazing",
+    "Landscape Development",
+    "Marble Flooring",
+    "Road and draining",
+    "Fire extinguisher",
+    "Painting Work",
+    "Quarry Tile Work",
+    "Rain water harvesting",
+    "Elctrical",
+    "Lift and other mechanicals",
+    "Ventilation System",
+    "Ciling and Wall Lining",
+    "Demolation & Dismanting",
+    "Stand By Generate and allied Services",
   ];
-  
+
   const [demoItems, setDemoItems] = useState(
     demoSublettingNames.map((name, idx) => ({
       id: idx + 1,
       contractors: [],
       name,
       fields: [
-        { label: "Benchmark Price", key: "benchmarkPrice", value: "", unit: "" },
+        {
+          label: "Benchmark Price",
+          key: "benchmarkPrice",
+          value: "",
+          unit: "",
+        },
         { label: "Quoted Price", key: "quotedPrice", value: "", unit: "" },
         { label: "Final Price", key: "finalPrice", value: "", unit: "" },
         { label: "Quantity", key: "quantity", value: "", unit: "unit" },
-        { label: "File", key: "file", value: "", unit: "", file: null }
+        { label: "File", key: "file", value: "", unit: "", file: null },
       ],
       saved: false,
-      editing: false
-    }))
+      editing: false,
+    })),
   );
-
 
   const handleFileUpload = (itemId, fieldIndex, event) => {
     const file = event.target.files[0];
     if (file) {
-      setDemoItems(prev =>
-        prev.map(item => {
+      setDemoItems((prev) =>
+        prev.map((item) => {
           if (item.id === itemId) {
             const newFields = [...item.fields];
-            newFields[fieldIndex] = { 
-              ...newFields[fieldIndex], 
+            newFields[fieldIndex] = {
+              ...newFields[fieldIndex],
               value: file.name,
-              file: file 
+              file: file,
             };
             return { ...item, fields: newFields };
           }
           return item;
-        })
+        }),
       );
-      
-      Swal.fire("Success!", `File "${file.name}" has been uploaded.`, "success");
+
+      Swal.fire(
+        "Success!",
+        `File "${file.name}" has been uploaded.`,
+        "success",
+      );
     }
   };
 
-
   const removeFile = (itemId, fieldIndex) => {
-    setDemoItems(prev =>
-      prev.map(item => {
+    setDemoItems((prev) =>
+      prev.map((item) => {
         if (item.id === itemId) {
           const newFields = [...item.fields];
-          newFields[fieldIndex] = { 
-            ...newFields[fieldIndex], 
+          newFields[fieldIndex] = {
+            ...newFields[fieldIndex],
             value: "",
-            file: null 
+            file: null,
           };
           return { ...item, fields: newFields };
         }
         return item;
-      })
+      }),
     );
   };
 
-
   const handleFileAction = (itemId, fieldIndex) => {
-    const item = demoItems.find(item => item.id === itemId);
+    const item = demoItems.find((item) => item.id === itemId);
     if (item) {
       const field = item.fields[fieldIndex];
       if (field.file) {
-
         const fileUrl = URL.createObjectURL(field.file);
-        
 
-        if (field.file.type.includes('image') || field.file.type.includes('pdf')) {
-          window.open(fileUrl, '_blank');
+        if (
+          field.file.type.includes("image") ||
+          field.file.type.includes("pdf")
+        ) {
+          window.open(fileUrl, "_blank");
         } else {
-          const link = document.createElement('a');
+          const link = document.createElement("a");
           link.href = fileUrl;
           link.download = field.file.name;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
         }
-        
 
         setTimeout(() => URL.revokeObjectURL(fileUrl), 100);
       }
     }
   };
 
-
   const openContractorSelection = async (itemId, contractorIndex = 0) => {
     if (!projectName) {
-      Swal.fire("Info", "Please select a project first to view contractors.", "info");
+      Swal.fire(
+        "Info",
+        "Please select a project first to view contractors.",
+        "info",
+      );
       return;
     }
 
-    const availableContractors = [...principalContractors, ...normalContractors];
-    
+    const availableContractors = [
+      ...principalContractors,
+      ...normalContractors,
+    ];
+
     if (availableContractors.length === 0) {
-      Swal.fire("Info", "No contractors available for the selected project.", "info");
+      Swal.fire(
+        "Info",
+        "No contractors available for the selected project.",
+        "info",
+      );
       return;
     }
 
@@ -3589,16 +220,24 @@ const Bill = () => {
           <p class="text-sm text-gray-600 mb-4">Choose a contractor for this work item:</p>
           <select id="contractor-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             <option value="">-- Select Contractor --</option>
-            ${principalContractors.length > 0 ? `
+            ${
+              principalContractors.length > 0
+                ? `
               <optgroup label="Principal Contractors" class="text-blue-600 font-semibold">
-                ${principalContractors.map(c => `<option value="${c.id}" class="text-blue-700">${c.name}</option>`).join('')}
+                ${principalContractors.map((c) => `<option value="${c.id}" class="text-blue-700">${c.name}</option>`).join("")}
               </optgroup>
-            ` : ''}
-            ${normalContractors.length > 0 ? `
+            `
+                : ""
+            }
+            ${
+              normalContractors.length > 0
+                ? `
               <optgroup label="Sub-Contractors" class="text-gray-600">
-                ${normalContractors.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+                ${normalContractors.map((c) => `<option value="${c.id}">${c.name}</option>`).join("")}
               </optgroup>
-            ` : ''}
+            `
+                : ""
+            }
           </select>
         </div>
       `,
@@ -3612,32 +251,33 @@ const Bill = () => {
         cancelButton: "bg-gray-400 text-white px-4 py-2 rounded text-sm",
       },
       preConfirm: () => {
-        const select = document.getElementById('contractor-select');
+        const select = document.getElementById("contractor-select");
         return select.value;
-      }
+      },
     });
 
     if (selectedContractorId) {
-      const selectedContractor = availableContractors.find(c => c.id.toString() === selectedContractorId);
+      const selectedContractor = availableContractors.find(
+        (c) => c.id.toString() === selectedContractorId,
+      );
       if (selectedContractor) {
-        setDemoItems(prev =>
-          prev.map(item => {
+        setDemoItems((prev) =>
+          prev.map((item) => {
             if (item.id === itemId) {
               const newContractors = [...item.contractors];
               newContractors[contractorIndex] = selectedContractor.name;
               return { ...item, contractors: newContractors };
             }
             return item;
-          })
+          }),
         );
       }
     }
   };
 
-
   const handleDemoFieldChange = (itemId, fieldType, value, index = 0) => {
-    setDemoItems(prev =>
-      prev.map(item => {
+    setDemoItems((prev) =>
+      prev.map((item) => {
         if (item.id === itemId) {
           if (fieldType === "field") {
             const newFields = [...item.fields];
@@ -3650,75 +290,73 @@ const Bill = () => {
           }
         }
         return item;
-      })
+      }),
     );
   };
-
 
   const addContractor = (itemId) => {
-    setDemoItems(prev =>
-      prev.map(item =>
-        item.id === itemId 
+    setDemoItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId
           ? { ...item, contractors: [...item.contractors, ""] }
-          : item
-      )
+          : item,
+      ),
     );
   };
-
 
   const removeContractor = (itemId, contractorIndex) => {
-    setDemoItems(prev =>
-      prev.map(item =>
-        item.id === itemId 
-          ? { 
-              ...item, 
-              contractors: item.contractors.filter((_, idx) => idx !== contractorIndex) 
+    setDemoItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId
+          ? {
+              ...item,
+              contractors: item.contractors.filter(
+                (_, idx) => idx !== contractorIndex,
+              ),
             }
-          : item
-      )
+          : item,
+      ),
     );
   };
-
 
   const addCustomField = (itemId) => {
     const newField = {
       label: `Custom Field ${Math.floor(Math.random() * 1000)}`,
       key: `custom_${Date.now()}`,
       value: "",
-      unit: "unit"
+      unit: "unit",
     };
-    
-    setDemoItems(prev =>
-      prev.map(item =>
-        item.id === itemId 
+
+    setDemoItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId
           ? { ...item, fields: [...item.fields, newField] }
-          : item
-      )
+          : item,
+      ),
     );
   };
-
 
   const removeField = (itemId, fieldIndex) => {
-    setDemoItems(prev =>
-      prev.map(item =>
-        item.id === itemId 
-          ? { 
-              ...item, 
-              fields: item.fields.filter((_, idx) => idx !== fieldIndex) 
+    setDemoItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId
+          ? {
+              ...item,
+              fields: item.fields.filter((_, idx) => idx !== fieldIndex),
             }
-          : item
-      )
+          : item,
+      ),
     );
   };
-
 
   useEffect(() => {
     setLoading(true);
-    operationApi.getContractors()
+    operationApi
+      .getContractors()
       .then((res) => {
         const list = res.data?.contractors || [];
-        setContractors(list.map(c => ({ ...c, type: c.type || "normal" })));
-        setEmployers(list.map(c => ({ ...c, type: c.type || "normal" })));
+        setContractors(list.map((c) => ({ ...c, type: c.type || "normal" })));
+        setEmployers(list.map((c) => ({ ...c, type: c.type || "normal" })));
       })
       .catch((err) => {
         console.error("failed to load contractors", err);
@@ -3726,15 +364,11 @@ const Bill = () => {
       .finally(() => setLoading(false));
   }, []);
 
-
-
   useEffect(() => {
     if (!projectName) {
       setEmployers(contractors);
     } else {
-      let filtered = contractors.filter(
-        (c) => c.project_name === projectName
-      );
+      let filtered = contractors.filter((c) => c.project_name === projectName);
       if (filtered.length === 0) {
         filtered = contractors;
       }
@@ -3744,35 +378,68 @@ const Bill = () => {
     setSubletting([]);
   }, [projectName, contractors]);
 
-
   const fetchBOQItems = useCallback(async () => {
     setLoading(true);
     try {
       const res = await operationApi.getBOQItems();
       console.debug("getBOQItems response:", res?.data ?? res);
       const items = res.data?.data || res.data || [];
-      
-      const selectedContractorObj = contractors.find(c => c.id.toString() === selectedEmployer.toString());
-      const selectedContractorName = selectedContractorObj ? selectedContractorObj.name : "";
 
-      const filtered = items.filter(item => {
-        const itemProjName = item.project_name || item.projectName || item.project;
-        const itemContractor = item.contractor_name || item.contractorName || item.contractor;
-        
-        const matchProject = !projectName || (itemProjName && itemProjName.toString().toLowerCase() === projectName.toString().toLowerCase());
-        const matchContractor = !selectedContractorName || (itemContractor && itemContractor.toString().toLowerCase() === selectedContractorName.toString().toLowerCase());
-        
+      const selectedContractorObj = contractors.find(
+        (c) => c.id.toString() === selectedEmployer.toString(),
+      );
+      const selectedContractorName = selectedContractorObj
+        ? selectedContractorObj.name
+        : "";
+
+      const filtered = items.filter((item) => {
+        const itemProjName =
+          item.project_name || item.projectName || item.project;
+        const itemContractor =
+          item.contractor_name || item.contractorName || item.contractor;
+
+        const matchProject =
+          !projectName ||
+          (itemProjName &&
+            itemProjName.toString().toLowerCase() ===
+              projectName.toString().toLowerCase());
+        const matchContractor =
+          !selectedContractorName ||
+          (itemContractor &&
+            itemContractor.toString().toLowerCase() ===
+              selectedContractorName.toString().toLowerCase());
+
         return matchProject && matchContractor;
       });
 
-      const mapped = filtered.map(item => {
+      const mapped = filtered.map((item) => {
         let fields = item.fields || item.items || [];
         if (fields.length === 0) {
           fields = [
-            { label: "Benchmark Price", key: "benchmarkPrice", value: item.benchmark_price || item.benchmarkPrice || 0, unit: item.unit || "" },
-            { label: "Quoted Price", key: "quotedPrice", value: item.quoted_price || item.quotedPrice || 0, unit: item.unit || "" },
-            { label: "Final Price", key: "finalPrice", value: item.final_price || item.finalPrice || 0, unit: item.unit || "" },
-            { label: "Quantity", key: "quantity", value: item.quantity || 0, unit: item.unit || "unit" },
+            {
+              label: "Benchmark Price",
+              key: "benchmarkPrice",
+              value: item.benchmark_price || item.benchmarkPrice || 0,
+              unit: item.unit || "",
+            },
+            {
+              label: "Quoted Price",
+              key: "quotedPrice",
+              value: item.quoted_price || item.quotedPrice || 0,
+              unit: item.unit || "",
+            },
+            {
+              label: "Final Price",
+              key: "finalPrice",
+              value: item.final_price || item.finalPrice || 0,
+              unit: item.unit || "",
+            },
+            {
+              label: "Quantity",
+              key: "quantity",
+              value: item.quantity || 0,
+              unit: item.unit || "unit",
+            },
           ];
         }
 
@@ -3786,7 +453,12 @@ const Bill = () => {
           description: item.description || "",
           fields: fields,
           editing: false,
-          status: (item.status === "approved" || item.status === "rejected" || item.status === "pending") ? item.status : "pending",
+          status:
+            item.status === "approved" ||
+            item.status === "rejected" ||
+            item.status === "pending"
+              ? item.status
+              : "pending",
           attachments: attachments,
         };
       });
@@ -3807,7 +479,8 @@ const Bill = () => {
     (item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.contractor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.category && item.category.toLowerCase().includes(searchTerm.toLowerCase()))
+      (item.category &&
+        item.category.toLowerCase().includes(searchTerm.toLowerCase())),
   );
 
   const groupedByContractor = filteredSubletting.reduce((acc, item) => {
@@ -3817,7 +490,9 @@ const Bill = () => {
   }, {});
 
   const toggleContractor = (contractor) => {
-    setExpandedContractor(expandedContractor === contractor ? null : contractor);
+    setExpandedContractor(
+      expandedContractor === contractor ? null : contractor,
+    );
   };
 
   const toggleItem = (id) => {
@@ -3825,9 +500,11 @@ const Bill = () => {
   };
 
   const toggleDemoItemEdit = (id) => {
-    setDemoItems(prev => prev.map(item => 
-      item.id === id ? { ...item, editing: !item.editing } : item
-    ));
+    setDemoItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, editing: !item.editing } : item,
+      ),
+    );
   };
 
   const handleFieldChange = (itemId, fieldKey, value) => {
@@ -3837,11 +514,11 @@ const Bill = () => {
           ? {
               ...item,
               fields: item.fields.map((f) =>
-                f.key === fieldKey ? { ...f, value: Number(value) } : f
+                f.key === fieldKey ? { ...f, value: Number(value) } : f,
               ),
             }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
@@ -3874,8 +551,13 @@ const Bill = () => {
   };
 
   const addNewSublettingItem = async () => {
-    const availableContractors = [...principalContractors, ...normalContractors];
-    const contractorOptions = availableContractors.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+    const availableContractors = [
+      ...principalContractors,
+      ...normalContractors,
+    ];
+    const contractorOptions = availableContractors
+      .map((c) => `<option value="${c.name}">${c.name}</option>`)
+      .join("");
 
     const { value: formValues } = await Swal.fire({
       width: "500px",
@@ -3929,8 +611,10 @@ const Bill = () => {
       cancelButtonText: "Cancel",
       customClass: {
         popup: "rounded-lg shadow-lg",
-        confirmButton: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm",
-        cancelButton: "bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded text-sm",
+        confirmButton:
+          "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm",
+        cancelButton:
+          "bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded text-sm",
       },
       preConfirm: () => {
         const contractor = document.getElementById("swal-contractor").value;
@@ -3963,20 +647,42 @@ const Bill = () => {
       setLoading(true);
       const postData = {
         project_name: projectName || "Unassigned Project",
-        project_id: projects.find(p => p.name === projectName)?.id || null,
-        project_type:projects.find(p => p.name === projectName)?.type || "null",
-        employee_id: contractors.find(c => c.name === formValues.contractor)?.id || null,
+        project_id: projects.find((p) => p.name === projectName)?.id || null,
+        project_type:
+          projects.find((p) => p.name === projectName)?.type || "null",
+        employee_id:
+          contractors.find((c) => c.name === formValues.contractor)?.id || null,
         contractor: formValues.contractor,
         name: formValues.name,
         category: formValues.category || "General",
         description: formValues.description || "",
         status: "pending",
         item: [
-          { label: "Benchmark Price", key: "benchmarkPrice", value: Number(formValues.benchmark) || 0, unit: "" },
-          { label: "Quoted Price", key: "quotedPrice", value: Number(formValues.quoted) || 0, unit: "" },
-          { label: "Final Price", key: "finalPrice", value: Number(formValues.final) || 0, unit: "" },
-          { label: "Quantity", key: "quantity", value: Number(formValues.quantity) || 0, unit: formValues.unit || "unit" },
-        ]
+          {
+            label: "Benchmark Price",
+            key: "benchmarkPrice",
+            value: Number(formValues.benchmark) || 0,
+            unit: "",
+          },
+          {
+            label: "Quoted Price",
+            key: "quotedPrice",
+            value: Number(formValues.quoted) || 0,
+            unit: "",
+          },
+          {
+            label: "Final Price",
+            key: "finalPrice",
+            value: Number(formValues.final) || 0,
+            unit: "",
+          },
+          {
+            label: "Quantity",
+            key: "quantity",
+            value: Number(formValues.quantity) || 0,
+            unit: formValues.unit || "unit",
+          },
+        ],
       };
 
       await operationApi.createBOQItem(postData);
@@ -3984,7 +690,11 @@ const Bill = () => {
       await fetchBOQItems();
     } catch (error) {
       console.error("Error creating custom BOQ item:", error);
-      Swal.fire("Error", "Failed to create custom BOQ item on server.", "error");
+      Swal.fire(
+        "Error",
+        "Failed to create custom BOQ item on server.",
+        "error",
+      );
     } finally {
       setLoading(false);
     }
@@ -3993,18 +703,22 @@ const Bill = () => {
   const saveDemoItem = async (item) => {
     try {
       setLoading(true);
-      const activeContractors = item.contractors.filter(c => c.trim());
+      const activeContractors = item.contractors.filter((c) => c.trim());
       if (activeContractors.length === 0) {
-        Swal.fire("Warning", "Please select at least one contractor.", "warning");
+        Swal.fire(
+          "Warning",
+          "Please select at least one contractor.",
+          "warning",
+        );
         return;
       }
 
       for (const contractorName of activeContractors) {
-        const payloadFields = item.fields.map(field => ({
+        const payloadFields = item.fields.map((field) => ({
           label: field.label,
           key: field.key,
           value: Number(field.value) || 0,
-          unit: field.unit || ""
+          unit: field.unit || "",
         }));
 
         const postData = {
@@ -4014,14 +728,14 @@ const Bill = () => {
           category: "General",
           description: "",
           status: "pending",
-          item: payloadFields
+          item: payloadFields,
         };
 
         const createRes = await operationApi.createBOQItem(postData);
         const newBOQItem = createRes.data?.data || createRes.data;
         const newId = newBOQItem?.id || newBOQItem?._id;
 
-        const fileField = item.fields.find(f => f.key === "file");
+        const fileField = item.fields.find((f) => f.key === "file");
         if (fileField && fileField.file && newId) {
           const formData = new FormData();
           formData.append("file", fileField.file);
@@ -4029,11 +743,17 @@ const Bill = () => {
         }
       }
 
-      Swal.fire("Saved!", `${item.name} has been assigned and saved on the server.`, "success");
-      
-      setDemoItems(prev => prev.map(i => 
-        i.id === item.id ? { ...i, editing: false, saved: true } : i
-      ));
+      Swal.fire(
+        "Saved!",
+        `${item.name} has been assigned and saved on the server.`,
+        "success",
+      );
+
+      setDemoItems((prev) =>
+        prev.map((i) =>
+          i.id === item.id ? { ...i, editing: false, saved: true } : i,
+        ),
+      );
 
       await fetchBOQItems();
     } catch (error) {
@@ -4047,21 +767,26 @@ const Bill = () => {
   const handleSaveItemChanges = async (item) => {
     try {
       setLoading(true);
-      const updatedFields = item.fields.map(f => ({
+      const updatedFields = item.fields.map((f) => ({
         label: f.label,
         key: f.key,
         value: Number(f.value) || 0,
-        unit: f.unit || ""
+        unit: f.unit || "",
       }));
 
       await operationApi.updateDocument(item.id, updatedFields);
-      
+
       await operationApi.updateBOQItem(item.id, {
         name: item.name,
         category: item.category,
         description: item.description,
         item: updatedFields,
-        status: (item.status === "approved" || item.status === "rejected" || item.status === "pending") ? item.status : "pending"
+        status:
+          item.status === "approved" ||
+          item.status === "rejected" ||
+          item.status === "pending"
+            ? item.status
+            : "pending",
       });
 
       Swal.fire("Success", "BOQ Item pricing updated successfully.", "success");
@@ -4076,14 +801,19 @@ const Bill = () => {
 
   const getCurrentApproverId = () => {
     if (!user) return null;
-    const id = user.user_id || user.id || user.userId || user.uid || user.employee_id;
+    const id =
+      user.user_id || user.id || user.userId || user.uid || user.employee_id;
     return Number(id) || null;
   };
 
   const handleApproveItem = async (item) => {
     const approverId = getCurrentApproverId();
     if (!approverId) {
-      Swal.fire("Error", "Unable to determine current approver ID for approval.", "error");
+      Swal.fire(
+        "Error",
+        "Unable to determine current approver ID for approval.",
+        "error",
+      );
       return;
     }
 
@@ -4091,14 +821,18 @@ const Bill = () => {
       setLoading(true);
       await operationApi.addApproval(item.id, {
         approved_by: approverId,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       await operationApi.updateBOQItem(item.id, {
         ...item,
-        status: "approved"
+        status: "approved",
       });
-      
-      Swal.fire("Approved!", "This BOQ Item has been successfully approved.", "success");
+
+      Swal.fire(
+        "Approved!",
+        "This BOQ Item has been successfully approved.",
+        "success",
+      );
       await fetchBOQItems();
     } catch (error) {
       console.error("Error approving BOQ item:", error);
@@ -4116,9 +850,13 @@ const Bill = () => {
       setLoading(true);
       const formData = new FormData();
       formData.append("file", file);
-      
+
       await operationApi.uploadAttachment(itemId, formData);
-      Swal.fire("Success", `File "${file.name}" uploaded successfully.`, "success");
+      Swal.fire(
+        "Success",
+        `File "${file.name}" uploaded successfully.`,
+        "success",
+      );
       await fetchBOQItems();
     } catch (error) {
       console.error("Error uploading attachment:", error);
@@ -4134,7 +872,7 @@ const Bill = () => {
       text: "Remove this attachment?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
@@ -4153,13 +891,22 @@ const Bill = () => {
   };
 
   const handleViewAttachment = (attachment) => {
-    const url = attachment.url || attachment.file_url || attachment.fileUrl || attachment.filePath || attachment.path;
+    const url =
+      attachment.url ||
+      attachment.file_url ||
+      attachment.fileUrl ||
+      attachment.filePath ||
+      attachment.path;
     if (url) {
-      window.open(url, '_blank');
+      window.open(url, "_blank");
       return;
     }
 
-    Swal.fire("Unable to open attachment", "The attachment does not have a valid URL.", "warning");
+    Swal.fire(
+      "Unable to open attachment",
+      "The attachment does not have a valid URL.",
+      "warning",
+    );
   };
 
   const calculateTotal = (item) => {
@@ -4171,22 +918,21 @@ const Bill = () => {
 
   const calculateSavings = (item) => {
     const fields = item.fields || item.item || [];
-    const benchmark = fields.find((f) => f.key === "benchmarkPrice")?.value || 0;
+    const benchmark =
+      fields.find((f) => f.key === "benchmarkPrice")?.value || 0;
     const final = fields.find((f) => f.key === "finalPrice")?.value || 0;
     const qty = fields.find((f) => f.key === "quantity")?.value || 0;
     return (benchmark - final) * qty;
   };
 
-
-  const principalContractors = employers.filter(emp => emp.type === "principal");
-  const normalContractors = employers.filter(emp => emp.type === "normal");
+  const principalContractors = employers.filter(
+    (emp) => emp.type === "principal",
+  );
+  const normalContractors = employers.filter((emp) => emp.type === "normal");
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       <div className="mx-auto space-y-6">
-      
-
-
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -4218,24 +964,25 @@ const Bill = () => {
                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">-- Select Contractor --</option>
-                
 
                 {principalContractors.length > 0 && (
-                  <optgroup label="Principal Contractors" className="text-blue-600 font-semibold">
+                  <optgroup
+                    label="Principal Contractors"
+                    className="text-blue-600 font-semibold"
+                  >
                     {principalContractors.map((e) => (
                       <option key={e.id} value={e.id} className="text-blue-700">
-                         {e.name}
+                        {e.name}
                       </option>
                     ))}
                   </optgroup>
                 )}
-                
 
                 {normalContractors.length > 0 && (
                   <optgroup label="Sub-Contractors" className="text-gray-600">
                     {normalContractors.map((e) => (
                       <option key={e.id} value={e.id}>
-                         {e.name}
+                        {e.name}
                       </option>
                     ))}
                   </optgroup>
@@ -4245,18 +992,17 @@ const Bill = () => {
           </div>
         </div>
 
-
         {loading && (
           <div className="flex justify-center items-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-            <span className="ml-3 text-gray-600 dark:text-gray-300">Loading project data...</span>
+            <span className="ml-3 text-gray-600 dark:text-gray-300">
+              Loading project data...
+            </span>
           </div>
         )}
 
-
         {!loading && (selectedEmployer || subletting.length > 0) && (
           <div className="space-y-6">
-
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="flex items-center gap-4">
@@ -4267,12 +1013,12 @@ const Bill = () => {
                     <Plus size={20} />
                     Add Custom Item
                   </button>
-                  
+
                   <div className="text-sm text-gray-600 dark:text-gray-300">
-                    {subletting.length} assigned items • {Object.keys(groupedByContractor).length} contractors
+                    {subletting.length} assigned items •{" "}
+                    {Object.keys(groupedByContractor).length} contractors
                   </div>
                 </div>
-
 
                 <div className="relative w-full sm:w-64">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -4287,16 +1033,17 @@ const Bill = () => {
               </div>
             </div>
 
-
             {Object.keys(groupedByContractor).length > 0 && (
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
                   Assigned Subletting Items
                 </h3>
-                
-                {Object.keys(groupedByContractor).map((contractor) => (
-                  <div key={contractor} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
 
+                {Object.keys(groupedByContractor).map((contractor) => (
+                  <div
+                    key={contractor}
+                    className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
+                  >
                     <div className="flex justify-between items-center p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-200">
                       <div className="flex items-center gap-4">
                         <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
@@ -4307,8 +1054,13 @@ const Bill = () => {
                             {contractor}
                           </h3>
                           <p className="text-sm text-gray-600 dark:text-gray-300">
-                            {groupedByContractor[contractor].length} items • 
-                            ₹{groupedByContractor[contractor].reduce((sum, item) => sum + calculateTotal(item), 0).toLocaleString()}
+                            {groupedByContractor[contractor].length} items • ₹
+                            {groupedByContractor[contractor]
+                              .reduce(
+                                (sum, item) => sum + calculateTotal(item),
+                                0,
+                              )
+                              .toLocaleString()}
                           </p>
                         </div>
                       </div>
@@ -4325,15 +1077,19 @@ const Bill = () => {
                       </button>
                     </div>
 
-
                     {expandedContractor === contractor && (
                       <div className="border-t border-gray-200 dark:border-gray-700">
                         {groupedByContractor[contractor].map((item) => (
-                          <div key={item.id} className="border-b border-gray-100 dark:border-gray-600 last:border-b-0 p-6">
+                          <div
+                            key={item.id}
+                            className="border-b border-gray-100 dark:border-gray-600 last:border-b-0 p-6"
+                          >
                             <div className="flex justify-between items-start mb-4">
                               <div className="flex-1">
                                 <div className="flex items-center gap-3">
-                                  <h4 className="font-medium text-gray-800 dark:text-white text-lg">{item.name}</h4>
+                                  <h4 className="font-medium text-gray-800 dark:text-white text-lg">
+                                    {item.name}
+                                  </h4>
                                   {item.status === "approved" ? (
                                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                                       <UserCheck size={12} /> Approved
@@ -4345,12 +1101,16 @@ const Bill = () => {
                                   )}
                                 </div>
                                 {item.description && (
-                                  <p className="text-gray-600 dark:text-gray-300 mt-1">{item.description}</p>
+                                  <p className="text-gray-600 dark:text-gray-300 mt-1">
+                                    {item.description}
+                                  </p>
                                 )}
                               </div>
                               <div className="flex items-center gap-2">
                                 <button
-                                  onClick={() => deleteSublettingItem(item.id, item.name)}
+                                  onClick={() =>
+                                    deleteSublettingItem(item.id, item.name)
+                                  }
                                   className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200"
                                 >
                                   <Trash2 size={16} />
@@ -4368,11 +1128,12 @@ const Bill = () => {
                               </div>
                             </div>
 
-
                             {expandedItem === item.id && (
                               <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg space-y-6">
                                 <div>
-                                  <h5 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Pricing & Quantities</h5>
+                                  <h5 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                                    Pricing & Quantities
+                                  </h5>
                                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                     {item.fields.map((field) => (
                                       <div key={field.key}>
@@ -4383,10 +1144,19 @@ const Bill = () => {
                                           <input
                                             type="number"
                                             value={field.value}
-                                            onChange={(e) => handleFieldChange(item.id, field.key, e.target.value)}
+                                            onChange={(e) =>
+                                              handleFieldChange(
+                                                item.id,
+                                                field.key,
+                                                e.target.value,
+                                              )
+                                            }
                                             className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                           />
-                                          {(field.key === "quantity" || field.key.startsWith("custom_")) && (
+                                          {(field.key === "quantity" ||
+                                            field.key.startsWith(
+                                              "custom_",
+                                            )) && (
                                             <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                                               {field.unit}
                                             </span>
@@ -4397,42 +1167,59 @@ const Bill = () => {
                                   </div>
                                 </div>
 
-
                                 <div className="pt-4 border-t border-gray-200 dark:border-gray-600">
                                   <div className="flex items-center justify-between mb-3">
-                                    <h5 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Attachments & Documents</h5>
+                                    <h5 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                      Attachments & Documents
+                                    </h5>
                                     <label className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium cursor-pointer transition-colors duration-150">
                                       <Paperclip size={12} />
                                       Upload Document
                                       <input
                                         type="file"
-                                        onChange={(e) => handleUploadItemAttachment(item.id, e)}
+                                        onChange={(e) =>
+                                          handleUploadItemAttachment(item.id, e)
+                                        }
                                         className="hidden"
                                         accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
                                       />
                                     </label>
                                   </div>
 
-                                  {item.attachments && item.attachments.length > 0 ? (
+                                  {item.attachments &&
+                                  item.attachments.length > 0 ? (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                                       {item.attachments.map((att) => (
-                                        <div key={att.id || att._id} className="flex items-center justify-between p-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <div
+                                          key={att.id || att._id}
+                                          className="flex items-center justify-between p-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg"
+                                        >
                                           <div className="flex items-center gap-2 truncate flex-1">
                                             <Paperclip className="h-4 w-4 text-blue-500 shrink-0" />
                                             <span className="text-sm text-gray-700 dark:text-gray-300 truncate font-medium">
-                                              {att.name || att.file_name || att.fileName || "Document"}
+                                              {att.name ||
+                                                att.file_name ||
+                                                att.fileName ||
+                                                "Document"}
                                             </span>
                                           </div>
                                           <div className="flex items-center gap-1 ml-2">
                                             <button
-                                              onClick={() => handleViewAttachment(att)}
+                                              onClick={() =>
+                                                handleViewAttachment(att)
+                                              }
                                               title="View document"
                                               className="p-1 hover:bg-gray-100 dark:hover:bg-gray-750 text-blue-600 dark:text-blue-400 rounded"
                                             >
                                               <Eye size={14} />
                                             </button>
                                             <button
-                                              onClick={() => handleDeleteItemAttachment(item.id, att.id || att._id)}
+                                              onClick={() =>
+                                                handleDeleteItemAttachment(
+                                                  item.id,
+                                                  att.id || att._id,
+                                                )
+                                              }
                                               title="Remove attachment"
                                               className="p-1 hover:bg-red-50 dark:hover:bg-red-950/20 text-red-600 rounded"
                                             >
@@ -4443,18 +1230,24 @@ const Bill = () => {
                                       ))}
                                     </div>
                                   ) : (
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 italic">No attachments uploaded yet.</p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                                      No attachments uploaded yet.
+                                    </p>
                                   )}
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-4 border-t border-gray-200 dark:border-gray-600 gap-4">
                                   <div className="text-sm">
                                     <span className="font-semibold text-gray-700 dark:text-gray-300">
-                                      Total: ₹{calculateTotal(item).toLocaleString()}
+                                      Total: ₹
+                                      {calculateTotal(item).toLocaleString()}
                                     </span>
                                     {calculateSavings(item) > 0 && (
                                       <span className="ml-4 text-green-600">
-                                        Savings: ₹{calculateSavings(item).toLocaleString()}
+                                        Savings: ₹
+                                        {calculateSavings(
+                                          item,
+                                        ).toLocaleString()}
                                       </span>
                                     )}
                                   </div>
@@ -4469,7 +1262,9 @@ const Bill = () => {
                                       </button>
                                     )}
                                     <button
-                                      onClick={() => handleSaveItemChanges(item)}
+                                      onClick={() =>
+                                        handleSaveItemChanges(item)
+                                      }
                                       className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
                                     >
                                       <Save size={16} /> Save Changes
@@ -4487,17 +1282,16 @@ const Bill = () => {
               </div>
             )}
 
-
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
                   Subletting Items ({demoItems.length})
                 </h3>
                 <div className="text-sm text-gray-600 dark:text-gray-300">
-                  {demoItems.filter(item => item.saved).length} saved
+                  {demoItems.filter((item) => item.saved).length} saved
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 {demoItems.map((item) => (
                   <div
@@ -4516,7 +1310,7 @@ const Bill = () => {
                           </span>
                         )}
                       </div>
-                      
+
                       {!item.editing ? (
                         <button
                           onClick={() => toggleDemoItemEdit(item.id)}
@@ -4536,10 +1330,8 @@ const Bill = () => {
                       )}
                     </div>
 
-
                     {item.editing && (
                       <div className="mt-4 space-y-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
                             <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -4553,36 +1345,50 @@ const Bill = () => {
                               Add Contractor
                             </button>
                           </div>
-                          
-                          {item.contractors.map((contractor, contractorIndex) => (
-                            <div key={contractorIndex} className="flex items-center gap-2">
-                              <div className="flex-1">
-                                {contractor ? (
-                                  <div className="flex items-center justify-between px-3 py-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                                    <span className="text-green-700 dark:text-green-300 font-medium">
-                                      {contractor}
-                                    </span>
-                                    <button
-                                      onClick={() => removeContractor(item.id, contractorIndex)}
-                                      className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
-                                    >
-                                      <X size={14} />
-                                    </button>
-                                  </div>
-                                ) : (
-                                  <button
-                                    onClick={() => openContractorSelection(item.id, contractorIndex)}
-                                    className="w-full px-3 py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors duration-200 text-gray-600 dark:text-gray-300 flex items-center gap-2 justify-center"
-                                  >
-                                    <UserPlus size={14} />
-                                    Select Contractor
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
 
+                          {item.contractors.map(
+                            (contractor, contractorIndex) => (
+                              <div
+                                key={contractorIndex}
+                                className="flex items-center gap-2"
+                              >
+                                <div className="flex-1">
+                                  {contractor ? (
+                                    <div className="flex items-center justify-between px-3 py-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                                      <span className="text-green-700 dark:text-green-300 font-medium">
+                                        {contractor}
+                                      </span>
+                                      <button
+                                        onClick={() =>
+                                          removeContractor(
+                                            item.id,
+                                            contractorIndex,
+                                          )
+                                        }
+                                        className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
+                                      >
+                                        <X size={14} />
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    <button
+                                      onClick={() =>
+                                        openContractorSelection(
+                                          item.id,
+                                          contractorIndex,
+                                        )
+                                      }
+                                      className="w-full px-3 py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors duration-200 text-gray-600 dark:text-gray-300 flex items-center gap-2 justify-center"
+                                    >
+                                      <UserPlus size={14} />
+                                      Select Contractor
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            ),
+                          )}
+                        </div>
 
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
@@ -4597,10 +1403,13 @@ const Bill = () => {
                               Add Field
                             </button>
                           </div>
-                          
+
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                             {item.fields.map((field, fieldIndex) => (
-                              <div key={fieldIndex} className="flex items-end gap-2">
+                              <div
+                                key={fieldIndex}
+                                className="flex items-end gap-2"
+                              >
                                 <div className="flex-1">
                                   <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">
                                     {field.label}
@@ -4618,13 +1427,23 @@ const Bill = () => {
                                             </div>
                                             <div className="flex items-center gap-1">
                                               <button
-                                                onClick={() => handleFileAction(item.id, fieldIndex)}
+                                                onClick={() =>
+                                                  handleFileAction(
+                                                    item.id,
+                                                    fieldIndex,
+                                                  )
+                                                }
                                                 className="p-1 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
                                               >
                                                 <Eye size={14} />
                                               </button>
                                               <button
-                                                onClick={() => removeFile(item.id, fieldIndex)}
+                                                onClick={() =>
+                                                  removeFile(
+                                                    item.id,
+                                                    fieldIndex,
+                                                  )
+                                                }
                                                 className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
                                               >
                                                 <X size={14} />
@@ -4634,10 +1453,18 @@ const Bill = () => {
                                         ) : (
                                           <label className="flex items-center gap-2 px-3 py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors duration-200 text-gray-600 dark:text-gray-300 cursor-pointer">
                                             <Paperclip className="h-4 w-4" />
-                                            <span className="text-sm">Upload File</span>
+                                            <span className="text-sm">
+                                              Upload File
+                                            </span>
                                             <input
                                               type="file"
-                                              onChange={(e) => handleFileUpload(item.id, fieldIndex, e)}
+                                              onChange={(e) =>
+                                                handleFileUpload(
+                                                  item.id,
+                                                  fieldIndex,
+                                                  e,
+                                                )
+                                              }
                                               className="hidden"
                                               accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
                                             />
@@ -4647,16 +1474,35 @@ const Bill = () => {
                                     ) : (
                                       <>
                                         <input
-                                          type={field.key.includes("Price") ? "number" : "text"}
+                                          type={
+                                            field.key.includes("Price")
+                                              ? "number"
+                                              : "text"
+                                          }
                                           placeholder="0"
                                           value={field.value}
-                                          onChange={(e) => handleDemoFieldChange(item.id, "field", e.target.value, fieldIndex)}
+                                          onChange={(e) =>
+                                            handleDemoFieldChange(
+                                              item.id,
+                                              "field",
+                                              e.target.value,
+                                              fieldIndex,
+                                            )
+                                          }
                                           className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         />
-                                        {(field.key === "quantity" || field.key.startsWith("custom_")) && (
+                                        {(field.key === "quantity" ||
+                                          field.key.startsWith("custom_")) && (
                                           <select
                                             value={field.unit}
-                                            onChange={(e) => handleDemoFieldChange(item.id, "unit", e.target.value, fieldIndex)}
+                                            onChange={(e) =>
+                                              handleDemoFieldChange(
+                                                item.id,
+                                                "unit",
+                                                e.target.value,
+                                                fieldIndex,
+                                              )
+                                            }
                                             className="px-2 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                           >
                                             <option value="unit">unit</option>
@@ -4673,7 +1519,9 @@ const Bill = () => {
                                 </div>
                                 {fieldIndex >= 5 && field.key !== "file" && (
                                   <button
-                                    onClick={() => removeField(item.id, fieldIndex)}
+                                    onClick={() =>
+                                      removeField(item.id, fieldIndex)
+                                    }
                                     className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded mb-1"
                                   >
                                     <X size={16} />
@@ -4684,11 +1532,13 @@ const Bill = () => {
                           </div>
                         </div>
 
-
                         <div className="flex justify-end pt-3 border-t border-gray-200 dark:border-gray-600">
                           <button
                             onClick={() => saveDemoItem(item)}
-                            disabled={item.contractors.length === 0 || item.contractors.every(c => !c.trim())}
+                            disabled={
+                              item.contractors.length === 0 ||
+                              item.contractors.every((c) => !c.trim())
+                            }
                             className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200"
                           >
                             <Save size={16} />
@@ -4709,5 +1559,3 @@ const Bill = () => {
 };
 
 export default Bill;
-
-

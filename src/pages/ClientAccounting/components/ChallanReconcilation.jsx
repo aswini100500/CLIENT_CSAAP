@@ -1,878 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Search,
   Download,
@@ -898,20 +25,20 @@ import {
   Landmark,
   Wallet,
   ArrowUpRight,
-  ArrowDownRight
-} from 'lucide-react';
+  ArrowDownRight,
+} from "lucide-react";
 import { useCompany } from "../context/CompanyContext";
 
 const ChallanReconciliation = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedMonth, setSelectedMonth] = useState('October 2023');
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("October 2023");
   const [expandedRows, setExpandedRows] = useState([]);
   const [showAddChallan, setShowAddChallan] = useState(false);
   const [filters, setFilters] = useState({
-    status: 'all',
-    payment_mode: 'all',
-    amountRange: 'all'
+    status: "all",
+    payment_mode: "all",
+    amountRange: "all",
   });
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState({
@@ -920,154 +47,207 @@ const ChallanReconciliation = () => {
     matchedChallans: 0,
     pendingReconciliation: 0,
     unmatchedAmount: 0,
-    matchedPercentage: 0
+    matchedPercentage: 0,
   });
   const [challans, setChallans] = useState([]);
   const [selectedChallan, setSelectedChallan] = useState(null);
   const [showReconcileModal, setShowReconcileModal] = useState(false);
   const [reconcileData, setReconcileData] = useState({
-    status: '',
-    reconciliation_status: '',
-    remarks: ''
+    status: "",
+    reconciliation_status: "",
+    remarks: "",
   });
 
   const { companyId } = useCompany();
 
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: <FileText className="w-4 h-4" /> },
-    { id: 'all-challans', label: 'All Challans', icon: <Receipt className="w-4 h-4" /> },
-    { id: 'add-challan', label: 'Add Challan', icon: <FilePlus className="w-4 h-4" /> },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: <FileText className="w-4 h-4" />,
+    },
+    {
+      id: "all-challans",
+      label: "All Challans",
+      icon: <Receipt className="w-4 h-4" />,
+    },
+    {
+      id: "add-challan",
+      label: "Add Challan",
+      icon: <FilePlus className="w-4 h-4" />,
+    },
   ];
 
   const months = [
-    'April 2023', 'May 2023', 'June 2023', 'July 2023',
-    'August 2023', 'September 2023', 'October 2023',
-    'November 2023', 'December 2023', 'January 2024',
-    'February 2024', 'March 2024'
+    "April 2023",
+    "May 2023",
+    "June 2023",
+    "July 2023",
+    "August 2023",
+    "September 2023",
+    "October 2023",
+    "November 2023",
+    "December 2023",
+    "January 2024",
+    "February 2024",
+    "March 2024",
   ];
 
   const paymentModes = [
-    { id: 'net_banking', label: 'Net Banking', icon: <Landmark className="w-4 h-4" /> },
-    { id: 'credit_card', label: 'Credit Card', icon: <CreditCard className="w-4 h-4" /> },
-    { id: 'debit_card', label: 'Debit Card', icon: <CreditCard className="w-4 h-4" /> },
-    { id: 'upi', label: 'UPI', icon: <Smartphone className="w-4 h-4" /> },
-    { id: 'neft_rtgs', label: 'NEFT/RTGS', icon: <Banknote className="w-4 h-4" /> },
-    { id: 'cheque', label: 'Cheque', icon: <Wallet className="w-4 h-4" /> },
-    { id: 'cash', label: 'Cash', icon: <IndianRupee className="w-4 h-4" /> },
-    { id: 'others', label: 'Others', icon: <Wallet className="w-4 h-4" /> }
+    {
+      id: "net_banking",
+      label: "Net Banking",
+      icon: <Landmark className="w-4 h-4" />,
+    },
+    {
+      id: "credit_card",
+      label: "Credit Card",
+      icon: <CreditCard className="w-4 h-4" />,
+    },
+    {
+      id: "debit_card",
+      label: "Debit Card",
+      icon: <CreditCard className="w-4 h-4" />,
+    },
+    { id: "upi", label: "UPI", icon: <Smartphone className="w-4 h-4" /> },
+    {
+      id: "neft_rtgs",
+      label: "NEFT/RTGS",
+      icon: <Banknote className="w-4 h-4" />,
+    },
+    { id: "cheque", label: "Cheque", icon: <Wallet className="w-4 h-4" /> },
+    { id: "cash", label: "Cash", icon: <IndianRupee className="w-4 h-4" /> },
+    { id: "others", label: "Others", icon: <Wallet className="w-4 h-4" /> },
   ];
 
   const returnTypes = [
-    'GSTR-3B', 'GSTR-1', 'GSTR-4', 'GSTR-9',
-    'GSTR-9C', 'TDS/TCS', 'Interest', 'Penalty'
+    "GSTR-3B",
+    "GSTR-1",
+    "GSTR-4",
+    "GSTR-9",
+    "GSTR-9C",
+    "TDS/TCS",
+    "Interest",
+    "Penalty",
   ];
 
   const statusOptions = [
-    { id: 'Matched', label: 'Matched', color: 'bg-green-100 text-green-800' },
-    { id: 'Pending', label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
-    { id: 'Unmatched', label: 'Unmatched', color: 'bg-red-100 text-red-800' }
+    { id: "Matched", label: "Matched", color: "bg-green-100 text-green-800" },
+    { id: "Pending", label: "Pending", color: "bg-yellow-100 text-yellow-800" },
+    { id: "Unmatched", label: "Unmatched", color: "bg-red-100 text-red-800" },
   ];
 
   const formatCurrency = (amount) => {
-    if (!amount) return '₹0';
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    if (!amount) return "₹0";
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
+    if (!dateString) return "N/A";
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-IN', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
   };
 
-
   const fetchSummary = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}/summary`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}/summary`,
+      );
       setSummary(response.data);
     } catch (error) {
-      console.error('Error fetching summary:', error);
+      console.error("Error fetching summary:", error);
     }
   };
-
 
   const fetchChallans = async () => {
     setLoading(true);
     try {
       const params = {};
-      if (filters.status !== 'all') params.status = filters.status;
-      if (filters.payment_mode !== 'all') params.payment_mode = filters.payment_mode;
+      if (filters.status !== "all") params.status = filters.status;
+      if (filters.payment_mode !== "all")
+        params.payment_mode = filters.payment_mode;
       if (searchTerm) params.q = searchTerm;
 
-      const response = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}`, { params });
+      const response = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}`,
+        { params },
+      );
       setChallans(response.data);
     } catch (error) {
-      console.error('Error fetching challans:', error);
+      console.error("Error fetching challans:", error);
     } finally {
       setLoading(false);
     }
   };
 
-
   const fetchChallanById = async (id) => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}/${id}`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}/${id}`,
+      );
       setSelectedChallan(response.data);
     } catch (error) {
-      console.error('Error fetching challan:', error);
+      console.error("Error fetching challan:", error);
     }
   };
 
-
   const handleAddChallan = async (formData) => {
     try {
-      await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}`, formData);
-      alert('Challan added successfully!');
+      await axios.post(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}`,
+        formData,
+      );
+      alert("Challan added successfully!");
       setShowAddChallan(false);
       fetchChallans();
       fetchSummary();
     } catch (error) {
-      console.error('Error adding challan:', error);
-      alert('Failed to add challan');
+      console.error("Error adding challan:", error);
+      alert("Failed to add challan");
     }
   };
-
 
   const handleReconcileChallan = async () => {
     if (!selectedChallan) return;
 
     try {
-      await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}/${selectedChallan.id}/reconcile`, reconcileData);
-      alert('Challan reconciled successfully!');
+      await axios.post(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${companyId}/${selectedChallan.id}/reconcile`,
+        reconcileData,
+      );
+      alert("Challan reconciled successfully!");
       setShowReconcileModal(false);
       fetchChallans();
       fetchSummary();
     } catch (error) {
-      console.error('Error reconciling challan:', error);
-      alert('Failed to reconcile challan');
+      console.error("Error reconciling challan:", error);
+      alert("Failed to reconcile challan");
     }
   };
 
-
   const handleDeleteChallan = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this challan?')) return;
+    if (!window.confirm("Are you sure you want to delete this challan?"))
+      return;
 
     try {
-      await axios.delete(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${id}`);
-      alert('Challan deleted successfully!');
+      await axios.delete(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/challans/${id}`,
+      );
+      alert("Challan deleted successfully!");
       fetchChallans();
       fetchSummary();
     } catch (error) {
-      console.error('Error deleting challan:', error);
-      alert('Failed to delete challan');
+      console.error("Error deleting challan:", error);
+      alert("Failed to delete challan");
     }
   };
 
@@ -1077,19 +257,27 @@ const ChallanReconciliation = () => {
   }, [filters, searchTerm]);
 
   const toggleRow = (id) => {
-    setExpandedRows(prev =>
-      prev.includes(id)
-        ? prev.filter(rowId => rowId !== id)
-        : [...prev, id]
+    setExpandedRows((prev) =>
+      prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id],
     );
   };
 
   const handleExport = (type) => {
-    if (type === 'excel') {
-      const csvContent = "data:text/csv;charset=utf-8," 
-        + [
-          ['Challan ID', 'CPN', 'Payment Date', 'Amount', 'Payment Mode', 'Status', 'Return Type', 'Tax Period'],
-          ...challans.map(challan => [
+    if (type === "excel") {
+      const csvContent =
+        "data:text/csv;charset=utf-8," +
+        [
+          [
+            "Challan ID",
+            "CPN",
+            "Payment Date",
+            "Amount",
+            "Payment Mode",
+            "Status",
+            "Return Type",
+            "Tax Period",
+          ],
+          ...challans.map((challan) => [
             challan.id,
             challan.cpn,
             formatDate(challan.payment_date),
@@ -1097,14 +285,19 @@ const ChallanReconciliation = () => {
             challan.payment_mode,
             challan.status,
             challan.return_type,
-            challan.tax_period
-          ])
-        ].map(row => row.join(",")).join("\n");
-      
+            challan.tax_period,
+          ]),
+        ]
+          .map((row) => row.join(","))
+          .join("\n");
+
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `challans_${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute(
+        "download",
+        `challans_${new Date().toISOString().split("T")[0]}.csv`,
+      );
       document.body.appendChild(link);
       link.click();
     } else {
@@ -1113,8 +306,8 @@ const ChallanReconciliation = () => {
   };
 
   const handlePrint = () => {
-    const printContent = document.getElementById('print-section');
-    const printWindow = window.open('', '_blank');
+    const printContent = document.getElementById("print-section");
+    const printWindow = window.open("", "_blank");
     printWindow.document.write(`
       <html>
         <head>
@@ -1147,7 +340,6 @@ const ChallanReconciliation = () => {
   const renderDashboard = () => {
     return (
       <div className="space-y-6">
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-linear-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6">
             <div className="flex items-center justify-between">
@@ -1162,7 +354,9 @@ const ChallanReconciliation = () => {
             <div className="mt-4 pt-4 border-t border-blue-200">
               <div className="flex justify-between text-sm">
                 <span className="text-blue-600">Amount</span>
-                <span className="font-semibold text-blue-800">{formatCurrency(summary.totalAmount)}</span>
+                <span className="font-semibold text-blue-800">
+                  {formatCurrency(summary.totalAmount)}
+                </span>
               </div>
             </div>
           </div>
@@ -1180,7 +374,9 @@ const ChallanReconciliation = () => {
             <div className="mt-4 pt-4 border-t border-green-200">
               <div className="flex justify-between text-sm">
                 <span className="text-green-600">Match %</span>
-                <span className="font-semibold text-green-800">{summary.matchedPercentage}%</span>
+                <span className="font-semibold text-green-800">
+                  {summary.matchedPercentage}%
+                </span>
               </div>
             </div>
           </div>
@@ -1198,7 +394,9 @@ const ChallanReconciliation = () => {
             <div className="mt-4 pt-4 border-t border-amber-200">
               <div className="flex justify-between text-sm">
                 <span className="text-amber-600">Requires Action</span>
-                <span className="font-semibold text-amber-800">{summary.pendingReconciliation} Challans</span>
+                <span className="font-semibold text-amber-800">
+                  {summary.pendingReconciliation} Challans
+                </span>
               </div>
             </div>
           </div>
@@ -1216,21 +414,26 @@ const ChallanReconciliation = () => {
             <div className="mt-4 pt-4 border-t border-red-200">
               <div className="flex justify-between text-sm">
                 <span className="text-red-600">Discrepancy</span>
-                <span className="font-semibold text-red-800">{formatCurrency(summary.unmatchedAmount)}</span>
+                <span className="font-semibold text-red-800">
+                  {formatCurrency(summary.unmatchedAmount)}
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800">Recent Challans</h3>
-              <p className="text-gray-600 text-sm mt-1">Latest tax payment challans</p>
+              <h3 className="text-lg font-semibold text-gray-800">
+                Recent Challans
+              </h3>
+              <p className="text-gray-600 text-sm mt-1">
+                Latest tax payment challans
+              </p>
             </div>
             <button
-              onClick={() => setActiveTab('all-challans')}
+              onClick={() => setActiveTab("all-challans")}
               className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center"
             >
               View All <ArrowUpRight className="w-4 h-4 ml-1" />
@@ -1240,37 +443,59 @@ const ChallanReconciliation = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CPN</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return Type</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    CPN
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Amount
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Return Type
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {challans.slice(0, 3).map((challan) => (
                   <tr key={challan.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{challan.cpn}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {challan.cpn}
+                      </div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{formatDate(challan.payment_date)}</div>
+                      <div className="text-sm text-gray-900">
+                        {formatDate(challan.payment_date)}
+                      </div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm font-semibold text-gray-900">{formatCurrency(challan.amount)}</div>
+                      <div className="text-sm font-semibold text-gray-900">
+                        {formatCurrency(challan.amount)}
+                      </div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{challan.return_type}</div>
+                      <div className="text-sm text-gray-900">
+                        {challan.return_type}
+                      </div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        challan.status === 'Matched'
-                          ? 'bg-green-100 text-green-800'
-                          : challan.status === 'Pending'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          challan.status === "Matched"
+                            ? "bg-green-100 text-green-800"
+                            : challan.status === "Pending"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                        }`}
+                      >
                         {challan.status}
                       </span>
                     </td>
@@ -1283,7 +508,7 @@ const ChallanReconciliation = () => {
                       >
                         <Eye className="w-4 h-4" />
                       </button>
-                      {challan.status !== 'Matched' && (
+                      {challan.status !== "Matched" && (
                         <button
                           onClick={() => {
                             setSelectedChallan(challan);
@@ -1302,19 +527,20 @@ const ChallanReconciliation = () => {
           </div>
         </div>
 
-
         <div className="bg-linear-to-r from-gray-50 to-gray-100 border border-gray-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            Quick Actions
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <button
-              onClick={() => setActiveTab('add-challan')}
+              onClick={() => setActiveTab("add-challan")}
               className="flex flex-col items-center justify-center bg-white hover:bg-gray-50 border border-gray-300 rounded-lg p-4"
             >
               <FilePlus className="w-8 h-8 text-blue-600 mb-2" />
               <span className="text-sm font-medium">Add Challan</span>
             </button>
             <button
-              onClick={() => handleExport('excel')}
+              onClick={() => handleExport("excel")}
               className="flex flex-col items-center justify-center bg-white hover:bg-gray-50 border border-gray-300 rounded-lg p-4"
             >
               <Download className="w-8 h-8 text-green-600 mb-2" />
@@ -1343,7 +569,6 @@ const ChallanReconciliation = () => {
   const renderAllChallans = () => {
     return (
       <div className="space-y-6">
-
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
           <div className="relative w-full md:w-96">
             <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -1359,7 +584,9 @@ const ChallanReconciliation = () => {
             <div className="flex space-x-2">
               <select
                 value={filters.status}
-                onChange={(e) => setFilters({...filters, status: e.target.value})}
+                onChange={(e) =>
+                  setFilters({ ...filters, status: e.target.value })
+                }
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
               >
                 <option value="all">All Status</option>
@@ -1369,25 +596,29 @@ const ChallanReconciliation = () => {
               </select>
               <select
                 value={filters.payment_mode}
-                onChange={(e) => setFilters({...filters, payment_mode: e.target.value})}
+                onChange={(e) =>
+                  setFilters({ ...filters, payment_mode: e.target.value })
+                }
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
               >
                 <option value="all">All Payment Modes</option>
-                {paymentModes.map(mode => (
-                  <option key={mode.id} value={mode.id}>{mode.label}</option>
+                {paymentModes.map((mode) => (
+                  <option key={mode.id} value={mode.id}>
+                    {mode.label}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="flex space-x-2">
               <button
-                onClick={() => handleExport('pdf')}
+                onClick={() => handleExport("pdf")}
                 className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
               >
                 <FileText className="w-4 h-4 text-red-600" />
                 <span className="text-sm">PDF</span>
               </button>
               <button
-                onClick={() => handleExport('excel')}
+                onClick={() => handleExport("excel")}
                 className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
               >
                 <Download className="w-4 h-4 text-green-600" />
@@ -1404,13 +635,11 @@ const ChallanReconciliation = () => {
           </div>
         </div>
 
-
         {loading ? (
           <div className="flex justify-center items-center py-12">
             <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
           </div>
         ) : (
-
           <div className="overflow-x-auto border border-gray-200 rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -1442,10 +671,11 @@ const ChallanReconciliation = () => {
                             onClick={() => toggleRow(challan.id)}
                             className="mr-3 text-gray-400 hover:text-gray-600"
                           >
-                            {expandedRows.includes(challan.id) ?
-                              <ChevronUp className="w-5 h-5" /> :
+                            {expandedRows.includes(challan.id) ? (
+                              <ChevronUp className="w-5 h-5" />
+                            ) : (
                               <ChevronDown className="w-5 h-5" />
-                            }
+                            )}
                           </button>
                           <div>
                             <div className="text-sm font-medium text-gray-900">
@@ -1455,37 +685,51 @@ const ChallanReconciliation = () => {
                               {formatDate(challan.payment_date)}
                             </div>
                             <div className="text-xs text-gray-400 mt-1">
-                              Section: {challan.section || 'N/A'}
+                              Section: {challan.section || "N/A"}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
-                          {paymentModes.find(m => m.id === challan.payment_mode)?.label || challan.payment_mode}
+                          {paymentModes.find(
+                            (m) => m.id === challan.payment_mode,
+                          )?.label || challan.payment_mode}
                         </div>
-                        <div className="text-sm text-gray-500">{challan.bank_name}</div>
+                        <div className="text-sm text-gray-500">
+                          {challan.bank_name}
+                        </div>
                         <div className="text-xs text-gray-400 mt-1">
                           Ref: {challan.reference_no}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-2xl font-bold text-gray-900">{formatCurrency(challan.amount)}</div>
-                        <div className="text-sm text-gray-500">{challan.tax_period}</div>
-                        <div className="text-sm text-gray-500">{challan.return_type}</div>
+                        <div className="text-2xl font-bold text-gray-900">
+                          {formatCurrency(challan.amount)}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {challan.tax_period}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {challan.return_type}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="space-y-1">
-                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            challan.status === 'Matched'
-                              ? 'bg-green-100 text-green-800'
-                              : challan.status === 'Pending'
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : 'bg-red-100 text-red-800'
-                          }`}>
+                          <span
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              challan.status === "Matched"
+                                ? "bg-green-100 text-green-800"
+                                : challan.status === "Pending"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
+                            }`}
+                          >
                             {challan.status}
                           </span>
-                          <div className="text-xs text-gray-500">{challan.reconciliation_status}</div>
+                          <div className="text-xs text-gray-500">
+                            {challan.reconciliation_status}
+                          </div>
                           <div className="text-xs">{challan.remarks}</div>
                         </div>
                       </td>
@@ -1501,7 +745,7 @@ const ChallanReconciliation = () => {
                           >
                             Reconcile
                           </button>
-                          {challan.status === 'Matched' && (
+                          {challan.status === "Matched" && (
                             <button
                               onClick={() => fetchChallanById(challan.id)}
                               className="text-green-600 hover:text-green-900 px-3 py-1 border border-green-200 rounded hover:bg-green-50"
@@ -1525,85 +769,125 @@ const ChallanReconciliation = () => {
                         <td colSpan="5" className="px-6 py-4 bg-blue-50">
                           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div>
-                              <h4 className="text-sm font-semibold text-gray-700 mb-2">Payment Details</h4>
+                              <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                                Payment Details
+                              </h4>
                               <dl className="space-y-1 text-sm">
                                 <div className="flex justify-between">
-                                  <dt className="text-gray-500">Transaction ID:</dt>
-                                  <dd className="font-medium">{challan.transaction_id}</dd>
+                                  <dt className="text-gray-500">
+                                    Transaction ID:
+                                  </dt>
+                                  <dd className="font-medium">
+                                    {challan.transaction_id}
+                                  </dd>
                                 </div>
                                 <div className="flex justify-between">
                                   <dt className="text-gray-500">Bank Name:</dt>
-                                  <dd className="font-medium">{challan.bank_name}</dd>
+                                  <dd className="font-medium">
+                                    {challan.bank_name}
+                                  </dd>
                                 </div>
                                 <div className="flex justify-between">
-                                  <dt className="text-gray-500">Payment Mode:</dt>
-                                  <dd className="font-medium">{challan.payment_mode}</dd>
+                                  <dt className="text-gray-500">
+                                    Payment Mode:
+                                  </dt>
+                                  <dd className="font-medium">
+                                    {challan.payment_mode}
+                                  </dd>
                                 </div>
                               </dl>
                             </div>
                             <div>
-                              <h4 className="text-sm font-semibold text-gray-700 mb-2">Tax Details</h4>
+                              <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                                Tax Details
+                              </h4>
                               <dl className="space-y-1 text-sm">
                                 <div className="flex justify-between">
                                   <dt className="text-gray-500">GSTIN:</dt>
-                                  <dd className="font-medium">{challan.gstin}</dd>
+                                  <dd className="font-medium">
+                                    {challan.gstin}
+                                  </dd>
                                 </div>
                                 <div className="flex justify-between">
                                   <dt className="text-gray-500">Tax Period:</dt>
-                                  <dd className="font-medium">{challan.tax_period}</dd>
+                                  <dd className="font-medium">
+                                    {challan.tax_period}
+                                  </dd>
                                 </div>
                                 <div className="flex justify-between">
-                                  <dt className="text-gray-500">Return Type:</dt>
-                                  <dd className="font-medium">{challan.return_type}</dd>
+                                  <dt className="text-gray-500">
+                                    Return Type:
+                                  </dt>
+                                  <dd className="font-medium">
+                                    {challan.return_type}
+                                  </dd>
                                 </div>
                               </dl>
                             </div>
                             <div>
-                              <h4 className="text-sm font-semibold text-gray-700 mb-2">Reconciliation</h4>
+                              <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                                Reconciliation
+                              </h4>
                               <dl className="space-y-1 text-sm">
                                 <div className="flex justify-between">
                                   <dt className="text-gray-500">Status:</dt>
-                                  <dd className={`font-medium ${
-                                    challan.reconciliation_status === 'Fully Matched' 
-                                      ? 'text-green-600' 
-                                      : challan.reconciliation_status === 'Partial Match'
-                                      ? 'text-yellow-600'
-                                      : 'text-red-600'
-                                  }`}>
+                                  <dd
+                                    className={`font-medium ${
+                                      challan.reconciliation_status ===
+                                      "Fully Matched"
+                                        ? "text-green-600"
+                                        : challan.reconciliation_status ===
+                                            "Partial Match"
+                                          ? "text-yellow-600"
+                                          : "text-red-600"
+                                    }`}
+                                  >
                                     {challan.reconciliation_status}
                                   </dd>
                                 </div>
                                 <div className="flex justify-between">
                                   <dt className="text-gray-500">Amount:</dt>
-                                  <dd className="font-medium">{formatCurrency(challan.amount)}</dd>
+                                  <dd className="font-medium">
+                                    {formatCurrency(challan.amount)}
+                                  </dd>
                                 </div>
                                 <div className="flex justify-between">
                                   <dt className="text-gray-500">Section:</dt>
-                                  <dd className="font-medium">{challan.section || 'N/A'}</dd>
+                                  <dd className="font-medium">
+                                    {challan.section || "N/A"}
+                                  </dd>
                                 </div>
                               </dl>
                             </div>
                             <div>
-                              <h4 className="text-sm font-semibold text-gray-700 mb-2">Actions</h4>
+                              <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                                Actions
+                              </h4>
                               <div className="space-y-2">
                                 <div className="flex items-center space-x-2">
-                                  <div className={`w-3 h-3 rounded-full ${
-                                    challan.reconciliation_status === 'Fully Matched'
-                                      ? 'bg-green-500'
-                                      : challan.reconciliation_status === 'Partial Match'
-                                      ? 'bg-yellow-500'
-                                      : 'bg-red-500'
-                                  }`} />
-                                  <span className="text-sm">{challan.reconciliation_status}</span>
+                                  <div
+                                    className={`w-3 h-3 rounded-full ${
+                                      challan.reconciliation_status ===
+                                      "Fully Matched"
+                                        ? "bg-green-500"
+                                        : challan.reconciliation_status ===
+                                            "Partial Match"
+                                          ? "bg-yellow-500"
+                                          : "bg-red-500"
+                                    }`}
+                                  />
+                                  <span className="text-sm">
+                                    {challan.reconciliation_status}
+                                  </span>
                                 </div>
                                 <div className="space-y-1">
-                                  <button 
-                                    onClick={() => handleExport('excel')}
+                                  <button
+                                    onClick={() => handleExport("excel")}
                                     className="w-full text-xs text-blue-600 hover:text-blue-800 px-3 py-1 border border-blue-200 rounded"
                                   >
                                     Download Challan Copy
                                   </button>
-                                  <button 
+                                  <button
                                     onClick={() => fetchChallanById(challan.id)}
                                     className="w-full text-xs text-gray-600 hover:text-gray-800 px-3 py-1 border border-gray-200 rounded"
                                   >
@@ -1628,19 +912,19 @@ const ChallanReconciliation = () => {
 
   const AddChallanModal = () => {
     const [formData, setFormData] = useState({
-      challan_no: '',
-      cpn: '',
-      payment_date: new Date().toISOString().split('T')[0],
-      payment_mode: '',
-      bank_name: '',
-      reference_no: '',
-      transaction_id: '',
-      amount: '',
-      tax_period: '',
-      return_type: '',
-      section: '',
-      gstin: '',
-      remarks: ''
+      challan_no: "",
+      cpn: "",
+      payment_date: new Date().toISOString().split("T")[0],
+      payment_mode: "",
+      bank_name: "",
+      reference_no: "",
+      transaction_id: "",
+      amount: "",
+      tax_period: "",
+      return_type: "",
+      section: "",
+      gstin: "",
+      remarks: "",
     });
 
     const handleSubmit = async (e) => {
@@ -1650,9 +934,9 @@ const ChallanReconciliation = () => {
 
     const handleChange = (e) => {
       const { name, value } = e.target;
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     };
 
@@ -1660,7 +944,9 @@ const ChallanReconciliation = () => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
           <div className="flex justify-between items-center p-6 border-b border-gray-200 bg-linear-to-r from-blue-50 to-cyan-50">
-            <h2 className="text-2xl font-bold text-gray-800">Add New Challan</h2>
+            <h2 className="text-2xl font-bold text-gray-800">
+              Add New Challan
+            </h2>
             <button
               onClick={() => setShowAddChallan(false)}
               className="text-gray-400 hover:text-gray-600"
@@ -1727,8 +1013,10 @@ const ChallanReconciliation = () => {
                   className="w-full border border-gray-300 rounded-lg px-4 py-2"
                 >
                   <option value="">Select Payment Mode</option>
-                  {paymentModes.map(mode => (
-                    <option key={mode.id} value={mode.id}>{mode.label}</option>
+                  {paymentModes.map((mode) => (
+                    <option key={mode.id} value={mode.id}>
+                      {mode.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -1775,8 +1063,10 @@ const ChallanReconciliation = () => {
                   className="w-full border border-gray-300 rounded-lg px-4 py-2"
                 >
                   <option value="">Select Return Type</option>
-                  {returnTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
+                  {returnTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -1894,7 +1184,9 @@ const ChallanReconciliation = () => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
           <div className="flex justify-between items-center p-6 border-b border-gray-200 bg-linear-to-r from-green-50 to-emerald-50">
-            <h2 className="text-xl font-bold text-gray-800">Reconcile Challan</h2>
+            <h2 className="text-xl font-bold text-gray-800">
+              Reconcile Challan
+            </h2>
             <button
               onClick={() => setShowReconcileModal(false)}
               className="text-gray-400 hover:text-gray-600"
@@ -1905,11 +1197,20 @@ const ChallanReconciliation = () => {
 
           <div className="p-6">
             <div className="mb-6">
-              <h3 className="font-semibold text-gray-800 mb-2">Challan Details</h3>
+              <h3 className="font-semibold text-gray-800 mb-2">
+                Challan Details
+              </h3>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm"><strong>CPN:</strong> {selectedChallan.cpn}</p>
-                <p className="text-sm"><strong>Amount:</strong> {formatCurrency(selectedChallan.amount)}</p>
-                <p className="text-sm"><strong>Tax Period:</strong> {selectedChallan.tax_period}</p>
+                <p className="text-sm">
+                  <strong>CPN:</strong> {selectedChallan.cpn}
+                </p>
+                <p className="text-sm">
+                  <strong>Amount:</strong>{" "}
+                  {formatCurrency(selectedChallan.amount)}
+                </p>
+                <p className="text-sm">
+                  <strong>Tax Period:</strong> {selectedChallan.tax_period}
+                </p>
               </div>
             </div>
 
@@ -1920,7 +1221,12 @@ const ChallanReconciliation = () => {
                 </label>
                 <select
                   value={reconcileData.status}
-                  onChange={(e) => setReconcileData({...reconcileData, status: e.target.value})}
+                  onChange={(e) =>
+                    setReconcileData({
+                      ...reconcileData,
+                      status: e.target.value,
+                    })
+                  }
                   className="w-full border border-gray-300 rounded-lg px-4 py-2"
                 >
                   <option value="">Select Status</option>
@@ -1937,7 +1243,12 @@ const ChallanReconciliation = () => {
                 <input
                   type="text"
                   value={reconcileData.reconciliation_status}
-                  onChange={(e) => setReconcileData({...reconcileData, reconciliation_status: e.target.value})}
+                  onChange={(e) =>
+                    setReconcileData({
+                      ...reconcileData,
+                      reconciliation_status: e.target.value,
+                    })
+                  }
                   className="w-full border border-gray-300 rounded-lg px-4 py-2"
                   placeholder="Fully Matched, Partial Match, etc."
                 />
@@ -1949,7 +1260,12 @@ const ChallanReconciliation = () => {
                 </label>
                 <textarea
                   value={reconcileData.remarks}
-                  onChange={(e) => setReconcileData({...reconcileData, remarks: e.target.value})}
+                  onChange={(e) =>
+                    setReconcileData({
+                      ...reconcileData,
+                      remarks: e.target.value,
+                    })
+                  }
                   className="w-full border border-gray-300 rounded-lg px-4 py-2"
                   rows="3"
                   placeholder="Add reconciliation remarks..."
@@ -1979,7 +1295,6 @@ const ChallanReconciliation = () => {
 
   return (
     <div className="space-y-6">
-
       <div className="bg-linear-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-xl p-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
           <div>
@@ -1988,11 +1303,13 @@ const ChallanReconciliation = () => {
               Challan Reconciliation
             </h1>
             <p className="text-gray-600 mt-1">
-              Match tax payment challans with GST returns for accurate ITC claims
+              Match tax payment challans with GST returns for accurate ITC
+              claims
             </p>
             <div className="flex items-center space-x-4 mt-3">
               <span className="text-sm text-gray-500">
-                Last Updated: {new Date().toLocaleDateString()} | Auto-reconciliation enabled
+                Last Updated: {new Date().toLocaleDateString()} |
+                Auto-reconciliation enabled
               </span>
             </div>
           </div>
@@ -2003,8 +1320,10 @@ const ChallanReconciliation = () => {
                 onChange={(e) => setSelectedMonth(e.target.value)}
                 className="appearance-none bg-white border border-purple-300 rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
-                {months.map(month => (
-                  <option key={month} value={month}>{month}</option>
+                {months.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
                 ))}
               </select>
               <ChevronDown className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
@@ -2020,18 +1339,17 @@ const ChallanReconciliation = () => {
         </div>
       </div>
 
-
       <div className="bg-white rounded-xl border border-gray-200">
         <div className="border-b border-gray-200">
           <nav className="flex overflow-x-auto">
-            {tabs.map(tab => (
+            {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center space-x-2 shrink-0 px-6 py-3 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-purple-500 text-purple-600 bg-purple-50'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? "border-purple-500 text-purple-600 bg-purple-50"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
               >
                 {tab.icon}
@@ -2041,15 +1359,18 @@ const ChallanReconciliation = () => {
           </nav>
         </div>
 
-
         <div className="p-6" id="print-section">
-          {activeTab === 'dashboard' && renderDashboard()}
-          {activeTab === 'all-challans' && renderAllChallans()}
-          {activeTab === 'add-challan' && (
+          {activeTab === "dashboard" && renderDashboard()}
+          {activeTab === "all-challans" && renderAllChallans()}
+          {activeTab === "add-challan" && (
             <div className="text-center py-12">
               <FilePlus className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Add Challan</h3>
-              <p className="text-gray-600 mb-6">Add new tax payment challans for reconciliation</p>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                Add Challan
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Add new tax payment challans for reconciliation
+              </p>
               <button
                 onClick={() => setShowAddChallan(true)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 mx-auto"
@@ -2061,7 +1382,6 @@ const ChallanReconciliation = () => {
           )}
         </div>
       </div>
-
 
       {showAddChallan && <AddChallanModal />}
       {showReconcileModal && <ReconcileModal />}

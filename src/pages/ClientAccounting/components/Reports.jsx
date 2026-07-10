@@ -5,14 +5,10 @@ import BalanceSheet from "./BalanceSheet";
 function Reports() {
   const [selectedReport, setSelectedReport] = useState("Profit & Loss Account");
 
-  const reports = [
-    "Profit & Loss Account",
-    "Balance Sheet",
-  ];
+  const reports = ["Profit & Loss Account", "Balance Sheet"];
 
   return (
     <div className="min-h-screen bg-[#FDFBE6] font-[calibri] text-[15px]">
-
       <div className="bg-gray-200 text-gray-800 flex items-center justify-start   shadow">
         <div className="flex ">
           {reports.map((report) => (
@@ -32,7 +28,6 @@ function Reports() {
         </div>
       </div>
 
-
       <div className="mt-2 py-3 px-2 mx-auto">
         <h2 className="text-xl font-semibold text-[#1C5D99] mb-4 border-b border-gray-300 pb-1">
           {selectedReport}
@@ -46,13 +41,9 @@ function Reports() {
             </p>
           )}
 
-        {selectedReport === "Profit & Loss Account" && (
-          <ProfitLoss />
-        )}
+          {selectedReport === "Profit & Loss Account" && <ProfitLoss />}
 
-          {selectedReport === "Balance Sheet" && (
-           <BalanceSheet />
-          )}
+          {selectedReport === "Balance Sheet" && <BalanceSheet />}
 
           {selectedReport === "Ledger Summary" && (
             <p className="text-gray-700">
@@ -61,10 +52,7 @@ function Reports() {
             </p>
           )}
         </div>
-
-    
       </div>
-
     </div>
   );
 }

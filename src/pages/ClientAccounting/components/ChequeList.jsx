@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useCompany } from '../context/CompanyContext';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useCompany } from "../context/CompanyContext";
 import {
   FileText,
   Calendar,
@@ -22,18 +22,18 @@ import {
   User,
   Hash,
   MoreVertical,
-  X
-} from 'lucide-react';
-import Swal from 'sweetalert2';
+  X,
+} from "lucide-react";
+import Swal from "sweetalert2";
 
 const ChequeList = () => {
   const { companyId } = useCompany();
   const [cheques, setCheques] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [dateFilter, setDateFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("");
   const [selectedCheques, setSelectedCheques] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,50 +44,50 @@ const ChequeList = () => {
     cleared: 0,
     bounced: 0,
     cancelled: 0,
-    totalAmount: 0
+    totalAmount: 0,
   });
-
 
   const [showChequePopup, setShowChequePopup] = useState(false);
   const [showViewPopup, setShowViewPopup] = useState(false);
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [selectedCheque, setSelectedCheque] = useState(null);
-  const [popupMode, setPopupMode] = useState('');
-
+  const [popupMode, setPopupMode] = useState("");
 
   const fetchCheques = async () => {
     if (!companyId) return;
-    
+
     setLoading(true);
     try {
       let url = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${companyId}/all`;
-      
 
       const params = new URLSearchParams();
-      if (statusFilter !== 'all') params.append('status', statusFilter);
-      if (typeFilter !== 'all') params.append('type', typeFilter);
-      if (searchTerm) params.append('q', searchTerm);
-      if (dateFilter) params.append('date', dateFilter);
-      
+      if (statusFilter !== "all") params.append("status", statusFilter);
+      if (typeFilter !== "all") params.append("type", typeFilter);
+      if (searchTerm) params.append("q", searchTerm);
+      if (dateFilter) params.append("date", dateFilter);
+
       const queryString = params.toString();
       if (queryString) url += `?${queryString}`;
-      
+
       const response = await axios.get(url);
-      
+
       if (response.data.success) {
         setCheques(response.data.data || []);
         calculateStats(response.data.data || []);
       } else {
-        Swal.fire('Error', response.data.message || 'Failed to fetch cheques', 'error');
+        Swal.fire(
+          "Error",
+          response.data.message || "Failed to fetch cheques",
+          "error",
+        );
       }
     } catch (error) {
-      console.error('Error fetching cheques:', error);
-      Swal.fire('Error', 'Failed to fetch cheques', 'error');
+      console.error("Error fetching cheques:", error);
+      Swal.fire("Error", "Failed to fetch cheques", "error");
     } finally {
       setLoading(false);
     }
   };
-
 
   const calculateStats = (data) => {
     const stats = {
@@ -96,20 +96,28 @@ const ChequeList = () => {
       cleared: 0,
       bounced: 0,
       cancelled: 0,
-      totalAmount: 0
+      totalAmount: 0,
     };
-    
-    data.forEach(cheque => {
+
+    data.forEach((cheque) => {
       stats.totalAmount += parseFloat(cheque.amount || 0);
-      
-      switch(cheque.status) {
-        case 'pending': stats.pending++; break;
-        case 'cleared': stats.cleared++; break;
-        case 'bounced': stats.bounced++; break;
-        case 'cancelled': stats.cancelled++; break;
+
+      switch (cheque.status) {
+        case "pending":
+          stats.pending++;
+          break;
+        case "cleared":
+          stats.cleared++;
+          break;
+        case "bounced":
+          stats.bounced++;
+          break;
+        case "cancelled":
+          stats.cancelled++;
+          break;
       }
     });
-    
+
     setStats(stats);
   };
 
@@ -125,35 +133,31 @@ const ChequeList = () => {
   };
 
   const handleResetFilters = () => {
-    setSearchTerm('');
-    setStatusFilter('all');
-    setTypeFilter('all');
-    setDateFilter('');
+    setSearchTerm("");
+    setStatusFilter("all");
+    setTypeFilter("all");
+    setDateFilter("");
     setSelectedCheques([]);
     fetchCheques();
   };
 
-
   const handleViewCheque = (cheque) => {
     setSelectedCheque(cheque);
-    setPopupMode('view');
+    setPopupMode("view");
     setShowViewPopup(true);
   };
 
-
   const handleEditCheque = (cheque) => {
     setSelectedCheque(cheque);
-    setPopupMode('edit');
+    setPopupMode("edit");
     setShowEditPopup(true);
   };
 
-
   const handleAddCheque = () => {
     setSelectedCheque(null);
-    setPopupMode('add');
+    setPopupMode("add");
     setShowChequePopup(true);
   };
-
 
   const closePopups = () => {
     setShowChequePopup(false);
@@ -162,73 +166,73 @@ const ChequeList = () => {
     setSelectedCheque(null);
   };
 
-
   const handleFormSubmit = async (formData) => {
     try {
-      const url = popupMode === 'add' 
-        ? `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/create`
-        : `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${selectedCheque.id}/update`;
-      
-      const method = popupMode === 'add' ? 'post' : 'put';
-      
+      const url =
+        popupMode === "add"
+          ? `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/create`
+          : `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${selectedCheque.id}/update`;
+
+      const method = popupMode === "add" ? "post" : "put";
+
       const response = await axios[method](url, formData);
-      
+
       if (response.data.success) {
         Swal.fire({
-          icon: 'success',
-          title: popupMode === 'add' ? 'Cheque Added!' : 'Cheque Updated!',
+          icon: "success",
+          title: popupMode === "add" ? "Cheque Added!" : "Cheque Updated!",
           text: response.data.message,
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
-        
+
         closePopups();
         fetchCheques();
       }
     } catch (error) {
-      console.error('Error saving cheque:', error);
+      console.error("Error saving cheque:", error);
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.response?.data?.message || 'Failed to save cheque',
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "Failed to save cheque",
       });
     }
   };
 
   const handleDeleteCheque = async (id) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'This action cannot be undone!',
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "This action cannot be undone!",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
       try {
         const response = await axios.delete(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${id}/delete`
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${id}/delete`,
         );
 
         if (response.data.success) {
           Swal.fire({
-            icon: 'success',
-            title: 'Deleted!',
-            text: 'Cheque has been deleted.',
+            icon: "success",
+            title: "Deleted!",
+            text: "Cheque has been deleted.",
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
-          
+
           fetchCheques();
         }
       } catch (error) {
-        console.error('Error deleting cheque:', error);
+        console.error("Error deleting cheque:", error);
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.response?.data?.message || 'Failed to delete cheque',
+          icon: "error",
+          title: "Error",
+          text: error.response?.data?.message || "Failed to delete cheque",
         });
       }
     }
@@ -236,12 +240,12 @@ const ChequeList = () => {
 
   const handleChangeStatus = async (id, newStatus) => {
     const result = await Swal.fire({
-      title: 'Change Status',
+      title: "Change Status",
       text: `Change cheque status to "${newStatus}"?`,
-      icon: 'question',
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: 'Yes, change it',
-      cancelButtonText: 'Cancel'
+      confirmButtonText: "Yes, change it",
+      cancelButtonText: "Cancel",
     });
 
     if (result.isConfirmed) {
@@ -250,27 +254,27 @@ const ChequeList = () => {
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/${id}/change-status`,
           {
             status: newStatus,
-            statusDate: new Date().toISOString().split('T')[0]
-          }
+            statusDate: new Date().toISOString().split("T")[0],
+          },
         );
 
         if (response.data.success) {
           Swal.fire({
-            icon: 'success',
-            title: 'Status Updated!',
+            icon: "success",
+            title: "Status Updated!",
             text: `Cheque status changed to ${newStatus}`,
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
-          
+
           fetchCheques();
         }
       } catch (error) {
-        console.error('Error changing status:', error);
+        console.error("Error changing status:", error);
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.response?.data?.message || 'Failed to change status',
+          icon: "error",
+          title: "Error",
+          text: error.response?.data?.message || "Failed to change status",
         });
       }
     }
@@ -278,12 +282,13 @@ const ChequeList = () => {
 
   const handleExport = () => {
     const dataStr = JSON.stringify(cheques, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    const exportFileDefaultName = `cheque-list-${new Date().toISOString().split('T')[0]}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+    const exportFileDefaultName = `cheque-list-${new Date().toISOString().split("T")[0]}.json`;
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
   };
 
@@ -293,16 +298,34 @@ const ChequeList = () => {
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: <Clock className="w-4 h-4" />, label: 'Pending' },
-      cleared: { color: 'bg-green-100 text-green-800', icon: <CheckCircle className="w-4 h-4" />, label: 'Cleared' },
-      bounced: { color: 'bg-red-100 text-red-800', icon: <XCircle className="w-4 h-4" />, label: 'Bounced' },
-      cancelled: { color: 'bg-gray-100 text-gray-800', icon: <XCircle className="w-4 h-4" />, label: 'Cancelled' }
+      pending: {
+        color: "bg-yellow-100 text-yellow-800",
+        icon: <Clock className="w-4 h-4" />,
+        label: "Pending",
+      },
+      cleared: {
+        color: "bg-green-100 text-green-800",
+        icon: <CheckCircle className="w-4 h-4" />,
+        label: "Cleared",
+      },
+      bounced: {
+        color: "bg-red-100 text-red-800",
+        icon: <XCircle className="w-4 h-4" />,
+        label: "Bounced",
+      },
+      cancelled: {
+        color: "bg-gray-100 text-gray-800",
+        icon: <XCircle className="w-4 h-4" />,
+        label: "Cancelled",
+      },
     };
-    
+
     const config = statusConfig[status] || statusConfig.pending;
-    
+
     return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${config.color}`}>
+      <span
+        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${config.color}`}
+      >
         {config.icon}
         <span className="ml-1">{config.label}</span>
       </span>
@@ -311,37 +334,41 @@ const ChequeList = () => {
 
   const getTypeBadge = (type) => {
     const typeConfig = {
-      issued: { color: 'bg-blue-100 text-blue-800', label: 'Issued' },
-      received: { color: 'bg-purple-100 text-purple-800', label: 'Received' }
+      issued: { color: "bg-blue-100 text-blue-800", label: "Issued" },
+      received: { color: "bg-purple-100 text-purple-800", label: "Received" },
     };
-    
-    const config = typeConfig[type] || { color: 'bg-gray-100 text-gray-800', label: type };
-    
+
+    const config = typeConfig[type] || {
+      color: "bg-gray-100 text-gray-800",
+      label: type,
+    };
+
     return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${config.color}`}>
+      <span
+        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${config.color}`}
+      >
         {config.label}
       </span>
     );
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return '-';
+    if (!dateString) return "-";
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-IN', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 2
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: 2,
     }).format(amount || 0);
   };
-
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -364,7 +391,6 @@ const ChequeList = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -372,9 +398,11 @@ const ChequeList = () => {
                 <FileText className="w-8 h-8 mr-3 text-blue-600" />
                 Cheque Register
               </h1>
-              <p className="text-gray-600 mt-1">Manage and track all your cheque transactions</p>
+              <p className="text-gray-600 mt-1">
+                Manage and track all your cheque transactions
+              </p>
             </div>
-            
+
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={handleAddCheque}
@@ -401,28 +429,31 @@ const ChequeList = () => {
           </div>
         </div>
 
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
-
           <div className="bg-white rounded-xl p-4 shadow border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-blue-600">Total Cheques</p>
-                <p className="text-2xl font-bold text-blue-700 mt-1">{stats.total}</p>
+                <p className="text-2xl font-bold text-blue-700 mt-1">
+                  {stats.total}
+                </p>
               </div>
               <div className="bg-blue-100 p-2 rounded-lg">
                 <FileText className="w-6 h-6 text-blue-600" />
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">All cheque transactions</p>
+            <p className="text-xs text-gray-500 mt-2">
+              All cheque transactions
+            </p>
           </div>
-          
 
           <div className="bg-white rounded-xl p-4 shadow border border-yellow-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-yellow-600">Pending</p>
-                <p className="text-2xl font-bold text-yellow-700 mt-1">{stats.pending}</p>
+                <p className="text-2xl font-bold text-yellow-700 mt-1">
+                  {stats.pending}
+                </p>
               </div>
               <div className="bg-yellow-100 p-2 rounded-lg">
                 <Clock className="w-6 h-6 text-yellow-600" />
@@ -430,13 +461,14 @@ const ChequeList = () => {
             </div>
             <p className="text-xs text-gray-500 mt-2">Awaiting clearance</p>
           </div>
-          
 
           <div className="bg-white rounded-xl p-4 shadow border border-green-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-green-600">Cleared</p>
-                <p className="text-2xl font-bold text-green-700 mt-1">{stats.cleared}</p>
+                <p className="text-2xl font-bold text-green-700 mt-1">
+                  {stats.cleared}
+                </p>
               </div>
               <div className="bg-green-100 p-2 rounded-lg">
                 <CheckCircle className="w-6 h-6 text-green-600" />
@@ -444,13 +476,14 @@ const ChequeList = () => {
             </div>
             <p className="text-xs text-gray-500 mt-2">Successfully processed</p>
           </div>
-          
 
           <div className="bg-white rounded-xl p-4 shadow border border-red-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-red-600">Bounced</p>
-                <p className="text-2xl font-bold text-red-700 mt-1">{stats.bounced}</p>
+                <p className="text-2xl font-bold text-red-700 mt-1">
+                  {stats.bounced}
+                </p>
               </div>
               <div className="bg-red-100 p-2 rounded-lg">
                 <XCircle className="w-6 h-6 text-red-600" />
@@ -458,13 +491,14 @@ const ChequeList = () => {
             </div>
             <p className="text-xs text-gray-500 mt-2">Returned cheques</p>
           </div>
-          
 
           <div className="bg-white rounded-xl p-4 shadow border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Cancelled</p>
-                <p className="text-2xl font-bold text-gray-700 mt-1">{stats.cancelled}</p>
+                <p className="text-2xl font-bold text-gray-700 mt-1">
+                  {stats.cancelled}
+                </p>
               </div>
               <div className="bg-gray-100 p-2 rounded-lg">
                 <XCircle className="w-6 h-6 text-gray-600" />
@@ -472,7 +506,6 @@ const ChequeList = () => {
             </div>
             <p className="text-xs text-gray-500 mt-2">Voided cheques</p>
           </div>
-          
 
           <div className="bg-white rounded-xl p-4 shadow border border-indigo-200">
             <div className="flex items-center justify-between">
@@ -489,7 +522,6 @@ const ChequeList = () => {
             <p className="text-xs text-gray-500 mt-2">Sum of all cheques</p>
           </div>
         </div>
-
 
         <div className="bg-white rounded-xl shadow border border-gray-200 p-4 mb-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -511,7 +543,7 @@ const ChequeList = () => {
                 </button>
               </div>
             </form>
-            
+
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowFilters(!showFilters)}
@@ -519,9 +551,11 @@ const ChequeList = () => {
               >
                 <Filter className="w-5 h-5 mr-2" />
                 Filters
-                <ChevronDown className={`w-4 h-4 ml-2 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`w-4 h-4 ml-2 transition-transform ${showFilters ? "rotate-180" : ""}`}
+                />
               </button>
-              
+
               <button
                 onClick={handleResetFilters}
                 className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
@@ -531,11 +565,9 @@ const ChequeList = () => {
               </button>
             </div>
           </div>
-          
 
           {showFilters && (
             <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-4">
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Status
@@ -552,7 +584,6 @@ const ChequeList = () => {
                   <option value="cancelled">Cancelled</option>
                 </select>
               </div>
-              
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -568,7 +599,6 @@ const ChequeList = () => {
                   <option value="received">Received (Income)</option>
                 </select>
               </div>
-              
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -585,16 +615,17 @@ const ChequeList = () => {
           )}
         </div>
 
-
         <div className="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800">Cheque Transactions</h3>
+              <h3 className="text-lg font-semibold text-gray-800">
+                Cheque Transactions
+              </h3>
               <p className="text-sm text-gray-500">
                 Showing {currentCheques.length} of {cheques.length} cheques
               </p>
             </div>
-            
+
             {selectedCheques.length > 0 && (
               <div className="flex items-center space-x-3">
                 <span className="text-sm text-gray-600">
@@ -609,15 +640,17 @@ const ChequeList = () => {
               </div>
             )}
           </div>
-          
+
           {cheques.length === 0 ? (
             <div className="p-8 text-center">
               <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h4 className="text-lg font-semibold text-gray-700 mb-2">No Cheques Found</h4>
+              <h4 className="text-lg font-semibold text-gray-700 mb-2">
+                No Cheques Found
+              </h4>
               <p className="text-gray-500 mb-6">
-                {searchTerm || statusFilter !== 'all' || typeFilter !== 'all' 
-                  ? 'No cheques match your search criteria. Try different filters.'
-                  : 'Get started by adding your first cheque.'}
+                {searchTerm || statusFilter !== "all" || typeFilter !== "all"
+                  ? "No cheques match your search criteria. Try different filters."
+                  : "Get started by adding your first cheque."}
               </p>
               <button
                 onClick={handleAddCheque}
@@ -681,7 +714,7 @@ const ChequeList = () => {
                             </div>
                           </div>
                         </td>
-                        
+
                         <td className="px-6 py-4">
                           <div className="text-lg font-bold text-gray-900">
                             {formatCurrency(cheque.amount)}
@@ -690,13 +723,15 @@ const ChequeList = () => {
                             {cheque.amountInWords?.substring(0, 30)}...
                           </div>
                         </td>
-                        
+
                         <td className="px-6 py-4">
                           <div className="space-y-1">
                             <div className="text-sm">
                               <Calendar className="w-4 h-4 inline mr-1 text-gray-400" />
                               <span className="text-gray-700">Date: </span>
-                              <span className="font-medium">{formatDate(cheque.chequeDate)}</span>
+                              <span className="font-medium">
+                                {formatDate(cheque.chequeDate)}
+                              </span>
                             </div>
                             <div className="text-sm">
                               <span className="text-gray-700">Issued: </span>
@@ -704,31 +739,39 @@ const ChequeList = () => {
                             </div>
                             {cheque.datePresented && (
                               <div className="text-sm">
-                                <span className="text-gray-700">Presented: </span>
+                                <span className="text-gray-700">
+                                  Presented:{" "}
+                                </span>
                                 <span>{formatDate(cheque.datePresented)}</span>
                               </div>
                             )}
                             {cheque.dateCleared && (
                               <div className="text-sm">
                                 <span className="text-gray-700">Cleared: </span>
-                                <span className="text-green-600">{formatDate(cheque.dateCleared)}</span>
+                                <span className="text-green-600">
+                                  {formatDate(cheque.dateCleared)}
+                                </span>
                               </div>
                             )}
                           </div>
                         </td>
-                        
+
                         <td className="px-6 py-4">
                           <div className="space-y-2">
                             <div className="flex items-center">
                               <Landmark className="w-4 h-4 text-gray-400 mr-2" />
-                              <span className="text-sm font-medium">{cheque.bankName}</span>
+                              <span className="text-sm font-medium">
+                                {cheque.bankName}
+                              </span>
                             </div>
                             <div className="text-xs text-gray-500">
                               A/c: {cheque.accountNumber}
                             </div>
                             <div className="flex items-center mt-2">
                               <User className="w-4 h-4 text-gray-400 mr-2" />
-                              <span className="text-sm">{cheque.payeeName}</span>
+                              <span className="text-sm">
+                                {cheque.payeeName}
+                              </span>
                             </div>
                             {cheque.purpose && (
                               <div className="text-xs text-gray-500">
@@ -737,7 +780,7 @@ const ChequeList = () => {
                             )}
                           </div>
                         </td>
-                        
+
                         <td className="px-6 py-4">
                           <div className="space-y-2">
                             {getStatusBadge(cheque.status)}
@@ -746,12 +789,14 @@ const ChequeList = () => {
                             </div>
 
                             <div className="flex flex-wrap gap-1 mt-2">
-                              {['pending', 'cleared', 'bounced', 'cancelled']
-                                .filter(status => status !== cheque.status)
-                                .map(status => (
+                              {["pending", "cleared", "bounced", "cancelled"]
+                                .filter((status) => status !== cheque.status)
+                                .map((status) => (
                                   <button
                                     key={status}
-                                    onClick={() => handleChangeStatus(cheque.id, status)}
+                                    onClick={() =>
+                                      handleChangeStatus(cheque.id, status)
+                                    }
                                     className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded"
                                   >
                                     Mark as {status}
@@ -760,7 +805,7 @@ const ChequeList = () => {
                             </div>
                           </div>
                         </td>
-                        
+
                         <td className="px-6 py-4">
                           <div className="flex items-center space-x-2">
                             <button
@@ -770,7 +815,7 @@ const ChequeList = () => {
                             >
                               <Eye className="w-5 h-5" />
                             </button>
-                            
+
                             <button
                               onClick={() => handleEditCheque(cheque)}
                               className="text-green-600 hover:text-green-800 p-1"
@@ -778,7 +823,7 @@ const ChequeList = () => {
                             >
                               <Edit className="w-5 h-5" />
                             </button>
-                            
+
                             <button
                               onClick={() => handleDeleteCheque(cheque.id)}
                               className="text-red-600 hover:text-red-800 p-1"
@@ -786,7 +831,7 @@ const ChequeList = () => {
                             >
                               <Trash2 className="w-5 h-5" />
                             </button>
-                            
+
                             <div className="relative">
                               <button
                                 className="text-gray-600 hover:text-gray-800 p-1"
@@ -803,36 +848,43 @@ const ChequeList = () => {
                 </table>
               </div>
 
-
               {totalPages > 1 && (
                 <div className="px-6 py-4 border-t border-gray-200">
                   <div className="flex items-center justify-between">
                     <div className="text-sm text-gray-700">
-                      Showing <span className="font-medium">{indexOfFirstItem + 1}</span> to{' '}
+                      Showing{" "}
+                      <span className="font-medium">
+                        {indexOfFirstItem + 1}
+                      </span>{" "}
+                      to{" "}
                       <span className="font-medium">
                         {Math.min(indexOfLastItem, cheques.length)}
-                      </span>{' '}
-                      of <span className="font-medium">{cheques.length}</span> results
+                      </span>{" "}
+                      of <span className="font-medium">{cheques.length}</span>{" "}
+                      results
                     </div>
-                    
+
                     <div className="flex space-x-2">
                       <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
                         className={`px-3 py-1 rounded ${
                           currentPage === 1
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                         }`}
                       >
                         Previous
                       </button>
-                      
+
                       {Array.from({ length: totalPages }, (_, i) => i + 1)
-                        .filter(page => {
+                        .filter((page) => {
                           if (totalPages <= 5) return true;
-                          return page === 1 || page === totalPages || 
-                                 (page >= currentPage - 1 && page <= currentPage + 1);
+                          return (
+                            page === 1 ||
+                            page === totalPages ||
+                            (page >= currentPage - 1 && page <= currentPage + 1)
+                          );
                         })
                         .map((page, index, array) => (
                           <React.Fragment key={page}>
@@ -843,22 +895,22 @@ const ChequeList = () => {
                               onClick={() => handlePageChange(page)}
                               className={`px-3 py-1 rounded ${
                                 currentPage === page
-                                  ? 'bg-blue-600 text-white'
-                                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                               }`}
                             >
                               {page}
                             </button>
                           </React.Fragment>
                         ))}
-                      
+
                       <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
                         className={`px-3 py-1 rounded ${
                           currentPage === totalPages
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                         }`}
                       >
                         Next
@@ -871,20 +923,38 @@ const ChequeList = () => {
           )}
         </div>
 
-
         <div className="mt-6 bg-white rounded-xl shadow border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Summary</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div>
-              <h4 className="font-medium text-gray-700 mb-2">Status Distribution</h4>
+              <h4 className="font-medium text-gray-700 mb-2">
+                Status Distribution
+              </h4>
               <div className="space-y-2">
                 {[
-                  { label: 'Pending', value: stats.pending, color: 'bg-yellow-500' },
-                  { label: 'Cleared', value: stats.cleared, color: 'bg-green-500' },
-                  { label: 'Bounced', value: stats.bounced, color: 'bg-red-500' },
-                  { label: 'Cancelled', value: stats.cancelled, color: 'bg-gray-500' }
+                  {
+                    label: "Pending",
+                    value: stats.pending,
+                    color: "bg-yellow-500",
+                  },
+                  {
+                    label: "Cleared",
+                    value: stats.cleared,
+                    color: "bg-green-500",
+                  },
+                  {
+                    label: "Bounced",
+                    value: stats.bounced,
+                    color: "bg-red-500",
+                  },
+                  {
+                    label: "Cancelled",
+                    value: stats.cancelled,
+                    color: "bg-gray-500",
+                  },
                 ].map((item, index) => {
-                  const percentage = stats.total > 0 ? (item.value / stats.total) * 100 : 0;
+                  const percentage =
+                    stats.total > 0 ? (item.value / stats.total) * 100 : 0;
                   return (
                     <div key={index} className="space-y-1">
                       <div className="flex justify-between text-sm">
@@ -894,7 +964,7 @@ const ChequeList = () => {
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
+                        <div
                           className={`${item.color} h-2 rounded-full`}
                           style={{ width: `${percentage}%` }}
                         ></div>
@@ -904,15 +974,28 @@ const ChequeList = () => {
                 })}
               </div>
             </div>
-            
+
             <div>
-              <h4 className="font-medium text-gray-700 mb-2">Type Distribution</h4>
+              <h4 className="font-medium text-gray-700 mb-2">
+                Type Distribution
+              </h4>
               <div className="space-y-2">
                 {[
-                  { label: 'Issued', value: cheques.filter(c => c.chequeType === 'issued').length, color: 'bg-blue-500' },
-                  { label: 'Received', value: cheques.filter(c => c.chequeType === 'received').length, color: 'bg-purple-500' }
+                  {
+                    label: "Issued",
+                    value: cheques.filter((c) => c.chequeType === "issued")
+                      .length,
+                    color: "bg-blue-500",
+                  },
+                  {
+                    label: "Received",
+                    value: cheques.filter((c) => c.chequeType === "received")
+                      .length,
+                    color: "bg-purple-500",
+                  },
                 ].map((item, index) => {
-                  const percentage = stats.total > 0 ? (item.value / stats.total) * 100 : 0;
+                  const percentage =
+                    stats.total > 0 ? (item.value / stats.total) * 100 : 0;
                   return (
                     <div key={index} className="space-y-1">
                       <div className="flex justify-between text-sm">
@@ -922,7 +1005,7 @@ const ChequeList = () => {
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
+                        <div
                           className={`${item.color} h-2 rounded-full`}
                           style={{ width: `${percentage}%` }}
                         ></div>
@@ -932,56 +1015,66 @@ const ChequeList = () => {
                 })}
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-medium text-gray-700 mb-2">Amount Summary</h4>
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Amount:</span>
-                  <span className="font-bold text-green-600">{formatCurrency(stats.totalAmount)}</span>
+                  <span className="font-bold text-green-600">
+                    {formatCurrency(stats.totalAmount)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Average Cheque:</span>
                   <span className="font-medium">
-                    {stats.total > 0 ? formatCurrency(stats.totalAmount / stats.total) : '₹0.00'}
+                    {stats.total > 0
+                      ? formatCurrency(stats.totalAmount / stats.total)
+                      : "₹0.00"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Largest Cheque:</span>
                   <span className="font-medium">
-                    {cheques.length > 0 
-                      ? formatCurrency(Math.max(...cheques.map(c => parseFloat(c.amount || 0))))
-                      : '₹0.00'}
+                    {cheques.length > 0
+                      ? formatCurrency(
+                          Math.max(
+                            ...cheques.map((c) => parseFloat(c.amount || 0)),
+                          ),
+                        )
+                      : "₹0.00"}
                   </span>
                 </div>
               </div>
             </div>
-            
+
             <div>
-              <h4 className="font-medium text-gray-700 mb-2">Recent Activity</h4>
+              <h4 className="font-medium text-gray-700 mb-2">
+                Recent Activity
+              </h4>
               <div className="space-y-3">
                 <div className="text-sm">
                   <div className="font-medium">Latest Cheque</div>
                   <div className="text-gray-600">
-                    {cheques.length > 0 
+                    {cheques.length > 0
                       ? `#${cheques[0].chequeNumber} - ${formatDate(cheques[0].createdAt)}`
-                      : 'No cheques yet'}
+                      : "No cheques yet"}
                   </div>
                 </div>
                 <div className="text-sm">
                   <div className="font-medium">Last Updated</div>
                   <div className="text-gray-600">
-                    {cheques.length > 0 
+                    {cheques.length > 0
                       ? formatDate(cheques[0].updatedAt)
-                      : 'Never'}
+                      : "Never"}
                   </div>
                 </div>
                 <div className="text-sm">
                   <div className="font-medium">Clearance Rate</div>
                   <div className="text-gray-600">
-                    {stats.total > 0 
+                    {stats.total > 0
                       ? `${((stats.cleared / stats.total) * 100).toFixed(1)}% cleared`
-                      : '0% cleared'}
+                      : "0% cleared"}
                   </div>
                 </div>
               </div>
@@ -990,13 +1083,12 @@ const ChequeList = () => {
         </div>
       </div>
 
-
       {showChequePopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
               <h2 className="text-2xl font-bold text-gray-800">
-                {popupMode === 'add' ? 'Add New Cheque' : 'Edit Cheque'}
+                {popupMode === "add" ? "Add New Cheque" : "Edit Cheque"}
               </h2>
               <button
                 onClick={closePopups}
@@ -1005,16 +1097,15 @@ const ChequeList = () => {
                 <X className="w-6 h-6" />
               </button>
             </div>
-            
-            <div className="p-6">
 
+            <div className="p-6">
               <div className="text-center py-8">
                 <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-600">
                   Cheque form will be implemented here
                 </p>
               </div>
-              
+
               <div className="mt-6 flex justify-end space-x-3">
                 <button
                   onClick={closePopups}
@@ -1022,10 +1113,8 @@ const ChequeList = () => {
                 >
                   Cancel
                 </button>
-                <button
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  {popupMode === 'add' ? 'Add Cheque' : 'Update Cheque'}
+                <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                  {popupMode === "add" ? "Add Cheque" : "Update Cheque"}
                 </button>
               </div>
             </div>
@@ -1033,12 +1122,13 @@ const ChequeList = () => {
         </div>
       )}
 
-
       {showViewPopup && selectedCheque && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-gray-800">Cheque Details</h2>
+              <h2 className="text-2xl font-bold text-gray-800">
+                Cheque Details
+              </h2>
               <button
                 onClick={closePopups}
                 className="text-gray-500 hover:text-gray-700"
@@ -1046,16 +1136,21 @@ const ChequeList = () => {
                 <X className="w-6 h-6" />
               </button>
             </div>
-            
+
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-gray-700 mb-4">Cheque Information</h3>
+                  <h3 className="font-semibold text-gray-700 mb-4">
+                    Cheque Information
+                  </h3>
                   <div className="space-y-3">
                     <div>
-                      <label className="text-sm text-gray-500">Cheque Number</label>
-                      <p className="font-medium">{selectedCheque.chequeNumber}</p>
+                      <label className="text-sm text-gray-500">
+                        Cheque Number
+                      </label>
+                      <p className="font-medium">
+                        {selectedCheque.chequeNumber}
+                      </p>
                     </div>
                     <div>
                       <label className="text-sm text-gray-500">Type</label>
@@ -1063,80 +1158,101 @@ const ChequeList = () => {
                     </div>
                     <div>
                       <label className="text-sm text-gray-500">Amount</label>
-                      <p className="text-xl font-bold">{formatCurrency(selectedCheque.amount)}</p>
+                      <p className="text-xl font-bold">
+                        {formatCurrency(selectedCheque.amount)}
+                      </p>
                     </div>
                     <div>
-                      <label className="text-sm text-gray-500">Amount in Words</label>
+                      <label className="text-sm text-gray-500">
+                        Amount in Words
+                      </label>
                       <p className="text-sm">{selectedCheque.amountInWords}</p>
                     </div>
                   </div>
                 </div>
 
-
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-gray-700 mb-4">Status & Dates</h3>
+                  <h3 className="font-semibold text-gray-700 mb-4">
+                    Status & Dates
+                  </h3>
                   <div className="space-y-3">
                     <div>
                       <label className="text-sm text-gray-500">Status</label>
                       <p>{getStatusBadge(selectedCheque.status)}</p>
                     </div>
                     <div>
-                      <label className="text-sm text-gray-500">Cheque Date</label>
+                      <label className="text-sm text-gray-500">
+                        Cheque Date
+                      </label>
                       <p>{formatDate(selectedCheque.chequeDate)}</p>
                     </div>
                     <div>
-                      <label className="text-sm text-gray-500">Date Issued</label>
+                      <label className="text-sm text-gray-500">
+                        Date Issued
+                      </label>
                       <p>{formatDate(selectedCheque.dateIssued)}</p>
                     </div>
                     {selectedCheque.datePresented && (
                       <div>
-                        <label className="text-sm text-gray-500">Date Presented</label>
+                        <label className="text-sm text-gray-500">
+                          Date Presented
+                        </label>
                         <p>{formatDate(selectedCheque.datePresented)}</p>
                       </div>
                     )}
                     {selectedCheque.dateCleared && (
                       <div>
-                        <label className="text-sm text-gray-500">Date Cleared</label>
+                        <label className="text-sm text-gray-500">
+                          Date Cleared
+                        </label>
                         <p>{formatDate(selectedCheque.dateCleared)}</p>
                       </div>
                     )}
                   </div>
                 </div>
 
-
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-gray-700 mb-4">Bank Details</h3>
+                  <h3 className="font-semibold text-gray-700 mb-4">
+                    Bank Details
+                  </h3>
                   <div className="space-y-3">
                     <div>
                       <label className="text-sm text-gray-500">Bank Name</label>
                       <p className="font-medium">{selectedCheque.bankName}</p>
                     </div>
                     <div>
-                      <label className="text-sm text-gray-500">Account Number</label>
+                      <label className="text-sm text-gray-500">
+                        Account Number
+                      </label>
                       <p>{selectedCheque.accountNumber}</p>
                     </div>
                     <div>
                       <label className="text-sm text-gray-500">IFSC Code</label>
-                      <p>{selectedCheque.ifscCode || '-'}</p>
+                      <p>{selectedCheque.ifscCode || "-"}</p>
                     </div>
                   </div>
                 </div>
 
-
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-gray-700 mb-4">Payee Details</h3>
+                  <h3 className="font-semibold text-gray-700 mb-4">
+                    Payee Details
+                  </h3>
                   <div className="space-y-3">
                     <div>
-                      <label className="text-sm text-gray-500">Payee Name</label>
+                      <label className="text-sm text-gray-500">
+                        Payee Name
+                      </label>
                       <p className="font-medium">{selectedCheque.payeeName}</p>
                     </div>
                     <div>
                       <label className="text-sm text-gray-500">Purpose</label>
-                      <p>{selectedCheque.purpose || '-'}</p>
+                      <p>{selectedCheque.purpose || "-"}</p>
                     </div>
                     <div>
-                      <label className="text-sm text-gray-500">Reference Number</label>
-                      <p>{selectedCheque.referenceNumber || '-'}</p>
+                      <label className="text-sm text-gray-500">
+                        Reference Number
+                      </label>
+                      <p>{selectedCheque.referenceNumber || "-"}</p>
                     </div>
                     {selectedCheque.remarks && (
                       <div>
@@ -1167,7 +1283,6 @@ const ChequeList = () => {
         </div>
       )}
 
-
       {showEditPopup && selectedCheque && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -1180,16 +1295,15 @@ const ChequeList = () => {
                 <X className="w-6 h-6" />
               </button>
             </div>
-            
-            <div className="p-6">
 
+            <div className="p-6">
               <div className="text-center py-8">
                 <Edit className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-600">
                   Edit form for cheque #{selectedCheque.chequeNumber}
                 </p>
               </div>
-              
+
               <div className="mt-6 flex justify-end space-x-3">
                 <button
                   onClick={closePopups}
@@ -1197,9 +1311,7 @@ const ChequeList = () => {
                 >
                   Cancel
                 </button>
-                <button
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
+                <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                   Update Cheque
                 </button>
               </div>

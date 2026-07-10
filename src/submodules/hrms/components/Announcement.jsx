@@ -41,9 +41,6 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import { usePermission } from "../../../hooks/usePermission";
 
-
-
-
 const formatDateForInput = (dateString) => {
   try {
     const d = new Date(dateString);
@@ -150,7 +147,6 @@ function Announcement() {
         const data = res.data.data || [];
         setEmployees(data);
 
-
         const grouped = data.reduce((acc, emp) => {
           const dept = emp.department || emp.postApplied || "Other";
           acc[dept] = (acc[dept] || 0) + 1;
@@ -176,7 +172,6 @@ function Announcement() {
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/holiday?company_id=${companyId}&slug=${slug}`,
       );
       if (res.data) {
-
         const holidayIcons = [
           PartyPopper,
           Flag,
@@ -222,7 +217,6 @@ function Announcement() {
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/announcements?company_id=${companyId}&slug=${slug}&status=${status}`,
       );
-
 
       if (res.data) {
         setAnnouncementsList(Array.isArray(res.data) ? res.data : []);
@@ -298,7 +292,10 @@ function Announcement() {
           : state.generalForm.scheduleDate && state.generalForm.scheduleTime
             ? `${state.generalForm.scheduleDate} ${state.generalForm.scheduleTime}`
             : null,
-        send_to: state.selectedEmployees && state.selectedEmployees.length > 0 ? state.selectedEmployees : null,
+        send_to:
+          state.selectedEmployees && state.selectedEmployees.length > 0
+            ? state.selectedEmployees
+            : null,
       };
 
       const url = `${import.meta.env.VITE_HRMS_BASE_URL}/api/announcements`;
@@ -335,7 +332,6 @@ function Announcement() {
 
   useEffect(() => {
     return () => {
-
       const state = latestStateRef.current;
       const title =
         state.activeTab === "holiday"
@@ -348,7 +344,6 @@ function Announcement() {
   }, []);
 
   const handleTabChange = (tab) => {
-
     const title = activeTab === "holiday" ? holidayTitle : generalForm.title;
     if (title.trim()) {
       autoSaveDraft();
@@ -389,7 +384,9 @@ function Announcement() {
 
   const handlePublish = async () => {
     if (!has("hrms.message.announcement.create")) {
-      alert("Access Denied: You do not have permission to publish announcements.");
+      alert(
+        "Access Denied: You do not have permission to publish announcements.",
+      );
       return;
     }
     if (!generalForm.title.trim()) {
@@ -406,14 +403,15 @@ function Announcement() {
     try {
       const senderId = user?.user_id || user?.id || null;
 
-      const recipientEmails = selectedEmployees.length > 0
-        ? employees
-            .filter((emp) =>
-              selectedEmployees.includes(getEmployeeTargetId(emp)),
-            )
-            .map((emp) => emp.email)
-            .filter(Boolean)
-        : employees.map((emp) => emp.email).filter(Boolean);
+      const recipientEmails =
+        selectedEmployees.length > 0
+          ? employees
+              .filter((emp) =>
+                selectedEmployees.includes(getEmployeeTargetId(emp)),
+              )
+              .map((emp) => emp.email)
+              .filter(Boolean)
+          : employees.map((emp) => emp.email).filter(Boolean);
 
       const payload = {
         title: generalForm.title,
@@ -497,7 +495,9 @@ function Announcement() {
 
   const handlePublishHolidayAnnouncement = async () => {
     if (!has("hrms.message.announcement.create")) {
-      alert("Access Denied: You do not have permission to publish announcements.");
+      alert(
+        "Access Denied: You do not have permission to publish announcements.",
+      );
       return;
     }
     if (!holidayTitle.trim()) {
@@ -513,14 +513,15 @@ function Announcement() {
     try {
       const senderId = user?.user_id || user?.id || null;
 
-      const recipientEmails = selectedEmployees.length > 0
-        ? employees
-            .filter((emp) =>
-              selectedEmployees.includes(getEmployeeTargetId(emp)),
-            )
-            .map((emp) => emp.email)
-            .filter(Boolean)
-        : employees.map((emp) => emp.email).filter(Boolean);
+      const recipientEmails =
+        selectedEmployees.length > 0
+          ? employees
+              .filter((emp) =>
+                selectedEmployees.includes(getEmployeeTargetId(emp)),
+              )
+              .map((emp) => emp.email)
+              .filter(Boolean)
+          : employees.map((emp) => emp.email).filter(Boolean);
 
       const payload = {
         title: holidayTitle,
@@ -627,7 +628,6 @@ function Announcement() {
 
   return (
     <div className="font-sans">
-
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Announcements</h2>
@@ -662,7 +662,6 @@ function Announcement() {
       </div>
 
       <div className="space-y-8">
-
         <div className="flex gap-2 p-1 bg-gray-100/80 rounded-xl w-fit">
           <button
             onClick={() => handleTabChange("general")}
@@ -699,13 +698,10 @@ function Announcement() {
           </button>
         </div>
 
-
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-3xl">
-
           {activeTab === "general" && (
             <div className="p-6 md:p-8 lg:p-10">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-
                 <div className="space-y-7">
                   <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-100">
                     <div className="p-1.5 bg-emerald-50 rounded-lg">
@@ -817,7 +813,6 @@ function Announcement() {
                       Send To
                     </label>
                     <div className="space-y-4">
-
                       <div className="flex flex-wrap gap-2">
                         <button
                           onClick={toggleSelectAll}
@@ -872,7 +867,6 @@ function Announcement() {
                           );
                         })}
                       </div>
-
 
                       <div className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4">
                         <div className="flex items-center justify-between mb-3">
@@ -1017,7 +1011,6 @@ function Announcement() {
                   </div>
                 </div>
 
-
                 <div className="bg-linear-to-br from-gray-50 to-white rounded-2xl p-6 border border-gray-200 shadow-inner sticky top-24">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2">
@@ -1130,11 +1123,9 @@ function Announcement() {
             </div>
           )}
 
-
           {activeTab === "holiday" && (
             <div className="p-6 md:p-8 lg:p-10">
               {selectedHoliday === null ? (
-
                 <div>
                   <div className="mb-8 flex items-center justify-between">
                     <div>
@@ -1213,7 +1204,6 @@ function Announcement() {
                   </div>
                 </div>
               ) : (
-
                 <div className="animate-fadeIn">
                   <button
                     onClick={backToHolidayList}
@@ -1326,7 +1316,6 @@ function Announcement() {
                           Send To
                         </label>
                         <div className="space-y-4">
-
                           <div className="flex flex-wrap gap-2">
                             <button
                               onClick={toggleSelectAll}
@@ -1383,7 +1372,6 @@ function Announcement() {
                               },
                             )}
                           </div>
-
 
                           <div className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4">
                             <div className="flex items-center justify-between mb-3">
@@ -1554,7 +1542,6 @@ function Announcement() {
             </div>
           )}
 
-
           {activeTab === "history" && (
             <div className="p-6 md:p-8 lg:p-10">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
@@ -1653,15 +1640,16 @@ function Announcement() {
                         </div>
 
                         <div className="flex items-center gap-2">
-                          {has("hrms.message.announcement.create") && item.status === "draft" && (
-                            <button
-                              onClick={() => handleEditDraft(item)}
-                              className="p-1.5 text-amber-500 hover:bg-amber-50 rounded-lg"
-                              title="Edit Draft"
-                            >
-                              <Edit2 className="h-3.5 w-3.5" />
-                            </button>
-                          )}
+                          {has("hrms.message.announcement.create") &&
+                            item.status === "draft" && (
+                              <button
+                                onClick={() => handleEditDraft(item)}
+                                className="p-1.5 text-amber-500 hover:bg-amber-50 rounded-lg"
+                                title="Edit Draft"
+                              >
+                                <Edit2 className="h-3.5 w-3.5" />
+                              </button>
+                            )}
                           {has("hrms.message.announcement.create") && (
                             <button
                               className="p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500 rounded-lg transition-colors"
@@ -1693,7 +1681,6 @@ function Announcement() {
             </div>
           )}
         </div>
-
 
         <div className="text-center text-xs text-gray-400 mt-8 flex items-center justify-center gap-3">
           <div className="flex items-center gap-1">

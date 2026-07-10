@@ -35,7 +35,6 @@ export default function EmployeeLeaveList({ setActiveMenu }) {
     fetchEmployees();
   }, []);
 
-
   const filteredEmployees = employees.filter(
     (emp) =>
       emp.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -66,11 +65,9 @@ export default function EmployeeLeaveList({ setActiveMenu }) {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-
       <div className="bg-blue-600 text-white px-4 py-3 flex items-center font-semibold text-lg">
         <span className="mr-2">📋</span> List of Employees for Leave
       </div>
-
 
       <div className="bg-white shadow p-4 rounded-md m-4 border">
         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -89,7 +86,6 @@ export default function EmployeeLeaveList({ setActiveMenu }) {
           </div>
         </div>
       </div>
-
 
       <div className="bg-white shadow rounded-md m-4 border overflow-x-auto">
         <table className="w-full text-sm border border-gray-200">
@@ -162,7 +158,6 @@ export default function EmployeeLeaveList({ setActiveMenu }) {
         )}
       </div>
 
-
       {selectedEmployees.length > 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-md mx-4 p-3">
           <div className="text-sm text-blue-700 font-medium">
@@ -170,7 +165,6 @@ export default function EmployeeLeaveList({ setActiveMenu }) {
           </div>
         </div>
       )}
-
 
       <div className="flex justify-center gap-4 mt-6 mb-8">
         <button

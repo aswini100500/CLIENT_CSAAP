@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Trash2, Save, Download, Edit3, Check, PlusIcon } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Save,
+  Download,
+  Edit3,
+  Check,
+  PlusIcon,
+} from "lucide-react";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";
 import operationApi from "../../../api/operation";
@@ -23,13 +31,16 @@ const LabourRates = () => {
     try {
       setLoading(true);
       const response = await operationApi.getLabourRates();
-      const { workers: fetchedWorkers, facilities: fetchedFacilities } = response.data.data || {};
-      
+      const { workers: fetchedWorkers, facilities: fetchedFacilities } =
+        response.data.data || {};
+
       if (Array.isArray(fetchedWorkers)) {
-        setWorkers(fetchedWorkers.map(w => ({ ...w, isEditing: false })));
+        setWorkers(fetchedWorkers.map((w) => ({ ...w, isEditing: false })));
       }
       if (Array.isArray(fetchedFacilities)) {
-        setFacilities(fetchedFacilities.map(f => ({ ...f, isEditing: false })));
+        setFacilities(
+          fetchedFacilities.map((f) => ({ ...f, isEditing: false })),
+        );
       }
     } catch (error) {
       console.error("Error fetching labour rates:", error);
@@ -38,20 +49,20 @@ const LabourRates = () => {
     }
   };
 
-
   useEffect(() => {
     calculateSummary();
   }, [workers]);
 
   const calculateSummary = () => {
-    const validWorkers = workers.filter(w => w.type && w.minWage && w.maxWage);
-    const totalCost = validWorkers.reduce(
-      (sum, w) => sum + ((parseFloat(w.minWage) || 0) + (parseFloat(w.maxWage) || 0)) / 2,
-      0
+    const validWorkers = workers.filter(
+      (w) => w.type && w.minWage && w.maxWage,
     );
-    const avgWage = validWorkers.length
-      ? totalCost / validWorkers.length
-      : 0;
+    const totalCost = validWorkers.reduce(
+      (sum, w) =>
+        sum + ((parseFloat(w.minWage) || 0) + (parseFloat(w.maxWage) || 0)) / 2,
+      0,
+    );
+    const avgWage = validWorkers.length ? totalCost / validWorkers.length : 0;
 
     setSummary({
       totalWorkers: validWorkers.length,
@@ -61,15 +72,15 @@ const LabourRates = () => {
   };
 
   const handleWorkerChange = (id, field, value) => {
-    const updated = workers.map(worker =>
-      worker.id === id ? { ...worker, [field]: value } : worker
+    const updated = workers.map((worker) =>
+      worker.id === id ? { ...worker, [field]: value } : worker,
     );
     setWorkers(updated);
   };
 
   const handleFacilityChange = (id, field, value) => {
-    const updated = facilities.map(facility =>
-      facility.id === id ? { ...facility, [field]: value } : facility
+    const updated = facilities.map((facility) =>
+      facility.id === id ? { ...facility, [field]: value } : facility,
     );
     setFacilities(updated);
   };
@@ -80,7 +91,7 @@ const LabourRates = () => {
       type: "",
       minWage: "",
       maxWage: "",
-      isEditing: true
+      isEditing: true,
     };
     setWorkers([...workers, newWorker]);
   };
@@ -98,9 +109,8 @@ const LabourRates = () => {
 
     if (result.isConfirmed) {
       try {
-        if (typeof id === 'number' && id > 1000000000) {
-
-          setWorkers(workers.filter(w => w.id !== id));
+        if (typeof id === "number" && id > 1000000000) {
+          setWorkers(workers.filter((w) => w.id !== id));
         } else {
           setLoading(true);
           await operationApi.deleteLabourRate(id);
@@ -120,35 +130,37 @@ const LabourRates = () => {
       id: Date.now(),
       name: "",
       description: "",
-      isEditing: true
+      isEditing: true,
     };
     setFacilities([...facilities, newFacility]);
   };
 
-
   const toggleWorkerEdit = async (id) => {
-    const worker = workers.find(w => w.id === id);
+    const worker = workers.find((w) => w.id === id);
     if (worker.isEditing) {
       if (!worker.type || !worker.minWage || !worker.maxWage) {
-        Swal.fire("Warning", "Please fill all fields for the worker", "warning");
+        Swal.fire(
+          "Warning",
+          "Please fill all fields for the worker",
+          "warning",
+        );
         return;
       }
 
       try {
         setLoading(true);
-        if (typeof id === 'number' && id > 1000000000) {
-
+        if (typeof id === "number" && id > 1000000000) {
           const payload = {
-            workers: workers.map(w => ({
+            workers: workers.map((w) => ({
               type: w.type,
               minWage: w.minWage,
               maxWage: w.maxWage,
-              description: w.description || "General"
+              description: w.description || "General",
             })),
-            facilities: facilities.map(f => ({
+            facilities: facilities.map((f) => ({
               name: f.name,
-              description: f.description || ""
-            }))
+              description: f.description || "",
+            })),
           };
           await operationApi.createLabourRate(payload);
         } else {
@@ -157,12 +169,18 @@ const LabourRates = () => {
         fetchLabourRates();
       } catch (error) {
         console.error("Error saving worker:", error);
-        Swal.fire("Error", error.response?.data?.message || "Failed to save worker", "error");
+        Swal.fire(
+          "Error",
+          error.response?.data?.message || "Failed to save worker",
+          "error",
+        );
       } finally {
         setLoading(false);
       }
     } else {
-      setWorkers(workers.map(w => w.id === id ? { ...w, isEditing: true } : w));
+      setWorkers(
+        workers.map((w) => (w.id === id ? { ...w, isEditing: true } : w)),
+      );
     }
   };
 
@@ -179,8 +197,8 @@ const LabourRates = () => {
 
     if (result.isConfirmed) {
       try {
-        if (typeof id === 'number' && id > 1000000000) {
-          setFacilities(facilities.filter(f => f.id !== id));
+        if (typeof id === "number" && id > 1000000000) {
+          setFacilities(facilities.filter((f) => f.id !== id));
         } else {
           setLoading(true);
           await operationApi.deleteLabourFacility(id);
@@ -196,7 +214,7 @@ const LabourRates = () => {
   };
 
   const toggleFacilityEdit = async (id) => {
-    const facility = facilities.find(f => f.id === id);
+    const facility = facilities.find((f) => f.id === id);
     if (facility.isEditing) {
       if (!facility.name) {
         Swal.fire("Warning", "Please enter facility name", "warning");
@@ -205,19 +223,18 @@ const LabourRates = () => {
 
       try {
         setLoading(true);
-        if (typeof id === 'number' && id > 1000000000) {
-
+        if (typeof id === "number" && id > 1000000000) {
           const payload = {
-            workers: workers.map(w => ({
+            workers: workers.map((w) => ({
               type: w.type,
               minWage: w.minWage,
               maxWage: w.maxWage,
-              description: w.description || "General"
+              description: w.description || "General",
             })),
-            facilities: facilities.map(f => ({
+            facilities: facilities.map((f) => ({
               name: f.name,
-              description: f.description || ""
-            }))
+              description: f.description || "",
+            })),
           };
           await operationApi.createLabourRate(payload);
         } else {
@@ -231,7 +248,9 @@ const LabourRates = () => {
         setLoading(false);
       }
     } else {
-      setFacilities(facilities.map(f => f.id === id ? { ...f, isEditing: true } : f));
+      setFacilities(
+        facilities.map((f) => (f.id === id ? { ...f, isEditing: true } : f)),
+      );
     }
   };
 
@@ -298,10 +317,18 @@ const LabourRates = () => {
             <table className="w-full border-collapse border border-gray-200 dark:border-gray-700 text-sm">
               <thead className="bg-gray-100 dark:bg-gray-700">
                 <tr>
-                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">Worker Type</th>
-                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">Min Wage (₹)</th>
-                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">Max Wage (₹)</th>
-                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-center">Actions</th>
+                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">
+                    Worker Type
+                  </th>
+                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">
+                    Min Wage (₹)
+                  </th>
+                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">
+                    Max Wage (₹)
+                  </th>
+                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-center">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -312,7 +339,13 @@ const LabourRates = () => {
                         <input
                           type="text"
                           value={worker.type}
-                          onChange={(e) => handleWorkerChange(worker.id, "type", e.target.value)}
+                          onChange={(e) =>
+                            handleWorkerChange(
+                              worker.id,
+                              "type",
+                              e.target.value,
+                            )
+                          }
                           className="w-full bg-transparent border rounded p-1"
                         />
                       ) : (
@@ -324,7 +357,13 @@ const LabourRates = () => {
                         <input
                           type="number"
                           value={worker.minWage}
-                          onChange={(e) => handleWorkerChange(worker.id, "minWage", e.target.value)}
+                          onChange={(e) =>
+                            handleWorkerChange(
+                              worker.id,
+                              "minWage",
+                              e.target.value,
+                            )
+                          }
                           className="w-full bg-transparent border rounded p-1"
                         />
                       ) : (
@@ -336,7 +375,13 @@ const LabourRates = () => {
                         <input
                           type="number"
                           value={worker.maxWage}
-                          onChange={(e) => handleWorkerChange(worker.id, "maxWage", e.target.value)}
+                          onChange={(e) =>
+                            handleWorkerChange(
+                              worker.id,
+                              "maxWage",
+                              e.target.value,
+                            )
+                          }
                           className="w-full bg-transparent border rounded p-1"
                         />
                       ) : (
@@ -350,7 +395,11 @@ const LabourRates = () => {
                           disabled={loading}
                           className="p-1 bg-blue-600 text-white rounded"
                         >
-                          {worker.isEditing ? <Check size={16} /> : <Edit3 size={16} />}
+                          {worker.isEditing ? (
+                            <Check size={16} />
+                          ) : (
+                            <Edit3 size={16} />
+                          )}
                         </button>
                         <button
                           onClick={() => removeWorker(worker.id)}
@@ -385,9 +434,15 @@ const LabourRates = () => {
             <table className="w-full border-collapse border border-gray-200 dark:border-gray-700 text-sm">
               <thead className="bg-gray-100 dark:bg-gray-700">
                 <tr>
-                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">Facility Name</th>
-                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">Description</th>
-                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-center">Actions</th>
+                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">
+                    Facility Name
+                  </th>
+                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-left">
+                    Description
+                  </th>
+                  <th className="border border-gray-200 dark:border-gray-600 px-4 py-3 text-center">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -398,7 +453,13 @@ const LabourRates = () => {
                         <input
                           type="text"
                           value={facility.name}
-                          onChange={(e) => handleFacilityChange(facility.id, "name", e.target.value)}
+                          onChange={(e) =>
+                            handleFacilityChange(
+                              facility.id,
+                              "name",
+                              e.target.value,
+                            )
+                          }
                           className="w-full bg-transparent border rounded p-1"
                         />
                       ) : (
@@ -410,7 +471,13 @@ const LabourRates = () => {
                         <input
                           type="text"
                           value={facility.description}
-                          onChange={(e) => handleFacilityChange(facility.id, "description", e.target.value)}
+                          onChange={(e) =>
+                            handleFacilityChange(
+                              facility.id,
+                              "description",
+                              e.target.value,
+                            )
+                          }
                           className="w-full bg-transparent border rounded p-1"
                         />
                       ) : (
@@ -424,7 +491,11 @@ const LabourRates = () => {
                           disabled={loading}
                           className="p-1 bg-blue-600 text-white rounded"
                         >
-                          {facility.isEditing ? <Check size={16} /> : <Edit3 size={16} />}
+                          {facility.isEditing ? (
+                            <Check size={16} />
+                          ) : (
+                            <Edit3 size={16} />
+                          )}
                         </button>
                         <button
                           onClick={() => removeFacility(facility.id)}

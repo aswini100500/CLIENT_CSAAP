@@ -24,14 +24,13 @@ import parse from "html-react-parser";
 const renderRichText = (html) => {
   if (!html) return null;
 
-
-  const cleanHtml = String(html).replace(/&nbsp;/g, ' ');
+  const cleanHtml = String(html).replace(/&nbsp;/g, " ");
 
   const urlRegex = /(https?:\/\/[^\s]+)/g;
 
   const options = {
     replace: (domNode) => {
-      if (domNode.type === 'text') {
+      if (domNode.type === "text") {
         const text = domNode.data;
         if (!text || !urlRegex.test(text)) return;
 
@@ -56,9 +55,8 @@ const renderRichText = (html) => {
           </>
         );
       }
-    }
+    },
   };
-
 
   return <>{parse(cleanHtml, options)}</>;
 };
@@ -87,7 +85,6 @@ const ArchivedTasks = () => {
       3000,
     );
   };
-
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -123,7 +120,6 @@ const ArchivedTasks = () => {
     fetchEmployees();
   }, [csaapToken]);
 
-
   const getEmployeeNameById = useCallback(
     (id) => {
       if (!id) return "Unknown";
@@ -134,7 +130,6 @@ const ArchivedTasks = () => {
     },
     [teamMembers, user.company_id],
   );
-
 
   const getEmployeeNamesByIds = useCallback(
     (ids = []) => {
@@ -230,7 +225,6 @@ const ArchivedTasks = () => {
   return (
     <div className="crm-module-root min-h-screen bg-(--bg-app) w-full p-4 flex flex-col">
       <div className="max-w-7xl mx-auto w-full space-y-6 flex-1">
-
         <div className="space-y-4">
           <button
             onClick={() => navigate(-1)}
@@ -238,7 +232,7 @@ const ArchivedTasks = () => {
           >
             <ChevronLeft className="w-3.5 h-3.5" /> Back to Task Management
           </button>
-          
+
           <div>
             <h1 className="app-title max-w-3xl">Archived Tasks</h1>
             <p className="app-subtitle mt-1">
@@ -246,7 +240,6 @@ const ArchivedTasks = () => {
             </p>
           </div>
         </div>
-
 
         <div className="app-grid-4">
           <div className="app-panel p-4">
@@ -294,7 +287,10 @@ const ArchivedTasks = () => {
                   In Progress
                 </p>
                 <div className="mt-2 text-[26px] font-extrabold leading-none text-(--text-strong)">
-                  {archivedTasks.filter((t) => t.status === "In Progress").length}
+                  {
+                    archivedTasks.filter((t) => t.status === "In Progress")
+                      .length
+                  }
                 </div>
                 <p className="mt-2 text-[12px] font-medium text-(--text-faint)">
                   In progress tasks
@@ -315,7 +311,7 @@ const ArchivedTasks = () => {
                 <div className="mt-2 text-[26px] font-extrabold leading-none text-(--text-strong)">
                   {
                     archivedTasks.filter(
-                      (t) => t.priority === "High" || t.priority === "Critical"
+                      (t) => t.priority === "High" || t.priority === "Critical",
                     ).length
                   }
                 </div>
@@ -330,7 +326,6 @@ const ArchivedTasks = () => {
           </div>
         </div>
 
-
         <div className="app-panel p-4">
           <div className="relative max-w-xl">
             <input
@@ -343,7 +338,6 @@ const ArchivedTasks = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-(--text-faint) size-3.5" />
           </div>
         </div>
-
 
         <div className="app-panel overflow-hidden border border-(--border-soft)">
           <div className="app-section-bar px-4 py-3.5 flex items-center justify-between gap-3 bg-white">
@@ -400,7 +394,8 @@ const ArchivedTasks = () => {
                       <td className="px-4 py-3">
                         <div className="flex flex-col gap-1">
                           <span className="text-[14px] font-bold text-(--text-strong) line-clamp-1 max-w-xs">
-{renderRichText(task.title || task.task)}                          </span>
+                            {renderRichText(task.title || task.task)}{" "}
+                          </span>
                           <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-(--brand-soft) text-(--brand) border border-(--border-soft) w-fit mt-1">
                             <Briefcase className="w-3 h-3 inline mr-1 -mt-0.5" />
                             {task.project || "N/A"}
@@ -420,7 +415,7 @@ const ArchivedTasks = () => {
                                   ? task.assignedTo
                                   : typeof task.assignedTo === "string"
                                     ? JSON.parse(task.assignedTo)
-                                    : []
+                                    : [],
                               )
                             : "N/A"}
                         </span>
@@ -480,13 +475,13 @@ const ArchivedTasks = () => {
                 No archived tasks
               </p>
               <p className="text-[13px] mt-1 text-(--text-soft)">
-                Tasks you delete will appear here. You can restore them at any time.
+                Tasks you delete will appear here. You can restore them at any
+                time.
               </p>
             </div>
           )}
         </div>
       </div>
-
 
       {snackbar.open && (
         <motion.div

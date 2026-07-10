@@ -1,4 +1,3 @@
-
 export const getInitialsColor = (initials) => {
   const colors = [
     "bg-green-600",
@@ -13,9 +12,6 @@ export const getInitialsColor = (initials) => {
   const index = initials.charCodeAt(0) % colors.length;
   return colors[index];
 };
-
-
-
 
 const statusLabels = {
   NEW: "New",
@@ -32,12 +28,6 @@ const statusLabels = {
 
 export const formatStatus = (status) =>
   statusLabels[status?.toUpperCase()] || status || "-";
-
-
-
-
-
-
 
 export const getStatusColor = (status) => {
   const s = status?.toUpperCase();
@@ -67,10 +57,6 @@ export const getStatusColor = (status) => {
   }
 };
 
-
-
-
-
 const allOutcomes = [
   { value: "NO_RESPONSE", label: "No response" },
   { value: "CALL_BACK", label: "Call back" },
@@ -78,20 +64,12 @@ const allOutcomes = [
   { value: "REJECTED", label: "Rejected" },
 ];
 
-
-
-
-
 const stageOutcomeMap = {
   NEW: [],
   ASSIGNED: ["NO_RESPONSE", "CALL_BACK", "ACCEPTED", "REJECTED"],
   FOLLOW_UP: ["NO_RESPONSE", "CALL_BACK", "ACCEPTED", "REJECTED"],
   REJECTED: [],
 };
-
-
-
-
 
 export const LEAD_SOURCES = [
   { value: "WEBSITE", label: "Website" },
@@ -111,7 +89,6 @@ const sourceLabels = Object.fromEntries(
 export const formatSource = (source) =>
   sourceLabels[source?.toUpperCase()] || source || "";
 
-
 export const getOutcomesForStage = (stage) => {
   const s = stage?.toUpperCase();
   const allowed = stageOutcomeMap[s] || [];
@@ -119,7 +96,6 @@ export const getOutcomesForStage = (stage) => {
 };
 
 const outcomesMap = new Map(allOutcomes.map((o) => [o.value, o.label]));
-
 
 export const getOutcomesForTab = (activeTab) => {
   const tab = activeTab?.toLowerCase();
@@ -131,23 +107,25 @@ export const getOutcomesForTab = (activeTab) => {
   return [];
 };
 
-
 export const getPossessionStatus = (item) => {
   if (!item) return "Pending";
   let s = item.possessionStatus || item.possession_status;
   if (!s && item.propertyFeatures) {
     let features = item.propertyFeatures;
     if (typeof features === "string") {
-      try { features = JSON.parse(features); } catch (e) { }
+      try {
+        features = JSON.parse(features);
+      } catch (e) {}
     }
     s = features?.possessionStatus;
   }
   if (!s && item.transactionType) {
-    s = item.transactionType.possessionStatus || item.transactionType.possession_status;
+    s =
+      item.transactionType.possessionStatus ||
+      item.transactionType.possession_status;
   }
   return s || "Pending";
 };
-
 
 export const isFinishedUnit = (unit) => {
   if (!unit?.possession_status) return false;
@@ -155,10 +133,8 @@ export const isFinishedUnit = (unit) => {
   return s === "ready to move" || s === "completed";
 };
 
-
 export const normalizeUnits = (rawDump, projectType) => {
   if (!rawDump) return [];
-
 
   let data = rawDump;
   if (typeof rawDump === "string") {
@@ -169,7 +145,6 @@ export const normalizeUnits = (rawDump, projectType) => {
       return [];
     }
   }
-
 
   if (data && typeof data === "object" && !Array.isArray(data)) {
     if (data.blocks_data !== undefined) {
@@ -182,12 +157,14 @@ export const normalizeUnits = (rawDump, projectType) => {
       data = data.configuration;
     }
 
-
     if (typeof data === "string") {
       try {
         data = JSON.parse(data);
       } catch (e) {
-        console.error("Failed to parse nested units raw dump from project object:", e);
+        console.error(
+          "Failed to parse nested units raw dump from project object:",
+          e,
+        );
         return [];
       }
     }
@@ -198,16 +175,22 @@ export const normalizeUnits = (rawDump, projectType) => {
 
   switch (type) {
     case "apartment": {
-
       if (Array.isArray(data)) {
         data.forEach((block) => {
           (block.floors || []).forEach((floor) => {
             (floor.units || []).forEach((unit) => {
-              const uId = String(unit.id || unit.unitNumber || unit.unit_no || "");
+              const uId = String(
+                unit.id || unit.unitNumber || unit.unit_no || "",
+              );
               const uNum = unit.unitNumber || unit.unit_no || "";
               normalized.push({
                 unit_id: uId,
-                unit_name: unit.name || uNum || (block.prefix ? `${block.prefix}-${uNum}` : `Unit ${uNum}` || `Unit ${uId}`),
+                unit_name:
+                  unit.name ||
+                  uNum ||
+                  (block.prefix
+                    ? `${block.prefix}-${uNum}`
+                    : `Unit ${uNum}` || `Unit ${uId}`),
                 possession_status: getPossessionStatus(unit),
               });
             });
@@ -218,7 +201,6 @@ export const normalizeUnits = (rawDump, projectType) => {
     }
 
     case "duplex": {
-
       if (Array.isArray(data)) {
         data.forEach((unit) => {
           const uId = String(unit.id || unit.unit_no || "");
@@ -235,7 +217,6 @@ export const normalizeUnits = (rawDump, projectType) => {
 
     case "triplex":
     case "commercial": {
-
       if (Array.isArray(data)) {
         data.forEach((unit) => {
           const uId = String(unit.id || unit.unit_no || "");
@@ -251,7 +232,6 @@ export const normalizeUnits = (rawDump, projectType) => {
     }
 
     case "plotting": {
-
       if (Array.isArray(data)) {
         data.forEach((plot) => {
           const pId = String(plot.id || plot.plot_no || "");
@@ -268,7 +248,6 @@ export const normalizeUnits = (rawDump, projectType) => {
 
     case "custom":
     case "custom_project": {
-
       if (data && Array.isArray(data.plots)) {
         data.plots.forEach((plot) => {
           const pId = String(plot.id || plot.plot_no || "");
@@ -288,6 +267,7 @@ export const normalizeUnits = (rawDump, projectType) => {
       break;
   }
 
-
-  return normalized.filter((item) => item.unit_id && item.unit_id.trim() !== "");
+  return normalized.filter(
+    (item) => item.unit_id && item.unit_id.trim() !== "",
+  );
 };

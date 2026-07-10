@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaYoutube,
+} from "react-icons/fa";
 import { MapPin, Phone, Mail, Send } from "lucide-react";
 
 const ContactUs = () => {
@@ -23,7 +28,6 @@ const ContactUs = () => {
     }, 800);
   };
 
-
   useEffect(() => {
     if (location.pathname === "/form" && formRef.current) {
       window.scrollTo({ top: formRef.current.offsetTop, behavior: "smooth" });
@@ -32,24 +36,18 @@ const ContactUs = () => {
 
   return (
     <div className="crm-module-root p-4 max-w-7xl mx-auto space-y-6">
-
       <div className="border-b border-(--border-soft) pb-4">
         <h1 className="app-title">Contact Us</h1>
         <p className="app-subtitle mt-1">
-          Get in touch with csaap ERP Ltd. Our support team is ready to assist you with live demos, purchases, and subscriptions.
+          Get in touch with csaap ERP Ltd. Our support team is ready to assist
+          you with live demos, purchases, and subscriptions.
         </p>
       </div>
 
-
       <div ref={formRef} />
 
-
       <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-6 items-start">
-        
-
         <div className="app-panel divide-y divide-(--border-soft)">
-          
-
           <div className="p-6">
             <h2 className="app-heading mb-4">Support Channels</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -58,9 +56,15 @@ const ContactUs = () => {
                   <Phone className="w-4 h-4 text-(--brand)" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Let's Talk</h3>
-                  <p className="text-sm font-semibold text-(--text-strong) mt-1">+91 74286-00607</p>
-                  <p className="text-xs text-slate-500 mt-0.5">Fax: +91 74286-00607</p>
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Let's Talk
+                  </h3>
+                  <p className="text-sm font-semibold text-(--text-strong) mt-1">
+                    +91 74286-00607
+                  </p>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Fax: +91 74286-00607
+                  </p>
                 </div>
               </div>
 
@@ -69,23 +73,33 @@ const ContactUs = () => {
                   <Mail className="w-4 h-4 text-(--brand)" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Email Support</h3>
-                  <p className="text-sm font-semibold text-(--text-strong) mt-1">info@auditfiling.com</p>
-                  <p className="text-xs text-slate-500 mt-0.5">audifiling@gmail.com</p>
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Email Support
+                  </h3>
+                  <p className="text-sm font-semibold text-(--text-strong) mt-1">
+                    info@auditfiling.com
+                  </p>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    audifiling@gmail.com
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-
           <div className="p-6">
             <h2 className="app-heading mb-4">Office Locations</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Head Office</h3>
-                <p className="text-sm font-semibold text-(--text-strong)">Gurugram Office</p>
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                  Head Office
+                </h3>
+                <p className="text-sm font-semibold text-(--text-strong)">
+                  Gurugram Office
+                </p>
                 <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  H No-511, Sarahah Tower, Subhash Nagar, Gurugram, India, 122006
+                  H No-511, Sarahah Tower, Subhash Nagar, Gurugram, India,
+                  122006
                 </p>
                 <a
                   href="https://www.google.com/maps?q=H+No-511,+Sarahah+Tower,+Subhash+Nagar,+Gurugram,+122006,+India"
@@ -98,10 +112,15 @@ const ContactUs = () => {
               </div>
 
               <div>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Branch Office</h3>
-                <p className="text-sm font-semibold text-(--text-strong)">Bhubaneswar Office</p>
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                  Branch Office
+                </h3>
+                <p className="text-sm font-semibold text-(--text-strong)">
+                  Bhubaneswar Office
+                </p>
                 <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  3rd Floor, BMC Panchadeep Market Complex, Unit 4, Bhouma Nagar, Bhubaneswar, Odisha, 751001
+                  3rd Floor, BMC Panchadeep Market Complex, Unit 4, Bhouma
+                  Nagar, Bhubaneswar, Odisha, 751001
                 </p>
                 <a
                   href="https://maps.app.goo.gl/GDArGKbynTLdLFUw6"
@@ -114,7 +133,6 @@ const ContactUs = () => {
               </div>
             </div>
           </div>
-
 
           <div className="p-1">
             <div className="h-64 md:h-80 w-full overflow-hidden rounded-b-[15px]">
@@ -131,15 +149,28 @@ const ContactUs = () => {
             </div>
           </div>
 
-
           <div className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 rounded-b-2xl">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Follow csaap ERP</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              Follow csaap ERP
+            </span>
             <div className="flex space-x-3">
               {[
-                { Icon: FaFacebookF, link: "https://www.facebook.com/profile.php?id=61584280923640" },
-                { Icon: FaInstagram, link: "https://www.instagram.com/csaap.official/?igsh=MWxvZ2c3OGxoemFteA%3D%3D#" },
-                { Icon: FaLinkedinIn, link: "https://www.linkedin.com/company/107153286/admin/dashboard/" },
-                { Icon: FaYoutube, link: "https://www.youtube.com/@Csaapindia" }
+                {
+                  Icon: FaFacebookF,
+                  link: "https://www.facebook.com/profile.php?id=61584280923640",
+                },
+                {
+                  Icon: FaInstagram,
+                  link: "https://www.instagram.com/csaap.official/?igsh=MWxvZ2c3OGxoemFteA%3D%3D#",
+                },
+                {
+                  Icon: FaLinkedinIn,
+                  link: "https://www.linkedin.com/company/107153286/admin/dashboard/",
+                },
+                {
+                  Icon: FaYoutube,
+                  link: "https://www.youtube.com/@Csaapindia",
+                },
               ].map(({ Icon, link }, idx) => (
                 <a
                   key={idx}
@@ -153,20 +184,19 @@ const ContactUs = () => {
               ))}
             </div>
           </div>
-
         </div>
 
-
         <div className="space-y-6">
-          
-
           <div className="app-panel p-6">
-            <h2 className="app-heading mb-4 text-emerald-950">Book Free Demo</h2>
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <h2 className="app-heading mb-4 text-emerald-950">
+              Book Free Demo
+            </h2>
 
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="app-label block mb-1.5">Name / Firm Name <span className="text-red-500">*</span></label>
+                <label className="app-label block mb-1.5">
+                  Name / Firm Name <span className="text-red-500">*</span>
+                </label>
                 <input
                   name="name"
                   type="text"
@@ -178,9 +208,10 @@ const ContactUs = () => {
                 />
               </div>
 
-
               <div>
-                <label className="app-label block mb-1.5">Mobile Number <span className="text-red-500">*</span></label>
+                <label className="app-label block mb-1.5">
+                  Mobile Number <span className="text-red-500">*</span>
+                </label>
                 <div className="flex">
                   <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-(--border-soft) bg-slate-50 text-slate-500 text-xs font-semibold">
                     +91
@@ -199,9 +230,10 @@ const ContactUs = () => {
                 </div>
               </div>
 
-
               <div>
-                <label className="app-label block mb-1.5">Pin Code <span className="text-red-500">*</span></label>
+                <label className="app-label block mb-1.5">
+                  Pin Code <span className="text-red-500">*</span>
+                </label>
                 <input
                   name="pincode"
                   type="text"
@@ -212,7 +244,6 @@ const ContactUs = () => {
                   className="app-input w-full"
                 />
               </div>
-
 
               <button
                 type="submit"
@@ -225,27 +256,32 @@ const ContactUs = () => {
             </form>
           </div>
 
-
           <div className="app-panel-muted p-5 space-y-4">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Services Guide</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              Services Guide
+            </h3>
             <div className="space-y-3">
               <div>
-                <p className="text-xs font-bold text-(--text-strong)">Demo Booking</p>
+                <p className="text-xs font-bold text-(--text-strong)">
+                  Demo Booking
+                </p>
                 <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                  Schedule live walkthroughs with our modules expert anytime. We will walk you through all modules and features in detail.
+                  Schedule live walkthroughs with our modules expert anytime. We
+                  will walk you through all modules and features in detail.
                 </p>
               </div>
               <div>
-                <p className="text-xs font-bold text-(--text-strong)">Purchase & Renewal</p>
+                <p className="text-xs font-bold text-(--text-strong)">
+                  Purchase & Renewal
+                </p>
                 <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                  Get pricing details, subscription renewals, billing adjustments, and support selecting standard ERP plans.
+                  Get pricing details, subscription renewals, billing
+                  adjustments, and support selecting standard ERP plans.
                 </p>
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
   );

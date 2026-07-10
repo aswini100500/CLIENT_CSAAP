@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useAuth } from '../../../../hooks/useAuth';
+import { useAuth } from "../../../../hooks/useAuth";
 
 const MyMessage = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -13,18 +13,11 @@ const MyMessage = () => {
   const slug = user?.slug;
   const companyId = user?.company_id ?? user?.id;
 
-
   const fetchMessages = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
-
-
-
-
-
-
       if (!user?.employee_id) {
         console.error("Missing employee_id");
         setError("Employee ID not found");
@@ -50,16 +43,10 @@ const MyMessage = () => {
       const params = {
         employee_id: user?.employee_id,
         company_id: companyId,
-        slug: slug
+        slug: slug,
       };
-      
-
-
 
       const res = await axios.get(apiUrl, { params });
-
-
-
 
       let messagesData = [];
       if (res.data?.data && Array.isArray(res.data.data)) {
@@ -73,17 +60,18 @@ const MyMessage = () => {
         messagesData = [];
       }
 
-
       setMessages(messagesData);
     } catch (err) {
       console.error("Error fetching messages:", err);
       console.error("Error response:", err.response);
       console.error("Error message:", err.message);
-      
+
       if (err.response) {
         console.error("Status:", err.response.status);
         console.error("Response data:", err.response.data);
-        setError(`API Error: ${err.response.status} - ${err.response.data?.message || err.message}`);
+        setError(
+          `API Error: ${err.response.status} - ${err.response.data?.message || err.message}`,
+        );
       } else {
         setError(`Error: ${err.message}`);
       }
@@ -96,25 +84,21 @@ const MyMessage = () => {
     if (user?.employee_id && companyId && slug) {
       fetchMessages();
     } else {
-
     }
   }, [user?.employee_id, companyId, slug]);
 
-
-  const filteredMessages = messages.filter((msg) =>
-    msg.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    msg.message?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMessages = messages.filter(
+    (msg) =>
+      msg.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      msg.message?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
-
-
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">My Message</h1>
         </div>
-
 
         {loading && (
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
@@ -122,13 +106,11 @@ const MyMessage = () => {
           </div>
         )}
 
-
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
           </div>
         )}
-
 
         <div className="bg-white rounded-lg border border-gray-300 p-4 mb-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -159,7 +141,6 @@ const MyMessage = () => {
           </div>
         </div>
 
-
         <div className="bg-white rounded-lg border border-gray-300 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -183,47 +164,54 @@ const MyMessage = () => {
               <tbody>
                 {!loading && filteredMessages.length === 0 && !error && (
                   <tr>
-                    <td colSpan="4" className="px-4 py-8 text-center text-gray-500">
+                    <td
+                      colSpan="4"
+                      className="px-4 py-8 text-center text-gray-500"
+                    >
                       No messages found
                     </td>
                   </tr>
                 )}
-                
-                {!loading && filteredMessages.slice(0, entriesPerPage).map((msg) => (
-                  <tr key={msg.id || msg._id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      {msg.created_at ? new Date(msg.created_at).toLocaleString() : 'N/A'}
-                    </td>
-                    <td className="px-4 py-3 font-semibold">
-                      {msg.subject || 'No Subject'}
-                    </td>
-                    <td className="px-4 py-3">
-                      {msg.message ? (
-                        <div dangerouslySetInnerHTML={{ __html: msg.message }} />
-                      ) : (
-                        'No description'
-                      )}
-                    </td>
-                    <td className="px-4 py-3">
-                      {msg.attachment ? (
-                        <a
-                          href={`${import.meta.env.VITE_HRMS_BASE_URL}/uploads/messages/${msg.attachment}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          View
-                        </a>
-                      ) : (
-                        "—"
-                      )}
-                    </td>
-                  </tr>
-                ))}
+
+                {!loading &&
+                  filteredMessages.slice(0, entriesPerPage).map((msg) => (
+                    <tr key={msg.id || msg._id} className="hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        {msg.created_at
+                          ? new Date(msg.created_at).toLocaleString()
+                          : "N/A"}
+                      </td>
+                      <td className="px-4 py-3 font-semibold">
+                        {msg.subject || "No Subject"}
+                      </td>
+                      <td className="px-4 py-3">
+                        {msg.message ? (
+                          <div
+                            dangerouslySetInnerHTML={{ __html: msg.message }}
+                          />
+                        ) : (
+                          "No description"
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
+                        {msg.attachment ? (
+                          <a
+                            href={`${import.meta.env.VITE_HRMS_BASE_URL}/uploads/messages/${msg.attachment}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline"
+                          >
+                            View
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
-
 
           <div className="bg-white px-4 py-3 border-t border-gray-300">
             <div className="text-sm text-gray-700">
@@ -231,8 +219,6 @@ const MyMessage = () => {
             </div>
           </div>
         </div>
-
-      
       </div>
     </div>
   );

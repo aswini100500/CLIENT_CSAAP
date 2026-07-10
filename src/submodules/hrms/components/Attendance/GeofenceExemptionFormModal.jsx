@@ -5,7 +5,7 @@ import {
   CheckCircle2,
   Loader2,
   ShieldAlert,
-  X
+  X,
 } from "lucide-react";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -104,10 +104,7 @@ const GeofenceExemptionFormModal = ({
 
   return (
     <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
-      <div
-        className="absolute inset-0"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0" onClick={onClose} />
 
       <div className="app-modal relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden">
         <div className="relative flex min-h-16 items-center justify-center border-b border-(--border-soft) bg-white px-5 py-3 text-(--text-strong)">

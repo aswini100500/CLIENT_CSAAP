@@ -29,16 +29,13 @@ const EquipmentManage = () => {
       setLoading(true);
       const response = await operationApi.getEquipments();
 
-
       setEquipments(response.data.data);
     } catch (error) {
-
       console.error("Error fetching equipments:", error);
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleAddEquipment = async () => {
     if (
@@ -52,7 +49,6 @@ const EquipmentManage = () => {
       alert("Please fill in all fields before adding an equipment.");
       return;
     }
-
 
     try {
       setLoading(true);
@@ -75,14 +71,11 @@ const EquipmentManage = () => {
       });
       fetchEquipments();
     } catch (error) {
-
-
       console.error("Error adding equipment:", error);
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleDelete = async (id) => {
     try {
@@ -96,13 +89,11 @@ const EquipmentManage = () => {
     }
   };
 
-
   const handleEdit = (id) => {
     const equipment = equipments.find((v) => v.id === id);
     setNewEquipment(equipment);
     setEditingId(id);
   };
-
 
   const handleUpdate = async () => {
     try {
@@ -135,13 +126,14 @@ const EquipmentManage = () => {
 
   return (
     <div className="p-5 bg-white rounded-xl shadow-md border border-gray-200">
-
       <div className="grid grid-cols-1 md:grid-cols-8 gap-4 mb-6">
         <input
           type="text"
           placeholder="Equipment Name"
           value={newEquipment.name}
-          onChange={(e) => setNewEquipment({ ...newEquipment, name: e.target.value })}
+          onChange={(e) =>
+            setNewEquipment({ ...newEquipment, name: e.target.value })
+          }
           className="border border-gray-300 rounded-lg p-2 text-sm"
         />
         <input
@@ -166,7 +158,9 @@ const EquipmentManage = () => {
           type="number"
           placeholder="Cost (₹)"
           value={newEquipment.cost}
-          onChange={(e) => setNewEquipment({ ...newEquipment, cost: e.target.value })}
+          onChange={(e) =>
+            setNewEquipment({ ...newEquipment, cost: e.target.value })
+          }
           className="border border-gray-300 rounded-lg p-2 text-sm"
         />
         <input
@@ -178,7 +172,6 @@ const EquipmentManage = () => {
           }
           className="border border-gray-300 rounded-lg p-2 text-sm"
         />
-
 
         <select
           value={newEquipment.fuel_type}
@@ -197,10 +190,11 @@ const EquipmentManage = () => {
         <button
           onClick={editingId ? handleUpdate : handleAddEquipment}
           disabled={loading}
-          className={`flex items-center justify-center gap-1 px-4 py-2 rounded-lg text-sm transition-all ${loading
-            ? "bg-gray-400 cursor-not-allowed text-white"
-            : "bg-blue-600 hover:bg-blue-700 text-white"
-            }`}
+          className={`flex items-center justify-center gap-1 px-4 py-2 rounded-lg text-sm transition-all ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed text-white"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
         >
           {loading ? (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -211,21 +205,32 @@ const EquipmentManage = () => {
         </button>
       </div>
 
-
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
           <thead className="bg-blue-50">
             <tr>
               <th className="border border-gray-200 p-2 text-left">#</th>
-              <th className="border border-gray-200 p-2 text-left">Equipment Name</th>
-              <th className="border border-gray-200 p-2 text-left">Odometer Start</th>
-              <th className="border border-gray-200 p-2 text-left">Odometer End</th>
+              <th className="border border-gray-200 p-2 text-left">
+                Equipment Name
+              </th>
+              <th className="border border-gray-200 p-2 text-left">
+                Odometer Start
+              </th>
+              <th className="border border-gray-200 p-2 text-left">
+                Odometer End
+              </th>
               <th className="border border-gray-200 p-2 text-left">Distance</th>
               <th className="border border-gray-200 p-2 text-left">Cost (₹)</th>
-              <th className="border border-gray-200 p-2 text-left">Number Plate</th>
-              <th className="border border-gray-200 p-2 text-left">Fuel Type</th>
+              <th className="border border-gray-200 p-2 text-left">
+                Number Plate
+              </th>
+              <th className="border border-gray-200 p-2 text-left">
+                Fuel Type
+              </th>
               <th className="border border-gray-200 p-2 text-left">Status</th>
-              <th className="border border-gray-200 p-2 text-center">Actions</th>
+              <th className="border border-gray-200 p-2 text-center">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -236,16 +241,24 @@ const EquipmentManage = () => {
                   <tr key={eq.id} className="hover:bg-gray-50">
                     <td className="border border-gray-200 p-2">{index + 1}</td>
                     <td className="border border-gray-200 p-2">{eq.name}</td>
-                    <td className="border border-gray-200 p-2">{eq.odometer_start}</td>
-                    <td className="border border-gray-200 p-2">{eq.odometer_end}</td>
+                    <td className="border border-gray-200 p-2">
+                      {eq.odometer_start}
+                    </td>
+                    <td className="border border-gray-200 p-2">
+                      {eq.odometer_end}
+                    </td>
                     <td className="border border-gray-200 p-2 font-semibold text-blue-700">
                       {totalHours}
                     </td>
                     <td className="border border-gray-200 p-2">
                       ₹{eq.cost.toLocaleString()}
                     </td>
-                    <td className="border border-gray-200 p-2">{eq.number_plate}</td>
-                    <td className="border border-gray-200 p-2">{eq.fuel_type}</td>
+                    <td className="border border-gray-200 p-2">
+                      {eq.number_plate}
+                    </td>
+                    <td className="border border-gray-200 p-2">
+                      {eq.fuel_type}
+                    </td>
                     <td className="border border-gray-200 p-2">
                       <span
                         className={`px-2 py-1 text-xs font-medium rounded-full ${
@@ -280,7 +293,10 @@ const EquipmentManage = () => {
               })
             ) : (
               <tr>
-                <td colSpan="10" className="text-center py-4 text-gray-500 italic">
+                <td
+                  colSpan="10"
+                  className="text-center py-4 text-gray-500 italic"
+                >
                   No equipment available
                 </td>
               </tr>

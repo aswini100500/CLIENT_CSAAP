@@ -13,14 +13,10 @@ const ProfitLoss = () => {
 
   const [loading, setLoading] = useState(false);
 
-
   const totalIncome = income.reduce((sum, i) => sum + (i.amount || 0), 0);
   const totalExpenses = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
 
   const netProfit = totalIncome - totalExpenses;
-
-
-
 
   const fetchPL = async () => {
     if (!companyId) return;
@@ -32,23 +28,18 @@ const ProfitLoss = () => {
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/profit-loss/${companyId}`,
         {
           params: { from: fromDate, to: toDate },
-        }
+        },
       );
-
-
 
       const rawIncome = res.data.income || [];
       const rawExpenses = res.data.expenses || [];
-
-
-
 
       setIncome(
         rawIncome.map((it) => ({
           name: it.ledgerName,
           amount: Number(it.amount) || 0,
           group: it.groupName,
-        }))
+        })),
       );
 
       setExpenses(
@@ -56,10 +47,9 @@ const ProfitLoss = () => {
           name: it.ledgerName,
           amount: Number(it.amount) || 0,
           group: it.groupName,
-        }))
+        })),
       );
     } catch (err) {
-
       alert("Failed to load data");
     }
 
@@ -72,14 +62,13 @@ const ProfitLoss = () => {
 
   return (
     <div className="bg-[#FDFDFD] min-h-screen font-[Cambria] text-sm text-gray-800">
-
       <div className="bg-[#0078D7] text-white py-2 px-4 flex justify-between items-center text-[15px]">
         <div className="font-semibold">Profit & Loss Account</div>
         <div>
-          Company: <span className="font-semibold">{companyName || companyId}</span>
+          Company:{" "}
+          <span className="font-semibold">{companyName || companyId}</span>
         </div>
       </div>
-
 
       <div className="flex justify-center gap-6 py-3 border-b border-gray-300 text-[14px]">
         <div>
@@ -102,15 +91,11 @@ const ProfitLoss = () => {
         </div>
       </div>
 
-
       <div className="max-w-4xl mx-auto mt-4 border border-gray-300">
-
-
         <div className="grid grid-cols-2 font-semibold bg-gray-100 border-b border-gray-300">
           <div className="py-2 px-3 border-r border-gray-300">Particulars</div>
           <div className="py-2 px-3 text-right">Amount (₹)</div>
         </div>
-
 
         <div className="border-b border-gray-200">
           <div className="bg-[#F2F8FF] font-semibold px-3 py-1">Income</div>
@@ -136,13 +121,14 @@ const ProfitLoss = () => {
           )}
 
           <div className="grid grid-cols-2 border-t border-gray-300 font-semibold bg-gray-50">
-            <div className="px-3 py-1 border-r border-gray-200">Total Income</div>
+            <div className="px-3 py-1 border-r border-gray-200">
+              Total Income
+            </div>
             <div className="px-3 py-1 text-right">
               {Number(totalIncome || 0).toLocaleString()}
             </div>
           </div>
         </div>
-
 
         <div className="border-b border-gray-200">
           <div className="bg-[#F2F8FF] font-semibold px-3 py-1">Expenses</div>
@@ -177,7 +163,6 @@ const ProfitLoss = () => {
           </div>
         </div>
 
-
         <div className="grid grid-cols-2 bg-yellow-50 font-semibold text-[15px]">
           <div className="px-3 py-2 border-r border-gray-300">
             {netProfit >= 0 ? "Net Profit" : "Net Loss"}
@@ -190,7 +175,6 @@ const ProfitLoss = () => {
             {Number(Math.abs(netProfit) || 0).toLocaleString()}
           </div>
         </div>
-
       </div>
     </div>
   );

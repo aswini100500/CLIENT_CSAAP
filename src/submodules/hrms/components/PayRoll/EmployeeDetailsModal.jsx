@@ -20,18 +20,24 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
         </div>
 
         <div className="p-4 space-y-4">
-
           <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-(--text-body)">
             <div>
-              <span className="text-(--text-faint)">ID:</span> <span className="font-semibold text-(--text-strong)">{employee.id}</span>
+              <span className="text-(--text-faint)">ID:</span>{" "}
+              <span className="font-semibold text-(--text-strong)">
+                {employee.id}
+              </span>
             </div>
             <div>
               <span className="text-(--text-faint)">Dept:</span>{" "}
-              <span className="font-semibold text-(--text-strong)">{employee.department || "N/A"}</span>
+              <span className="font-semibold text-(--text-strong)">
+                {employee.department || "N/A"}
+              </span>
             </div>
             <div className="col-span-1">
               <span className="text-(--text-faint)">Job Title:</span>{" "}
-              <span className="font-semibold text-(--text-strong)">{employee.jobTitle || "N/A"}</span>
+              <span className="font-semibold text-(--text-strong)">
+                {employee.jobTitle || "N/A"}
+              </span>
             </div>
             <div className="col-span-1">
               <span className="text-(--text-faint)">Tax Regime:</span>{" "}
@@ -41,27 +47,35 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
             <div className="col-span-2">
               <span className="text-(--text-faint)">Annual CTC:</span>{" "}
-              <span className="font-bold text-(--text-strong)">{formatINR(payroll.annualCTC)}</span>
+              <span className="font-bold text-(--text-strong)">
+                {formatINR(payroll.annualCTC)}
+              </span>
             </div>
           </div>
 
-
           <div className="app-panel-muted p-4">
             <h3 className="app-heading mb-2 border-b border-(--border-soft) pb-1 flex items-center gap-1.5">
-              <Calendar size={14} className="text-(--brand)" /> Attendance & Leaves
+              <Calendar size={14} className="text-(--brand)" /> Attendance &
+              Leaves
             </h3>
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <div className="text-xs text-(--text-soft)">Days Present</div>
-                <div className="font-bold text-(--text-strong)">{uiPresentDays}</div>
+                <div className="font-bold text-(--text-strong)">
+                  {uiPresentDays}
+                </div>
               </div>
               <div>
                 <div className="text-xs text-(--text-soft)">Late Days</div>
-                <div className="font-bold text-(--text-strong)">{payroll.lateDays}</div>
+                <div className="font-bold text-(--text-strong)">
+                  {payroll.lateDays}
+                </div>
               </div>
               <div>
                 <div className="text-xs text-(--text-soft)">Half Days</div>
-                <div className="font-bold text-(--text-strong)">{payroll.halfDays}</div>
+                <div className="font-bold text-(--text-strong)">
+                  {payroll.halfDays}
+                </div>
               </div>
               <div>
                 <div className="text-xs text-(--text-soft)">LOP Days</div>
@@ -71,7 +85,6 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
               </div>
             </div>
           </div>
-
 
           {payroll.proratedEarnings && (
             <div className="app-panel p-4 bg-amber-50/40 border border-amber-200 shadow-sm">
@@ -158,7 +171,6 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
           )}
 
-
           {payroll.otHoursDecimal > 0 && (
             <div className="app-panel p-4 bg-blue-50/40 border border-blue-200">
               <div className="flex items-center justify-between">
@@ -177,31 +189,41 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
           )}
 
-
           <div className="app-panel p-4">
             <h3 className="app-heading mb-2 border-b border-(--border-soft) pb-1 flex items-center gap-1.5">
-              <IndianRupee size={14} className="text-(--brand)" /> Monthly Earnings
+              <IndianRupee size={14} className="text-(--brand)" /> Monthly
+              Earnings
             </h3>
             <div className="space-y-1 text-(--text-body)">
               <div className="flex justify-between">
                 <span className="text-(--text-soft)">Basic</span>
-                <span className="font-medium text-(--text-strong)">{formatINR(payroll.basic)}</span>
+                <span className="font-medium text-(--text-strong)">
+                  {formatINR(payroll.basic)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-(--text-soft)">HRA</span>
-                <span className="font-medium text-(--text-strong)">{formatINR(payroll.hra)}</span>
+                <span className="font-medium text-(--text-strong)">
+                  {formatINR(payroll.hra)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-(--text-soft)">TA</span>
-                <span className="font-medium text-(--text-strong)">{formatINR(payroll.ta)}</span>
+                <span className="font-medium text-(--text-strong)">
+                  {formatINR(payroll.ta)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-(--text-soft)">DA</span>
-                <span className="font-medium text-(--text-strong)">{formatINR(payroll.da)}</span>
+                <span className="font-medium text-(--text-strong)">
+                  {formatINR(payroll.da)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-(--text-soft)">Special Allowance</span>
-                <span className="font-medium text-(--text-strong)">{formatINR(payroll.specialAllowance)}</span>
+                <span className="font-medium text-(--text-strong)">
+                  {formatINR(payroll.specialAllowance)}
+                </span>
               </div>
               <div className="flex justify-between font-bold pt-1 border-t border-(--border-soft) mt-1 text-(--text-strong)">
                 <span>Base Gross</span>
@@ -212,7 +234,9 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
                 .map((comp, idx) => (
                   <div key={`o-earn-${idx}`} className="flex justify-between">
                     <span className="text-(--text-soft)">{comp.name}</span>
-                    <span className="font-medium text-emerald-700">+{formatINR(comp.amount)}</span>
+                    <span className="font-medium text-emerald-700">
+                      +{formatINR(comp.amount)}
+                    </span>
                   </div>
                 ))}
               {payroll.extraEarnings
@@ -220,7 +244,9 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
                 .map((comp, idx) => (
                   <div key={`e-earn-${idx}`} className="flex justify-between">
                     <span className="text-(--text-soft)">{comp.name}</span>
-                    <span className="font-medium text-blue-700">+{formatINR(comp.amount)}</span>
+                    <span className="font-medium text-blue-700">
+                      +{formatINR(comp.amount)}
+                    </span>
                   </div>
                 ))}
               <div
@@ -236,7 +262,6 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             </div>
           </div>
 
-
           <div className="app-panel p-4">
             <h3 className="app-heading mb-2 border-b border-(--border-soft) pb-1">
               Deductions
@@ -244,15 +269,21 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
             <div className="space-y-1 text-(--text-body)">
               <div className="flex justify-between">
                 <span className="text-(--text-soft)">EPF</span>
-                <span className="text-rose-600 font-medium">-{formatINR(payroll.epf)}</span>
+                <span className="text-rose-600 font-medium">
+                  -{formatINR(payroll.epf)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-(--text-soft)">ESI</span>
-                <span className="text-rose-600 font-medium">-{formatINR(payroll.esi)}</span>
+                <span className="text-rose-600 font-medium">
+                  -{formatINR(payroll.esi)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-(--text-soft)">Professional Tax</span>
-                <span className="text-rose-600 font-medium">-{formatINR(payroll.pt)}</span>
+                <span className="text-rose-600 font-medium">
+                  -{formatINR(payroll.pt)}
+                </span>
               </div>
               {payroll.lwf > 0 && (
                 <div className="flex justify-between">
@@ -284,7 +315,9 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
                 ))}
               <div className="flex justify-between">
                 <span className="text-(--text-soft)">TDS</span>
-                <span className="text-rose-600 font-medium">-{formatINR(payroll.tds)}</span>
+                <span className="text-rose-600 font-medium">
+                  -{formatINR(payroll.tds)}
+                </span>
               </div>
               {payroll.lopDeduction > 0 && (
                 <div className="flex justify-between">
@@ -313,7 +346,6 @@ const EmployeeDetailsModal = ({ employee, payroll, onClose }) => {
               </div>
             </div>
           </div>
-
 
           <div className="app-panel p-4 bg-emerald-50/40 border border-emerald-200">
             <div className="flex justify-between font-bold text-lg text-emerald-950">

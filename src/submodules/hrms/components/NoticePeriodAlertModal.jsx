@@ -1,12 +1,19 @@
 import React from "react";
-import { X, UserMinus, RotateCcw, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import {
+  X,
+  UserMinus,
+  RotateCcw,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+} from "lucide-react";
 
-const NoticePeriodAlertModal = ({ 
-  isOpen, 
-  onClose, 
-  alerts, 
-  onAction, 
-  actionLoading 
+const NoticePeriodAlertModal = ({
+  isOpen,
+  onClose,
+  alerts,
+  onAction,
+  actionLoading,
 }) => {
   const [extendingId, setExtendingId] = React.useState(null);
   const [extraDays, setExtraDays] = React.useState("7");
@@ -29,20 +36,22 @@ const NoticePeriodAlertModal = ({
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
-
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-red-50/50">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-red-100 text-red-600 rounded-xl">
               <AlertCircle size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Notice Period Action Required</h3>
+              <h3 className="text-xl font-bold text-gray-900">
+                Notice Period Action Required
+              </h3>
               <p className="text-sm text-gray-500">
-                {alerts.length} employee{alerts.length === 1 ? "" : "s"} need immediate action.
+                {alerts.length} employee{alerts.length === 1 ? "" : "s"} need
+                immediate action.
               </p>
             </div>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="p-2 hover:bg-gray-200 rounded-full transition-colors"
           >
@@ -50,14 +59,13 @@ const NoticePeriodAlertModal = ({
           </button>
         </div>
 
-
         <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
           {alerts.map((item) => {
             const loadingKeyPrefix = `${item.source}-${item.id}`;
             const isExtending = extendingId === item.id;
-            
+
             return (
-              <div 
+              <div
                 key={`${item.source}-${item.id}`}
                 className="p-4 rounded-2xl border border-gray-100 bg-gray-50 flex flex-col gap-4"
               >
@@ -65,10 +73,16 @@ const NoticePeriodAlertModal = ({
                   <div>
                     <h4 className="font-bold text-gray-900">{item.name}</h4>
                     <p className="text-sm text-gray-600">
-                      {item.designation || "Employee"}{item.department ? ` • ${item.department}` : ""}
+                      {item.designation || "Employee"}
+                      {item.department ? ` • ${item.department}` : ""}
                     </p>
                     <p className="mt-1 text-xs text-red-600 font-medium">
-                      Notice ends on: {item.noticeEndDate ? new Date(item.noticeEndDate).toLocaleDateString("en-IN") : "-"}
+                      Notice ends on:{" "}
+                      {item.noticeEndDate
+                        ? new Date(item.noticeEndDate).toLocaleDateString(
+                            "en-IN",
+                          )
+                        : "-"}
                     </p>
                   </div>
 
@@ -110,8 +124,10 @@ const NoticePeriodAlertModal = ({
                 {isExtending && (
                   <div className="flex items-center gap-3 bg-blue-50 p-3 rounded-xl animate-in slide-in-from-top-2 duration-200">
                     <div className="flex-1">
-                      <label className="block text-[10px] uppercase font-bold text-blue-600 mb-1">Extension Days</label>
-                      <input 
+                      <label className="block text-[10px] uppercase font-bold text-blue-600 mb-1">
+                        Extension Days
+                      </label>
+                      <input
                         type="number"
                         value={extraDays}
                         onChange={(e) => setExtraDays(e.target.value)}
@@ -141,9 +157,8 @@ const NoticePeriodAlertModal = ({
           })}
         </div>
 
-
         <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
-          <button 
+          <button
             onClick={onClose}
             className="px-6 py-2 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors"
           >
@@ -151,8 +166,6 @@ const NoticePeriodAlertModal = ({
           </button>
         </div>
       </div>
-      
-
     </div>
   );
 };

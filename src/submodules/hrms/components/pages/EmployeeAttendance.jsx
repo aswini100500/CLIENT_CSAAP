@@ -88,7 +88,6 @@ const EmployeeAttendance = () => {
   ];
   const availableMonths = monthNames.map((_, index) => index);
 
-
   const panelClass =
     "app-panel overflow-hidden transition-colors duration-200 hover:border-(--border-strong)";
   const controlClass =
@@ -396,11 +395,14 @@ const EmployeeAttendance = () => {
           axios.get(
             `${import.meta.env.VITE_HRMS_BASE_URL}/api/attendance/${slug}?month=${monthValue}`,
           ),
-          axios.get("https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees", {
-            headers: {
-              Authorization: `Bearer ${token}`,
+          axios.get(
+            "https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             },
-          }),
+          ),
           slug
             ? axios
                 .get(
@@ -1131,9 +1133,7 @@ const EmployeeAttendance = () => {
           <div className="space-y-4 text-center">
             <Loader2 className="mx-auto h-10 w-10 animate-spin text-(--brand)" />
             <div>
-              <h3 className="app-heading">
-                Loading Attendance Data
-              </h3>
+              <h3 className="app-heading">Loading Attendance Data</h3>
               <p className="mt-1 text-[13px] font-medium text-(--text-soft)">
                 Please wait while we fetch the latest records
               </p>
@@ -1147,7 +1147,6 @@ const EmployeeAttendance = () => {
   return (
     <div className="app-shell min-h-screen p-4 font-sans md:p-6">
       <div className="mx-auto max-w-425">
-
         <div className="app-panel mb-6 p-4 md:p-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-3">
@@ -1358,10 +1357,7 @@ const EmployeeAttendance = () => {
           )}
         </div>
 
-
-        <div
-          className="app-panel overflow-hidden max-h-[calc(100vh-130px)] flex flex-col bg-(--bg-subtle)/45"
-        >
+        <div className="app-panel overflow-hidden max-h-[calc(100vh-130px)] flex flex-col bg-(--bg-subtle)/45">
           <div className="app-section-bar flex items-center justify-between px-4 py-3">
             <div className="flex items-center gap-3">
               <div className="rounded-xl border border-(--border-soft) bg-(--brand-soft) p-2.5 text-(--brand) shrink-0">
@@ -1371,9 +1367,7 @@ const EmployeeAttendance = () => {
                 <p className="text-[11px] font-extrabold uppercase tracking-widest text-(--text-soft) mb-0.5">
                   Attendance Records
                 </p>
-                <h2 className="app-heading">
-                  {getMonthYearLabel()}
-                </h2>
+                <h2 className="app-heading">{getMonthYearLabel()}</h2>
               </div>
             </div>
             <div className="rounded-lg border border-(--border-soft) bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-(--text-soft)">
@@ -1394,9 +1388,7 @@ const EmployeeAttendance = () => {
               <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-(--border-soft) bg-white shadow-sm">
                 <Users className="w-7 h-7 text-(--text-faint)" />
               </div>
-              <h3 className="mb-2 app-heading">
-                No Records Found
-              </h3>
+              <h3 className="mb-2 app-heading">No Records Found</h3>
               <p className="mb-6 max-w-sm text-[13px] font-medium text-(--text-soft)">
                 We couldn't find any attendance data for {getMonthYearLabel()}{" "}
                 with current filters.
@@ -1584,13 +1576,16 @@ const EmployeeAttendance = () => {
                 </table>
               </div>
 
-
               <div className="app-section-bar border-t border-(--border-soft) px-4 py-3">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="flex flex-col gap-1">
                     <p className="text-[11px] font-bold uppercase tracking-wider text-(--text-soft)">
-                      Page <span className="text-(--text-strong)">{currentPage}</span>{" "}
-                      of <span className="text-(--text-strong)">{totalPages}</span>
+                      Page{" "}
+                      <span className="text-(--text-strong)">
+                        {currentPage}
+                      </span>{" "}
+                      of{" "}
+                      <span className="text-(--text-strong)">{totalPages}</span>
                     </p>
                     <p className="text-[13px] font-medium text-(--text-soft)">
                       Showing{" "}
@@ -1686,7 +1681,6 @@ const EmployeeAttendance = () => {
         </div>
       </div>
 
-
       {selectedAttendanceRecord && !showAuditModal && (
         <DailyAttendanceModal
           selectedAttendanceRecord={selectedAttendanceRecord}
@@ -1723,7 +1717,6 @@ const EmployeeAttendance = () => {
           onSaved={handleAuditSaved}
         />
       )}
-
 
       {showTimesheet && selectedEmployee && (
         <MonthlyAttendanceOverview

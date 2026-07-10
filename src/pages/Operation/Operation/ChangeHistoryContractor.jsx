@@ -51,4 +51,4 @@ const ChangeHistoryContractor = () => {
   );
 };
 
-export default ChangeHistoryContractor
+export default ChangeHistoryContractor;

@@ -12,10 +12,8 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 
-
 const getFileType = (fileUrl) => {
   if (!fileUrl) return null;
-
 
   if (
     fileUrl.includes("unsplash.com") ||
@@ -29,7 +27,6 @@ const getFileType = (fileUrl) => {
   }
   return "unknown";
 };
-
 
 const DocumentCard = ({
   document,
@@ -64,7 +61,9 @@ const DocumentCard = ({
         <div className="flex items-center gap-2">
           <span className="text-(--brand)">{document.icon}</span>
           {showLabel && (
-            <h4 className="font-bold text-[13px] text-(--text-strong)">{document.label}</h4>
+            <h4 className="font-bold text-[13px] text-(--text-strong)">
+              {document.label}
+            </h4>
           )}
         </div>
         <span className="text-[10px] font-bold tracking-wider uppercase bg-(--bg-subtle) text-(--text-soft) px-2 py-0.5 rounded border border-(--border-soft)">
@@ -72,7 +71,10 @@ const DocumentCard = ({
         </span>
       </div>
 
-      <div className="text-[12px] text-(--text-soft) mb-3 truncate flex items-center gap-1.5 font-medium" title={fileName}>
+      <div
+        className="text-[12px] text-(--text-soft) mb-3 truncate flex items-center gap-1.5 font-medium"
+        title={fileName}
+      >
         <span className="text-gray-400">📄</span> {fileName}
       </div>
 
@@ -105,7 +107,6 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
 
   if (!employee) return null;
 
-
   const getSampleDocuments = () => {
     return {
       photo:
@@ -125,7 +126,6 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
       ],
     };
   };
-
 
   const documents = employee.documents
     ? typeof employee.documents === "string"
@@ -228,10 +228,6 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
 
   const handleDownload = async (fileUrl, fileName) => {
     try {
-
-
-
-
       const link = document.createElement("a");
       link.href = fileUrl;
       link.download = fileName || fileUrl.split("/").pop();
@@ -239,7 +235,6 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
 
       alert(`Downloading ${fileName || "file"}...`);
     } catch (error) {
@@ -250,7 +245,6 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
 
   const handlePreview = (document) => {
     if (document.isMultiple) {
-
       if (document.files.length > 0) {
         setSelectedDocument(document);
         setPreviewUrl(document.files[0]);
@@ -351,7 +345,6 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
   return (
     <div className="app-modal-backdrop fixed inset-0 z-50 overflow-auto p-4 md:p-6 flex items-start justify-center">
       <div className="app-modal max-w-6xl w-full my-10 border border-(--border-strong) shadow-xl bg-(--bg-panel-strong) flex flex-col">
-
         <div className="flex items-center justify-between p-5 border-b border-(--border-soft) bg-(--bg-subtle)/30 rounded-t-[22px]">
           <div className="flex items-center gap-4">
             <button
@@ -366,17 +359,20 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
                 Employee Documents
               </h2>
               <p className="text-[11px] font-bold text-(--text-soft) mt-0.5">
-                {employee.name} <span className="text-gray-300 mx-1.5">•</span> {employee.employeeId || employee.id}
+                {employee.name} <span className="text-gray-300 mx-1.5">•</span>{" "}
+                {employee.employeeId || employee.id}
               </p>
             </div>
           </div>
         </div>
 
-
         <div className="p-6 bg-(--bg-panel)">
           {!hasDocuments ? (
             <div className="text-center py-12 bg-white rounded-xl border border-(--border-soft) p-8 shadow-sm">
-              <FileSearch size={44} className="mx-auto text-(--text-faint) mb-3" />
+              <FileSearch
+                size={44}
+                className="mx-auto text-(--text-faint) mb-3"
+              />
               <h3 className="text-base font-bold text-(--text-strong) mb-1.5">
                 No Documents Available
               </h3>
@@ -398,14 +394,14 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
                     key={categoryIndex}
                     className="app-panel border border-(--border-soft) overflow-hidden shadow-sm bg-white"
                   >
-
                     <div className="flex items-center gap-3 p-4 bg-(--bg-subtle)/40 border-b border-(--border-soft)">
-                      <div className="text-(--brand) size-5 flex items-center justify-center">{category.icon}</div>
+                      <div className="text-(--brand) size-5 flex items-center justify-center">
+                        {category.icon}
+                      </div>
                       <h3 className="text-[14px] font-extrabold text-(--text-strong) tracking-tight">
                         {category.title}
                       </h3>
                     </div>
-
 
                     <div className="p-4 bg-white">
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -416,8 +412,13 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
                             return (
                               <div key={docIndex} className="col-span-full">
                                 <h4 className="text-[13px] font-bold text-(--text-strong) mb-3 flex items-center gap-2">
-                                  <span className="text-(--brand)">{doc.icon}</span>
-                                  {doc.label} <span className="text-xs text-(--text-soft) font-normal">({doc.files.length} files)</span>
+                                  <span className="text-(--brand)">
+                                    {doc.icon}
+                                  </span>
+                                  {doc.label}{" "}
+                                  <span className="text-xs text-(--text-soft) font-normal">
+                                    ({doc.files.length} files)
+                                  </span>
                                 </h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                                   {doc.files.map((file, fileIndex) => (
@@ -457,11 +458,12 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
           )}
         </div>
 
-
         <div className="border-t border-(--border-soft) p-4 bg-(--bg-subtle)/35 rounded-b-[22px] flex justify-between items-center">
           <div className="text-xs text-(--text-soft) font-medium flex items-center gap-1.5">
             <span className="text-(--brand)">💡</span>
-            <span>This is demo data. Real documents will appear when uploaded.</span>
+            <span>
+              This is demo data. Real documents will appear when uploaded.
+            </span>
           </div>
           <button
             onClick={onClose}
@@ -472,11 +474,9 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
         </div>
       </div>
 
-
       {selectedDocument && (
         <div className="app-modal-backdrop fixed inset-0 z-70 bg-black/50 backdrop-blur-md flex items-center justify-center p-4">
           <div className="app-modal max-w-4xl w-full max-h-[90vh] overflow-hidden border border-(--border-strong) bg-white shadow-2xl flex flex-col">
-
             <div className="flex items-center justify-between p-4 border-b border-(--border-soft) bg-(--bg-subtle)/30 rounded-t-[22px]">
               <div className="flex items-center gap-3">
                 <div className="text-(--brand) size-5 flex items-center justify-center">
@@ -487,7 +487,9 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
                     {selectedDocument.label}
                   </h3>
                   <p className="text-[11px] font-bold text-(--text-soft) mt-0.5">
-                    {employee.name} <span className="text-gray-300 mx-1.5">•</span> {getFileName(previewUrl, selectedDocument.type)}
+                    {employee.name}{" "}
+                    <span className="text-gray-300 mx-1.5">•</span>{" "}
+                    {getFileName(previewUrl, selectedDocument.type)}
                   </p>
                 </div>
               </div>
@@ -513,10 +515,8 @@ const ViewEmployeeDocuments = ({ employee, onClose }) => {
               </div>
             </div>
 
-
             <div className="p-6 max-h-[calc(90vh-120px)] overflow-auto bg-white custom-scrollbar flex-1">
               {renderPreview()}
-
 
               {selectedDocument.isMultiple &&
                 selectedDocument.files.length > 1 && (

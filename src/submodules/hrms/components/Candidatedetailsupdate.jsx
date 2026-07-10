@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const CandidateDetailsUpdate = ({ employee, onClose }) => {
-
   const [formData, setFormData] = useState({
     employeeDepartment: "",
     employeeDesignation: "",
@@ -26,7 +25,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
     hrSignatory: "",
   });
 
-
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
 
@@ -43,13 +41,11 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
     }
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     alert("Candidate details updated successfully!");
   };
-
 
   const departments = [
     "Select Department",
@@ -61,7 +57,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
     "Operations",
     "Research & Development",
   ];
-
 
   const designations = [
     "Select Designation",
@@ -75,15 +70,11 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
     "Marketing Specialist",
   ];
 
-
   const workTypes = ["Full-time", "Part-time", "Contract", "Remote", "Hybrid"];
-
 
   const employeeStatuses = ["Active", "Inactive", "On Leave", "Probation"];
 
-
   const paymentModes = ["Bank Transfer", "Cash", "Cheque", "Online Transfer"];
-
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -94,16 +85,13 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
           onSubmit={handleSubmit}
           className="app-panel bg-white shadow-sm border border-(--border-soft) rounded-2xl overflow-hidden"
         >
-
           <div className="p-6 space-y-8">
-
             <div>
               <h2 className="text-[14px] font-bold text-(--text-strong) mb-4 pb-2 border-b border-(--border-soft) uppercase tracking-wider">
                 Personal & Job Details
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                 <div>
                   <label className="app-label block mb-1.5">
                     Employee Department <span className="text-red-500">*</span>
@@ -122,7 +110,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                     ))}
                   </select>
                 </div>
-
 
                 <div>
                   <label className="app-label block mb-1.5">
@@ -143,7 +130,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-
                 <div>
                   <label className="app-label block mb-1.5">
                     Reporting Authority
@@ -161,7 +147,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-
                 <div>
                   <label className="app-label block mb-1.5">
                     Office Mail ID <span className="text-red-500">*</span>
@@ -176,7 +161,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                     required
                   />
                 </div>
-
 
                 <div>
                   <label className="app-label block mb-1.5">
@@ -196,7 +180,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                     ))}
                   </select>
                 </div>
-
 
                 <div>
                   <label className="app-label block mb-1.5">
@@ -218,7 +201,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </div>
                 </div>
 
-
                 <div>
                   <label className="app-label block mb-1.5">
                     PF Required/NOT
@@ -233,7 +215,9 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                         onChange={handleInputChange}
                         className="text-(--brand) focus:ring-(--brand-ring) h-4 w-4 border-(--border-strong)"
                       />
-                      <span className="ml-2 text-sm text-(--text-body) font-medium">Required</span>
+                      <span className="ml-2 text-sm text-(--text-body) font-medium">
+                        Required
+                      </span>
                     </label>
                     <label className="inline-flex items-center cursor-pointer">
                       <input
@@ -244,16 +228,15 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                         onChange={handleInputChange}
                         className="text-(--brand) focus:ring-(--brand-ring) h-4 w-4 border-(--border-strong)"
                       />
-                      <span className="ml-2 text-sm text-(--text-body) font-medium">Not Required</span>
+                      <span className="ml-2 text-sm text-(--text-body) font-medium">
+                        Not Required
+                      </span>
                     </label>
                   </div>
                 </div>
 
-
                 <div>
-                  <label className="app-label block mb-1.5">
-                    Basic Salary
-                  </label>
+                  <label className="app-label block mb-1.5">Basic Salary</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <span className="text-(--text-faint) text-xs">₹</span>
@@ -272,14 +255,12 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
               </div>
             </div>
 
-
             <div>
               <h2 className="text-[14px] font-bold text-(--text-strong) mb-4 pb-2 border-b border-(--border-soft) uppercase tracking-wider">
                 Employment Details
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                 <div>
                   <label className="app-label block mb-1.5">
                     Employee Status
@@ -299,11 +280,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-
                 <div>
-                  <label className="app-label block mb-1.5">
-                    Joining Date
-                  </label>
+                  <label className="app-label block mb-1.5">Joining Date</label>
                   <input
                     type="date"
                     name="joiningDate"
@@ -313,11 +291,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-
                 <div>
-                  <label className="app-label block mb-1.5">
-                    Blood Group
-                  </label>
+                  <label className="app-label block mb-1.5">Blood Group</label>
                   <select
                     name="bloodGroup"
                     value={formData.bloodGroup}
@@ -333,7 +308,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-
                 <div>
                   <label className="app-label block mb-1.5">
                     Probation Period
@@ -348,11 +322,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-
                 <div>
-                  <label className="app-label block mb-1.5">
-                    HR Signatory
-                  </label>
+                  <label className="app-label block mb-1.5">HR Signatory</label>
                   <input
                     type="text"
                     name="hrSignatory"
@@ -363,11 +334,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-
                 <div className="md:col-span-2">
-                  <label className="app-label block mb-1.5">
-                    Photo Upload
-                  </label>
+                  <label className="app-label block mb-1.5">Photo Upload</label>
                   <div className="flex items-center">
                     <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-(--border-strong) bg-(--bg-subtle)/20 hover:bg-(--bg-subtle)/40 rounded-xl cursor-pointer hover:border-(--brand) transition-all duration-200">
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -409,14 +377,12 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
               </div>
             </div>
 
-
             <div>
               <h2 className="text-[14px] font-bold text-(--text-strong) mb-4 pb-2 border-b border-(--border-soft) uppercase tracking-wider">
                 Payment Details
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                 <div>
                   <label className="app-label block mb-1.5">
                     Mode Of Payment
@@ -436,11 +402,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   </select>
                 </div>
 
-
                 <div>
-                  <label className="app-label block mb-1.5">
-                    Bank Name
-                  </label>
+                  <label className="app-label block mb-1.5">Bank Name</label>
                   <input
                     type="text"
                     name="bankName"
@@ -451,11 +414,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-
                 <div>
-                  <label className="app-label block mb-1.5">
-                    Branch Name
-                  </label>
+                  <label className="app-label block mb-1.5">Branch Name</label>
                   <input
                     type="text"
                     name="branchName"
@@ -466,11 +426,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-
                 <div>
-                  <label className="app-label block mb-1.5">
-                    A/C No
-                  </label>
+                  <label className="app-label block mb-1.5">A/C No</label>
                   <input
                     type="text"
                     name="accountNo"
@@ -481,11 +438,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-
                 <div>
-                  <label className="app-label block mb-1.5">
-                    IFSC Code
-                  </label>
+                  <label className="app-label block mb-1.5">IFSC Code</label>
                   <input
                     type="text"
                     name="ifscCode"
@@ -496,11 +450,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
                   />
                 </div>
 
-
                 <div>
-                  <label className="app-label block mb-1.5">
-                    Allowance
-                  </label>
+                  <label className="app-label block mb-1.5">Allowance</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <span className="text-(--text-faint) text-xs">₹</span>
@@ -519,11 +470,8 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
               </div>
             </div>
 
-
             <div>
-              <label className="app-label block mb-1.5">
-                Comment
-              </label>
+              <label className="app-label block mb-1.5">Comment</label>
               <textarea
                 name="comment"
                 value={formData.comment}
@@ -535,7 +483,6 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
             </div>
           </div>
 
-
           <div className="bg-(--bg-subtle)/30 px-6 py-4 border-t border-(--border-soft)">
             <div className="flex justify-end gap-3">
               <button
@@ -545,10 +492,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
               >
                 Cancel
               </button>
-              <button
-                type="submit"
-                className="app-btn-primary cursor-pointer"
-              >
+              <button type="submit" className="app-btn-primary cursor-pointer">
                 Update Candidate Details
               </button>
             </div>

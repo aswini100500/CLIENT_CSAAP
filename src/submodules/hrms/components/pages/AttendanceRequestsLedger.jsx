@@ -66,7 +66,6 @@ const AttendanceRequestsLedger = () => {
 
   useEffect(() => {
     fetchRequests();
-
   }, [user?.slug, user?.company_id, user?.id, statusFilter]);
 
   const filteredRequests = useMemo(() => {

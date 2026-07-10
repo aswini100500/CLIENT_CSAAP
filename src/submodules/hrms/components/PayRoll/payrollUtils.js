@@ -1,6 +1,4 @@
 export const getUiPresentDays = (value = {}) => {
-
-
   const daysPresent = Number(value.daysPresent ?? value.days_present) || 0;
   const lateDays = Number(value.lateDays ?? value.late_days) || 0;
   const halfDays = Number(value.halfDays ?? value.half_days) || 0;

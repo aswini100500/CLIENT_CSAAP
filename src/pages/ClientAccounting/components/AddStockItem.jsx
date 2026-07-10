@@ -8,12 +8,10 @@ const AddStockItem = () => {
     value: "",
   });
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     let updated = { ...item, [name]: value };
-
 
     if (name === "qty" || name === "rate") {
       const qty = Number(updated.qty);
@@ -24,7 +22,6 @@ const AddStockItem = () => {
 
     setItem(updated);
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,7 +35,6 @@ const AddStockItem = () => {
     localStorage.setItem("stockItems", JSON.stringify(updatedList));
 
     alert("Item added successfully!");
-
 
     setItem({
       name: "",
@@ -56,7 +52,6 @@ const AddStockItem = () => {
         </h2>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-
           <div>
             <label className="block font-medium mb-1">Item Name</label>
             <input
@@ -70,7 +65,6 @@ const AddStockItem = () => {
             />
           </div>
 
-
           <div>
             <label className="block font-medium mb-1">Quantity</label>
             <input
@@ -81,7 +75,6 @@ const AddStockItem = () => {
               className="w-full border p-2 rounded"
             />
           </div>
-
 
           <div>
             <label className="block font-medium mb-1">Rate</label>
@@ -94,7 +87,6 @@ const AddStockItem = () => {
             />
           </div>
 
-
           <div>
             <label className="block font-medium mb-1">Value</label>
             <input
@@ -105,7 +97,6 @@ const AddStockItem = () => {
               className="w-full border p-2 rounded bg-gray-200"
             />
           </div>
-
 
           <button
             type="submit"

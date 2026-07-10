@@ -117,14 +117,15 @@ const AssignLeadModal = ({
   const modalContent = (
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
       <div className="app-modal w-full max-w-md overflow-hidden flex flex-col">
-
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="pr-4">
-            <h3 className="modal-title">
-              Assign Lead
-            </h3>
+            <h3 className="modal-title">Assign Lead</h3>
             <p className="modal-subtitle mt-1.5">
-              Assign <span className="font-semibold text-(--text-strong)">{lead.name}</span> to a team member.
+              Assign{" "}
+              <span className="font-semibold text-(--text-strong)">
+                {lead.name}
+              </span>{" "}
+              to a team member.
             </p>
           </div>
           <button
@@ -137,11 +138,8 @@ const AssignLeadModal = ({
           </button>
         </div>
 
-
         <div className="p-5 pb-4">
-          <label className="modal-label mb-2 block">
-            Select Employee *
-          </label>
+          <label className="modal-label mb-2 block">Select Employee *</label>
           <p className="modal-helper mb-3">
             Search by name, email, or role and choose exactly one assignee.
           </p>
@@ -176,83 +174,85 @@ const AssignLeadModal = ({
               </div>
             </div>
 
-
             {showDropdown && dropdownStyle
               ? createPortal(
-              <div
-                ref={portalDropdownRef}
-                style={dropdownStyle}
-                className="app-floating bg-white rounded-2xl max-h-50 overflow-y-auto custom-scrollbar py-1"
-              >
-                {filteredEmployees.length > 0 ? (
-                  filteredEmployees.map((emp) => (
-                    <button
-                      key={emp.id}
-                      onClick={() => handleSelect(emp)}
-                      className="w-full px-3.5 py-2 flex items-center gap-3 hover:bg-(--bg-subtle) transition-colors text-left group"
-                      type="button"
-                    >
-                      <div className="size-8 rounded-xl bg-(--brand-soft) border border-(--border-soft) flex items-center justify-center shrink-0 overflow-hidden">
-                        {emp.profile_photo ? (
-                          <img
-                            src={emp.profile_photo}
-                            alt={emp.name}
-                            className="size-full object-cover"
-                          />
-                        ) : (
-                          <User className="size-3.5 text-(--brand)" />
-                        )}
+                  <div
+                    ref={portalDropdownRef}
+                    style={dropdownStyle}
+                    className="app-floating bg-white rounded-2xl max-h-50 overflow-y-auto custom-scrollbar py-1"
+                  >
+                    {filteredEmployees.length > 0 ? (
+                      filteredEmployees.map((emp) => (
+                        <button
+                          key={emp.id}
+                          onClick={() => handleSelect(emp)}
+                          className="w-full px-3.5 py-2 flex items-center gap-3 hover:bg-(--bg-subtle) transition-colors text-left group"
+                          type="button"
+                        >
+                          <div className="size-8 rounded-xl bg-(--brand-soft) border border-(--border-soft) flex items-center justify-center shrink-0 overflow-hidden">
+                            {emp.profile_photo ? (
+                              <img
+                                src={emp.profile_photo}
+                                alt={emp.name}
+                                className="size-full object-cover"
+                              />
+                            ) : (
+                              <User className="size-3.5 text-(--brand)" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-[13px] font-medium text-(--text-strong) truncate">
+                              {emp.name}
+                            </div>
+                            <div className="text-[11px] text-(--text-faint) truncate">
+                              {emp.designation || "No designation"}
+                              {emp.department ? ` • ${emp.department}` : ""}
+                            </div>
+                          </div>
+                          {selectedEmployee?.user_id === emp.user_id && (
+                            <Check className="size-3.5 text-(--brand) shrink-0" />
+                          )}
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-6 text-center">
+                        <p className="text-[12px] text-(--text-faint)">
+                          No employees found
+                        </p>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-[13px] font-medium text-(--text-strong) truncate">
-                          {emp.name}
-                        </div>
-                        <div className="text-[11px] text-(--text-faint) truncate">
-                          {emp.designation || "No designation"}{emp.department ? ` • ${emp.department}` : ""}
-                        </div>
-                      </div>
-                      {selectedEmployee?.user_id === emp.user_id && (
-                        <Check className="size-3.5 text-(--brand) shrink-0" />
-                      )}
-                    </button>
-                  ))
-                ) : (
-                  <div className="px-4 py-6 text-center">
-                    <p className="text-[12px] text-(--text-faint)">No employees found</p>
-                  </div>
-                )}
-              </div>,
-              document.body,
-            )
+                    )}
+                  </div>,
+                  document.body,
+                )
               : null}
           </div>
-
 
           {selectedEmployee && !showDropdown && (
             <div className="mt-4 app-panel overflow-hidden">
               <div className="app-section-bar px-4 py-2.5">
-                <h4 className="modal-section-title">
-                  Selected Assignee
-                </h4>
+                <h4 className="modal-section-title">Selected Assignee</h4>
               </div>
               <div className="p-4 flex items-center gap-3.5">
                 <div className="size-11 rounded-2xl bg-white border border-(--border-soft) flex items-center justify-center shrink-0 overflow-hidden">
-                   {selectedEmployee.profile_photo ? (
-                      <img
-                        src={selectedEmployee.profile_photo}
-                        alt={selectedEmployee.name}
-                        className="size-full object-cover"
-                      />
-                    ) : (
-                      <User className="size-5 text-(--brand)" />
-                    )}
+                  {selectedEmployee.profile_photo ? (
+                    <img
+                      src={selectedEmployee.profile_photo}
+                      alt={selectedEmployee.name}
+                      className="size-full object-cover"
+                    />
+                  ) : (
+                    <User className="size-5 text-(--brand)" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[15px] font-bold tracking-[-0.02em] text-(--text-strong) truncate">
                     {selectedEmployee.name}
                   </div>
                   <div className="text-[12px] font-medium text-(--text-faint) truncate mt-0.5">
-                    {selectedEmployee.designation || "No designation"}{selectedEmployee.department ? ` • ${selectedEmployee.department}` : ""}
+                    {selectedEmployee.designation || "No designation"}
+                    {selectedEmployee.department
+                      ? ` • ${selectedEmployee.department}`
+                      : ""}
                   </div>
                   <div className="text-[11px] text-(--text-faint) truncate mt-0.5">
                     {selectedEmployee.email}
@@ -265,7 +265,6 @@ const AssignLeadModal = ({
             </div>
           )}
         </div>
-
 
         <div className="px-5 py-3 border-t border-(--border-soft) flex justify-end items-center gap-2.5 bg-white">
           <button

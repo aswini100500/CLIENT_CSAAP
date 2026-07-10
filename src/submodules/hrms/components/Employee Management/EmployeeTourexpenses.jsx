@@ -106,7 +106,6 @@ const TourOfEmployees = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div>
@@ -118,7 +117,6 @@ const TourOfEmployees = () => {
               </p>
             </div>
           </div>
-
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
@@ -191,9 +189,7 @@ const TourOfEmployees = () => {
           </div>
         </div>
 
-
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-
           <div className="p-6 border-b border-gray-200">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
               <div className="flex items-center gap-3">
@@ -236,7 +232,6 @@ const TourOfEmployees = () => {
               </div>
             </div>
           </div>
-
 
           <div className="overflow-x-auto">
             {isLoading ? (
@@ -381,7 +376,6 @@ const TourOfEmployees = () => {
               </table>
             )}
           </div>
-
 
           <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">

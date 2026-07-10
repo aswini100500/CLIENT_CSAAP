@@ -55,26 +55,31 @@ const LedgerForm = () => {
     }
     setLedger((prev) => ({ ...prev, [key]: finalValue }));
 
-
     if (key === "pan") {
       const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
       setErrors((prev) => ({
         ...prev,
-        pan: finalValue && !panRegex.test(finalValue) ? "Invalid PAN format (e.g. ABCDE1234F)" : "",
+        pan:
+          finalValue && !panRegex.test(finalValue)
+            ? "Invalid PAN format (e.g. ABCDE1234F)"
+            : "",
       }));
     }
     if (key === "gstin") {
-      const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+      const gstinRegex =
+        /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
       setErrors((prev) => ({
         ...prev,
-        gstin: finalValue && !gstinRegex.test(finalValue) ? "Invalid GSTIN format (e.g. 27AAAAA0000A1Z5)" : "",
+        gstin:
+          finalValue && !gstinRegex.test(finalValue)
+            ? "Invalid GSTIN format (e.g. 27AAAAA0000A1Z5)"
+            : "",
       }));
     }
   };
 
   const handleBankChange = (key, value) =>
     setBankDetails((prev) => ({ ...prev, [key]: value }));
-
 
   useEffect(() => {
     if (!companyId) return;
@@ -85,19 +90,15 @@ const LedgerForm = () => {
 
         if (res.data && res.data.length > 0) {
           setGroups(res.data);
-
         } else {
           throw new Error("No backend data");
         }
       } catch (err) {
-
-
         const stored = JSON.parse(localStorage.getItem("tallyGroups"));
 
         if (stored && stored.length > 0) {
           setGroups(stored);
         } else {
-
           setGroups(demoGroups);
         }
       } finally {
@@ -108,13 +109,14 @@ const LedgerForm = () => {
     fetchGroups();
   }, [companyId]);
 
-
   useEffect(() => {
     if (!id || !companyId) return;
 
     const fetchLedger = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/${id}`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/${id}`,
+        );
         const data = res.data;
 
         let actualUnderGroupName = data.underGroup;
@@ -132,7 +134,10 @@ const LedgerForm = () => {
         setLedger({
           name: data.name,
           alias: data.aliasName,
-          under: JSON.stringify({ id: actualGroupId, name: actualUnderGroupName }),
+          under: JSON.stringify({
+            id: actualGroupId,
+            name: actualUnderGroupName,
+          }),
           openingBalance: data.openingBalance,
           type: data.balanceType,
           mailingName: data.mailingName,
@@ -159,20 +164,17 @@ const LedgerForm = () => {
     fetchLedger();
   }, [id, companyId]);
 
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const name = params.get("name");
     if (name && !id) {
-      setLedger(prev => ({
+      setLedger((prev) => ({
         ...prev,
         name: name,
-        mailingName: name
+        mailingName: name,
       }));
     }
   }, [id]);
-
-
 
   const handleSubmit = async () => {
     if (!ledger.name || !ledger.under) {
@@ -198,14 +200,17 @@ const LedgerForm = () => {
 
     try {
       if (id) {
-
-        await axios.put(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/update/${companyId}/${id}`, payload);
+        await axios.put(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/update/${companyId}/${id}`,
+          payload,
+        );
         Swal.fire("Success!", "Ledger updated successfully!", "success");
         navigate("/accounting/client/listOfLedgers");
       } else {
-
-
-        await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`, payload);
+        await axios.post(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`,
+          payload,
+        );
         Swal.fire("Success!", "Ledger created successfully!", "success");
 
         const params = new URLSearchParams(window.location.search);
@@ -242,7 +247,6 @@ const LedgerForm = () => {
         accountNumber: "",
         ifsc: "",
       });
-
     } catch (err) {
       Swal.fire("Error", "Could not save ledger!", "error");
       console.error(err);
@@ -255,7 +259,6 @@ const LedgerForm = () => {
         <h2 className="text-center text-lg font-bold text-blue-800 mb-4">
           {id ? "Ledger Alteration" : "Ledger Creation"}
         </h2>
-
 
         <div className="grid grid-cols-2 gap-6 border-b pb-4">
           <div>
@@ -300,7 +303,6 @@ const LedgerForm = () => {
           </div>
         </div>
 
-
         <div className="mt-3 border-b pb-4">
           <label className="block text-sm mb-1">Under :</label>
 
@@ -321,16 +323,16 @@ const LedgerForm = () => {
                 >
                   {g.groupName}
                 </option>
-
               ))}
             </select>
           )}
         </div>
 
-
         <div className="grid grid-cols-2 mt-4 gap-6 border-b pb-4">
           <div>
-            <h3 className="font-semibold text-blue-700 mb-2">Mailing Details</h3>
+            <h3 className="font-semibold text-blue-700 mb-2">
+              Mailing Details
+            </h3>
 
             <label className="block text-sm mb-1">Mailing Name :</label>
             <input
@@ -414,7 +416,6 @@ const LedgerForm = () => {
           </div>
         </div>
 
-
         <div className="mt-4 border-b pb-4">
           <h3 className="font-semibold text-blue-700 mb-2">
             Beneficiary Details
@@ -436,7 +437,6 @@ const LedgerForm = () => {
           </div>
         </div>
 
-
         <div className="mt-4">
           <h3 className="font-semibold text-blue-700 mb-2">
             Tax Registration Details
@@ -453,7 +453,9 @@ const LedgerForm = () => {
                 maxLength={10}
                 className={`border px-2 py-1 w-full ${errors.pan ? "border-red-500" : ""}`}
               />
-              {errors.pan && <p className="text-red-500 text-[12px] mt-1">{errors.pan}</p>}
+              {errors.pan && (
+                <p className="text-red-500 text-[12px] mt-1">{errors.pan}</p>
+              )}
             </div>
 
             <div>
@@ -481,7 +483,9 @@ const LedgerForm = () => {
                 maxLength={15}
                 className={`border px-2 py-1 w-full ${errors.gstin ? "border-red-500" : ""}`}
               />
-              {errors.gstin && <p className="text-red-500 text-[10px] mt-1">{errors.gstin}</p>}
+              {errors.gstin && (
+                <p className="text-red-500 text-[10px] mt-1">{errors.gstin}</p>
+              )}
             </div>
 
             <div>
@@ -497,7 +501,6 @@ const LedgerForm = () => {
             </div>
           </div>
         </div>
-
 
         <div className="mt-6 flex justify-center gap-4">
           <button
@@ -530,7 +533,6 @@ const LedgerForm = () => {
           </button>
         </div>
       </div>
-
 
       {showBankPopup && (
         <div className="fixed inset-0 backdrop-blur bg-black/30 flex items-center justify-center z-50">

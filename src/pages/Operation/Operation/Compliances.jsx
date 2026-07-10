@@ -57,12 +57,12 @@ const Compliances = () => {
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     if (name === "contractor_select") {
-      const selected = contractors.find(c => c.id === parseInt(value));
+      const selected = contractors.find((c) => c.id === parseInt(value));
       if (selected) {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           contractor_name: selected.name,
-          contractor_id: selected.id
+          contractor_id: selected.id,
         }));
       }
       return;
@@ -71,8 +71,16 @@ const Compliances = () => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.contractor_name || !formData.work_order_no || !formData.document_date) {
-      Swal.fire("Required Fields", "Please fill contractor name, work order no, and document date.", "warning");
+    if (
+      !formData.contractor_name ||
+      !formData.work_order_no ||
+      !formData.document_date
+    ) {
+      Swal.fire(
+        "Required Fields",
+        "Please fill contractor name, work order no, and document date.",
+        "warning",
+      );
       return;
     }
     try {
@@ -92,7 +100,11 @@ const Compliances = () => {
       fetchRecords();
     } catch (err) {
       console.error("Error creating compliance:", err);
-      Swal.fire("Error", err.response?.data?.message || "Failed to create compliance.", "error");
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Failed to create compliance.",
+        "error",
+      );
     } finally {
       setLoading(false);
     }
@@ -151,10 +163,14 @@ const Compliances = () => {
 
       {showForm && (
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
-          <h3 className="font-semibold text-gray-700 mb-4">New Compliance Record</h3>
+          <h3 className="font-semibold text-gray-700 mb-4">
+            New Compliance Record
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Select Contractor</label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                Select Contractor
+              </label>
               <select
                 name="contractor_select"
                 value={formData.contractor_id}
@@ -162,14 +178,18 @@ const Compliances = () => {
                 className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               >
                 <option value="">-- Select Contractor --</option>
-                {contractors.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
+                {contractors.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
             </div>
             {formFields.map((field) => (
               <div key={field.name}>
-                <label className="block text-xs font-medium text-gray-600 mb-1">{field.label}</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  {field.label}
+                </label>
                 <input
                   type={field.type}
                   name={field.name}
@@ -180,7 +200,9 @@ const Compliances = () => {
               </div>
             ))}
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Billing Type</label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                Billing Type
+              </label>
               <select
                 name="billing_type"
                 value={formData.billing_type}
@@ -193,7 +215,9 @@ const Compliances = () => {
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-xs font-medium text-gray-600 mb-1">Narration</label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                Narration
+              </label>
               <input
                 type="text"
                 name="narration"
@@ -203,7 +227,9 @@ const Compliances = () => {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Clearance Document</label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                Clearance Document
+              </label>
               <input
                 type="file"
                 onChange={(e) => setClearanceFile(e.target.files[0])}
@@ -233,13 +259,24 @@ const Compliances = () => {
         <table className="w-full border-collapse border border-gray-200 text-sm">
           <thead className="bg-blue-50">
             <tr>
-              {["#", "Contractor", "Business Unit", "Doc Type", "Work Order", "Bill Amount", "Period", "Status", "Actions"].map(
-                (h) => (
-                  <th key={h} className="border border-gray-200 p-2 text-left text-xs font-semibold">
-                    {h}
-                  </th>
-                )
-              )}
+              {[
+                "#",
+                "Contractor",
+                "Business Unit",
+                "Doc Type",
+                "Work Order",
+                "Bill Amount",
+                "Period",
+                "Status",
+                "Actions",
+              ].map((h) => (
+                <th
+                  key={h}
+                  className="border border-gray-200 p-2 text-left text-xs font-semibold"
+                >
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -251,7 +288,10 @@ const Compliances = () => {
               </tr>
             ) : records.length === 0 ? (
               <tr>
-                <td colSpan="9" className="text-center py-6 text-gray-400 italic">
+                <td
+                  colSpan="9"
+                  className="text-center py-6 text-gray-400 italic"
+                >
                   No compliance records found.
                 </td>
               </tr>
@@ -259,16 +299,29 @@ const Compliances = () => {
               records.map((r, i) => (
                 <tr key={r.id} className="hover:bg-gray-50">
                   <td className="border border-gray-200 p-2">{i + 1}</td>
-                  <td className="border border-gray-200 p-2">{r.contractor_name}</td>
-                  <td className="border border-gray-200 p-2">{r.business_unit}</td>
-                  <td className="border border-gray-200 p-2">{r.document_type}</td>
-                  <td className="border border-gray-200 p-2">{r.work_order_no}</td>
+                  <td className="border border-gray-200 p-2">
+                    {r.contractor_name}
+                  </td>
+                  <td className="border border-gray-200 p-2">
+                    {r.business_unit}
+                  </td>
+                  <td className="border border-gray-200 p-2">
+                    {r.document_type}
+                  </td>
+                  <td className="border border-gray-200 p-2">
+                    {r.work_order_no}
+                  </td>
                   <td className="border border-gray-200 p-2">
                     ₹{parseFloat(r.bill_amount || 0).toLocaleString()}
                   </td>
                   <td className="border border-gray-200 p-2 text-xs">
-                    {r.period_from ? new Date(r.period_from).toLocaleDateString() : "-"} →{" "}
-                    {r.period_to ? new Date(r.period_to).toLocaleDateString() : "-"}
+                    {r.period_from
+                      ? new Date(r.period_from).toLocaleDateString()
+                      : "-"}{" "}
+                    →{" "}
+                    {r.period_to
+                      ? new Date(r.period_to).toLocaleDateString()
+                      : "-"}
                   </td>
                   <td className="border border-gray-200 p-2">
                     <span
@@ -276,8 +329,8 @@ const Compliances = () => {
                         r.status === "draft"
                           ? "bg-yellow-100 text-yellow-700"
                           : r.status === "approved"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-700"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-100 text-gray-700"
                       }`}
                     >
                       {r.status}

@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { 
-  X, 
-  IndianRupee, 
-  AlertCircle, 
-  Loader2, 
+import {
+  X,
+  IndianRupee,
+  AlertCircle,
+  Loader2,
   Calendar,
   CreditCard,
   FileText,
-  CheckCircle2
+  CheckCircle2,
 } from "lucide-react";
 import accountingApi from "../../../submodules/crm/accountingApi";
 
@@ -19,10 +19,9 @@ const RecordPaymentModal = ({
   paymentPlan,
   stages = [],
   onClose,
-  onPaymentSuccess
+  onPaymentSuccess,
 }) => {
-
-  const activeSlabs = stages.filter(s => (s.allocated_amount || 0) > 0);
+  const activeSlabs = stages.filter((s) => (s.allocated_amount || 0) > 0);
 
   const [selectedSlabId, setSelectedSlabId] = useState("");
   const [amount, setAmount] = useState("");
@@ -36,38 +35,38 @@ const RecordPaymentModal = ({
     return `${yyyy}-${mm}-${dd}`;
   });
   const [note, setNote] = useState("");
-  
+
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-
-  const selectedSlab = activeSlabs.find(s => String(s.db_slab_id) === String(selectedSlabId));
-  const outstandingAmount = selectedSlab 
-    ? (selectedSlab.allocated_amount - (selectedSlab.paid_amount || 0)) 
+  const selectedSlab = activeSlabs.find(
+    (s) => String(s.db_slab_id) === String(selectedSlabId),
+  );
+  const outstandingAmount = selectedSlab
+    ? selectedSlab.allocated_amount - (selectedSlab.paid_amount || 0)
     : 0;
-
 
   const maxAllowedPayment = (() => {
     if (!selectedSlab) return 0;
-    const selectedIndex = activeSlabs.findIndex(s => String(s.db_slab_id) === String(selectedSlabId));
+    const selectedIndex = activeSlabs.findIndex(
+      (s) => String(s.db_slab_id) === String(selectedSlabId),
+    );
     if (selectedIndex === -1) return 0;
 
     let sum = 0;
     for (let i = selectedIndex; i < activeSlabs.length; i++) {
       const slab = activeSlabs[i];
       if (slab.status !== "paid") {
-        sum += (slab.allocated_amount - (slab.paid_amount || 0));
+        sum += slab.allocated_amount - (slab.paid_amount || 0);
       }
     }
     return sum;
   })();
 
-
   useEffect(() => {
     if (activeSlabs.length > 0 && !selectedSlabId) {
-
-      const firstUnpaid = activeSlabs.find(s => s.status !== "paid");
+      const firstUnpaid = activeSlabs.find((s) => s.status !== "paid");
       if (firstUnpaid) {
         setSelectedSlabId(String(firstUnpaid.db_slab_id));
       } else {
@@ -84,12 +83,11 @@ const RecordPaymentModal = ({
     }
   }, [selectedSlabId, selectedSlab, outstandingAmount]);
 
-
   const formatINR = (val) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(val || 0);
   };
 
@@ -107,7 +105,9 @@ const RecordPaymentModal = ({
     }
 
     if (amtNum > maxAllowedPayment) {
-      setError(`Payment exceeds total outstanding amount for selected and subsequent milestones. Max allowed is ${formatINR(maxAllowedPayment)}.`);
+      setError(
+        `Payment exceeds total outstanding amount for selected and subsequent milestones. Max allowed is ${formatINR(maxAllowedPayment)}.`,
+      );
       return;
     }
 
@@ -127,12 +127,12 @@ const RecordPaymentModal = ({
         payment_mode: paymentMode,
         reference_number: referenceNumber || null,
         payment_date: paymentDate,
-        note: note || null
+        note: note || null,
       };
 
       const response = await accountingApi.post(
         `/api/v1/project-payment/${paymentPlan.ledger_id || paymentPlan.id}/record`,
-        payload
+        payload,
       );
 
       if (response.data && response.data.success) {
@@ -147,7 +147,11 @@ const RecordPaymentModal = ({
       }
     } catch (err) {
       console.error("Error submitting payment:", err);
-      setError(err.response?.data?.message || err.message || "An error occurred while recording payment.");
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "An error occurred while recording payment.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -156,17 +160,13 @@ const RecordPaymentModal = ({
   const modalContent = (
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-md">
       <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
-        
-
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="flex items-start gap-3 min-w-0">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-(--brand-soft) border border-(--border-soft) shrink-0">
               <IndianRupee className="size-5 text-(--brand)" />
             </div>
             <div className="min-w-0">
-              <h3 className="modal-title">
-                Record Payment
-              </h3>
+              <h3 className="modal-title">Record Payment</h3>
               <p className="modal-subtitle mt-0.5">
                 Lead / Customer: {lead.name}
               </p>
@@ -181,16 +181,22 @@ const RecordPaymentModal = ({
           </button>
         </div>
 
-
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-[#f8faf8]/40">
+        <form
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-[#f8faf8]/40"
+        >
           {success ? (
             <div className="py-12 text-center space-y-4">
               <div className="size-16 bg-emerald-50 border border-emerald-100 rounded-full flex items-center justify-center mx-auto shadow-md">
                 <CheckCircle2 className="size-10 text-green-600 animate-bounce" />
               </div>
               <div>
-                <h4 className="text-[16px] font-extrabold text-(--text-strong)">Payment Recorded Successfully</h4>
-                <p className="text-[13px] text-(--text-soft) mt-1">Refreshed ledger payment slabs...</p>
+                <h4 className="text-[16px] font-extrabold text-(--text-strong)">
+                  Payment Recorded Successfully
+                </h4>
+                <p className="text-[13px] text-(--text-soft) mt-1">
+                  Refreshed ledger payment slabs...
+                </p>
               </div>
             </div>
           ) : (
@@ -204,7 +210,6 @@ const RecordPaymentModal = ({
                 </div>
               )}
 
-
               <div>
                 <label className="modal-label block mb-1.5 uppercase">
                   Select Milestone Slab *
@@ -216,45 +221,63 @@ const RecordPaymentModal = ({
                     className={`${inputClass} appearance-none cursor-pointer pr-10`}
                     required
                   >
-                    {activeSlabs.map(slab => {
-                      const outstanding = slab.allocated_amount - (slab.paid_amount || 0);
+                    {activeSlabs.map((slab) => {
+                      const outstanding =
+                        slab.allocated_amount - (slab.paid_amount || 0);
                       const isPaid = slab.status === "paid";
                       return (
-                        <option 
-                          key={slab.db_slab_id} 
+                        <option
+                          key={slab.db_slab_id}
                           value={slab.db_slab_id}
                           disabled={isPaid}
                         >
-                          {slab.name} {isPaid ? "(Fully Paid)" : `(Outstanding: ${formatINR(outstanding)})`}
+                          {slab.name}{" "}
+                          {isPaid
+                            ? "(Fully Paid)"
+                            : `(Outstanding: ${formatINR(outstanding)})`}
                         </option>
                       );
                     })}
                     {activeSlabs.length === 0 && (
-                      <option value="" disabled>No slabs available for payment</option>
+                      <option value="" disabled>
+                        No slabs available for payment
+                      </option>
                     )}
                   </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 font-bold text-xs">▼</div>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 font-bold text-xs">
+                    ▼
+                  </div>
                 </div>
               </div>
-
 
               {selectedSlab && (
                 <div className="app-panel p-3.5 space-y-2.5 shadow-xs bg-white">
                   <div className="flex items-center justify-between text-[12px]">
-                    <span className="font-medium text-(--text-soft)">Allocated Amount:</span>
-                    <span className="font-bold text-(--text-strong)">{formatINR(selectedSlab.allocated_amount)}</span>
+                    <span className="font-medium text-(--text-soft)">
+                      Allocated Amount:
+                    </span>
+                    <span className="font-bold text-(--text-strong)">
+                      {formatINR(selectedSlab.allocated_amount)}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between text-[12px]">
-                    <span className="font-medium text-(--text-soft)">Already Paid:</span>
-                    <span className="font-bold text-emerald-700">{formatINR(selectedSlab.paid_amount)}</span>
+                    <span className="font-medium text-(--text-soft)">
+                      Already Paid:
+                    </span>
+                    <span className="font-bold text-emerald-700">
+                      {formatINR(selectedSlab.paid_amount)}
+                    </span>
                   </div>
                   <div className="border-t border-dashed border-(--border-soft) pt-2 flex items-center justify-between text-[13px] font-bold">
-                    <span className="text-(--text-soft)">Outstanding Balance:</span>
-                    <span className="text-rose-600">{formatINR(outstandingAmount)}</span>
+                    <span className="text-(--text-soft)">
+                      Outstanding Balance:
+                    </span>
+                    <span className="text-rose-600">
+                      {formatINR(outstandingAmount)}
+                    </span>
                   </div>
                 </div>
               )}
-
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -273,14 +296,22 @@ const RecordPaymentModal = ({
                       required
                     />
                   </div>
-                  {!Number.isNaN(parseFloat(amount)) && parseFloat(amount) > outstandingAmount && parseFloat(amount) <= maxAllowedPayment && (
-                    <div className="mt-2 text-[11.5px] font-semibold text-emerald-700 bg-emerald-50/50 border border-emerald-100 rounded-xl px-3 py-2 flex items-start gap-2">
-                      <span className="text-emerald-600 font-bold shrink-0">★</span>
-                      <span>
-                        Advance payment: Surplus of <strong className="text-emerald-800">{formatINR(parseFloat(amount) - outstandingAmount)}</strong> will overflow to subsequent milestone slabs.
-                      </span>
-                    </div>
-                  )}
+                  {!Number.isNaN(parseFloat(amount)) &&
+                    parseFloat(amount) > outstandingAmount &&
+                    parseFloat(amount) <= maxAllowedPayment && (
+                      <div className="mt-2 text-[11.5px] font-semibold text-emerald-700 bg-emerald-50/50 border border-emerald-100 rounded-xl px-3 py-2 flex items-start gap-2">
+                        <span className="text-emerald-600 font-bold shrink-0">
+                          ★
+                        </span>
+                        <span>
+                          Advance payment: Surplus of{" "}
+                          <strong className="text-emerald-800">
+                            {formatINR(parseFloat(amount) - outstandingAmount)}
+                          </strong>{" "}
+                          will overflow to subsequent milestone slabs.
+                        </span>
+                      </div>
+                    )}
                 </div>
 
                 <div>
@@ -301,11 +332,12 @@ const RecordPaymentModal = ({
                       <option value="cheque">Cheque</option>
                       <option value="other">Other</option>
                     </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 font-bold text-xs">▼</div>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 font-bold text-xs">
+                      ▼
+                    </div>
                   </div>
                 </div>
               </div>
-
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -341,7 +373,6 @@ const RecordPaymentModal = ({
                 </div>
               </div>
 
-
               <div>
                 <label className="modal-label block mb-1.5 uppercase">
                   Remarks / Notes
@@ -355,7 +386,6 @@ const RecordPaymentModal = ({
               </div>
             </>
           )}
-
 
           {!success && (
             <div className="px-5 py-4 border-t border-(--border-soft) bg-white flex items-center justify-end gap-3 -mx-5 -mb-5 mt-4">

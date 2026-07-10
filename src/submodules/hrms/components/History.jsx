@@ -153,7 +153,6 @@ const History = () => {
     setExpandedEmployee(expandedEmployee === employeeId ? null : employeeId);
   };
 
-
   const filteredEmployees = employees.filter((employee) => {
     const matchesName =
       !filters.name ||
@@ -221,7 +220,6 @@ const History = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-
       <div className="flex-1 p-7">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -233,7 +231,6 @@ const History = () => {
             </p>
           </div>
         </div>
-
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
@@ -319,7 +316,6 @@ const History = () => {
             </button>
           </div>
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-6">
           <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
@@ -460,7 +456,6 @@ const History = () => {
             </p>
           </div>
         </div>
-
 
         <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
           <div className="overflow-x-auto">

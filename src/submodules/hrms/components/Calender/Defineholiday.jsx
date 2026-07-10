@@ -401,13 +401,8 @@ const HolidaysList = () => {
 
   const token = authToken;
 
-
-
-
-
   useEffect(() => {
     if (!companyId || !slug) {
-
       return;
     }
 
@@ -464,7 +459,10 @@ const HolidaysList = () => {
   const handleAddHoliday = async (e) => {
     e.preventDefault();
     if (!has("hrms.calendar.holiday.create")) {
-      showSnackbar("Access Denied: You do not have permission to add holidays.", "error");
+      showSnackbar(
+        "Access Denied: You do not have permission to add holidays.",
+        "error",
+      );
       return;
     }
 
@@ -499,7 +497,10 @@ const HolidaysList = () => {
 
   const handleEdit = (holiday) => {
     if (!has("hrms.calendar.holiday.create")) {
-      showSnackbar("Access Denied: You do not have permission to edit holidays.", "error");
+      showSnackbar(
+        "Access Denied: You do not have permission to edit holidays.",
+        "error",
+      );
       return;
     }
     setEditingHoliday(holiday);
@@ -509,7 +510,10 @@ const HolidaysList = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     if (!has("hrms.calendar.holiday.create")) {
-      showSnackbar("Access Denied: You do not have permission to edit holidays.", "error");
+      showSnackbar(
+        "Access Denied: You do not have permission to edit holidays.",
+        "error",
+      );
       return;
     }
 
@@ -544,7 +548,10 @@ const HolidaysList = () => {
 
   const handleDelete = async (id) => {
     if (!has("hrms.calendar.holiday.create")) {
-      showSnackbar("Access Denied: You do not have permission to delete holidays.", "error");
+      showSnackbar(
+        "Access Denied: You do not have permission to delete holidays.",
+        "error",
+      );
       return;
     }
     if (window.confirm("Are you sure you want to delete this holiday?")) {

@@ -10,8 +10,10 @@ export const getCompanyAddress = (company) => {
     .join(", ");
 };
 
-
-export const addReportHeader = (doc, { companyName, companyAddress, reportTitle, generatedOn }) => {
+export const addReportHeader = (
+  doc,
+  { companyName, companyAddress, reportTitle, generatedOn },
+) => {
   const company = (companyName || "Company").toUpperCase();
 
   doc.setFont("helvetica", "bold");
@@ -47,7 +49,11 @@ export const addReportHeader = (doc, { companyName, companyAddress, reportTitle,
   };
 };
 
-export const addWorkbookHeader = (XLSX, ws, { companyName, companyAddress, reportTitle, generatedOn }) => {
+export const addWorkbookHeader = (
+  XLSX,
+  ws,
+  { companyName, companyAddress, reportTitle, generatedOn },
+) => {
   const headerRows = [
     [`Company Name: ${companyName || "Company"}`],
     [`Address: ${companyAddress || "-"}`],

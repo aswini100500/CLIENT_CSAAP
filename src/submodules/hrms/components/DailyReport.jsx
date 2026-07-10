@@ -33,7 +33,6 @@ export default function DailyReportsPage() {
           date: r.date,
         }));
 
-
         setReports(formatted);
       } catch (err) {
         console.error("Error fetching reports:", err);
@@ -50,13 +49,11 @@ export default function DailyReportsPage() {
       r.department.toLowerCase().includes(search.toLowerCase()),
   );
 
-
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentData = filtered.slice(startIndex, startIndex + itemsPerPage);
   const startEntry = startIndex + 1;
   const endEntry = Math.min(startIndex + itemsPerPage, filtered.length);
-
 
   const summary = {
     totalEmployees: filtered.length,
@@ -67,13 +64,11 @@ export default function DailyReportsPage() {
     totalEarlyGoing: filtered.reduce((sum, r) => sum + r.earlyGoing, 0),
   };
 
-
   const handleCheckboxChange = (id) => {
     setSelectedEmployees((prev) =>
       prev.includes(id) ? prev.filter((empId) => empId !== id) : [...prev, id],
     );
   };
-
 
   const handleSelectAll = () => {
     if (selectedEmployees.length === currentData.length) {
@@ -82,7 +77,6 @@ export default function DailyReportsPage() {
       setSelectedEmployees(currentData.map((r) => r.id));
     }
   };
-
 
   const handleExport = (format) => {
     const dataToExport =
@@ -134,14 +128,11 @@ export default function DailyReportsPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Daily Attendance Reports
         </h1>
 
-
         <div className="bg-white rounded-2xl shadow-lg p-6">
-
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
             <div>
               <h2 className="text-xl font-semibold text-gray-800 mb-2">
@@ -172,7 +163,6 @@ export default function DailyReportsPage() {
               Monthly Performance Report
             </button>
           </div>
-
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
@@ -214,7 +204,6 @@ export default function DailyReportsPage() {
               </p>
             </div>
           </div>
-
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div className="flex gap-3">
@@ -271,7 +260,6 @@ export default function DailyReportsPage() {
               />
             </div>
           </div>
-
 
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
@@ -425,7 +413,6 @@ export default function DailyReportsPage() {
               </tbody>
             </table>
           </div>
-
 
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
             <div className="text-sm text-gray-600">

@@ -125,19 +125,14 @@ const LeadTimelineModal = ({ lead, onClose }) => {
   const modalContent = (
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
       <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
-
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="flex items-start gap-3.5 min-w-0 pr-4">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-(--brand-soft) border border-(--border-soft) shrink-0">
               <User className="size-5 text-(--brand)" />
             </div>
             <div className="min-w-0">
-              <h3 className="modal-title truncate">
-                {lead.name}
-              </h3>
-              <p className="modal-subtitle mt-1">
-                Interaction timeline
-              </p>
+              <h3 className="modal-title truncate">{lead.name}</h3>
+              <p className="modal-subtitle mt-1">Interaction timeline</p>
             </div>
           </div>
           <button
@@ -148,7 +143,6 @@ const LeadTimelineModal = ({ lead, onClose }) => {
             <X className="size-5" />
           </button>
         </div>
-
 
         <div className="p-5 overflow-y-auto custom-scrollbar">
           {isLoading ? (
@@ -175,7 +169,6 @@ const LeadTimelineModal = ({ lead, onClose }) => {
             </div>
           ) : (
             <div className="relative">
-
               <div className="absolute left-3.75 inset-y-4 w-px bg-(--border-soft)" />
 
               <div className="space-y-0">
@@ -192,18 +185,16 @@ const LeadTimelineModal = ({ lead, onClose }) => {
                       key={`${event.type}-${event.id}`}
                       className="relative flex gap-3.5 pb-5"
                     >
-
                       <div
                         className={`relative z-10 size-8 rounded-full flex items-center justify-center shrink-0 border ${styles.circle}`}
                       >
                         <Icon className={`size-3.5 ${styles.icon}`} />
                       </div>
 
-
                       <div className="flex-1 min-w-0 pt-0.5">
                         <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                           <span
-                            className={`px-2 py-0.5 rounded text-[11px] font-medium ${getStatusColor( isCreated ? null : event.outcome, )}`}
+                            className={`px-2 py-0.5 rounded text-[11px] font-medium ${getStatusColor(isCreated ? null : event.outcome)}`}
                           >
                             {config.label}
                           </span>
@@ -229,8 +220,6 @@ const LeadTimelineModal = ({ lead, onClose }) => {
                             {formatDateTime(event.next_follow_up_at)}
                           </div>
                         )}
-
-
                       </div>
                     </div>
                   );
@@ -239,7 +228,6 @@ const LeadTimelineModal = ({ lead, onClose }) => {
             </div>
           )}
         </div>
-
 
         <div className="px-5 py-3 border-t border-(--border-soft) bg-(--bg-subtle)/50">
           <div className="flex items-center">

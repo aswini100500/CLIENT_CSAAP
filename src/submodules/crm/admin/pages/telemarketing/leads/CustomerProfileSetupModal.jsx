@@ -57,7 +57,6 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
     setExistingDocs((prev) => prev.filter((_, i) => i !== index));
   };
 
-
   const { data: existingProfile, isLoading: loadingProfile } = useQuery({
     queryKey: ["customer-profile", lead.id, companyId],
     queryFn: async () => {
@@ -108,7 +107,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
     },
     onError: (error) => {
       alert(
-        `Error saving profile: ${error.response?.data?.message || error.message}`
+        `Error saving profile: ${error.response?.data?.message || error.message}`,
       );
     },
   });
@@ -117,7 +116,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
     const formData = new FormData();
     formData.append("company_id", companyId);
     formData.append("lead_id", lead.id);
-    
+
     Object.keys(form).forEach((key) => {
       formData.append(key, form[key] || "");
     });
@@ -140,7 +139,6 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
   return createPortal(
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999">
       <div className="app-modal w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-
         <div className="px-5 py-4 border-b border-(--border-soft) flex items-center justify-between shrink-0">
           <div className="flex items-start gap-3.5 min-w-0 pr-4">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-blue-50 border border-blue-100 shrink-0">
@@ -165,7 +163,6 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
           </button>
         </div>
 
-
         <div className="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar">
           {loadingProfile ? (
             <div className="flex items-center justify-center py-12">
@@ -176,7 +173,6 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
             </div>
           ) : (
             <>
-
               <div className="space-y-4">
                 <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                   <MapPin className="size-4 text-blue-600" />
@@ -233,7 +229,6 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                 </div>
               </div>
 
-
               <div className="space-y-4">
                 <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                   <CreditCard className="size-4 text-emerald-600" />
@@ -249,10 +244,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                       type="text"
                       value={form.pan_number}
                       onChange={(e) =>
-                        updateField(
-                          "pan_number",
-                          e.target.value.toUpperCase()
-                        )
+                        updateField("pan_number", e.target.value.toUpperCase())
                       }
                       placeholder="e.g. ABCDE1234F"
                       maxLength={10}
@@ -321,7 +313,6 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                 </div>
               </div>
 
-
               <div className="space-y-4">
                 <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                   <Heart className="size-4 text-rose-500" />
@@ -382,7 +373,6 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                 </div>
               </div>
 
-
               <div>
                 <label className="modal-label block mb-1">
                   Additional Notes
@@ -396,7 +386,6 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                 />
               </div>
 
-
               <div className="space-y-4">
                 <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                   <Upload className="size-4 text-purple-600" />
@@ -405,16 +394,20 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                   </h4>
                 </div>
 
-
                 {existingDocs.length > 0 && (
                   <div className="space-y-2">
-                    <label className="modal-label block">Uploaded Documents</label>
+                    <label className="modal-label block">
+                      Uploaded Documents
+                    </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {existingDocs.map((doc, idx) => {
                         const fileName = doc.split("/").pop();
                         const fileUrl = `${import.meta.env.VITE_CRM_BASE_URL}/${doc}`;
                         return (
-                          <div key={idx} className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 rounded-xl hover:border-slate-200 transition-all">
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 rounded-xl hover:border-slate-200 transition-all"
+                          >
                             <div className="flex items-center gap-2 min-w-0">
                               <FileText className="size-4 text-purple-600 shrink-0" />
                               <span className="text-xs text-slate-700 truncate font-medium">
@@ -447,13 +440,17 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                   </div>
                 )}
 
-
                 {newFiles.length > 0 && (
                   <div className="space-y-2">
-                    <label className="modal-label block text-emerald-700">New Files to Upload</label>
+                    <label className="modal-label block text-emerald-700">
+                      New Files to Upload
+                    </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {newFiles.map((file, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-2.5 bg-emerald-50/50 border border-emerald-100 rounded-xl">
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between p-2.5 bg-emerald-50/50 border border-emerald-100 rounded-xl"
+                        >
                           <div className="flex items-center gap-2 min-w-0">
                             <FileText className="size-4 text-emerald-600 shrink-0" />
                             <span className="text-xs text-emerald-800 truncate font-medium">
@@ -474,15 +471,19 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
                   </div>
                 )}
 
-
                 <div className="flex items-center justify-center w-full">
                   <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-2xl cursor-pointer bg-slate-50/30 hover:bg-slate-50 hover:border-slate-300 transition-all">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <Upload className="size-6 text-slate-400 mb-1.5" />
                       <p className="text-xs text-slate-500">
-                        <span className="font-semibold text-blue-600">Click to upload</span> or drag and drop files
+                        <span className="font-semibold text-blue-600">
+                          Click to upload
+                        </span>{" "}
+                        or drag and drop files
                       </p>
-                      <p className="text-[10px] text-slate-400 mt-0.5">PDF, PNG, JPG (Max 10MB)</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">
+                        PDF, PNG, JPG (Max 10MB)
+                      </p>
                     </div>
                     <input
                       type="file"
@@ -496,7 +497,6 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
             </>
           )}
         </div>
-
 
         <div className="px-5 py-3.5 border-t border-(--border-soft) flex items-center justify-between shrink-0">
           {isEditing && (
@@ -531,7 +531,7 @@ const CustomerProfileSetupModal = ({ lead, onClose, onSaveSuccess }) => {
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

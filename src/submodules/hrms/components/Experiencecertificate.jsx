@@ -12,7 +12,7 @@ import {
   Plus,
   Search,
   Send,
-  X
+  X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -44,7 +44,6 @@ const ExperienceCertificateManagement = () => {
   const [toast, setToast] = useState(null);
   const entriesPerPage = 5;
 
-
   const [certificateData, setCertificateData] = useState([]);
 
   const { user } = useAuth();
@@ -59,11 +58,9 @@ const ExperienceCertificateManagement = () => {
           `${import.meta.env.VITE_HRMS_BASE_URL}/api/experience-certificates/eligible/employees/${company_id}`,
         );
 
-
         if (res.data?.data) {
           setEligibleEmployees(res.data.data);
         }
-
       } catch (err) {
         console.error("Error fetching eligible employees:", err);
         Swal.fire("Error", "Failed to fetch eligible employees", "error");
@@ -134,18 +131,28 @@ const ExperienceCertificateManagement = () => {
     startIndex + entriesPerPage,
   );
 
-
   const departments = [
     ...new Set((certificateData || []).map((cert) => cert.department)),
   ];
 
-
   const StatusBadge = ({ status }) => {
     const statusConfig = {
-      draft: { label: "Draft", color: "bg-gray-50 text-gray-600 border border-gray-200" },
-      pending: { label: "Pending", color: "bg-amber-50 text-amber-700 border border-amber-100" },
-      issued: { label: "Issued", color: "bg-green-50 text-green-700 border border-green-100" },
-      revoked: { label: "Revoked", color: "bg-red-50 text-red-700 border border-red-100" },
+      draft: {
+        label: "Draft",
+        color: "bg-gray-50 text-gray-600 border border-gray-200",
+      },
+      pending: {
+        label: "Pending",
+        color: "bg-amber-50 text-amber-700 border border-amber-100",
+      },
+      issued: {
+        label: "Issued",
+        color: "bg-green-50 text-green-700 border border-green-100",
+      },
+      revoked: {
+        label: "Revoked",
+        color: "bg-red-50 text-red-700 border border-red-100",
+      },
     };
     const config = statusConfig[status?.toLowerCase()] || statusConfig.draft;
     return (
@@ -157,14 +164,21 @@ const ExperienceCertificateManagement = () => {
     );
   };
 
-
   const PerformanceBadge = ({ performance }) => {
     const performanceConfig = {
-      Excellent: { color: "bg-green-50 text-green-700 border border-green-100" },
-      Outstanding: { color: "bg-indigo-50 text-indigo-700 border border-indigo-100" },
-      "Very Good": { color: "bg-emerald-50 text-emerald-700 border border-emerald-100" },
+      Excellent: {
+        color: "bg-green-50 text-green-700 border border-green-100",
+      },
+      Outstanding: {
+        color: "bg-indigo-50 text-indigo-700 border border-indigo-100",
+      },
+      "Very Good": {
+        color: "bg-emerald-50 text-emerald-700 border border-emerald-100",
+      },
       Good: { color: "bg-amber-50 text-amber-700 border border-amber-100" },
-      Average: { color: "bg-orange-50 text-orange-700 border border-orange-100" },
+      Average: {
+        color: "bg-orange-50 text-orange-700 border border-orange-100",
+      },
     };
     const config = performanceConfig[performance] || performanceConfig.Good;
     return (
@@ -175,7 +189,6 @@ const ExperienceCertificateManagement = () => {
       </span>
     );
   };
-
 
   const Toast = ({ message, type }) => {
     useEffect(() => {
@@ -191,7 +204,6 @@ const ExperienceCertificateManagement = () => {
       </div>
     );
   };
-
 
   const handleView = (certificate) => {
     const mappedCertificate = {
@@ -217,7 +229,6 @@ const ExperienceCertificateManagement = () => {
     setSelectedCertificate(mappedCertificate);
     setShowViewModal(true);
   };
-
 
   const handleEdit = (certificate) => {
     const mappedCertificate = {
@@ -321,44 +332,6 @@ const ExperienceCertificateManagement = () => {
     }
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const handleSend = async () => {
     try {
       const res = await axios.post(
@@ -373,7 +346,6 @@ const ExperienceCertificateManagement = () => {
       );
     }
   };
-
 
   const handleIssue = async () => {
     try {
@@ -399,7 +371,6 @@ const ExperienceCertificateManagement = () => {
     setCertificateData(res.data.data);
     setCertificateId(res.data.certificateId);
   };
-
 
   const handleExport = () => {
     const headers = [
@@ -451,7 +422,6 @@ const ExperienceCertificateManagement = () => {
       alert("Failed to send certificate!");
     }
   };
-
 
   const handleDownloadCertificate = async () => {
     if (!selectedCertificate) return;
@@ -508,7 +478,6 @@ const ExperienceCertificateManagement = () => {
     }
   };
 
-
   const calculateDuration = (startDate, endDate) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -530,7 +499,6 @@ const ExperienceCertificateManagement = () => {
       : yearsPart || monthsPart || "0 months";
   };
 
-
   useEffect(() => {
     if (newCertificate.startDate && newCertificate.endDate) {
       const duration = calculateDuration(
@@ -544,7 +512,6 @@ const ExperienceCertificateManagement = () => {
   return (
     <div className="crm-module-root app-shell font-sans">
       <div className="mx-auto max-w-7xl px-3 py-4 lg:px-4">
-
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
           <div>
             <h1 className="app-title max-w-3xl">
@@ -571,7 +538,6 @@ const ExperienceCertificateManagement = () => {
             </button>
           </div>
         </div>
-
 
         <div className="app-panel p-4 md:p-5 mb-6 bg-white border border-(--border-soft)">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -647,7 +613,6 @@ const ExperienceCertificateManagement = () => {
           </div>
         </div>
 
-
         <div className="app-panel overflow-hidden border border-(--border-soft) bg-white">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-(--border-soft)">
@@ -704,7 +669,6 @@ const ExperienceCertificateManagement = () => {
                       key={certificate.employeeId}
                       className="hover:bg-(--bg-subtle)/40 transition-colors"
                     >
-
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="font-extrabold text-[13px] text-(--text-strong)">
@@ -716,7 +680,6 @@ const ExperienceCertificateManagement = () => {
                         </div>
                       </td>
 
-
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-xs text-(--text-strong) font-semibold">
@@ -727,7 +690,6 @@ const ExperienceCertificateManagement = () => {
                           </div>
                         </div>
                       </td>
-
 
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-xs text-(--text-strong) font-semibold">
@@ -749,7 +711,6 @@ const ExperienceCertificateManagement = () => {
                         </div>
                       </td>
 
-
                       <td className="px-6 py-4 whitespace-nowrap text-xs text-(--text-strong) font-semibold">
                         <div>
                           {certificate.monthsWorked
@@ -758,18 +719,15 @@ const ExperienceCertificateManagement = () => {
                         </div>
                       </td>
 
-
                       <td className="px-6 py-4 whitespace-nowrap">
                         <PerformanceBadge
                           performance={certificate.performance || "N/A"}
                         />
                       </td>
 
-
                       <td className="px-6 py-4 whitespace-nowrap">
                         <StatusBadge status={certificate.status || "Pending"} />
                       </td>
-
 
                       <td className="px-6 py-4 whitespace-nowrap text-xs">
                         <div className="flex space-x-1">
@@ -827,9 +785,16 @@ const ExperienceCertificateManagement = () => {
                   <tr>
                     <td colSpan="7" className="px-6 py-12 text-center bg-white">
                       <div className="text-(--text-soft) flex flex-col items-center justify-center">
-                        <Search size={44} className="text-(--text-faint) mb-3" />
-                        <p className="font-bold text-sm text-(--text-strong)">No experience certificates found</p>
-                        <p className="text-xs text-(--text-soft) mt-1">Try adjusting your search or filters</p>
+                        <Search
+                          size={44}
+                          className="text-(--text-faint) mb-3"
+                        />
+                        <p className="font-bold text-sm text-(--text-strong)">
+                          No experience certificates found
+                        </p>
+                        <p className="text-xs text-(--text-soft) mt-1">
+                          Try adjusting your search or filters
+                        </p>
                       </div>
                     </td>
                   </tr>
@@ -838,14 +803,17 @@ const ExperienceCertificateManagement = () => {
             </table>
           </div>
 
-
           <div className="px-6 py-4 bg-(--bg-subtle)/35 border-t border-(--border-soft) flex flex-col sm:flex-row items-center justify-between">
             <div className="text-xs font-bold text-(--text-soft) mb-4 sm:mb-0">
-              Showing <span className="text-(--text-strong)">{startIndex + 1}</span> to{" "}
+              Showing{" "}
+              <span className="text-(--text-strong)">{startIndex + 1}</span> to{" "}
               <span className="text-(--text-strong)">
                 {Math.min(startIndex + entriesPerPage, filteredData.length)}
               </span>{" "}
-              of <span className="text-(--text-strong)">{filteredData.length}</span>{" "}
+              of{" "}
+              <span className="text-(--text-strong)">
+                {filteredData.length}
+              </span>{" "}
               results
             </div>
             <div className="flex items-center gap-1.5">
@@ -884,7 +852,6 @@ const ExperienceCertificateManagement = () => {
           </div>
         </div>
 
-
         {showViewModal && selectedCertificate && (
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="app-modal p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col">
@@ -898,7 +865,6 @@ const ExperienceCertificateManagement = () => {
                 </button>
               </div>
 
-
               <div
                 id="certificate-content"
                 style={{
@@ -910,7 +876,6 @@ const ExperienceCertificateManagement = () => {
                   border: "1px solid var(--border-soft)",
                 }}
               >
-
                 <div style={{ textAlign: "center", marginBottom: "32px" }}>
                   <div
                     style={{
@@ -957,7 +922,6 @@ const ExperienceCertificateManagement = () => {
                   ></div>
                 </div>
 
-
                 <div
                   style={{
                     color: "var(--text-body)",
@@ -966,7 +930,13 @@ const ExperienceCertificateManagement = () => {
                     marginBottom: "32px",
                   }}
                 >
-                  <p style={{ fontSize: "1.1rem", marginBottom: "16px", color: "var(--text-soft)" }}>
+                  <p
+                    style={{
+                      fontSize: "1.1rem",
+                      marginBottom: "16px",
+                      color: "var(--text-soft)",
+                    }}
+                  >
                     This is to certify that
                   </p>
                   <h2
@@ -979,7 +949,13 @@ const ExperienceCertificateManagement = () => {
                   >
                     {selectedCertificate.employeeName}
                   </h2>
-                  <p style={{ color: "var(--text-faint)", fontSize: "0.875rem", marginBottom: "20px" }}>
+                  <p
+                    style={{
+                      color: "var(--text-faint)",
+                      fontSize: "0.875rem",
+                      marginBottom: "20px",
+                    }}
+                  >
                     Employee ID: {selectedCertificate.employeeId}
                   </p>
 
@@ -1020,7 +996,16 @@ const ExperienceCertificateManagement = () => {
                   </p>
 
                   {selectedCertificate.certificateDetails && (
-                    <p style={{ fontStyle: "italic", marginBottom: "16px", color: "var(--text-soft)", background: "var(--bg-subtle)", padding: "12px", borderRadius: "8px" }}>
+                    <p
+                      style={{
+                        fontStyle: "italic",
+                        marginBottom: "16px",
+                        color: "var(--text-soft)",
+                        background: "var(--bg-subtle)",
+                        padding: "12px",
+                        borderRadius: "8px",
+                      }}
+                    >
                       "{selectedCertificate.certificateDetails}"
                     </p>
                   )}
@@ -1037,7 +1022,6 @@ const ExperienceCertificateManagement = () => {
                   </p>
                   <p>We wish them the very best in their future endeavors.</p>
                 </div>
-
 
                 <div
                   style={{
@@ -1061,15 +1045,33 @@ const ExperienceCertificateManagement = () => {
                           : new Date().toLocaleDateString("en-CA")}
                       </strong>
                     </p>
-                    <p style={{ color: "var(--text-faint)", fontSize: "0.8rem", marginTop: "4px" }}>
+                    <p
+                      style={{
+                        color: "var(--text-faint)",
+                        fontSize: "0.8rem",
+                        marginTop: "4px",
+                      }}
+                    >
                       Certificate No: EC-{selectedCertificate.employeeId}-
                       {selectedCertificate.id}
                     </p>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <p style={{ fontWeight: "700", color: "var(--text-strong)" }}>[Authorized Signatory]</p>
-                    <p style={{ color: "var(--text-soft)", fontSize: "0.85rem" }}>Human Resources Department</p>
-                    <p style={{ color: "var(--text-faint)", fontSize: "0.8rem" }}>Cloudsat PVT LTD</p>
+                    <p
+                      style={{ fontWeight: "700", color: "var(--text-strong)" }}
+                    >
+                      [Authorized Signatory]
+                    </p>
+                    <p
+                      style={{ color: "var(--text-soft)", fontSize: "0.85rem" }}
+                    >
+                      Human Resources Department
+                    </p>
+                    <p
+                      style={{ color: "var(--text-faint)", fontSize: "0.8rem" }}
+                    >
+                      Cloudsat PVT LTD
+                    </p>
                   </div>
                 </div>
 
@@ -1084,7 +1086,6 @@ const ExperienceCertificateManagement = () => {
                   <p>This is a computer-generated certificate.</p>
                 </div>
               </div>
-
 
               <div className="mt-6 flex justify-end gap-3 pt-4 border-t border-(--border-soft)">
                 <button
@@ -1105,7 +1106,6 @@ const ExperienceCertificateManagement = () => {
           </div>
         )}
 
-
         {showEditModal && selectedCertificate && (
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="app-modal p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col">
@@ -1121,7 +1121,9 @@ const ExperienceCertificateManagement = () => {
               <form onSubmit={handleEditSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="app-label block mb-1.5">Employee Name</label>
+                    <label className="app-label block mb-1.5">
+                      Employee Name
+                    </label>
                     <input
                       type="text"
                       className="app-input w-full px-4 py-2 text-[13px]"
@@ -1135,7 +1137,9 @@ const ExperienceCertificateManagement = () => {
                     />
                   </div>
                   <div>
-                    <label className="app-label block mb-1.5">Employee ID</label>
+                    <label className="app-label block mb-1.5">
+                      Employee ID
+                    </label>
                     <input
                       type="text"
                       className="app-input w-full px-4 py-2 text-[13px]"
@@ -1199,7 +1203,9 @@ const ExperienceCertificateManagement = () => {
                     />
                   </div>
                   <div>
-                    <label className="app-label block mb-1.5">Reason for Leaving</label>
+                    <label className="app-label block mb-1.5">
+                      Reason for Leaving
+                    </label>
                     <input
                       type="text"
                       className="app-input w-full px-4 py-2 text-[13px]"
@@ -1213,7 +1219,9 @@ const ExperienceCertificateManagement = () => {
                     />
                   </div>
                   <div>
-                    <label className="app-label block mb-1.5">Performance</label>
+                    <label className="app-label block mb-1.5">
+                      Performance
+                    </label>
                     <select
                       className="app-input w-full px-4 py-2 text-[13px] bg-white cursor-pointer"
                       value={editForm.performance || "Excellent"}
@@ -1232,7 +1240,9 @@ const ExperienceCertificateManagement = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="app-label block mb-1.5">Issued Date</label>
+                    <label className="app-label block mb-1.5">
+                      Issued Date
+                    </label>
                     <input
                       type="date"
                       className="app-input w-full px-4 py-2 text-[13px]"
@@ -1247,7 +1257,9 @@ const ExperienceCertificateManagement = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="app-label block mb-1.5">Certificate Details</label>
+                  <label className="app-label block mb-1.5">
+                    Certificate Details
+                  </label>
                   <textarea
                     className="app-input w-full px-4 py-2 text-[13px]"
                     rows="4"
@@ -1280,12 +1292,13 @@ const ExperienceCertificateManagement = () => {
           </div>
         )}
 
-
         {showCreateModal && (
           <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="app-modal p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col">
               <div className="flex justify-between items-center mb-4 pb-3 border-b border-(--border-soft)">
-                <h2 className="modal-title">Create New Experience Certificate</h2>
+                <h2 className="modal-title">
+                  Create New Experience Certificate
+                </h2>
                 <button
                   onClick={() => setShowCreateModal(false)}
                   className="app-icon-button p-1.5 hover:bg-(--bg-subtle) text-(--text-soft) hover:text-(--text-strong) cursor-pointer"
@@ -1296,7 +1309,9 @@ const ExperienceCertificateManagement = () => {
               <form onSubmit={handleCreateSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="app-label block mb-1.5">Employee Name *</label>
+                    <label className="app-label block mb-1.5">
+                      Employee Name *
+                    </label>
                     <input
                       type="text"
                       required
@@ -1311,7 +1326,9 @@ const ExperienceCertificateManagement = () => {
                     />
                   </div>
                   <div>
-                    <label className="app-label block mb-1.5">Employee ID *</label>
+                    <label className="app-label block mb-1.5">
+                      Employee ID *
+                    </label>
                     <input
                       type="text"
                       required
@@ -1341,7 +1358,9 @@ const ExperienceCertificateManagement = () => {
                     />
                   </div>
                   <div>
-                    <label className="app-label block mb-1.5">Department *</label>
+                    <label className="app-label block mb-1.5">
+                      Department *
+                    </label>
                     <input
                       type="text"
                       required
@@ -1356,7 +1375,9 @@ const ExperienceCertificateManagement = () => {
                     />
                   </div>
                   <div>
-                    <label className="app-label block mb-1.5">Start Date *</label>
+                    <label className="app-label block mb-1.5">
+                      Start Date *
+                    </label>
                     <input
                       type="date"
                       required
@@ -1386,7 +1407,9 @@ const ExperienceCertificateManagement = () => {
                     />
                   </div>
                   <div>
-                    <label className="app-label block mb-1.5">Work Duration</label>
+                    <label className="app-label block mb-1.5">
+                      Work Duration
+                    </label>
                     <input
                       type="text"
                       className="app-input w-full px-4 py-2 text-[13px] bg-(--bg-subtle)/50"
@@ -1395,7 +1418,9 @@ const ExperienceCertificateManagement = () => {
                     />
                   </div>
                   <div>
-                    <label className="app-label block mb-1.5">Performance</label>
+                    <label className="app-label block mb-1.5">
+                      Performance
+                    </label>
                     <select
                       className="app-input w-full px-4 py-2 text-[13px] bg-white cursor-pointer"
                       value={newCertificate.performance}
@@ -1414,7 +1439,9 @@ const ExperienceCertificateManagement = () => {
                     </select>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="app-label block mb-1.5">Reason for Leaving</label>
+                    <label className="app-label block mb-1.5">
+                      Reason for Leaving
+                    </label>
                     <select
                       className="app-input w-full px-4 py-2 text-[13px] bg-white cursor-pointer"
                       value={newCertificate.reasonForLeaving}
@@ -1430,13 +1457,17 @@ const ExperienceCertificateManagement = () => {
                       <option value="Personal Reasons">Personal Reasons</option>
                       <option value="Relocation">Relocation</option>
                       <option value="Higher Education">Higher Education</option>
-                      <option value="Better Opportunity">Better Opportunity</option>
+                      <option value="Better Opportunity">
+                        Better Opportunity
+                      </option>
                       <option value="Career Change">Career Change</option>
                     </select>
                   </div>
                 </div>
                 <div>
-                  <label className="app-label block mb-1.5">Certificate Details</label>
+                  <label className="app-label block mb-1.5">
+                    Certificate Details
+                  </label>
                   <textarea
                     className="app-input w-full px-4 py-2 text-[13px]"
                     rows="4"
@@ -1469,7 +1500,6 @@ const ExperienceCertificateManagement = () => {
             </div>
           </div>
         )}
-
 
         {toast && <Toast message={toast.message} type={toast.type} />}
       </div>

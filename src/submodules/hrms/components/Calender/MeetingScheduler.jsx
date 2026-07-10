@@ -18,7 +18,7 @@ import {
   User,
   Users,
   Video,
-  X
+  X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -44,13 +44,11 @@ const MeetingScheduler = () => {
     type: "success",
   });
 
-
   const { user, token: authToken } = useAuth();
   const { has } = usePermission();
   const token = authToken;
   const companyId = user?.company_id;
   const slug = user?.slug;
-
 
   const [newMeeting, setNewMeeting] = useState({
     title: "",
@@ -72,11 +70,9 @@ const MeetingScheduler = () => {
     notes: "",
   });
 
-
   const [employees, setEmployees] = useState([]);
   const [searchEmployee, setSearchEmployee] = useState("");
   const [showEmployeeDropdown, setShowEmployeeDropdown] = useState(false);
-
 
   useEffect(() => {
     if (companyId && slug) {
@@ -94,7 +90,6 @@ const MeetingScheduler = () => {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-
 
       setEmployees(
         Array.isArray(response.data)
@@ -157,7 +152,10 @@ const MeetingScheduler = () => {
   const handleCreateMeeting = async (e) => {
     e.preventDefault();
     if (!has("hrms.calendar.meeting.create")) {
-      showSnackbar("Access Denied: You do not have permission to schedule meetings.", "error");
+      showSnackbar(
+        "Access Denied: You do not have permission to schedule meetings.",
+        "error",
+      );
       return;
     }
 
@@ -209,7 +207,10 @@ const MeetingScheduler = () => {
   const handleUpdateMeeting = async (e) => {
     e.preventDefault();
     if (!has("hrms.calendar.meeting.create")) {
-      showSnackbar("Access Denied: You do not have permission to update meetings.", "error");
+      showSnackbar(
+        "Access Denied: You do not have permission to update meetings.",
+        "error",
+      );
       return;
     }
 
@@ -257,7 +258,10 @@ const MeetingScheduler = () => {
 
   const handleDeleteMeeting = async (meetingId) => {
     if (!has("hrms.calendar.meeting.create")) {
-      showSnackbar("Access Denied: You do not have permission to cancel meetings.", "error");
+      showSnackbar(
+        "Access Denied: You do not have permission to cancel meetings.",
+        "error",
+      );
       return;
     }
     if (window.confirm("Are you sure you want to cancel this meeting?")) {
@@ -307,7 +311,6 @@ const MeetingScheduler = () => {
     setSnackbar({ open: true, message, type });
     setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 3000);
   };
-
 
   const filteredMeetings = (Array.isArray(meetings) ? meetings : []).filter(
     (meeting) => {
@@ -412,7 +415,6 @@ const MeetingScheduler = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
-
       {snackbar.open && (
         <div
           className={`fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slideIn ${
@@ -428,7 +430,6 @@ const MeetingScheduler = () => {
         </div>
       )}
 
-
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -442,7 +443,10 @@ const MeetingScheduler = () => {
           <button
             onClick={() => {
               if (!has("hrms.calendar.meeting.create")) {
-                showSnackbar("Access Denied: You do not have permission to schedule meetings.", "error");
+                showSnackbar(
+                  "Access Denied: You do not have permission to schedule meetings.",
+                  "error",
+                );
                 return;
               }
               setShowAddModal(true);
@@ -453,7 +457,6 @@ const MeetingScheduler = () => {
             Schedule Meeting
           </button>
         </div>
-
 
         <div className="bg-white rounded-xl shadow-lg p-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -522,7 +525,6 @@ const MeetingScheduler = () => {
           </div>
         </div>
 
-
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <Loader2 className="animate-spin text-emerald-600" size={40} />
@@ -534,7 +536,6 @@ const MeetingScheduler = () => {
                 key={meeting?.id}
                 className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
               >
-
                 <div className="p-4 border-b border-gray-100 bg-linear-to-r from-emerald-50 to-indigo-50">
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
@@ -552,7 +553,6 @@ const MeetingScheduler = () => {
                     {getStatusBadge(meeting?.status)}
                   </div>
                 </div>
-
 
                 <div className="p-4 space-y-3">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -599,7 +599,6 @@ const MeetingScheduler = () => {
                     </div>
                   )}
 
-
                   <div className="flex items-center justify-between pt-2">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(meeting?.priority)}`}
@@ -607,7 +606,6 @@ const MeetingScheduler = () => {
                       {capitalizeFirstLetter(meeting?.priority) ||
                         "No Priority"}
                     </span>
-
 
                     <div className="flex gap-2">
                       <button
@@ -623,7 +621,10 @@ const MeetingScheduler = () => {
                       <button
                         onClick={() => {
                           if (!has("hrms.calendar.meeting.create")) {
-                            showSnackbar("Access Denied: You do not have permission to edit meetings.", "error");
+                            showSnackbar(
+                              "Access Denied: You do not have permission to edit meetings.",
+                              "error",
+                            );
                             return;
                           }
                           setSelectedMeeting(meeting);
@@ -649,7 +650,6 @@ const MeetingScheduler = () => {
           </div>
         )}
 
-
         {!loading && filteredMeetings.length === 0 && (
           <div className="text-center py-12 bg-white rounded-xl shadow-lg">
             <CalendarDays className="mx-auto h-16 w-16 text-gray-400 mb-4" />
@@ -662,7 +662,10 @@ const MeetingScheduler = () => {
             <button
               onClick={() => {
                 if (!has("hrms.calendar.meeting.create")) {
-                  showSnackbar("Access Denied: You do not have permission to schedule meetings.", "error");
+                  showSnackbar(
+                    "Access Denied: You do not have permission to schedule meetings.",
+                    "error",
+                  );
                   return;
                 }
                 setShowAddModal(true);
@@ -675,7 +678,6 @@ const MeetingScheduler = () => {
           </div>
         )}
       </div>
-
 
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -696,7 +698,6 @@ const MeetingScheduler = () => {
             </div>
 
             <form onSubmit={handleCreateMeeting} className="p-6 space-y-6">
-
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Basic Information
@@ -731,7 +732,6 @@ const MeetingScheduler = () => {
                   />
                 </div>
               </div>
-
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -786,7 +786,6 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Meeting Mode
@@ -828,7 +827,6 @@ const MeetingScheduler = () => {
                 )}
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Priority
@@ -844,7 +842,6 @@ const MeetingScheduler = () => {
                   <option value="high">High</option>
                 </select>
               </div>
-
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -869,7 +866,6 @@ const MeetingScheduler = () => {
                       placeholder="Search employees to add..."
                     />
                   </div>
-
 
                   {showEmployeeDropdown && searchEmployee && (
                     <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
@@ -916,7 +912,6 @@ const MeetingScheduler = () => {
                   )}
                 </div>
 
-
                 {newMeeting.attendees.length > 0 && (
                   <div className="mt-3 space-y-2">
                     <p className="text-sm font-medium text-gray-700">
@@ -951,7 +946,6 @@ const MeetingScheduler = () => {
                 )}
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Additional Notes
@@ -965,7 +959,6 @@ const MeetingScheduler = () => {
                   placeholder="Any additional information for attendees..."
                 />
               </div>
-
 
               <div className="flex items-center gap-2">
                 <input
@@ -981,7 +974,6 @@ const MeetingScheduler = () => {
                   Send reminder notifications to attendees
                 </label>
               </div>
-
 
               <div className="flex items-center gap-2">
                 <input
@@ -1001,7 +993,6 @@ const MeetingScheduler = () => {
                 </label>
               </div>
 
-
               {newMeeting.recurring && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1020,7 +1011,6 @@ const MeetingScheduler = () => {
                   </select>
                 </div>
               )}
-
 
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <button
@@ -1045,7 +1035,6 @@ const MeetingScheduler = () => {
         </div>
       )}
 
-
       {showDetailsModal && selectedMeeting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full">
@@ -1060,7 +1049,6 @@ const MeetingScheduler = () => {
             </div>
 
             <div className="p-6 space-y-6">
-
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">
                   {selectedMeeting?.title || "Untitled Meeting"}
@@ -1076,13 +1064,11 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-
               {selectedMeeting?.description && (
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-gray-700">{selectedMeeting.description}</p>
                 </div>
               )}
-
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-3">
@@ -1167,7 +1153,6 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-
               <div>
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <Users size={18} />
@@ -1211,7 +1196,6 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-
               {selectedMeeting?.notes && (
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-2">
@@ -1223,12 +1207,14 @@ const MeetingScheduler = () => {
                 </div>
               )}
 
-
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <button
                   onClick={() => {
                     if (!has("hrms.calendar.meeting.create")) {
-                      showSnackbar("Access Denied: You do not have permission to edit meetings.", "error");
+                      showSnackbar(
+                        "Access Denied: You do not have permission to edit meetings.",
+                        "error",
+                      );
                       return;
                     }
                     setShowDetailsModal(false);
@@ -1262,7 +1248,6 @@ const MeetingScheduler = () => {
         </div>
       )}
 
-
       {showEditModal && selectedMeeting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
@@ -1280,7 +1265,6 @@ const MeetingScheduler = () => {
             </div>
 
             <form onSubmit={handleUpdateMeeting} className="p-6 space-y-6">
-
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Basic Information
@@ -1321,7 +1305,6 @@ const MeetingScheduler = () => {
                   />
                 </div>
               </div>
-
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -1393,7 +1376,6 @@ const MeetingScheduler = () => {
                 </div>
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Mode
@@ -1413,7 +1395,6 @@ const MeetingScheduler = () => {
                   <option value="hybrid">Hybrid</option>
                 </select>
               </div>
-
 
               {selectedMeeting.mode === "online" ? (
                 <div>
@@ -1451,7 +1432,6 @@ const MeetingScheduler = () => {
                 </div>
               )}
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Priority
@@ -1472,7 +1452,6 @@ const MeetingScheduler = () => {
                 </select>
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Notes
@@ -1489,7 +1468,6 @@ const MeetingScheduler = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
                 />
               </div>
-
 
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <button
@@ -1513,7 +1491,6 @@ const MeetingScheduler = () => {
           </div>
         </div>
       )}
-
 
       <style jsx>{`
         @keyframes slideIn {

@@ -1,9 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Route, Routes, useSearchParams, useParams } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useSearchParams,
+  useParams,
+} from "react-router-dom";
 import { Loader2 } from "lucide-react";
-
 
 import { CompanyProvider } from "./pages/ClientAccounting/context/CompanyContext";
 import { UserProvider } from "./pages/ClientAccounting/context/UserContext";
@@ -19,10 +24,7 @@ import {
 } from "./store/slices/userSlice";
 import { setSuperAdmin } from "./submodules/hrms/redux/slices/superAdminSlice";
 
-
 import AdminLayout from "./components/AdminLayout";
-
-
 
 import Bill from "./pages/Operation/BOQ/Bill";
 import Drivers from "./pages/Operation/Equipment management/Drivers";
@@ -46,7 +48,6 @@ import WorkDiary from "./pages/Operation/Work Diary/WorkDiary";
 import Work from "./pages/Operation/Work Order/Work";
 import IndentEntryO from "./pages/Operation/material mangement/IndentEntryO";
 
-
 import EmployeeForm from "./components/EmployeeForm";
 import ProjectsPage from "./components/projectCl/projectCl";
 import BrokerPage from "./pages/BrokerPage";
@@ -59,7 +60,6 @@ import SalesEntry from "./pages/Stock&inventory/SaleEntry";
 import StockEntry from "./pages/Stock&inventory/StockEntry";
 import SupplierList from "./pages/Stock&inventory/SupplierList";
 import SupplierPage from "./pages/SupplierPage";
-
 
 import ClientBankActivites from "./pages/ClientAccounting/components/BankActivites";
 import ClientCheque from "./pages/ClientAccounting/components/Cheque";
@@ -102,14 +102,9 @@ import PlansPage from "./pages/PlansPage";
 import UserPlanDetails from "./pages/HRMS/plans/UserPlanDetails";
 import ContactUs from "./pages/ContactUs";
 
-
-
-
 import AdminRoutes from "./submodules/crm/admin/routes/AdminRoutes";
 import HRMSAdminRoutes from "./submodules/hrms/routes/AdminRoutes";
 import HRMSEmployeeRoutes from "./submodules/hrms/routes/EmployeeRoutes";
-
-
 
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -168,8 +163,18 @@ const XYZRedirect = () => {
   }
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", backgroundColor: "#f8fafc" }}>
-      <h2 style={{ fontSize: "1.25rem", color: "#334155", fontWeight: "600" }}>404 | Page not found</h2>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundColor: "#f8fafc",
+      }}
+    >
+      <h2 style={{ fontSize: "1.25rem", color: "#334155", fontWeight: "600" }}>
+        404 | Page not found
+      </h2>
     </div>
   );
 };
@@ -204,17 +209,12 @@ const App = () => {
         return;
       }
 
-
       if (window.location.pathname.startsWith("/employee")) {
         setIsVerifying(false);
         return;
       }
 
-
-
-
       if (isLocalAuth) {
-
         const existingToken = getAuthToken();
         const existingUser = getAuthUser();
         if (existingToken && existingUser) {
@@ -232,9 +232,7 @@ const App = () => {
               existingUser?.slug ||
               currentSlug,
             company_id:
-              existingUser?.company_id ??
-              existingUser?.tenant_id ??
-              null,
+              existingUser?.company_id ?? existingUser?.tenant_id ?? null,
             isEmployee: Boolean(existingUser?.isEmployee),
           });
 
@@ -290,7 +288,9 @@ const App = () => {
             );
           }
           if (!normalizedUser.isEmployee && data.token) {
-            dispatch(setSuperAdmin({ user: normalizedUser, token: data.token }));
+            dispatch(
+              setSuperAdmin({ user: normalizedUser, token: data.token }),
+            );
           }
           queryClient.setQueryData(["authUser"], {
             user: normalizedUser,
@@ -322,7 +322,10 @@ const App = () => {
   if (isVerifying) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 gap-3">
-        <Loader2 className="w-10 h-10 animate-spin text-[#00a651]" strokeWidth={2.5} />
+        <Loader2
+          className="w-10 h-10 animate-spin text-[#00a651]"
+          strokeWidth={2.5}
+        />
         <span className="text-sm font-semibold text-slate-600 font-body">
           Verifying your workspace...
         </span>
@@ -334,7 +337,6 @@ const App = () => {
     <UserProvider>
       <CompanyProvider>
         <Routes>
-
           <Route
             path="/admin/login"
             element={
@@ -350,7 +352,6 @@ const App = () => {
           <Route path="/employee/*" element={<HRMSEmployeeRoutes />} />
           <Route path="/xyz" element={<XYZRedirect />} />
           <Route path="/xyz/:company_id" element={<XYZRedirect />} />
-
 
           <Route
             element={
@@ -369,7 +370,6 @@ const App = () => {
             <Route path="/dashboard" element={<DashboardHome />} />
             <Route path="/crm/*" element={<AdminRoutes />} />
             <Route path="/hrms/*" element={<HRMSAdminRoutes />} />
-
 
             <Route path="/project-budget" element={<ProjectBudgetTabs />} />
             <Route path="/bill" element={<Bill />} />
@@ -398,7 +398,6 @@ const App = () => {
               path="/change-history"
               element={<ChangeHistoryContractor />}
             />
-
 
             <Route
               path="/accounting/client/dashboard"
@@ -584,15 +583,11 @@ const App = () => {
               path="/accounting/client/stockGroupSummery"
               element={<ClientStockGroupSummary />}
             />
-            <Route
-              path="/accounting/client/hsnsummery"
-              element={<HSNList />}
-            />
+            <Route path="/accounting/client/hsnsummery" element={<HSNList />} />
             <Route
               path="/accounting/client/stocklist"
               element={<StockNamesList />}
             />
-
 
             <Route path="/brokers" element={<BrokerPage />} />
             <Route path="/suppliers" element={<SupplierPage />} />
@@ -656,7 +651,6 @@ const App = () => {
               element={<BookingCancellations />}
             />
 
-
             <Route
               path="/superadmin/accounting/superadmin/activity"
               element={<SuperAdminAccountingActivity />}
@@ -677,16 +671,9 @@ const App = () => {
               path="/superadmin/accounting/superadmin/gst-details"
               element={<GstDetails />}
             />
-             <Route
-              path="/profile"
-              element={<CompanyProfilePage />} />
-            <Route
-              path="/contact-us"
-              element={<ContactUs />} />
+            <Route path="/profile" element={<CompanyProfilePage />} />
+            <Route path="/contact-us" element={<ContactUs />} />
           </Route>
-
-
-
 
           <Route
             path="*"

@@ -1,472 +1,48 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 
 const InFlow = () => {
   const [data, setData] = useState([
-    { source: "Aggregates", code: "INF-1", description: "Crushed stone supply", quantity: 50, amount: 150000, status: "approved" },
-    { source: "Sand", code: "INF-2", description: "River sand delivered", quantity: 30, amount: 100000, status: "pending" },
-    { source: "Cement", code: "INF-3", description: "50kg bags - initial stock", quantity: 100, amount: 250000, status: "approved" },
-    { source: "Bricks", code: "INF-4", description: "Red bricks - batch 1", quantity: 5000, amount: 180000, status: "pending" },
-    { source: "Granite", code: "INF-5", description: "Granite slabs - flooring", quantity: 200, amount: 200000, status: "approved" },
+    {
+      source: "Aggregates",
+      code: "INF-1",
+      description: "Crushed stone supply",
+      quantity: 50,
+      amount: 150000,
+      status: "approved",
+    },
+    {
+      source: "Sand",
+      code: "INF-2",
+      description: "River sand delivered",
+      quantity: 30,
+      amount: 100000,
+      status: "pending",
+    },
+    {
+      source: "Cement",
+      code: "INF-3",
+      description: "50kg bags - initial stock",
+      quantity: 100,
+      amount: 250000,
+      status: "approved",
+    },
+    {
+      source: "Bricks",
+      code: "INF-4",
+      description: "Red bricks - batch 1",
+      quantity: 5000,
+      amount: 180000,
+      status: "pending",
+    },
+    {
+      source: "Granite",
+      code: "INF-5",
+      description: "Granite slabs - flooring",
+      quantity: 200,
+      amount: 200000,
+      status: "approved",
+    },
   ]);
 
   const [formData, setFormData] = useState({
@@ -482,7 +58,7 @@ const InFlow = () => {
 
   const toggleSelect = (code) => {
     setSelectedRows((prev) =>
-      prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code]
+      prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code],
     );
   };
 
@@ -520,7 +96,13 @@ const InFlow = () => {
     };
 
     setData((prev) => [...prev, newItem]);
-    setFormData({ source: "", code: "", description: "", quantity: "", amount: "" });
+    setFormData({
+      source: "",
+      code: "",
+      description: "",
+      quantity: "",
+      amount: "",
+    });
 
     Swal.fire({
       icon: "success",
@@ -535,8 +117,8 @@ const InFlow = () => {
   const handleApprove = (code) => {
     setData((prev) =>
       prev.map((item) =>
-        item.code === code ? { ...item, status: "approved" } : item
-      )
+        item.code === code ? { ...item, status: "approved" } : item,
+      ),
     );
 
     Swal.fire({
@@ -577,8 +159,8 @@ const InFlow = () => {
           prev.map((item) =>
             selectedRows.includes(item.code)
               ? { ...item, status: "approved" }
-              : item
-          )
+              : item,
+          ),
         );
         setSelectedRows([]);
         setSelectAll(false);
@@ -623,7 +205,7 @@ const InFlow = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         setData((prev) =>
-          prev.filter((item) => !selectedRows.includes(item.code))
+          prev.filter((item) => !selectedRows.includes(item.code)),
         );
         setSelectedRows([]);
         setSelectAll(false);
@@ -668,7 +250,6 @@ const InFlow = () => {
         <span className="w-2 h-6 bg-green-600 rounded"></span>
         Material Inflow Management
       </h2>
-
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
         <div>
@@ -759,7 +340,6 @@ const InFlow = () => {
         </div>
       </div>
 
-
       <div className="overflow-x-auto border border-gray-200 rounded-lg">
         <table className="w-full text-sm">
           <thead className="bg-green-600 text-white text-left">
@@ -832,7 +412,6 @@ const InFlow = () => {
         </table>
       </div>
 
-
       <div className="flex flex-col sm:flex-row items-center justify-between px-4 py-4 bg-gray-50 border-t mt-4 rounded-b-lg gap-4">
         <div className="space-y-1">
           <div className="text-sm text-gray-600">
@@ -858,7 +437,13 @@ const InFlow = () => {
         <div className="flex gap-3">
           <button
             onClick={() => {
-              setFormData({ source: "", code: "", description: "", quantity: "", amount: "" });
+              setFormData({
+                source: "",
+                code: "",
+                description: "",
+                quantity: "",
+                amount: "",
+              });
               setSelectedRows([]);
               setSelectAll(false);
             }}
@@ -867,12 +452,14 @@ const InFlow = () => {
             Cancel
           </button>
           <button
-            onClick={() => Swal.fire({
-              icon: 'success',
-              title: 'Submitted!',
-              text: 'Material inflow data submitted successfully.',
-              confirmButtonColor: '#16a34a'
-            })}
+            onClick={() =>
+              Swal.fire({
+                icon: "success",
+                title: "Submitted!",
+                text: "Material inflow data submitted successfully.",
+                confirmButtonColor: "#16a34a",
+              })
+            }
             className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium"
           >
             Submit Data

@@ -29,12 +29,10 @@ export default function DefineLeave({ setActiveMenu }) {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="bg-white shadow-md rounded-md overflow-hidden border">
-
         <div className="bg-blue-500 text-white px-4 py-2 flex items-center gap-2">
           <List className="w-4 h-4" />
           <h2 className="font-semibold text-lg">Define Leave</h2>
         </div>
-
 
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse text-sm">
@@ -75,7 +73,6 @@ export default function DefineLeave({ setActiveMenu }) {
             </tbody>
           </table>
         </div>
-
 
         <div className="flex justify-center gap-3 py-4 bg-white">
           <button

@@ -1,35 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import BillInwardHistory from './BillInwardHistory';
-import { FaCalendarAlt, FaSearch, FaUser, FaFileAlt, FaBuilding, FaRupeeSign } from 'react-icons/fa';
-import operationApi from '../../../api/operation';
+import React, { useState, useEffect } from "react";
+import BillInwardHistory from "./BillInwardHistory";
+import {
+  FaCalendarAlt,
+  FaSearch,
+  FaUser,
+  FaFileAlt,
+  FaBuilding,
+  FaRupeeSign,
+} from "react-icons/fa";
+import operationApi from "../../../api/operation";
 
 const BillInward = () => {
   const [loading, setLoading] = useState(false);
-  const [documentDate, setDocumentDate] = useState(new Date().toISOString().split('T')[0]);
-  const [partyBillDate, setPartyBillDate] = useState('');
+  const [documentDate, setDocumentDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
+  const [partyBillDate, setPartyBillDate] = useState("");
   const [isImport, setIsImport] = useState(false);
-  const [assignTo, setAssignTo] = useState('');
-  const [searchUser, setSearchUser] = useState('');
-  const [activeTab, setActiveTab] = useState('inward');
+  const [assignTo, setAssignTo] = useState("");
+  const [searchUser, setSearchUser] = useState("");
+  const [activeTab, setActiveTab] = useState("inward");
 
   const [suppliers, setSuppliers] = useState([]);
   const [formData, setFormData] = useState({
-    businessUnit: '',
-    documentType: '',
-    documentNo: '',
-    supplier_id: '',
-    partyBillNo: '',
-    billAmount: '',
-    remarks: '',
-    financialYear: '',
-    parentAccountHead: '',
+    businessUnit: "",
+    documentType: "",
+    documentNo: "",
+    supplier_id: "",
+    partyBillNo: "",
+    billAmount: "",
+    remarks: "",
+    financialYear: "",
+    parentAccountHead: "",
   });
 
-  const businessUnits = ['Head Office', 'Branch Office'];
-  const documentTypes = ['Tax Invoice', 'Purchase Bill', 'Service Bill'];
-  const financialYears = ['2023-2024', '2024-2025', '2025-2026'];
-  const parentAccountHeads = ['IT Assets', 'Construction Material', 'Office Supplies'];
-  const users = ['Admin User', 'John Doe', 'Jane Smith'];
+  const businessUnits = ["Head Office", "Branch Office"];
+  const documentTypes = ["Tax Invoice", "Purchase Bill", "Service Bill"];
+  const financialYears = ["2023-2024", "2024-2025", "2025-2026"];
+  const parentAccountHeads = [
+    "IT Assets",
+    "Construction Material",
+    "Office Supplies",
+  ];
+  const users = ["Admin User", "John Doe", "Jane Smith"];
 
   useEffect(() => {
     fetchSuppliers();
@@ -46,7 +59,7 @@ const BillInward = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async () => {
@@ -74,19 +87,19 @@ const BillInward = () => {
       await operationApi.createBillInward(payload);
       alert("Bill Inward submitted successfully!");
       setFormData({
-        businessUnit: '',
-        documentType: '',
-        documentNo: '',
-        supplier_id: '',
-        partyBillNo: '',
-        billAmount: '',
-        remarks: '',
-        financialYear: '',
-        parentAccountHead: '',
+        businessUnit: "",
+        documentType: "",
+        documentNo: "",
+        supplier_id: "",
+        partyBillNo: "",
+        billAmount: "",
+        remarks: "",
+        financialYear: "",
+        parentAccountHead: "",
       });
-      setPartyBillDate('');
-      setAssignTo('');
-      setSearchUser('');
+      setPartyBillDate("");
+      setAssignTo("");
+      setSearchUser("");
     } catch (error) {
       console.error("Error submitting bill inward:", error);
       alert(error.response?.data?.message || "Failed to submit bill inward");
@@ -98,19 +111,20 @@ const BillInward = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
-
         <div className="bg-slate-100 rounded-lg shadow-sm border border-gray-200 mb-6">
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex ">
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setActiveTab('inward')}
-                  className={`px-3 py-1 rounded ${activeTab === 'inward' ? 'bg-white text-blue-500 border-t-2' : 'bg-transparent text-gray-700 hover:bg-gray-100'}`}>
+                  onClick={() => setActiveTab("inward")}
+                  className={`px-3 py-1 rounded ${activeTab === "inward" ? "bg-white text-blue-500 border-t-2" : "bg-transparent text-gray-700 hover:bg-gray-100"}`}
+                >
                   Bill Inwarding
                 </button>
                 <button
-                  onClick={() => setActiveTab('history')}
-                  className={`px-3 py-1 rounded ${activeTab === 'history' ? 'bg-white text-blue-500 border-t-2' : 'bg-transparent text-gray-700 hover:bg-gray-100'}`}>
+                  onClick={() => setActiveTab("history")}
+                  className={`px-3 py-1 rounded ${activeTab === "history" ? "bg-white text-blue-500 border-t-2" : "bg-transparent text-gray-700 hover:bg-gray-100"}`}
+                >
                   Bill Inward History
                 </button>
               </div>
@@ -119,12 +133,14 @@ const BillInward = () => {
         </div>
 
         <div>
-          {activeTab === 'inward' ? (
+          {activeTab === "inward" ? (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="p-6">
                 <div className="grid grid-cols-2 gap-6 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Business Unit</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Business Unit
+                    </label>
                     <select
                       name="businessUnit"
                       value={formData.businessUnit}
@@ -133,12 +149,16 @@ const BillInward = () => {
                     >
                       <option value="">Select Business Unit</option>
                       {businessUnits.map((unit, index) => (
-                        <option key={index} value={unit}>{unit}</option>
+                        <option key={index} value={unit}>
+                          {unit}
+                        </option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Document Type</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Document Type
+                    </label>
                     <select
                       name="documentType"
                       value={formData.documentType}
@@ -147,7 +167,9 @@ const BillInward = () => {
                     >
                       <option value="">Select Document Type</option>
                       {documentTypes.map((type, index) => (
-                        <option key={index} value={type}>{type}</option>
+                        <option key={index} value={type}>
+                          {type}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -157,7 +179,9 @@ const BillInward = () => {
 
                 <div className="grid grid-cols-3 gap-6 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Document No</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Document No
+                    </label>
                     <input
                       type="text"
                       name="documentNo"
@@ -168,7 +192,9 @@ const BillInward = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Supplier</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Supplier
+                    </label>
                     <select
                       name="supplier_id"
                       value={formData.supplier_id}
@@ -176,13 +202,17 @@ const BillInward = () => {
                       className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                     >
                       <option value="">Select Supplier</option>
-                      {suppliers.map(s => (
-                        <option key={s.id} value={s.id}>{s.name}</option>
+                      {suppliers.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.name}
+                        </option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Party Bill No</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Party Bill No
+                    </label>
                     <input
                       type="text"
                       name="partyBillNo"
@@ -196,7 +226,9 @@ const BillInward = () => {
 
                 <div className="grid grid-cols-3 gap-6 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Bill Amount</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Bill Amount
+                    </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <FaRupeeSign className="text-gray-400 text-sm" />
@@ -213,7 +245,9 @@ const BillInward = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Remarks</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Remarks
+                    </label>
                     <input
                       type="text"
                       name="remarks"
@@ -224,7 +258,9 @@ const BillInward = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Party Bill Date</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Party Bill Date
+                    </label>
                     <input
                       type="date"
                       value={partyBillDate}
@@ -232,17 +268,20 @@ const BillInward = () => {
                       className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pl-4 pr-10"
                     />
                     <FaCalendarAlt className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-
                   </div>
                 </div>
 
                 <div className="border-t border-gray-200 my-6"></div>
 
                 <div className="mb-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Document Details</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">
+                    Document Details
+                  </h3>
                   <div className="grid grid-cols-3 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Financial Year</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Financial Year
+                      </label>
                       <select
                         name="financialYear"
                         value={formData.financialYear}
@@ -250,13 +289,17 @@ const BillInward = () => {
                         className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       >
                         <option value="">Select Financial Year</option>
-                        {financialYears.map(fy => (
-                          <option key={fy} value={fy}>{fy}</option>
+                        {financialYears.map((fy) => (
+                          <option key={fy} value={fy}>
+                            {fy}
+                          </option>
                         ))}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Document Date</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Document Date
+                      </label>
                       <div className="relative">
                         <input
                           type="date"
@@ -271,7 +314,9 @@ const BillInward = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Parent Account Head</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Parent Account Head
+                  </label>
                   <select
                     name="parentAccountHead"
                     value={formData.parentAccountHead}
@@ -279,13 +324,17 @@ const BillInward = () => {
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   >
                     <option value="">Select</option>
-                    {parentAccountHeads.map(head => (
-                      <option key={head} value={head}>{head}</option>
+                    {parentAccountHeads.map((head) => (
+                      <option key={head} value={head}>
+                        {head}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Assign To</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Assign To
+                  </label>
                   <select
                     value={assignTo}
                     onChange={(e) => setAssignTo(e.target.value)}
@@ -293,12 +342,16 @@ const BillInward = () => {
                   >
                     <option value="">Select</option>
                     {users.map((user, index) => (
-                      <option key={index} value={user}>{user}</option>
+                      <option key={index} value={user}>
+                        {user}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Search User</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Search User
+                  </label>
                   <select
                     value={searchUser}
                     onChange={(e) => setSearchUser(e.target.value)}
@@ -306,7 +359,9 @@ const BillInward = () => {
                   >
                     <option value="">Select</option>
                     {users.map((user, index) => (
-                      <option key={index} value={user}>{user}</option>
+                      <option key={index} value={user}>
+                        {user}
+                      </option>
                     ))}
                   </select>
                 </div>

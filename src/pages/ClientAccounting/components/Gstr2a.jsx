@@ -1,888 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-
-
-
-          
-
-
-
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState, useEffect } from 'react';
-import { 
-  HiSearch, 
-  HiDownload, 
-  HiPrinter, 
+import React, { useState, useEffect } from "react";
+import {
+  HiSearch,
+  HiDownload,
+  HiPrinter,
   HiRefresh,
   HiFilter,
   HiDocumentAdd,
@@ -891,85 +11,132 @@ import {
   HiTrash,
   HiCheckCircle,
   HiExclamationCircle,
-  HiPlus
-} from 'react-icons/hi';
-import { BiChevronDown, BiChevronUp, BiCopy } from 'react-icons/bi';
-import { FaFileExcel, FaFilePdf } from 'react-icons/fa';
-import axios from 'axios';
+  HiPlus,
+} from "react-icons/hi";
+import { BiChevronDown, BiChevronUp, BiCopy } from "react-icons/bi";
+import { FaFileExcel, FaFilePdf } from "react-icons/fa";
+import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
 
 const Gstr2a = () => {
-  const [activeTab, setActiveTab] = useState('b2b');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedMonth, setSelectedMonth] = useState('October 2023');
+  const [activeTab, setActiveTab] = useState("b2b");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("October 2023");
   const [expandedRows, setExpandedRows] = useState([]);
   const [showAddEntry, setShowAddEntry] = useState(false);
-  const [entryType, setEntryType] = useState('b2b');
+  const [entryType, setEntryType] = useState("b2b");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     b2b: [],
     b2bAmendments: [],
     creditDebitNotes: [],
-    amendmentsToCreditDebitNotes: []
+    amendmentsToCreditDebitNotes: [],
   });
-  
+
   const { companyId } = useCompany();
 
   const tabs = [
-    { id: 'b2b', label: 'B2B Invoices', api: 'b2b' },
-    { id: 'b2bAmendments', label: 'Amendments to B2B Invoices', api: 'b2b-amendments' },
-    { id: 'creditDebitNotes', label: 'Credit/Debit Notes', api: 'credit-debit-notes' },
-    { id: 'amendmentsToCreditDebitNotes', label: 'Amendments to Credit/Debit Notes', api: 'cdn-amendments' }
+    { id: "b2b", label: "B2B Invoices", api: "b2b" },
+    {
+      id: "b2bAmendments",
+      label: "Amendments to B2B Invoices",
+      api: "b2b-amendments",
+    },
+    {
+      id: "creditDebitNotes",
+      label: "Credit/Debit Notes",
+      api: "credit-debit-notes",
+    },
+    {
+      id: "amendmentsToCreditDebitNotes",
+      label: "Amendments to Credit/Debit Notes",
+      api: "cdn-amendments",
+    },
   ];
 
   const months = [
-    'April 2023', 'May 2023', 'June 2023', 'July 2023',
-    'August 2023', 'September 2023', 'October 2023',
-    'November 2023', 'December 2023', 'January 2024',
-    'February 2024', 'March 2024'
+    "April 2023",
+    "May 2023",
+    "June 2023",
+    "July 2023",
+    "August 2023",
+    "September 2023",
+    "October 2023",
+    "November 2023",
+    "December 2023",
+    "January 2024",
+    "February 2024",
+    "March 2024",
   ];
 
   const tabData = {
     b2b: {
-      title: 'B2B Invoices',
-      description: 'Auto-populated B2B invoices from suppliers',
-      columns: ['Supplier Details', 'Invoice Details', 'Tax Amounts', 'Status', 'Actions']
+      title: "B2B Invoices",
+      description: "Auto-populated B2B invoices from suppliers",
+      columns: [
+        "Supplier Details",
+        "Invoice Details",
+        "Tax Amounts",
+        "Status",
+        "Actions",
+      ],
     },
     b2bAmendments: {
-      title: 'Amendments to B2B Invoices',
-      description: 'Amended B2B invoices and corrections',
-      columns: ['Supplier Details', 'Amendment Details', 'Value Changes', 'Status', 'Actions']
+      title: "Amendments to B2B Invoices",
+      description: "Amended B2B invoices and corrections",
+      columns: [
+        "Supplier Details",
+        "Amendment Details",
+        "Value Changes",
+        "Status",
+        "Actions",
+      ],
     },
     creditDebitNotes: {
-      title: 'Credit/Debit Notes',
-      description: 'Credit and debit notes received from suppliers',
-      columns: ['Supplier Details', 'Note Details', 'Tax Amounts', 'Status', 'Actions']
+      title: "Credit/Debit Notes",
+      description: "Credit and debit notes received from suppliers",
+      columns: [
+        "Supplier Details",
+        "Note Details",
+        "Tax Amounts",
+        "Status",
+        "Actions",
+      ],
     },
     amendmentsToCreditDebitNotes: {
-      title: 'Amendments to Credit/Debit Notes',
-      description: 'Amended credit and debit notes',
-      columns: ['Supplier Details', 'Amendment Details', 'Value Changes', 'Status', 'Actions']
-    }
+      title: "Amendments to Credit/Debit Notes",
+      description: "Amended credit and debit notes",
+      columns: [
+        "Supplier Details",
+        "Amendment Details",
+        "Value Changes",
+        "Status",
+        "Actions",
+      ],
+    },
   };
 
   const fetchData = async (tabId = activeTab) => {
     if (!companyId) {
-      console.error('Company ID is not available');
+      console.error("Company ID is not available");
       return;
     }
 
     setLoading(true);
     try {
-      const tab = tabs.find(t => t.id === tabId);
-      const response = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/gstr2a/${tab.api}/${companyId}`, {
-        params: {
-          month: selectedMonth
-        }
-      });
-      
-      setData(prev => ({
+      const tab = tabs.find((t) => t.id === tabId);
+      const response = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/gstr2a/${tab.api}/${companyId}`,
+        {
+          params: {
+            month: selectedMonth,
+          },
+        },
+      );
+
+      setData((prev) => ({
         ...prev,
-        [tabId]: response.data
+        [tabId]: response.data,
       }));
     } catch (error) {
       console.error(`Error fetching ${tabId} data:`, error);
@@ -991,10 +158,8 @@ const Gstr2a = () => {
   };
 
   const toggleRow = (id) => {
-    setExpandedRows(prev => 
-      prev.includes(id) 
-        ? prev.filter(rowId => rowId !== id)
-        : [...prev, id]
+    setExpandedRows((prev) =>
+      prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id],
     );
   };
 
@@ -1008,9 +173,10 @@ const Gstr2a = () => {
 
   const handleExport = (type) => {
     const currentData = data[activeTab];
-    if (type === 'excel') {
-      const csvContent = "data:text/csv;charset=utf-8," 
-        + currentData.map(row => Object.values(row).join(",")).join("\n");
+    if (type === "excel") {
+      const csvContent =
+        "data:text/csv;charset=utf-8," +
+        currentData.map((row) => Object.values(row).join(",")).join("\n");
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
@@ -1018,103 +184,116 @@ const Gstr2a = () => {
       document.body.appendChild(link);
       link.click();
     } else {
-      alert(`Exporting ${tabData[activeTab].title} data as ${type.toUpperCase()}...`);
+      alert(
+        `Exporting ${tabData[activeTab].title} data as ${type.toUpperCase()}...`,
+      );
     }
   };
 
   const handleAccept = async (entryId) => {
     try {
-      await axios.put(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/gstr2a/b2b/${entryId}/status`, {
-        status: 'Accepted',
-        match_status: 'Fully Matched'
-      });
-      alert('Invoice accepted successfully');
+      await axios.put(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/gstr2a/b2b/${entryId}/status`,
+        {
+          status: "Accepted",
+          match_status: "Fully Matched",
+        },
+      );
+      alert("Invoice accepted successfully");
       fetchData();
     } catch (error) {
-      alert('Failed to accept invoice');
+      alert("Failed to accept invoice");
     }
   };
 
   const handleReject = async (entryId) => {
     try {
-      await axios.put(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/gstr2a/b2b/${entryId}/status`, {
-        status: 'Rejected',
-        match_status: 'Unmatched'
-      });
-      alert('Invoice rejected successfully');
+      await axios.put(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/gstr2a/b2b/${entryId}/status`,
+        {
+          status: "Rejected",
+          match_status: "Unmatched",
+        },
+      );
+      alert("Invoice rejected successfully");
       fetchData();
     } catch (error) {
-      alert('Failed to reject invoice');
+      alert("Failed to reject invoice");
     }
   };
 
   const handleAddEntry = async (formData) => {
     if (!companyId) {
-      alert('Company ID is required');
+      alert("Company ID is required");
       return;
     }
 
     try {
-      let endpoint = '';
-      
+      let endpoint = "";
+
       switch (entryType) {
-        case 'b2b':
+        case "b2b":
           endpoint = `http://localhost:3000/api/v1/gstr2a/b2b/${companyId}`;
           break;
-        case 'b2bAmendments':
+        case "b2bAmendments":
           endpoint = `http://localhost:3000/api/v1/gstr2a/b2b-amendments/${companyId}`;
           break;
-        case 'creditDebitNotes':
+        case "creditDebitNotes":
           endpoint = `http://localhost:3000/api/v1/gstr2a/credit-debit-notes/${companyId}`;
           break;
-        case 'amendmentsToCreditDebitNotes':
+        case "amendmentsToCreditDebitNotes":
           endpoint = `http://localhost:3000/api/v1/gstr2a/cdn-amendments/${companyId}`;
           break;
         default:
-          throw new Error('Invalid entry type');
+          throw new Error("Invalid entry type");
       }
 
       await axios.post(endpoint, formData);
-      alert('Entry added successfully!');
+      alert("Entry added successfully!");
       setShowAddEntry(false);
       fetchData();
     } catch (error) {
-      console.error('Error adding entry:', error);
-      alert(`Failed to add entry: ${error.response?.data?.error || error.message}`);
+      console.error("Error adding entry:", error);
+      alert(
+        `Failed to add entry: ${error.response?.data?.error || error.message}`,
+      );
     }
   };
 
   const formatCurrency = (value) => {
-    if (!value) return '₹0';
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0
+    if (!value) return "₹0";
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: 0,
     }).format(value);
   };
 
   const renderStatusBadge = (status) => {
     const config = {
-      'Matched': 'bg-green-100 text-green-800',
-      'Accepted': 'bg-green-100 text-green-800',
-      'Pending': 'bg-yellow-100 text-yellow-800',
-      'Rejected': 'bg-red-100 text-red-800',
-      'Available': 'bg-blue-100 text-blue-800',
-      'Partially Matched': 'bg-orange-100 text-orange-800'
+      Matched: "bg-green-100 text-green-800",
+      Accepted: "bg-green-100 text-green-800",
+      Pending: "bg-yellow-100 text-yellow-800",
+      Rejected: "bg-red-100 text-red-800",
+      Available: "bg-blue-100 text-blue-800",
+      "Partially Matched": "bg-orange-100 text-orange-800",
     };
 
     return (
-      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${config[status] || 'bg-gray-100 text-gray-800'}`}>
+      <span
+        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${config[status] || "bg-gray-100 text-gray-800"}`}
+      >
         {status}
       </span>
     );
   };
 
   const renderB2BTable = () => {
-    const entries = data.b2b.filter(entry => 
-      entry.supplier_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entry.invoice_no?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entry.supplier_gstin?.toLowerCase().includes(searchTerm.toLowerCase())
+    const entries = data.b2b.filter(
+      (entry) =>
+        entry.supplier_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        entry.invoice_no?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        entry.supplier_gstin?.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     return (
@@ -1148,10 +327,11 @@ const Gstr2a = () => {
                       onClick={() => toggleRow(entry.id)}
                       className="mr-3 text-gray-400 hover:text-gray-600"
                     >
-                      {expandedRows.includes(entry.id) ? 
-                        <BiChevronUp className="w-5 h-5" /> : 
+                      {expandedRows.includes(entry.id) ? (
+                        <BiChevronUp className="w-5 h-5" />
+                      ) : (
                         <BiChevronDown className="w-5 h-5" />
-                      }
+                      )}
                     </button>
                     <div>
                       <div className="text-sm font-medium text-gray-900">
@@ -1164,24 +344,31 @@ const Gstr2a = () => {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{entry.invoice_no}</div>
+                  <div className="text-sm text-gray-900">
+                    {entry.invoice_no}
+                  </div>
                   <div className="text-sm text-gray-500">
                     {new Date(entry.invoice_date).toLocaleDateString()}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{formatCurrency(entry.invoice_value)}</div>
+                  <div className="text-sm text-gray-900">
+                    {formatCurrency(entry.invoice_value)}
+                  </div>
                   <div className="text-sm text-gray-500">
-                    CGST: {formatCurrency(entry.cgst)} | SGST: {formatCurrency(entry.sgst)}
+                    CGST: {formatCurrency(entry.cgst)} | SGST:{" "}
+                    {formatCurrency(entry.sgst)}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {renderStatusBadge(entry.status)}
-                  <div className="text-xs text-gray-500 mt-1">{entry.match_status}</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {entry.match_status}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex space-x-2">
-                    {entry.status === 'Pending' && (
+                    {entry.status === "Pending" && (
                       <>
                         <button
                           onClick={() => handleAccept(entry.id)}
@@ -1214,7 +401,9 @@ const Gstr2a = () => {
                   <td colSpan="5" className="px-6 py-4 bg-gray-50">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Invoice Details</h4>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                          Invoice Details
+                        </h4>
                         <dl className="space-y-1 text-sm">
                           <div className="flex justify-between">
                             <dt className="text-gray-500">Invoice Number:</dt>
@@ -1223,40 +412,57 @@ const Gstr2a = () => {
                           <div className="flex justify-between">
                             <dt className="text-gray-500">Invoice Date:</dt>
                             <dd className="font-medium">
-                              {new Date(entry.invoice_date).toLocaleDateString()}
+                              {new Date(
+                                entry.invoice_date,
+                              ).toLocaleDateString()}
                             </dd>
                           </div>
                           <div className="flex justify-between">
                             <dt className="text-gray-500">Taxable Value:</dt>
-                            <dd className="font-medium">{formatCurrency(entry.taxable_value)}</dd>
+                            <dd className="font-medium">
+                              {formatCurrency(entry.taxable_value)}
+                            </dd>
                           </div>
                         </dl>
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Tax Details</h4>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                          Tax Details
+                        </h4>
                         <dl className="space-y-1 text-sm">
                           <div className="flex justify-between">
                             <dt className="text-gray-500">CGST:</dt>
-                            <dd className="font-medium">{formatCurrency(entry.cgst)}</dd>
+                            <dd className="font-medium">
+                              {formatCurrency(entry.cgst)}
+                            </dd>
                           </div>
                           <div className="flex justify-between">
                             <dt className="text-gray-500">SGST:</dt>
-                            <dd className="font-medium">{formatCurrency(entry.sgst)}</dd>
+                            <dd className="font-medium">
+                              {formatCurrency(entry.sgst)}
+                            </dd>
                           </div>
                           <div className="flex justify-between">
                             <dt className="text-gray-500">IGST:</dt>
-                            <dd className="font-medium">{formatCurrency(entry.igst)}</dd>
+                            <dd className="font-medium">
+                              {formatCurrency(entry.igst)}
+                            </dd>
                           </div>
                         </dl>
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Status</h4>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                          Status
+                        </h4>
                         <div className="space-y-2">
                           <div className="flex items-center space-x-2">
                             {renderStatusBadge(entry.match_status)}
                           </div>
                           {entry.created_at && (
-                            <p className="text-xs text-gray-600">Added on: {new Date(entry.created_at).toLocaleDateString()}</p>
+                            <p className="text-xs text-gray-600">
+                              Added on:{" "}
+                              {new Date(entry.created_at).toLocaleDateString()}
+                            </p>
                           )}
                         </div>
                       </div>
@@ -1272,9 +478,10 @@ const Gstr2a = () => {
   };
 
   const renderOtherTables = () => {
-    const entries = data[activeTab].filter(entry => 
-      entry.supplier_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entry.supplier_gstin?.toLowerCase().includes(searchTerm.toLowerCase())
+    const entries = data[activeTab].filter(
+      (entry) =>
+        entry.supplier_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        entry.supplier_gstin?.toLowerCase().includes(searchTerm.toLowerCase()),
     );
     const currentTab = tabData[activeTab];
 
@@ -1283,7 +490,10 @@ const Gstr2a = () => {
         <thead className="bg-gray-50">
           <tr>
             {currentTab.columns.map((column, index) => (
-              <th key={index} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                key={index}
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 {column}
               </th>
             ))}
@@ -1291,7 +501,7 @@ const Gstr2a = () => {
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {entries.map((entry) => {
-            if (activeTab === 'b2bAmendments') {
+            if (activeTab === "b2bAmendments") {
               return (
                 <tr key={entry.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -1305,11 +515,16 @@ const Gstr2a = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">Original: {entry.original_invoice_no}</div>
-                    <div className="text-sm text-gray-500">
-                      Amended: {new Date(entry.amendment_date).toLocaleDateString()}
+                    <div className="text-sm text-gray-900">
+                      Original: {entry.original_invoice_no}
                     </div>
-                    <div className="text-sm text-gray-500">Type: {entry.amendment_type}</div>
+                    <div className="text-sm text-gray-500">
+                      Amended:{" "}
+                      {new Date(entry.amendment_date).toLocaleDateString()}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Type: {entry.amendment_type}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900 line-through">
@@ -1331,7 +546,7 @@ const Gstr2a = () => {
                   </td>
                 </tr>
               );
-            } else if (activeTab === 'creditDebitNotes') {
+            } else if (activeTab === "creditDebitNotes") {
               return (
                 <tr key={entry.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -1349,21 +564,36 @@ const Gstr2a = () => {
                     <div className="text-sm text-gray-500">
                       {new Date(entry.note_date).toLocaleDateString()}
                     </div>
-                    <div className={`text-sm font-medium ${
-                      entry.note_type === 'Credit Note' ? 'text-green-700' : 'text-red-700'
-                    }`}>
+                    <div
+                      className={`text-sm font-medium ${
+                        entry.note_type === "Credit Note"
+                          ? "text-green-700"
+                          : "text-red-700"
+                      }`}
+                    >
                       {entry.note_type}
                     </div>
                     {entry.original_invoice_no && (
-                      <div className="text-sm text-gray-500">Original: {entry.original_invoice_no}</div>
+                      <div className="text-sm text-gray-500">
+                        Original: {entry.original_invoice_no}
+                      </div>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{formatCurrency(entry.note_value)}</div>
-                    <div className="text-sm text-gray-500">
-                      Tax: {formatCurrency(Number(entry.cgst) + Number(entry.sgst) + Number(entry.igst))}
+                    <div className="text-sm text-gray-900">
+                      {formatCurrency(entry.note_value)}
                     </div>
-                    <div className="text-sm text-gray-500">Taxable: {formatCurrency(entry.taxable_value)}</div>
+                    <div className="text-sm text-gray-500">
+                      Tax:{" "}
+                      {formatCurrency(
+                        Number(entry.cgst) +
+                          Number(entry.sgst) +
+                          Number(entry.igst),
+                      )}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Taxable: {formatCurrency(entry.taxable_value)}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {renderStatusBadge(entry.status)}
@@ -1377,7 +607,7 @@ const Gstr2a = () => {
                   </td>
                 </tr>
               );
-            } else if (activeTab === 'amendmentsToCreditDebitNotes') {
+            } else if (activeTab === "amendmentsToCreditDebitNotes") {
               return (
                 <tr key={entry.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -1391,11 +621,16 @@ const Gstr2a = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">Original Note: {entry.original_note_no}</div>
-                    <div className="text-sm text-gray-500">
-                      Amended: {new Date(entry.amendment_date).toLocaleDateString()}
+                    <div className="text-sm text-gray-900">
+                      Original Note: {entry.original_note_no}
                     </div>
-                    <div className="text-sm text-gray-500">Type: {entry.amendment_type}</div>
+                    <div className="text-sm text-gray-500">
+                      Amended:{" "}
+                      {new Date(entry.amendment_date).toLocaleDateString()}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Type: {entry.amendment_type}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900 line-through">
@@ -1434,7 +669,7 @@ const Gstr2a = () => {
       );
     }
 
-    if (activeTab === 'b2b') {
+    if (activeTab === "b2b") {
       return renderB2BTable();
     } else {
       return renderOtherTables();
@@ -1444,7 +679,7 @@ const Gstr2a = () => {
   const AddEntryForm = ({ onClose, onSubmit }) => {
     const [formData, setFormData] = useState({
       month: selectedMonth,
-      action_note: ''
+      action_note: "",
     });
 
     const handleSubmit = (e) => {
@@ -1454,15 +689,15 @@ const Gstr2a = () => {
 
     const handleChange = (e) => {
       const { name, value } = e.target;
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     };
 
     const renderFormFields = () => {
       switch (entryType) {
-        case 'b2b':
+        case "b2b":
           return (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -1475,7 +710,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.supplier_gstin || ''}
+                  value={formData.supplier_gstin || ""}
                 />
               </div>
               <div>
@@ -1488,7 +723,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.supplier_name || ''}
+                  value={formData.supplier_name || ""}
                 />
               </div>
               <div>
@@ -1501,7 +736,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.invoice_no || ''}
+                  value={formData.invoice_no || ""}
                 />
               </div>
               <div>
@@ -1514,7 +749,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.invoice_date || ''}
+                  value={formData.invoice_date || ""}
                 />
               </div>
               <div>
@@ -1527,7 +762,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.invoice_value || ''}
+                  value={formData.invoice_value || ""}
                 />
               </div>
               <div>
@@ -1540,7 +775,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.taxable_value || ''}
+                  value={formData.taxable_value || ""}
                 />
               </div>
               <div>
@@ -1552,7 +787,7 @@ const Gstr2a = () => {
                   name="cgst"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.cgst || ''}
+                  value={formData.cgst || ""}
                 />
               </div>
               <div>
@@ -1564,7 +799,7 @@ const Gstr2a = () => {
                   name="sgst"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.sgst || ''}
+                  value={formData.sgst || ""}
                 />
               </div>
               <div>
@@ -1576,13 +811,13 @@ const Gstr2a = () => {
                   name="igst"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.igst || ''}
+                  value={formData.igst || ""}
                 />
               </div>
             </div>
           );
 
-        case 'b2bAmendments':
+        case "b2bAmendments":
           return (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -1595,7 +830,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.supplier_gstin || ''}
+                  value={formData.supplier_gstin || ""}
                 />
               </div>
               <div>
@@ -1608,7 +843,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.supplier_name || ''}
+                  value={formData.supplier_name || ""}
                 />
               </div>
               <div>
@@ -1621,7 +856,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.original_invoice_no || ''}
+                  value={formData.original_invoice_no || ""}
                 />
               </div>
               <div>
@@ -1633,7 +868,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.amendment_type || ''}
+                  value={formData.amendment_type || ""}
                 >
                   <option value="">Select Type</option>
                   <option value="Value Correction">Value Correction</option>
@@ -1651,7 +886,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.amendment_date || ''}
+                  value={formData.amendment_date || ""}
                 />
               </div>
               <div>
@@ -1663,7 +898,7 @@ const Gstr2a = () => {
                   name="original_value"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.original_value || ''}
+                  value={formData.original_value || ""}
                 />
               </div>
               <div>
@@ -1675,13 +910,13 @@ const Gstr2a = () => {
                   name="amended_value"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.amended_value || ''}
+                  value={formData.amended_value || ""}
                 />
               </div>
             </div>
           );
 
-        case 'creditDebitNotes':
+        case "creditDebitNotes":
           return (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -1694,7 +929,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.supplier_gstin || ''}
+                  value={formData.supplier_gstin || ""}
                 />
               </div>
               <div>
@@ -1707,7 +942,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.supplier_name || ''}
+                  value={formData.supplier_name || ""}
                 />
               </div>
               <div>
@@ -1720,7 +955,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.note_no || ''}
+                  value={formData.note_no || ""}
                 />
               </div>
               <div>
@@ -1733,7 +968,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.note_date || ''}
+                  value={formData.note_date || ""}
                 />
               </div>
               <div>
@@ -1745,7 +980,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.note_type || ''}
+                  value={formData.note_type || ""}
                 >
                   <option value="">Select Type</option>
                   <option value="Credit Note">Credit Note</option>
@@ -1761,7 +996,7 @@ const Gstr2a = () => {
                   name="original_invoice_no"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.original_invoice_no || ''}
+                  value={formData.original_invoice_no || ""}
                 />
               </div>
               <div>
@@ -1773,7 +1008,7 @@ const Gstr2a = () => {
                   name="note_value"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.note_value || ''}
+                  value={formData.note_value || ""}
                 />
               </div>
               <div>
@@ -1785,7 +1020,7 @@ const Gstr2a = () => {
                   name="taxable_value"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.taxable_value || ''}
+                  value={formData.taxable_value || ""}
                 />
               </div>
               <div>
@@ -1797,7 +1032,7 @@ const Gstr2a = () => {
                   name="cgst"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.cgst || ''}
+                  value={formData.cgst || ""}
                 />
               </div>
               <div>
@@ -1809,7 +1044,7 @@ const Gstr2a = () => {
                   name="sgst"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.sgst || ''}
+                  value={formData.sgst || ""}
                 />
               </div>
               <div>
@@ -1821,13 +1056,13 @@ const Gstr2a = () => {
                   name="igst"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.igst || ''}
+                  value={formData.igst || ""}
                 />
               </div>
             </div>
           );
 
-        case 'amendmentsToCreditDebitNotes':
+        case "amendmentsToCreditDebitNotes":
           return (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -1840,7 +1075,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.supplier_gstin || ''}
+                  value={formData.supplier_gstin || ""}
                 />
               </div>
               <div>
@@ -1853,7 +1088,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.supplier_name || ''}
+                  value={formData.supplier_name || ""}
                 />
               </div>
               <div>
@@ -1866,7 +1101,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.original_note_no || ''}
+                  value={formData.original_note_no || ""}
                 />
               </div>
               <div>
@@ -1878,7 +1113,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.amendment_type || ''}
+                  value={formData.amendment_type || ""}
                 >
                   <option value="">Select Type</option>
                   <option value="Value Adjustment">Value Adjustment</option>
@@ -1896,7 +1131,7 @@ const Gstr2a = () => {
                   required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.amendment_date || ''}
+                  value={formData.amendment_date || ""}
                 />
               </div>
               <div>
@@ -1908,7 +1143,7 @@ const Gstr2a = () => {
                   name="original_value"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.original_value || ''}
+                  value={formData.original_value || ""}
                 />
               </div>
               <div>
@@ -1920,7 +1155,7 @@ const Gstr2a = () => {
                   name="amended_value"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   onChange={handleChange}
-                  value={formData.amended_value || ''}
+                  value={formData.amended_value || ""}
                 />
               </div>
             </div>
@@ -1936,7 +1171,7 @@ const Gstr2a = () => {
         <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
           <div className="flex justify-between items-center p-6 border-b">
             <h3 className="text-xl font-bold text-gray-800">
-              Add {tabs.find(t => t.id === entryType)?.label}
+              Add {tabs.find((t) => t.id === entryType)?.label}
             </h3>
             <button
               onClick={onClose}
@@ -1957,7 +1192,7 @@ const Gstr2a = () => {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2"
                 rows="3"
                 onChange={handleChange}
-                value={formData.action_note || ''}
+                value={formData.action_note || ""}
                 placeholder="Explain why this entry needs to be manually added..."
               />
             </div>
@@ -1984,12 +1219,15 @@ const Gstr2a = () => {
 
   return (
     <div className="space-y-6 print:p-0">
-
       <div className="bg-white rounded-lg border border-gray-200 p-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">GSTR-2A Auto-drafted Purchase Data</h2>
-            <p className="text-gray-600">Auto-populated invoices from suppliers for ITC claims</p>
+            <h2 className="text-xl font-bold text-gray-800">
+              GSTR-2A Auto-drafted Purchase Data
+            </h2>
+            <p className="text-gray-600">
+              Auto-populated invoices from suppliers for ITC claims
+            </p>
           </div>
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -1998,8 +1236,10 @@ const Gstr2a = () => {
                 onChange={(e) => setSelectedMonth(e.target.value)}
                 className="appearance-none bg-white border border-gray-300 rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
-                {months.map(month => (
-                  <option key={month} value={month}>{month}</option>
+                {months.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
                 ))}
               </select>
               <BiChevronDown className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
@@ -2015,18 +1255,17 @@ const Gstr2a = () => {
         </div>
       </div>
 
-
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="border-b border-gray-200">
           <nav className="flex overflow-x-auto">
-            {tabs.map(tab => (
+            {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => handleTabChange(tab.id)}
                 className={`flex items-center space-x-2 shrink-0 px-6 py-3 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600 bg-blue-50'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? "border-blue-500 text-blue-600 bg-blue-50"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
               >
                 <span>{tab.label}</span>
@@ -2049,14 +1288,16 @@ const Gstr2a = () => {
           </nav>
         </div>
 
-
         <div className="p-6">
           <div className="space-y-6">
-
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">{tabData[activeTab].title}</h3>
-                <p className="text-gray-600 text-sm mt-1">{tabData[activeTab].description}</p>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {tabData[activeTab].title}
+                </h3>
+                <p className="text-gray-600 text-sm mt-1">
+                  {tabData[activeTab].description}
+                </p>
               </div>
               <button
                 onClick={() => {
@@ -2069,7 +1310,6 @@ const Gstr2a = () => {
                 <span>Add Entry</span>
               </button>
             </div>
-
 
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
               <div className="relative w-full md:w-96">
@@ -2087,21 +1327,21 @@ const Gstr2a = () => {
                   <HiFilter className="w-5 h-5" />
                   <span>Filter</span>
                 </button>
-                <button 
-                  onClick={() => handleExport('pdf')}
+                <button
+                  onClick={() => handleExport("pdf")}
                   className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
                 >
                   <FaFilePdf className="w-5 h-5 text-red-600" />
                   <span>PDF</span>
                 </button>
-                <button 
-                  onClick={() => handleExport('excel')}
+                <button
+                  onClick={() => handleExport("excel")}
                   className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
                 >
                   <FaFileExcel className="w-5 h-5 text-green-600" />
                   <span>Excel</span>
                 </button>
-                <button 
+                <button
                   onClick={handlePrint}
                   className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
                 >
@@ -2111,14 +1351,16 @@ const Gstr2a = () => {
               </div>
             </div>
 
-
             <div className="overflow-x-auto border border-gray-200 rounded-lg">
               {data[activeTab].length === 0 && !loading ? (
                 <div className="text-center py-12 border border-dashed border-gray-300 rounded-lg">
                   <HiDocumentAdd className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h4 className="text-lg font-medium text-gray-800 mb-2">No entries found</h4>
+                  <h4 className="text-lg font-medium text-gray-800 mb-2">
+                    No entries found
+                  </h4>
                   <p className="text-gray-600 mb-4">
-                    There are no {tabData[activeTab].title.toLowerCase()} available for {selectedMonth}.
+                    There are no {tabData[activeTab].title.toLowerCase()}{" "}
+                    available for {selectedMonth}.
                   </p>
                   <button
                     onClick={() => {
@@ -2139,7 +1381,6 @@ const Gstr2a = () => {
         </div>
       </div>
 
-
       {showAddEntry && (
         <AddEntryForm
           onClose={() => setShowAddEntry(false)}
@@ -2147,21 +1388,21 @@ const Gstr2a = () => {
         />
       )}
 
-
       <style jsx>{`
         @media print {
           .no-print {
             display: none !important;
           }
-          
+
           body * {
             visibility: hidden;
           }
-          
-          #print-section, #print-section * {
+
+          #print-section,
+          #print-section * {
             visibility: visible;
           }
-          
+
           #print-section {
             position: absolute;
             left: 0;

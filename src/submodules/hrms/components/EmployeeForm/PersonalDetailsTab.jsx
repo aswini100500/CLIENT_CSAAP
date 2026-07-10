@@ -10,9 +10,7 @@ const PersonalDetailsTab = ({ formData, handleInputChange }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {PERSONAL_DETAILS_FIELDS.map((field, index) => (
         <div key={index}>
-          <label className="app-label block mb-1.5">
-            {field.label}
-          </label>
+          <label className="app-label block mb-1.5">{field.label}</label>
           {field.options ? (
             <select
               name={field.name}

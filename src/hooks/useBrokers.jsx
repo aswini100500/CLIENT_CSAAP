@@ -1,6 +1,4 @@
+import useSWR from "swr";
+import { getBrokers } from "../api/brokers";
 
-import useSWR from 'swr'
-import { getBrokers } from '../api/brokers'
-
-export const useBrokers = () =>
-  useSWR('brokers', getBrokers)
+export const useBrokers = () => useSWR("brokers", getBrokers);

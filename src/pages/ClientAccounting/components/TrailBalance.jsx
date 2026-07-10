@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
-import { ChevronDown, ChevronRight, Printer, FileSpreadsheet, FileText } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Printer,
+  FileSpreadsheet,
+  FileText,
+} from "lucide-react";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -23,17 +29,22 @@ const TrialBalance = () => {
     try {
       setLoading(true);
 
-
       const [tbRes, plRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/trial-balance/get-Trail-balance/${companyId}`),
-        axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/profit-loss/${companyId}`).catch(() => null)
+        axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/trial-balance/get-Trail-balance/${companyId}`,
+        ),
+        axios
+          .get(
+            `${import.meta.env.VITE_ACCOUNTING_URL}/api/profit-loss/${companyId}`,
+          )
+          .catch(() => null),
       ]);
 
       if (tbRes.data.success) {
         setData(tbRes.data);
         const extractAllGroupNames = (groupsObj) => {
           let names = {};
-          Object.values(groupsObj).forEach(g => {
+          Object.values(groupsObj).forEach((g) => {
             names[g.groupName] = true;
             if (g.subGroups) {
               names = { ...names, ...extractAllGroupNames(g.subGroups) };
@@ -46,13 +57,18 @@ const TrialBalance = () => {
       }
 
       if (plRes?.data?.success) {
-        const rawIncome   = plRes.data.income   || [];
+        const rawIncome = plRes.data.income || [];
         const rawExpenses = plRes.data.expenses || [];
 
-
-        const totalIncome   = rawIncome.reduce((s, i) => s + (Number(i.amount) || 0), 0);
-        const totalExpenses = rawExpenses.reduce((s, e) => s + (Number(e.amount) || 0), 0);
-        const netProfit     = totalIncome - totalExpenses;
+        const totalIncome = rawIncome.reduce(
+          (s, i) => s + (Number(i.amount) || 0),
+          0,
+        );
+        const totalExpenses = rawExpenses.reduce(
+          (s, e) => s + (Number(e.amount) || 0),
+          0,
+        );
+        const netProfit = totalIncome - totalExpenses;
 
         setPlData({ netProfit, totalIncome, totalExpenses });
       }
@@ -70,38 +86,46 @@ const TrialBalance = () => {
     const traverseGroup = (group, depth) => {
       const indent = "  ".repeat(depth);
 
-
       exportData.push({
         Particulars: `${indent}${group.groupName.toUpperCase()}`,
         "Opening Balance": "",
         Debit: group.totalDebit || "",
         Credit: group.totalCredit || "",
-        "Closing Balance": ""
+        "Closing Balance": "",
       });
 
-
       if (group.subGroups) {
-        Object.values(group.subGroups).forEach(subG => traverseGroup(subG, depth + 1));
+        Object.values(group.subGroups).forEach((subG) =>
+          traverseGroup(subG, depth + 1),
+        );
       }
 
-
       if (group.ledgers) {
-        group.ledgers.forEach(l => {
+        group.ledgers.forEach((l) => {
           exportData.push({
             Particulars: `${indent}  ${l.ledgerName}`,
-            "Opening Balance": l.openingDebit > 0 ? `${l.openingDebit} Dr` : l.openingCredit > 0 ? `${l.openingCredit} Cr` : "0.00",
+            "Opening Balance":
+              l.openingDebit > 0
+                ? `${l.openingDebit} Dr`
+                : l.openingCredit > 0
+                  ? `${l.openingCredit} Cr`
+                  : "0.00",
             Debit: l.debit || "",
             Credit: l.credit || "",
-            "Closing Balance": l.closingDebit > 0 ? `${l.closingDebit} Dr` : l.closingCredit > 0 ? `${l.closingCredit} Cr` : "0.00"
+            "Closing Balance":
+              l.closingDebit > 0
+                ? `${l.closingDebit} Dr`
+                : l.closingCredit > 0
+                  ? `${l.closingCredit} Cr`
+                  : "0.00",
           });
         });
       }
     };
 
-    Object.values(groupWise).forEach(group => {
+    Object.values(groupWise).forEach((group) => {
       traverseGroup(group, 0);
     });
-
 
     exportData.push({});
     exportData.push({
@@ -109,7 +133,10 @@ const TrialBalance = () => {
       "Opening Balance": "",
       Debit: summary.totalDebit,
       Credit: summary.totalCredit,
-      "Closing Balance": Math.abs(summary.difference) < 1 ? "BALANCED" : `DIFF: ${summary.difference}`
+      "Closing Balance":
+        Math.abs(summary.difference) < 1
+          ? "BALANCED"
+          : `DIFF: ${summary.difference}`,
     });
 
     const ws = XLSX.utils.json_to_sheet(exportData);
@@ -133,27 +160,37 @@ const TrialBalance = () => {
         "",
         group.totalDebit ? formatCurrency(group.totalDebit) : "",
         group.totalCredit ? formatCurrency(group.totalCredit) : "",
-        ""
+        "",
       ]);
 
       if (group.subGroups) {
-        Object.values(group.subGroups).forEach(subG => traverseGroup(subG, depth + 1));
+        Object.values(group.subGroups).forEach((subG) =>
+          traverseGroup(subG, depth + 1),
+        );
       }
       if (group.ledgers) {
-        group.ledgers.forEach(l => {
+        group.ledgers.forEach((l) => {
           rows.push([
             `${indent}  ${l.ledgerName}`,
-            l.openingDebit > 0 ? `${formatCurrency(l.openingDebit)} Dr` : l.openingCredit > 0 ? `${formatCurrency(l.openingCredit)} Cr` : "0.00",
+            l.openingDebit > 0
+              ? `${formatCurrency(l.openingDebit)} Dr`
+              : l.openingCredit > 0
+                ? `${formatCurrency(l.openingCredit)} Cr`
+                : "0.00",
             l.debit ? formatCurrency(l.debit) : "",
             l.credit ? formatCurrency(l.credit) : "",
-            l.closingDebit > 0 ? `${formatCurrency(l.closingDebit)} Dr` : l.closingCredit > 0 ? `${formatCurrency(l.closingCredit)} Cr` : "0.00"
+            l.closingDebit > 0
+              ? `${formatCurrency(l.closingDebit)} Dr`
+              : l.closingCredit > 0
+                ? `${formatCurrency(l.closingCredit)} Cr`
+                : "0.00",
           ]);
         });
       }
     };
 
     if (groupWise) {
-      Object.values(groupWise).forEach(group => {
+      Object.values(groupWise).forEach((group) => {
         traverseGroup(group, 0);
       });
     }
@@ -163,16 +200,26 @@ const TrialBalance = () => {
       "",
       formatCurrency(summary?.totalDebit || 0),
       formatCurrency(summary?.totalCredit || 0),
-      Math.abs(summary?.difference || 0) < 1 ? "BALANCED" : `DIFF: ${formatCurrency(summary?.difference)}`
+      Math.abs(summary?.difference || 0) < 1
+        ? "BALANCED"
+        : `DIFF: ${formatCurrency(summary?.difference)}`,
     ]);
 
     autoTable(doc, {
       startY: 35,
-      head: [["Particulars", "Opening Balance", "Debit", "Credit", "Closing Balance"]],
+      head: [
+        [
+          "Particulars",
+          "Opening Balance",
+          "Debit",
+          "Credit",
+          "Closing Balance",
+        ],
+      ],
       body: rows,
-      theme: 'grid',
+      theme: "grid",
       styles: { fontSize: 8 },
-      headStyles: { fillColor: [30, 58, 138] }
+      headStyles: { fillColor: [30, 58, 138] },
     });
 
     if (shouldPrint) {
@@ -201,29 +248,26 @@ const TrialBalance = () => {
   const formatCurrency = (amount) => {
     const formatted = new Intl.NumberFormat("en-IN", {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     }).format(amount || 0);
     return `Rs. ${formatted}`;
   };
 
   const { groupWise, summary } = data;
 
+  const netProfit = plData.netProfit || 0;
 
-  const netProfit   = plData.netProfit || 0;
+  const plDebit = netProfit < 0 ? Math.abs(netProfit) : 0;
+  const plCredit = netProfit > 0 ? netProfit : 0;
+  const hasPL = Math.abs(netProfit) > 0.005;
 
-  const plDebit     = netProfit < 0 ? Math.abs(netProfit) : 0;
-  const plCredit    = netProfit > 0 ? netProfit : 0;
-  const hasPL       = Math.abs(netProfit) > 0.005;
-
-
-  const totalDebit  = (summary?.totalDebit  || 0) + plDebit;
+  const totalDebit = (summary?.totalDebit || 0) + plDebit;
   const totalCredit = (summary?.totalCredit || 0) + plCredit;
-  const rawDiff     = totalDebit - totalCredit;
-  const hasDiff     = Math.abs(rawDiff) > 0.005;
-  const diffDebit   = rawDiff < 0 ? Math.abs(rawDiff) : 0;
-  const diffCredit  = rawDiff > 0 ? Math.abs(rawDiff) : 0;
-  const grandTotal  = Math.max(totalDebit, totalCredit);
-
+  const rawDiff = totalDebit - totalCredit;
+  const hasDiff = Math.abs(rawDiff) > 0.005;
+  const diffDebit = rawDiff < 0 ? Math.abs(rawDiff) : 0;
+  const diffCredit = rawDiff > 0 ? Math.abs(rawDiff) : 0;
+  const grandTotal = Math.max(totalDebit, totalCredit);
 
   const GroupNode = ({ group, depth = 0 }) => {
     const isExpanded = expandedGroups[group.groupName];
@@ -231,7 +275,6 @@ const TrialBalance = () => {
 
     return (
       <div key={group.groupName}>
-
         <div
           className="grid grid-cols-12 bg-gray-50 p-2 hover:bg-gray-100 cursor-pointer transition-colors border-b border-gray-100"
           onClick={() => toggleGroup(group.groupName)}
@@ -240,7 +283,11 @@ const TrialBalance = () => {
             className="col-span-4 flex items-center gap-2 font-semibold text-gray-800"
             style={{ paddingLeft: `${paddingLeft}rem` }}
           >
-            {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+            {isExpanded ? (
+              <ChevronDown size={14} />
+            ) : (
+              <ChevronRight size={14} />
+            )}
             {group.groupName}
           </div>
 
@@ -254,52 +301,55 @@ const TrialBalance = () => {
           <div className="col-span-2 text-right text-gray-500 pr-4">-</div>
         </div>
 
-
         {isExpanded && (
           <div className="bg-white">
+            {group.subGroups &&
+              Object.values(group.subGroups).map((subG) => (
+                <GroupNode
+                  key={subG.groupName}
+                  group={subG}
+                  depth={depth + 1}
+                />
+              ))}
 
-            {group.subGroups && Object.values(group.subGroups).map(subG => (
-              <GroupNode key={subG.groupName} group={subG} depth={depth + 1} />
-            ))}
-
-
-            {group.ledgers && group.ledgers.map((ledger) => (
-              <div
-                key={ledger.ledgerId}
-                className="grid grid-cols-12 p-2 border-b border-gray-50 hover:bg-blue-50 transition-colors"
-              >
+            {group.ledgers &&
+              group.ledgers.map((ledger) => (
                 <div
-                  className="col-span-4 text-gray-700 truncate"
-                  title={ledger.ledgerName}
-                  style={{ paddingLeft: `${paddingLeft + 2}rem` }}
+                  key={ledger.ledgerId}
+                  className="grid grid-cols-12 p-2 border-b border-gray-50 hover:bg-blue-50 transition-colors"
                 >
-                  {ledger.ledgerName}
-                </div>
+                  <div
+                    className="col-span-4 text-gray-700 truncate"
+                    title={ledger.ledgerName}
+                    style={{ paddingLeft: `${paddingLeft + 2}rem` }}
+                  >
+                    {ledger.ledgerName}
+                  </div>
 
-                <div className="col-span-2 text-right text-gray-600">
-                  {ledger.openingDebit > 0
-                    ? `${formatCurrency(ledger.openingDebit)} Dr`
-                    : ledger.openingCredit > 0
-                      ? `${formatCurrency(ledger.openingCredit)} Cr`
-                      : "-"}
-                </div>
+                  <div className="col-span-2 text-right text-gray-600">
+                    {ledger.openingDebit > 0
+                      ? `${formatCurrency(ledger.openingDebit)} Dr`
+                      : ledger.openingCredit > 0
+                        ? `${formatCurrency(ledger.openingCredit)} Cr`
+                        : "-"}
+                  </div>
 
-                <div className="col-span-2 text-right text-gray-800">
-                  {ledger.debit > 0 ? formatCurrency(ledger.debit) : ""}
-                </div>
-                <div className="col-span-2 text-right text-gray-800">
-                  {ledger.credit > 0 ? formatCurrency(ledger.credit) : ""}
-                </div>
+                  <div className="col-span-2 text-right text-gray-800">
+                    {ledger.debit > 0 ? formatCurrency(ledger.debit) : ""}
+                  </div>
+                  <div className="col-span-2 text-right text-gray-800">
+                    {ledger.credit > 0 ? formatCurrency(ledger.credit) : ""}
+                  </div>
 
-                <div className="col-span-2 text-right font-semibold text-gray-900 pr-4">
-                  {ledger.closingDebit > 0
-                    ? `${formatCurrency(ledger.closingDebit)} Dr`
-                    : ledger.closingCredit > 0
-                      ? `${formatCurrency(ledger.closingCredit)} Cr`
-                      : "-"}
+                  <div className="col-span-2 text-right font-semibold text-gray-900 pr-4">
+                    {ledger.closingDebit > 0
+                      ? `${formatCurrency(ledger.closingDebit)} Dr`
+                      : ledger.closingCredit > 0
+                        ? `${formatCurrency(ledger.closingCredit)} Cr`
+                        : "-"}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
       </div>
@@ -316,7 +366,6 @@ const TrialBalance = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 font-mono text-sm print:bg-white print:p-0">
-
       <div className="flex justify-between items-center mb-6 print:hidden">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Trial Balance</h1>
@@ -344,17 +393,13 @@ const TrialBalance = () => {
         </div>
       </div>
 
-
       <div className="hidden print:block text-center mb-6">
         <h1 className="text-xl font-bold">{companyName}</h1>
         <h2 className="text-lg">Trial Balance</h2>
         <p className="text-sm">As on {new Date().toLocaleDateString()}</p>
       </div>
 
-
       <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200 print:shadow-none print:border-none">
-
-
         <div className="grid grid-cols-12 bg-blue-100 text-blue-900 font-bold p-3 border-b border-blue-200">
           <div className="col-span-4 pl-4">Particulars</div>
           <div className="col-span-2 text-right">Opening Balance</div>
@@ -363,12 +408,11 @@ const TrialBalance = () => {
           <div className="col-span-2 text-right pr-4">Closing Balance</div>
         </div>
 
-
         <div className="divide-y divide-gray-100">
-          {groupWise && Object.values(groupWise).map((group) => (
-            <GroupNode key={group.groupName} group={group} depth={0} />
-          ))}
-
+          {groupWise &&
+            Object.values(groupWise).map((group) => (
+              <GroupNode key={group.groupName} group={group} depth={0} />
+            ))}
 
           {hasPL && (
             <div className="grid grid-cols-12 p-2 border-b border-gray-100 hover:bg-gray-50 text-gray-700">
@@ -384,10 +428,11 @@ const TrialBalance = () => {
             </div>
           )}
 
-
           {hasDiff && (
             <div className="grid grid-cols-12 p-2 border-b border-gray-100 hover:bg-gray-50 italic text-gray-500">
-              <div className="col-span-4 pl-4 font-bold text-gray-700">Difference in opening balances</div>
+              <div className="col-span-4 pl-4 font-bold text-gray-700">
+                Difference in opening balances
+              </div>
               <div className="col-span-2 text-right">-</div>
               <div className="col-span-2 text-right not-italic text-gray-700">
                 {diffDebit > 0 ? formatCurrency(diffDebit) : ""}
@@ -400,12 +445,15 @@ const TrialBalance = () => {
           )}
         </div>
 
-
         <div className="grid grid-cols-12 bg-blue-100 text-blue-900 font-bold p-3 border-t border-blue-200">
           <div className="col-span-4 pl-4">Grand Total</div>
           <div className="col-span-2 text-right">-</div>
-          <div className="col-span-2 text-right">{formatCurrency(grandTotal)}</div>
-          <div className="col-span-2 text-right">{formatCurrency(grandTotal)}</div>
+          <div className="col-span-2 text-right">
+            {formatCurrency(grandTotal)}
+          </div>
+          <div className="col-span-2 text-right">
+            {formatCurrency(grandTotal)}
+          </div>
           <div className="col-span-2 text-right pr-4">-</div>
         </div>
       </div>

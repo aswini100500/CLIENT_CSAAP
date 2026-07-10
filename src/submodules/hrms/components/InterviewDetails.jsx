@@ -22,18 +22,14 @@ const RecruitmentTablePage = () => {
 
   const company_id = user.company_id;
 
- 
-
   const [recruitmentData, setRecruitmentData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
 
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [filterStatus, setFilterStatus] = useState("All");
   const [filterPosition, setFilterPosition] = useState("All");
-
 
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -52,12 +48,9 @@ const RecruitmentTablePage = () => {
   const [interviewDate, setInterviewDate] = useState("");
   const [interviewTime, setInterviewTime] = useState("");
 
-
   const API_BASE = `${import.meta.env.VITE_HRMS_BASE_URL}/api`;
 
-
   const processedData = useMemo(() => {
-
     return recruitmentData.map((item) => ({
       id: item.id,
       candidateName: item.candidate_name || item.candidateName || "N/A",
@@ -74,7 +67,6 @@ const RecruitmentTablePage = () => {
       raw: item,
     }));
   }, [recruitmentData]);
-
 
   const filteredAndSortedData = useMemo(() => {
     let filtered = processedData.filter((candidate) => {
@@ -95,7 +87,6 @@ const RecruitmentTablePage = () => {
       return matchesSearch && matchesStatus && matchesPosition;
     });
 
-
     if (sortConfig.key) {
       filtered.sort((a, b) => {
         const aVal = a[sortConfig.key]?.toString().toLowerCase() || "";
@@ -111,12 +102,10 @@ const RecruitmentTablePage = () => {
     return filtered;
   }, [processedData, searchTerm, filterStatus, filterPosition, sortConfig]);
 
-
   const uniquePositions = useMemo(() => {
     const positions = [...new Set(processedData.map((item) => item.jobTitle))];
     return positions.filter(Boolean);
   }, [processedData]);
-
 
   const fetchRecruitments = useCallback(async () => {
     if (!company_id) {
@@ -131,8 +120,6 @@ const RecruitmentTablePage = () => {
       const url = `${API_BASE}/applicant/getInterview/interview/${company_id}`;
       const response = await axios.get(url);
 
-
-
       let rows = [];
 
       if (Array.isArray(response.data)) {
@@ -142,7 +129,6 @@ const RecruitmentTablePage = () => {
       } else if (Array.isArray(response.data.interviews)) {
         rows = response.data.interviews;
       }
-
 
       setRecruitmentData(rows);
 
@@ -163,7 +149,6 @@ const RecruitmentTablePage = () => {
     fetchRecruitments();
   }, [fetchRecruitments]);
 
-
   const getStatusColor = (status) => {
     const statusColors = {
       Approved: "bg-green-100 text-green-800 border border-green-200",
@@ -182,7 +167,6 @@ const RecruitmentTablePage = () => {
     );
   };
 
-
   const handleSort = (key) => {
     setSortConfig((prev) => ({
       key,
@@ -192,7 +176,11 @@ const RecruitmentTablePage = () => {
 
   const handleCompleteRound = async (candidate) => {
     if (!has("hrms.job.interview.schedule")) {
-      Swal.fire("Access Denied", "You do not have permission to schedule interviews.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to schedule interviews.",
+        "error",
+      );
       return;
     }
     const raw = candidate.raw;
@@ -200,7 +188,6 @@ const RecruitmentTablePage = () => {
       candidate.completed_round + 1 >= candidate.interview_round;
 
     try {
-
       if (!isLastRound) {
         await axios.put(
           `${API_BASE}/applicant/complete-round/${raw.candidate_id}/${company_id}`,
@@ -208,7 +195,6 @@ const RecruitmentTablePage = () => {
         fetchRecruitments();
         return;
       }
-
 
       const result = await Swal.fire({
         title: "All interview rounds completed",
@@ -220,7 +206,6 @@ const RecruitmentTablePage = () => {
         cancelButtonText: "⏸ Put On Hold",
       });
 
-
       if (
         result.dismiss === Swal.DismissReason.close ||
         result.dismiss === Swal.DismissReason.esc ||
@@ -229,7 +214,6 @@ const RecruitmentTablePage = () => {
         return;
       }
 
-
       if (result.dismiss === Swal.DismissReason.cancel) {
         await axios.put(
           `${API_BASE}/applicant/hold/${raw.candidate_id}/${company_id}`,
@@ -237,7 +221,6 @@ const RecruitmentTablePage = () => {
         fetchRecruitments();
         return;
       }
-
 
       if (result.isConfirmed) {
         const { value: rounds } = await Swal.fire({
@@ -263,14 +246,17 @@ const RecruitmentTablePage = () => {
     }
   };
 
-
   const handleView = (candidate) => {
     setSelectedCandidate(candidate);
   };
 
   const handleEdit = (candidate) => {
     if (!has("hrms.job.interview.schedule")) {
-      Swal.fire("Access Denied", "You do not have permission to schedule interviews.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to schedule interviews.",
+        "error",
+      );
       return;
     }
     const raw = candidate.raw || {};
@@ -301,17 +287,13 @@ const RecruitmentTablePage = () => {
     try {
       const { candidate_id, status, ...rest } = editForm;
 
-
       if (status === "Rejected") {
         await axios.put(
           `${API_BASE}/applicant/reject/${candidate_id}/${company_id}`,
         );
 
         Swal.fire("Rejected", "Candidate rejected successfully", "success");
-      }
-
-
-      else {
+      } else {
         await axios.put(
           `${API_BASE}/applicant/approve/${candidate_id}/${company_id}`,
           {
@@ -337,7 +319,11 @@ const RecruitmentTablePage = () => {
 
   const handleContact = (candidate) => {
     if (!has("hrms.job.interview.schedule")) {
-      Swal.fire("Access Denied", "You do not have permission to schedule interviews.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to schedule interviews.",
+        "error",
+      );
       return;
     }
     setSelectedCandidate(candidate);
@@ -395,7 +381,6 @@ HR Team`,
         `${API_BASE}/recruitments/${candidateId}`,
       );
 
-
       setReportData(response.data);
       setIsViewReportOpen(true);
     } catch (err) {
@@ -418,7 +403,11 @@ HR Team`,
   };
   const handleResume = async (candidate) => {
     if (!has("hrms.job.interview.schedule")) {
-      Swal.fire("Access Denied", "You do not have permission to schedule interviews.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to schedule interviews.",
+        "error",
+      );
       return;
     }
     const raw = candidate.raw;
@@ -445,7 +434,6 @@ HR Team`,
     }
   };
 
-
   if (loading) {
     return (
       <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center">
@@ -456,7 +444,6 @@ HR Team`,
       </div>
     );
   }
-
 
   if (error) {
     return (
@@ -480,7 +467,6 @@ HR Team`,
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-8 border border-gray-200">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex-1">
@@ -503,9 +489,7 @@ HR Team`,
             </div>
           </div>
 
-
           <div className="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-4">
-
             <div className="lg:col-span-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -518,7 +502,6 @@ HR Team`,
                 />
               </div>
             </div>
-
 
             <div className="lg:col-span-1">
               <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-4 py-3">
@@ -540,7 +523,6 @@ HR Team`,
               </div>
             </div>
 
-
             <div className="lg:col-span-1">
               <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-4 py-3">
                 <Filter size={18} className="text-gray-400" />
@@ -559,7 +541,6 @@ HR Team`,
               </div>
             </div>
 
-
             <div className="lg:col-span-1 flex items-center justify-end">
               <span className="text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded-xl">
                 Showing {filteredAndSortedData.length} of {processedData.length}{" "}
@@ -568,7 +549,6 @@ HR Team`,
             </div>
           </div>
         </div>
-
 
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
           <div className="overflow-x-auto">
@@ -604,14 +584,11 @@ HR Team`,
 
               <tbody className="divide-y divide-gray-200">
                 {filteredAndSortedData.map((candidate) => {
-
-
                   const isAllRoundsCompleted =
                     candidate.completed_round >= candidate.interview_round;
                   const nextRound = candidate.completed_round + 1;
                   const rawStatus = candidate.status || "";
                   const normalizedStatus = rawStatus.trim().toLowerCase();
-
 
                   const displayStatusMap = {
                     approved: "Selected",
@@ -660,22 +637,22 @@ HR Team`,
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-
-                          {has("hrms.job.interview.schedule") && normalizedStatus === "on hold" && (
-                            <button
-                              onClick={() => handleResume(candidate)}
-                              className="px-3 py-1 bg-orange-100 hover:bg-orange-200
+                          {has("hrms.job.interview.schedule") &&
+                            normalizedStatus === "on hold" && (
+                              <button
+                                onClick={() => handleResume(candidate)}
+                                className="px-3 py-1 bg-orange-100 hover:bg-orange-200
                text-orange-800 text-sm rounded-lg
                border border-orange-300 transition"
-                              title="Resume interview"
-                            >
-                              ▶ Resume from Round{" "}
-                              {candidate.completed_round + 1}
-                            </button>
-                          )}
+                                title="Resume interview"
+                              >
+                                ▶ Resume from Round{" "}
+                                {candidate.completed_round + 1}
+                              </button>
+                            )}
 
-
-                          {has("hrms.job.interview.schedule") && normalizedStatus !== "on hold" &&
+                          {has("hrms.job.interview.schedule") &&
+                            normalizedStatus !== "on hold" &&
                             normalizedStatus !== "approved" &&
                             candidate.completed_round <
                               candidate.interview_round && (
@@ -687,7 +664,6 @@ HR Team`,
                                 Complete Round {candidate.completed_round + 1}
                               </button>
                             )}
-
 
                           {normalizedStatus !== "on hold" &&
                             (candidate.completed_round >=
@@ -726,47 +702,47 @@ HR Team`,
                             <Eye size={16} />
                           </button>
                           {has("hrms.job.interview.schedule") && (
-                             <button
-                               onClick={() => handleEdit(candidate)}
-                               className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
-                               title="Edit Candidate"
-                             >
-                               <Edit size={16} />
-                             </button>
-                           )}
-                           {has("hrms.job.interview.schedule") && (
-                             <button
-                               onClick={() => handleContact(candidate)}
-                               className="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all"
-                               title="Send Email"
-                             >
-                               <Mail size={16} />
-                             </button>
-                           )}
-                           <button
-                             onClick={() => handleViewReport(candidate.id)}
-                             className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-lg transition-colors"
-                             title="View Report"
-                           >
-                             View Report
-                           </button>
-                           <button
-                             onClick={() => handleDownload(candidate)}
-                             className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-all"
-                             title="Download"
-                           >
-                             <Download size={16} />
-                           </button>
-                           {has("hrms.job.interview.schedule") && (
-                             <button
-                               onClick={() =>
-                                 navigate(`/interview-report/${candidate.id}`)
-                               }
-                               className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
-                             >
-                               Add Report
-                             </button>
-                           )}
+                            <button
+                              onClick={() => handleEdit(candidate)}
+                              className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
+                              title="Edit Candidate"
+                            >
+                              <Edit size={16} />
+                            </button>
+                          )}
+                          {has("hrms.job.interview.schedule") && (
+                            <button
+                              onClick={() => handleContact(candidate)}
+                              className="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all"
+                              title="Send Email"
+                            >
+                              <Mail size={16} />
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleViewReport(candidate.id)}
+                            className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-lg transition-colors"
+                            title="View Report"
+                          >
+                            View Report
+                          </button>
+                          <button
+                            onClick={() => handleDownload(candidate)}
+                            className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-all"
+                            title="Download"
+                          >
+                            <Download size={16} />
+                          </button>
+                          {has("hrms.job.interview.schedule") && (
+                            <button
+                              onClick={() =>
+                                navigate(`/interview-report/${candidate.id}`)
+                              }
+                              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
+                            >
+                              Add Report
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -775,7 +751,6 @@ HR Team`,
               </tbody>
             </table>
           </div>
-
 
           {filteredAndSortedData.length === 0 && (
             <div className="text-center py-12">
@@ -798,7 +773,6 @@ HR Team`,
           <div className="fixed inset-0 z-50">
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
             <div className="relative flex items-center justify-center min-h-screen p-4">
-
               <div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl mx-auto">
                 <div className="px-6 py-4">
                   <div className="flex items-center justify-between mb-4">
@@ -837,7 +811,6 @@ HR Team`,
           </div>
         )}
 
-
         {isEmailModalOpen && selectedCandidate && (
           <Modal
             title={`Contact ${selectedCandidate.candidateName}`}
@@ -857,7 +830,6 @@ HR Team`,
           </Modal>
         )}
 
-
         {isViewReportOpen && reportData && (
           <Modal
             title="Interview Report"
@@ -873,7 +845,6 @@ HR Team`,
     </div>
   );
 };
-
 
 const Modal = ({ title, children, onClose }) => (
   <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -892,7 +863,6 @@ const Modal = ({ title, children, onClose }) => (
   </div>
 );
 
-
 const DetailItem = ({ label, value }) => (
   <div className="flex justify-between items-start">
     <span className="font-medium text-gray-700">{label}:</span>
@@ -900,12 +870,10 @@ const DetailItem = ({ label, value }) => (
   </div>
 );
 
-
 const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
   <form onSubmit={onSubmit} className="flex flex-col h-full">
     <div className="flex-1 overflow-y-auto pr-2 max-h-[70vh]">
       <div className="space-y-6 p-1">
-
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
             Personal Information
@@ -957,7 +925,6 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
           </div>
         </div>
 
-
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
             Interview Details
@@ -990,7 +957,6 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Total Interview Rounds <span className="text-red-500">*</span>
@@ -1014,7 +980,6 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
                 Total number of rounds for this position
               </p>
             </div>
-
 
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
@@ -1068,7 +1033,6 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
           </div>
         </div>
 
-
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
             Status & Remarks
@@ -1092,7 +1056,6 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
             ]}
           />
 
-
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Remarks
@@ -1115,7 +1078,6 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
       </div>
     </div>
 
-
     <div className="mt-8 pt-6 border-t border-gray-200">
       <div className="flex gap-3 justify-end">
         <button
@@ -1135,7 +1097,6 @@ const EditCandidateForm = ({ form, onChange, onSubmit, onCancel }) => (
     </div>
   </form>
 );
-
 
 const EmailForm = ({
   candidate,
@@ -1159,10 +1120,8 @@ const EmailForm = ({
     }
   }, [candidate]);
 
-
   useEffect(() => {
     const generateEmailTemplate = () => {
-
       let formattedDate = "___";
       if (interviewDate) {
         const date = new Date(interviewDate);
@@ -1173,7 +1132,6 @@ const EmailForm = ({
           day: "numeric",
         });
       }
-
 
       const getModeIcon = () => {
         switch (interviewMode) {
@@ -1187,7 +1145,6 @@ const EmailForm = ({
             return "";
         }
       };
-
 
       const getModeDetails = () => {
         if (interviewMode === "Online") {
@@ -1248,14 +1205,12 @@ ${candidate.company || "[Company Name]"}`;
         className="bg-gray-50"
       />
 
-
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
           Interview Details
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Interview Date <span className="text-red-500">*</span>
@@ -1268,7 +1223,6 @@ ${candidate.company || "[Company Name]"}`;
               className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
@@ -1301,7 +1255,6 @@ ${candidate.company || "[Company Name]"}`;
           </div>
         </div>
 
-
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Round Type / Description
@@ -1318,7 +1271,6 @@ ${candidate.company || "[Company Name]"}`;
           </p>
         </div>
 
-
         <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -1330,7 +1282,6 @@ ${candidate.company || "[Company Name]"}`;
           </div>
         </div>
       </div>
-
 
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
@@ -1375,7 +1326,6 @@ ${candidate.company || "[Company Name]"}`;
         </div>
       </div>
 
-
       <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
         <button
           type="button"
@@ -1396,7 +1346,6 @@ ${candidate.company || "[Company Name]"}`;
   );
 };
 
-
 const ReportView = ({ data, onClose }) => (
   <div className="space-y-4">
     <div className="bg-gray-50 rounded-lg p-4">
@@ -1414,7 +1363,6 @@ const ReportView = ({ data, onClose }) => (
     </div>
   </div>
 );
-
 
 const FormField = ({ label, as = "input", options, ...props }) => (
   <div>

@@ -11,8 +11,8 @@ export const UserProvider = ({ children }) => {
   const [subscriptionData, setSubscriptionData] = useState(null);
   const [loadingSubscription, setLoadingSubscription] = useState(false);
 
-  const API_BASE_URL = import.meta.env.VITE_ACCOUNTING_URL || "http://localhost:5000";
-
+  const API_BASE_URL =
+    import.meta.env.VITE_ACCOUNTING_URL || "http://localhost:5000";
 
   useEffect(() => {
     const verifyAuth = async () => {
@@ -27,8 +27,6 @@ export const UserProvider = ({ children }) => {
           setUserId(userData.id);
         }
       } catch (error) {
-
-
         setUser(null);
         setUserId(null);
       } finally {
@@ -38,7 +36,6 @@ export const UserProvider = ({ children }) => {
 
     verifyAuth();
   }, []);
-
 
   useEffect(() => {
     if (userId) {
@@ -53,7 +50,7 @@ export const UserProvider = ({ children }) => {
     try {
       const response = await axios.get(
         `${API_BASE_URL}/api/v1/subscription/status?userId=${userId}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
       const data = response.data;
 
@@ -72,9 +69,13 @@ export const UserProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post(`${API_BASE_URL}/api/v1/auth/logout`, {}, {
-        withCredentials: true
-      });
+      await axios.post(
+        `${API_BASE_URL}/api/v1/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
     } catch (error) {
       console.error("Logout failed", error);
     } finally {
@@ -101,8 +102,7 @@ export const UserProvider = ({ children }) => {
       }}
     >
       {!loadingAuth && children}
-
-    </UserContext.Provider >
+    </UserContext.Provider>
   );
 };
 

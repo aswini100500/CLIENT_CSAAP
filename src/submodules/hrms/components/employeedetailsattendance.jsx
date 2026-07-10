@@ -21,7 +21,6 @@ const Employeedetailsattendance = () => {
     chatID: "",
     address: "",
 
-
     companyName: "Cloudstat Pvt Ltd",
     branchName: "",
     department: "",
@@ -31,9 +30,7 @@ const Employeedetailsattendance = () => {
     shiftStartDate: "2025-01-01",
     resignationDate: "",
 
-
     geoFencing: "",
-
 
     shiftType: "Fixed",
     firstWeeklyOff: "Sunday",
@@ -44,9 +41,7 @@ const Employeedetailsattendance = () => {
     secondWeeklyOff: "None",
     halfDayShift: "None",
 
-
     isAutoShift: "GEN",
-
 
     weekTimeZone1: "",
     weekTimeZone2: "0",
@@ -64,18 +59,14 @@ const Employeedetailsattendance = () => {
     });
   };
 
-  const handleFileChange = (e, type) => {
-
-  };
+  const handleFileChange = (e, type) => {};
 
   const handleVerifyToken = () => {
-
     setFormData({ ...formData, chatID: "123456789" });
   };
 
   return (
     <div className="p-6 space-y-6 bg-gray-50">
-
       <div className="bg-white p-4 rounded-lg shadow-sm">
         <h1 className="text-2xl font-bold text-gray-800">
           Add/Edit Employee Details
@@ -97,11 +88,8 @@ const Employeedetailsattendance = () => {
         </div>
       </div>
 
-
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
         <div className="lg:col-span-3 space-y-6">
-
           <div className="bg-white shadow-sm border rounded-lg p-4 space-y-4">
             <div
               className="bg-blue-50 border-2 border-dashed border-blue-200 rounded-xl w-32 h-32 mx-auto flex items-center justify-center cursor-pointer hover:bg-blue-100 transition-colors"
@@ -128,7 +116,6 @@ const Employeedetailsattendance = () => {
             </p>
           </div>
 
-
           <div className="bg-white shadow-sm border rounded-lg p-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Mobile Attendance Mode
@@ -146,7 +133,6 @@ const Employeedetailsattendance = () => {
             </select>
           </div>
         </div>
-
 
         <div className="lg:col-span-9 bg-white shadow-sm border rounded-lg p-6">
           <h3 className="text-md font-semibold text-gray-800 mb-4 border-b pb-2">
@@ -206,7 +192,6 @@ const Employeedetailsattendance = () => {
               </div>
             ))}
 
-
             <div className="md:col-span-2 lg:col-span-4">
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Address
@@ -219,7 +204,6 @@ const Employeedetailsattendance = () => {
                 className="w-full px-2 py-2 border text-sm border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
               />
             </div>
-
 
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -257,9 +241,7 @@ const Employeedetailsattendance = () => {
         </div>
       </div>
 
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
             Company Details
@@ -290,13 +272,11 @@ const Employeedetailsattendance = () => {
           </div>
         </div>
 
-
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
             Employee Details
           </h3>
           <div className="space-y-3">
-
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -321,7 +301,6 @@ const Employeedetailsattendance = () => {
                 />
               </div>
             </div>
-
 
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -350,7 +329,6 @@ const Employeedetailsattendance = () => {
               </div>
             </div>
 
-
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
                 Office Time Policy *
@@ -362,7 +340,6 @@ const Employeedetailsattendance = () => {
                 className="w-full border border-gray-300 text-xs rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 box-border"
               />
             </div>
-
 
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -378,7 +355,6 @@ const Employeedetailsattendance = () => {
             </div>
           </div>
         </div>
-
 
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
@@ -404,15 +380,12 @@ const Employeedetailsattendance = () => {
         </div>
       </div>
 
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
             Shift & Policy Details
           </h3>
           <div className="space-y-3">
-
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -437,7 +410,6 @@ const Employeedetailsattendance = () => {
                 />
               </div>
             </div>
-
 
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -464,7 +436,6 @@ const Employeedetailsattendance = () => {
               </div>
             </div>
 
-
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -489,7 +460,6 @@ const Employeedetailsattendance = () => {
                 />
               </div>
             </div>
-
 
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -517,7 +487,6 @@ const Employeedetailsattendance = () => {
             </div>
           </div>
         </div>
-
 
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
           <h3 className="text-sm font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1">
@@ -549,7 +518,6 @@ const Employeedetailsattendance = () => {
         </div>
       </div>
 
-
       <div className="bg-white border rounded-lg shadow-sm p-4">
         <h3 className="text-md font-semibold text-gray-800 mb-2">
           Access Control Setting
@@ -580,7 +548,6 @@ const Employeedetailsattendance = () => {
           ))}
         </div>
       </div>
-
 
       <div className="flex justify-end space-x-4 pt-4">
         <button

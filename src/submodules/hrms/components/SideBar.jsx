@@ -67,18 +67,18 @@ const SideBar = () => {
   };
   const { user } = useAuth();
 
-
   const menuItems = [
-    { name: "Dashboard", path: "/hrms/dashboard", icon: <LayoutDashboard size={20} /> },
-
+    {
+      name: "Dashboard",
+      path: "/hrms/dashboard",
+      icon: <LayoutDashboard size={20} />,
+    },
 
     {
       name: "Employee",
       path: "/hrms/joined-employee",
       icon: <Users size={20} />,
     },
-
-
 
     {
       name: "Employee Hub",
@@ -98,13 +98,11 @@ const SideBar = () => {
       ],
     },
 
-
     {
       name: "Job",
       path: "/hrms/job",
       icon: <Folder size={20} />,
     },
-
 
     {
       name: "Payroll",
@@ -112,22 +110,17 @@ const SideBar = () => {
       icon: <IndianRupee size={20} />,
     },
 
-
     {
       name: "All Report",
       path: "/hrms/all-report",
       icon: <PieChart size={20} />,
     },
 
-
     {
       name: "Attendance",
       path: "/hrms/attendance-cloudsat",
       icon: <CalendarCheck size={20} />,
     },
-
-
-
 
     {
       name: "Calendar",
@@ -141,24 +134,24 @@ const SideBar = () => {
         },
       ],
     },
-
-
   ];
 
   return (
     <div className="flex h-screen overflow-hidden">
       <div
-        className={`bg-[#032c50] text-white ${isSidebarOpen ? "w-70" : "w-20"
-          } shrink-0 duration-300 relative flex flex-col h-full`}
+        className={`bg-[#032c50] text-white ${
+          isSidebarOpen ? "w-70" : "w-20"
+        } shrink-0 duration-300 relative flex flex-col h-full`}
       >
-
         <div
-          className={`shrink-0 flex items-center p-5 border-b border-gray-700 ${isSidebarOpen ? "justify-between" : "justify-center"
-            }`}
+          className={`shrink-0 flex items-center p-5 border-b border-gray-700 ${
+            isSidebarOpen ? "justify-between" : "justify-center"
+          }`}
         >
           <h1
-            className={`text-xl font-bold duration-300 ${!isSidebarOpen && "hidden"
-              }`}
+            className={`text-xl font-bold duration-300 ${
+              !isSidebarOpen && "hidden"
+            }`}
           >
             HRMS
           </h1>
@@ -174,7 +167,6 @@ const SideBar = () => {
           </button>
         </div>
 
-
         <nav
           className="flex-1 overflow-y-auto p-4 space-y-2"
           style={{
@@ -182,8 +174,6 @@ const SideBar = () => {
             msOverflowStyle: "none",
           }}
         >
-
-
           <ul className="space-y-1">
             {menuItems.map((item, index) => (
               <li key={index}>
@@ -194,10 +184,11 @@ const SideBar = () => {
                         setOpenDropdown(openDropdown === index ? null : index)
                       }
                       className={`w-full flex items-center gap-x-4 rounded-md p-2 text-sm cursor-pointer transition-all
-                      ${openDropdown === index
+                      ${
+                        openDropdown === index
                           ? "bg-blue-600 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                        }
+                      }
                       ${!isSidebarOpen ? "justify-center" : ""}`}
                       title={!isSidebarOpen ? item.name : undefined}
                     >
@@ -225,9 +216,10 @@ const SideBar = () => {
                             <NavLink
                               to={sub.path}
                               className={({ isActive }) =>
-                                `flex items-center gap-x-3 p-2 rounded-md text-sm transition-all ${isActive
-                                  ? "bg-blue-600 text-white"
-                                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                                `flex items-center gap-x-3 p-2 rounded-md text-sm transition-all ${
+                                  isActive
+                                    ? "bg-blue-600 text-white"
+                                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
                                 }`
                               }
                             >
@@ -246,9 +238,10 @@ const SideBar = () => {
                     to={item.path}
                     title={!isSidebarOpen ? item.name : undefined}
                     className={({ isActive }) =>
-                      `flex rounded-md p-2 cursor-pointer text-sm items-center gap-x-4 ${isActive
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                      `flex rounded-md p-2 cursor-pointer text-sm items-center gap-x-4 ${
+                        isActive
+                          ? "bg-blue-600 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white"
                       } ${!isSidebarOpen ? "justify-center" : ""}`
                     }
                   >
@@ -263,12 +256,11 @@ const SideBar = () => {
           </ul>
         </nav>
 
-
         <div className="shrink-0 border-t border-gray-700 p-5">
-
           <div
-            className={`mb-4 flex items-center ${!isSidebarOpen ? "justify-center" : ""
-              }`}
+            className={`mb-4 flex items-center ${
+              !isSidebarOpen ? "justify-center" : ""
+            }`}
           >
             <div className="h-9 w-9 shrink-0 rounded-full bg-blue-600 flex items-center justify-center">
               <User size={20} />
@@ -281,12 +273,12 @@ const SideBar = () => {
             )}
           </div>
 
-
           <button
             onClick={handleLogout}
             title={!isSidebarOpen ? "Logout" : undefined}
-            className={`flex w-full rounded-md p-2 cursor-pointer text-sm items-center gap-x-4 text-gray-300 hover:bg-gray-700 hover:text-white ${!isSidebarOpen ? "justify-center" : ""
-              }`}
+            className={`flex w-full rounded-md p-2 cursor-pointer text-sm items-center gap-x-4 text-gray-300 hover:bg-gray-700 hover:text-white ${
+              !isSidebarOpen ? "justify-center" : ""
+            }`}
           >
             <LucideLogOut size={20} />
             {isSidebarOpen && <span className="whitespace-nowrap">Logout</span>}

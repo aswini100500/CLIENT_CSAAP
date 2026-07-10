@@ -1,9 +1,8 @@
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import useAuth from '../../../hooks/useAuth';
-import Swal from 'sweetalert2';
-import { usePermission } from '../../../hooks/usePermission';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import useAuth from "../../../hooks/useAuth";
+import Swal from "sweetalert2";
+import { usePermission } from "../../../hooks/usePermission";
 import {
   Search,
   Filter,
@@ -16,7 +15,7 @@ import {
   ChevronRight,
   X,
   CheckCircle,
-} from 'lucide-react';
+} from "lucide-react";
 import jsPDF from "jspdf";
 
 const OfferLetterManagement = () => {
@@ -24,15 +23,15 @@ const OfferLetterManagement = () => {
     if (!dateStr || dateStr === "0000-00-00") return "Not specified";
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return dateStr;
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [positionFilter, setPositionFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [positionFilter, setPositionFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -49,11 +48,10 @@ const OfferLetterManagement = () => {
   const { user, token } = useAuth();
   const { has } = usePermission();
 
-  const id = user.company_id
+  const id = user.company_id;
 
   const company_id = user.company_id;
   const role = user.role;
-
 
   const csaapToken = user.csaapToken;
 
@@ -61,39 +59,51 @@ const OfferLetterManagement = () => {
     setLoading(true);
 
     axios
-      .get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getselectedCandidates/all/${id}`)
+      .get(
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getselectedCandidates/all/${id}`,
+      )
 
-      .then((res) => setCandidates(Array.isArray(res.data.data) ? res.data.data : []))
-      .catch(() => setToast({ message: 'Failed to fetch candidates', type: 'error' }))
+      .then((res) =>
+        setCandidates(Array.isArray(res.data.data) ? res.data.data : []),
+      )
+      .catch(() =>
+        setToast({ message: "Failed to fetch candidates", type: "error" }),
+      )
       .finally(() => setLoading(false));
   }, []);
 
   const filteredData = candidates.filter((offer) => {
     const matchesSearch =
-      (offer.name ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (offer.email ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (offer.position ?? '').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesPosition = !positionFilter || offer.position === positionFilter;
+      (offer.name ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (offer.email ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (offer.position ?? "").toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPosition =
+      !positionFilter || offer.position === positionFilter;
     const matchesStatus = !statusFilter || offer.status === statusFilter;
     return matchesSearch && matchesPosition && matchesStatus;
   });
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
-  const currentData = filteredData.slice(startIndex, startIndex + entriesPerPage);
+  const currentData = filteredData.slice(
+    startIndex,
+    startIndex + entriesPerPage,
+  );
   const positions = [...new Set(candidates.map((o) => o.position))];
 
   const StatusBadge = ({ status }) => {
     const statusConfig = {
-      pending: { label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
-      sent: { label: 'Sent', color: 'bg-blue-100 text-blue-800' },
-      offer_sent: { label: 'Sent', color: 'bg-blue-100 text-blue-800' },
-      accepted: { label: 'Accepted', color: 'bg-green-100 text-green-800' },
-      declined: { label: 'Declined', color: 'bg-red-100 text-red-800' },
+      pending: { label: "Pending", color: "bg-yellow-100 text-yellow-800" },
+      sent: { label: "Sent", color: "bg-blue-100 text-blue-800" },
+      offer_sent: { label: "Sent", color: "bg-blue-100 text-blue-800" },
+      accepted: { label: "Accepted", color: "bg-green-100 text-green-800" },
+      declined: { label: "Declined", color: "bg-red-100 text-red-800" },
     };
     const config = statusConfig[status] || statusConfig.pending;
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}>
+      <span
+        className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}
+      >
         {config.label}
       </span>
     );
@@ -107,39 +117,40 @@ const OfferLetterManagement = () => {
 
     return (
       <div
-        className={`fixed bottom-4 right-4 px-4 py-2 rounded-lg shadow-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'
-          }`}
+        className={`fixed bottom-4 right-4 px-4 py-2 rounded-lg shadow-lg text-white ${
+          type === "success" ? "bg-green-500" : "bg-red-500"
+        }`}
       >
         {message}
       </div>
     );
   };
 
-
   const handleView = async (offer) => {
     setSelectedOffer(offer);
     setOfferLetterLoading(true);
     setShowViewModal(true);
 
-
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getOfferLetter/${offer.selected_id}`
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getOfferLetter/${offer.selected_id}`,
       );
-
 
       setOfferLetterData(res.data.data);
     } catch {
       setOfferLetterData(null);
-      setToast({ message: 'Failed to fetch offer letter', type: 'error' });
+      setToast({ message: "Failed to fetch offer letter", type: "error" });
     }
     setOfferLetterLoading(false);
   };
 
-
   const handleEdit = async (offer) => {
     if (!has("hrms.job.offer.create")) {
-      Swal.fire("Access Denied", "You do not have permission to edit offer letters.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to edit offer letters.",
+        "error",
+      );
       return;
     }
     setSelectedOffer(offer);
@@ -147,36 +158,38 @@ const OfferLetterManagement = () => {
     setShowEditModal(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getOfferLetter/${offer.selected_id}`
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/getOfferLetter/${offer.selected_id}`,
       );
 
       const candidateData = res.data.data || {};
 
       setEditForm({
         ...candidateData,
-        position: offer.postApplied || candidateData.position || '',
-        salary: candidateData.salary || '',
-        startDate: candidateData.start_date || ''
+        position: offer.postApplied || candidateData.position || "",
+        salary: candidateData.salary || "",
+        startDate: candidateData.start_date || "",
       });
     } catch (err) {
       console.error("Fetch error:", err);
       setEditForm({
-        position: offer.postApplied || '',
-        salary: '',
-        startDate: ''
+        position: offer.postApplied || "",
+        salary: "",
+        startDate: "",
       });
       setShowEditModal(false);
-      setToast({ message: 'Failed to fetch offer letter', type: 'error' });
+      setToast({ message: "Failed to fetch offer letter", type: "error" });
     }
     setOfferLetterLoading(false);
   };
 
-
-
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     if (!has("hrms.job.offer.create")) {
-      Swal.fire("Access Denied", "You do not have permission to edit offer letters.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to edit offer letters.",
+        "error",
+      );
       return;
     }
 
@@ -191,41 +204,46 @@ const OfferLetterManagement = () => {
           position: editForm.position,
           salary: editForm.salary,
           startDate: editForm.startDate,
-          status: editForm.status
+          status: editForm.status,
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
-
 
       setCandidates((prev) =>
         prev.map((c) =>
           c.candidate_id === selectedOffer.candidate_id
-            ? { ...c, salary: editForm.salary, start_date: editForm.startDate, position: editForm.position }
-            : c
-        )
+            ? {
+                ...c,
+                salary: editForm.salary,
+                start_date: editForm.startDate,
+                position: editForm.position,
+              }
+            : c,
+        ),
       );
 
-      setToast({ message: 'Offer updated successfully', type: 'success' });
+      setToast({ message: "Offer updated successfully", type: "success" });
       setShowEditModal(false);
-
     } catch (error) {
       console.error("ERROR:", error.response);
       setToast({
-        message: error.response?.data?.message || 'Update failed',
-        type: 'error'
+        message: error.response?.data?.message || "Update failed",
+        type: "error",
       });
     }
   };
 
-
-
   const handleSend = async (offer) => {
     if (!has("hrms.job.offer.create")) {
-      Swal.fire("Access Denied", "You do not have permission to send offer letters.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to send offer letters.",
+        "error",
+      );
       return;
     }
     const confirm = await Swal.fire({
@@ -245,41 +263,45 @@ const OfferLetterManagement = () => {
         {
           salary: offer.salary,
           startDate: offer.start_date,
-          position: offer.position || offer.postApplied
-        }
+          position: offer.position || offer.postApplied,
+        },
       );
 
       await axios.put(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/applicant/update/${id}/${offer.candidate_id}`,
-        { status: "offer_sent" }
+        { status: "offer_sent" },
       );
 
       setCandidates((prev) =>
         prev.map((c) =>
           c.candidate_id === offer.candidate_id
             ? { ...c, status: "offer_sent" }
-            : c
-        )
+            : c,
+        ),
       );
 
-      setToast({ message: `Offer letter sent to ${offer.email}`, type: 'success' });
+      setToast({
+        message: `Offer letter sent to ${offer.email}`,
+        type: "success",
+      });
       Swal.fire("Offer Sent!", `Offer sent to ${offer.name}`, "success");
-
     } catch (error) {
       console.error("Error sending mail:", error);
       setToast({
         message: `Failed to send mail to ${offer.email}`,
-        type: 'error'
+        type: "error",
       });
     }
   };
 
-
-
   const handleAcceptOffer = async () => {
     if (!selectedOffer) return;
     if (!has("hrms.job.offer.create")) {
-      Swal.fire("Access Denied", "You do not have permission to accept candidate offers.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to accept candidate offers.",
+        "error",
+      );
       return;
     }
 
@@ -294,18 +316,16 @@ const OfferLetterManagement = () => {
         selectedOffer?.contactNo ||
         "";
       const resolvedPostApplied =
-        selectedOffer?.postApplied ||
-        selectedOffer?.position ||
-        "";
+        selectedOffer?.postApplied || selectedOffer?.position || "";
 
       if (!resolvedCompanyId || !resolvedName || !resolvedEmail) {
         setToast({
-          message: "Candidate name, email, or company is missing. Please refresh and try again.",
-          type: "error"
+          message:
+            "Candidate name, email, or company is missing. Please refresh and try again.",
+          type: "error",
         });
         return;
       }
-
 
       const submitFormData = new FormData();
       submitFormData.append("name", resolvedName);
@@ -327,7 +347,6 @@ const OfferLetterManagement = () => {
       submitFormData.append("password", "12345678");
       submitFormData.append("company_id", resolvedCompanyId);
 
-
       const cloudPayload = {
         company_id: resolvedCompanyId,
         name: resolvedName,
@@ -340,9 +359,8 @@ const OfferLetterManagement = () => {
         storeAssign: null,
         employeeStatus: "Probation",
         shift_start: null,
-        shift_end: null
+        shift_end: null,
       };
-
 
       let csaapEmployeeId = null;
       try {
@@ -354,7 +372,7 @@ const OfferLetterManagement = () => {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
 
         csaapEmployeeId =
@@ -366,8 +384,9 @@ const OfferLetterManagement = () => {
         console.error("Cloud API Error:", err.response?.data);
 
         setToast({
-          message: err.response?.data?.message || "Failed to create employee in Cloud",
-          type: "error"
+          message:
+            err.response?.data?.message || "Failed to create employee in Cloud",
+          type: "error",
         });
 
         return;
@@ -376,13 +395,12 @@ const OfferLetterManagement = () => {
       if (!csaapEmployeeId) {
         setToast({
           message: "Cloud employee created but employee id was not returned.",
-          type: "error"
+          type: "error",
         });
         return;
       }
 
       submitFormData.append("id", csaapEmployeeId);
-
 
       try {
         await axios.post(
@@ -393,24 +411,24 @@ const OfferLetterManagement = () => {
             headers: {
               Authorization: `Bearer ${localToken}`,
             },
-          }
+          },
         );
       } catch (err) {
         console.error("Local API Error:", err.response?.data);
 
         setToast({
-          message: err.response?.data?.message || "Failed to create employee locally",
-          type: "error"
+          message:
+            err.response?.data?.message || "Failed to create employee locally",
+          type: "error",
         });
 
         return;
       }
 
-
-      const updatedCandidates = candidates.map(candidate =>
+      const updatedCandidates = candidates.map((candidate) =>
         candidate.selected_id === selectedOffer.selected_id
-          ? { ...candidate, status: 'accepted' }
-          : candidate
+          ? { ...candidate, status: "accepted" }
+          : candidate,
       );
 
       setCandidates(updatedCandidates);
@@ -419,59 +437,62 @@ const OfferLetterManagement = () => {
 
       setToast({
         message: `Offer accepted & employee created for ${selectedOffer.name}`,
-        type: 'success'
+        type: "success",
       });
-
     } catch (error) {
       console.error("LOCAL API FULL ERROR:", error.response);
 
-
-
       setToast({
-        message: error.response?.data?.message || 'Failed to create employee',
-        type: 'error'
+        message: error.response?.data?.message || "Failed to create employee",
+        type: "error",
       });
     }
   };
-
 
   const handleOpenAcceptModal = (offer) => {
     setSelectedOffer({
       ...offer,
-      position: offer.postApplied
+      position: offer.postApplied,
     });
     setShowAcceptModal(true);
   };
 
-
-
   const handleExport = () => {
     if (!has("hrms.job.offer.download")) {
-      Swal.fire("Access Denied", "You do not have permission to export data.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to export data.",
+        "error",
+      );
       return;
     }
-    const headers = ['ID,Position,Name,Contact,Email,Gender,Status'];
+    const headers = ["ID,Position,Name,Contact,Email,Gender,Status"];
     const rows = filteredData.map(
       (offer) =>
-        `${offer._id || offer.id},${offer.position},${offer.name},${offer.contact},${offer.email
-        },${offer.gender},${offer.status}`
+        `${offer._id || offer.id},${offer.position},${offer.name},${offer.contact},${
+          offer.email
+        },${offer.gender},${offer.status}`,
     );
-    const csvContent = [...headers, ...rows].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const csvContent = [...headers, ...rows].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'offer_letters.csv');
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "offer_letters.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setToast({ message: 'Data exported successfully', type: 'success' });
+    setToast({ message: "Data exported successfully", type: "success" });
   };
 
   const handleDownloadOfferLetter = () => {
     if (!offerLetterData) return;
     if (!has("hrms.job.offer.download")) {
-      Swal.fire("Access Denied", "You do not have permission to download offer letters.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to download offer letters.",
+        "error",
+      );
       return;
     }
 
@@ -484,16 +505,16 @@ info@yourcompany.com | (555) 123-4567
 www.yourcompany.com
 
 Job Offer Letter
-${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
 
 ${offerLetterData.name}
 ${offerLetterData.email}
 
-Dear Mr./Ms. ${offerLetterData.name?.split(' ')[0]},
+Dear Mr./Ms. ${offerLetterData.name?.split(" ")[0]},
 
 We are thrilled to extend you an offer for the ${offerLetterData.position} position at Your Company Name. We believe your skills and experience will contribute to our team and company's future.
 
-Your starting date will be ${offerLetterData.startDate || ''}, and your salary will be ${offerLetterData.salary || ''}, payable bi-weekly, along with any other benefits as per company policy. If you have any questions, please feel free to reach out. We're looking forward to having you!
+Your starting date will be ${offerLetterData.startDate || ""}, and your salary will be ${offerLetterData.salary || ""}, payable bi-weekly, along with any other benefits as per company policy. If you have any questions, please feel free to reach out. We're looking forward to having you!
 
 Sincerely,
 
@@ -503,11 +524,9 @@ Human Resource Manager
 hr@cloudsat.com
 `;
 
-
-    doc.setFont('Times', 'Normal');
+    doc.setFont("Times", "Normal");
     doc.setFontSize(12);
     doc.text(content, 10, 10);
-
 
     doc.save(`${offerLetterData.name}_Offer_Letter.pdf`);
   };
@@ -515,10 +534,11 @@ hr@cloudsat.com
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto">
-
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div>
-            <p className="text-gray-600 mt-1">Manage and track all offer letters</p>
+            <p className="text-gray-600 mt-1">
+              Manage and track all offer letters
+            </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 mt-4 md:mt-0">
             {has("hrms.job.offer.download") && (
@@ -530,17 +550,23 @@ hr@cloudsat.com
                 <span>Export</span>
               </button>
             )}
-
           </div>
         </div>
-
 
         <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">Search</label>
+              <label
+                htmlFor="search"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Search
+              </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
                 <input
                   id="search"
                   type="text"
@@ -552,9 +578,17 @@ hr@cloudsat.com
               </div>
             </div>
             <div>
-              <label htmlFor="position" className="block text-sm font-medium text-gray-700 mb-1">Position</label>
+              <label
+                htmlFor="position"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Position
+              </label>
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Filter
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
                 <select
                   id="position"
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none"
@@ -563,13 +597,20 @@ hr@cloudsat.com
                 >
                   <option value="">All Positions</option>
                   {positions.map((position) => (
-                    <option key={position} value={position}>{position}</option>
+                    <option key={position} value={position}>
+                      {position}
+                    </option>
                   ))}
                 </select>
               </div>
             </div>
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <label
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Status
+              </label>
               <select
                 id="status"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -587,33 +628,66 @@ hr@cloudsat.com
           </div>
         </div>
 
-
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           {loading ? (
-            <div className="text-center py-10 text-gray-400">Loading candidates...</div>
+            <div className="text-center py-10 text-gray-400">
+              Loading candidates...
+            </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied For</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact No</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mail ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Applied For
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Contact No
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Mail ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentData.length > 0 ? (
                     currentData.map((offer) => (
-                      <tr key={offer.selected_id}
-                        className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap"><div className="text-sm font-medium text-gray-900">{offer.position || offer.postApplied}</div></td>
-                        <td className="px-6 py-4 whitespace-nowrap"><div className="text-sm text-gray-900">{offer.name}</div></td>
-                        <td className="px-6 py-4 whitespace-nowrap"><div className="text-sm text-gray-500">{offer.phone}</div></td>
-                        <td className="px-6 py-4 whitespace-nowrap"><div className="text-sm text-gray-500">{offer.email}</div></td>
-                        <td className="px-6 py-4 whitespace-nowrap"><StatusBadge status={offer.status} /></td>
+                      <tr
+                        key={offer.selected_id}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">
+                            {offer.position || offer.postApplied}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {offer.name}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500">
+                            {offer.phone}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500">
+                            {offer.email}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <StatusBadge status={offer.status} />
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
                             {offer.resume_url && (
@@ -652,15 +726,16 @@ hr@cloudsat.com
                                 <Send size={16} />
                               </button>
                             )}
-                            {has("hrms.job.offer.create") && offer.status !== 'accepted' && (
-                              <button
-                                onClick={() => handleOpenAcceptModal(offer)}
-                                className="text-green-600 hover:text-green-900 p-1 rounded"
-                                title="Accept Offer"
-                              >
-                                <CheckCircle size={16} />
-                              </button>
-                            )}
+                            {has("hrms.job.offer.create") &&
+                              offer.status !== "accepted" && (
+                                <button
+                                  onClick={() => handleOpenAcceptModal(offer)}
+                                  className="text-green-600 hover:text-green-900 p-1 rounded"
+                                  title="Accept Offer"
+                                >
+                                  <CheckCircle size={16} />
+                                </button>
+                              )}
                           </div>
                         </td>
                       </tr>
@@ -669,8 +744,12 @@ hr@cloudsat.com
                     <tr>
                       <td colSpan="7" className="px-6 py-24 text-center">
                         <div className="flex flex-col items-center justify-center">
-                          <div className="text-gray-400 mb-2">No offer letters found</div>
-                          <p className="text-gray-500 text-sm">Try adjusting your search or filters</p>
+                          <div className="text-gray-400 mb-2">
+                            No offer letters found
+                          </div>
+                          <p className="text-gray-500 text-sm">
+                            Try adjusting your search or filters
+                          </p>
                         </div>
                       </td>
                     </tr>
@@ -682,9 +761,12 @@ hr@cloudsat.com
 
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between">
             <div className="text-sm text-gray-700 mb-4 sm:mb-0">
-              Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
-              <span className="font-medium">{Math.min(startIndex + entriesPerPage, filteredData.length)}</span> of{' '}
-              <span className="font-medium">{filteredData.length}</span> results
+              Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
+              <span className="font-medium">
+                {Math.min(startIndex + entriesPerPage, filteredData.length)}
+              </span>{" "}
+              of <span className="font-medium">{filteredData.length}</span>{" "}
+              results
             </div>
             <div className="flex items-center space-x-2">
               <button
@@ -694,21 +776,26 @@ hr@cloudsat.com
               >
                 <ChevronLeft size={18} />
               </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  className={`px-3 py-1 rounded-lg border ${currentPage === page
-                      ? 'border-blue-500 bg-blue-50 text-blue-600'
-                      : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    className={`px-3 py-1 rounded-lg border ${
+                      currentPage === page
+                        ? "border-blue-500 bg-blue-50 text-blue-600"
+                        : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
                     }`}
-                  onClick={() => setCurrentPage(page)}
-                >
-                  {page}
-                </button>
-              ))}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
               <button
                 className="p-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 disabled={currentPage === totalPages}
               >
                 <ChevronRight size={18} />
@@ -717,10 +804,12 @@ hr@cloudsat.com
           </div>
         </div>
 
-
         {showViewModal && selectedOffer && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-2xl w-full" style={{ maxHeight: '100vh', overflowY: 'auto' }}>
+            <div
+              className="bg-white rounded-lg p-6 max-w-2xl w-full"
+              style={{ maxHeight: "100vh", overflowY: "auto" }}
+            >
               <div className="flex justify-between items-center mb-4">
                 <button
                   onClick={() => setShowViewModal(false)}
@@ -730,38 +819,62 @@ hr@cloudsat.com
                 </button>
               </div>
               {offerLetterLoading ? (
-                <div className="text-center py-8 text-gray-400">Loading offer letter...</div>
+                <div className="text-center py-8 text-gray-400">
+                  Loading offer letter...
+                </div>
               ) : offerLetterData ? (
                 <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
                   <div className="flex justify-between items-center mb-6">
                     <div className="text-gray-800 font-bold text-2xl"></div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-600">Devon Rd, Hampstead, NY 10001</p>
-                      <p className="text-sm text-gray-600">info@yourcompany.com | (555) 123-4567</p>
-                      <p className="text-sm text-gray-600">www.yourcompany.com</p>
+                      <p className="text-sm text-gray-600">
+                        Devon Rd, Hampstead, NY 10001
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        info@yourcompany.com | (555) 123-4567
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        www.yourcompany.com
+                      </p>
                     </div>
                   </div>
-                  <h2 className="text-2xl font-semibold text-center mb-4">Job Offer Letter</h2>
+                  <h2 className="text-2xl font-semibold text-center mb-4">
+                    Job Offer Letter
+                  </h2>
                   <p className="text-center text-gray-600 mb-6">
-                    {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    {new Date().toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
                   </p>
                   <div className="mb-6">
                     <p className="text-gray-800">{offerLetterData.name}</p>
                     <p className="text-gray-600">{offerLetterData.email}</p>
                   </div>
                   <div className="space-y-4 text-gray-700">
-                    <p>Dear Mr./Ms. {offerLetterData.name?.split(' ')[0]},</p>
+                    <p>Dear Mr./Ms. {offerLetterData.name?.split(" ")[0]},</p>
                     <p>
-                      We are thrilled to extend you an offer for the{' '}
-                      <span className="font-medium">{offerLetterData.postApplied}</span> position at Your Company Name.
-                      We believe your skills and experience will contribute to our team and company's future.
+                      We are thrilled to extend you an offer for the{" "}
+                      <span className="font-medium">
+                        {offerLetterData.postApplied}
+                      </span>{" "}
+                      position at Your Company Name. We believe your skills and
+                      experience will contribute to our team and company's
+                      future.
                     </p>
                     <p>
-                      Your starting date will be{' '}
-                      <span className="font-medium">{offerLetterData.startDate || ''}</span>, and your salary will be{' '}
-                      <span className="font-medium">{offerLetterData.salary || ''}</span>, payable bi-weekly, along
-                      with any other benefits as per company policy. If you have any questions, please feel free to
-                      reach out. We're looking forward to having you!
+                      Your starting date will be{" "}
+                      <span className="font-medium">
+                        {offerLetterData.startDate || ""}
+                      </span>
+                      , and your salary will be{" "}
+                      <span className="font-medium">
+                        {offerLetterData.salary || ""}
+                      </span>
+                      , payable bi-weekly, along with any other benefits as per
+                      company policy. If you have any questions, please feel
+                      free to reach out. We're looking forward to having you!
                     </p>
                   </div>
                   <div className="mt-8 text-gray-700">
@@ -781,24 +894,26 @@ hr@cloudsat.com
                         <span>Download Offer Letter</span>
                       </button>
                     )}
-                    {has("hrms.job.offer.create") && selectedOffer.status !== 'accepted' && (
-                      <button
-                        onClick={() => handleOpenAcceptModal(selectedOffer)}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                      >
-                        <CheckCircle size={18} />
-                        <span>Accept Offer</span>
-                      </button>
-                    )}
+                    {has("hrms.job.offer.create") &&
+                      selectedOffer.status !== "accepted" && (
+                        <button
+                          onClick={() => handleOpenAcceptModal(selectedOffer)}
+                          className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                        >
+                          <CheckCircle size={18} />
+                          <span>Accept Offer</span>
+                        </button>
+                      )}
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-400">No offer letter found.</div>
+                <div className="text-center py-8 text-gray-400">
+                  No offer letter found.
+                </div>
               )}
             </div>
           </div>
         )}
-
 
         {showAcceptModal && selectedOffer && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
@@ -807,20 +922,34 @@ hr@cloudsat.com
                 <div className="p-2 bg-green-100 rounded-full">
                   <CheckCircle className="text-green-600" size={24} />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Accept Offer Letter</h2>
+                <h2 className="text-xl font-bold text-gray-900">
+                  Accept Offer Letter
+                </h2>
               </div>
 
               <div className="mb-6">
                 <p className="text-gray-600 mb-4">
-                  Are you sure you want to accept the offer letter for <strong>{selectedOffer.name} </strong>
-                  as  <strong>{selectedOffer.position}</strong>?
+                  Are you sure you want to accept the offer letter for{" "}
+                  <strong>{selectedOffer.name} </strong>
+                  as <strong>{selectedOffer.position}</strong>?
                 </p>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="font-medium text-blue-800 mb-2">Offer Details:</h3>
+                  <h3 className="font-medium text-blue-800 mb-2">
+                    Offer Details:
+                  </h3>
                   <ul className="text-sm text-blue-700 space-y-1">
-                    <li><strong>Position:</strong> {selectedOffer.position}</li>
-                    <li><strong>Salary:</strong> {selectedOffer.salary}</li>
-                    <li><strong>Joining Date:</strong> {formatDate(selectedOffer.start_date || selectedOffer.startDate)}</li>
+                    <li>
+                      <strong>Position:</strong> {selectedOffer.position}
+                    </li>
+                    <li>
+                      <strong>Salary:</strong> {selectedOffer.salary}
+                    </li>
+                    <li>
+                      <strong>Joining Date:</strong>{" "}
+                      {formatDate(
+                        selectedOffer.start_date || selectedOffer.startDate,
+                      )}
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -844,10 +973,12 @@ hr@cloudsat.com
           </div>
         )}
 
-
         {showEditModal && selectedOffer && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-lg w-full" style={{ maxHeight: '100vh', overflowY: 'auto' }}>
+            <div
+              className="bg-white rounded-lg p-6 max-w-lg w-full"
+              style={{ maxHeight: "100vh", overflowY: "auto" }}
+            >
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold">Edit Offer Letter</h2>
                 <button
@@ -858,52 +989,74 @@ hr@cloudsat.com
                 </button>
               </div>
               {offerLetterLoading ? (
-                <div className="text-center py-8 text-gray-400">Loading offer letter...</div>
+                <div className="text-center py-8 text-gray-400">
+                  Loading offer letter...
+                </div>
               ) : (
                 <form onSubmit={handleEditSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Name</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Name
+                    </label>
                     <input
                       type="text"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.name || ''}
-                      onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                      value={editForm.name || ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, name: e.target.value })
+                      }
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Position</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Position
+                    </label>
                     <input
                       type="text"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.position || ''}
-                      onChange={(e) => setEditForm({ ...editForm, position: e.target.value })}
+                      value={editForm.position || ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, position: e.target.value })
+                      }
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Email</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Email
+                    </label>
                     <input
                       type="email"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.email || ''}
-                      onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                      value={editForm.email || ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, email: e.target.value })
+                      }
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Contact</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Contact
+                    </label>
                     <input
                       type="text"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.contact || ''}
-                      onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
+                      value={editForm.contact || ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, contact: e.target.value })
+                      }
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Gender</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Gender
+                    </label>
                     <select
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.gender || ''}
-                      onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}
+                      value={editForm.gender || ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, gender: e.target.value })
+                      }
                     >
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -911,11 +1064,15 @@ hr@cloudsat.com
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Status</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Status
+                    </label>
                     <select
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.status || ''}
-                      onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
+                      value={editForm.status || ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, status: e.target.value })
+                      }
                     >
                       <option value="pending">Pending</option>
                       <option value="sent">Sent</option>
@@ -924,37 +1081,56 @@ hr@cloudsat.com
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Salary</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Salary
+                    </label>
                     <input
                       type="text"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.salary || ''}
-                      onChange={(e) => setEditForm({ ...editForm, salary: e.target.value })}
+                      value={editForm.salary || ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, salary: e.target.value })
+                      }
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Start Date</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Start Date
+                    </label>
                     <input
                       type="date"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.startDate || ''}
-                      onChange={(e) => setEditForm({ ...editForm, startDate: e.target.value })}
+                      value={editForm.startDate || ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, startDate: e.target.value })
+                      }
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Benefits</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Benefits
+                    </label>
                     <textarea
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.benefits || ''}
-                      onChange={(e) => setEditForm({ ...editForm, benefits: e.target.value })}
+                      value={editForm.benefits || ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, benefits: e.target.value })
+                      }
                     ></textarea>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Additional Notes</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Additional Notes
+                    </label>
                     <textarea
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      value={editForm.additionalNotes || ''}
-                      onChange={(e) => setEditForm({ ...editForm, additionalNotes: e.target.value })}
+                      value={editForm.additionalNotes || ""}
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          additionalNotes: e.target.value,
+                        })
+                      }
                     ></textarea>
                   </div>
                   <div className="flex justify-end space-x-2">
@@ -977,7 +1153,6 @@ hr@cloudsat.com
             </div>
           </div>
         )}
-
 
         {toast && <Toast message={toast.message} type={toast.type} />}
       </div>

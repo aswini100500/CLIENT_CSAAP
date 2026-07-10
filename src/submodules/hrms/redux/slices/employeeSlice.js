@@ -20,7 +20,6 @@ const employeeSlice = createSlice({
   },
 });
 
-export const { setEmployee, clearEmployee } =
-  employeeSlice.actions;
+export const { setEmployee, clearEmployee } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

@@ -1,44 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
@@ -47,12 +6,12 @@ const CompanyContext = createContext();
 
 export const CompanyProvider = ({ children }) => {
   const { user, token } = useAuth();
-  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
+  const API_BASE_URL =
+    import.meta.env.VITE_CSAAP_URL || "https://csaapnodeapi.csaap.com";
   const [companyId, setCompanyId] = useState(null);
   const [companyName, setcompanyName] = useState("");
   const [employees, setEmployees] = useState([]);
   const isFetching = useRef(false);
-
 
   const fetchCompanyByEmail = async () => {
     if (isFetching.current) return;
@@ -66,7 +25,7 @@ export const CompanyProvider = ({ children }) => {
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/getByEmail/${email}`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         if (res.data) {
@@ -75,30 +34,38 @@ export const CompanyProvider = ({ children }) => {
           setCompanyId(company.id);
           setcompanyName(company.name);
 
-
           sessionStorage.setItem("selectedCompanyId", company.id);
           sessionStorage.setItem("selectedCompanyName", company.name);
         }
       } catch (error) {
-
         if (error.response && error.response.status === 404) {
           try {
             const createRes = await axios.post(
               `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/create`,
               {
-                name: user?.companyName || user?.company || user?.slug || user?.name || "",
+                name:
+                  user?.companyName ||
+                  user?.company ||
+                  user?.slug ||
+                  user?.name ||
+                  "",
                 email: email,
                 slug: user?.slug || "",
                 userId: user?.id || 0,
                 gstRegistered: "No",
-                gstin: ""
+                gstin: "",
               },
-              { withCredentials: true }
+              { withCredentials: true },
             );
 
             if (createRes.data && createRes.data.id) {
               const newCompanyId = createRes.data.id;
-              const newCompanyName = user?.companyName || user?.company || user?.slug || user?.name || "";
+              const newCompanyName =
+                user?.companyName ||
+                user?.company ||
+                user?.slug ||
+                user?.name ||
+                "";
 
               setCompanyId(newCompanyId);
               setcompanyName(newCompanyName);
@@ -122,9 +89,12 @@ export const CompanyProvider = ({ children }) => {
 
   const fetchEmployeesList = async (id) => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/tenant/hrms/all-employees`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
+      const res = await axios.get(
+        `${API_BASE_URL}/api/tenant/hrms/all-employees`,
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        },
+      );
       if (res.data && res.data.success) {
         setEmployees(res.data.data);
       }
@@ -132,7 +102,6 @@ export const CompanyProvider = ({ children }) => {
       console.error("Error fetching employees:", err);
     }
   };
-
 
   useEffect(() => {
     if (user?.email) {
@@ -154,7 +123,13 @@ export const CompanyProvider = ({ children }) => {
 
   return (
     <CompanyContext.Provider
-      value={{ companyId, setCompanyId, companyName, setcompanyName, employees }}
+      value={{
+        companyId,
+        setCompanyId,
+        companyName,
+        setcompanyName,
+        employees,
+      }}
     >
       {children}
     </CompanyContext.Provider>

@@ -46,7 +46,7 @@ import {
   Users,
   Wallet,
   Warehouse,
-  Wrench
+  Wrench,
 } from "lucide-react";
 import { clearUser as clearActiveUser } from "../store/slices/userSlice";
 import { resetPersistedAuthState } from "../store/authSession";
@@ -56,7 +56,8 @@ import { FaAddressBook } from "react-icons/fa";
 
 const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
   const { user } = useAuth();
-  const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
+  const API_BASE_URL =
+    import.meta.env.VITE_CSAAP_URL || "https://csaapnodeapi.csaap.com";
   const tenantId = user?.tenant_id || user?.company_id || user?.id;
 
   const [expandedMenus, setExpandedMenus] = useState({});
@@ -69,13 +70,11 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
   const companyData = useSelector((state) => state.companyApi.data);
   const queryClient = useQueryClient();
 
-
   const companyName =
     companyData?.master_company_name ||
     companyData?.company_name ||
     "BuilderERP PRO";
   const companyLogoText = companyName.charAt(0).toUpperCase();
-
 
   const logoUrl = companyData?.logo_path
     ? `${API_BASE_URL}/${companyData.logo_path}`
@@ -92,17 +91,12 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
     if (onItemClick) onItemClick();
   };
 
-
   const handleLogout = async () => {
-
     try {
-      await fetch(
-        `${API_BASE_URL}/api/builder-companies/logout`,
-        {
-          method: "POST",
-          credentials: "include",
-        },
-      );
+      await fetch(`${API_BASE_URL}/api/builder-companies/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
     } catch (error) {
       console.error("API Logout failed:", error);
     }
@@ -126,7 +120,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
 
     navigate("/admin/login");
   };
-
 
   useEffect(() => {
     const fetchCompanyData = async () => {
@@ -154,7 +147,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
     fetchCompanyData();
   }, [dispatch, tenantId]);
 
-
   const sidebarItems = [
     {
       id: "dashboard",
@@ -169,7 +161,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       icon: <Home size={20} className="text-green-700" />,
       path: "/projects",
     },
-
 
     {
       id: "users",
@@ -196,12 +187,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           icon: <Target size={18} className="text-green-700" />,
         },
 
-
-
-
-
-
-
         {
           id: "u_user_list",
           label: "UserDetails",
@@ -214,12 +199,8 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           path: "/users/booking-cancellations",
           icon: <AlertTriangle size={18} className="text-green-700" />,
         },
-
       ],
     },
-
-
-
 
     {
       id: "hrms",
@@ -280,7 +261,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       ],
     },
 
-
     {
       id: "crm",
       label: "CRM System",
@@ -332,7 +312,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
         },
       ],
     },
-
 
     {
       id: "client-accounting",
@@ -394,7 +373,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           path: "/accounting/client/statutoryReports",
           icon: <FileText size={16} className="text-green-700 " />,
         },
-
 
         {
           id: "client-vouchers",
@@ -494,7 +472,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           ],
         },
 
-
         {
           id: "client-banking",
           label: "Banking",
@@ -510,7 +487,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
               label: "Cash",
               path: "/accounting/client/cash",
             },
-
           ],
         },
 
@@ -538,7 +514,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           path: "/accounting/client/transactionSummary",
           icon: <BarChart4 size={16} className="text-green-700 " />,
         },
-
 
         {
           id: "client-inventory",
@@ -582,10 +557,8 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
     },
   ];
 
-
   const renderItem = (item, level = 0) => {
     const hasChildren = item.children && item.children.length > 0;
-
 
     if (!hasChildren && (!item.path || item.path === "")) {
       return null;
@@ -593,11 +566,9 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
 
     const isExpanded = expandedMenus[item.id];
 
-
     const paddingLeft = level === 0 ? "px-3" : "px-2";
     const textSize = level === 0 ? "text-[13px]" : "text-[12.5px]";
     const iconSize = level === 0 ? 19 : 17;
-
 
     if (isCollapsed) {
       const isInactiveFolder = hasChildren && !isExpanded;
@@ -606,7 +577,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           key={`${item.id}-col`}
           className={`flex flex-col items-center w-full ${isInactiveFolder ? "mb-2.5" : "mb-0.5"}`}
         >
-
           <NavLink
             to={item.path || "#"}
             end={item.exact}
@@ -636,30 +606,32 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
 
               const stackShadow = isInactiveFolder
                 ? {
-                  boxShadow:
-                    "0 3px 0 -1px #fff, 0 3px 0 0 #e2e8f0, 0 6px 0 -1px #f8fafc, 0 6px 0 0 #e2e8f080",
-                }
+                    boxShadow:
+                      "0 3px 0 -1px #fff, 0 3px 0 0 #e2e8f0, 0 6px 0 -1px #f8fafc, 0 6px 0 0 #e2e8f080",
+                  }
                 : {};
               return (
                 <>
                   <div
-                    className={`absolute inset-0 rounded-lg transition-all duration-200 ${isItemActive && !hasChildren
-                      ? "bg-linear-to-r from-green-600 to-emerald-500 shadow-md shadow-green-100"
-                      : isFolderExpanded
-                        ? "bg-white shadow-sm ring-1 ring-slate-200"
-                        : isInactiveFolder
-                          ? "bg-white border border-slate-200"
-                          : "bg-transparent group-hover:bg-slate-50"
-                      }`}
+                    className={`absolute inset-0 rounded-lg transition-all duration-200 ${
+                      isItemActive && !hasChildren
+                        ? "bg-linear-to-r from-green-600 to-emerald-500 shadow-md shadow-green-100"
+                        : isFolderExpanded
+                          ? "bg-white shadow-sm ring-1 ring-slate-200"
+                          : isInactiveFolder
+                            ? "bg-white border border-slate-200"
+                            : "bg-transparent group-hover:bg-slate-50"
+                    }`}
                     style={stackShadow}
                   />
                   <span
-                    className={`relative z-10 transition-colors duration-200 ${isItemActive && !hasChildren
-                      ? "[&_svg]:text-white!"
-                      : isFolderExpanded
-                        ? "[&_svg]:text-green-600!"
-                        : "text-slate-500 group-hover:text-green-600"
-                      }`}
+                    className={`relative z-10 transition-colors duration-200 ${
+                      isItemActive && !hasChildren
+                        ? "[&_svg]:text-white!"
+                        : isFolderExpanded
+                          ? "[&_svg]:text-green-600!"
+                          : "text-slate-500 group-hover:text-green-600"
+                    }`}
                   >
                     {item.icon ? (
                       React.cloneElement(item.icon, {
@@ -678,7 +650,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             }}
           </NavLink>
 
-
           {hasChildren && isExpanded && (
             <div className="w-full flex flex-col items-center py-1.5 px-0.5 mb-1 mt-0.5 relative animate-sub-menu bg-slate-50 rounded-lg border border-slate-200/80">
               <div className="w-full flex flex-col items-center space-y-0.5">
@@ -690,17 +661,17 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       );
     }
 
-
     return (
       <div key={`${item.id}-exp`} className="mb-1.5">
         {hasChildren ? (
           <div className="space-y-1">
             <button
               onClick={() => toggleMenu(item.id)}
-              className={`w-full flex items-center justify-between transition-all duration-200 py-2 outline-none rounded-lg border border-transparent ${paddingLeft} ${textSize} ${isExpanded
-                ? "bg-slate-100 text-slate-900 font-semibold shadow-sm border-slate-100"
-                : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:border-slate-100"
-                }`}
+              className={`w-full flex items-center justify-between transition-all duration-200 py-2 outline-none rounded-lg border border-transparent ${paddingLeft} ${textSize} ${
+                isExpanded
+                  ? "bg-slate-100 text-slate-900 font-semibold shadow-sm border-slate-100"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:border-slate-100"
+              }`}
             >
               <div className="flex items-center min-w-0">
                 {item.icon && (
@@ -725,12 +696,12 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
               />
             </button>
 
-
             <div
-              className={`transition-all duration-300 ease-out overflow-hidden ${isExpanded
-                ? "max-h-500 opacity-100 mt-1 mb-2 bg-slate-50/50 rounded-lg p-0.5"
-                : "max-h-0 opacity-0"
-                }`}
+              className={`transition-all duration-300 ease-out overflow-hidden ${
+                isExpanded
+                  ? "max-h-500 opacity-100 mt-1 mb-2 bg-slate-50/50 rounded-lg p-0.5"
+                  : "max-h-0 opacity-0"
+              }`}
             >
               <div className="ml-3.5 border-l border-slate-100 pl-1 py-1 space-y-1">
                 {item.children.map((child) => renderItem(child, level + 1))}
@@ -747,10 +718,11 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             }}
             className={({ isActive }) => {
               const isItemActive = isActive && item.path && item.path !== "#";
-              return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${isItemActive
-                ? "bg-linear-to-r from-green-600 to-emerald-500 text-white font-medium shadow-md shadow-green-100 border-green-500/50"
-                : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:translate-x-1 hover:border-slate-100"
-                }`;
+              return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${
+                isItemActive
+                  ? "bg-linear-to-r from-green-600 to-emerald-500 text-white font-medium shadow-md shadow-green-100 border-green-500/50"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:translate-x-1 hover:border-slate-100"
+              }`;
             }}
           >
             {({ isActive }) => {
@@ -769,7 +741,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
                   )}
                   <span className="truncate text-left">{item.label}</span>
                 </>
-              )
+              );
             }}
           </NavLink>
         )}
@@ -806,7 +778,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
         }
       `}</style>
 
-
       {isCollapsed ? (
         <div className="h-16 flex flex-col items-center justify-center border-b border-slate-100 shrink-0 bg-white">
           <button
@@ -825,7 +796,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             onClick={handleItemClick}
             className="flex-1 flex items-center min-w-0 gap-3"
           >
-
             {logoUrl && !logoError ? (
               <img
                 src={logoUrl}
@@ -833,15 +803,12 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
                 crossOrigin="anonymous"
                 className="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0"
                 onError={() => {
-                  console.error('Logo failed to load in expanded mode');
+                  console.error("Logo failed to load in expanded mode");
                   setLogoError(true);
                 }}
               />
             ) : (
-
-              <div
-                className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0"
-              >
+              <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0">
                 {companyLogoText}
               </div>
             )}
@@ -857,14 +824,11 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
         </div>
       )}
 
-
       <div className="flex-1 overflow-y-auto px-3 py-4 custom-scrollbar">
         <nav className="space-y-1">
-
           {sidebarItems.map((item) => renderItem(item))}
         </nav>
       </div>
-
 
       <div className="border-t border-slate-100 p-3 shrink-0">
         {isCollapsed ? (
@@ -901,7 +865,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           </button>
         )}
       </div>
-
 
       {isCollapsed && hoveredItem && (
         <div

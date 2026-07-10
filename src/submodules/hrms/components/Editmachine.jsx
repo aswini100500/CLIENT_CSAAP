@@ -5,13 +5,10 @@ export default function MachineList({ setActiveMenu, machines = [] }) {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="bg-white shadow-md rounded-md overflow-hidden">
-
         <div className="bg-blue-600 text-white px-4 py-2 flex items-center gap-2">
           <List className="w-4 h-4" />
           <h2 className="font-semibold text-lg">List of Machine</h2>
         </div>
-
-
 
         <div className="p-4 bg-white h-100 overflow-y-auto">
           <table className="min-w-full border text-sm">
@@ -48,7 +45,6 @@ export default function MachineList({ setActiveMenu, machines = [] }) {
           </table>
         </div>
       </div>
-
 
       <div className="flex justify-center gap-3 mt-6">
         <button

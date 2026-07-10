@@ -2,42 +2,106 @@ import React, { useState } from "react";
 
 const OutFlow = () => {
   const [data, setData] = useState([
-    { group: "CONSTRUCTION COST", code: "1.1", head: "EARTH WORK", amount: 2118507.96, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.2", head: "PLAIN CEMENT CONCRETE", amount: 8869753.92, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.3", head: "RCC - CONCRETE WORK", amount: 9716404.02, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.4", head: "BRICK WORK / BLOCK WORK", amount: 1659014.53, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.5", head: "MARBLE WORK", amount: 64138283.96, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.6", head: "WOOD WORK", amount: 2877152.49, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.7", head: "STEEL WORK", amount: 552774.79, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.8", head: "FLOORING", amount: 513689.79, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.9", head: "ROOFING", amount: 249551.26, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.10", head: "WATER PROOFING", amount: 2750102.11, quantity: 1 },
-    { group: "CONSTRUCTION COST", code: "1.11", head: "PLASTERING", amount: 2750102.11, quantity: 1 },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.1",
+      head: "EARTH WORK",
+      amount: 2118507.96,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.2",
+      head: "PLAIN CEMENT CONCRETE",
+      amount: 8869753.92,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.3",
+      head: "RCC - CONCRETE WORK",
+      amount: 9716404.02,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.4",
+      head: "BRICK WORK / BLOCK WORK",
+      amount: 1659014.53,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.5",
+      head: "MARBLE WORK",
+      amount: 64138283.96,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.6",
+      head: "WOOD WORK",
+      amount: 2877152.49,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.7",
+      head: "STEEL WORK",
+      amount: 552774.79,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.8",
+      head: "FLOORING",
+      amount: 513689.79,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.9",
+      head: "ROOFING",
+      amount: 249551.26,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.10",
+      head: "WATER PROOFING",
+      amount: 2750102.11,
+      quantity: 1,
+    },
+    {
+      group: "CONSTRUCTION COST",
+      code: "1.11",
+      head: "PLASTERING",
+      amount: 2750102.11,
+      quantity: 1,
+    },
   ]);
 
   const [selectedRows, setSelectedRows] = useState([]);
 
   const toggleSelect = (code) => {
     setSelectedRows((prev) =>
-      prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code]
+      prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code],
     );
   };
-
 
   const updateQuantity = (code, newQty) => {
     setData((prev) =>
       prev.map((item) =>
         item.code === code
           ? { ...item, quantity: newQty === "" ? "" : parseFloat(newQty) }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
-
   const totalOutflow = data.reduce(
-    (sum, item) => sum + (item.amount * (item.quantity || 0)),
-    0
+    (sum, item) => sum + item.amount * (item.quantity || 0),
+    0,
   );
 
   return (
@@ -73,7 +137,6 @@ const OutFlow = () => {
                 <td className="px-3 py-2">{row.group}</td>
                 <td className="px-3 py-2">{row.head}</td>
 
-
                 <td className="px-3 py-2 text-center">
                   <input
                     type="number"
@@ -84,7 +147,6 @@ const OutFlow = () => {
                     className="w-20 p-1 text-center border border-gray-300 rounded"
                   />
                 </td>
-
 
                 <td className="px-3 py-2 text-right">
                   {(row.amount * (row.quantity || 0)).toLocaleString("en-IN", {
@@ -97,7 +159,6 @@ const OutFlow = () => {
           </tbody>
         </table>
       </div>
-
 
       <div className="flex items-center justify-between px-4 py-3 bg-gray-100 border-t">
         <div className="text-sm text-gray-600">

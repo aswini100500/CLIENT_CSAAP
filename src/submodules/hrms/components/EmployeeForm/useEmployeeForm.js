@@ -38,9 +38,9 @@ const parsePhone = (fullPhone, countryCodes) => {
   if (!fullPhone) return { phoneCode: "+91", phone: "" };
   const cleanedPhone = String(fullPhone).trim();
 
-
-
-  const sortedCodes = [...countryCodes].sort((a, b) => b.dial_code.length - a.dial_code.length);
+  const sortedCodes = [...countryCodes].sort(
+    (a, b) => b.dial_code.length - a.dial_code.length,
+  );
   for (const c of sortedCodes) {
     if (cleanedPhone.startsWith(c.dial_code)) {
       let rawPhone = cleanedPhone.substring(c.dial_code.length).trim();
@@ -52,7 +52,6 @@ const parsePhone = (fullPhone, countryCodes) => {
     }
   }
 
-
   if (cleanedPhone.startsWith("+")) {
     const parts = cleanedPhone.split(/\s+/);
     if (parts.length > 1) {
@@ -61,7 +60,6 @@ const parsePhone = (fullPhone, countryCodes) => {
       return { phoneCode: parsedCode, phone: parsedPhone };
     }
   }
-
 
   return { phoneCode: "+91", phone: cleanedPhone };
 };
@@ -109,9 +107,7 @@ const normalizeFileList = (value) => {
   try {
     const parsed = JSON.parse(value);
     if (Array.isArray(parsed)) return parsed;
-  } catch {
-
-  }
+  } catch {}
 
   return value
     .split(",")
@@ -135,10 +131,7 @@ const toExistingFileObject = (value) => {
   };
 };
 
-const useEmployeeForm = ({
-  mode = "create",
-  basePath = "/hrms",
-} = {}) => {
+const useEmployeeForm = ({ mode = "create", basePath = "/hrms" } = {}) => {
   const [activeTab, setActiveTab] = useState("basic");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -180,7 +173,7 @@ const useEmployeeForm = ({
 
     tax_regime: "NEW",
     gross_anual: "",
-    effective_from: new Date().toLocaleDateString('en-CA'),
+    effective_from: new Date().toLocaleDateString("en-CA"),
     bloodGroup: "",
     epfoId: "",
     permanentAddress1: "",
@@ -232,7 +225,6 @@ const useEmployeeForm = ({
     },
   ]);
 
-
   const [leaveData, setLeaveData] = useState({
     yearly_cl: "",
     yearly_el: "",
@@ -269,7 +261,6 @@ const useEmployeeForm = ({
 
   const [uploadProgress, setUploadProgress] = useState({});
   const [isUploading, setIsUploading] = useState(false);
-
 
   const [otherComponents, setOtherComponents] = useState([]);
 
@@ -317,14 +308,12 @@ const useEmployeeForm = ({
     });
   };
 
-
   const handleLeaveChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
     setLeaveData((prev) => {
       const updated = { ...prev, [name]: newValue };
-
 
       if (["yearly_cl", "yearly_el", "yearly_ml"].includes(name)) {
         const cl = name === "yearly_cl" ? newValue : prev.yearly_cl;
@@ -337,9 +326,6 @@ const useEmployeeForm = ({
       return updated;
     });
   };
-
-
-
 
   const resetLeaveData = () => {
     setLeaveData({
@@ -365,7 +351,6 @@ const useEmployeeForm = ({
     });
   };
 
-
   const [autoCalculate, setAutoCalculate] = useState(true);
   const [readOnlyFields, setReadOnlyFields] = useState(true);
   const [salaryPolicy, setSalaryPolicy] = useState(
@@ -374,7 +359,6 @@ const useEmployeeForm = ({
   const [isSalaryPolicyLoading, setIsSalaryPolicyLoading] = useState(false);
   const [isSalaryPolicySaving, setIsSalaryPolicySaving] = useState(false);
   const [showSalaryPolicyModal, setShowSalaryPolicyModal] = useState(false);
-
 
   const [salaryToggles, setSalaryToggles] = useState({
     hra: true,
@@ -388,14 +372,9 @@ const useEmployeeForm = ({
     useState(false);
   const salaryPolicyRef = useRef(salaryPolicy);
 
-
   const [projectsList, setProjectsList] = useState([]);
 
-
-
-
   const [departmentsList, setDepartmentsList] = useState([]);
-
 
   const [designationsList, setDesignationsList] = useState([]);
 
@@ -431,10 +410,7 @@ const useEmployeeForm = ({
   );
   const hrmsToken = user.token;
   const csaapToken = user.csaapToken || user.token;
-  const companyId =
-    user?.company_id || user?.id;
-
-
+  const companyId = user?.company_id || user?.id;
 
   const recalcFromCTC = (
     data,
@@ -491,8 +467,6 @@ const useEmployeeForm = ({
   useEffect(() => {
     if (mode !== "create") return;
 
-
-
     const fetchLeavePolicyTemplate = async () => {
       const companySlug = user?.slug;
       if (!companySlug) return;
@@ -538,26 +512,19 @@ const useEmployeeForm = ({
             max_encashable_days: leavePolicy.max_encashable_days || "",
           }));
         } else {
-
-
         }
       } catch (error) {
-
         const status = error?.response?.status;
         const message = error?.response?.data?.message || "";
 
         if (status === 404 || message.toLowerCase().includes("not found")) {
-
         } else {
-
           console.error("Error fetching leave policy template:", error);
         }
-
       }
     };
     fetchLeavePolicyTemplate();
   }, [mode, user?.slug]);
-
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -574,15 +541,15 @@ const useEmployeeForm = ({
         );
         const data = response.data?.data || response.data || [];
         if (Array.isArray(data)) {
-          const names = data.map((p) => p.project_name || p.name).filter(Boolean);
+          const names = data
+            .map((p) => p.project_name || p.name)
+            .filter(Boolean);
           setProjectsList([...new Set(names)]);
         }
       } catch (error) {
         console.error("Error fetching projects:", error);
       }
     };
-
-
 
     const fetchDepartmentsAndRoles = async () => {
       try {
@@ -595,12 +562,12 @@ const useEmployeeForm = ({
         if (response.data?.success && Array.isArray(response.data.data)) {
           const data = response.data.data;
 
-
           const deptNames = [
-            ...new Set(data.map((item) => item.department_name).filter(Boolean)),
+            ...new Set(
+              data.map((item) => item.department_name).filter(Boolean),
+            ),
           ];
           setDepartmentsList(deptNames);
-
 
           const seen = new Set();
           const mappedDesignations = [];
@@ -689,15 +656,24 @@ const useEmployeeForm = ({
             employee.maritalStatus || employee.marital_status || "",
           fathers_identity: employee.fathers_identity || "",
           dob: (employee.dob || "")?.split("T")[0],
-          effective_from: (salaryBreakdown?.effective_from || new Date().toLocaleDateString('en-CA'))?.split(
-            "T",
-          )[0],
-          probation_period: employee.probation_period || employee.provision_period || "",
+          effective_from: (
+            salaryBreakdown?.effective_from ||
+            new Date().toLocaleDateString("en-CA")
+          )?.split("T")[0],
+          probation_period:
+            employee.probation_period || employee.provision_period || "",
           bankname: employee.bankname || employee.bankName || "",
-          accountnumber: employee.accountnumber || employee.accountNumber || employee.accountNo || employee.account_no || "",
-          ifsc_code: employee.ifsc_code || employee.ifscCode || employee.ifsc || "",
+          accountnumber:
+            employee.accountnumber ||
+            employee.accountNumber ||
+            employee.accountNo ||
+            employee.account_no ||
+            "",
+          ifsc_code:
+            employee.ifsc_code || employee.ifscCode || employee.ifsc || "",
           branch: employee.branch || employee.branchName || "",
-          mode_of_payment: employee.mode_of_payment || employee.modeOfPayment || "",
+          mode_of_payment:
+            employee.mode_of_payment || employee.modeOfPayment || "",
           registered_emp_id: employee.registered_emp_id || "",
         };
         delete nextFormData.education;
@@ -732,7 +708,7 @@ const useEmployeeForm = ({
             passingYear: edu.passingYear || edu.year || "",
             institute: edu.institute || "",
             graduationType: edu.graduationType || "",
-          }))
+          })),
         );
         setExperienceList(
           normalizeList(employee.experience, [
@@ -767,8 +743,6 @@ const useEmployeeForm = ({
           });
           return next;
         });
-
-
 
         if (user?.slug) {
           try {
@@ -815,22 +789,15 @@ const useEmployeeForm = ({
                 max_encashable_days: leavePolicy.max_encashable_days || "",
               }));
             } else {
-
-
             }
           } catch (leaveError) {
-
             const status = leaveError?.response?.status;
             const message = leaveError?.response?.data?.message || "";
 
             if (status === 404 || message.toLowerCase().includes("not found")) {
-
-
             } else {
-
               console.error("Error fetching leave policy:", leaveError);
             }
-
           }
         }
       } catch (error) {
@@ -886,7 +853,7 @@ const useEmployeeForm = ({
       Swal.fire(
         "Error",
         error.response?.data?.message ||
-        "Failed to update salary breakdown policy",
+          "Failed to update salary breakdown policy",
         "error",
       );
     } finally {
@@ -894,12 +861,14 @@ const useEmployeeForm = ({
     }
   };
 
-
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     let nextValue = type === "checkbox" ? checked : value;
 
-    if ((name === "email" || name === "officeEmail") && typeof nextValue === "string") {
+    if (
+      (name === "email" || name === "officeEmail") &&
+      typeof nextValue === "string"
+    ) {
       nextValue = nextValue.toLowerCase();
     }
 
@@ -918,7 +887,6 @@ const useEmployeeForm = ({
 
     if (name === "ctc" || name === "variable_pay_annual") {
       if (autoCalculate) {
-
         setFormData((prev) => {
           const updated = { ...prev, [name]: nextValue };
           const derived = recalcFromCTC(
@@ -935,19 +903,16 @@ const useEmployeeForm = ({
       return;
     }
 
-
     if (name === "pt" || name === "lwf") {
       setFormData((prev) => ({ ...prev, [name]: nextValue }));
       return;
     }
-
 
     setFormData((prev) => ({
       ...prev,
       [name]: nextValue,
     }));
   };
-
 
   const handleFileUpload = async (fileType, file) => {
     setIsUploading(true);
@@ -1047,7 +1012,6 @@ const useEmployeeForm = ({
     }
   };
 
-
   const handleSameAsPermanent = (checked) => {
     setSameAsPermanent(checked);
     if (checked) {
@@ -1062,7 +1026,6 @@ const useEmployeeForm = ({
       }));
     }
   };
-
 
   const getSalaryWarnings = () => {
     const warnings = [];
@@ -1082,8 +1045,6 @@ const useEmployeeForm = ({
       .filter((comp) => comp.type === "earning")
       .reduce((sum, comp) => sum + (parseFloat(comp.amount) || 0), 0);
 
-
-
     const ta = parseFloat(formData.ta) || 0;
     const da = parseFloat(formData.da) || 0;
 
@@ -1102,12 +1063,10 @@ const useEmployeeForm = ({
         `CTC components don't add up — sum is ₹${componentSum.toFixed(2)} vs CTC ₹${ctc.toFixed(2)} (gap: ₹${Math.abs(componentSum - ctc).toFixed(2)}). Allowed tolerance is ₹${tolerance.toFixed(2)}.`,
       );
 
-
     if (special < 0)
       warnings.push(
         `Employer costs exceed CTC — Special Allowance is negative (₹${special.toFixed(2)}). Reduce components or increase CTC.`,
       );
-
 
     const expectedGrossAnnual =
       basic + hra + ta + da + special + totalOtherEarningsAnnual;
@@ -1121,7 +1080,6 @@ const useEmployeeForm = ({
 
     return warnings;
   };
-
 
   const getSalaryErrors = () => {
     const errors = [];
@@ -1165,7 +1123,6 @@ const useEmployeeForm = ({
     }
     setActiveTab(tabId);
   };
-
 
   const currentTabIndex = TABS.findIndex((t) => t.id === activeTab);
   const goNext = () => {
@@ -1230,7 +1187,6 @@ const useEmployeeForm = ({
     }
   };
 
-
   const addEducation = () => {
     setEducationList((prev) => [
       ...prev,
@@ -1256,7 +1212,6 @@ const useEmployeeForm = ({
       prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     );
   };
-
 
   const addExperience = () => {
     setExperienceList((prev) => [
@@ -1284,10 +1239,8 @@ const useEmployeeForm = ({
     );
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
 
     if (mode !== "edit" && activeTab !== "leave") {
       goNext();
@@ -1338,7 +1291,6 @@ const useEmployeeForm = ({
 
       const submitFormData = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-
         if (key === "ctc") return;
         if (key === "basic") return;
         if (key === "hra") return;
@@ -1443,12 +1395,14 @@ const useEmployeeForm = ({
       submitFormData.append("designation", formData.postApplied || "");
 
       const selectedRole = designationsList.find(
-        (d) => d.department === formData.department && d.designation === formData.postApplied
+        (d) =>
+          d.department === formData.department &&
+          d.designation === formData.postApplied,
       );
       if (selectedRole && selectedRole.id) {
         submitFormData.append("role_id", selectedRole.id);
       }
-      
+
       submitFormData.append("ot_allowed", formData.ot_allowed ? "1" : "0");
       submitFormData.append("phone", combinedPhone);
       if (mode === "edit") {
@@ -1460,9 +1414,6 @@ const useEmployeeForm = ({
         year: edu.passingYear || "",
       }));
       submitFormData.append("education", JSON.stringify(educationPayload));
-
-
-
 
       submitFormData.append("experience", JSON.stringify(experienceList));
       if (mode !== "edit") {
@@ -1483,28 +1434,6 @@ const useEmployeeForm = ({
           }
         });
       });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       const leavePolicyPayload = {
         employee_id: employeeId,
@@ -1600,7 +1529,7 @@ const useEmployeeForm = ({
             Authorization: `Bearer ${csaapToken || hrmsToken}`,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       const newEmployeeId = response.data?.employeeId;
@@ -1638,17 +1567,15 @@ const useEmployeeForm = ({
       Swal.fire(
         "Error",
         error.response?.data?.message ||
-        (mode === "edit"
-          ? "Employee update failed"
-          : "Employee creation failed"),
+          (mode === "edit"
+            ? "Employee update failed"
+            : "Employee creation failed"),
         "error",
       );
     } finally {
       setIsSubmitting(false);
     }
   };
-
-
 
   const isSessionExpired = [
     "employee",
@@ -1659,7 +1586,6 @@ const useEmployeeForm = ({
     ? !user?.token
     : !csaapToken;
   return {
-
     activeTab,
     setActiveTab: handleSetActiveTab,
     showPassword,
@@ -1687,11 +1613,9 @@ const useEmployeeForm = ({
     setShowSalaryPolicyModal,
     saveSalaryPolicy,
 
-
     leaveData,
     handleLeaveChange,
     resetLeaveData,
-
 
     handleInputChange,
     handleFileInput,
@@ -1703,26 +1627,21 @@ const useEmployeeForm = ({
     handleConfirmEmployee,
     handleSubmit,
 
-
     addEducation,
     removeEducation,
     updateEducation,
-
 
     addExperience,
     removeExperience,
     updateExperience,
 
-
     addOtherComponent,
     updateOtherComponent,
     removeOtherComponent,
 
-
     currentTabIndex,
     goNext,
     goPrev,
-
 
     isSessionExpired,
     navigate,

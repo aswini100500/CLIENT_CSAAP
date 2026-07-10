@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-import axios from 'axios';
-import { useSelector } from 'react-redux';
+import axios from "axios";
+import { useSelector } from "react-redux";
 import useAuth from "../../../hooks/useAuth";
 import {
   AlertCircle,
@@ -23,7 +23,8 @@ const unwrapApiData = (payload) => {
   if (!payload) return payload;
   if (Array.isArray(payload)) return payload;
   if (payload.data && Array.isArray(payload.data)) return payload.data;
-  if (payload.data && payload.data.data && Array.isArray(payload.data.data)) return payload.data.data;
+  if (payload.data && payload.data.data && Array.isArray(payload.data.data))
+    return payload.data.data;
   if (payload.data && typeof payload.data === "object") return payload.data;
   return payload;
 };
@@ -38,7 +39,7 @@ const toNumber = (value) => {
 
 const normalizeIds = (ids) => {
   if (!ids) return [];
-  
+
   const extractId = (item) => {
     if (item && typeof item === "object") {
       return String(item.id ?? item.service_id ?? item.value ?? item);
@@ -52,17 +53,26 @@ const normalizeIds = (ids) => {
       const parsed = JSON.parse(ids);
       if (Array.isArray(parsed)) return parsed.map(extractId);
     } catch {
-      return ids.split(",").map((id) => id.trim()).filter(Boolean);
+      return ids
+        .split(",")
+        .map((id) => id.trim())
+        .filter(Boolean);
     }
   }
   return [extractId(ids)];
 };
 
 const getServiceId = (service) =>
-  service?.id ?? service?.service_id ?? service?.master_service_id ?? service?.value;
+  service?.id ??
+  service?.service_id ??
+  service?.master_service_id ??
+  service?.value;
 
 const getServiceName = (service) =>
-  service?.service_name || service?.name || service?.title || `Service #${getServiceId(service)}`;
+  service?.service_name ||
+  service?.name ||
+  service?.title ||
+  `Service #${getServiceId(service)}`;
 
 const getServicePrice = (service) =>
   toNumber(
@@ -71,7 +81,7 @@ const getServicePrice = (service) =>
       service?.cost ??
       service?.service_cost ??
       service?.service_price ??
-      service?.rate
+      service?.rate,
   );
 
 const getProjectCost = (company) =>
@@ -80,7 +90,7 @@ const getProjectCost = (company) =>
       company?.project_cost ??
       company?.projectCost ??
       company?.total_project_cost ??
-      company?.cost
+      company?.cost,
   );
 
 const getPlanDuration = (company) =>
@@ -104,35 +114,41 @@ const UserPlanDetails = () => {
   const [companyId, setCompanyId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [isScriptLoaded, setIsScriptLoaded] = useState(Boolean(window.Razorpay));
+  const [isScriptLoaded, setIsScriptLoaded] = useState(
+    Boolean(window.Razorpay),
+  );
   const [processingPayment, setProcessingPayment] = useState(false);
   const [projectPrice, setProjectPrice] = useState(0);
 
-
-  const companyData = useSelector(state => state.companyApi.data);
+  const companyData = useSelector((state) => state.companyApi.data);
 
   const requiredServiceIds = useMemo(
     () => normalizeIds(company?.required_services),
-    [company?.required_services]
+    [company?.required_services],
   );
 
   const selectedServices = useMemo(() => {
     const requiredIdSet = new Set(requiredServiceIds);
-    return services.filter((service) => requiredIdSet.has(String(getServiceId(service))));
+    return services.filter((service) =>
+      requiredIdSet.has(String(getServiceId(service))),
+    );
   }, [requiredServiceIds, services]);
 
   const missingServiceIds = useMemo(() => {
-    const selectedIdSet = new Set(selectedServices.map((service) => String(getServiceId(service))));
+    const selectedIdSet = new Set(
+      selectedServices.map((service) => String(getServiceId(service))),
+    );
     return requiredServiceIds.filter((id) => !selectedIdSet.has(id));
   }, [requiredServiceIds, selectedServices]);
 
   const costs = useMemo(() => {
     const servicesTotal = selectedServices.reduce(
       (total, service) => total + getServicePrice(service),
-      0
+      0,
     );
 
-    const mainProjectCost = projectPrice > 0 ? projectPrice : getProjectCost(company);
+    const mainProjectCost =
+      projectPrice > 0 ? projectPrice : getProjectCost(company);
     const subtotal = servicesTotal + mainProjectCost;
     const gstAmount = subtotal * GST_RATE;
 
@@ -153,12 +169,14 @@ const UserPlanDetails = () => {
       }
 
       const existingScript = document.querySelector(
-        'script[src="https://checkout.razorpay.com/v1/checkout.js"]'
+        'script[src="https://checkout.razorpay.com/v1/checkout.js"]',
       );
 
       if (existingScript) {
         existingScript.addEventListener("load", () => setIsScriptLoaded(true));
-        existingScript.addEventListener("error", () => setIsScriptLoaded(false));
+        existingScript.addEventListener("error", () =>
+          setIsScriptLoaded(false),
+        );
         return;
       }
 
@@ -201,10 +219,15 @@ const UserPlanDetails = () => {
         const companyData = unwrapApiData(companyResponse);
         const servicesData = unwrapApiData(servicesResponse);
 
-
         try {
-          const priceRes = await axios.get(`${API_BASE_URL}/api/master/user-service-prices/company/${companyId}`);
-          if (priceRes.data?.success && Array.isArray(priceRes.data.data) && priceRes.data.data.length > 0) {
+          const priceRes = await axios.get(
+            `${API_BASE_URL}/api/master/user-service-prices/company/${companyId}`,
+          );
+          if (
+            priceRes.data?.success &&
+            Array.isArray(priceRes.data.data) &&
+            priceRes.data.data.length > 0
+          ) {
             setProjectPrice(Number(priceRes.data.data[0].price) || 0);
           }
         } catch (e) {
@@ -229,20 +252,18 @@ const UserPlanDetails = () => {
     fetchPlanDetails();
   }, [companyId]);
 
-
-
-
   const handlePaymentSuccess = async (response) => {
     try {
-
-      if (!response.razorpay_payment_id || !response.razorpay_order_id || !response.razorpay_signature) {
-        throw new Error('Invalid Razorpay response - missing required fields');
+      if (
+        !response.razorpay_payment_id ||
+        !response.razorpay_order_id ||
+        !response.razorpay_signature
+      ) {
+        throw new Error("Invalid Razorpay response - missing required fields");
       }
 
-
-      const paymentMethod = 'Razorpay';
+      const paymentMethod = "Razorpay";
       const bankName = null;
-
 
       const adminPhoneValue =
         companyData?.admin_phone ||
@@ -263,7 +284,6 @@ const UserPlanDetails = () => {
         user?.contactNumber ||
         null;
 
-
       const paymentData = {
         razorpayOrderId: response.razorpay_order_id,
         razorpayPaymentId: response.razorpay_payment_id,
@@ -271,18 +291,30 @@ const UserPlanDetails = () => {
 
         orderId: response.razorpay_order_id,
         companyId: authCompanyId,
-        serviceId: null, 
+        serviceId: null,
 
-        companyName: companyData?.master_company_name || companyData?.company_name || company?.master_company_name || company?.company_name,
-        companyEmail: companyData?.email || companyData?.company_email || company?.email || company?.company_email,
-        adminEmail: companyData?.admin_email || companyData?.adminEmail || company?.admin_email || company?.adminEmail,
+        companyName:
+          companyData?.master_company_name ||
+          companyData?.company_name ||
+          company?.master_company_name ||
+          company?.company_name,
+        companyEmail:
+          companyData?.email ||
+          companyData?.company_email ||
+          company?.email ||
+          company?.company_email,
+        adminEmail:
+          companyData?.admin_email ||
+          companyData?.adminEmail ||
+          company?.admin_email ||
+          company?.adminEmail,
         adminPhone: adminPhoneValue,
 
         bankName: bankName,
         amount: costs.grandTotal,
-        currency: 'INR',
+        currency: "INR",
         paymentMethod: paymentMethod,
-        status: 'completed',
+        status: "completed",
 
         paymentSummaryDetails: {
           costs,
@@ -291,44 +323,54 @@ const UserPlanDetails = () => {
           company: {
             id: company?.id,
             name: company?.master_company_name || company?.company_name,
-            email: company?.email || company?.company_email
+            email: company?.email || company?.company_email,
           },
           timestamp: new Date().toISOString(),
           razorpayDetails: {
             paymentId: response.razorpay_payment_id,
             orderId: response.razorpay_order_id,
-            signature: response.razorpay_signature
-          }
-        }
+            signature: response.razorpay_signature,
+          },
+        },
       };
 
-
-      const apiResponse = await axios.post(`${API_BASE_URL}/api/master/payments`, paymentData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: authToken ? `Bearer ${authToken}` : undefined,
+      const apiResponse = await axios.post(
+        `${API_BASE_URL}/api/master/payments`,
+        paymentData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authToken ? `Bearer ${authToken}` : undefined,
+          },
+          timeout: 30000,
         },
-        timeout: 30000, 
-      });
+      );
 
       if (apiResponse.data?.success) {
-
-        alert(`Payment Successful! 🎉\n\nPayment ID: ${response.razorpay_payment_id}\nAmount: ${formatMoney(costs.grandTotal)}\n\nPayment record saved successfully.`);
-
+        alert(
+          `Payment Successful! 🎉\n\nPayment ID: ${response.razorpay_payment_id}\nAmount: ${formatMoney(costs.grandTotal)}\n\nPayment record saved successfully.`,
+        );
       } else {
-        const errorMsg = apiResponse.data?.message || 'Payment record could not be saved.';
-        alert(`Payment Successful, but saving failed!\n\nPayment ID: ${response.razorpay_payment_id}\n\n⚠️ Warning: ${errorMsg}`);
+        const errorMsg =
+          apiResponse.data?.message || "Payment record could not be saved.";
+        alert(
+          `Payment Successful, but saving failed!\n\nPayment ID: ${response.razorpay_payment_id}\n\n⚠️ Warning: ${errorMsg}`,
+        );
       }
-
     } catch (error) {
-      console.error('Payment processing error:', error);
-      let errorMessage = 'Payment processing failed. Please contact support.';
+      console.error("Payment processing error:", error);
+      let errorMessage = "Payment processing failed. Please contact support.";
       if (error.response) {
-        errorMessage = error.response.data?.message || `Server error (${error.response.status}).`;
+        errorMessage =
+          error.response.data?.message ||
+          `Server error (${error.response.status}).`;
       } else if (error.request) {
-        errorMessage = 'Network error. Please check your connection and try again.';
+        errorMessage =
+          "Network error. Please check your connection and try again.";
       }
-      alert(`Payment Issue\n\nPayment ID: ${response.razorpay_payment_id}\n\n${errorMessage}`);
+      alert(
+        `Payment Issue\n\nPayment ID: ${response.razorpay_payment_id}\n\n${errorMessage}`,
+      );
     } finally {
       setProcessingPayment(false);
     }
@@ -338,21 +380,25 @@ const UserPlanDetails = () => {
     setProcessingPayment(false);
     const errorDescription = razorpayError?.error?.description;
     const errorReason = razorpayError?.error?.reason;
-    let userMessage = errorDescription || `Payment failed: ${errorReason || 'Unknown error'}`;
-    alert(`Payment Failed\n\n${userMessage}\n\nPlease try again or contact support if the problem persists.`);
+    let userMessage =
+      errorDescription || `Payment failed: ${errorReason || "Unknown error"}`;
+    alert(
+      `Payment Failed\n\n${userMessage}\n\nPlease try again or contact support if the problem persists.`,
+    );
   };
-
-
-
 
   const handlePayment = async () => {
     if (!VITE_RAZORPAY_KEY_ID) {
-      setError("Razorpay key id is missing. Please set VITE_RAZORPAY_KEY_ID in the frontend .env file.");
+      setError(
+        "Razorpay key id is missing. Please set VITE_RAZORPAY_KEY_ID in the frontend .env file.",
+      );
       return;
     }
 
     if (!window.Razorpay || !isScriptLoaded) {
-      setError("Razorpay checkout could not be loaded. Please refresh and try again.");
+      setError(
+        "Razorpay checkout could not be loaded. Please refresh and try again.",
+      );
       return;
     }
 
@@ -375,20 +421,21 @@ const UserPlanDetails = () => {
     setError("");
 
     try {
-
       const orderResponse = await axios.post(
-        `${API_BASE_URL}/api/master/payments/create-order`, 
-        { amount: costs.grandTotal }, 
-        { headers: { Authorization: authToken ? `Bearer ${authToken}` : undefined } }
+        `${API_BASE_URL}/api/master/payments/create-order`,
+        { amount: costs.grandTotal },
+        {
+          headers: {
+            Authorization: authToken ? `Bearer ${authToken}` : undefined,
+          },
+        },
       );
 
       if (!orderResponse.data?.success || !orderResponse.data?.order?.id) {
         throw new Error("Failed to generate order ID from server.");
       }
 
-
       const orderId = orderResponse.data.order.id;
-
 
       const options = {
         key: VITE_RAZORPAY_KEY_ID,
@@ -400,7 +447,8 @@ const UserPlanDetails = () => {
         prefill: {
           name: company?.master_company_name || company?.company_name || "",
           email: company?.email || company?.company_email || "",
-          contact: company?.phone || company?.mobile || company?.contact_number || "",
+          contact:
+            company?.phone || company?.mobile || company?.contact_number || "",
         },
         notes: {
           company_id: company?.id || authCompanyId,
@@ -416,15 +464,16 @@ const UserPlanDetails = () => {
           escape: true,
         },
         retry: { enabled: false },
-        timeout: 300, 
+        timeout: 300,
       };
 
       const razorpay = new window.Razorpay(options);
-      razorpay.on("payment.failed", (response) => handlePaymentFailure(response.error));
+      razorpay.on("payment.failed", (response) =>
+        handlePaymentFailure(response.error),
+      );
       razorpay.open();
-
     } catch (initError) {
-      console.error('Order creation error:', initError);
+      console.error("Order creation error:", initError);
       setProcessingPayment(false);
       setError("Failed to initialize payment order. Please try again.");
     }
@@ -451,10 +500,14 @@ const UserPlanDetails = () => {
             <p className="text-sm font-medium uppercase tracking-wide text-green-700">
               User Management
             </p>
-            <h1 className="mt-1 text-3xl font-bold text-slate-900">User Plan Details</h1>
+            <h1 className="mt-1 text-3xl font-bold text-slate-900">
+              User Plan Details
+            </h1>
             <p className="mt-2 text-slate-600">
-              {company?.master_company_name || company?.company_name || "Company plan"} service
-              charges and payment summary.
+              {company?.master_company_name ||
+                company?.company_name ||
+                "Company plan"}{" "}
+              service charges and payment summary.
             </p>
           </div>
 
@@ -483,7 +536,9 @@ const UserPlanDetails = () => {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="mb-3 flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-500">Duration</span>
+                  <span className="text-sm font-medium text-slate-500">
+                    Duration
+                  </span>
                   <CalendarDays className="h-5 w-5 text-green-700" />
                 </div>
                 <p className="text-2xl font-bold text-slate-900">
@@ -494,24 +549,35 @@ const UserPlanDetails = () => {
 
               <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="mb-3 flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-500">Required Services</span>
+                  <span className="text-sm font-medium text-slate-500">
+                    Required Services
+                  </span>
                   <Package className="h-5 w-5 text-green-700" />
                 </div>
-                <p className="text-2xl font-bold text-slate-900">{requiredServiceIds.length}</p>
+                <p className="text-2xl font-bold text-slate-900">
+                  {requiredServiceIds.length}
+                </p>
                 <p className="mt-1 text-sm text-slate-500">
-                  IDs: {requiredServiceIds.length ? requiredServiceIds.join(", ") : "N/A"}
+                  IDs:{" "}
+                  {requiredServiceIds.length
+                    ? requiredServiceIds.join(", ")
+                    : "N/A"}
                 </p>
               </div>
 
               <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="mb-3 flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-500">Main Project Cost</span>
+                  <span className="text-sm font-medium text-slate-500">
+                    Main Project Cost
+                  </span>
                   <IndianRupee className="h-5 w-5 text-green-700" />
                 </div>
                 <p className="text-2xl font-bold text-slate-900">
                   {formatMoney(costs.mainProjectCost)}
                 </p>
-                <p className="mt-1 text-sm text-slate-500">Fetched from company details</p>
+                <p className="mt-1 text-sm text-slate-500">
+                  Fetched from company details
+                </p>
               </div>
             </div>
 
@@ -519,7 +585,9 @@ const UserPlanDetails = () => {
               <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="mb-5 flex items-center gap-2">
                   <CheckCircle2 className="h-5 w-5 text-green-700" />
-                  <h2 className="text-xl font-semibold text-slate-900">Selected Services</h2>
+                  <h2 className="text-xl font-semibold text-slate-900">
+                    Selected Services
+                  </h2>
                 </div>
 
                 {selectedServices.length > 0 ? (
@@ -527,9 +595,15 @@ const UserPlanDetails = () => {
                     <table className="min-w-full divide-y divide-slate-200 text-sm">
                       <thead className="bg-slate-100 text-left text-xs uppercase tracking-wide text-slate-600">
                         <tr>
-                          <th className="px-4 py-3 font-semibold">Service ID</th>
-                          <th className="px-4 py-3 font-semibold">Service Name</th>
-                          <th className="px-4 py-3 text-right font-semibold">Cost</th>
+                          <th className="px-4 py-3 font-semibold">
+                            Service ID
+                          </th>
+                          <th className="px-4 py-3 font-semibold">
+                            Service Name
+                          </th>
+                          <th className="px-4 py-3 text-right font-semibold">
+                            Cost
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-200 bg-white">
@@ -558,13 +632,15 @@ const UserPlanDetails = () => {
                   </div>
                 ) : (
                   <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-                    No matching services were found for the required service IDs.
+                    No matching services were found for the required service
+                    IDs.
                   </div>
                 )}
 
                 {missingServiceIds.length > 0 && (
                   <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-                    Service master data was not found for ID(s): {missingServiceIds.join(", ")}.
+                    Service master data was not found for ID(s):{" "}
+                    {missingServiceIds.join(", ")}.
                   </div>
                 )}
               </section>
@@ -572,7 +648,9 @@ const UserPlanDetails = () => {
               <aside className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="mb-5 flex items-center gap-2">
                   <CreditCard className="h-5 w-5 text-green-700" />
-                  <h2 className="text-xl font-semibold text-slate-900">Payment Summary</h2>
+                  <h2 className="text-xl font-semibold text-slate-900">
+                    Payment Summary
+                  </h2>
                 </div>
 
                 <div className="space-y-3">
@@ -597,14 +675,18 @@ const UserPlanDetails = () => {
                     </div>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">GST ({GST_RATE * 100}%)</span>
+                    <span className="text-slate-600">
+                      GST ({GST_RATE * 100}%)
+                    </span>
                     <span className="font-semibold text-slate-900">
                       {formatMoney(costs.gstAmount)}
                     </span>
                   </div>
                   <div className="rounded-lg bg-green-50 p-4">
                     <div className="flex items-center justify-between">
-                      <span className="font-semibold text-green-900">Total payable</span>
+                      <span className="font-semibold text-green-900">
+                        Total payable
+                      </span>
                       <span className="text-2xl font-bold text-green-700">
                         {formatMoney(costs.grandTotal)}
                       </span>
@@ -615,7 +697,12 @@ const UserPlanDetails = () => {
                 <button
                   type="button"
                   onClick={handlePayment}
-                  disabled={processingPayment || !isScriptLoaded || !VITE_RAZORPAY_KEY_ID || costs.grandTotal <= 0}
+                  disabled={
+                    processingPayment ||
+                    !isScriptLoaded ||
+                    !VITE_RAZORPAY_KEY_ID ||
+                    costs.grandTotal <= 0
+                  }
                   className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-green-700 px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-slate-400"
                 >
                   {processingPayment ? (

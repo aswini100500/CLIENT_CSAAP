@@ -1,196 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { Calendar, Filter, FileText, Download } from "lucide-react";
 import axios from "axios";
@@ -215,9 +22,8 @@ const TransactionSummery = () => {
     "Purchase",
     "Contra",
     "Journal",
-    "Receipt"
+    "Receipt",
   ];
-
 
   useEffect(() => {
     if (!companyId) return;
@@ -225,9 +31,8 @@ const TransactionSummery = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/daybook/${companyId}`
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/daybook/${companyId}`,
         );
-
 
         let cleaned = res.data.map((e) => ({
           ...e,
@@ -248,10 +53,9 @@ const TransactionSummery = () => {
 
         setEntries(cleaned);
 
-
         if (cleaned.length > 0) {
           const dates = cleaned.map((e) =>
-            new Date(e.date).toISOString().slice(0, 10)
+            new Date(e.date).toISOString().slice(0, 10),
           );
 
           setDateRange({
@@ -262,7 +66,6 @@ const TransactionSummery = () => {
 
         setLoading(false);
       } catch (err) {
-
         setLoading(false);
       }
     };
@@ -270,8 +73,6 @@ const TransactionSummery = () => {
     fetchData();
   }, [companyId]);
 
-
-  
   if (loading) {
     return (
       <div className="p-5 text-center text-gray-500 font-mono">
@@ -279,7 +80,6 @@ const TransactionSummery = () => {
       </div>
     );
   }
-
 
   const filteredData = entries.filter((row) => {
     const date = new Date(row.date).getTime();
@@ -296,7 +96,6 @@ const TransactionSummery = () => {
 
   const totalDebit = filteredData.reduce((a, b) => a + b.debit, 0);
   const totalCredit = filteredData.reduce((a, b) => a + b.credit, 0);
-
 
   const handleExport = () => {
     const csv = [
@@ -323,12 +122,10 @@ const TransactionSummery = () => {
 
   return (
     <div className="flex w-full h-[calc(100vh-70px)] bg-gray-100 overflow-hidden font-[monospace]">
-
       <div className="w-64 bg-white border-r shadow-sm p-4 overflow-y-auto">
         <h2 className="font-bold text-lg mb-4 text-blue-700 flex items-center gap-2">
           <Filter size={18} /> Filters
         </h2>
-
 
         <div className="mb-5">
           <h3 className="text-sm font-semibold text-gray-700 mb-1">
@@ -361,7 +158,6 @@ const TransactionSummery = () => {
           </div>
         </div>
 
-
         <div>
           <h3 className="text-sm font-semibold text-gray-700 mb-1">
             Voucher Type
@@ -384,7 +180,6 @@ const TransactionSummery = () => {
         </div>
       </div>
 
-
       <div className="flex-1 p-6 overflow-auto">
         <div className="bg-white rounded-lg shadow-sm p-4 border">
           <div className="flex items-center justify-between">
@@ -403,7 +198,6 @@ const TransactionSummery = () => {
           <p className="text-sm text-gray-600 mt-1">
             Period: <b>{dateRange.from}</b> to <b>{dateRange.to}</b>
           </p>
-
 
           <div className="mt-4 border rounded-lg overflow-hidden">
             <table className="w-full text-sm">
@@ -447,7 +241,6 @@ const TransactionSummery = () => {
               </tbody>
             </table>
 
-
             <div className="bg-gray-100 flex justify-end px-6 py-2 text-sm font-bold">
               <span className="mr-10 text-green-700">
                 Total Debit: ₹{totalDebit.toLocaleString()}
@@ -464,7 +257,3 @@ const TransactionSummery = () => {
 };
 
 export default TransactionSummery;
-
-
-
-

@@ -5,36 +5,42 @@ export default function OverTime() {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [showReport, setShowReport] = useState(false);
-const [overtimeData,setOvertimeData]=useState([]);
+  const [overtimeData, setOvertimeData] = useState([]);
 
   const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
-  const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
-
-  
-
-
-
+  const years = Array.from(
+    { length: 10 },
+    (_, i) => new Date().getFullYear() - i,
+  );
 
   useEffect(() => {
-
     setMonth("");
     setYear("");
     setShowReport(false);
   }, []);
 
   function handleSubmit(e) {
-  e.preventDefault();
-  if (!month || !year) {
-    alert("Please select both month and year");
-    return;
+    e.preventDefault();
+    if (!month || !year) {
+      alert("Please select both month and year");
+      return;
+    }
+    fetchOvertimeReport();
   }
-  fetchOvertimeReport();
-}
-
 
   const getDaysInMonth = () => {
     const date = new Date(parseInt(year), months.indexOf(month), 1);
@@ -43,39 +49,42 @@ const [overtimeData,setOvertimeData]=useState([]);
 
   const daysInMonth = getDaysInMonth();
 
-
   const summary = {
     totalEmployees: overtimeData.length,
-    totalOvertimeDays: overtimeData.reduce((total, emp) => 
-      total + emp.days.filter(day => day.hours).length, 0
+    totalOvertimeDays: overtimeData.reduce(
+      (total, emp) => total + emp.days.filter((day) => day.hours).length,
+      0,
     ),
-    totalOvertimeHours: overtimeData.reduce((total, emp) => 
-      total + emp.days.reduce((empTotal, day) => 
-        empTotal + (parseInt(day.hours) || 0), 0
-      ), 0
-    )
+    totalOvertimeHours: overtimeData.reduce(
+      (total, emp) =>
+        total +
+        emp.days.reduce(
+          (empTotal, day) => empTotal + (parseInt(day.hours) || 0),
+          0,
+        ),
+      0,
+    ),
   };
 
-
- const fetchOvertimeReport = async () => {
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/overtime?month=${month}&year=${year}`);
-    setOvertimeData(res.data.data || []);
-    setShowReport(true);
-  } catch (err) {
-    console.error("Error fetching overtime report", err);
-    alert("Failed to load overtime report");
-  }
-};
+  const fetchOvertimeReport = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/overtime?month=${month}&year=${year}`,
+      );
+      setOvertimeData(res.data.data || []);
+      setShowReport(true);
+    } catch (err) {
+      console.error("Error fetching overtime report", err);
+      alert("Failed to load overtime report");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Monthly Overtime Report
         </h1>
-
 
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
@@ -132,10 +141,8 @@ const [overtimeData,setOvertimeData]=useState([]);
           </form>
         </div>
 
-
         {showReport && (
           <div className="bg-white rounded-2xl shadow-lg p-6 animate-fadeIn">
-
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm">
                 <thead>
@@ -198,11 +205,11 @@ const [overtimeData,setOvertimeData]=useState([]);
                         <td
                           key={day.day}
                           className={`border border-gray-200 px-3 py-3 text-center text-sm font-medium ${
-                            day.hours === "2" 
-                              ? "bg-yellow-100 text-yellow-800" 
-                              : day.hours === "1" 
-                              ? "bg-green-100 text-green-800" 
-                              : "text-gray-400"
+                            day.hours === "2"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : day.hours === "1"
+                                ? "bg-green-100 text-green-800"
+                                : "text-gray-400"
                           }`}
                         >
                           {day.hours || "-"}
@@ -217,11 +224,16 @@ const [overtimeData,setOvertimeData]=useState([]);
         )}
       </div>
 
-
       <style jsx>{`
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;

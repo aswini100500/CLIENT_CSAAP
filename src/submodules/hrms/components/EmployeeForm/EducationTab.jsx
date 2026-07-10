@@ -19,7 +19,9 @@ const EducationTab = ({
         className="border border-(--border-soft) rounded-xl p-4 mb-4 hover:shadow-sm transition-all duration-200 bg-(--bg-app)/30"
       >
         <div className="flex justify-between mb-4">
-          <h3 className="font-bold text-sm text-(--text-strong)">Education {index + 1}</h3>
+          <h3 className="font-bold text-sm text-(--text-strong)">
+            Education {index + 1}
+          </h3>
           {educationList.length > 1 && (
             <button
               type="button"
@@ -33,9 +35,7 @@ const EducationTab = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {EDUCATION_FIELDS.map((field) => (
             <div key={field.name}>
-              <label className="app-label block mb-1.5">
-                {field.label}
-              </label>
+              <label className="app-label block mb-1.5">{field.label}</label>
               <input
                 type="text"
                 value={edu[field.name]}
@@ -48,9 +48,7 @@ const EducationTab = ({
             </div>
           ))}
           <div>
-            <label className="app-label block mb-1.5">
-              Graduation Type
-            </label>
+            <label className="app-label block mb-1.5">Graduation Type</label>
             <select
               value={edu.graduationType}
               onChange={(e) =>

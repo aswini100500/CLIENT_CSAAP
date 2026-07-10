@@ -18,7 +18,7 @@ const LabourDetails = ({ projectSetup }) => {
   ];
 
   const [labour, setLabour] = useState(
-    DEFAULT_ROLES.reduce((acc, role) => ({ ...acc, [role]: 0 }), {})
+    DEFAULT_ROLES.reduce((acc, role) => ({ ...acc, [role]: 0 }), {}),
   );
 
   const [newRole, setNewRole] = useState("");
@@ -35,18 +35,26 @@ const LabourDetails = ({ projectSetup }) => {
     try {
       setLoading(true);
       const res = await operationApi.getLabourDetails();
-      const details = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-      const existingData = details.find(d => d.project_setup_id === projectSetup.id);
+      const details = Array.isArray(res.data) ? res.data : res.data?.data || [];
+      const existingData = details.find(
+        (d) => d.project_setup_id === projectSetup.id,
+      );
       if (existingData) {
         let loadedLabour = existingData.labour_data;
-        if (typeof loadedLabour === 'string') {
-          try { loadedLabour = JSON.parse(loadedLabour); } catch (e) { loadedLabour = {}; }
+        if (typeof loadedLabour === "string") {
+          try {
+            loadedLabour = JSON.parse(loadedLabour);
+          } catch (e) {
+            loadedLabour = {};
+          }
         }
         setLabour(loadedLabour || {});
         setSavedData(loadedLabour);
       } else {
-          setLabour(DEFAULT_ROLES.reduce((acc, role) => ({ ...acc, [role]: 0 }), {}));
-          setSavedData(null);
+        setLabour(
+          DEFAULT_ROLES.reduce((acc, role) => ({ ...acc, [role]: 0 }), {}),
+        );
+        setSavedData(null);
       }
     } catch (error) {
       console.error("Error fetching labour details:", error);
@@ -55,12 +63,10 @@ const LabourDetails = ({ projectSetup }) => {
     }
   };
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLabour({ ...labour, [name]: Number(value) });
   };
-
 
   const handleAddRole = () => {
     const role = newRole.trim().toLowerCase().replace(/\s+/g, "_");
@@ -74,7 +80,6 @@ const LabourDetails = ({ projectSetup }) => {
     Swal.fire("Added!", "New labour role added successfully.", "success");
   };
 
-
   const handleDeleteRole = (role) => {
     const updated = { ...labour };
     delete updated[role];
@@ -82,48 +87,53 @@ const LabourDetails = ({ projectSetup }) => {
     Swal.fire(
       "Deleted!",
       `${role.replace(/_/g, " ")} removed successfully.`,
-      "success"
+      "success",
     );
   };
 
-
   const handleSave = async () => {
     if (!projectSetup) {
-        return Swal.fire("Error", "Please complete Project Setup first!", "error");
+      return Swal.fire(
+        "Error",
+        "Please complete Project Setup first!",
+        "error",
+      );
     }
 
     try {
-        setLoading(true);
-        const submissionData = {
-            project_setup_id: projectSetup.id,
-            labour_data: JSON.stringify(labour),
-            remarks: "Daily labour allocation"
-        };
+      setLoading(true);
+      const submissionData = {
+        project_setup_id: projectSetup.id,
+        labour_data: JSON.stringify(labour),
+        remarks: "Daily labour allocation",
+      };
 
-        const res = await operationApi.getLabourDetails();
-        const details = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-        const existingData = details.find(d => d.project_setup_id === projectSetup.id);
+      const res = await operationApi.getLabourDetails();
+      const details = Array.isArray(res.data) ? res.data : res.data?.data || [];
+      const existingData = details.find(
+        (d) => d.project_setup_id === projectSetup.id,
+      );
 
-        if (existingData) {
-            await operationApi.updateLabourDetails(existingData.id, submissionData);
-        } else {
-            await operationApi.createLabourDetails(submissionData);
-        }
+      if (existingData) {
+        await operationApi.updateLabourDetails(existingData.id, submissionData);
+      } else {
+        await operationApi.createLabourDetails(submissionData);
+      }
 
-        setSavedData(labour);
-        Swal.fire({
-            icon: "success",
-            title: "Labour Details Saved!",
-            text: "Your labour details have been saved successfully.",
-            timer: 2000,
-            showConfirmButton: false,
-        });
-        fetchLabourDetails();
+      setSavedData(labour);
+      Swal.fire({
+        icon: "success",
+        title: "Labour Details Saved!",
+        text: "Your labour details have been saved successfully.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      fetchLabourDetails();
     } catch (error) {
-        console.error("Error saving labour details:", error);
-        Swal.fire("Error", "Failed to save labour details.", "error");
+      console.error("Error saving labour details:", error);
+      Swal.fire("Error", "Failed to save labour details.", "error");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -132,7 +142,6 @@ const LabourDetails = ({ projectSetup }) => {
       <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">
         Labour Details
       </h2>
-
 
       <div className="flex flex-col sm:flex-row items-center gap-3 mb-6">
         <input
@@ -149,7 +158,6 @@ const LabourDetails = ({ projectSetup }) => {
           <PlusCircle size={18} /> Add Role
         </button>
       </div>
-
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Object.keys(labour).map((role) => (
@@ -171,7 +179,6 @@ const LabourDetails = ({ projectSetup }) => {
               />
             </div>
 
-
             {!DEFAULT_ROLES.includes(role) && (
               <button
                 onClick={() => handleDeleteRole(role)}
@@ -184,7 +191,6 @@ const LabourDetails = ({ projectSetup }) => {
         ))}
       </div>
 
-
       <div className="mt-8 text-right">
         <button
           onClick={handleSave}
@@ -193,7 +199,6 @@ const LabourDetails = ({ projectSetup }) => {
           <Save size={18} /> Save Labour Details
         </button>
       </div>
-
 
       {savedData && (
         <div className="mt-10 bg-white shadow-md rounded-lg border border-gray-200 p-6">

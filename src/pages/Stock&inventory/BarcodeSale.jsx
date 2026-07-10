@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const BarcodeSale = () => {
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
-    fromStore: '',
-    customerName: '',
-    contactNo: '',
-    address: '',
-    barcode: '',
-    product: '',
-    batch: '',
-    rack: '',
-    quantity: '',
-    salePrice: '',
-    cgst: '0',
-    sgst: '0',
-    igst: '0',
-    discount: '',
-    gstType: 'noGst',
-    taxType: 'cgstSgst',
-    gstNumber: ''
+    fromStore: "",
+    customerName: "",
+    contactNo: "",
+    address: "",
+    barcode: "",
+    product: "",
+    batch: "",
+    rack: "",
+    quantity: "",
+    salePrice: "",
+    cgst: "0",
+    sgst: "0",
+    igst: "0",
+    discount: "",
+    gstType: "noGst",
+    taxType: "cgstSgst",
+    gstNumber: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -37,8 +37,8 @@ const BarcodeSale = () => {
       const cgst = parseFloat(formData.cgst) || 0;
       const sgst = parseFloat(formData.sgst) || 0;
       const igst = parseFloat(formData.igst) || 0;
-      
-      const totalPrice = (quantity * salePrice) + cgst + sgst + igst;
+
+      const totalPrice = quantity * salePrice + cgst + sgst + igst;
 
       const newProduct = {
         id: Date.now(),
@@ -50,39 +50,40 @@ const BarcodeSale = () => {
         cgst: cgst,
         sgst: sgst,
         igst: igst,
-        totalPrice: totalPrice
+        totalPrice: totalPrice,
       };
 
       setProducts([...products, newProduct]);
-      
 
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        product: '',
-        batch: '',
-        rack: '',
-        quantity: '',
-        salePrice: '',
-        cgst: '0',
-        sgst: '0',
-        igst: '0',
-        barcode: ''
+        product: "",
+        batch: "",
+        rack: "",
+        quantity: "",
+        salePrice: "",
+        cgst: "0",
+        sgst: "0",
+        igst: "0",
+        barcode: "",
       }));
     }
   };
 
   const removeProduct = (id) => {
-    setProducts(products.filter(product => product.id !== id));
+    setProducts(products.filter((product) => product.id !== id));
   };
 
   const calculateTotals = () => {
-    const grossPrice = products.reduce((sum, product) => 
-      sum + (product.quantity * product.salePrice), 0);
-    
+    const grossPrice = products.reduce(
+      (sum, product) => sum + product.quantity * product.salePrice,
+      0,
+    );
+
     const totalCgst = products.reduce((sum, product) => sum + product.cgst, 0);
     const totalSgst = products.reduce((sum, product) => sum + product.sgst, 0);
     const totalIgst = products.reduce((sum, product) => sum + product.igst, 0);
-    
+
     const discount = parseFloat(formData.discount) || 0;
     const netPrice = grossPrice + totalCgst + totalSgst + totalIgst - discount;
 
@@ -94,14 +95,11 @@ const BarcodeSale = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-6xl mx-auto">
-
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Barcode Sale</h1>
         </div>
 
-
         <div className="bg-white rounded-lg border border-gray-300">
-
           <div className="p-4 border-b border-gray-300">
             <div className="flex items-center gap-2">
               <span className="text-gray-700 font-medium">From Store</span>
@@ -110,7 +108,12 @@ const BarcodeSale = () => {
                   type="checkbox"
                   name="fromStore"
                   checked={formData.fromStore}
-                  onChange={(e) => setFormData(prev => ({...prev, fromStore: e.target.checked}))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      fromStore: e.target.checked,
+                    }))
+                  }
                   className="w-4 h-4 text-blue-600"
                 />
                 <span className="ml-1">✔</span>
@@ -118,11 +121,12 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-
           <div className="p-4 border-b border-gray-300">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Contact No</label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Contact No
+                </label>
                 <input
                   type="text"
                   name="contactNo"
@@ -133,7 +137,9 @@ const BarcodeSale = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Address</label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Address
+                </label>
                 <input
                   type="text"
                   name="address"
@@ -144,7 +150,9 @@ const BarcodeSale = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Customer Name</label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Customer Name
+                </label>
                 <input
                   type="text"
                   name="customerName"
@@ -156,7 +164,6 @@ const BarcodeSale = () => {
               </div>
             </div>
           </div>
-
 
           <div className="p-4 border-b border-gray-300">
             <h3 className="text-sm font-medium text-gray-600 mb-2">Barcode</h3>
@@ -172,12 +179,11 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-
           <div className="p-4 border-b border-gray-300">
             <h3 className="text-sm font-medium text-gray-600 mb-3">
-              Product List (Enter Product details and press "Add Product To List" to add product)
+              Product List (Enter Product details and press "Add Product To
+              List" to add product)
             </h3>
-            
 
             <div className="grid grid-cols-6 gap-2 mb-3 text-xs font-medium text-gray-600">
               <div>Product</div>
@@ -237,7 +243,6 @@ const BarcodeSale = () => {
               </button>
             </div>
 
-
             <div className="grid grid-cols-4 gap-3 max-w-md">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">CGST</label>
@@ -273,14 +278,17 @@ const BarcodeSale = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Total Price</label>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Total Price
+                </label>
                 <div className="px-3 py-2 border border-gray-300 rounded text-sm bg-gray-50">
-                  {products.length > 0 ? products[products.length - 1]?.totalPrice.toFixed(2) : '0.00'}
+                  {products.length > 0
+                    ? products[products.length - 1]?.totalPrice.toFixed(2)
+                    : "0.00"}
                 </div>
               </div>
             </div>
           </div>
-
 
           {products.length > 0 && (
             <div className="p-4 border-b border-gray-300">
@@ -296,7 +304,9 @@ const BarcodeSale = () => {
                       <th className="px-3 py-2 text-left border">CGST</th>
                       <th className="px-3 py-2 text-left border">SGST</th>
                       <th className="px-3 py-2 text-left border">IGST</th>
-                      <th className="px-3 py-2 text-left border">Total Price</th>
+                      <th className="px-3 py-2 text-left border">
+                        Total Price
+                      </th>
                       <th className="px-3 py-2 text-left border">Action</th>
                     </tr>
                   </thead>
@@ -307,11 +317,21 @@ const BarcodeSale = () => {
                         <td className="px-3 py-2 border">{product.batch}</td>
                         <td className="px-3 py-2 border">{product.rack}</td>
                         <td className="px-3 py-2 border">{product.quantity}</td>
-                        <td className="px-3 py-2 border">{product.salePrice.toFixed(2)}</td>
-                        <td className="px-3 py-2 border">{product.cgst.toFixed(2)}</td>
-                        <td className="px-3 py-2 border">{product.sgst.toFixed(2)}</td>
-                        <td className="px-3 py-2 border">{product.igst.toFixed(2)}</td>
-                        <td className="px-3 py-2 border">{product.totalPrice.toFixed(2)}</td>
+                        <td className="px-3 py-2 border">
+                          {product.salePrice.toFixed(2)}
+                        </td>
+                        <td className="px-3 py-2 border">
+                          {product.cgst.toFixed(2)}
+                        </td>
+                        <td className="px-3 py-2 border">
+                          {product.sgst.toFixed(2)}
+                        </td>
+                        <td className="px-3 py-2 border">
+                          {product.igst.toFixed(2)}
+                        </td>
+                        <td className="px-3 py-2 border">
+                          {product.totalPrice.toFixed(2)}
+                        </td>
                         <td className="px-3 py-2 border">
                           <button
                             onClick={() => removeProduct(product.id)}
@@ -328,11 +348,12 @@ const BarcodeSale = () => {
             </div>
           )}
 
-
           <div className="p-4 border-b border-gray-300">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Gross Price</label>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Gross Price
+                </label>
                 <div className="px-3 py-2 border border-gray-300 rounded text-sm bg-gray-50">
                   {totals.grossPrice.toFixed(2)}
                 </div>
@@ -358,11 +379,12 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-
           <div className="p-4 border-b border-gray-300">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Discount</label>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Discount
+                </label>
                 <input
                   type="number"
                   name="discount"
@@ -373,7 +395,9 @@ const BarcodeSale = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Net Price</label>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Net Price
+                </label>
                 <div className="px-3 py-2 border border-gray-300 rounded text-sm bg-gray-50 font-medium">
                   {totals.netPrice.toFixed(2)}
                 </div>
@@ -381,18 +405,20 @@ const BarcodeSale = () => {
             </div>
           </div>
 
-
           <div className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl">
               <div>
                 <h4 className="font-medium text-gray-700 mb-3">GST Options</h4>
                 <div className="space-y-2">
                   {[
-                    { value: 'noGst', label: 'No GST' },
-                    { value: 'gstWithoutNumber', label: 'GST Without Number' },
-                    { value: 'gstWithNumber', label: 'GST With Number' }
+                    { value: "noGst", label: "No GST" },
+                    { value: "gstWithoutNumber", label: "GST Without Number" },
+                    { value: "gstWithNumber", label: "GST With Number" },
                   ].map((option) => (
-                    <label key={option.value} className="flex items-center gap-2">
+                    <label
+                      key={option.value}
+                      className="flex items-center gap-2"
+                    >
                       <input
                         type="radio"
                         name="gstType"
@@ -405,7 +431,7 @@ const BarcodeSale = () => {
                     </label>
                   ))}
                 </div>
-                {formData.gstType === 'gstWithNumber' && (
+                {formData.gstType === "gstWithNumber" && (
                   <input
                     type="text"
                     name="gstNumber"
@@ -421,10 +447,13 @@ const BarcodeSale = () => {
                 <h4 className="font-medium text-gray-700 mb-3">Tax Type</h4>
                 <div className="space-y-2">
                   {[
-                    { value: 'cgstSgst', label: 'CGST/SGST' },
-                    { value: 'igst', label: 'IGST' }
+                    { value: "cgstSgst", label: "CGST/SGST" },
+                    { value: "igst", label: "IGST" },
                   ].map((option) => (
-                    <label key={option.value} className="flex items-center gap-2">
+                    <label
+                      key={option.value}
+                      className="flex items-center gap-2"
+                    >
                       <input
                         type="radio"
                         name="taxType"
@@ -439,7 +468,6 @@ const BarcodeSale = () => {
                 </div>
               </div>
             </div>
-
 
             <div className="text-center mt-6">
               <button className="bg-green-500 text-white px-8 py-2 rounded-md hover:bg-green-600 font-medium">

@@ -11,14 +11,19 @@ const getAuthHeaders = () => {
 
 export const fetchSuperAdminAccountingActivity = async (filters = {}) => {
   const params = Object.fromEntries(
-    Object.entries(filters).filter(([, value]) => value !== undefined && value !== null && value !== "")
+    Object.entries(filters).filter(
+      ([, value]) => value !== undefined && value !== null && value !== "",
+    ),
   );
 
-  const response = await axios.get(`${API_BASE_URL}/api/v1/superadmin-accounting/activity`, {
-    params,
-    withCredentials: true,
-    headers: getAuthHeaders(),
-  });
+  const response = await axios.get(
+    `${API_BASE_URL}/api/v1/superadmin-accounting/activity`,
+    {
+      params,
+      withCredentials: true,
+      headers: getAuthHeaders(),
+    },
+  );
 
   return response.data;
 };

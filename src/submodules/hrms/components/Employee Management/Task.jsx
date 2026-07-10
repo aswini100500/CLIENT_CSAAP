@@ -35,7 +35,7 @@ import {
   User,
   Users,
   X,
-  Zap
+  Zap,
 } from "lucide-react";
 import React, {
   useCallback,
@@ -53,7 +53,6 @@ import ToDoList from "../ToDoList/ToDoList";
 
 const renderRichText = (html) => {
   if (!html) return null;
-
 
   const cleanHtml = String(html).replace(/&nbsp;/g, " ");
 
@@ -89,7 +88,6 @@ const renderRichText = (html) => {
     },
   };
 
-
   return <>{parse(cleanHtml, options)}</>;
 };
 
@@ -121,8 +119,8 @@ const parseAttachmentArray = (value, fallbackType = "file") => {
     const parsed = typeof value === "string" ? JSON.parse(value) : value;
     return Array.isArray(parsed)
       ? parsed
-        .map((file) => normalizeAttachment(file, fallbackType))
-        .filter(Boolean)
+          .map((file) => normalizeAttachment(file, fallbackType))
+          .filter(Boolean)
       : [];
   } catch {
     return [];
@@ -213,7 +211,6 @@ const Task = () => {
     }
   };
 
-
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [extensionApprovalDeadline, setExtensionApprovalDeadline] =
@@ -238,9 +235,7 @@ const Task = () => {
   const [teamMembers, setTeamMembers] = useState([]);
 
   const { user, token: authToken } = useAuth();
-  const isAdmin =
-    user?.role?.toLowerCase() === "admin" ||
-    !user?.employee_id;
+  const isAdmin = user?.role?.toLowerCase() === "admin" || !user?.employee_id;
   const API = `${import.meta.env.VITE_HRMS_BASE_URL}`;
   const companyId = user?.company_id;
 
@@ -273,7 +268,6 @@ const Task = () => {
     [getEmployeeNameById],
   );
 
-
   useEffect(() => {
     setCurrentPage(1);
   }, [
@@ -287,9 +281,6 @@ const Task = () => {
   ]);
 
   const dropdownRef = useRef(null);
-
-
-
 
   const [chatMessages, setChatMessages] = useState([]);
 
@@ -320,16 +311,13 @@ const Task = () => {
     "Pending Approval",
   ];
 
-
   const showSnackbar = (message, type = "info") => {
     setSnackbar({ open: true, message, type });
-
 
     setTimeout(() => {
       setSnackbar((prev) => ({ ...prev, open: false }));
     }, 5000);
   };
-
 
   const toggleAssignee = (id) => {
     setFormData((prev) => ({
@@ -364,11 +352,13 @@ const Task = () => {
     }));
   };
 
-
   const addSubtask = () => {
     setFormData((prev) => ({
       ...prev,
-      subtasks: [...prev.subtasks, { name: "", completed: false, assigned_to: null }],
+      subtasks: [
+        ...prev.subtasks,
+        { name: "", completed: false, assigned_to: null },
+      ],
     }));
   };
 
@@ -387,12 +377,14 @@ const Task = () => {
 
   const handleSubtaskAssigneeChange = (index, assigneeId) => {
     const newSubtasks = [...formData.subtasks];
-    newSubtasks[index] = { ...newSubtasks[index], assigned_to: assigneeId || null };
+    newSubtasks[index] = {
+      ...newSubtasks[index],
+      assigned_to: assigneeId || null,
+    };
     setFormData((prev) => ({ ...prev, subtasks: newSubtasks }));
   };
 
   const handleSubtaskToggle = async (taskId, subtaskId) => {
-
     const task = tasks.find((t) => t.id === taskId);
     if (task) {
       const updatedSubtasks = task.subtasks.map((st) =>
@@ -424,10 +416,10 @@ const Task = () => {
       subtasks:
         task.subtasks && task.subtasks.length > 0
           ? task.subtasks.map((st) => ({
-            name: st.name || st.title,
-            completed: st.completed || false,
-            assigned_to: st.assigned_to || st.assignedTo || null,
-          }))
+              name: st.name || st.title,
+              completed: st.completed || false,
+              assigned_to: st.assigned_to || st.assignedTo || null,
+            }))
           : [{ name: "", completed: false, assigned_to: null }],
     });
     setViewingTask(null);
@@ -531,32 +523,38 @@ const Task = () => {
           return;
         }
 
-        const API_BASE_URL = import.meta.env.VITE_CSAAP_URL || 'https://csaapnodeapi.csaap.com';
+        const API_BASE_URL =
+          import.meta.env.VITE_CSAAP_URL || "https://csaapnodeapi.csaap.com";
         const activeCompanyId = companyId || 1;
-        const response = await axios.get(`${API_BASE_URL}/api/tenant/clprojects`, {
-          params: { company_id: activeCompanyId },
-          headers: { Authorization: `Bearer ${csaapToken}` }
-        });
+        const response = await axios.get(
+          `${API_BASE_URL}/api/tenant/clprojects`,
+          {
+            params: { company_id: activeCompanyId },
+            headers: { Authorization: `Bearer ${csaapToken}` },
+          },
+        );
 
         const projectsData = Array.isArray(response.data?.data)
           ? response.data.data
           : Array.isArray(response.data)
-          ? response.data
-          : [];
+            ? response.data
+            : [];
 
         const allProjects = projectsData
           .map((project) => ({
             id: project.id,
             name: project.project_name || project.name || "Unnamed Project",
-            property_type: 'clproject',
-            display_type: 'Client Project',
-            locality: project.locality || '',
-            city: project.city || '',
-            branch: project.project_code || 'Main',
+            property_type: "clproject",
+            display_type: "Client Project",
+            locality: project.locality || "",
+            city: project.city || "",
+            branch: project.project_code || "Main",
             composite_key: `clproject:${project.id}`,
-            location: [project?.locality, project?.city].filter(Boolean).join(", ")
+            location: [project?.locality, project?.city]
+              .filter(Boolean)
+              .join(", "),
           }))
-          .filter(project => project.name)
+          .filter((project) => project.name)
           .sort((a, b) => a.name.localeCompare(b.name));
 
         setProjects(allProjects);
@@ -615,7 +613,6 @@ const Task = () => {
         subtasks: Array.isArray(t.subtasks)
           ? t.subtasks
           : JSON.parse(t.subtasks || "[]"),
-
 
         history: Array.isArray(t.history)
           ? t.history
@@ -764,7 +761,6 @@ const Task = () => {
 
   const handleStatusChange = async (taskId, newStatus) => {
     try {
-
       const task = tasks.find((t) => t.id === taskId);
 
       let updatedHistory = [...(task.history || [])];
@@ -795,7 +791,6 @@ const Task = () => {
       showSnackbar("Failed to update status", "error");
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -845,7 +840,6 @@ const Task = () => {
       })
       .filter((email) => email && email.trim() !== "");
 
-
     const uniqueTo = [...new Set(formData.assignedTo)];
     const filteredSubtasks = formData.subtasks.filter(
       (st) => st.name && st.name.trim() !== "",
@@ -881,41 +875,41 @@ const Task = () => {
 
       history: editingTask
         ? [
-          ...(editingTask.history || []),
-          {
-            status: editingTask.status || "Pending",
-            action: isReassignMode ? "reassigned" : "updated",
-            task: editingTask.task || editingTask.title || "",
-            newTask: formData.task.trim(),
-            project: editingTask.project || "",
-            priority: editingTask.priority || "",
-            deadlineDate:
-              editingTask.deadlineDate || editingTask.dueDate || "",
-            assignedDate:
-              editingTask.assignedDate ||
-              editingTask.createdAt?.split("T")[0] ||
-              "",
-            remark: editingTask.remark || "",
-            subtasks: filteredSubtasks,
-            by: user?.employee_id || "Admin",
-            to: editingTask.assignedTo || [],
-            reassignedTo: uniqueTo,
-            remarks: formData.remark || editingTask.remark,
-            previousCompletedDate: editingTask.completedDate || null,
-            date: new Date().toISOString(),
-          },
-        ]
+            ...(editingTask.history || []),
+            {
+              status: editingTask.status || "Pending",
+              action: isReassignMode ? "reassigned" : "updated",
+              task: editingTask.task || editingTask.title || "",
+              newTask: formData.task.trim(),
+              project: editingTask.project || "",
+              priority: editingTask.priority || "",
+              deadlineDate:
+                editingTask.deadlineDate || editingTask.dueDate || "",
+              assignedDate:
+                editingTask.assignedDate ||
+                editingTask.createdAt?.split("T")[0] ||
+                "",
+              remark: editingTask.remark || "",
+              subtasks: filteredSubtasks,
+              by: user?.employee_id || "Admin",
+              to: editingTask.assignedTo || [],
+              reassignedTo: uniqueTo,
+              remarks: formData.remark || editingTask.remark,
+              previousCompletedDate: editingTask.completedDate || null,
+              date: new Date().toISOString(),
+            },
+          ]
         : [
-          {
-            action: "assigned",
-            task: formData.task.trim(),
-            subtasks: filteredSubtasks,
-            by: user?.employee_id || "Admin",
-            to: uniqueTo,
-            remarks: formData.remark || "Task assigned",
-            date: new Date().toISOString(),
-          },
-        ],
+            {
+              action: "assigned",
+              task: formData.task.trim(),
+              subtasks: filteredSubtasks,
+              by: user?.employee_id || "Admin",
+              to: uniqueTo,
+              remarks: formData.remark || "Task assigned",
+              date: new Date().toISOString(),
+            },
+          ],
     };
 
     setIsProcessing(true);
@@ -967,11 +961,11 @@ const Task = () => {
       subtasks:
         task.subtasks && task.subtasks.length > 0
           ? task.subtasks.map((st) => ({
-            id: st.id,
-            name: st.name || st.title,
-            completed: st.completed || false,
-            assigned_to: st.assigned_to || st.assignedTo || null,
-          }))
+              id: st.id,
+              name: st.name || st.title,
+              completed: st.completed || false,
+              assigned_to: st.assigned_to || st.assignedTo || null,
+            }))
           : [{ name: "", completed: false, assigned_to: null }],
     });
     setIsFormOpen(true);
@@ -1179,12 +1173,8 @@ const Task = () => {
     },
   ];
 
-
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
-
-
-
       if (activeStatFilter === "Approved" && task.status !== "Approved")
         return false;
       if (activeStatFilter === "Completed" && task.status !== "Completed")
@@ -1215,7 +1205,6 @@ const Task = () => {
       )
         return false;
 
-
       if (tableSearchTerm) {
         const search = tableSearchTerm.toLowerCase();
         const taskTitle = (task.task || task.title || "").toLowerCase();
@@ -1223,7 +1212,6 @@ const Task = () => {
         const assignedBy = getEmployeeNameById(task.assignedBy).toLowerCase();
         const priority = (task.priority || "").toLowerCase();
         const status = (task.status || "").toLowerCase();
-
 
         const assignedToNames = (
           Array.isArray(task.assignedTo) ? task.assignedTo : []
@@ -1243,7 +1231,6 @@ const Task = () => {
         }
       }
 
-
       if (tableDateFilter) {
         if (!task.assignedDate) return false;
         const d = new Date(task.assignedDate);
@@ -1255,11 +1242,9 @@ const Task = () => {
         if (taskDate !== tableDateFilter) return false;
       }
 
-
       if (tableProjectFilter && task.project !== tableProjectFilter) {
         return false;
       }
-
 
       if (
         tableAssignByFilter &&
@@ -1268,11 +1253,9 @@ const Task = () => {
         return false;
       }
 
-
       if (tableStatusFilter && task.status !== tableStatusFilter) {
         return false;
       }
-
 
       if (tableDeadlineFilter) {
         if (!task.deadlineDate) return false;
@@ -1300,7 +1283,6 @@ const Task = () => {
     getEmployeeNameById,
   ]);
 
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredTasks.slice(indexOfFirstItem, indexOfLastItem);
@@ -1309,7 +1291,6 @@ const Task = () => {
   return (
     <div className="crm-module-root app-shell min-h-[calc(100vh-80px)] font-sans bg-(--bg-app) w-full overflow-x-hidden">
       <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 w-full">
-
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div>
             <h1 className="app-title max-w-3xl font-extrabold text-(--text-strong) tracking-tight">
@@ -1341,7 +1322,6 @@ const Task = () => {
           )}
         </div>
 
-
         <div
           className="-mx-3 mb-5 px-3 py-3 lg:-mx-4 lg:px-4"
           style={{ background: "color-mix(in srgb, var(--bg-app) 94%, white)" }}
@@ -1355,24 +1335,26 @@ const Task = () => {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative inline-flex shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-[13px] font-bold tracking-[-0.02em] transition-all duration-200 sm:px-4 ${isActive
-                    ? "border-transparent text-white shadow-[0_14px_28px_rgba(0,166,81,0.18)]"
-                    : "border-(--border-soft) bg-white/88 text-(--text-body) hover:border-(--border-strong) hover:bg-white hover:text-(--brand)"
-                    }`}
+                  className={`relative inline-flex shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-[13px] font-bold tracking-[-0.02em] transition-all duration-200 sm:px-4 ${
+                    isActive
+                      ? "border-transparent text-white shadow-[0_14px_28px_rgba(0,166,81,0.18)]"
+                      : "border-(--border-soft) bg-white/88 text-(--text-body) hover:border-(--border-strong) hover:bg-white hover:text-(--brand)"
+                  }`}
                   style={
                     isActive
                       ? {
-                        background:
-                          "linear-gradient(135deg, var(--brand), #00c853)",
-                      }
+                          background:
+                            "linear-gradient(135deg, var(--brand), #00c853)",
+                        }
                       : undefined
                   }
                 >
                   <span
-                    className={`flex h-7 w-7 items-center justify-center rounded-lg ${isActive
-                      ? "border border-white/10 bg-white/16 text-white"
-                      : "bg-(--bg-subtle) text-(--text-soft)"
-                      }`}
+                    className={`flex h-7 w-7 items-center justify-center rounded-lg ${
+                      isActive
+                        ? "border border-white/10 bg-white/16 text-white"
+                        : "bg-(--bg-subtle) text-(--text-soft)"
+                    }`}
                   >
                     {React.cloneElement(tab.icon, { className: "h-3.5 w-3.5" })}
                   </span>
@@ -1395,7 +1377,6 @@ const Task = () => {
             {activeTab === "task" ? (
               hasReadPermission ? (
                 <>
-
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
                       {
@@ -1410,28 +1391,36 @@ const Task = () => {
                       {
                         id: "Completed",
                         label: "Completed",
-                        value: tasks.filter((t) => t.status === "Completed").length,
+                        value: tasks.filter((t) => t.status === "Completed")
+                          .length,
                         color: "text-(--brand)",
                         icon: <Check className="w-5 h-5 text-(--brand)" />,
                         bg: "bg-(--brand-soft) border border-(--border-soft)",
-                        activeClass: "border-(--brand) ring-2 ring-(--brand-ring)",
+                        activeClass:
+                          "border-(--brand) ring-2 ring-(--brand-ring)",
                       },
                       {
                         id: "Incompleted",
                         label: "Incompleted",
                         value: tasks.filter((t) =>
-                          ["Pending", "In Progress", "Blocked"].includes(t.status)
+                          ["Pending", "In Progress", "Blocked"].includes(
+                            t.status,
+                          ),
                         ).length,
                         color: "text-amber-600",
                         icon: <Clock className="w-5 h-5 text-amber-600" />,
                         bg: "bg-amber-50 border border-amber-100",
-                        activeClass: "border-amber-500 ring-2 ring-amber-500/10",
+                        activeClass:
+                          "border-amber-500 ring-2 ring-amber-500/10",
                       },
                       {
                         id: "Requests",
                         label: "Requests",
                         value: tasks.filter((t) => {
-                          if (t.status === "Completed" || t.status === "Approved")
+                          if (
+                            t.status === "Completed" ||
+                            t.status === "Approved"
+                          )
                             return false;
                           const requestStatuses = [
                             "Pending Approval",
@@ -1448,7 +1437,8 @@ const Task = () => {
                         color: "text-violet-600",
                         icon: <Bell className="w-5 h-5 text-violet-600" />,
                         bg: "bg-violet-50 border border-violet-100",
-                        activeClass: "border-violet-500 ring-2 ring-violet-500/10",
+                        activeClass:
+                          "border-violet-500 ring-2 ring-violet-500/10",
                       },
                     ].map((card) => (
                       <button
@@ -1456,65 +1446,70 @@ const Task = () => {
                         onClick={() => {
                           setActiveStatFilter(card.id);
                         }}
-                        className={`app-panel p-4 flex items-start justify-between gap-3 text-left group transition-all duration-200 cursor-pointer ${activeStatFilter === card.id
-                          ? card.activeClass
-                          : "hover:border-(--border-strong) hover:shadow-2xs"
-                          }`}
+                        className={`app-panel p-4 flex items-start justify-between gap-3 text-left group transition-all duration-200 cursor-pointer ${
+                          activeStatFilter === card.id
+                            ? card.activeClass
+                            : "hover:border-(--border-strong) hover:shadow-2xs"
+                        }`}
                       >
                         <div>
                           <p className="text-[11px] font-bold text-(--text-soft) uppercase tracking-wider">
                             {card.label}
                           </p>
-                          <div className={`mt-2 text-2xl sm:text-[28px] font-extrabold leading-none ${card.color}`}>
+                          <div
+                            className={`mt-2 text-2xl sm:text-[28px] font-extrabold leading-none ${card.color}`}
+                          >
                             {card.value}
                           </div>
                         </div>
-                        <div className={`size-10 rounded-2xl flex items-center justify-center shrink-0 ${card.bg}`}>
+                        <div
+                          className={`size-10 rounded-2xl flex items-center justify-center shrink-0 ${card.bg}`}
+                        >
                           {card.icon}
                         </div>
                       </button>
                     ))}
                   </div>
 
-
                   <div className="app-panel overflow-hidden">
                     <div className="px-4 sm:px-6 py-4 border-b border-(--border-soft) bg-white">
                       <div className="flex flex-col gap-3">
-
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                           <div className="flex items-center gap-3">
-                            <h3 className="app-heading">
-                              {activeStatLabel}
-                            </h3>
+                            <h3 className="app-heading">{activeStatLabel}</h3>
                             <span className="text-xs font-semibold text-(--brand) bg-(--brand-soft) border border-(--border-soft) px-2 py-0.5 rounded-full">
-                              {filteredTasks.length} result{filteredTasks.length !== 1 ? "s" : ""}
+                              {filteredTasks.length} result
+                              {filteredTasks.length !== 1 ? "s" : ""}
                             </span>
                           </div>
 
                           <div className="flex items-center gap-2 sm:ml-auto w-full sm:w-auto">
-
                             <div className="relative flex-1 sm:w-80">
                               <input
                                 type="text"
                                 placeholder="Search tasks, projects, assigned to, assigned by, priority, status..."
                                 value={tableSearchTerm}
-                                onChange={(e) => setTableSearchTerm(e.target.value)}
+                                onChange={(e) =>
+                                  setTableSearchTerm(e.target.value)
+                                }
                                 className="app-input w-full pl-9 pr-3 py-2 bg-white border border-(--border-soft) rounded-xl focus:outline-none focus:ring-2 focus:ring-(--brand)/20 focus:border-(--brand) text-sm transition-all duration-200 text-(--text-body) placeholder-(--text-faint)"
                               />
                               <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
                             </div>
 
-
                             <button
-                              onClick={() => setShowFilterPanel((prev) => !prev)}
-                              className={`flex items-center gap-1.5 px-3 py-2 text-sm border border-(--border-soft) rounded-xl transition-all font-semibold whitespace-nowrap ${showFilterPanel ||
+                              onClick={() =>
+                                setShowFilterPanel((prev) => !prev)
+                              }
+                              className={`flex items-center gap-1.5 px-3 py-2 text-sm border border-(--border-soft) rounded-xl transition-all font-semibold whitespace-nowrap ${
+                                showFilterPanel ||
                                 tableDateFilter ||
                                 tableProjectFilter ||
                                 tableAssignByFilter ||
                                 tableStatusFilter
-                                ? "border-(--brand) text-(--brand) bg-(--brand-soft)"
-                                : "bg-white text-(--text-soft) hover:bg-(--bg-subtle) hover:text-(--text-strong) hover:border-(--border-strong)"
-                                }`}
+                                  ? "border-(--brand) text-(--brand) bg-(--brand-soft)"
+                                  : "bg-white text-(--text-soft) hover:bg-(--bg-subtle) hover:text-(--text-strong) hover:border-(--border-strong)"
+                              }`}
                             >
                               <Filter className="w-3.5 h-3.5" />
                               More Filters
@@ -1523,20 +1518,19 @@ const Task = () => {
                                 tableProjectFilter ||
                                 tableAssignByFilter ||
                                 tableStatusFilter) && (
-                                  <span className="bg-(--brand) text-white text-[10px] px-1.5 py-0.5 rounded-full leading-none font-bold">
-                                    {
-                                      [
-                                        tableDateFilter,
-                                        tableDeadlineFilter,
-                                        tableProjectFilter,
-                                        tableAssignByFilter,
-                                        tableStatusFilter,
-                                      ].filter(Boolean).length
-                                    }
-                                  </span>
-                                )}
+                                <span className="bg-(--brand) text-white text-[10px] px-1.5 py-0.5 rounded-full leading-none font-bold">
+                                  {
+                                    [
+                                      tableDateFilter,
+                                      tableDeadlineFilter,
+                                      tableProjectFilter,
+                                      tableAssignByFilter,
+                                      tableStatusFilter,
+                                    ].filter(Boolean).length
+                                  }
+                                </span>
+                              )}
                             </button>
-
 
                             {(tableSearchTerm ||
                               tableDateFilter ||
@@ -1545,29 +1539,27 @@ const Task = () => {
                               tableAssignByFilter ||
                               tableStatusFilter ||
                               activeStatFilter !== "All") && (
-                                <button
-                                  onClick={() => {
-                                    setTableSearchTerm("");
-                                    setTableDateFilter("");
-                                    setTableDeadlineFilter("");
-                                    setTableProjectFilter("");
-                                    setTableAssignByFilter("");
-                                    setTableStatusFilter("");
-                                    setActiveStatFilter("All");
-                                  }}
-                                  className="p-2 text-rose-500 border border-rose-100 rounded-xl hover:bg-rose-50 hover:border-rose-200 transition-colors duration-200"
-                                  title="Reset all filters"
-                                >
-                                  <RefreshCw className="w-3.5 h-3.5" />
-                                </button>
-                              )}
+                              <button
+                                onClick={() => {
+                                  setTableSearchTerm("");
+                                  setTableDateFilter("");
+                                  setTableDeadlineFilter("");
+                                  setTableProjectFilter("");
+                                  setTableAssignByFilter("");
+                                  setTableStatusFilter("");
+                                  setActiveStatFilter("All");
+                                }}
+                                className="p-2 text-rose-500 border border-rose-100 rounded-xl hover:bg-rose-50 hover:border-rose-200 transition-colors duration-200"
+                                title="Reset all filters"
+                              >
+                                <RefreshCw className="w-3.5 h-3.5" />
+                              </button>
+                            )}
                           </div>
                         </div>
 
-
                         {showFilterPanel && (
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-4 border border-(--border-soft) rounded-xl bg-(--bg-subtle)/20">
-
                             <div className="relative">
                               <div className="app-label block mb-1 text-(--text-soft)">
                                 Date Assigned
@@ -1576,13 +1568,14 @@ const Task = () => {
                                 <input
                                   type="date"
                                   value={tableDateFilter}
-                                  onChange={(e) => setTableDateFilter(e.target.value)}
+                                  onChange={(e) =>
+                                    setTableDateFilter(e.target.value)
+                                  }
                                   className="app-input w-full pl-9 pr-3 py-2 bg-white border border-(--border-soft) rounded-xl focus:outline-none focus:ring-2 focus:ring-(--brand)/20 focus:border-(--brand) text-sm transition-all duration-200 text-(--text-body) clean-date-input"
                                 />
                                 <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
                               </div>
                             </div>
-
 
                             <div className="relative">
                               <div className="app-label block mb-1 text-(--text-soft)">
@@ -1592,13 +1585,14 @@ const Task = () => {
                                 <input
                                   type="date"
                                   value={tableDeadlineFilter}
-                                  onChange={(e) => setTableDeadlineFilter(e.target.value)}
+                                  onChange={(e) =>
+                                    setTableDeadlineFilter(e.target.value)
+                                  }
                                   className="app-input w-full pl-9 pr-3 py-2 bg-white border border-(--border-soft) rounded-xl focus:outline-none focus:ring-2 focus:ring-(--brand)/20 focus:border-(--brand) text-sm transition-all duration-200 text-(--text-body) clean-date-input"
                                 />
                                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
                               </div>
                             </div>
-
 
                             <div className="relative">
                               <div className="app-label block mb-1 text-(--text-soft)">
@@ -1607,12 +1601,18 @@ const Task = () => {
                               <div className="relative">
                                 <select
                                   value={tableProjectFilter}
-                                  onChange={(e) => setTableProjectFilter(e.target.value)}
+                                  onChange={(e) =>
+                                    setTableProjectFilter(e.target.value)
+                                  }
                                   className="app-input w-full pl-9 pr-8 py-2 bg-white border border-(--border-soft) rounded-xl focus:outline-none focus:ring-2 focus:ring-(--brand)/20 focus:border-(--brand) text-sm transition-all duration-200 text-(--text-body) appearance-none"
                                 >
                                   <option value="">All Projects</option>
                                   {Array.from(
-                                    new Set(tasks.map((t) => t.project).filter(Boolean))
+                                    new Set(
+                                      tasks
+                                        .map((t) => t.project)
+                                        .filter(Boolean),
+                                    ),
                                   ).map((project) => (
                                     <option key={project} value={project}>
                                       {project}
@@ -1624,7 +1624,6 @@ const Task = () => {
                               </div>
                             </div>
 
-
                             <div className="relative">
                               <div className="app-label block mb-1 text-(--text-soft)">
                                 Assigned By
@@ -1632,18 +1631,26 @@ const Task = () => {
                               <div className="relative">
                                 <select
                                   value={tableAssignByFilter}
-                                  onChange={(e) => setTableAssignByFilter(e.target.value)}
+                                  onChange={(e) =>
+                                    setTableAssignByFilter(e.target.value)
+                                  }
                                   className="app-input w-full pl-9 pr-8 py-2 bg-white border border-(--border-soft) rounded-xl focus:outline-none focus:ring-2 focus:ring-(--brand)/20 focus:border-(--brand) text-sm transition-all duration-200 text-(--text-body) appearance-none"
                                 >
                                   <option value="">All Assigners</option>
                                   {Array.from(
-                                    new Set(tasks.map((t) => t.assignedBy).filter(Boolean))
+                                    new Set(
+                                      tasks
+                                        .map((t) => t.assignedBy)
+                                        .filter(Boolean),
+                                    ),
                                   )
                                     .map((assignerId) => ({
                                       id: assignerId,
                                       name: getEmployeeNameById(assignerId),
                                     }))
-                                    .sort((a, b) => a.name.localeCompare(b.name))
+                                    .sort((a, b) =>
+                                      a.name.localeCompare(b.name),
+                                    )
                                     .map(({ id, name }) => (
                                       <option key={id} value={id}>
                                         {name}
@@ -1655,7 +1662,6 @@ const Task = () => {
                               </div>
                             </div>
 
-
                             <div className="relative col-span-1 sm:col-span-2 lg:col-span-4 mt-2">
                               <div className="app-label block mb-1 text-(--text-soft)">
                                 Status
@@ -1663,13 +1669,17 @@ const Task = () => {
                               <div className="relative max-w-sm">
                                 <select
                                   value={tableStatusFilter}
-                                  onChange={(e) => setTableStatusFilter(e.target.value)}
+                                  onChange={(e) =>
+                                    setTableStatusFilter(e.target.value)
+                                  }
                                   className="app-input w-full pl-9 pr-8 py-2 bg-white border border-(--border-soft) rounded-xl focus:outline-none focus:ring-2 focus:ring-(--brand)/20 focus:border-(--brand) text-sm transition-all duration-200 text-(--text-body) appearance-none"
                                 >
                                   <option value="">All Status</option>
                                   {statusOptions.map((status) => (
                                     <option key={status} value={status}>
-                                      {status === "Pending Approval" ? "Reviewing" : status}
+                                      {status === "Pending Approval"
+                                        ? "Reviewing"
+                                        : status}
                                     </option>
                                   ))}
                                 </select>
@@ -1680,7 +1690,6 @@ const Task = () => {
                           </div>
                         )}
 
-
                         {(tableSearchTerm ||
                           tableDateFilter ||
                           tableDeadlineFilter ||
@@ -1688,89 +1697,90 @@ const Task = () => {
                           tableAssignByFilter ||
                           tableStatusFilter ||
                           activeStatFilter !== "All") && (
-                            <div className="flex flex-wrap items-center gap-2 mt-1">
-                              <span className="text-xs text-(--text-soft) font-medium">
-                                Active filters:
+                          <div className="flex flex-wrap items-center gap-2 mt-1">
+                            <span className="text-xs text-(--text-soft) font-medium">
+                              Active filters:
+                            </span>
+                            {activeStatFilter !== "All" && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-100 rounded-full">
+                                {activeStatFilter}
+                                <button
+                                  onClick={() => setActiveStatFilter("All")}
+                                  className="hover:text-sky-900 ml-1 font-bold"
+                                >
+                                  ×
+                                </button>
                               </span>
-                              {activeStatFilter !== "All" && (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-100 rounded-full">
-                                  {activeStatFilter}
-                                  <button
-                                    onClick={() => setActiveStatFilter("All")}
-                                    className="hover:text-sky-900 ml-1 font-bold"
-                                  >
-                                    ×
-                                  </button>
-                                </span>
-                              )}
-                              {tableSearchTerm && (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-gray-50 text-(--text-soft) border border-gray-100 rounded-full">
-                                  Search: {tableSearchTerm}
-                                  <button
-                                    onClick={() => setTableSearchTerm("")}
-                                    className="hover:text-gray-900 ml-1 font-bold"
-                                  >
-                                    ×
-                                  </button>
-                                </span>
-                              )}
-                              {tableDateFilter && (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
-                                  Date: {formatDate(tableDateFilter)}
-                                  <button
-                                    onClick={() => setTableDateFilter("")}
-                                    className="hover:text-(--brand-strong) ml-1 font-bold"
-                                  >
-                                    ×
-                                  </button>
-                                </span>
-                              )}
-                              {tableDeadlineFilter && (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
-                                  Deadline: {formatDate(tableDeadlineFilter)}
-                                  <button
-                                    onClick={() => setTableDeadlineFilter("")}
-                                    className="hover:text-(--brand-strong) ml-1 font-bold"
-                                  >
-                                    ×
-                                  </button>
-                                </span>
-                              )}
-                              {tableProjectFilter && (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
-                                  Project: {tableProjectFilter}
-                                  <button
-                                    onClick={() => setTableProjectFilter("")}
-                                    className="hover:text-(--brand-strong) ml-1 font-bold"
-                                  >
-                                    ×
-                                  </button>
-                                </span>
-                              )}
-                              {tableAssignByFilter && (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
-                                  Assigner: {getEmployeeNameById(tableAssignByFilter)}
-                                  <button
-                                    onClick={() => setTableAssignByFilter("")}
-                                    className="hover:text-(--brand-strong) ml-1 font-bold"
-                                  >
-                                    ×
-                                  </button>
-                                </span>
-                              )}
-                              {tableStatusFilter && (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
-                                  Status: {tableStatusFilter}
-                                  <button
-                                    onClick={() => setTableStatusFilter("")}
-                                    className="hover:text-(--brand-strong) ml-1 font-bold"
-                                  >
-                                    ×
-                                  </button>
-                                </span>
-                              )}
-                            </div>
-                          )}
+                            )}
+                            {tableSearchTerm && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-gray-50 text-(--text-soft) border border-gray-100 rounded-full">
+                                Search: {tableSearchTerm}
+                                <button
+                                  onClick={() => setTableSearchTerm("")}
+                                  className="hover:text-gray-900 ml-1 font-bold"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            )}
+                            {tableDateFilter && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
+                                Date: {formatDate(tableDateFilter)}
+                                <button
+                                  onClick={() => setTableDateFilter("")}
+                                  className="hover:text-(--brand-strong) ml-1 font-bold"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            )}
+                            {tableDeadlineFilter && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
+                                Deadline: {formatDate(tableDeadlineFilter)}
+                                <button
+                                  onClick={() => setTableDeadlineFilter("")}
+                                  className="hover:text-(--brand-strong) ml-1 font-bold"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            )}
+                            {tableProjectFilter && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
+                                Project: {tableProjectFilter}
+                                <button
+                                  onClick={() => setTableProjectFilter("")}
+                                  className="hover:text-(--brand-strong) ml-1 font-bold"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            )}
+                            {tableAssignByFilter && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
+                                Assigner:{" "}
+                                {getEmployeeNameById(tableAssignByFilter)}
+                                <button
+                                  onClick={() => setTableAssignByFilter("")}
+                                  className="hover:text-(--brand-strong) ml-1 font-bold"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            )}
+                            {tableStatusFilter && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-(--brand-soft) text-(--brand) border border-(--border-soft) rounded-full">
+                                Status: {tableStatusFilter}
+                                <button
+                                  onClick={() => setTableStatusFilter("")}
+                                  className="hover:text-(--brand-strong) ml-1 font-bold"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -1807,7 +1817,10 @@ const Task = () => {
                         <tbody className="bg-white divide-y divide-(--bg-subtle)">
                           {filteredTasks.length === 0 ? (
                             <tr>
-                              <td colSpan="8" className="px-6 py-12 text-center">
+                              <td
+                                colSpan="8"
+                                className="px-6 py-12 text-center"
+                              >
                                 <div className="flex flex-col items-center gap-2">
                                   <FileText className="w-8 h-8 text-(--text-faint)" />
                                   <p className="font-semibold text-(--text-strong)">
@@ -1839,18 +1852,23 @@ const Task = () => {
                                         <div
                                           className="font-bold text-(--text-strong) leading-snug text-[13.5px] line-clamp-1 hover:text-(--brand) transition-colors"
                                           title={String(
-                                            task.title || task.task || ""
+                                            task.title || task.task || "",
                                           ).replace(/&nbsp;/g, " ")}
                                         >
-                                          {renderRichText(task.title || task.task)}
+                                          {renderRichText(
+                                            task.title || task.task,
+                                          )}
                                         </div>
                                         {(() => {
-                                          const movement = [...(task.history || [])]
+                                          const movement = [
+                                            ...(task.history || []),
+                                          ]
                                             .reverse()
                                             .find((h) =>
-                                              ["reassigned", "transferred"].includes(
-                                                h.action
-                                              )
+                                              [
+                                                "reassigned",
+                                                "transferred",
+                                              ].includes(h.action),
                                             );
                                           if (!movement) return null;
                                           return (
@@ -1869,37 +1887,46 @@ const Task = () => {
                                         >
                                           {truncateWords(task.project, 2)}
                                         </span>
-                                        {task.subtasks && task.subtasks.length > 0 && (
-                                          <div className="flex items-center gap-1 text-[9.5px] font-semibold text-(--text-faint)">
-                                            <CheckSquare className="w-3 h-3 text-(--text-faint)" />
-                                            <span>
-                                              {task.subtasks.filter((s) => s.completed).length}/
-                                              {task.subtasks.length}
-                                            </span>
-                                          </div>
-                                        )}
+                                        {task.subtasks &&
+                                          task.subtasks.length > 0 && (
+                                            <div className="flex items-center gap-1 text-[9.5px] font-semibold text-(--text-faint)">
+                                              <CheckSquare className="w-3 h-3 text-(--text-faint)" />
+                                              <span>
+                                                {
+                                                  task.subtasks.filter(
+                                                    (s) => s.completed,
+                                                  ).length
+                                                }
+                                                /{task.subtasks.length}
+                                              </span>
+                                            </div>
+                                          )}
                                       </div>
                                     </div>
                                   </td>
                                   <td className="px-3 py-3">
                                     <div className="flex -space-x-1.5 overflow-hidden">
-                                      {task.assignedTo?.slice(0, 3).map((memberId, idx) => {
-                                        const member = teamMembers.find(
-                                          (m) => m.id === memberId
-                                        );
-                                        const name = member ? member.name : "Team Member";
-                                        return (
-                                          <div
-                                            key={idx}
-                                            className={`h-7.5 w-7.5 rounded-full border-2 border-white shadow-2xs flex items-center justify-center text-[9.5px] font-bold text-white transition-transform hover:scale-105 shrink-0 ${getMemberAvatarColor(
-                                              name
-                                            )}`}
-                                            title={name}
-                                          >
-                                            {getInitials(name)}
-                                          </div>
-                                        );
-                                      })}
+                                      {task.assignedTo
+                                        ?.slice(0, 3)
+                                        .map((memberId, idx) => {
+                                          const member = teamMembers.find(
+                                            (m) => m.id === memberId,
+                                          );
+                                          const name = member
+                                            ? member.name
+                                            : "Team Member";
+                                          return (
+                                            <div
+                                              key={idx}
+                                              className={`h-7.5 w-7.5 rounded-full border-2 border-white shadow-2xs flex items-center justify-center text-[9.5px] font-bold text-white transition-transform hover:scale-105 shrink-0 ${getMemberAvatarColor(
+                                                name,
+                                              )}`}
+                                              title={name}
+                                            >
+                                              {getInitials(name)}
+                                            </div>
+                                          );
+                                        })}
                                       {task.assignedTo?.length > 3 && (
                                         <div className="h-7.5 w-7.5 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-[9.5px] font-bold text-gray-600 shrink-0">
                                           +{task.assignedTo.length - 3}
@@ -1926,7 +1953,7 @@ const Task = () => {
                                   <td className="px-3 py-3">
                                     <span
                                       className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${getPriorityColor(
-                                        task.priority
+                                        task.priority,
                                       )}`}
                                     >
                                       {task.priority}
@@ -1935,7 +1962,7 @@ const Task = () => {
                                   <td className="px-3 py-3">
                                     <span
                                       className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold border ${getStatusColor(
-                                        task.status
+                                        task.status,
                                       )}`}
                                     >
                                       {task.status === "Pending Approval"
@@ -1966,12 +1993,12 @@ const Task = () => {
                                       {task.status === "Pending Approval" &&
                                         (isAdmin ||
                                           String(user?.employee_id) ===
-                                          String(task.assignedBy)) && (
+                                            String(task.assignedBy)) && (
                                           <button
                                             onClick={() =>
                                               handleStatusChange(
                                                 task.id,
-                                                "Approved"
+                                                "Approved",
                                               )
                                             }
                                             className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all shadow-3xs ring-1 ring-emerald-300"
@@ -1984,18 +2011,20 @@ const Task = () => {
                                       {task.status === "Extension Pending" &&
                                         (isAdmin ||
                                           String(user?.employee_id) ===
-                                          String(task.assignedBy)) && (
+                                            String(task.assignedBy)) && (
                                           <button
                                             onClick={() => {
                                               setSelectedExtensionTask(task);
                                               setExtensionApprovalDeadline(
                                                 task.extensionDate
                                                   ? new Date(task.extensionDate)
-                                                    .toISOString()
-                                                    .split("T")[0]
-                                                  : ""
+                                                      .toISOString()
+                                                      .split("T")[0]
+                                                  : "",
                                               );
-                                              setShowExtensionApproveModal(true);
+                                              setShowExtensionApproveModal(
+                                                true,
+                                              );
                                             }}
                                             className="p-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-500 hover:text-white hover:border-amber-500 transition-all shadow-3xs"
                                             title="Review Extension Request"
@@ -2007,15 +2036,13 @@ const Task = () => {
                                       {task.status === "Cannot Complete" &&
                                         (isAdmin ||
                                           String(user?.employee_id) ===
-                                          String(task.assignedBy)) && (
+                                            String(task.assignedBy)) && (
                                           <button
                                             onClick={() => {
                                               setSelectedCannotCompleteTask(
                                                 task,
                                               );
-                                              setCannotCompleteReassignTo(
-                                                "",
-                                              );
+                                              setCannotCompleteReassignTo("");
                                               setShowCannotCompleteApproveModal(
                                                 true,
                                               );
@@ -2035,7 +2062,6 @@ const Task = () => {
                         </tbody>
                       </table>
 
-
                       {filteredTasks.length > 0 && (
                         <div className="px-4 sm:px-6 py-4 border-t border-(--border-soft) bg-(--bg-subtle)/20 flex flex-col sm:flex-row justify-between items-center gap-3">
                           <div className="text-xs font-semibold text-(--text-soft)">
@@ -2050,10 +2076,11 @@ const Task = () => {
                                 setCurrentPage((prev) => Math.max(prev - 1, 1))
                               }
                               disabled={currentPage === 1}
-                              className={`p-2 rounded-lg border border-(--border-soft) transition-colors bg-white ${currentPage === 1
-                                ? "text-(--text-faint) cursor-not-allowed"
-                                : "text-(--text-body) hover:bg-(--bg-subtle) hover:text-(--brand)"
-                                }`}
+                              className={`p-2 rounded-lg border border-(--border-soft) transition-colors bg-white ${
+                                currentPage === 1
+                                  ? "text-(--text-faint) cursor-not-allowed"
+                                  : "text-(--text-body) hover:bg-(--bg-subtle) hover:text-(--brand)"
+                              }`}
                             >
                               <ChevronLeft className="w-4 h-4" />
                             </button>
@@ -2077,10 +2104,11 @@ const Task = () => {
                                     <button
                                       key={pageNum}
                                       onClick={() => setCurrentPage(pageNum)}
-                                      className={`w-8 h-8 rounded-lg text-xs font-bold transition-all border border-(--border-soft) ${currentPage === pageNum
-                                        ? "bg-(--brand) text-white border-(--brand) shadow-xs"
-                                        : "text-(--text-body) bg-white hover:bg-(--bg-subtle) hover:text-(--brand)"
-                                        }`}
+                                      className={`w-8 h-8 rounded-lg text-xs font-bold transition-all border border-(--border-soft) ${
+                                        currentPage === pageNum
+                                          ? "bg-(--brand) text-white border-(--brand) shadow-xs"
+                                          : "text-(--text-body) bg-white hover:bg-(--bg-subtle) hover:text-(--brand)"
+                                      }`}
                                     >
                                       {pageNum}
                                     </button>
@@ -2096,10 +2124,11 @@ const Task = () => {
                                 )
                               }
                               disabled={currentPage === totalPages}
-                              className={`p-2 rounded-lg border border-(--border-soft) transition-colors bg-white ${currentPage === totalPages
-                                ? "text-(--text-faint) cursor-not-allowed"
-                                : "text-(--text-body) hover:bg-(--bg-subtle) hover:text-(--brand)"
-                                }`}
+                              className={`p-2 rounded-lg border border-(--border-soft) transition-colors bg-white ${
+                                currentPage === totalPages
+                                  ? "text-(--text-faint) cursor-not-allowed"
+                                  : "text-(--text-body) hover:bg-(--bg-subtle) hover:text-(--brand)"
+                              }`}
                             >
                               <ChevronRight className="w-4 h-4" />
                             </button>
@@ -2166,12 +2195,13 @@ const Task = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar px-8 py-5 flex flex-col">
+            <form
+              onSubmit={handleSubmit}
+              className="flex-1 overflow-y-auto custom-scrollbar px-8 py-5 flex flex-col"
+            >
               <div className="space-y-5 flex-1">
-
                 {editingTask && (
                   <div className="space-y-4">
-
                     {editingTask.history && editingTask.history.length > 0 && (
                       <div className="bg-white border border-(--border-soft) rounded-xl overflow-hidden shadow-2xs">
                         <div className="px-4 py-2.5 border-b border-(--border-soft) bg-(--bg-subtle)/35 flex items-center gap-2">
@@ -2190,24 +2220,29 @@ const Task = () => {
                                   const actionColors = {
                                     assigned: {
                                       dot: "bg-blue-500",
-                                      badge: "bg-blue-50 text-blue-700 border-blue-100",
+                                      badge:
+                                        "bg-blue-50 text-blue-700 border-blue-100",
                                     },
                                     updated: {
                                       dot: "bg-slate-500",
-                                      badge: "bg-slate-50 text-slate-700 border-slate-100",
+                                      badge:
+                                        "bg-slate-50 text-slate-700 border-slate-100",
                                     },
                                     reassigned: {
                                       dot: "bg-amber-500",
-                                      badge: "bg-amber-50 text-amber-700 border-amber-100",
+                                      badge:
+                                        "bg-amber-50 text-amber-700 border-amber-100",
                                     },
                                     completed: {
                                       dot: "bg-green-500",
-                                      badge: "bg-green-50 text-green-700 border-green-100",
+                                      badge:
+                                        "bg-green-50 text-green-700 border-green-100",
                                     },
                                   };
                                   const style = actionColors[h.action] || {
                                     dot: "bg-gray-400",
-                                    badge: "bg-gray-100 text-gray-600 border-gray-200",
+                                    badge:
+                                      "bg-gray-100 text-gray-600 border-gray-200",
                                   };
                                   return (
                                     <div key={idx} className="relative">
@@ -2224,15 +2259,15 @@ const Task = () => {
                                           <span className="text-[10px] font-medium text-(--text-faint)">
                                             {h.date
                                               ? new Date(h.date).toLocaleString(
-                                                "en-GB",
-                                                {
-                                                  day: "numeric",
-                                                  month: "short",
-                                                  year: "numeric",
-                                                  hour: "2-digit",
-                                                  minute: "2-digit",
-                                                },
-                                              )
+                                                  "en-GB",
+                                                  {
+                                                    day: "numeric",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                  },
+                                                )
                                               : ""}
                                           </span>
                                         </div>
@@ -2240,9 +2275,9 @@ const Task = () => {
                                           <p className="text-[12px] text-(--text-body) leading-relaxed">
                                             {h.action === "reassigned"
                                               ? renderRichText(h.newTask) ||
-                                              "No description"
+                                                "No description"
                                               : renderRichText(h.task) ||
-                                              "No description"}
+                                                "No description"}
                                           </p>
                                         </div>
                                       </div>
@@ -2256,7 +2291,6 @@ const Task = () => {
                     )}
                   </div>
                 )}
-
 
                 <div className="px-1">
                   <label
@@ -2279,7 +2313,6 @@ const Task = () => {
                     />
                   </div>
                 </div>
-
 
                 <div className="grid grid-cols-2 gap-5 px-1">
                   <div>
@@ -2332,7 +2365,6 @@ const Task = () => {
                     </div>
                   </div>
                 </div>
-
 
                 <div className="grid grid-cols-2 gap-5 px-1">
                   <div>
@@ -2463,10 +2495,11 @@ const Task = () => {
                             {filteredTeamMembers.map((member) => (
                               <label
                                 key={member.id}
-                                className={`flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-(--bg-subtle)/35 border-l-4 transition-colors ${formData.assignedTo.includes(member.id)
-                                  ? "border-(--brand) bg-(--brand-soft)"
-                                  : "border-transparent"
-                                  }`}
+                                className={`flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-(--bg-subtle)/35 border-l-4 transition-colors ${
+                                  formData.assignedTo.includes(member.id)
+                                    ? "border-(--brand) bg-(--brand-soft)"
+                                    : "border-transparent"
+                                }`}
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <input
@@ -2513,7 +2546,6 @@ const Task = () => {
                   </div>
                 </div>
 
-
                 <div className="px-1">
                   <label
                     className="block text-(--text-strong) text-sm font-bold mb-1.5"
@@ -2531,7 +2563,6 @@ const Task = () => {
                     placeholder="Add any special instructions, notes, or context for the assigned team members..."
                   />
                 </div>
-
 
                 <div className="bg-(--bg-subtle)/20 rounded-xl p-4 border border-(--border-soft) mx-1">
                   <div className="flex justify-between items-center mb-3">
@@ -2554,7 +2585,9 @@ const Task = () => {
                   </div>
                   <div className="space-y-2">
                     {formData.subtasks.map((subtask, index) => {
-                      const parentAssignees = teamMembers.filter(m => formData.assignedTo.includes(m.id));
+                      const parentAssignees = teamMembers.filter((m) =>
+                        formData.assignedTo.includes(m.id),
+                      );
                       return (
                         <div
                           key={index}
@@ -2575,12 +2608,16 @@ const Task = () => {
                             />
                           </div>
                           <select
-                            value={subtask.assigned_to || subtask.assignedTo || ""}
-                            onChange={(e) => handleSubtaskAssigneeChange(index, e.target.value)}
+                            value={
+                              subtask.assigned_to || subtask.assignedTo || ""
+                            }
+                            onChange={(e) =>
+                              handleSubtaskAssigneeChange(index, e.target.value)
+                            }
                             className="px-3 py-1.5 border border-(--border-soft) rounded-lg focus:outline-none focus:ring-1 focus:ring-(--brand) focus:border-(--brand) text-xs text-(--text-body) font-medium bg-white"
                           >
                             <option value="">Unassigned</option>
-                            {parentAssignees.map(member => (
+                            {parentAssignees.map((member) => (
                               <option key={member.id} value={member.id}>
                                 {member.name}
                               </option>
@@ -2602,7 +2639,6 @@ const Task = () => {
                   </div>
                 </div>
               </div>
-
 
               <div className="flex justify-end gap-3 pt-5 mt-5 border-t border-(--border-soft)">
                 <button
@@ -2639,12 +2675,9 @@ const Task = () => {
         </div>
       )}
 
-
-
       {viewingTask && (
         <div className="fixed inset-0 bg-black/45 backdrop-blur-xs flex items-center justify-center p-5 z-50">
           <div className="bg-white rounded-2xl border border-(--border-soft) w-full max-w-2xl my-auto flex flex-col overflow-hidden max-h-[90vh] shadow-2xl">
-
             <div className="sticky rounded-t-2xl top-0 bg-white border-b border-(--border-soft) px-5 py-4 flex justify-between items-center z-10">
               <div>
                 <p className="text-sm font-extrabold text-(--text-strong) uppercase tracking-wider">
@@ -2663,7 +2696,6 @@ const Task = () => {
             </div>
 
             <div className="px-5 py-5 flex flex-col gap-3 grow overflow-y-auto max-h-[70vh] custom-scrollbar">
-
               <div className="border border-(--border-soft) bg-white rounded-xl p-4 shadow-3xs">
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -2702,7 +2734,6 @@ const Task = () => {
                 </div>
               </div>
 
-
               {viewingTask.subtasks?.length > 0 &&
                 viewingTask.status !== "Completed" &&
                 viewingTask.status !== "Approved" && (
@@ -2727,7 +2758,6 @@ const Task = () => {
                     {showSubtasks && (
                       <div className="p-3.5 bg-white">
                         <div className="space-y-1.5">
-
                           {viewingTask.subtasks
                             .filter((subtask) => !subtask.completed)
                             .map((subtask) => (
@@ -2756,9 +2786,14 @@ const Task = () => {
                                     className={`text-xs font-semibold ${subtask.completed ? "text-(--text-faint) line-through" : "text-(--text-body)"}`}
                                   >
                                     {subtask.name}
-                                    {(subtask.assigned_to || subtask.assignedTo) && (
+                                    {(subtask.assigned_to ||
+                                      subtask.assignedTo) && (
                                       <span className="text-[10px] text-gray-400 ml-2 font-medium bg-gray-100 px-1.5 py-0.5 rounded-md">
-                                        @{getEmployeeNameById(subtask.assigned_to || subtask.assignedTo)}
+                                        @
+                                        {getEmployeeNameById(
+                                          subtask.assigned_to ||
+                                            subtask.assignedTo,
+                                        )}
                                       </span>
                                     )}
                                   </span>
@@ -2771,83 +2806,81 @@ const Task = () => {
                               </div>
                             ))}
 
-
                           {viewingTask.subtasks.filter(
                             (subtask) => !subtask.completed,
                           ).length === 0 && (
-                              <div className="text-center py-4 text-xs font-semibold text-(--brand)">
-                                ✨ All subtasks completed!
-                              </div>
-                            )}
+                            <div className="text-center py-4 text-xs font-semibold text-(--brand)">
+                              ✨ All subtasks completed!
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}
                   </div>
                 )}
 
-
               {(viewingTask.attachedFiles?.length > 0 ||
                 viewingTask.images?.length > 0 ||
                 viewingTask.attachments?.length > 0) && (
-                  <div className="border border-(--border-soft) rounded-xl overflow-hidden shadow-3xs bg-white">
-                    <div className="flex items-center gap-2 px-3.5 py-2.5 bg-(--bg-subtle)/30 border-b border-(--border-soft)">
-                      <Paperclip className="w-3.5 h-3.5 text-(--text-soft)" />
-                      <span className="text-xs font-extrabold text-(--text-strong) uppercase tracking-wider">
-                        Attachments
-                      </span>
-                    </div>
-                    <div className="p-3.5 space-y-2">
-                      {(viewingTask.attachments?.length
-                        ? viewingTask.attachments
-                        : [
+                <div className="border border-(--border-soft) rounded-xl overflow-hidden shadow-3xs bg-white">
+                  <div className="flex items-center gap-2 px-3.5 py-2.5 bg-(--bg-subtle)/30 border-b border-(--border-soft)">
+                    <Paperclip className="w-3.5 h-3.5 text-(--text-soft)" />
+                    <span className="text-xs font-extrabold text-(--text-strong) uppercase tracking-wider">
+                      Attachments
+                    </span>
+                  </div>
+                  <div className="p-3.5 space-y-2">
+                    {(viewingTask.attachments?.length
+                      ? viewingTask.attachments
+                      : [
                           ...(viewingTask.attachedFiles || []),
                           ...(viewingTask.images || []),
                         ]
-                      )
-                        .map((file) => normalizeAttachment(file))
-                        .filter(Boolean)
-                        .map((attachment, index) => {
-                          const attachmentUrl = getAttachmentUrl(attachment, API);
-                          return (
-                            <div
-                              key={`${attachment.name}-${index}`}
-                              className="flex items-center gap-2 rounded-lg border border-(--border-soft) bg-gray-50/50 px-2.5 py-2 shadow-3xs"
-                            >
-                              {attachment.type === "image" ? (
-                                <Image className="w-3.5 h-3.5 text-(--text-faint)" />
-                              ) : (
-                                <FileText className="w-3.5 h-3.5 text-(--text-faint)" />
-                              )}
-                              {attachmentUrl ? (
-                                <a
-                                  href={attachmentUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="min-w-0 flex-1 truncate text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline"
-                                >
-                                  {attachment.name}
-                                </a>
-                              ) : (
-                                <span className="min-w-0 flex-1 truncate text-xs font-bold text-(--text-body)">
-                                  {attachment.name}
-                                </span>
-                              )}
-                              {attachmentUrl && (
-                                <a
-                                  href={attachmentUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-(--text-faint) hover:text-(--text-strong)"
-                                >
-                                  <Download className="w-3.5 h-3.5" />
-                                </a>
-                              )}
-                            </div>
-                          );
-                        })}
-                    </div>
+                    )
+                      .map((file) => normalizeAttachment(file))
+                      .filter(Boolean)
+                      .map((attachment, index) => {
+                        const attachmentUrl = getAttachmentUrl(attachment, API);
+                        return (
+                          <div
+                            key={`${attachment.name}-${index}`}
+                            className="flex items-center gap-2 rounded-lg border border-(--border-soft) bg-gray-50/50 px-2.5 py-2 shadow-3xs"
+                          >
+                            {attachment.type === "image" ? (
+                              <Image className="w-3.5 h-3.5 text-(--text-faint)" />
+                            ) : (
+                              <FileText className="w-3.5 h-3.5 text-(--text-faint)" />
+                            )}
+                            {attachmentUrl ? (
+                              <a
+                                href={attachmentUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="min-w-0 flex-1 truncate text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline"
+                              >
+                                {attachment.name}
+                              </a>
+                            ) : (
+                              <span className="min-w-0 flex-1 truncate text-xs font-bold text-(--text-body)">
+                                {attachment.name}
+                              </span>
+                            )}
+                            {attachmentUrl && (
+                              <a
+                                href={attachmentUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-(--text-faint) hover:text-(--text-strong)"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                              </a>
+                            )}
+                          </div>
+                        );
+                      })}
                   </div>
-                )}
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-3 bg-white">
                 <div className="border border-(--border-soft) rounded-xl overflow-hidden shadow-3xs">
@@ -2866,7 +2899,9 @@ const Task = () => {
                         <p className="text-xs font-bold text-(--text-strong)">
                           {viewingTask.project}
                         </p>
-                        <p className="text-[10px] text-(--text-faint) font-semibold uppercase tracking-wider">Project</p>
+                        <p className="text-[10px] text-(--text-faint) font-semibold uppercase tracking-wider">
+                          Project
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2.5 pt-3 border-t border-(--border-soft)">
@@ -2877,7 +2912,9 @@ const Task = () => {
                         <p className="text-xs font-bold text-(--text-strong)">
                           {getEmployeeNameById(viewingTask.assignedBy)}
                         </p>
-                        <p className="text-[10px] text-(--text-faint) font-semibold uppercase tracking-wider">Assigned by</p>
+                        <p className="text-[10px] text-(--text-faint) font-semibold uppercase tracking-wider">
+                          Assigned by
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -2927,7 +2964,6 @@ const Task = () => {
                 </div>
               </div>
 
-
               {viewingTask.remark && (
                 <div className="border border-(--border-soft) rounded-xl overflow-hidden shadow-3xs bg-white">
                   <div className="flex items-center gap-2 px-3.5 py-2.5 bg-(--bg-subtle)/30 border-b border-(--border-soft)">
@@ -2947,7 +2983,6 @@ const Task = () => {
                 </div>
               )}
 
-
               {getStatusReasonDetails(viewingTask) && (
                 <div className="border border-(--border-soft) rounded-xl overflow-hidden shadow-3xs bg-white">
                   <div className="px-3.5 py-2.5 bg-gray-50/50 border-b border-(--border-soft)">
@@ -2962,7 +2997,6 @@ const Task = () => {
                   </div>
                 </div>
               )}
-
 
               {viewingTask.status === "Extension Pending" && (
                 <div className="border border-orange-200 bg-orange-50/30 rounded-xl overflow-hidden shadow-3xs">
@@ -2979,8 +3013,10 @@ const Task = () => {
                           Reason
                         </span>
                         <span className="text-(--text-strong) font-bold italic">
-                          "{viewingTask.extensionReason ||
-                            viewingTask.reasonForExtension}"
+                          "
+                          {viewingTask.extensionReason ||
+                            viewingTask.reasonForExtension}
+                          "
                         </span>
                       </div>
                       <div className="flex gap-3 text-xs">
@@ -2995,58 +3031,57 @@ const Task = () => {
                     </div>
                     {String(user?.employee_id) ===
                       String(viewingTask.assignedBy) && (
-                        <div className="border-t border-orange-200/50 pt-3 flex flex-col gap-2.5">
-                          <div>
-                            <p className="text-[10px] font-bold text-orange-800 uppercase tracking-wider mb-1.5">
-                              Set new deadline
-                            </p>
-                            <input
-                              type="date"
-                              className="w-full px-3 py-1.5 border border-orange-200 rounded-lg text-xs bg-white focus:outline-none focus:ring-2 focus:ring-orange-300 text-(--text-body) font-medium"
-                              value={
+                      <div className="border-t border-orange-200/50 pt-3 flex flex-col gap-2.5">
+                        <div>
+                          <p className="text-[10px] font-bold text-orange-800 uppercase tracking-wider mb-1.5">
+                            Set new deadline
+                          </p>
+                          <input
+                            type="date"
+                            className="w-full px-3 py-1.5 border border-orange-200 rounded-lg text-xs bg-white focus:outline-none focus:ring-2 focus:ring-orange-300 text-(--text-body) font-medium"
+                            value={
+                              extensionApprovalDeadline ||
+                              viewingTask.extensionDate?.split("T")[0] ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              setExtensionApprovalDeadline(e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() =>
+                              handleExtensionAction(
+                                viewingTask.id,
+                                "Approve",
                                 extensionApprovalDeadline ||
-                                viewingTask.extensionDate?.split("T")[0] ||
-                                ""
-                              }
-                              onChange={(e) =>
-                                setExtensionApprovalDeadline(e.target.value)
-                              }
-                            />
-                          </div>
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() =>
-                                handleExtensionAction(
-                                  viewingTask.id,
-                                  "Approve",
-                                  extensionApprovalDeadline ||
                                   viewingTask.extensionDate?.split("T")[0] ||
                                   "",
-                                )
-                              }
-                              className="flex items-center gap-1.5 px-4 py-1.5 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs active:scale-[0.98]"
-                            >
-                              Approve
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleExtensionAction(
-                                  viewingTask.id,
-                                  "Reject",
-                                  null,
-                                )
-                              }
-                              className="px-4 py-1.5 border border-orange-200 text-orange-700 hover:bg-orange-100 rounded-lg text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
-                            >
-                              Reject
-                            </button>
-                          </div>
+                              )
+                            }
+                            className="flex items-center gap-1.5 px-4 py-1.5 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs active:scale-[0.98]"
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleExtensionAction(
+                                viewingTask.id,
+                                "Reject",
+                                null,
+                              )
+                            }
+                            className="px-4 py-1.5 border border-orange-200 text-orange-700 hover:bg-orange-100 rounded-lg text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
+                          >
+                            Reject
+                          </button>
                         </div>
-                      )}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
-
 
               {viewingTask.status === "Transfer Pending" && (
                 <div className="border border-pink-200 bg-pink-50/20 rounded-xl overflow-hidden shadow-3xs">
@@ -3073,37 +3108,38 @@ const Task = () => {
                           Reason
                         </span>
                         <span className="text-(--text-strong) font-bold italic">
-                          "{renderRichText(
+                          "
+                          {renderRichText(
                             viewingTask.transferReason || "No reason provided",
-                          )}"
+                          )}
+                          "
                         </span>
                       </div>
                     </div>
                     {String(user?.employee_id) ===
                       String(viewingTask.assignedBy) && (
-                        <div className="flex gap-2 pt-3 border-t border-pink-200/50">
-                          <button
-                            onClick={() =>
-                              handleTransferAction(viewingTask.id, "Approve")
-                            }
-                            className="flex items-center gap-1.5 px-4 py-1.5 bg-pink-700 hover:bg-pink-800 text-pink-50 rounded-lg text-xs font-bold transition-all shadow-xs active:scale-[0.98]"
-                          >
-                            Approve
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleTransferAction(viewingTask.id, "Reject")
-                            }
-                            className="px-4 py-1.5 border border-pink-200 text-pink-700 hover:bg-pink-100 rounded-lg text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
-                          >
-                            Reject
-                          </button>
-                        </div>
-                      )}
+                      <div className="flex gap-2 pt-3 border-t border-pink-200/50">
+                        <button
+                          onClick={() =>
+                            handleTransferAction(viewingTask.id, "Approve")
+                          }
+                          className="flex items-center gap-1.5 px-4 py-1.5 bg-pink-700 hover:bg-pink-800 text-pink-50 rounded-lg text-xs font-bold transition-all shadow-xs active:scale-[0.98]"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleTransferAction(viewingTask.id, "Reject")
+                          }
+                          className="px-4 py-1.5 border border-pink-200 text-pink-700 hover:bg-pink-100 rounded-lg text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
-
 
               {viewingTask.history?.length > 0 && (
                 <div className="border border-(--border-soft) rounded-xl overflow-hidden shadow-3xs bg-white">
@@ -3194,12 +3230,12 @@ const Task = () => {
                                   <Clock className="w-3 h-3" />
                                   {h.date
                                     ? new Date(h.date).toLocaleString("en-GB", {
-                                      day: "numeric",
-                                      month: "short",
-                                      year: "numeric",
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                    })
+                                        day: "numeric",
+                                        month: "short",
+                                        year: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      })
                                     : "—"}
                                 </span>
                               </div>
@@ -3265,10 +3301,11 @@ const Task = () => {
                                                 `Subtask ${subtaskIndex + 1}`}
                                             </span>
                                             <span
-                                              className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${subtask.completed
-                                                ? "bg-green-50 text-green-700"
-                                                : "bg-amber-50 text-amber-700"
-                                                }`}
+                                              className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                                                subtask.completed
+                                                  ? "bg-green-50 text-green-700"
+                                                  : "bg-amber-50 text-amber-700"
+                                              }`}
                                             >
                                               {subtask.completed
                                                 ? "Done"
@@ -3301,7 +3338,9 @@ const Task = () => {
 
             <div className="sticky bottom-0 bg-white border-t border-(--border-soft) px-5 py-3.5 flex flex-wrap justify-end gap-2 z-10">
               {hasUpdatePermission &&
-                !["Completed", "Approved", "Transferred", "Rejected"].includes(viewingTask.status) && (
+                !["Completed", "Approved", "Transferred", "Rejected"].includes(
+                  viewingTask.status,
+                ) && (
                   <button
                     onClick={() => {
                       handleEdit(viewingTask);
@@ -3314,7 +3353,9 @@ const Task = () => {
                 )}
 
               {hasUpdatePermission &&
-                !["Completed", "Approved", "Transferred"].includes(viewingTask.status) && (
+                !["Completed", "Approved", "Transferred"].includes(
+                  viewingTask.status,
+                ) && (
                   <button
                     onClick={() => openDirectTransferModal(viewingTask)}
                     className="flex items-center gap-1.5 px-4 py-2 bg-pink-50 border border-pink-200 text-pink-700 hover:bg-pink-100 hover:text-pink-850 rounded-xl text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
@@ -3324,7 +3365,9 @@ const Task = () => {
                 )}
 
               {hasUpdatePermission &&
-                !["Completed", "Approved", "Transferred"].includes(viewingTask.status) && (
+                !["Completed", "Approved", "Transferred"].includes(
+                  viewingTask.status,
+                ) && (
                   <button
                     onClick={() => handleReassign(viewingTask)}
                     className="flex items-center gap-1.5 px-4 py-2 bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100 hover:text-amber-850 rounded-xl text-xs font-bold transition-all shadow-3xs active:scale-[0.98]"
@@ -3334,7 +3377,9 @@ const Task = () => {
                 )}
 
               {viewingTask.status === "Pending Approval" &&
-                (isAdmin || String(user?.employee_id) === String(viewingTask.assignedBy)) && (
+                (isAdmin ||
+                  String(user?.employee_id) ===
+                    String(viewingTask.assignedBy)) && (
                   <button
                     onClick={() => {
                       handleStatusChange(viewingTask.id, "Approved");
@@ -3347,7 +3392,9 @@ const Task = () => {
                 )}
 
               {hasDeletePermission &&
-                !["Completed", "Approved", "Transferred"].includes(viewingTask.status) && (
+                !["Completed", "Approved", "Transferred"].includes(
+                  viewingTask.status,
+                ) && (
                   <button
                     onClick={() => {
                       handleDelete(viewingTask.id);
@@ -3363,18 +3410,18 @@ const Task = () => {
         </div>
       )}
 
-
       {snackbar.open && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 animate-slideUp">
           <div
-            className={`px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 ${snackbar.type === "success"
-              ? "bg-green-500"
-              : snackbar.type === "error"
-                ? "bg-red-500"
-                : snackbar.type === "warning"
-                  ? "bg-orange-500"
-                  : "bg-blue-500"
-              } text-white min-w-50`}
+            className={`px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 ${
+              snackbar.type === "success"
+                ? "bg-green-500"
+                : snackbar.type === "error"
+                  ? "bg-red-500"
+                  : snackbar.type === "warning"
+                    ? "bg-orange-500"
+                    : "bg-blue-500"
+            } text-white min-w-50`}
           >
             {snackbar.type === "success" && <Check className="w-4 h-4" />}
             {snackbar.type === "error" && <AlertCircle className="w-4 h-4" />}
@@ -3388,11 +3435,12 @@ const Task = () => {
         </div>
       )}
 
-
       {showChat && (
         <div className="fixed bottom-4 right-4 w-80 bg-white rounded-2xl border border-(--border-soft) shadow-xl z-50 overflow-hidden flex flex-col">
           <div className="bg-linear-to-r from-(--brand) to-(--brand-strong) p-3.5 text-white flex justify-between items-center">
-            <h3 className="font-extrabold text-xs uppercase tracking-wider">Comments</h3>
+            <h3 className="font-extrabold text-xs uppercase tracking-wider">
+              Comments
+            </h3>
             <button
               onClick={() => setShowChat(false)}
               className="text-white hover:text-gray-200 transition-colors p-1"
@@ -3448,7 +3496,8 @@ const Task = () => {
                   Transfer Task
                 </h3>
                 <p className="text-(--text-soft) text-[11px] font-semibold mt-0.5 leading-relaxed">
-                  Move this task to another employee. The current employee will keep a transferred record for viewing.
+                  Move this task to another employee. The current employee will
+                  keep a transferred record for viewing.
                 </p>
               </div>
               <button
@@ -3468,7 +3517,7 @@ const Task = () => {
                   <p className="text-xs font-bold text-(--text-strong) line-clamp-2 leading-relaxed">
                     {renderRichText(
                       selectedDirectTransferTask.task ||
-                      selectedDirectTransferTask.title,
+                        selectedDirectTransferTask.title,
                     )}
                   </p>
                 </div>
@@ -3549,11 +3598,9 @@ const Task = () => {
         </div>
       )}
 
-
       {showExtensionApproveModal && selectedExtensionTask && (
         <div className="fixed inset-0 backdrop-blur-xs bg-black/45 flex items-center justify-center p-4 z-100">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-(--border-soft) flex flex-col">
-
             <div className="px-6 py-5 border-b border-(--border-soft) flex justify-between items-start bg-white">
               <div>
                 <h3 className="text-base font-extrabold text-(--text-strong) flex items-center gap-2">
@@ -3561,7 +3608,8 @@ const Task = () => {
                   Review Extension Request
                 </h3>
                 <p className="text-(--text-soft) text-[11px] font-semibold mt-0.5">
-                  Decide whether to approve or reject the employee's extension request.
+                  Decide whether to approve or reject the employee's extension
+                  request.
                 </p>
               </div>
               <button
@@ -3576,9 +3624,7 @@ const Task = () => {
               </button>
             </div>
 
-
             <div className="px-6 py-5 space-y-4">
-
               <div className="bg-(--bg-subtle)/35 rounded-xl p-4 border border-(--border-soft) space-y-2.5 shadow-3xs">
                 <div className="space-y-0.5">
                   <p className="text-[10px] text-(--text-faint) font-bold uppercase tracking-wider">
@@ -3601,8 +3647,8 @@ const Task = () => {
                       <p className="text-xs font-semibold">
                         {selectedExtensionTask.deadlineDate
                           ? new Date(
-                            selectedExtensionTask.deadlineDate,
-                          ).toLocaleDateString("en-GB")
+                              selectedExtensionTask.deadlineDate,
+                            ).toLocaleDateString("en-GB")
                           : "—"}
                       </p>
                     </div>
@@ -3616,8 +3662,8 @@ const Task = () => {
                       <p className="text-xs font-bold">
                         {selectedExtensionTask.extensionDate
                           ? new Date(
-                            selectedExtensionTask.extensionDate,
-                          ).toLocaleDateString("en-GB")
+                              selectedExtensionTask.extensionDate,
+                            ).toLocaleDateString("en-GB")
                           : "—"}
                       </p>
                     </div>
@@ -3635,7 +3681,6 @@ const Task = () => {
                   </div>
                 )}
               </div>
-
 
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold text-(--text-strong)">
@@ -3658,7 +3703,6 @@ const Task = () => {
                 </p>
               </div>
             </div>
-
 
             <div className="px-6 py-4 border-t border-(--border-soft) bg-gray-50 flex gap-3 justify-end items-center">
               <button
@@ -3697,7 +3741,8 @@ const Task = () => {
                   Review Transfer Request
                 </h3>
                 <p className="text-(--text-soft) text-[11px] font-semibold mt-0.5">
-                  Approve to move this task to the requested employee, or reject.
+                  Approve to move this task to the requested employee, or
+                  reject.
                 </p>
               </div>
               <button
@@ -3812,7 +3857,7 @@ const Task = () => {
                   <p className="text-xs font-bold text-(--text-strong) line-clamp-2 leading-relaxed">
                     {renderRichText(
                       selectedCannotCompleteTask.task ||
-                      selectedCannotCompleteTask.title,
+                        selectedCannotCompleteTask.title,
                     )}
                   </p>
                 </div>
@@ -3847,7 +3892,9 @@ const Task = () => {
                 <div className="relative">
                   <select
                     value={cannotCompleteReassignTo}
-                    onChange={(e) => setCannotCompleteReassignTo(e.target.value)}
+                    onChange={(e) =>
+                      setCannotCompleteReassignTo(e.target.value)
+                    }
                     className="app-input w-full px-4 py-2.5 bg-white border border-(--border-soft) rounded-xl focus:outline-none focus:ring-2 focus:ring-(--brand)/20 focus:border-(--brand) text-xs transition-all duration-300 font-semibold text-(--text-body) appearance-none"
                   >
                     <option value="">Select employee</option>

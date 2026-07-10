@@ -1,5 +1,3 @@
-
-
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import projectService from "./projectService";
@@ -60,19 +58,12 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     custom: true,
   });
 
-
   const toggleSection = (section) => {
     setExpandedSections((prev) => ({
       ...prev,
       [section]: !prev[section],
     }));
   };
-
-
-
-
-
-
 
   const get = (obj, ...keys) => {
     for (const k of keys) {
@@ -97,16 +88,16 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     return undefined;
   };
 
-
-
-
-
   const getEffectiveProject = () => {
-    if ((project.type === "Custom" || project.type === "custom") && project.configuration) {
+    if (
+      (project.type === "Custom" || project.type === "custom") &&
+      project.configuration
+    ) {
       try {
-        const config = typeof project.configuration === "string"
-          ? JSON.parse(project.configuration)
-          : project.configuration;
+        const config =
+          typeof project.configuration === "string"
+            ? JSON.parse(project.configuration)
+            : project.configuration;
         if (config && typeof config === "object") {
           return { ...project, ...config };
         }
@@ -118,7 +109,6 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
   };
 
   const effectiveProject = getEffectiveProject();
-
 
   const price =
     get(effectiveProject, "priceDetails") ||
@@ -142,7 +132,9 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
   const plots = get(effectiveProject, "plots") || [];
   const units =
-    get(effectiveProject, "units") || get(effectiveProject, "unit_configuration") || [];
+    get(effectiveProject, "units") ||
+    get(effectiveProject, "unit_configuration") ||
+    [];
 
   const commercialFeatures =
     get(effectiveProject, "commercialFeatures") ||
@@ -151,8 +143,14 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     [];
 
   const additional = {
-    kissama: get(effectiveProject, "kissama") || get(effectiveProject, "kissama_details") || "",
-    boundary: get(effectiveProject, "boundary") || get(effectiveProject, "boundary_type") || "",
+    kissama:
+      get(effectiveProject, "kissama") ||
+      get(effectiveProject, "kissama_details") ||
+      "",
+    boundary:
+      get(effectiveProject, "boundary") ||
+      get(effectiveProject, "boundary_type") ||
+      "",
     broker: get(project, "broker") || get(project, "broker_id") || "",
 
     constructor: get(project, "constructor") || "",
@@ -165,12 +163,9 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         (typeof get(project, "attachment") === "string"
           ? get(project, "attachment")
           : get(project, "attachment").name ||
-          JSON.stringify(get(project, "attachment")))) ||
+            JSON.stringify(get(project, "attachment")))) ||
       "",
   };
-
-
-
 
   const parseData = (data) => {
     if (!data) return [];
@@ -186,18 +181,23 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     return [];
   };
 
+  const normalizedPlotsData = parseData(
+    get(effectiveProject, "plots_data", "plotsData", "plots"),
+  );
 
-  const normalizedPlotsData = parseData(get(effectiveProject, "plots_data", "plotsData", "plots"));
+  const normalizedBlocksData = parseData(
+    get(effectiveProject, "blocks_data", "blocksData", "blocks"),
+  );
 
-
-  const normalizedBlocksData = parseData(get(effectiveProject, "blocks_data", "blocksData", "blocks"));
-
-
-  const normalizedUnitsData = parseData(get(effectiveProject, "units_data", "unitsData", "units", "unit_configuration"));
-
-
-
-
+  const normalizedUnitsData = parseData(
+    get(
+      effectiveProject,
+      "units_data",
+      "unitsData",
+      "units",
+      "unit_configuration",
+    ),
+  );
 
   const rawPf =
     get(project, "propertyFeatures") ||
@@ -211,14 +211,12 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
   const td =
     get(project, "transaction_details", "transactionDetails") || transaction;
 
-
   if (!pf.propertyStatus && !pf.property_status) {
     pf.propertyStatus =
       get(rawPf, "propertyStatus", "property_status") ||
       get(td, "possession_status", "possessionStatus") ||
       "";
   }
-
 
   if (!pf.landArea) {
     pf.landArea =
@@ -229,31 +227,25 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       "";
   }
 
-
   if (!pf.openSides) {
     pf.openSides = get(rawPf, "openSides", "open_sides");
   }
-
 
   if (!pf.roadWidth) {
     pf.roadWidth = get(rawPf, "roadWidth", "road_width");
   }
 
-
   if (!pf.boundaryWall) {
     pf.boundaryWall = get(rawPf, "boundaryWall", "boundary_wall");
   }
-
 
   if (!pf.gatedColony) {
     pf.gatedColony = get(rawPf, "gatedColony", "gated_colony");
   }
 
-
   if (!pf.hasOuthouse) {
     pf.hasOuthouse = get(rawPf, "hasOuthouse", "has_outhouse");
   }
-
 
   if (!pf.possessionStatus) {
     pf.possessionStatus =
@@ -261,7 +253,6 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       get(td, "possession_status", "possessionStatus") ||
       "";
   }
-
 
   if (!pf.availableFromMonth || !pf.availableFromYear) {
     const available =
@@ -280,7 +271,6 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       "";
   }
 
-
   const safeNumber = (v) => {
     const n = Number(String(v ?? "").replace(/[^0-9.-]+/g, ""));
     return Number.isFinite(n) ? n : 0;
@@ -288,7 +278,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
   const totalRevenueArea = revenuePlots.reduce(
     (s, p) => s + safeNumber(get(p, "plot_area_sqft", "area", "plot_area")),
-    0
+    0,
   );
 
   const formatMoney = (v) => {
@@ -313,19 +303,17 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
   const authToken = authVal || token || localStorage.getItem("authToken") || "";
   const dynamicSlug = user?.slug || "";
 
-
   const fetchRevenuePlots = async () => {
     if (!project?.id) {
       console.warn("No project ID available for fetching revenue plots");
       return;
     }
 
-
     const currentSubTypes = get(project, "subTypes", "sub_types") || [];
-    const parsedSubTypes = typeof currentSubTypes === "string"
-      ? JSON.parse(currentSubTypes)
-      : currentSubTypes;
-
+    const parsedSubTypes =
+      typeof currentSubTypes === "string"
+        ? JSON.parse(currentSubTypes)
+        : currentSubTypes;
 
     const localPlots =
       get(effectiveProject, "revenue_plots_data") ||
@@ -334,23 +322,28 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
     const normalizedType = (project.type || "").toString().toLowerCase();
     const isPlottingCompatible =
-      ["plotting", "custom", "commercial", "duplex", "triplex", "apartment"].includes(normalizedType) ||
-      (parsedSubTypes && (
-        parsedSubTypes.some(st => st.toLowerCase().includes("plotting"))
-      ));
-
+      [
+        "plotting",
+        "custom",
+        "commercial",
+        "duplex",
+        "triplex",
+        "apartment",
+      ].includes(normalizedType) ||
+      (parsedSubTypes &&
+        parsedSubTypes.some((st) => st.toLowerCase().includes("plotting")));
 
     if (parsedLocalPlots && parsedLocalPlots.length > 0) {
       setRevenuePlots(parsedLocalPlots);
     }
 
-
-
-    if (!isPlottingCompatible && (!parsedLocalPlots || parsedLocalPlots.length === 0)) {
+    if (
+      !isPlottingCompatible &&
+      (!parsedLocalPlots || parsedLocalPlots.length === 0)
+    ) {
       setRevenuePlots([]);
       return;
     }
-
 
     setLoadingRevenuePlots(true);
     setRevenuePlotsError(null);
@@ -361,10 +354,14 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
       switch (type) {
         case "apartment":
-          fetchedProjectData = await projectService.getApartmentById(project.id);
+          fetchedProjectData = await projectService.getApartmentById(
+            project.id,
+          );
           break;
         case "commercial":
-          fetchedProjectData = await projectService.getCommercialById(project.id);
+          fetchedProjectData = await projectService.getCommercialById(
+            project.id,
+          );
           break;
         case "plotting":
           fetchedProjectData = await projectService.getPlottingById(project.id);
@@ -376,7 +373,9 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
           fetchedProjectData = await projectService.getTriplexById(project.id);
           break;
         case "custom":
-          fetchedProjectData = await projectService.getCustomProjectById(project.id);
+          fetchedProjectData = await projectService.getCustomProjectById(
+            project.id,
+          );
           break;
         default:
           break;
@@ -384,18 +383,21 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
       let plotsArray = [];
       if (fetchedProjectData) {
-
         let targetData = fetchedProjectData;
         if (type === "custom" && fetchedProjectData.configuration) {
           try {
-            const config = typeof fetchedProjectData.configuration === "string"
-              ? JSON.parse(fetchedProjectData.configuration)
-              : fetchedProjectData.configuration;
+            const config =
+              typeof fetchedProjectData.configuration === "string"
+                ? JSON.parse(fetchedProjectData.configuration)
+                : fetchedProjectData.configuration;
             if (config && typeof config === "object") {
               targetData = { ...fetchedProjectData, ...config };
             }
           } catch (e) {
-            console.error("Failed to parse custom config during revenue plots fetch:", e);
+            console.error(
+              "Failed to parse custom config during revenue plots fetch:",
+              e,
+            );
           }
         }
 
@@ -408,34 +410,35 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         plotsArray = parseData(rawPlots);
       }
 
-
-      if (plotsArray.length === 0 && parsedLocalPlots && parsedLocalPlots.length > 0) {
+      if (
+        plotsArray.length === 0 &&
+        parsedLocalPlots &&
+        parsedLocalPlots.length > 0
+      ) {
         plotsArray = parsedLocalPlots;
       }
 
       setRevenuePlots(plotsArray || []);
-
     } catch (error) {
-      console.error("Error fetching revenue plots from local controller:", error);
-
+      console.error(
+        "Error fetching revenue plots from local controller:",
+        error,
+      );
 
       if (parsedLocalPlots && parsedLocalPlots.length > 0) {
         setRevenuePlots(parsedLocalPlots);
-
       } else {
         setRevenuePlotsError(error.message || "Failed to fetch revenue plots");
       }
     } finally {
       setLoadingRevenuePlots(false);
     }
-
   };
-
 
   const fetchFloorDetails = async (
     projectIdParam,
     unitIdParam,
-    floorKeyParam
+    floorKeyParam,
   ) => {
     const cacheKey = `${projectIdParam}-${unitIdParam}-${floorKeyParam}`;
 
@@ -474,7 +477,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     } catch (error) {
       console.error(
         `[fetchFloorDetails] network/error for ${cacheKey}:`,
-        error
+        error,
       );
       setFloorDetails((prev) => ({
         ...prev,
@@ -485,14 +488,11 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     }
   };
 
-
   useEffect(() => {
     if (project?.id) {
       fetchRevenuePlots();
     }
-
   }, [project?.id, project?.type]);
-
 
   useEffect(() => {
     if (!project || !project.id) return;
@@ -532,9 +532,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         });
       }
     });
-
   }, [units, project.id]);
-
 
   const handleDownloadDocument = (plot) => {
     const documentUrl = get(plot, "plot_document", "document_url");
@@ -552,7 +550,6 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     }
   };
 
-
   const FloorBlock = ({
     title,
     floor = {},
@@ -567,7 +564,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
     const unitFloorDetails = unitData?.floor_details || [];
     const floorFromUnitDetails = unitFloorDetails.find(
-      (f) => f.floor_key === floorKey
+      (f) => f.floor_key === floorKey,
     );
     const finalFloorData = apiFloorData || floorFromUnitDetails || floor;
 
@@ -596,14 +593,14 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       "total_bedrooms",
       "totalBedrooms",
       "bedrooms",
-      "bedroom_count"
+      "bedroom_count",
     );
     const bathrooms = get(
       floorData,
       "total_bathrooms",
       "totalBathrooms",
       "bathrooms",
-      "toilets"
+      "toilets",
     );
     const area = get(
       floorData,
@@ -612,7 +609,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
       "area",
       "floorArea",
       "totalArea",
-      "carpetArea"
+      "carpetArea",
     );
     const studyRoom = get(floorData, "study_room", "studyRoom");
     const bathroomAreas = get(floorData, "bathroom_areas", "bathroomAreas");
@@ -629,7 +626,7 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
     const additionalNotes = get(
       floorData,
       "additional_notes",
-      "additionalNotes"
+      "additionalNotes",
     );
 
     return (
@@ -647,7 +644,6 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-3 text-sm">
-
           <div className="bg-purple-50 p-2 rounded-lg">
             <div className="text-xs text-purple-600 font-medium">Bedrooms</div>
             <div className="text-gray-800 font-semibold">
@@ -689,7 +685,13 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
           )}
         </div>
 
-        {(bedroomAreas || bathroomAreas || balconyArea || studyRoomAreas || livingArea || diningArea || additionalNotes) && (
+        {(bedroomAreas ||
+          bathroomAreas ||
+          balconyArea ||
+          studyRoomAreas ||
+          livingArea ||
+          diningArea ||
+          additionalNotes) && (
           <div className="mt-3 pt-3 border-t border-gray-100">
             <div className="text-xs text-gray-500 font-medium mb-2">
               Additional Details
@@ -721,8 +723,8 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
               )}
               {livingArea && (
                 <div>
-                  <span className="font-medium">Living Area:</span>{" "}
-                  {livingArea} sq-ft
+                  <span className="font-medium">Living Area:</span> {livingArea}{" "}
+                  sq-ft
                 </div>
               )}
               {balconyArea && (
@@ -733,8 +735,8 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
               )}
               {diningArea && (
                 <div>
-                  <span className="font-medium">Dining Area:</span>{" "}
-                  {diningArea} sq-ft
+                  <span className="font-medium">Dining Area:</span> {diningArea}{" "}
+                  sq-ft
                 </div>
               )}
               {garage && (
@@ -744,12 +746,14 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
               )}
               {kitchenArea && (
                 <div>
-                  <span className="font-medium">Kitchen Area:</span> {kitchenArea} sq-ft
+                  <span className="font-medium">Kitchen Area:</span>{" "}
+                  {kitchenArea} sq-ft
                 </div>
               )}
               {garageArea && (
                 <div>
-                  <span className="font-medium">Garage Area:</span> {garageArea} sq-ft
+                  <span className="font-medium">Garage Area:</span> {garageArea}{" "}
+                  sq-ft
                 </div>
               )}
               {additionalNotes && (
@@ -770,7 +774,6 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto p-4">
       <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
-
         <div className="sticky top-0 bg-white border-b border-gray-200 rounded-t-2xl p-4 z-10">
           <div className="flex justify-between items-start gap-4">
             <div className="flex-1">
@@ -792,13 +795,19 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                     {(() => {
                       const overallStatus = getProjectOverallStatus(project);
                       return overallStatus ? (
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          overallStatus === "Completed" ? "bg-emerald-100 text-emerald-700" :
-                          overallStatus === "Pending" ? "bg-amber-100 text-amber-700" :
-                          overallStatus === "In Progress" ? "bg-blue-100 text-blue-700" :
-                          overallStatus === "Ready to Move" ? "bg-indigo-100 text-indigo-700" :
-                          "bg-slate-100 text-slate-600"
-                        }`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            overallStatus === "Completed"
+                              ? "bg-emerald-100 text-emerald-700"
+                              : overallStatus === "Pending"
+                                ? "bg-amber-100 text-amber-700"
+                                : overallStatus === "In Progress"
+                                  ? "bg-blue-100 text-blue-700"
+                                  : overallStatus === "Ready to Move"
+                                    ? "bg-indigo-100 text-indigo-700"
+                                    : "bg-slate-100 text-slate-600"
+                          }`}
+                        >
                           {overallStatus}
                         </span>
                       ) : null;
@@ -826,13 +835,15 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             </div>
           </div>
 
-
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
             <StatCard
               icon={<FaMapMarkerAlt className="text-blue-500" />}
               label="Location"
-              value={`${effectiveProject.city || "N/A"}${effectiveProject.locality ? `, ${effectiveProject.locality}` : ""
-                }`}
+              value={`${effectiveProject.city || "N/A"}${
+                effectiveProject.locality
+                  ? `, ${effectiveProject.locality}`
+                  : ""
+              }`}
             />
             <StatCard
               icon={<FaRuler className="text-green-500" />}
@@ -847,7 +858,11 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             <StatCard
               icon={<FaCalendar className="text-purple-500" />}
               label="Created"
-              value={effectiveProject.createdAt || effectiveProject.created_at || "N/A"}
+              value={
+                effectiveProject.createdAt ||
+                effectiveProject.created_at ||
+                "N/A"
+              }
             />
             <StatCard
               icon={<FaLayerGroup className="text-orange-500" />}
@@ -858,10 +873,6 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
         </div>
 
         <div className="p-6 space-y-6">
-
-
-
-
           <CollapsibleSection
             title="Revenue Plots"
             icon={<FaRulerCombined className="text-green-600" />}
@@ -932,7 +943,12 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                             />
                             <DetailRow
                               label="Entry Plot No"
-                              value={get(rp, "plot_no", "entry_plot_no", "entryPlotNo")}
+                              value={get(
+                                rp,
+                                "plot_no",
+                                "entry_plot_no",
+                                "entryPlotNo",
+                              )}
                             />
                             <DetailRow
                               label="Khata No"
@@ -941,13 +957,18 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
 
                             <DetailRow
                               label="Document"
-                              value={get(rp, "fileName", "file_name", "plot_document")}
+                              value={get(
+                                rp,
+                                "fileName",
+                                "file_name",
+                                "plot_document",
+                              )}
                             />
                             {rp.created_at && (
                               <DetailRow
                                 label="Created"
                                 value={new Date(
-                                  rp.created_at
+                                  rp.created_at,
                                 ).toLocaleDateString()}
                               />
                             )}
@@ -975,13 +996,8 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             )}
           </CollapsibleSection>
 
-
-
-
-
-
-          {project.type !== "commercial" && (normalizedPlotsData.length > 0 ||
-            project.type === "plotting") && (
+          {project.type !== "commercial" &&
+            (normalizedPlotsData.length > 0 || project.type === "plotting") && (
               <CollapsibleSection
                 title="Plots Configuration"
                 icon={<FaRulerCombined className="text-orange-600" />}
@@ -994,7 +1010,9 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                     {normalizedPlotsData.length === 0 ? (
                       <div className="col-span-full py-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
                         <FaRulerCombined className="mx-auto h-12 w-12 text-gray-300 mb-2" />
-                        <p className="text-gray-500">No individual plots configured yet.</p>
+                        <p className="text-gray-500">
+                          No individual plots configured yet.
+                        </p>
                       </div>
                     ) : (
                       normalizedPlotsData.map((p, i) => (
@@ -1002,8 +1020,6 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                           key={p.id || i}
                           className="bg-white border border-gray-200 rounded-2xl p-5 hover:shadow-lg transition-all border-l-4 border-l-orange-500"
                         >
-
-
                           <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
                             <h4 className="font-bold text-gray-900 text-lg">
                               {p.name || `Plot ${i + 1}`}
@@ -1015,15 +1031,22 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                                 </span>
                               )}
                               {(() => {
-                                const status = get(p, "propertyFeatures.possessionStatus") || get(p, "possessionStatus");
+                                const status =
+                                  get(p, "propertyFeatures.possessionStatus") ||
+                                  get(p, "possessionStatus");
                                 if (!status) return null;
                                 return (
-                                  <span className={`px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${
-                                    status === "Completed" ? "bg-emerald-100 text-emerald-700" :
-                                    status === "Pending" ? "bg-amber-100 text-amber-700" :
-                                    status === "In Progress" ? "bg-blue-100 text-blue-700" :
-                                    "bg-slate-100 text-slate-600"
-                                  }`}>
+                                  <span
+                                    className={`px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${
+                                      status === "Completed"
+                                        ? "bg-emerald-100 text-emerald-700"
+                                        : status === "Pending"
+                                          ? "bg-amber-100 text-amber-700"
+                                          : status === "In Progress"
+                                            ? "bg-blue-100 text-blue-700"
+                                            : "bg-slate-100 text-slate-600"
+                                    }`}
+                                  >
                                     {status}
                                   </span>
                                 );
@@ -1041,121 +1064,210 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                           </div>
 
                           <div className="space-y-4">
-
-
                             <div>
-                              <div className="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest">Dimensions & Area</div>
+                              <div className="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest">
+                                Dimensions & Area
+                              </div>
                               <div className="grid grid-cols-2 gap-3 mb-3">
                                 <div className="bg-gray-50 rounded-lg p-2 border border-gray-100 col-span-2">
                                   <div className="grid grid-cols-3 gap-2">
                                     <div>
-                                      <div className="text-[10px] text-gray-500">Length</div>
-                                      <div className="text-xs font-bold text-gray-800">{get(p, "areaDetails.plotLength") || "—"} <span className="text-[9px] font-normal text-gray-500">yd</span></div>
+                                      <div className="text-[10px] text-gray-500">
+                                        Length
+                                      </div>
+                                      <div className="text-xs font-bold text-gray-800">
+                                        {get(p, "areaDetails.plotLength") ||
+                                          "—"}{" "}
+                                        <span className="text-[9px] font-normal text-gray-500">
+                                          yd
+                                        </span>
+                                      </div>
                                     </div>
                                     <div>
-                                      <div className="text-[10px] text-gray-500">Breadth</div>
-                                      <div className="text-xs font-bold text-gray-800">{get(p, "areaDetails.plotBreadth") || "—"} <span className="text-[9px] font-normal text-gray-500">yd</span></div>
+                                      <div className="text-[10px] text-gray-500">
+                                        Breadth
+                                      </div>
+                                      <div className="text-xs font-bold text-gray-800">
+                                        {get(p, "areaDetails.plotBreadth") ||
+                                          "—"}{" "}
+                                        <span className="text-[9px] font-normal text-gray-500">
+                                          yd
+                                        </span>
+                                      </div>
                                     </div>
                                     <div>
-                                      <div className="text-[10px] text-gray-500">Plot Area</div>
-                                      <div className="text-xs font-bold text-gray-800">{get(p, "areaDetails.plotArea") || "—"} <span className="text-[9px] font-normal text-gray-500">sq-yd</span></div>
+                                      <div className="text-[10px] text-gray-500">
+                                        Plot Area
+                                      </div>
+                                      <div className="text-xs font-bold text-gray-800">
+                                        {get(p, "areaDetails.plotArea") || "—"}{" "}
+                                        <span className="text-[9px] font-normal text-gray-500">
+                                          sq-yd
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
 
                                 <div className="bg-indigo-50 rounded-lg p-2 border border-indigo-100 col-span-2">
                                   <div className="flex justify-between items-center">
-                                    <div className="text-xs text-indigo-800 font-medium">Land Area</div>
+                                    <div className="text-xs text-indigo-800 font-medium">
+                                      Land Area
+                                    </div>
                                     <div className="text-sm font-bold text-indigo-700">
-                                      {get(p, "propertyFeatures.landArea") || "—"} <span className="text-[10px] font-normal text-indigo-500">sqft</span>
+                                      {get(p, "propertyFeatures.landArea") ||
+                                        "—"}{" "}
+                                      <span className="text-[10px] font-normal text-indigo-500">
+                                        sqft
+                                      </span>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
 
-
                             <div className="grid grid-cols-2 gap-4">
                               <DetailRow
                                 label="Exp. Price"
-                                value={formatMoney(get(p, "priceDetails.expectedPrice", "price"))}
+                                value={formatMoney(
+                                  get(p, "priceDetails.expectedPrice", "price"),
+                                )}
                               />
                               <DetailRow
                                 label="Token Amount"
-                                value={formatMoney(get(p, "priceDetails.tokenAmount"))}
+                                value={formatMoney(
+                                  get(p, "priceDetails.tokenAmount"),
+                                )}
                               />
                             </div>
 
-
                             <div className="bg-orange-50/50 rounded-xl p-3 space-y-2 border border-orange-100">
                               <DetailRow label="Kissama" value={p.kissama} />
-                              <DetailRow label="Road Width" value={get(p, "propertyFeatures.roadWidth")} suffix="ft" />
-                              <DetailRow label="Open Sides" value={get(p, "propertyFeatures.openSides")} />
-                              <DetailRow label="Property Status" value={get(p, "propertyFeatures.propertyStatus")} />
-                              <DetailRow label="Possession" value={get(p, "propertyFeatures.possessionStatus")} />
-
+                              <DetailRow
+                                label="Road Width"
+                                value={get(p, "propertyFeatures.roadWidth")}
+                                suffix="ft"
+                              />
+                              <DetailRow
+                                label="Open Sides"
+                                value={get(p, "propertyFeatures.openSides")}
+                              />
+                              <DetailRow
+                                label="Property Status"
+                                value={get(
+                                  p,
+                                  "propertyFeatures.propertyStatus",
+                                )}
+                              />
+                              <DetailRow
+                                label="Possession"
+                                value={get(
+                                  p,
+                                  "propertyFeatures.possessionStatus",
+                                )}
+                              />
 
                               <div className="pt-2 border-t border-orange-200 mt-2 space-y-2">
-                                <DetailRow label="Available From" value={`${get(p, "propertyFeatures.availableFromMonth") || ""} ${get(p, "propertyFeatures.availableFromYear") || ""}`.trim()} />
-                                <DetailRow label="Boundary Wall" value={get(p, "propertyFeatures.boundaryWall")} />
-                                <DetailRow label="Gated Colony" value={get(p, "propertyFeatures.gatedColony")} />
+                                <DetailRow
+                                  label="Available From"
+                                  value={`${get(p, "propertyFeatures.availableFromMonth") || ""} ${get(p, "propertyFeatures.availableFromYear") || ""}`.trim()}
+                                />
+                                <DetailRow
+                                  label="Boundary Wall"
+                                  value={get(
+                                    p,
+                                    "propertyFeatures.boundaryWall",
+                                  )}
+                                />
+                                <DetailRow
+                                  label="Gated Colony"
+                                  value={get(p, "propertyFeatures.gatedColony")}
+                                />
 
-                                <DetailRow label="Has Outhouse" value={get(p, "propertyFeatures.hasOuthouse")} />
-                                {get(p, "propertyFeatures.hasOuthouse") === "Yes" && (
-                                  <DetailRow label="Outhouse Area" value={get(p, "propertyFeatures.outhouseArea")} suffix="sqft" />
+                                <DetailRow
+                                  label="Has Outhouse"
+                                  value={get(p, "propertyFeatures.hasOuthouse")}
+                                />
+                                {get(p, "propertyFeatures.hasOuthouse") ===
+                                  "Yes" && (
+                                  <DetailRow
+                                    label="Outhouse Area"
+                                    value={get(
+                                      p,
+                                      "propertyFeatures.outhouseArea",
+                                    )}
+                                    suffix="sqft"
+                                  />
                                 )}
                               </div>
 
-
-                              {(get(p, "propertyFeatures.parking") || get(p, "propertyFeatures.garden")) && (
+                              {(get(p, "propertyFeatures.parking") ||
+                                get(p, "propertyFeatures.garden")) && (
                                 <div className="pt-2 mt-2 border-t border-orange-200">
-                                  <span className="text-xs text-gray-500 mb-1 block">Facilities:</span>
+                                  <span className="text-xs text-gray-500 mb-1 block">
+                                    Facilities:
+                                  </span>
                                   <div className="flex gap-2 flex-wrap">
                                     {get(p, "propertyFeatures.parking") && (
-                                      <span className="px-2 py-0.5 bg-white text-orange-700 border border-orange-200 rounded-lg text-[10px] font-medium shadow-sm">Parking</span>
+                                      <span className="px-2 py-0.5 bg-white text-orange-700 border border-orange-200 rounded-lg text-[10px] font-medium shadow-sm">
+                                        Parking
+                                      </span>
                                     )}
                                     {get(p, "propertyFeatures.garden") && (
-                                      <span className="px-2 py-0.5 bg-white text-orange-700 border border-orange-200 rounded-lg text-[10px] font-medium shadow-sm">Garden</span>
+                                      <span className="px-2 py-0.5 bg-white text-orange-700 border border-orange-200 rounded-lg text-[10px] font-medium shadow-sm">
+                                        Garden
+                                      </span>
                                     )}
                                   </div>
                                 </div>
                               )}
                             </div>
 
-
                             <div className="pt-2 border-t border-gray-100 space-y-1">
-
                               <div className="flex items-center gap-2 text-xs text-gray-600">
                                 <FaHardHat className="text-gray-400 text-[10px]" />
                                 <span className="font-medium">Contractor:</span>
-                                <span className="text-gray-900">{get(p, "constructor") || "N/A"}</span>
+                                <span className="text-gray-900">
+                                  {get(p, "constructor") || "N/A"}
+                                </span>
                               </div>
                               <div className="flex items-center gap-2 text-xs text-gray-600">
                                 <FaUser className="text-gray-400 text-[10px]" />
                                 <span className="font-medium">Broker:</span>
-                                <span className="text-gray-900">{get(p, "broker") || "None"}</span>
+                                <span className="text-gray-900">
+                                  {get(p, "broker") || "None"}
+                                </span>
                               </div>
                               <div className="flex items-center gap-2 text-xs text-gray-600">
                                 <FaFileAlt className="text-gray-400 text-[10px]" />
                                 <span className="font-medium">Reference:</span>
-                                <span className="text-gray-900">{get(p, "reference") || "None"}</span>
+                                <span className="text-gray-900">
+                                  {get(p, "reference") || "None"}
+                                </span>
                               </div>
                               {get(p, "staffEngaged") && (
                                 <div className="flex items-center gap-2 text-xs text-gray-600">
                                   <FaUserTie className="text-gray-400 text-[10px]" />
-                                  <span className="font-medium">Staff Engaged:</span>
-                                  <span className="text-gray-900">{get(p, "staffEngaged")}</span>
+                                  <span className="font-medium">
+                                    Staff Engaged:
+                                  </span>
+                                  <span className="text-gray-900">
+                                    {get(p, "staffEngaged")}
+                                  </span>
                                 </div>
                               )}
                               <div className="flex items-center gap-2 text-xs text-gray-600">
                                 <FaUniversity className="text-gray-400 text-[10px]" />
-                                <span className="font-medium">Loan Provider:</span>
-                                <span className="text-gray-900">{get(p, "loanProvider") || "None"}</span>
+                                <span className="font-medium">
+                                  Loan Provider:
+                                </span>
+                                <span className="text-gray-900">
+                                  {get(p, "loanProvider") || "None"}
+                                </span>
                               </div>
                             </div>
                           </div>
                         </div>
-
                       ))
                     )}
                   </div>
@@ -1163,10 +1275,8 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
               </CollapsibleSection>
             )}
 
-
-
-          {(normalizedBlocksData.length > 0 || (project.type || "").toLowerCase() === "apartment") && (
-
+          {(normalizedBlocksData.length > 0 ||
+            (project.type || "").toLowerCase() === "apartment") && (
             <CollapsibleSection
               title="Blocks & Floors Overview"
               icon={<FaLayerGroup className="text-indigo-600" />}
@@ -1179,20 +1289,28 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                   {normalizedBlocksData.length === 0 ? (
                     <div className="py-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
                       <FaLayerGroup className="mx-auto h-12 w-12 text-gray-300 mb-2" />
-                      <p className="text-gray-500 text-sm">No blocks configured.</p>
+                      <p className="text-gray-500 text-sm">
+                        No blocks configured.
+                      </p>
                     </div>
                   ) : (
                     normalizedBlocksData.map((block, bIdx) => (
-                      <div key={block.id || bIdx} className="bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                      <div
+                        key={block.id || bIdx}
+                        className="bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
+                      >
                         <div className="bg-indigo-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
                               <FaLayerGroup className="text-indigo-600" />
                             </div>
                             <div>
-                              <h4 className="text-lg font-bold text-gray-900">{block.name}</h4>
+                              <h4 className="text-lg font-bold text-gray-900">
+                                {block.name}
+                              </h4>
                               <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
-                                {block.prefix} • {block.totalUnits || 0}/{block.capacity || 0} Units
+                                {block.prefix} • {block.totalUnits || 0}/
+                                {block.capacity || 0} Units
                               </p>
                             </div>
                           </div>
@@ -1209,13 +1327,18 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                         <div className="p-6">
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {(block.floors || []).map((floor, fIdx) => (
-                              <div key={floor.id || fIdx} className="bg-white rounded-xl border border-gray-200 p-4 shadow-xs">
+                              <div
+                                key={floor.id || fIdx}
+                                className="bg-white rounded-xl border border-gray-200 p-4 shadow-xs"
+                              >
                                 <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-50">
                                   <h5 className="font-bold text-gray-800 flex items-center gap-2">
                                     <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
                                     {floor.floorName}
                                   </h5>
-                                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${floor.floorType === 'parking' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
+                                  <span
+                                    className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${floor.floorType === "parking" ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"}`}
+                                  >
                                     {floor.floorType}
                                   </span>
                                 </div>
@@ -1224,21 +1347,29 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                                   {(floor.units || []).map((unit, uIdx) => (
                                     <button
                                       key={unit.id || uIdx}
-                                      onClick={() => setSelectedApartmentUnit(unit)}
-                                      className={`aspect-square rounded-lg flex flex-col items-center justify-center transition-all ${unit.isComplete
-                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 shadow-sm'
-                                        : 'bg-gray-50 text-gray-400 border border-gray-100 hover:bg-gray-100'
-                                        }`}
+                                      onClick={() =>
+                                        setSelectedApartmentUnit(unit)
+                                      }
+                                      className={`aspect-square rounded-lg flex flex-col items-center justify-center transition-all ${
+                                        unit.isComplete
+                                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 shadow-sm"
+                                          : "bg-gray-50 text-gray-400 border border-gray-100 hover:bg-gray-100"
+                                      }`}
                                     >
                                       <span className="text-[10px] font-bold truncate w-full px-1 text-center">
-                                        {unit.name || unit.unitNo || `U${uIdx + 1}`}
+                                        {unit.name ||
+                                          unit.unitNo ||
+                                          `U${uIdx + 1}`}
                                       </span>
                                       <span className="text-[8px] font-medium opacity-70">
-                                        {unit.unitType || unit.roomType || 'N/A'}
+                                        {unit.unitType ||
+                                          unit.roomType ||
+                                          "N/A"}
                                       </span>
                                     </button>
                                   ))}
-                                  {(!floor.units || floor.units.length === 0) && (
+                                  {(!floor.units ||
+                                    floor.units.length === 0) && (
                                     <div className="col-span-4 py-2 text-center text-[10px] text-gray-400 italic">
                                       No units added
                                     </div>
@@ -1256,194 +1387,430 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             </CollapsibleSection>
           )}
 
-
           {(normalizedUnitsData.length > 0 ||
             ["duplex", "triplex"].includes(project.type)) && (
-              <CollapsibleSection
-                title="Units Configuration"
-                icon={<FaHome className="text-blue-600" />}
-                isExpanded={expandedSections.units}
-                onToggle={() => toggleSection("units")}
-                count={normalizedUnitsData.length}
-              >
-                {expandedSections.units && (
-                  <div className="space-y-6">
-                    {normalizedUnitsData.length === 0 ? (
-                      <div className="py-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                        <FaHome className="mx-auto h-12 w-12 text-gray-300 mb-2" />
-                        <p className="text-gray-500">No units configured.</p>
-                      </div>
-                    ) : (
-                      normalizedUnitsData.map((u, i) => {
-                        const unitId = u.id || u.apiId || i;
-                        const projectId = project.id;
-                        const floors =
-                          get(u, "floors") ||
-                          (u.floorDetails ? u.floorDetails : {});
+            <CollapsibleSection
+              title="Units Configuration"
+              icon={<FaHome className="text-blue-600" />}
+              isExpanded={expandedSections.units}
+              onToggle={() => toggleSection("units")}
+              count={normalizedUnitsData.length}
+            >
+              {expandedSections.units && (
+                <div className="space-y-6">
+                  {normalizedUnitsData.length === 0 ? (
+                    <div className="py-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                      <FaHome className="mx-auto h-12 w-12 text-gray-300 mb-2" />
+                      <p className="text-gray-500">No units configured.</p>
+                    </div>
+                  ) : (
+                    normalizedUnitsData.map((u, i) => {
+                      const unitId = u.id || u.apiId || i;
+                      const projectId = project.id;
+                      const floors =
+                        get(u, "floors") ||
+                        (u.floorDetails ? u.floorDetails : {});
 
-                        return (
-                          <div
-                            key={unitId}
-                            className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all"
-                          >
-                            <div className="flex items-start justify-between mb-4">
-                              <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-                                  <FaHome className="text-indigo-600" />
-                                </div>
-                                <div>
-                                  {project.type === "commercial" && u.floor && (
-                                    <div className="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-0.5">
-                                      {u.floor}
-                                    </div>
-                                  )}
-                                  <h4 className="font-bold text-gray-900 text-lg leading-tight">
-                                    {u.name || `Unit ${i + 1}`}
-                                  </h4>
-                                  <div className="flex flex-wrap gap-2 mt-2">
-                                    <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
-                                      {get(u, "roomType", "room_type") || "N/A"}
-                                    </span>
-                                    <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-                                      {get(
-                                        u,
-                                        "areaDetails.carpetArea",
-                                        "areaDetails.carpet_area",
-                                        "area"
-                                      ) || "N/A"}{" "}
-                                      sq-ft
-                                    </span>
-                                    {u.isComplete && (
-                                      <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">
-                                        Complete
-                                      </span>
-                                    )}
+                      return (
+                        <div
+                          key={unitId}
+                          className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all"
+                        >
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-start gap-4">
+                              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                                <FaHome className="text-indigo-600" />
+                              </div>
+                              <div>
+                                {project.type === "commercial" && u.floor && (
+                                  <div className="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-0.5">
+                                    {u.floor}
                                   </div>
+                                )}
+                                <h4 className="font-bold text-gray-900 text-lg leading-tight">
+                                  {u.name || `Unit ${i + 1}`}
+                                </h4>
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                  <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                                    {get(u, "roomType", "room_type") || "N/A"}
+                                  </span>
+                                  <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                                    {get(
+                                      u,
+                                      "areaDetails.carpetArea",
+                                      "areaDetails.carpet_area",
+                                      "area",
+                                    ) || "N/A"}{" "}
+                                    sq-ft
+                                  </span>
+                                  {u.isComplete && (
+                                    <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">
+                                      Complete
+                                    </span>
+                                  )}
                                 </div>
                               </div>
-                              <div className="text-right text-sm text-gray-500 space-y-1">
-                                <div>ID: {u.id ?? "—"}</div>
-                                {u.apiId && <div>API: {u.apiId}</div>}
-                              </div>
                             </div>
+                            <div className="text-right text-sm text-gray-500 space-y-1">
+                              <div>ID: {u.id ?? "—"}</div>
+                              {u.apiId && <div>API: {u.apiId}</div>}
+                            </div>
+                          </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                              <DetailRow
-                                label="Price"
-                                value={formatMoney(
-                                  get(
-                                    u,
-                                    "priceDetails.expectedPrice",
-                                    "priceDetails.expected_price"
-                                  )
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <DetailRow
+                              label="Price"
+                              value={formatMoney(
+                                get(
+                                  u,
+                                  "priceDetails.expectedPrice",
+                                  "priceDetails.expected_price",
+                                ),
+                              )}
+                            />
+
+                            <DetailRow
+                              label="Contractor"
+                              value={u.constructor}
+                            />
+                          </div>
+
+                          {(u.mainInfo ||
+                            u.propertyFeatures ||
+                            u.broker ||
+                            u.broker_id ||
+                            u.contractor ||
+                            u.open_sides ||
+                            u.staff_engaged ||
+                            u.loan_provider ||
+                            u.possession_status ||
+                            u.approval_status) && (
+                            <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                              <h5 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                <FaInfoCircle className="text-blue-500" />{" "}
+                                Property Details
+                              </h5>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2">
+                                {u.mainInfo && (
+                                  <>
+                                    {u.mainInfo.facing && (
+                                      <DetailRow
+                                        label="Facing"
+                                        value={u.mainInfo.facing}
+                                      />
+                                    )}
+                                    {u.mainInfo.landArea && (
+                                      <DetailRow
+                                        label="Land Area"
+                                        value={u.mainInfo.landArea}
+                                        suffix="sq-ft"
+                                      />
+                                    )}
+                                    {u.mainInfo.totalBuiltUpArea && (
+                                      <DetailRow
+                                        label="Built-up Area"
+                                        value={u.mainInfo.totalBuiltUpArea}
+                                        suffix="sq-ft"
+                                      />
+                                    )}
+                                    {u.mainInfo.groundFloorArea && (
+                                      <DetailRow
+                                        label="Ground Floor Area"
+                                        value={u.mainInfo.groundFloorArea}
+                                        suffix="sq-ft"
+                                      />
+                                    )}
+                                    {u.mainInfo.firstFloorArea && (
+                                      <DetailRow
+                                        label="1st Floor Area"
+                                        value={u.mainInfo.firstFloorArea}
+                                        suffix="sq-ft"
+                                      />
+                                    )}
+                                    {u.mainInfo.secondFloorArea && (
+                                      <DetailRow
+                                        label="2nd Floor Area"
+                                        value={u.mainInfo.secondFloorArea}
+                                        suffix="sq-ft"
+                                      />
+                                    )}
+                                    {u.mainInfo.staircaseArea && (
+                                      <DetailRow
+                                        label="Staircase Area"
+                                        value={u.mainInfo.staircaseArea}
+                                        suffix="sq-ft"
+                                      />
+                                    )}
+                                    {u.mainInfo.individualBoundary !==
+                                      undefined && (
+                                      <DetailRow
+                                        label="Individual Boundary"
+                                        value={
+                                          u.mainInfo.individualBoundary
+                                            ? "Yes"
+                                            : "No"
+                                        }
+                                      />
+                                    )}
+                                  </>
                                 )}
-                              />
 
-                              <DetailRow
-                                label="Contractor"
-                                value={u.constructor}
-                              />
-                            </div>
-
-
-                            {(u.mainInfo || u.propertyFeatures || u.broker || u.broker_id || u.contractor || u.open_sides || u.staff_engaged || u.loan_provider || u.possession_status || u.approval_status) && (
-                              <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
-                                <h5 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                  <FaInfoCircle className="text-blue-500" /> Property Details
-                                </h5>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2">
-
-                                  {u.mainInfo && (
-                                    <>
-                                      {u.mainInfo.facing && <DetailRow label="Facing" value={u.mainInfo.facing} />}
-                                      {u.mainInfo.landArea && <DetailRow label="Land Area" value={u.mainInfo.landArea} suffix="sq-ft" />}
-                                      {u.mainInfo.totalBuiltUpArea && <DetailRow label="Built-up Area" value={u.mainInfo.totalBuiltUpArea} suffix="sq-ft" />}
-                                      {u.mainInfo.groundFloorArea && <DetailRow label="Ground Floor Area" value={u.mainInfo.groundFloorArea} suffix="sq-ft" />}
-                                      {u.mainInfo.firstFloorArea && <DetailRow label="1st Floor Area" value={u.mainInfo.firstFloorArea} suffix="sq-ft" />}
-                                      {u.mainInfo.secondFloorArea && <DetailRow label="2nd Floor Area" value={u.mainInfo.secondFloorArea} suffix="sq-ft" />}
-                                      {u.mainInfo.staircaseArea && <DetailRow label="Staircase Area" value={u.mainInfo.staircaseArea} suffix="sq-ft" />}
-                                      {u.mainInfo.individualBoundary !== undefined && <DetailRow label="Individual Boundary" value={u.mainInfo.individualBoundary ? "Yes" : "No"} />}
-                                    </>
-                                  )}
-
-                                  {u.propertyFeatures && (
-                                    <>
-                                      {u.propertyFeatures.bedrooms && <DetailRow label="Bedrooms" value={u.propertyFeatures.bedrooms} />}
-                                      {u.propertyFeatures.bathrooms && <DetailRow label="Bathrooms" value={u.propertyFeatures.bathrooms} />}
-                                      {u.propertyFeatures.balconies && <DetailRow label="Balconies" value={u.propertyFeatures.balconies} />}
-                                      {u.propertyFeatures.parking && <DetailRow label="Parking" value={u.propertyFeatures.parking} />}
-                                      {u.propertyFeatures.totalRooms && <DetailRow label="Total Rooms" value={u.propertyFeatures.totalRooms} />}
-                                      {u.propertyFeatures.roomAreas && Array.isArray(u.propertyFeatures.roomAreas) && u.propertyFeatures.roomAreas.length > 0 && (
-                                        <DetailRow label="Room Areas" value={u.propertyFeatures.roomAreas.filter(Boolean).map((a) => `${a} sqft`).join(", ")} />
+                                {u.propertyFeatures && (
+                                  <>
+                                    {u.propertyFeatures.bedrooms && (
+                                      <DetailRow
+                                        label="Bedrooms"
+                                        value={u.propertyFeatures.bedrooms}
+                                      />
+                                    )}
+                                    {u.propertyFeatures.bathrooms && (
+                                      <DetailRow
+                                        label="Bathrooms"
+                                        value={u.propertyFeatures.bathrooms}
+                                      />
+                                    )}
+                                    {u.propertyFeatures.balconies && (
+                                      <DetailRow
+                                        label="Balconies"
+                                        value={u.propertyFeatures.balconies}
+                                      />
+                                    )}
+                                    {u.propertyFeatures.parking && (
+                                      <DetailRow
+                                        label="Parking"
+                                        value={u.propertyFeatures.parking}
+                                      />
+                                    )}
+                                    {u.propertyFeatures.totalRooms && (
+                                      <DetailRow
+                                        label="Total Rooms"
+                                        value={u.propertyFeatures.totalRooms}
+                                      />
+                                    )}
+                                    {u.propertyFeatures.roomAreas &&
+                                      Array.isArray(
+                                        u.propertyFeatures.roomAreas,
+                                      ) &&
+                                      u.propertyFeatures.roomAreas.length >
+                                        0 && (
+                                        <DetailRow
+                                          label="Room Areas"
+                                          value={u.propertyFeatures.roomAreas
+                                            .filter(Boolean)
+                                            .map((a) => `${a} sqft`)
+                                            .join(", ")}
+                                        />
                                       )}
-                                      {u.propertyFeatures.washrooms && <DetailRow label="Washrooms" value={u.propertyFeatures.washrooms} />}
-                                      {u.propertyFeatures.washroomAreas && Array.isArray(u.propertyFeatures.washroomAreas) && u.propertyFeatures.washroomAreas.length > 0 && (
-                                        <DetailRow label="Washroom Areas" value={u.propertyFeatures.washroomAreas.filter(Boolean).map((a) => `${a} sqft`).join(", ")} />
+                                    {u.propertyFeatures.washrooms && (
+                                      <DetailRow
+                                        label="Washrooms"
+                                        value={u.propertyFeatures.washrooms}
+                                      />
+                                    )}
+                                    {u.propertyFeatures.washroomAreas &&
+                                      Array.isArray(
+                                        u.propertyFeatures.washroomAreas,
+                                      ) &&
+                                      u.propertyFeatures.washroomAreas.length >
+                                        0 && (
+                                        <DetailRow
+                                          label="Washroom Areas"
+                                          value={u.propertyFeatures.washroomAreas
+                                            .filter(Boolean)
+                                            .map((a) => `${a} sqft`)
+                                            .join(", ")}
+                                        />
                                       )}
-                                      {u.propertyFeatures.personalWashroom && <DetailRow label="Personal Washroom" value={u.propertyFeatures.personalWashroom} />}
-                                      {u.propertyFeatures.personalWashroomArea && <DetailRow label="Personal Washroom Area" value={u.propertyFeatures.personalWashroomArea} suffix="sqft" />}
-                                      {u.propertyFeatures.furnishedStatus && <DetailRow label="Furnishing Status" value={u.propertyFeatures.furnishedStatus} />}
-                                      {u.propertyFeatures.pantryCafeteria && <DetailRow label="Pantry/Cafeteria" value={u.propertyFeatures.pantryCafeteria} />}
-                                    </>
-                                  )}
-                                  {u.open_sides && <DetailRow label="Open Sides" value={`${u.open_sides} Sides`} />}
+                                    {u.propertyFeatures.personalWashroom && (
+                                      <DetailRow
+                                        label="Personal Washroom"
+                                        value={
+                                          u.propertyFeatures.personalWashroom
+                                        }
+                                      />
+                                    )}
+                                    {u.propertyFeatures
+                                      .personalWashroomArea && (
+                                      <DetailRow
+                                        label="Personal Washroom Area"
+                                        value={
+                                          u.propertyFeatures
+                                            .personalWashroomArea
+                                        }
+                                        suffix="sqft"
+                                      />
+                                    )}
+                                    {u.propertyFeatures.furnishedStatus && (
+                                      <DetailRow
+                                        label="Furnishing Status"
+                                        value={
+                                          u.propertyFeatures.furnishedStatus
+                                        }
+                                      />
+                                    )}
+                                    {u.propertyFeatures.pantryCafeteria && (
+                                      <DetailRow
+                                        label="Pantry/Cafeteria"
+                                        value={
+                                          u.propertyFeatures.pantryCafeteria
+                                        }
+                                      />
+                                    )}
+                                  </>
+                                )}
+                                {u.open_sides && (
+                                  <DetailRow
+                                    label="Open Sides"
+                                    value={`${u.open_sides} Sides`}
+                                  />
+                                )}
 
-                                  {get(u, "broker", "broker_id") && <DetailRow label="Broker" value={get(u, "broker", "broker_id")} />}
-                                  {u.staff_engaged && <DetailRow label="Staff Engaged" value={u.staff_engaged} />}
-                                  {u.contractor && <DetailRow label="Contractor" value={u.contractor} />}
-                                  {u.contractor_work_type && <DetailRow label="Work Type" value={u.contractor_work_type} />}
-                                  {u.loan_provider && <DetailRow label="Loan Provider" value={u.loan_provider} />}
-                                  {(() => {
-                                    const status = get(u, "propertyFeatures.possessionStatus") || get(u, "possessionStatus") || get(u, "possession_status") || get(u, "transactionType.possessionStatus") || get(u, "propertyFeatures.possession_status");
-                                    if (!status) return null;
-                                    return <DetailRow label="Possession Status" value={status} />;
-                                  })()}
-                                  {u.transactionType?.availableFromMonth && u.transactionType?.availableFromYear && (
-                                    <DetailRow label="Available From" value={`${u.transactionType.availableFromMonth} ${u.transactionType.availableFromYear}`} />
-                                  )}
-                                  {u.transactionType?.currentlyLeasedOut && <DetailRow label="Currently Leased Out" value={u.transactionType.currentlyLeasedOut} />}
-                                  {u.transactionType?.assuredReturns && <DetailRow label="Assured Returns" value={u.transactionType.assuredReturns} />}
-                                  {u.transaction_type?.availableFrom?.month && u.transaction_type?.availableFrom?.year && (
-                                    <DetailRow label="Available From" value={`${u.transaction_type.availableFrom.month} ${u.transaction_type.availableFrom.year}`} />
-                                  )}
-                                  {get(u, "fileName", "file_name", "attachment") && (
+                                {get(u, "broker", "broker_id") && (
+                                  <DetailRow
+                                    label="Broker"
+                                    value={get(u, "broker", "broker_id")}
+                                  />
+                                )}
+                                {u.staff_engaged && (
+                                  <DetailRow
+                                    label="Staff Engaged"
+                                    value={u.staff_engaged}
+                                  />
+                                )}
+                                {u.contractor && (
+                                  <DetailRow
+                                    label="Contractor"
+                                    value={u.contractor}
+                                  />
+                                )}
+                                {u.contractor_work_type && (
+                                  <DetailRow
+                                    label="Work Type"
+                                    value={u.contractor_work_type}
+                                  />
+                                )}
+                                {u.loan_provider && (
+                                  <DetailRow
+                                    label="Loan Provider"
+                                    value={u.loan_provider}
+                                  />
+                                )}
+                                {(() => {
+                                  const status =
+                                    get(
+                                      u,
+                                      "propertyFeatures.possessionStatus",
+                                    ) ||
+                                    get(u, "possessionStatus") ||
+                                    get(u, "possession_status") ||
+                                    get(
+                                      u,
+                                      "transactionType.possessionStatus",
+                                    ) ||
+                                    get(
+                                      u,
+                                      "propertyFeatures.possession_status",
+                                    );
+                                  if (!status) return null;
+                                  return (
                                     <DetailRow
-                                      label="Attachment"
-                                      value={get(u, "fileName", "file_name", "attachment")}
+                                      label="Possession Status"
+                                      value={status}
+                                    />
+                                  );
+                                })()}
+                                {u.transactionType?.availableFromMonth &&
+                                  u.transactionType?.availableFromYear && (
+                                    <DetailRow
+                                      label="Available From"
+                                      value={`${u.transactionType.availableFromMonth} ${u.transactionType.availableFromYear}`}
                                     />
                                   )}
-                                </div>
-                                {u.approval_status && Array.isArray(u.approval_status) && u.approval_status.some(a => a.authority || a.status) && (
+                                {u.transactionType?.currentlyLeasedOut && (
+                                  <DetailRow
+                                    label="Currently Leased Out"
+                                    value={u.transactionType.currentlyLeasedOut}
+                                  />
+                                )}
+                                {u.transactionType?.assuredReturns && (
+                                  <DetailRow
+                                    label="Assured Returns"
+                                    value={u.transactionType.assuredReturns}
+                                  />
+                                )}
+                                {u.transaction_type?.availableFrom?.month &&
+                                  u.transaction_type?.availableFrom?.year && (
+                                    <DetailRow
+                                      label="Available From"
+                                      value={`${u.transaction_type.availableFrom.month} ${u.transaction_type.availableFrom.year}`}
+                                    />
+                                  )}
+                                {get(
+                                  u,
+                                  "fileName",
+                                  "file_name",
+                                  "attachment",
+                                ) && (
+                                  <DetailRow
+                                    label="Attachment"
+                                    value={get(
+                                      u,
+                                      "fileName",
+                                      "file_name",
+                                      "attachment",
+                                    )}
+                                  />
+                                )}
+                              </div>
+                              {u.approval_status &&
+                                Array.isArray(u.approval_status) &&
+                                u.approval_status.some(
+                                  (a) => a.authority || a.status,
+                                ) && (
                                   <div className="mt-3 border-t border-gray-200 pt-3">
-                                    <h6 className="text-xs font-semibold text-gray-500 mb-2 uppercase">Approval Status</h6>
+                                    <h6 className="text-xs font-semibold text-gray-500 mb-2 uppercase">
+                                      Approval Status
+                                    </h6>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                      {u.approval_status.map((approval, idx) => (
-                                        (approval.authority || approval.status) && (
-                                          <div key={idx} className="bg-white p-2 rounded border border-gray-100 text-sm">
-                                            <div className="font-medium text-gray-800">{approval.authority || "Unknown"}</div>
-                                            <div className="text-gray-500 text-xs">{approval.status || "N/A"}</div>
-                                          </div>
-                                        )
-                                      ))}
+                                      {u.approval_status.map(
+                                        (approval, idx) =>
+                                          (approval.authority ||
+                                            approval.status) && (
+                                            <div
+                                              key={idx}
+                                              className="bg-white p-2 rounded border border-gray-100 text-sm"
+                                            >
+                                              <div className="font-medium text-gray-800">
+                                                {approval.authority ||
+                                                  "Unknown"}
+                                              </div>
+                                              <div className="text-gray-500 text-xs">
+                                                {approval.status || "N/A"}
+                                              </div>
+                                            </div>
+                                          ),
+                                      )}
                                     </div>
                                   </div>
                                 )}
-                              </div>
-                            )}
+                            </div>
+                          )}
 
-
-                            {project.type !== "commercial" && (
-                              <div className="mt-4">
-                                <h5 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                  <FaLayerGroup className="text-gray-500" />
-                                  Floor Details
-                                </h5>
+                          {project.type !== "commercial" && (
+                            <div className="mt-4">
+                              <h5 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                <FaLayerGroup className="text-gray-500" />
+                                Floor Details
+                              </h5>
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FloorBlock
                                   title="Ground Floor"
                                   floor={
-                                    get(floors, "groundFloor", "ground_floor") ||
-                                    get(u, "groundFloor", "ground_floor")
+                                    get(
+                                      floors,
+                                      "groundFloor",
+                                      "ground_floor",
+                                    ) || get(u, "groundFloor", "ground_floor")
                                   }
                                   projectId={projectId}
                                   unitId={unitId}
@@ -1462,12 +1829,15 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                                   unitData={u}
                                 />
                                 {get(floors, "secondFloor", "second_floor") ||
-                                  get(u, "secondFloor", "second_floor") ? (
+                                get(u, "secondFloor", "second_floor") ? (
                                   <FloorBlock
                                     title="2nd Floor"
                                     floor={
-                                      get(floors, "secondFloor", "second_floor") ||
-                                      get(u, "secondFloor", "second_floor")
+                                      get(
+                                        floors,
+                                        "secondFloor",
+                                        "second_floor",
+                                      ) || get(u, "secondFloor", "second_floor")
                                     }
                                     projectId={projectId}
                                     unitId={unitId}
@@ -1476,18 +1846,16 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                                   />
                                 ) : null}
                               </div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })
-                    )}
-                  </div>
-                )}
-              </CollapsibleSection>
-            )}
-
-
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              )}
+            </CollapsibleSection>
+          )}
 
           {project.type === "custom" && (
             <CollapsibleSection
@@ -1503,38 +1871,49 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                       const rawSubTypes = get(project, "subTypes", "sub_types");
                       const subTypes = Array.isArray(rawSubTypes)
                         ? rawSubTypes
-                        : (typeof rawSubTypes === 'string' ? parseData(rawSubTypes) : []);
+                        : typeof rawSubTypes === "string"
+                          ? parseData(rawSubTypes)
+                          : [];
 
                       return (subTypes || []).map((type, i) => {
-
                         let isComplete = false;
                         let hasData = false;
 
-                        if (type === 'plotting') {
+                        if (type === "plotting") {
                           hasData = plots.length > 0;
-                          isComplete = hasData && plots.every(p => p.isComplete);
+                          isComplete =
+                            hasData && plots.every((p) => p.isComplete);
                         } else {
-                          const subUnits = units.filter(u => u.projectType === type || u.type === type);
+                          const subUnits = units.filter(
+                            (u) => u.projectType === type || u.type === type,
+                          );
                           hasData = subUnits.length > 0;
-                          isComplete = hasData && subUnits.every(u => u.isComplete);
+                          isComplete =
+                            hasData && subUnits.every((u) => u.isComplete);
                         }
 
                         return (
-                          <div key={i} className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-2 pr-3 shadow-sm">
+                          <div
+                            key={i}
+                            className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-2 pr-3 shadow-sm"
+                          >
                             <span className="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs font-bold uppercase tracking-wider">
                               {type}
                             </span>
                             {!hasData ? (
                               <span className="text-[10px] text-gray-500 font-semibold flex items-center">
-                                <FaInfoCircle className="mr-1 text-gray-400" /> No Data
+                                <FaInfoCircle className="mr-1 text-gray-400" />{" "}
+                                No Data
                               </span>
                             ) : isComplete ? (
                               <span className="text-[10px] text-emerald-600 font-semibold flex items-center">
-                                <FaCheckCircle className="mr-1 text-emerald-500" /> Complete
+                                <FaCheckCircle className="mr-1 text-emerald-500" />{" "}
+                                Complete
                               </span>
                             ) : (
                               <span className="text-[10px] text-amber-600 font-semibold flex items-center">
-                                <FaTimes className="mr-1 text-amber-500" /> Incomplete
+                                <FaTimes className="mr-1 text-amber-500" />{" "}
+                                Incomplete
                               </span>
                             )}
                           </div>
@@ -1576,22 +1955,31 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
               )}
             </CollapsibleSection>
           )}
-
         </div>
       </div>
 
-
       {selectedApartmentUnit && (
-        <div className="fixed inset-0 bg-black/60 z-60 flex items-center justify-center p-4 backdrop-blur-sm" style={{ pointerEvents: 'auto' }}>
-
+        <div
+          className="fixed inset-0 bg-black/60 z-60 flex items-center justify-center p-4 backdrop-blur-sm"
+          style={{ pointerEvents: "auto" }}
+        >
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-200">
             <div className="bg-linear-to-r from-indigo-600 to-blue-600 p-6 flex justify-between items-start text-white">
               <div>
                 <h3 className="text-xl font-bold">
-                  {get(selectedApartmentUnit, "name") || get(selectedApartmentUnit, "unitNo") || "Unit Details"}
+                  {get(selectedApartmentUnit, "name") ||
+                    get(selectedApartmentUnit, "unitNo") ||
+                    "Unit Details"}
                 </h3>
                 <p className="text-blue-100 text-sm mt-1">
-                  Type: {get(selectedApartmentUnit, "unitType", "roomType", "unit_type", "room_type") || "N/A"}
+                  Type:{" "}
+                  {get(
+                    selectedApartmentUnit,
+                    "unitType",
+                    "roomType",
+                    "unit_type",
+                    "room_type",
+                  ) || "N/A"}
                 </p>
               </div>
               <button
@@ -1603,7 +1991,6 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
             </div>
 
             <div className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
-
               <div className="grid grid-cols-2 gap-4">
                 <PriceCard
                   label="Expected Price"
@@ -1613,8 +2000,8 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                       "priceDetails.expectedPrice",
                       "priceDetails.expected_price",
                       "expectedPrice",
-                      "expected_price"
-                    )
+                      "expected_price",
+                    ),
                   )}
                 />
                 <PriceCard
@@ -1626,12 +2013,11 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                       "priceDetails.tokenAmount",
                       "priceDetails.token_amount",
                       "tokenAmount",
-                      "token_amount"
-                    )
+                      "token_amount",
+                    ),
                   )}
                 />
               </div>
-
 
               <div className="bg-purple-50 p-4 rounded-xl border border-purple-100">
                 <h4 className="text-sm font-semibold text-purple-800 mb-3 flex items-center gap-2">
@@ -1639,55 +2025,99 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                 </h4>
                 <div className="flex gap-4 mb-3">
                   <div className="bg-white px-3 py-2 rounded-lg border border-purple-100 text-center flex-1">
-                    <div className="text-xs text-purple-600 font-bold uppercase">Bedrooms</div>
-                    <div className="text-lg font-bold text-gray-800">{get(selectedApartmentUnit, "propertyFeatures.bedrooms", "bedrooms") || 0}</div>
+                    <div className="text-xs text-purple-600 font-bold uppercase">
+                      Bedrooms
+                    </div>
+                    <div className="text-lg font-bold text-gray-800">
+                      {get(
+                        selectedApartmentUnit,
+                        "propertyFeatures.bedrooms",
+                        "bedrooms",
+                      ) || 0}
+                    </div>
                   </div>
                   <div className="bg-white px-3 py-2 rounded-lg border border-purple-100 text-center flex-1">
-                    <div className="text-xs text-purple-600 font-bold uppercase">Bathrooms</div>
-                    <div className="text-lg font-bold text-gray-800">{get(selectedApartmentUnit, "propertyFeatures.bathrooms", "bathrooms") || 0}</div>
+                    <div className="text-xs text-purple-600 font-bold uppercase">
+                      Bathrooms
+                    </div>
+                    <div className="text-lg font-bold text-gray-800">
+                      {get(
+                        selectedApartmentUnit,
+                        "propertyFeatures.bathrooms",
+                        "bathrooms",
+                      ) || 0}
+                    </div>
                   </div>
                   <div className="bg-white px-3 py-2 rounded-lg border border-purple-100 text-center flex-1">
-                    <div className="text-xs text-purple-600 font-bold uppercase">Balconies</div>
-                    <div className="text-lg font-bold text-gray-800">{get(selectedApartmentUnit, "propertyFeatures.balcony", "balcony") || 0}</div>
+                    <div className="text-xs text-purple-600 font-bold uppercase">
+                      Balconies
+                    </div>
+                    <div className="text-lg font-bold text-gray-800">
+                      {get(
+                        selectedApartmentUnit,
+                        "propertyFeatures.balcony",
+                        "balcony",
+                      ) || 0}
+                    </div>
                   </div>
                 </div>
 
-
                 {(() => {
-                  const roomAreas = get(selectedApartmentUnit, "roomAreas") || {};
+                  const roomAreas =
+                    get(selectedApartmentUnit, "roomAreas") || {};
                   const bedroomAreas = roomAreas.bedrooms || [];
                   const bathroomAreas = roomAreas.bathrooms || [];
                   const balconyAreas = roomAreas.balconies || [];
 
-                  if (bedroomAreas.length === 0 && bathroomAreas.length === 0 && balconyAreas.length === 0) return null;
+                  if (
+                    bedroomAreas.length === 0 &&
+                    bathroomAreas.length === 0 &&
+                    balconyAreas.length === 0
+                  )
+                    return null;
 
                   return (
                     <div className="space-y-2 mt-3 pt-3 border-t border-purple-200">
                       {bedroomAreas.length > 0 && (
                         <div className="flex flex-wrap gap-2">
-                          {bedroomAreas.map((area, idx) => area ? (
-                            <span key={`bed-${idx}`} className="text-xs bg-white text-purple-700 px-2 py-1 rounded border border-purple-100">
-                              🛏️ Bed {idx + 1}: <b>{area} sqft</b>
-                            </span>
-                          ) : null)}
+                          {bedroomAreas.map((area, idx) =>
+                            area ? (
+                              <span
+                                key={`bed-${idx}`}
+                                className="text-xs bg-white text-purple-700 px-2 py-1 rounded border border-purple-100"
+                              >
+                                🛏️ Bed {idx + 1}: <b>{area} sqft</b>
+                              </span>
+                            ) : null,
+                          )}
                         </div>
                       )}
                       {bathroomAreas.length > 0 && (
                         <div className="flex flex-wrap gap-2">
-                          {bathroomAreas.map((area, idx) => area ? (
-                            <span key={`bath-${idx}`} className="text-xs bg-white text-blue-700 px-2 py-1 rounded border border-blue-100">
-                              🚿 Bath {idx + 1}: <b>{area} sqft</b>
-                            </span>
-                          ) : null)}
+                          {bathroomAreas.map((area, idx) =>
+                            area ? (
+                              <span
+                                key={`bath-${idx}`}
+                                className="text-xs bg-white text-blue-700 px-2 py-1 rounded border border-blue-100"
+                              >
+                                🚿 Bath {idx + 1}: <b>{area} sqft</b>
+                              </span>
+                            ) : null,
+                          )}
                         </div>
                       )}
                       {balconyAreas.length > 0 && (
                         <div className="flex flex-wrap gap-2">
-                          {balconyAreas.map((area, idx) => area ? (
-                            <span key={`balc-${idx}`} className="text-xs bg-white text-green-700 px-2 py-1 rounded border border-green-100">
-                              🌿 Balcony {idx + 1}: <b>{area} sqft</b>
-                            </span>
-                          ) : null)}
+                          {balconyAreas.map((area, idx) =>
+                            area ? (
+                              <span
+                                key={`balc-${idx}`}
+                                className="text-xs bg-white text-green-700 px-2 py-1 rounded border border-green-100"
+                              >
+                                🌿 Balcony {idx + 1}: <b>{area} sqft</b>
+                              </span>
+                            ) : null,
+                          )}
                         </div>
                       )}
                     </div>
@@ -1695,43 +2125,72 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                 })()}
               </div>
 
-
               <div className="grid grid-cols-2 gap-3">
                 <DetailCard
                   label="Carpet Area"
-                  value={get(selectedApartmentUnit, "areaDetails.carpetArea", "areaDetails.carpet_area", "carpetArea", "carpet_area")}
+                  value={get(
+                    selectedApartmentUnit,
+                    "areaDetails.carpetArea",
+                    "areaDetails.carpet_area",
+                    "carpetArea",
+                    "carpet_area",
+                  )}
                   suffix="sq-ft"
                 />
                 <DetailCard
                   label="Built-up Area"
-                  value={get(selectedApartmentUnit, "areaDetails.builtUpArea", "areaDetails.built_up_area", "builtUpArea", "built_up_area")}
+                  value={get(
+                    selectedApartmentUnit,
+                    "areaDetails.builtUpArea",
+                    "areaDetails.built_up_area",
+                    "builtUpArea",
+                    "built_up_area",
+                  )}
                   suffix="sq-ft"
                 />
                 <DetailCard
                   label="Super Built-up"
-                  value={get(selectedApartmentUnit, "areaDetails.superBuiltUpArea", "areaDetails.super_built_up_area", "superBuiltUpArea", "super_built_up_area")}
+                  value={get(
+                    selectedApartmentUnit,
+                    "areaDetails.superBuiltUpArea",
+                    "areaDetails.super_built_up_area",
+                    "superBuiltUpArea",
+                    "super_built_up_area",
+                  )}
                   suffix="sq-ft"
                 />
                 <DetailCard
                   label="Construction Area"
-                  value={get(selectedApartmentUnit, "areaDetails.constructionArea", "areaDetails.construction_area", "constructionArea", "construction_area")}
+                  value={get(
+                    selectedApartmentUnit,
+                    "areaDetails.constructionArea",
+                    "areaDetails.construction_area",
+                    "constructionArea",
+                    "construction_area",
+                  )}
                   suffix="sq-ft"
                 />
                 <DetailCard
                   label="Land Area"
-                  value={get(selectedApartmentUnit, "areaDetails.landArea", "areaDetails.land_area", "landArea", "land_area")}
+                  value={get(
+                    selectedApartmentUnit,
+                    "areaDetails.landArea",
+                    "areaDetails.land_area",
+                    "landArea",
+                    "land_area",
+                  )}
                   suffix="sq-ft"
                 />
                 <DetailCard
                   label="Available From"
-                  value={`${get(selectedApartmentUnit, "areaDetails.availableFromMonth") || '--'}/${get(selectedApartmentUnit, "areaDetails.availableFromYear") || '--'}`}
+                  value={`${get(selectedApartmentUnit, "areaDetails.availableFromMonth") || "--"}/${get(selectedApartmentUnit, "areaDetails.availableFromYear") || "--"}`}
                   icon={<FaCalendar className="text-gray-400" />}
                 />
               </div>
 
-
               {(() => {
-                const facilities = get(selectedApartmentUnit, "facilities") || [];
+                const facilities =
+                  get(selectedApartmentUnit, "facilities") || [];
                 if (facilities.length > 0) {
                   return (
                     <div className="bg-orange-50 p-4 rounded-xl border border-orange-100">
@@ -1740,24 +2199,32 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {facilities.map((fac, i) => (
-                          <span key={i} className="bg-white text-orange-700 px-2 py-1 rounded-lg text-xs font-medium border border-orange-200">
+                          <span
+                            key={i}
+                            className="bg-white text-orange-700 px-2 py-1 rounded-lg text-xs font-medium border border-orange-200"
+                          >
                             {fac.name || fac}
                           </span>
                         ))}
                       </div>
                     </div>
-                  )
+                  );
                 }
                 return null;
               })()}
 
-
               <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Additional Info</h4>
+                <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  Additional Info
+                </h4>
 
                 <DetailRow
                   label="Contractor"
-                  value={get(selectedApartmentUnit, "constructor") || get(selectedApartmentUnit, "contractor") || "N/A"}
+                  value={
+                    get(selectedApartmentUnit, "constructor") ||
+                    get(selectedApartmentUnit, "contractor") ||
+                    "N/A"
+                  }
                 />
                 <DetailRow
                   label="Broker"
@@ -1771,45 +2238,63 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
                   <span className="text-sm text-gray-600">Loan:</span>
                   <span className="text-sm font-semibold text-gray-900">
                     {get(selectedApartmentUnit, "loan") === "Yes" ? (
-                      <span className="text-sm font-semibold text-gray-900">Provided by {get(selectedApartmentUnit, "loanProvider") || "Bank"}</span>
+                      <span className="text-sm font-semibold text-gray-900">
+                        Provided by{" "}
+                        {get(selectedApartmentUnit, "loanProvider") || "Bank"}
+                      </span>
                     ) : (
                       <span className="text-gray-400">Not Availed</span>
                     )}
                   </span>
                 </div>
 
-
                 {(() => {
-                  const approvals = get(selectedApartmentUnit, "approvalStatus") || [];
-                  const validApprovals = approvals.filter(a => a.authority && a.status);
+                  const approvals =
+                    get(selectedApartmentUnit, "approvalStatus") || [];
+                  const validApprovals = approvals.filter(
+                    (a) => a.authority && a.status,
+                  );
 
                   if (validApprovals.length > 0) {
                     return (
                       <div className="pt-2 border-t border-gray-200 mt-2">
-                        <span className="text-xs font-bold text-gray-500 uppercase">Approvals</span>
+                        <span className="text-xs font-bold text-gray-500 uppercase">
+                          Approvals
+                        </span>
                         <div className="grid grid-cols-2 gap-2 mt-1">
                           {validApprovals.map((app, idx) => (
-                            <div key={idx} className="flex justify-between items-center bg-white px-2 py-1 rounded border border-gray-200">
-                              <span className="text-xs text-gray-600">{app.authority}</span>
-                              <span className="text-xs font-bold text-emerald-600">{app.status}</span>
+                            <div
+                              key={idx}
+                              className="flex justify-between items-center bg-white px-2 py-1 rounded border border-gray-200"
+                            >
+                              <span className="text-xs text-gray-600">
+                                {app.authority}
+                              </span>
+                              <span className="text-xs font-bold text-emerald-600">
+                                {app.status}
+                              </span>
                             </div>
                           ))}
                         </div>
                       </div>
-                    )
+                    );
                   }
                   return null;
                 })()}
 
                 <div className="pt-2 border-t border-gray-200 mt-2 flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Construction Status</span>
-                  <span className={`text-sm font-medium px-2 py-0.5 rounded ${selectedApartmentUnit.isComplete ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
-                    {selectedApartmentUnit.isComplete ? "Complete" : "In Progress"}
+                  <span className="text-sm text-gray-600">
+                    Construction Status
+                  </span>
+                  <span
+                    className={`text-sm font-medium px-2 py-0.5 rounded ${selectedApartmentUnit.isComplete ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}
+                  >
+                    {selectedApartmentUnit.isComplete
+                      ? "Complete"
+                      : "In Progress"}
                   </span>
                 </div>
               </div>
-
-
             </div>
 
             <div className="bg-gray-50 p-4 border-t flex justify-end">
@@ -1823,12 +2308,9 @@ const ProjectViewForm = ({ project = {}, onClose, token }) => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
-
-
 
 function StatCard({ icon, label, value }) {
   return (
@@ -1919,13 +2401,12 @@ function PriceCard({ label, value, type = "primary" }) {
 }
 
 function DetailRow({ label, value, suffix }) {
-
   let displayValue = value;
 
-  if (typeof value === 'boolean') {
-    displayValue = value ? 'Yes' : 'No';
-  } else if (value === null || value === undefined || value === '') {
-    displayValue = 'N/A';
+  if (typeof value === "boolean") {
+    displayValue = value ? "Yes" : "No";
+  } else if (value === null || value === undefined || value === "") {
+    displayValue = "N/A";
   }
 
   return (
@@ -1933,7 +2414,7 @@ function DetailRow({ label, value, suffix }) {
       <span className="text-sm text-gray-600">{label}:</span>
       <span className="text-sm font-semibold text-gray-900">
         {displayValue}{" "}
-        {displayValue !== 'N/A' && suffix && (
+        {displayValue !== "N/A" && suffix && (
           <span className="text-gray-500 text-xs">{suffix}</span>
         )}
       </span>
@@ -1960,7 +2441,7 @@ function FloorBlock({ title, floor }) {
 
   const parseArray = (data) => {
     if (Array.isArray(data)) return data;
-    if (typeof data === 'string') {
+    if (typeof data === "string") {
       try {
         return JSON.parse(data);
       } catch (e) {
@@ -1972,7 +2453,9 @@ function FloorBlock({ title, floor }) {
 
   const bedroomAreas = parseArray(floor.bedroomAreas || floor.bedroom_areas);
   const bathroomAreas = parseArray(floor.bathroomAreas || floor.bathroom_areas);
-  const studyRoomAreas = parseArray(floor.studyRoomAreas || floor.study_room_areas);
+  const studyRoomAreas = parseArray(
+    floor.studyRoomAreas || floor.study_room_areas,
+  );
   const kitchenArea = floor.kitchenArea || floor.kitchen_area;
   const garageArea = floor.garageArea || floor.garage_area;
 
@@ -1984,40 +2467,52 @@ function FloorBlock({ title, floor }) {
       </h6>
 
       <div className="space-y-3">
-
         {(floor.totalBedrooms || floor.totalBathrooms || floor.studyRoom) && (
           <div className="grid grid-cols-3 gap-2">
             {floor.totalBedrooms && (
               <div className="text-center bg-blue-50 rounded-lg p-2 border border-blue-100">
-                <div className="text-[10px] text-blue-600 font-medium">Bedrooms</div>
-                <div className="text-sm font-bold text-blue-700">{floor.totalBedrooms}</div>
+                <div className="text-[10px] text-blue-600 font-medium">
+                  Bedrooms
+                </div>
+                <div className="text-sm font-bold text-blue-700">
+                  {floor.totalBedrooms}
+                </div>
               </div>
             )}
             {floor.totalBathrooms && (
               <div className="text-center bg-cyan-50 rounded-lg p-2 border border-cyan-100">
-                <div className="text-[10px] text-cyan-600 font-medium">Bathrooms</div>
-                <div className="text-sm font-bold text-cyan-700">{floor.totalBathrooms}</div>
+                <div className="text-[10px] text-cyan-600 font-medium">
+                  Bathrooms
+                </div>
+                <div className="text-sm font-bold text-cyan-700">
+                  {floor.totalBathrooms}
+                </div>
               </div>
             )}
             {floor.studyRoom && (
               <div className="text-center bg-purple-50 rounded-lg p-2 border border-purple-100">
-                <div className="text-[10px] text-purple-600 font-medium">Study Rooms</div>
-                <div className="text-sm font-bold text-purple-700">{floor.studyRoom}</div>
+                <div className="text-[10px] text-purple-600 font-medium">
+                  Study Rooms
+                </div>
+                <div className="text-sm font-bold text-purple-700">
+                  {floor.studyRoom}
+                </div>
               </div>
             )}
           </div>
         )}
 
-
-
-
-
         {bedroomAreas.length > 0 && (
           <div>
-            <div className="text-[9px] font-bold text-gray-400 uppercase mb-1.5 tracking-wider">Bedroom Areas (sq-ft)</div>
+            <div className="text-[9px] font-bold text-gray-400 uppercase mb-1.5 tracking-wider">
+              Bedroom Areas (sq-ft)
+            </div>
             <div className="flex flex-wrap gap-1.5">
               {bedroomAreas.map((area, idx) => (
-                <span key={idx} className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-medium">
+                <span
+                  key={idx}
+                  className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-medium"
+                >
                   BR{idx + 1}: {area}
                 </span>
               ))}
@@ -2025,13 +2520,17 @@ function FloorBlock({ title, floor }) {
           </div>
         )}
 
-
         {bathroomAreas.length > 0 && (
           <div>
-            <div className="text-[9px] font-bold text-gray-400 uppercase mb-1.5 tracking-wider">Bathroom Areas (sq-ft)</div>
+            <div className="text-[9px] font-bold text-gray-400 uppercase mb-1.5 tracking-wider">
+              Bathroom Areas (sq-ft)
+            </div>
             <div className="flex flex-wrap gap-1.5">
               {bathroomAreas.map((area, idx) => (
-                <span key={idx} className="px-2 py-0.5 bg-cyan-100 text-cyan-700 rounded text-[10px] font-medium">
+                <span
+                  key={idx}
+                  className="px-2 py-0.5 bg-cyan-100 text-cyan-700 rounded text-[10px] font-medium"
+                >
                   BA{idx + 1}: {area}
                 </span>
               ))}
@@ -2039,13 +2538,17 @@ function FloorBlock({ title, floor }) {
           </div>
         )}
 
-
         {studyRoomAreas.length > 0 && (
           <div>
-            <div className="text-[9px] font-bold text-gray-400 uppercase mb-1.5 tracking-wider">Study Room Areas (sq-ft)</div>
+            <div className="text-[9px] font-bold text-gray-400 uppercase mb-1.5 tracking-wider">
+              Study Room Areas (sq-ft)
+            </div>
             <div className="flex flex-wrap gap-1.5">
               {studyRoomAreas.map((area, idx) => (
-                <span key={idx} className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-[10px] font-medium">
+                <span
+                  key={idx}
+                  className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-[10px] font-medium"
+                >
                   SR{idx + 1}: {area}
                 </span>
               ))}
@@ -2053,36 +2556,65 @@ function FloorBlock({ title, floor }) {
           </div>
         )}
 
-
-        {(floor.livingArea || floor.diningArea || kitchenArea || garageArea) && (
+        {(floor.livingArea ||
+          floor.diningArea ||
+          kitchenArea ||
+          garageArea) && (
           <div className="grid grid-cols-2 gap-2 mt-2">
             {floor.livingArea && (
               <div className="bg-green-50 rounded-lg p-2 border border-green-100">
-                <div className="text-[9px] text-green-600 font-medium">Living Area</div>
-                <div className="text-xs font-bold text-green-700">{floor.livingArea} <span className="text-[9px] font-normal text-green-500">sq-ft</span></div>
+                <div className="text-[9px] text-green-600 font-medium">
+                  Living Area
+                </div>
+                <div className="text-xs font-bold text-green-700">
+                  {floor.livingArea}{" "}
+                  <span className="text-[9px] font-normal text-green-500">
+                    sq-ft
+                  </span>
+                </div>
               </div>
             )}
             {floor.diningArea && (
               <div className="bg-amber-50 rounded-lg p-2 border border-amber-100">
-                <div className="text-[9px] text-amber-600 font-medium">Dining Area</div>
-                <div className="text-xs font-bold text-amber-700">{floor.diningArea} <span className="text-[9px] font-normal text-amber-500">sq-ft</span></div>
+                <div className="text-[9px] text-amber-600 font-medium">
+                  Dining Area
+                </div>
+                <div className="text-xs font-bold text-amber-700">
+                  {floor.diningArea}{" "}
+                  <span className="text-[9px] font-normal text-amber-500">
+                    sq-ft
+                  </span>
+                </div>
               </div>
             )}
             {kitchenArea && (
               <div className="bg-red-50 rounded-lg p-2 border border-red-100">
-                <div className="text-[9px] text-red-600 font-medium">Kitchen Area</div>
-                <div className="text-xs font-bold text-red-700">{kitchenArea} <span className="text-[9px] font-normal text-red-500">sq-ft</span></div>
+                <div className="text-[9px] text-red-600 font-medium">
+                  Kitchen Area
+                </div>
+                <div className="text-xs font-bold text-red-700">
+                  {kitchenArea}{" "}
+                  <span className="text-[9px] font-normal text-red-500">
+                    sq-ft
+                  </span>
+                </div>
               </div>
             )}
             {garageArea && (
               <div className="bg-gray-50 rounded-lg p-2 border border-gray-200">
-                <div className="text-[9px] text-gray-600 font-medium">Garage Area</div>
-                <div className="text-xs font-bold text-gray-700">{garageArea} <span className="text-[9px] font-normal text-gray-500">sq-ft</span></div>
+                <div className="text-[9px] text-gray-600 font-medium">
+                  Garage Area
+                </div>
+                <div className="text-xs font-bold text-gray-700">
+                  {garageArea}{" "}
+                  <span className="text-[9px] font-normal text-gray-500">
+                    sq-ft
+                  </span>
+                </div>
               </div>
             )}
           </div>
         )}
-
 
         {(floor.kitchen || floor.garage) && (
           <div className="flex gap-2 flex-wrap pt-2 border-t border-gray-100">
@@ -2099,11 +2631,14 @@ function FloorBlock({ title, floor }) {
           </div>
         )}
 
-
         {floor.additionalNotes && (
           <div className="pt-2 border-t border-gray-100">
-            <div className="text-[9px] font-bold text-gray-400 uppercase mb-1">Notes</div>
-            <p className="text-[10px] text-gray-600 italic">{floor.additionalNotes}</p>
+            <div className="text-[9px] font-bold text-gray-400 uppercase mb-1">
+              Notes
+            </div>
+            <p className="text-[10px] text-gray-600 italic">
+              {floor.additionalNotes}
+            </p>
           </div>
         )}
       </div>
@@ -2112,6 +2647,3 @@ function FloorBlock({ title, floor }) {
 }
 
 export default ProjectViewForm;
-
-
-

@@ -7,21 +7,15 @@ const AddressTab = ({
   handleSameAsPermanent,
 }) => (
   <div className="space-y-4">
-
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {["Permanent", "Present"].map((type) => (
-        <div
-          key={type}
-          className="app-panel p-6"
-        >
+        <div key={type} className="app-panel p-6">
           <h2 className="app-heading text-lg font-bold text-(--text-strong) mb-6 border-b border-(--border-soft) pb-3">
             {type} Address
           </h2>
           <div className="space-y-6">
             <div>
-              <label className="app-label block mb-1.5">
-                Address Line 1
-              </label>
+              <label className="app-label block mb-1.5">Address Line 1</label>
               <input
                 type="text"
                 name={`${type.toLowerCase()}Address1`}
@@ -32,9 +26,7 @@ const AddressTab = ({
               />
             </div>
             <div>
-              <label className="app-label block mb-1.5">
-                Address Line 2
-              </label>
+              <label className="app-label block mb-1.5">Address Line 2</label>
               <input
                 type="text"
                 name={`${type.toLowerCase()}Address2`}
@@ -46,9 +38,7 @@ const AddressTab = ({
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div>
-                <label className="app-label block mb-1.5">
-                  Country
-                </label>
+                <label className="app-label block mb-1.5">Country</label>
                 <input
                   type="text"
                   name={`${type.toLowerCase()}Country`}
@@ -59,9 +49,7 @@ const AddressTab = ({
                 />
               </div>
               <div>
-                <label className="app-label block mb-1.5">
-                  District
-                </label>
+                <label className="app-label block mb-1.5">District</label>
                 <input
                   type="text"
                   name={`${type.toLowerCase()}District`}
@@ -74,9 +62,7 @@ const AddressTab = ({
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div>
-                <label className="app-label block mb-1.5">
-                  State
-                </label>
+                <label className="app-label block mb-1.5">State</label>
                 <input
                   type="text"
                   name={`${type.toLowerCase()}State`}
@@ -87,9 +73,7 @@ const AddressTab = ({
                 />
               </div>
               <div>
-                <label className="app-label block mb-1.5">
-                  Zip Code
-                </label>
+                <label className="app-label block mb-1.5">Zip Code</label>
                 <input
                   type="text"
                   name={`${type.toLowerCase()}ZipCode`}
@@ -104,7 +88,6 @@ const AddressTab = ({
         </div>
       ))}
     </div>
-
 
     <label className="inline-flex items-center gap-3 cursor-pointer select-none bg-white rounded-xl border border-(--border-soft) px-5 py-4 hover:shadow-sm transition-all duration-200">
       <input

@@ -201,9 +201,7 @@ const SalaryBreakdownConfigModal = ({
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {RATE_FIELDS.map((field) => (
               <div key={field.key}>
-                <label className="app-label mb-1.5 block">
-                  {field.label}
-                </label>
+                <label className="app-label mb-1.5 block">{field.label}</label>
                 <div className="relative">
                   <input
                     type="number"
@@ -248,7 +246,9 @@ const SalaryBreakdownConfigModal = ({
                   key={key}
                   className="flex items-center justify-between rounded-xl border border-(--border-soft) bg-white px-3 py-2"
                 >
-                  <span className="text-sm font-semibold text-(--text-soft)">{label}</span>
+                  <span className="text-sm font-semibold text-(--text-soft)">
+                    {label}
+                  </span>
                   <button
                     type="button"
                     onClick={() => handleToggle(key)}
@@ -306,7 +306,7 @@ const SalaryBreakdownConfigModal = ({
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

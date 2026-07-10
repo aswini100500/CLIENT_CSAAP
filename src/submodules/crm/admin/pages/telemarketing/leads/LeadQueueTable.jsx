@@ -23,7 +23,12 @@ import axios from "axios";
 import useAuth from "../../../../../../hooks/useAuth";
 
 import ActionIconButton from "./ActionIconButton";
-import { formatStatus, getStatusColor, LEAD_SOURCES, formatSource } from "./leadUtils";
+import {
+  formatStatus,
+  getStatusColor,
+  LEAD_SOURCES,
+  formatSource,
+} from "./leadUtils";
 
 const stageTitles = {
   new: {
@@ -61,7 +66,9 @@ const filterByTab = (leads, tabKey) => {
     case "followup":
       return leads.filter((l) => l.stage === "FOLLOW_UP");
     case "interested":
-      return leads.filter((l) => l.stage === "INTERESTED" || l.stage === "SITE_VISIT");
+      return leads.filter(
+        (l) => l.stage === "INTERESTED" || l.stage === "SITE_VISIT",
+      );
     case "accepted":
       return leads.filter((l) => l.stage === "ACCEPTED");
     case "rejected":
@@ -104,23 +111,27 @@ const LeadQueueTable = ({
 
   const { token, companyId } = useAuth();
 
-
   const { data: projectOptions = [] } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
-      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`, {
-        params: { company_id: companyId },
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
+        {
+          params: { company_id: companyId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const projects = response.data?.data || [];
       return projects.map((p) => ({
         project_id: p.id,
         composite_key: p.id,
         name: p.project_name,
         display_type: p.project_code || p.status || "",
-        location: p.client_company_name ? `Client: ${p.client_company_name}` : "",
+        location: p.client_company_name
+          ? `Client: ${p.client_company_name}`
+          : "",
       }));
     },
     enabled: !!token && !!companyId,
@@ -136,20 +147,22 @@ const LeadQueueTable = ({
     return map;
   }, [projectOptions]);
 
-
   useEffect(() => {
-
     setSelectedProject("");
     setSelectedSource("");
     setSelectedStatus("");
     setSelectedAssignee("");
   }, [activeTab]);
 
-
-  const stageLeads = useMemo(() => filterByTab(leads, activeTab), [leads, activeTab]);
+  const stageLeads = useMemo(
+    () => filterByTab(leads, activeTab),
+    [leads, activeTab],
+  );
 
   const uniqueProjects = useMemo(() => {
-    const ids = [...new Set(stageLeads.map((l) => l.project_id).filter(Boolean))];
+    const ids = [
+      ...new Set(stageLeads.map((l) => l.project_id).filter(Boolean)),
+    ];
     return ids.map((id) => ({
       id,
       name: projectOptionsMap.get(id) || id,
@@ -157,7 +170,9 @@ const LeadQueueTable = ({
   }, [stageLeads, projectOptionsMap]);
 
   const uniqueSources = useMemo(() => {
-    const sources = [...new Set(stageLeads.map((l) => l.source).filter(Boolean))];
+    const sources = [
+      ...new Set(stageLeads.map((l) => l.source).filter(Boolean)),
+    ];
     return sources.map((source) => ({
       value: source,
       label: formatSource(source) || source,
@@ -165,7 +180,9 @@ const LeadQueueTable = ({
   }, [stageLeads]);
 
   const uniqueStatuses = useMemo(() => {
-    const statuses = [...new Set(stageLeads.map((l) => l.status).filter(Boolean))];
+    const statuses = [
+      ...new Set(stageLeads.map((l) => l.status).filter(Boolean)),
+    ];
     return statuses.map((status) => ({
       value: status,
       label: formatStatus(status),
@@ -189,8 +206,20 @@ const LeadQueueTable = ({
   }, [stageLeads]);
 
   const hasActiveFilters = useMemo(() => {
-    return !!(searchTerm.trim() || selectedProject || selectedSource || selectedStatus || selectedAssignee);
-  }, [searchTerm, selectedProject, selectedSource, selectedStatus, selectedAssignee]);
+    return !!(
+      searchTerm.trim() ||
+      selectedProject ||
+      selectedSource ||
+      selectedStatus ||
+      selectedAssignee
+    );
+  }, [
+    searchTerm,
+    selectedProject,
+    selectedSource,
+    selectedStatus,
+    selectedAssignee,
+  ]);
 
   const clearAllFilters = () => {
     setSearchTerm("");
@@ -221,13 +250,13 @@ const LeadQueueTable = ({
 
     if (selectedSource) {
       result = result.filter(
-        (lead) => lead.source?.toUpperCase() === selectedSource.toUpperCase()
+        (lead) => lead.source?.toUpperCase() === selectedSource.toUpperCase(),
       );
     }
 
     if (selectedStatus) {
       result = result.filter(
-        (lead) => lead.status?.toUpperCase() === selectedStatus.toUpperCase()
+        (lead) => lead.status?.toUpperCase() === selectedStatus.toUpperCase(),
       );
     }
 
@@ -248,7 +277,11 @@ const LeadQueueTable = ({
           : Number.MAX_SAFE_INTEGER;
         return firstDate - secondDate;
       });
-    } else if (activeTab === "interested" || activeTab === "accepted" || activeTab === "rejected") {
+    } else if (
+      activeTab === "interested" ||
+      activeTab === "accepted" ||
+      activeTab === "rejected"
+    ) {
       result.sort(
         (first, second) =>
           new Date(second.updated_at || 0).getTime() -
@@ -263,15 +296,21 @@ const LeadQueueTable = ({
     }
 
     return result;
-  }, [leads, searchTerm, activeTab, selectedProject, selectedSource, selectedStatus, selectedAssignee]);
+  }, [
+    leads,
+    searchTerm,
+    activeTab,
+    selectedProject,
+    selectedSource,
+    selectedStatus,
+    selectedAssignee,
+  ]);
 
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="app-title max-w-3xl">
-            {copy.title}
-          </h1>
+          <h1 className="app-title max-w-3xl">{copy.title}</h1>
           <p className="app-subtitle mt-1">{copy.subtitle}</p>
         </div>
 
@@ -299,7 +338,6 @@ const LeadQueueTable = ({
 
       <div className="app-panel p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-
           <div className="flex-1 min-w-0">
             <label className="app-label block mb-1.5 font-bold tracking-wide">
               Search Leads
@@ -316,13 +354,9 @@ const LeadQueueTable = ({
             </div>
           </div>
 
-
           <div className="flex flex-wrap items-center gap-3 shrink-0">
-
             <div className="w-full sm:w-44">
-              <label className="app-label block mb-1.5">
-                Project
-              </label>
+              <label className="app-label block mb-1.5">Project</label>
               <div className="relative">
                 <select
                   value={selectedProject}
@@ -354,11 +388,8 @@ const LeadQueueTable = ({
               </div>
             </div>
 
-
             <div className="w-full sm:w-36">
-              <label className="app-label block mb-1.5">
-                Source
-              </label>
+              <label className="app-label block mb-1.5">Source</label>
               <div className="relative">
                 <select
                   value={selectedSource}
@@ -390,11 +421,8 @@ const LeadQueueTable = ({
               </div>
             </div>
 
-
             <div className="w-full sm:w-36">
-              <label className="app-label block mb-1.5">
-                Status
-              </label>
+              <label className="app-label block mb-1.5">Status</label>
               <div className="relative">
                 <select
                   value={selectedStatus}
@@ -426,12 +454,9 @@ const LeadQueueTable = ({
               </div>
             </div>
 
-
             {activeTab !== "new" && showAssignee && (
               <div className="w-full sm:w-40">
-                <label className="app-label block mb-1.5">
-                  Assignee
-                </label>
+                <label className="app-label block mb-1.5">Assignee</label>
                 <div className="relative">
                   <select
                     value={selectedAssignee}
@@ -463,7 +488,6 @@ const LeadQueueTable = ({
                 </div>
               </div>
             )}
-
 
             {hasActiveFilters && (
               <div className="w-full sm:w-auto self-end pt-1 lg:pt-0">
@@ -578,16 +602,23 @@ const LeadQueueTable = ({
                             )}
                           </>
                         )}
-                        {(activeTab === "assigned" || activeTab === "followup") && (
+                        {(activeTab === "assigned" ||
+                          activeTab === "followup") && (
                           <>
-                            {onReportEntry && !(lead.stage === "ACCEPTED" || lead.stage === "REJECTED" || lead.status === "ACCEPTED" || lead.status === "REJECTED") && (
-                              <ActionIconButton
-                                icon={PhoneCall}
-                                label="Log interaction"
-                                onClick={() => onReportEntry(lead)}
-                                className="app-icon-button p-1.5 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200"
-                              />
-                            )}
+                            {onReportEntry &&
+                              !(
+                                lead.stage === "ACCEPTED" ||
+                                lead.stage === "REJECTED" ||
+                                lead.status === "ACCEPTED" ||
+                                lead.status === "REJECTED"
+                              ) && (
+                                <ActionIconButton
+                                  icon={PhoneCall}
+                                  label="Log interaction"
+                                  onClick={() => onReportEntry(lead)}
+                                  className="app-icon-button p-1.5 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200"
+                                />
+                              )}
                             {onTransferLead && (
                               <ActionIconButton
                                 icon={ArrowRightLeft}
@@ -612,7 +643,11 @@ const LeadQueueTable = ({
                               <ActionIconButton
                                 icon={Layers}
                                 label="Manage Payment Slabs"
-                                onClick={() => (onViewPaymentSlabs || onCreatePaymentSlab)(lead)}
+                                onClick={() =>
+                                  (onViewPaymentSlabs || onCreatePaymentSlab)(
+                                    lead,
+                                  )
+                                }
                                 className="app-icon-button p-1.5 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200"
                               />
                             )}

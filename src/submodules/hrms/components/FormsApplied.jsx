@@ -31,7 +31,6 @@ const FormsApplied = ({ basePath = "/superadmin/hrms" }) => {
   const { user } = useAuth();
   const id = user.company_id || user.id;
 
-
   const fetchApplicants = async () => {
     try {
       const res = await axios.get(`${API_URL}/ap/${id}`);
@@ -47,13 +46,11 @@ const FormsApplied = ({ basePath = "/superadmin/hrms" }) => {
     fetchApplicants();
   }, []);
 
-
   const uniquePosts = useMemo(() => {
     if (!Array.isArray(applicants)) return [];
     const posts = applicants.map((a) => a?.postApplied).filter(Boolean);
     return ["All", ...new Set(posts)];
   }, [applicants]);
-
 
   useEffect(() => {
     if (!Array.isArray(applicants)) {
@@ -76,7 +73,6 @@ const FormsApplied = ({ basePath = "/superadmin/hrms" }) => {
     setFilteredApplicants(filtered);
     setCurrentPage(1);
   }, [searchTerm, statusFilter, postFilter, applicants]);
-
 
   const indexOfLastApplicant = currentPage * applicantsPerPage;
   const indexOfFirstApplicant = indexOfLastApplicant - applicantsPerPage;
@@ -144,7 +140,6 @@ const FormsApplied = ({ basePath = "/superadmin/hrms" }) => {
 
   return (
     <div className="bg-gray-50">
-
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center space-x-3">
           <button
@@ -171,7 +166,6 @@ const FormsApplied = ({ basePath = "/superadmin/hrms" }) => {
             <option value="rejected">Rejected</option>
           </select>
 
-
           <select
             className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={postFilter}
@@ -185,7 +179,6 @@ const FormsApplied = ({ basePath = "/superadmin/hrms" }) => {
           </select>
         </div>
       </div>
-
 
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <table className="w-full p-3 text-sm text-left">
@@ -271,7 +264,6 @@ const FormsApplied = ({ basePath = "/superadmin/hrms" }) => {
           </div>
         )}
 
-
         {totalPages > 1 && (
           <div className="flex justify-center items-center mt-4 mb-3 space-x-2">
             <button
@@ -304,7 +296,6 @@ const FormsApplied = ({ basePath = "/superadmin/hrms" }) => {
           </div>
         )}
       </div>
-
 
       {isFormOpen && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md z-50">

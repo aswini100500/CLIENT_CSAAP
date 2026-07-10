@@ -1,1952 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 
 import {
@@ -2006,7 +57,6 @@ const HomeSection = ({
     { value: projectTypes.CUSTOM, label: "Custom" },
   ];
 
-
   const [plotsData, setPlotsData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [generatedProjectId, setGeneratedProjectId] = useState(null);
@@ -2014,16 +64,13 @@ const HomeSection = ({
   const [autoCreating, setAutoCreating] = useState(false);
   const [apiBaseUrl] = useState("https://api.csaap.com/api/tenantuser");
 
-
   const [plotStatuses, setPlotStatuses] = useState({});
-
 
   const [localCity, setLocalCity] = useState(city || "");
   const [localLocality, setLocalLocality] = useState(locality || "");
   const [localLandArea, setLocalLandArea] = useState(landArea || 0);
   const [localRevenuePlots, setLocalRevenuePlots] = useState(revenuePlots || 0);
   const [localAttachment, setLocalAttachment] = useState(attachment || null);
-
 
   useEffect(() => {
     const saved = localStorage.getItem("latestProjectId");
@@ -2045,7 +92,6 @@ const HomeSection = ({
       setPlotsData(newPlots);
     }
   }, []);
-
 
   useEffect(() => {
     const target = Math.max(0, parseInt(localRevenuePlots) || 0);
@@ -2072,9 +118,7 @@ const HomeSection = ({
         return next;
       });
     }
-
   }, [localRevenuePlots]);
-
 
   const handleProjectNameChange = (value) => {
     if (
@@ -2127,9 +171,9 @@ const HomeSection = ({
   const getFilledPlotsCount = () =>
     plotsData.filter(
       (plot) =>
-        plot && (plot.area || plot.entryPlotNo || plot.khataNo || plot.fileName)
+        plot &&
+        (plot.area || plot.entryPlotNo || plot.khataNo || plot.fileName),
     ).length;
-
 
   const trySyncParent = (field, value) => {
     if (field === "city" && typeof setCity === "function") setCity(value);
@@ -2166,7 +210,6 @@ const HomeSection = ({
       trySyncParent("revenuePlots", next);
       return next;
     });
-
 
     setPlotStatuses((prev) => {
       const newStatus = {};
@@ -2207,7 +250,6 @@ const HomeSection = ({
     return resp.json();
   };
 
-
   const checkProjectExists = async (projectId) => {
     const token = localStorage.getItem("authToken") || "";
     try {
@@ -2224,162 +266,156 @@ const HomeSection = ({
       return false;
     }
   };
-    const handleSaveRevenuePlots = async () => {
-  const projectId = generatedProjectId || editingProjectId;
+  const handleSaveRevenuePlots = async () => {
+    const projectId = generatedProjectId || editingProjectId;
 
-  if (!projectId) {
-    alert(
-      "Please create the project first (project ID missing). Enter project name and click Generate Project."
-    );
-    return;
-  }
-
-
-  const exists = await checkProjectExists(projectId);
-  if (!exists) {
-
-    if (generatedProjectId) {
-      localStorage.removeItem("latestProjectId");
-      localStorage.removeItem("latestProjectName");
-      setGeneratedProjectId(null);
-      setLastCreatedProjectName("");
+    if (!projectId) {
+      alert(
+        "Please create the project first (project ID missing). Enter project name and click Generate Project.",
+      );
+      return;
     }
 
-    alert(
-      `The project with ID ${projectId} was not found on the server.\n\n` +
-        `Please click "Generate Project" first to create/update the project, then save revenue plots again.`
-    );
-    return;
-  }
+    const exists = await checkProjectExists(projectId);
+    if (!exists) {
+      if (generatedProjectId) {
+        localStorage.removeItem("latestProjectId");
+        localStorage.removeItem("latestProjectName");
+        setGeneratedProjectId(null);
+        setLastCreatedProjectName("");
+      }
 
-  if (!plotsData || plotsData.length === 0) {
-    alert("No plots to save.");
-    return;
-  }
+      alert(
+        `The project with ID ${projectId} was not found on the server.\n\n` +
+          `Please click "Generate Project" first to create/update the project, then save revenue plots again.`,
+      );
+      return;
+    }
 
-  const token = localStorage.getItem("authToken") || "";
+    if (!plotsData || plotsData.length === 0) {
+      alert("No plots to save.");
+      return;
+    }
 
+    const token = localStorage.getItem("authToken") || "";
 
-  const filledPlots = plotsData
-    .map((plot, idx) => ({ plot, idx }))
-    .filter(
-      (item) =>
-        item.plot &&
-        (item.plot.area ||
-          item.plot.entryPlotNo ||
-          item.plot.khataNo ||
-          item.plot.fileName)
-    );
+    const filledPlots = plotsData
+      .map((plot, idx) => ({ plot, idx }))
+      .filter(
+        (item) =>
+          item.plot &&
+          (item.plot.area ||
+            item.plot.entryPlotNo ||
+            item.plot.khataNo ||
+            item.plot.fileName),
+      );
 
-  if (filledPlots.length === 0) {
-    alert("No filled plots to save.");
-    return;
-  }
+    if (filledPlots.length === 0) {
+      alert("No filled plots to save.");
+      return;
+    }
 
-
-  const initStatuses = {};
-  filledPlots.forEach(({ idx }) => {
-    initStatuses[idx] = { status: "pending", message: "" };
-  });
-  setPlotStatuses((prev) => ({ ...prev, ...initStatuses }));
-
-  setIsLoading(true);
-
-  try {
-    const endpointBase = `${apiBaseUrl}/projects/${projectId}/revenue-plots`;
-
-    const requests = filledPlots.map(({ plot, idx }) => {
-      const plotNumber = idx + 1;
-
-      const payload = {
-
-        subdomain: "cloudflare",
-        plot_number: plotNumber,
-        area: plot.area ? Number(plot.area) : 0,
-        entry_plot_no: plot.entryPlotNo || "",
-        khata_no: plot.khataNo || "",
-        plot_document: plot.fileName || "",
-        file_name: plot.fileName || "",
-      };
-
-      return fetch(endpointBase, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-        body: JSON.stringify(payload),
-      })
-        .then(async (resp) => {
-          if (!resp.ok) {
-            const txt = await resp.text().catch(() => "");
-            let msg = txt || resp.statusText;
-            try {
-              const j = JSON.parse(txt);
-              if (j?.message) msg = j.message;
-            } catch (e) {}
-            throw new Error(msg);
-          }
-          return resp.json().then((j) => ({ result: j, idx }));
-        })
-        .catch((err) => {
-          throw { err, idx };
-        });
+    const initStatuses = {};
+    filledPlots.forEach(({ idx }) => {
+      initStatuses[idx] = { status: "pending", message: "" };
     });
+    setPlotStatuses((prev) => ({ ...prev, ...initStatuses }));
 
-    const results = await Promise.allSettled(requests);
-    let successes = 0;
-    const failures = [];
+    setIsLoading(true);
 
-    results.forEach((r) => {
-      if (r.status === "fulfilled") {
-        const { idx } = r.value;
-        successes++;
-        setPlotStatuses((prev) => ({
-          ...prev,
-          [idx]: { status: "saved", message: "created" },
-        }));
-      } else {
-        const reason = r.reason;
-        const idx = reason?.idx;
-        const message =
-          (reason?.err && reason?.err.message) ||
-          (reason && reason.message) ||
-          "Unknown error";
+    try {
+      const endpointBase = `${apiBaseUrl}/projects/${projectId}/revenue-plots`;
 
-        if (typeof idx === "number") {
+      const requests = filledPlots.map(({ plot, idx }) => {
+        const plotNumber = idx + 1;
+
+        const payload = {
+          subdomain: "cloudflare",
+          plot_number: plotNumber,
+          area: plot.area ? Number(plot.area) : 0,
+          entry_plot_no: plot.entryPlotNo || "",
+          khata_no: plot.khataNo || "",
+          plot_document: plot.fileName || "",
+          file_name: plot.fileName || "",
+        };
+
+        return fetch(endpointBase, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+          body: JSON.stringify(payload),
+        })
+          .then(async (resp) => {
+            if (!resp.ok) {
+              const txt = await resp.text().catch(() => "");
+              let msg = txt || resp.statusText;
+              try {
+                const j = JSON.parse(txt);
+                if (j?.message) msg = j.message;
+              } catch (e) {}
+              throw new Error(msg);
+            }
+            return resp.json().then((j) => ({ result: j, idx }));
+          })
+          .catch((err) => {
+            throw { err, idx };
+          });
+      });
+
+      const results = await Promise.allSettled(requests);
+      let successes = 0;
+      const failures = [];
+
+      results.forEach((r) => {
+        if (r.status === "fulfilled") {
+          const { idx } = r.value;
+          successes++;
           setPlotStatuses((prev) => ({
             ...prev,
-            [idx]: { status: "error", message },
+            [idx]: { status: "saved", message: "created" },
           }));
+        } else {
+          const reason = r.reason;
+          const idx = reason?.idx;
+          const message =
+            (reason?.err && reason?.err.message) ||
+            (reason && reason.message) ||
+            "Unknown error";
+
+          if (typeof idx === "number") {
+            setPlotStatuses((prev) => ({
+              ...prev,
+              [idx]: { status: "error", message },
+            }));
+          }
+          failures.push({ idx, message });
         }
-        failures.push({ idx, message });
+      });
+
+      if (successes > 0) {
+        alert(
+          `${successes} revenue plot(s) saved successfully for project ${projectId}.`,
+        );
       }
-    });
-
-    if (successes > 0) {
-      alert(
-        `${successes} revenue plot(s) saved successfully for project ${projectId}.`
-      );
+      if (failures.length > 0) {
+        const first = failures[0];
+        alert(
+          `${failures.length} plot(s) failed. First error (plot ${
+            typeof first.idx === "number" ? first.idx + 1 : "?"
+          }): ${first.message}. Check console for details.`,
+        );
+        console.error("Revenue plot save failures:", failures);
+      }
+    } catch (err) {
+      console.error("Error saving revenue plots:", err);
+      alert(`Failed to save revenue plots: ${err.message || "Check console"}`);
+    } finally {
+      setIsLoading(false);
     }
-    if (failures.length > 0) {
-      const first = failures[0];
-      alert(
-        `${failures.length} plot(s) failed. First error (plot ${
-          typeof first.idx === "number" ? first.idx + 1 : "?"
-        }): ${first.message}. Check console for details.`
-      );
-      console.error("Revenue plot save failures:", failures);
-    }
-  } catch (err) {
-    console.error("Error saving revenue plots:", err);
-    alert(`Failed to save revenue plots: ${err.message || "Check console"}`);
-  } finally {
-    setIsLoading(false);
-  }
-    };
-
+  };
 
   const handleAutoCreateProject = async () => {
     if (!projectName || autoCreating) return;
@@ -2423,13 +459,13 @@ const HomeSection = ({
           } else {
             console.warn("Project created but no ID in response:", result);
             alert(
-              "Project created but API didn't return an ID. Check console."
+              "Project created but API didn't return an ID. Check console.",
             );
           }
         } else {
           console.warn("Unexpected create project response:", result);
           alert(
-            "Project API responded but did not return an ID. Check console."
+            "Project API responded but did not return an ID. Check console.",
           );
         }
       }
@@ -2448,8 +484,10 @@ const HomeSection = ({
     }
   };
 
-  const isEditing = Boolean(isEditMode) || Boolean(generatedProjectId) || Boolean(editingProjectId);
-
+  const isEditing =
+    Boolean(isEditMode) ||
+    Boolean(generatedProjectId) ||
+    Boolean(editingProjectId);
 
   const handleGenerateProject = async () => {
     if (!projectName || !projectType) {
@@ -2487,16 +525,16 @@ const HomeSection = ({
           projectType === projectTypes.DUPLEX
             ? "duplex"
             : projectType === projectTypes.TRIPLEX
-            ? "triplex"
-            : "",
+              ? "triplex"
+              : "",
         total_land_area: parseInt(localLandArea),
         built_up_area: parseInt(localLandArea) * 0.8,
         total_floors:
           projectType === projectTypes.DUPLEX
             ? 2
             : projectType === projectTypes.TRIPLEX
-            ? 3
-            : 1,
+              ? 3
+              : 1,
         kissama: `Generated ${projectType} project`,
         boundary_type: "compound_wall",
         broker_id: 1,
@@ -2543,14 +581,10 @@ const HomeSection = ({
 
       const token = localStorage.getItem("authToken") || "";
 
-
       if (generatedProjectId) {
-
         const projectExists = await checkProjectExists(generatedProjectId);
 
         if (!projectExists) {
-
-
           try {
             const result = await createProjectAPI(projectData);
 
@@ -2585,7 +619,9 @@ const HomeSection = ({
                 apiData: result.project || result,
               };
               onGenerate(localProjectData);
-              alert(`Project "${projectName}" created successfully with ID: ${newId}`);
+              alert(
+                `Project "${projectName}" created successfully with ID: ${newId}`,
+              );
               setIsLoading(false);
               return;
             }
@@ -2596,7 +632,6 @@ const HomeSection = ({
             return;
           }
         }
-
 
         try {
           const updateUrl = `${apiBaseUrl}/projects/${generatedProjectId}?subdomain=cloudflare`;
@@ -2614,7 +649,7 @@ const HomeSection = ({
           if (!response.ok) {
             const errorText = await response.text();
             throw new Error(
-              `HTTP ${response.status} - ${errorText || response.statusText}`
+              `HTTP ${response.status} - ${errorText || response.statusText}`,
             );
           }
 
@@ -2638,7 +673,7 @@ const HomeSection = ({
 
           onGenerate(localProjectData);
           alert(
-            `Project "${projectName}" updated successfully with ID: ${generatedProjectId}`
+            `Project "${projectName}" updated successfully with ID: ${generatedProjectId}`,
           );
         } catch (updateError) {
           console.error("Error updating project:", updateError);
@@ -2646,7 +681,6 @@ const HomeSection = ({
           createdLocally = true;
         }
       } else {
-
         try {
           const result = await createProjectAPI(projectData);
 
@@ -2682,7 +716,7 @@ const HomeSection = ({
             };
             onGenerate(localProjectData);
             alert(
-              `Project "${projectName}" created successfully with ID: ${newId}`
+              `Project "${projectName}" created successfully with ID: ${newId}`,
             );
           } else {
             createdLocally = true;
@@ -2720,7 +754,7 @@ const HomeSection = ({
         alert(
           generatedProjectId
             ? "Project updated locally (API failed)."
-            : "Project created locally (API failed)."
+            : "Project created locally (API failed).",
         );
       }
     }
@@ -2764,7 +798,6 @@ const HomeSection = ({
       </h2>
 
       <div className="space-y-6">
-
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -2917,7 +950,6 @@ const HomeSection = ({
           )}
         </div>
 
-
         <div className="bg-gray-50 p-4 md:p-5 rounded-lg border border-gray-200">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-indigo-700">
@@ -2947,7 +979,7 @@ const HomeSection = ({
                   const num = parseInt(e.target.value);
                   const limited = Math.min(
                     Math.max(0, isNaN(num) ? 0 : num),
-                    50
+                    50,
                   );
                   setLocalRevenuePlots(limited);
                   trySyncParent("revenuePlots", limited);
@@ -3077,7 +1109,6 @@ const HomeSection = ({
                       )}
                     </div>
 
-
                     <div>
                       {plotStatuses[index] &&
                         plotStatuses[index].status === "pending" && (
@@ -3138,7 +1169,6 @@ const HomeSection = ({
           )}
         </div>
 
-
         <div className="flex justify-end pt-4">
           <button
             onClick={handleGenerateProject}
@@ -3170,5 +1200,3 @@ const HomeSection = ({
 };
 
 export default HomeSection;
-
-

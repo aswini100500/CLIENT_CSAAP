@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import {
-  Plus,
-  Trash2,
-  X,
-  AlertCircle
-} from "lucide-react";
+import { Plus, Trash2, X, AlertCircle } from "lucide-react";
 import Swal from "sweetalert2";
 import useAuth from "../../../../../../hooks/useAuth";
 import { store } from "../../../../../../store/store";
-
-
 
 const API_BASE_URL = "https://csaapnodeapi.csaap.com";
 const API_ENDPOINTS = {
@@ -29,7 +22,10 @@ const getUserData = () => {
 };
 
 const generateSlug = (name) => {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 };
 
 const apiService = {
@@ -90,15 +86,25 @@ const apiService = {
   },
 };
 
-
-
-const STATUS_OPTIONS = ["Planning", "Active", "On Hold", "Completed", "Cancelled"];
+const STATUS_OPTIONS = [
+  "Planning",
+  "Active",
+  "On Hold",
+  "Completed",
+  "Cancelled",
+];
 const PRIORITY_OPTIONS = ["Low", "Medium", "High", "Critical"];
 const ENVIRONMENT_OPTIONS = ["Development", "Staging", "Production", "Testing"];
 
-
-
-const Modal = ({ isOpen, onClose, title, children, size = "max-w-2xl", onSubmit, footer }) => {
+const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  size = "max-w-2xl",
+  onSubmit,
+  footer,
+}) => {
   if (!isOpen) return null;
 
   const innerContent = (
@@ -113,9 +119,7 @@ const Modal = ({ isOpen, onClose, title, children, size = "max-w-2xl", onSubmit,
           <X className="h-5 w-5" />
         </button>
       </div>
-      <div className="overflow-y-auto p-5 flex-1 min-h-0">
-        {children}
-      </div>
+      <div className="overflow-y-auto p-5 flex-1 min-h-0">{children}</div>
       {footer && (
         <div className="border-t border-[#e2f2e9] px-5 py-4 bg-white rounded-b-2xl shrink-0">
           {footer}
@@ -126,7 +130,10 @@ const Modal = ({ isOpen, onClose, title, children, size = "max-w-2xl", onSubmit,
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
+        onClick={onClose}
+      />
       {onSubmit ? (
         <form
           onSubmit={onSubmit}
@@ -142,7 +149,7 @@ const Modal = ({ isOpen, onClose, title, children, size = "max-w-2xl", onSubmit,
         </div>
       )}
     </div>,
-    document.body
+    document.body,
   );
 };
 
@@ -151,14 +158,14 @@ const ErrorAlert = ({ message }) => (
     <div className="flex items-center gap-2">
       <AlertCircle className="h-5 w-5 text-rose-600 shrink-0" />
       <div>
-        <p className="text-[13px] font-medium text-rose-800">Error creating project</p>
+        <p className="text-[13px] font-medium text-rose-800">
+          Error creating project
+        </p>
         <p className="text-[12px] text-rose-600">{message}</p>
       </div>
     </div>
   </div>
 );
-
-
 
 const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
   const { user, companyId } = useAuth();
@@ -193,11 +200,10 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
 
   const [locations, setLocations] = useState([{ location_name: "" }]);
 
-
   useEffect(() => {
     if (lead) {
       const initialSlug = user?.slug || generateSlug(lead.name || "client");
-      
+
       setClient({
         company_name: lead.name || "",
         slug: initialSlug,
@@ -208,8 +214,9 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
         website: "",
       });
 
-
-      const shortId = lead.id ? String(lead.id).slice(-4).toUpperCase() : Math.random().toString(36).substr(2, 4).toUpperCase();
+      const shortId = lead.id
+        ? String(lead.id).slice(-4).toUpperCase()
+        : Math.random().toString(36).substr(2, 4).toUpperCase();
       setProject({
         project_name: lead.name ? `${lead.name} Project` : "",
         project_code: `PROJ-${shortId}`,
@@ -225,7 +232,11 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
         environment: "Development",
       });
 
-      setLocations(lead.location ? [{ location_name: lead.location }] : [{ location_name: "" }]);
+      setLocations(
+        lead.location
+          ? [{ location_name: lead.location }]
+          : [{ location_name: "" }],
+      );
     }
   }, [lead, user?.slug]);
 
@@ -258,7 +269,7 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
 
     try {
       const userSlug = user?.slug || generateSlug(project.project_name);
-      
+
       const validLocations = locations
         .filter((l) => l.location_name && l.location_name.trim() !== "")
         .map((loc) => ({
@@ -296,7 +307,6 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
         slug: userSlug,
         companyId: companyId,
       };
-
 
       await apiService.createProject(createPayload);
 
@@ -356,31 +366,42 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
       <div className="space-y-6">
         {error && <ErrorAlert message={error} />}
 
-
         <div>
-          <h3 className="text-[16px] font-bold text-[#042f2e] mb-3">Client Information</h3>
+          <h3 className="text-[16px] font-bold text-[#042f2e] mb-3">
+            Client Information
+          </h3>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Company Name *</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Company Name *
+              </label>
               <input
                 type="text"
                 value={client.company_name}
-                onChange={(e) => handleClientChange("company_name", e.target.value)}
+                onChange={(e) =>
+                  handleClientChange("company_name", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
                 required
               />
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Contact Person</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Contact Person
+              </label>
               <input
                 type="text"
                 value={client.contact_person}
-                onChange={(e) => handleClientChange("contact_person", e.target.value)}
+                onChange={(e) =>
+                  handleClientChange("contact_person", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
               />
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Email</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Email
+              </label>
               <input
                 type="email"
                 value={client.email}
@@ -389,7 +410,9 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
               />
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Phone</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Phone
+              </label>
               <input
                 type="text"
                 value={client.phone}
@@ -398,7 +421,9 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Address</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Address
+              </label>
               <input
                 type="text"
                 value={client.address}
@@ -407,7 +432,9 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Website</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Website
+              </label>
               <input
                 type="url"
                 value={client.website}
@@ -418,41 +445,56 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
           </div>
         </div>
 
-
         <div>
-          <h3 className="text-[16px] font-bold text-[#042f2e] mb-3">Project Details</h3>
+          <h3 className="text-[16px] font-bold text-[#042f2e] mb-3">
+            Project Details
+          </h3>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <div className="md:col-span-2">
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Project Name *</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Project Name *
+              </label>
               <input
                 type="text"
                 value={project.project_name}
-                onChange={(e) => handleProjectChange("project_name", e.target.value)}
+                onChange={(e) =>
+                  handleProjectChange("project_name", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
                 required
               />
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Project Code *</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Project Code *
+              </label>
               <input
                 type="text"
                 value={project.project_code}
-                onChange={(e) => handleProjectChange("project_code", e.target.value)}
+                onChange={(e) =>
+                  handleProjectChange("project_code", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] font-mono focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
                 required
               />
             </div>
             <div className="md:col-span-2">
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Description</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Description
+              </label>
               <textarea
                 value={project.description}
-                onChange={(e) => handleProjectChange("description", e.target.value)}
+                onChange={(e) =>
+                  handleProjectChange("description", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
                 rows={3}
               />
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Status</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Status
+              </label>
               <select
                 value={project.status}
                 onChange={(e) => handleProjectChange("status", e.target.value)}
@@ -464,10 +506,14 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
               </select>
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Priority</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Priority
+              </label>
               <select
                 value={project.priority}
-                onChange={(e) => handleProjectChange("priority", e.target.value)}
+                onChange={(e) =>
+                  handleProjectChange("priority", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
               >
                 {PRIORITY_OPTIONS.map((p) => (
@@ -476,58 +522,85 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
               </select>
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Start Date</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Start Date
+              </label>
               <input
                 type="date"
                 value={project.start_date}
-                onChange={(e) => handleProjectChange("start_date", e.target.value)}
+                onChange={(e) =>
+                  handleProjectChange("start_date", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
               />
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">End Date</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                End Date
+              </label>
               <input
                 type="date"
                 value={project.end_date}
-                onChange={(e) => handleProjectChange("end_date", e.target.value)}
+                onChange={(e) =>
+                  handleProjectChange("end_date", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
               />
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Budget ($)</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Budget ($)
+              </label>
               <input
                 type="number"
                 placeholder="0"
                 value={project.budget || ""}
-                onChange={(e) => handleProjectChange("budget", parseFloat(e.target.value) || 0)}
+                onChange={(e) =>
+                  handleProjectChange("budget", parseFloat(e.target.value) || 0)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
               />
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Estimated Hours</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Estimated Hours
+              </label>
               <input
                 type="number"
                 placeholder="0"
                 value={project.estimated_hours || ""}
-                onChange={(e) => handleProjectChange("estimated_hours", parseInt(e.target.value) || 0)}
+                onChange={(e) =>
+                  handleProjectChange(
+                    "estimated_hours",
+                    parseInt(e.target.value) || 0,
+                  )
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Technology Stack</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Technology Stack
+              </label>
               <input
                 type="text"
                 placeholder="React, Node.js, MongoDB"
                 value={project.technology_stack}
-                onChange={(e) => handleProjectChange("technology_stack", e.target.value)}
+                onChange={(e) =>
+                  handleProjectChange("technology_stack", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
               />
             </div>
             <div>
-              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">Environment</label>
+              <label className="modal-label block mb-1 text-[12px] font-bold text-[#475569]">
+                Environment
+              </label>
               <select
                 value={project.environment}
-                onChange={(e) => handleProjectChange("environment", e.target.value)}
+                onChange={(e) =>
+                  handleProjectChange("environment", e.target.value)
+                }
                 className="w-full rounded-xl border border-[#e2f2e9] px-3 py-2 text-[13px] focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[rgba(0,166,81,0.16)] transition-all"
               >
                 {ENVIRONMENT_OPTIONS.map((e) => (
@@ -538,10 +611,11 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
           </div>
         </div>
 
-
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[16px] font-bold text-[#042f2e]">Project Locations</h3>
+            <h3 className="text-[16px] font-bold text-[#042f2e]">
+              Project Locations
+            </h3>
             <button
               type="button"
               onClick={addLocation}
@@ -578,7 +652,6 @@ const CreateProjectModal = ({ lead, onClose, onSaveSuccess }) => {
             Locations will use the same slug as the project and client
           </p>
         </div>
-
       </div>
     </Modal>
   );

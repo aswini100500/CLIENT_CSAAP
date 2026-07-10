@@ -1,4 +1,3 @@
-
 export const TABS = [
   { id: "basic", label: "Basic Information" },
   { id: "address", label: "Address" },
@@ -8,7 +7,6 @@ export const TABS = [
   { id: "documents", label: "Document Upload" },
   { id: "leave", label: "Assign Leave" },
 ];
-
 
 export const BASIC_INFO_FIELDS = [
   {
@@ -77,7 +75,6 @@ export const BASIC_INFO_FIELDS = [
     type: "checkbox",
   },
 
-
   {
     label: "Employee Status",
     name: "employeeStatus",
@@ -105,7 +102,7 @@ export const BASIC_INFO_FIELDS = [
     required: true,
     placeholder: "Set shift end time",
   },
- 
+
   {
     label: "Department",
     name: "department",
@@ -113,20 +110,19 @@ export const BASIC_INFO_FIELDS = [
     options: [],
     placeholder: "Select Department",
   },
-    {
+  {
     label: "Designation",
     name: "postApplied",
     type: "select",
     options: [],
     placeholder: "Select Designation",
   },
-   {
+  {
     label: "Probation Period",
     name: "probation_period",
     placeholder: "1 month",
   },
 ];
-
 
 export const BANK_DETAILS_FIELDS = [
   {
@@ -156,7 +152,6 @@ export const BANK_DETAILS_FIELDS = [
     options: ["Bank Transfer", "Cash", "Cheque", "UPI"],
   },
 ];
-
 
 export const SALARY_FIELDS = [
   {
@@ -255,7 +250,6 @@ export const SALARY_FIELDS = [
   { label: "Effective From", name: "effective_from", type: "date" },
 ];
 
-
 export const PERSONAL_DETAILS_FIELDS = [
   { label: "Date of Birth", name: "dob", type: "date" },
   {
@@ -280,7 +274,6 @@ export const PERSONAL_DETAILS_FIELDS = [
   },
 ];
 
-
 export const EDUCATION_FIELDS = [
   {
     name: "course",
@@ -304,7 +297,6 @@ export const EDUCATION_FIELDS = [
   },
 ];
 
-
 export const EXPERIENCE_FIELDS = [
   {
     name: "jobTitle",
@@ -319,7 +311,6 @@ export const EXPERIENCE_FIELDS = [
   { name: "startDate", label: "Start Date", type: "date" },
   { name: "endDate", label: "End Date", type: "date" },
 ];
-
 
 export const FILE_UPLOAD_CONFIG = [
   {
@@ -380,9 +371,7 @@ export const FILE_UPLOAD_CONFIG = [
   },
 ];
 
-
 export const LEAVE_ASSIGNMENT_FIELDS = [
-
   {
     section: "Yearly Leave Allocation",
     description: "Set annual leave quotas for the employee",
@@ -428,7 +417,6 @@ export const LEAVE_ASSIGNMENT_FIELDS = [
     ],
   },
 
-
   {
     section: "Monthly Leave Allocation",
     description: "Set monthly leave quotas for the employee",
@@ -466,12 +454,10 @@ export const LEAVE_ASSIGNMENT_FIELDS = [
     ],
   },
 
-
   {
     section: "Carry Forward Rules",
     description: "Configure monthly and yearly leave carry forward limits",
     fields: [
-
       {
         label: "Monthly Carry Forward - CL",
         name: "monthly_carry_forward_cl",
@@ -502,7 +488,6 @@ export const LEAVE_ASSIGNMENT_FIELDS = [
         helpText:
           "Maximum Medical Leave that can be carried forward to the next month",
       },
-
 
       {
         label: "Yearly Carry Forward - CL",
@@ -552,7 +537,6 @@ export const LEAVE_ASSIGNMENT_FIELDS = [
   },
 ];
 
-
 export const calculateTotalYearlyLeave = (cl, el, ml = 0) => {
   return (parseInt(cl) || 0) + (parseInt(el) || 0) + (parseInt(ml) || 0);
 };
@@ -571,5 +555,5 @@ export const COUNTRY_CODES = [
   { code: "NP", name: "Nepal", dial_code: "+977", flag: "🇳🇵" },
   { code: "BD", name: "Bangladesh", dial_code: "+880", flag: "🇧🇩" },
   { code: "LK", name: "Sri Lanka", dial_code: "+94", flag: "🇱🇰" },
-  { code: "PK", name: "Pakistan", dial_code: "+92", flag: "🇵🇰" }
+  { code: "PK", name: "Pakistan", dial_code: "+92", flag: "🇵🇰" },
 ];

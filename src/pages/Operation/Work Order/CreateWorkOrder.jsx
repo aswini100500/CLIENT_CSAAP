@@ -1,230 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { Plus, Trash2, Save, FileText, Search, User } from "lucide-react";
 import { jsPDF } from "jspdf";
@@ -254,7 +27,15 @@ const CreateWorkOrder = () => {
   });
 
   const [items, setItems] = useState([
-    { description: "", unit: "", quantity: 0, rate: 0, amount: 0, gst: 0, gstAmount: 0 },
+    {
+      description: "",
+      unit: "",
+      quantity: 0,
+      rate: 0,
+      amount: 0,
+      gst: 0,
+      gstAmount: 0,
+    },
   ]);
 
   const [showContractorDropdown, setShowContractorDropdown] = useState(false);
@@ -265,16 +46,14 @@ const CreateWorkOrder = () => {
   const [tenderApplicants, setTenderApplicants] = useState([]);
   const [loading, setLoading] = useState(false);
 
-
   const getApplicantId = () => {
     try {
-      const activeToken = token || localStorage.getItem('token');
+      const activeToken = token || localStorage.getItem("token");
       if (activeToken) {
-        const decoded = JSON.parse(atob(activeToken.split('.')[1]));
+        const decoded = JSON.parse(atob(activeToken.split(".")[1]));
         return decoded.id || decoded.userId;
       }
     } catch (error) {
-
       console.warn("Could not extract user ID from token");
     }
     return null;
@@ -284,33 +63,32 @@ const CreateWorkOrder = () => {
     fetchAllData();
   }, []);
 
-
   useEffect(() => {
     if (formData.tender_id) {
       fetchTenderApplicants(formData.tender_id);
     } else {
       setTenderApplicants([]);
-      setFormData(prev => ({ ...prev, applicant_id: "" }));
+      setFormData((prev) => ({ ...prev, applicant_id: "" }));
     }
   }, [formData.tender_id]);
 
   const fetchAllData = async () => {
     try {
       setLoading(true);
-      const [contRes, tendRes, apts, comms, plots, dup, tri, custom] = await Promise.all([
-        operationApi.getContractors(),
-        operationApi.getTenders(),
-        operationApi.getApartments(),
-        operationApi.getCommercials(),
-        operationApi.getPlottings(),
-        operationApi.getDuplexes(),
-        operationApi.getTriplexes(),
-        operationApi.getCustomProjects()
-      ]);
+      const [contRes, tendRes, apts, comms, plots, dup, tri, custom] =
+        await Promise.all([
+          operationApi.getContractors(),
+          operationApi.getTenders(),
+          operationApi.getApartments(),
+          operationApi.getCommercials(),
+          operationApi.getPlottings(),
+          operationApi.getDuplexes(),
+          operationApi.getTriplexes(),
+          operationApi.getCustomProjects(),
+        ]);
 
       setContractors(contRes.data.contractors || []);
       setTenders(tendRes.data.data || []);
-      
 
       const allProjects = [
         ...(apts.data.data || []),
@@ -318,13 +96,13 @@ const CreateWorkOrder = () => {
         ...(plots.data.data || []),
         ...(dup.data.data || []),
         ...(tri.data.data || []),
-        ...(custom.data.data || [])
-      ].map(p => ({
+        ...(custom.data.data || []),
+      ].map((p) => ({
         id: p.id,
         name: p.project_name || p.name,
-        type: p.project_type || p.type
+        type: p.project_type || p.type,
       }));
-      
+
       setProjects(allProjects);
     } catch (error) {
       console.error("Error fetching work order data:", error);
@@ -332,7 +110,6 @@ const CreateWorkOrder = () => {
       setLoading(false);
     }
   };
-
 
   const fetchTenderApplicants = async (tenderId) => {
     try {
@@ -352,7 +129,7 @@ const CreateWorkOrder = () => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -363,15 +140,16 @@ const CreateWorkOrder = () => {
       to: contractor.name,
       address: contractor.address || "",
       pin: contractor.pin || "",
-      contractorName: contractor.contact_person || contractor.name
+      contractorName: contractor.contact_person || contractor.name,
     });
     setShowContractorDropdown(false);
     setSearchTerm("");
   };
 
-  const filteredContractors = contractors.filter(c =>
-    c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.contact_person?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredContractors = contractors.filter(
+    (c) =>
+      c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.contact_person?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleItemChange = (index, field, value) => {
@@ -387,7 +165,18 @@ const CreateWorkOrder = () => {
   };
 
   const addItem = () => {
-    setItems([...items, { description: "", unit: "", quantity: 0, rate: 0, amount: 0, gst: 0, gstAmount: 0 }]);
+    setItems([
+      ...items,
+      {
+        description: "",
+        unit: "",
+        quantity: 0,
+        rate: 0,
+        amount: 0,
+        gst: 0,
+        gstAmount: 0,
+      },
+    ]);
   };
 
   const removeItem = (index) => {
@@ -405,7 +194,7 @@ const CreateWorkOrder = () => {
       Swal.fire("Error", "Please select a contractor first!", "error");
       return;
     }
-    
+
     if (!formData.subject) {
       Swal.fire("Error", "Please enter a subject for the work order!", "error");
       return;
@@ -417,7 +206,11 @@ const CreateWorkOrder = () => {
     }
 
     if (!formData.applicant_id) {
-      Swal.fire("Error", "Please select an applicant for this tender!", "error");
+      Swal.fire(
+        "Error",
+        "Please select an applicant for this tender!",
+        "error",
+      );
       return;
     }
 
@@ -430,33 +223,36 @@ const CreateWorkOrder = () => {
       Swal.fire("Error", "Please accept the payment terms!", "error");
       return;
     }
-    
+
     try {
       setLoading(true);
-      
+
       const payload = {
         applicant_id: formData.applicant_id,
         tender_id: parseInt(formData.tender_id),
         subject: formData.subject,
-        project_id: formData.projectName ? projects.find(p => p.name === formData.projectName)?.id : null,
+        project_id: formData.projectName
+          ? projects.find((p) => p.name === formData.projectName)?.id
+          : null,
         contractor_id: parseInt(formData.contractor_id),
-        project_type: projects.find(p => p.name === formData.projectName)?.type || "null",
+        project_type:
+          projects.find((p) => p.name === formData.projectName)?.type || "null",
         note: formData.note,
         completion_date: formData.workCompletionDate,
         terms_accepted: formData.terms_accepted,
         payment_terms_accepted: formData.payment_terms_accepted,
-        items: items.map(item => ({
+        items: items.map((item) => ({
           description: item.description,
           unit: item.unit,
           quantity: parseFloat(item.quantity) || 0,
-          rate: parseFloat(item.rate) || 0
-        }))
+          rate: parseFloat(item.rate) || 0,
+        })),
       };
 
       await operationApi.createTenderWorkOrder(payload);
       Swal.fire("Success", "Work Order Saved Successfully!", "success");
 
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         contractor_id: "",
         to: "",
@@ -473,13 +269,27 @@ const CreateWorkOrder = () => {
         note: "",
         terms_accepted: false,
         payment_terms_accepted: false,
-        applicant_id: ""
+        applicant_id: "",
       }));
-      setItems([{ description: "", unit: "", quantity: 0, rate: 0, amount: 0, gst: 0, gstAmount: 0 }]);
+      setItems([
+        {
+          description: "",
+          unit: "",
+          quantity: 0,
+          rate: 0,
+          amount: 0,
+          gst: 0,
+          gstAmount: 0,
+        },
+      ]);
       setTenderApplicants([]);
     } catch (error) {
       console.error("Error saving work order:", error);
-      Swal.fire("Error", error.response?.data?.message || "Failed to save work order", "error");
+      Swal.fire(
+        "Error",
+        error.response?.data?.message || "Failed to save work order",
+        "error",
+      );
     } finally {
       setLoading(false);
     }
@@ -494,7 +304,6 @@ const CreateWorkOrder = () => {
     const doc = new jsPDF();
     let y = 15;
 
-
     doc.setFontSize(18);
     doc.setTextColor(37, 99, 235);
     doc.text("CONSTRUCTION WORK ORDER", 105, y, { align: "center" });
@@ -503,16 +312,15 @@ const CreateWorkOrder = () => {
     doc.line(20, y, 190, y);
     y += 15;
 
-
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
-    doc.setFont(undefined, 'bold');
+    doc.setFont(undefined, "bold");
     doc.text("CONTRACTOR DETAILS:", 20, y);
     y += 8;
-    doc.setFont(undefined, 'normal');
+    doc.setFont(undefined, "normal");
 
     const selectedContractor = contractors.find(
-      (c) => c.id === parseInt(formData.contractor_id)
+      (c) => c.id === parseInt(formData.contractor_id),
     );
 
     doc.text(`Company: ${formData.to || "-"}`, 20, y);
@@ -528,38 +336,52 @@ const CreateWorkOrder = () => {
     }
     y += 12;
 
-
-    doc.setFont(undefined, 'bold');
+    doc.setFont(undefined, "bold");
     doc.text("WORK ORDER INFORMATION:", 20, y);
     y += 8;
-    doc.setFont(undefined, 'normal');
+    doc.setFont(undefined, "normal");
     doc.text(`Project: ${formData.projectName || "-"}`, 20, y);
     y += 6;
     doc.text(`Work Order Date: ${formData.workOrderDate || "-"}`, 20, y);
     y += 6;
-    doc.text(`Work Completion Date: ${formData.workCompletionDate || "-"}`, 20, y);
+    doc.text(
+      `Work Completion Date: ${formData.workCompletionDate || "-"}`,
+      20,
+      y,
+    );
     y += 6;
     doc.text(`Description: ${formData.description || "-"}`, 20, y);
-    
+
     if (formData.tender_id) {
-      const selectedTender = tenders.find(t => t.id === parseInt(formData.tender_id));
+      const selectedTender = tenders.find(
+        (t) => t.id === parseInt(formData.tender_id),
+      );
       if (selectedTender) {
         y += 6;
-        doc.text(`Link Tender: ${selectedTender.tender_title || selectedTender.title}`, 20, y);
+        doc.text(
+          `Link Tender: ${selectedTender.tender_title || selectedTender.title}`,
+          20,
+          y,
+        );
       }
     }
 
     if (formData.applicant_id) {
-      const selectedApplicant = tenderApplicants.find(a => a.id === parseInt(formData.applicant_id));
+      const selectedApplicant = tenderApplicants.find(
+        (a) => a.id === parseInt(formData.applicant_id),
+      );
       if (selectedApplicant) {
         y += 6;
-        doc.text(`Applicant: ${selectedApplicant.name || selectedApplicant.applicant_name}`, 20, y);
+        doc.text(
+          `Applicant: ${selectedApplicant.name || selectedApplicant.applicant_name}`,
+          20,
+          y,
+        );
       }
     }
     y += 12;
 
-
-    doc.setFont(undefined, 'bold');
+    doc.setFont(undefined, "bold");
     doc.text("S.No", 20, y);
     doc.text("Description", 40, y);
     doc.text("Qty", 110, y);
@@ -570,8 +392,7 @@ const CreateWorkOrder = () => {
     doc.line(20, y, 190, y);
     y += 6;
 
-
-    doc.setFont(undefined, 'normal');
+    doc.setFont(undefined, "normal");
     items.forEach((item, index) => {
       doc.text(`${index + 1}`, 22, y);
       doc.text(`${item.description || "-"}`, 40, y);
@@ -582,7 +403,6 @@ const CreateWorkOrder = () => {
       y += 8;
     });
 
-
     y += 4;
     doc.line(20, y, 190, y);
     y += 8;
@@ -590,22 +410,21 @@ const CreateWorkOrder = () => {
     y += 6;
     doc.text(`GST Total: ₹${gstTotal.toFixed(2)}`, 120, y);
     y += 6;
-    doc.setFont(undefined, 'bold');
+    doc.setFont(undefined, "bold");
     doc.text(`Grand Total: ₹${totalAmount.toFixed(2)}`, 120, y);
 
-
     y += 15;
-    doc.setFont(undefined, 'bold');
+    doc.setFont(undefined, "bold");
     doc.text("TERMS & CONDITIONS:", 20, y);
     y += 8;
-    doc.setFont(undefined, 'normal');
-    const termsText = formData.terms || "Standard construction terms and conditions apply.";
+    doc.setFont(undefined, "normal");
+    const termsText =
+      formData.terms || "Standard construction terms and conditions apply.";
     const splitText = doc.splitTextToSize(termsText, 170);
     doc.text(splitText, 20, y);
 
-
     y += splitText.length * 6 + 20;
-    doc.setFont(undefined, 'bold');
+    doc.setFont(undefined, "bold");
     doc.text("Authorized Signature", 150, y);
     doc.line(140, y + 2, 190, y + 2);
 
@@ -618,9 +437,7 @@ const CreateWorkOrder = () => {
         Construction Work Order
       </h2>
 
-
       <div className="grid md:grid-cols-2 gap-4 mb-6">
-
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Select Contractor *
@@ -640,7 +457,7 @@ const CreateWorkOrder = () => {
                 className="w-full pl-10 pr-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
               />
             </div>
-            
+
             {showContractorDropdown && (
               <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                 {filteredContractors.length > 0 ? (
@@ -652,14 +469,18 @@ const CreateWorkOrder = () => {
                     >
                       <div className="flex items-center gap-3">
                         <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-full">
-                          <User className="text-blue-600 dark:text-blue-300" size={16} />
+                          <User
+                            className="text-blue-600 dark:text-blue-300"
+                            size={16}
+                          />
                         </div>
                         <div>
                           <div className="font-medium text-gray-900 dark:text-white">
                             {contractor.name}
                           </div>
                           <div className="text-sm text-gray-600 dark:text-gray-300">
-                            Contact: {contractor.contact_person || "N/A"} • {contractor.phone || "N/A"}
+                            Contact: {contractor.contact_person || "N/A"} •{" "}
+                            {contractor.phone || "N/A"}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">
                             {contractor.address || "No address provided"}
@@ -677,7 +498,6 @@ const CreateWorkOrder = () => {
             )}
           </div>
 
-
           {formData.contractor_id && (
             <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
               <div className="flex items-center justify-between">
@@ -686,18 +506,21 @@ const CreateWorkOrder = () => {
                     Selected Contractor
                   </h4>
                   <p className="text-green-700 dark:text-green-400">
-                    {formData.to} {formData.contractorName ? `• ${formData.contractorName}` : ""}
+                    {formData.to}{" "}
+                    {formData.contractorName
+                      ? `• ${formData.contractorName}`
+                      : ""}
                   </p>
                 </div>
                 <button
                   onClick={() => {
-                    setFormData(prev => ({
+                    setFormData((prev) => ({
                       ...prev,
                       contractor_id: "",
                       to: "",
                       address: "",
                       pin: "",
-                      contractorName: ""
+                      contractorName: "",
                     }));
                   }}
                   className="text-red-600 hover:text-red-800 text-sm"
@@ -708,7 +531,6 @@ const CreateWorkOrder = () => {
             </div>
           )}
         </div>
-
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -730,7 +552,6 @@ const CreateWorkOrder = () => {
           </select>
         </div>
 
-
         {formData.tender_id && tenderApplicants.length > 0 && (
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -746,13 +567,14 @@ const CreateWorkOrder = () => {
               <option value="">Select an applicant</option>
               {tenderApplicants.map((applicant) => (
                 <option key={applicant.id} value={applicant.id}>
-                  {applicant.name || applicant.applicant_name || `Applicant #${applicant.id}`}
+                  {applicant.name ||
+                    applicant.applicant_name ||
+                    `Applicant #${applicant.id}`}
                 </option>
               ))}
             </select>
           </div>
         )}
-
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -768,7 +590,6 @@ const CreateWorkOrder = () => {
             required
           />
         </div>
-
 
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -835,7 +656,9 @@ const CreateWorkOrder = () => {
           >
             <option value="">Select project</option>
             {projects.map((p) => (
-              <option key={p.id} value={p.name}>{p.name}</option>
+              <option key={p.id} value={p.name}>
+                {p.name}
+              </option>
             ))}
           </select>
         </div>
@@ -878,7 +701,6 @@ const CreateWorkOrder = () => {
           />
         </div>
       </div>
-
 
       <div className="mb-6">
         <h3 className="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">
@@ -944,7 +766,9 @@ const CreateWorkOrder = () => {
                   type="number"
                   placeholder="Rate"
                   value={item.rate}
-                  onChange={(e) => handleItemChange(index, "rate", e.target.value)}
+                  onChange={(e) =>
+                    handleItemChange(index, "rate", e.target.value)
+                  }
                   className="w-full px-3 py-2 border rounded-lg dark:bg-gray-600 dark:border-gray-500"
                 />
               </div>
@@ -982,7 +806,6 @@ const CreateWorkOrder = () => {
         </button>
       </div>
 
-
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Note
@@ -996,7 +819,6 @@ const CreateWorkOrder = () => {
           className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
         />
       </div>
-
 
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -1012,7 +834,6 @@ const CreateWorkOrder = () => {
         />
       </div>
 
-
       <div className="mb-6 p-4 border rounded-lg bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
         <div className="flex items-center gap-3 mb-3">
           <input
@@ -1023,7 +844,10 @@ const CreateWorkOrder = () => {
             onChange={handleInputChange}
             className="w-4 h-4 rounded"
           />
-          <label htmlFor="terms_accepted" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+          <label
+            htmlFor="terms_accepted"
+            className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer"
+          >
             I accept the Terms & Conditions *
           </label>
         </div>
@@ -1036,19 +860,20 @@ const CreateWorkOrder = () => {
             onChange={handleInputChange}
             className="w-4 h-4 rounded"
           />
-          <label htmlFor="payment_terms_accepted" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+          <label
+            htmlFor="payment_terms_accepted"
+            className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer"
+          >
             I accept the Payment Terms *
           </label>
         </div>
       </div>
-
 
       <div className="flex justify-end items-center mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
         <span className="text-lg font-semibold text-gray-800 dark:text-gray-100">
           Estimated Total: ₹{totalAmount.toFixed(2)}
         </span>
       </div>
-
 
       <div className="flex justify-end gap-3">
         <button
@@ -1071,4 +896,3 @@ const CreateWorkOrder = () => {
 };
 
 export default CreateWorkOrder;
-

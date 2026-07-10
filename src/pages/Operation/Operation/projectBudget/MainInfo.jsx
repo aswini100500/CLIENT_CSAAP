@@ -1,1067 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import {
   Plus,
@@ -1090,44 +26,15 @@ const MainInfo = () => {
 
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [commonFacilities, setCommonFacilities] = useState([{ id: 1, name: "", cost: "" }]);
+  const [commonFacilities, setCommonFacilities] = useState([
+    { id: 1, name: "", cost: "" },
+  ]);
   const [constructionAreas, setConstructionAreas] = useState([]);
   const [saleableAreas, setSaleableAreas] = useState([]);
   const [landAreas, setLandAreas] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- useEffect(() => {
+  useEffect(() => {
     const fetchProjects = async () => {
       setLoading(true);
       try {
@@ -1137,7 +44,7 @@ const MainInfo = () => {
           operationApi.getPlottings(),
           operationApi.getDuplexes(),
           operationApi.getTriplexes(),
-          operationApi.getCustomProjects()
+          operationApi.getCustomProjects(),
         ]);
 
         const allProjects = [
@@ -1146,12 +53,12 @@ const MainInfo = () => {
           ...(plots.data.data || []),
           ...(dup.data.data || []),
           ...(tri.data.data || []),
-          ...(custom.data.data || [])
-        ].map(p => ({
+          ...(custom.data.data || []),
+        ].map((p) => ({
           id: p.id,
-          name: p.project_name || p.name
+          name: p.project_name || p.name,
         }));
-        
+
         setProjects(allProjects);
       } catch (error) {
         console.error("Error fetching BOQ projects:", error);
@@ -1164,13 +71,17 @@ const MainInfo = () => {
   const calculateTotals = (areas) =>
     areas.reduce(
       (acc, area) => ({
-        superBuiltupArea: acc.superBuiltupArea + (parseFloat(area.superBuiltupArea) || 0),
-        superBuiltupBudget: acc.superBuiltupBudget + (parseFloat(area.superBuiltupBudget) || 0),
+        superBuiltupArea:
+          acc.superBuiltupArea + (parseFloat(area.superBuiltupArea) || 0),
+        superBuiltupBudget:
+          acc.superBuiltupBudget + (parseFloat(area.superBuiltupBudget) || 0),
         builtupArea: acc.builtupArea + (parseFloat(area.builtupArea) || 0),
-        builtupBudget: acc.builtupBudget + (parseFloat(area.builtupBudget) || 0),
+        builtupBudget:
+          acc.builtupBudget + (parseFloat(area.builtupBudget) || 0),
         carpetArea: acc.carpetArea + (parseFloat(area.carpetArea) || 0),
         carpetBudget: acc.carpetBudget + (parseFloat(area.carpetBudget) || 0),
-        financialArea: acc.financialArea + (parseFloat(area.financialArea) || 0),
+        financialArea:
+          acc.financialArea + (parseFloat(area.financialArea) || 0),
       }),
       {
         superBuiltupArea: 0,
@@ -1180,7 +91,7 @@ const MainInfo = () => {
         carpetArea: 0,
         carpetBudget: 0,
         financialArea: 0,
-      }
+      },
     );
 
   const constructionTotals = calculateTotals(constructionAreas);
@@ -1199,8 +110,11 @@ const MainInfo = () => {
     : 0;
   const totalLandAreaCost = landAreas.reduce(
     (acc, a) =>
-      acc + (parseFloat(a.landAreaCost) || 0) + (parseFloat(a.landDevelopmentCost) || 0) + (parseFloat(a.approvalCost) || 0),
-    0
+      acc +
+      (parseFloat(a.landAreaCost) || 0) +
+      (parseFloat(a.landDevelopmentCost) || 0) +
+      (parseFloat(a.approvalCost) || 0),
+    0,
   );
 
   const handleChange = (e) => {
@@ -1213,18 +127,21 @@ const MainInfo = () => {
 
   const handleFacilityChange = (id, value) => {
     setCommonFacilities((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, name: value } : f))
+      prev.map((f) => (f.id === id ? { ...f, name: value } : f)),
     );
   };
 
   const handleFacilityBudgetChange = (id, value) => {
     setCommonFacilities((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, cost: value } : f))
+      prev.map((f) => (f.id === id ? { ...f, cost: value } : f)),
     );
   };
 
   const addFacility = () => {
-    setCommonFacilities((prev) => [...prev, { id: Date.now(), name: "", cost: "" }]);
+    setCommonFacilities((prev) => [
+      ...prev,
+      { id: Date.now(), name: "", cost: "" },
+    ]);
   };
 
   const removeFacility = (id) => {
@@ -1301,13 +218,13 @@ const MainInfo = () => {
 
   const updateConstructionArea = (id, field, value) => {
     setConstructionAreas((prev) =>
-      prev.map((area) => (area.id === id ? { ...area, [field]: value } : area))
+      prev.map((area) => (area.id === id ? { ...area, [field]: value } : area)),
     );
   };
 
   const updateSaleableArea = (id, field, value) => {
     setSaleableAreas((prev) =>
-      prev.map((area) => (area.id === id ? { ...area, [field]: value } : area))
+      prev.map((area) => (area.id === id ? { ...area, [field]: value } : area)),
     );
   };
 
@@ -1336,7 +253,9 @@ const MainInfo = () => {
   };
 
   const updateLandArea = (id, field, value) => {
-    setLandAreas((prev) => prev.map((a) => (a.id === id ? { ...a, [field]: value } : a)));
+    setLandAreas((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, [field]: value } : a)),
+    );
   };
 
   const removeLandArea = (id) => {
@@ -1351,33 +270,33 @@ const MainInfo = () => {
       document_date: formData.documentDate,
       road_area: formData.roadArea,
       attachment: formData.attachment,
-      common_facilities: commonFacilities.map(f => ({
+      common_facilities: commonFacilities.map((f) => ({
         name: f.name,
-        cost: f.cost
+        cost: f.cost,
       })),
-      construction_areas: constructionAreas.map(area => ({
+      construction_areas: constructionAreas.map((area) => ({
         financial_year: area.financialYear,
         super_builtup_area: area.superBuiltupArea,
         super_builtup_budget: area.superBuiltupBudget,
         builtup_area: area.builtupArea,
         builtup_budget: area.builtupBudget,
         carpet_area: area.carpetArea,
-        carpet_budget: area.carpetBudget
+        carpet_budget: area.carpetBudget,
       })),
-      saleable_areas: saleableAreas.map(area => ({
+      saleable_areas: saleableAreas.map((area) => ({
         financial_year: area.financialYear,
         super_builtup_area: area.superBuiltupArea,
         super_builtup_budget: area.superBuiltupBudget,
         builtup_area: area.builtupArea,
         builtup_budget: area.builtupBudget,
         carpet_area: area.carpetArea,
-        carpet_budget: area.carpetBudget
+        carpet_budget: area.carpetBudget,
       })),
-      land_areas: landAreas.map(la => ({
+      land_areas: landAreas.map((la) => ({
         description: la.description,
         land_area_cost: la.landAreaCost,
         land_development_cost: la.landDevelopmentCost,
-        approval_cost: la.approvalCost
+        approval_cost: la.approvalCost,
       })),
       totals: {
         construction: {
@@ -1386,7 +305,7 @@ const MainInfo = () => {
           builtup_area: constructionTotals.builtupArea,
           builtup_budget: constructionTotals.builtupBudget,
           carpet_area: constructionTotals.carpetArea,
-          carpet_budget: constructionTotals.carpetBudget
+          carpet_budget: constructionTotals.carpetBudget,
         },
         saleable: {
           super_builtup_area: saleableTotals.superBuiltupArea,
@@ -1394,7 +313,7 @@ const MainInfo = () => {
           builtup_area: saleableTotals.builtupArea,
           builtup_budget: saleableTotals.builtupBudget,
           carpet_area: saleableTotals.carpetArea,
-          carpet_budget: saleableTotals.carpetBudget
+          carpet_budget: saleableTotals.carpetBudget,
         },
         profit,
         total_land_area_cost: totalLandAreaCost,
@@ -1415,7 +334,8 @@ const MainInfo = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "Failed to submit project budget.",
+        text:
+          error.response?.data?.message || "Failed to submit project budget.",
       });
     } finally {
       setLoading(false);
@@ -1427,11 +347,13 @@ const MainInfo = () => {
     doc.setFontSize(14);
     doc.text("Project Budget Details", 14, 20);
 
-    const selectedProject = projects.find(p => p.name === formData.projectName);
-    const projectType = selectedProject ? selectedProject.type : 'N/A';
+    const selectedProject = projects.find(
+      (p) => p.name === formData.projectName,
+    );
+    const projectType = selectedProject ? selectedProject.type : "N/A";
 
     doc.setFontSize(12);
-    doc.text(`Project: ${formData.projectName || 'Not selected'}`, 14, 30);
+    doc.text(`Project: ${formData.projectName || "Not selected"}`, 14, 30);
     doc.text(`Project Type: ${projectType}`, 14, 37);
     doc.text(`Document Subject: ${formData.documentSubject}`, 14, 44);
     doc.text(`Document Date: ${formData.documentDate}`, 14, 51);
@@ -1442,7 +364,11 @@ const MainInfo = () => {
       doc.text("Construction Areas:", 14, yOffset);
       yOffset += 7;
       constructionAreas.forEach((area, index) => {
-        doc.text(`${index + 1}. Year: ${area.financialYear}, Super Built-up Area: ${area.superBuiltupArea}, Super Built-up Budget: ₹${area.superBuiltupBudget}, Built-up Area: ${area.builtupArea}, Built-up Budget: ₹${area.builtupBudget}, Carpet Area: ${area.carpetArea}, Carpet Budget: ₹${area.carpetBudget}`, 14, yOffset);
+        doc.text(
+          `${index + 1}. Year: ${area.financialYear}, Super Built-up Area: ${area.superBuiltupArea}, Super Built-up Budget: ₹${area.superBuiltupBudget}, Built-up Area: ${area.builtupArea}, Built-up Budget: ₹${area.builtupBudget}, Carpet Area: ${area.carpetArea}, Carpet Budget: ₹${area.carpetBudget}`,
+          14,
+          yOffset,
+        );
         yOffset += 7;
       });
     }
@@ -1452,7 +378,11 @@ const MainInfo = () => {
       doc.text("Land Areas:", 14, yOffset);
       yOffset += 7;
       landAreas.forEach((la, idx) => {
-        doc.text(`${idx + 1}. ${la.description || "Land"}: Area Cost: ₹${la.landAreaCost || 0}, Development: ₹${la.landDevelopmentCost || 0}, Approval: ₹${la.approvalCost || 0}`, 14, yOffset);
+        doc.text(
+          `${idx + 1}. ${la.description || "Land"}: Area Cost: ₹${la.landAreaCost || 0}, Development: ₹${la.landDevelopmentCost || 0}, Approval: ₹${la.approvalCost || 0}`,
+          14,
+          yOffset,
+        );
         yOffset += 7;
       });
       yOffset += 5;
@@ -1464,7 +394,11 @@ const MainInfo = () => {
       doc.text("Saleable Areas:", 14, yOffset);
       yOffset += 7;
       saleableAreas.forEach((area, index) => {
-        doc.text(`${index + 1}. Year: ${area.financialYear}, Financial Area: ${area.financialArea}, Super Built-up Area: ${area.superBuiltupArea}, Super Built-up Budget: ₹${area.superBuiltupBudget}, Built-up Area: ${area.builtupArea}, Built-up Budget: ₹${area.builtupBudget}, Carpet Area: ${area.carpetArea}, Carpet Budget: ₹${area.carpetBudget}`, 14, yOffset);
+        doc.text(
+          `${index + 1}. Year: ${area.financialYear}, Financial Area: ${area.financialArea}, Super Built-up Area: ${area.superBuiltupArea}, Super Built-up Budget: ₹${area.superBuiltupBudget}, Built-up Area: ${area.builtupArea}, Built-up Budget: ₹${area.builtupBudget}, Carpet Area: ${area.carpetArea}, Carpet Budget: ₹${area.carpetBudget}`,
+          14,
+          yOffset,
+        );
         yOffset += 7;
       });
     }
@@ -1537,10 +471,15 @@ const MainInfo = () => {
           >
             <option value="">-- Select Project --</option>
             {loading ? (
-              <option value="" disabled>Loading projects...</option>
+              <option value="" disabled>
+                Loading projects...
+              </option>
             ) : (
               projects.map((project) => (
-                <option key={`${project.type}-${project.id || project._id}`} value={project.name}>
+                <option
+                  key={`${project.type}-${project.id || project._id}`}
+                  value={project.name}
+                >
                   {project.name}
                 </option>
               ))
@@ -1670,7 +609,7 @@ const MainInfo = () => {
                               updateLandArea(
                                 la.id,
                                 "landAreaCost",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             placeholder="0"
@@ -1694,7 +633,7 @@ const MainInfo = () => {
                               updateLandArea(
                                 la.id,
                                 "landDevelopmentCost",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             placeholder="0"
@@ -1718,7 +657,7 @@ const MainInfo = () => {
                               updateLandArea(
                                 la.id,
                                 "approvalCost",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             placeholder="0"
@@ -1767,8 +706,8 @@ const MainInfo = () => {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-gray-100">
-              <Building2 className="w-5 h-5 text-blue-600" /> Construction
-              Area Details
+              <Building2 className="w-5 h-5 text-blue-600" /> Construction Area
+              Details
             </h3>
             <button
               type="button"
@@ -1820,7 +759,7 @@ const MainInfo = () => {
                             updateConstructionArea(
                               area.id,
                               "financialYear",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -1841,7 +780,7 @@ const MainInfo = () => {
                             updateConstructionArea(
                               area.id,
                               "superBuiltupArea",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -1855,7 +794,7 @@ const MainInfo = () => {
                             updateConstructionArea(
                               area.id,
                               "superBuiltupBudget",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -1869,7 +808,7 @@ const MainInfo = () => {
                             updateConstructionArea(
                               area.id,
                               "builtupArea",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -1883,7 +822,7 @@ const MainInfo = () => {
                             updateConstructionArea(
                               area.id,
                               "builtupBudget",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -1897,7 +836,7 @@ const MainInfo = () => {
                             updateConstructionArea(
                               area.id,
                               "carpetArea",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -1911,7 +850,7 @@ const MainInfo = () => {
                             updateConstructionArea(
                               area.id,
                               "carpetBudget",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -1921,9 +860,7 @@ const MainInfo = () => {
                         <div className="flex items-center justify-center gap-2">
                           <button
                             type="button"
-                            onClick={() =>
-                              addConstructionAreaAtPosition(index)
-                            }
+                            onClick={() => addConstructionAreaAtPosition(index)}
                             className="text-green-500 hover:text-green-700 p-1 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition"
                             title="Add row below"
                           >
@@ -1975,7 +912,6 @@ const MainInfo = () => {
           <div className="flex items-center justify-between">
             <h3 className="flex  items-center gap-2 text-lg font-semibold mt-8 mb-3 text-gray-800 dark:text-gray-100">
               <FileText className="w-5 h-5 text-blue-600" /> Common Facilities
-
             </h3>
             <button
               type="button"
@@ -2021,11 +957,9 @@ const MainInfo = () => {
                 >
                   <Trash2 size={18} />
                 </button>
-
               </div>
             ))}
           </div>
-
         </div>
 
         <div>
@@ -2084,7 +1018,7 @@ const MainInfo = () => {
                             updateSaleableArea(
                               area.id,
                               "financialYear",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -2105,7 +1039,7 @@ const MainInfo = () => {
                             updateSaleableArea(
                               area.id,
                               "superBuiltupArea",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -2119,7 +1053,7 @@ const MainInfo = () => {
                             updateSaleableArea(
                               area.id,
                               "superBuiltupBudget",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -2133,7 +1067,7 @@ const MainInfo = () => {
                             updateSaleableArea(
                               area.id,
                               "builtupArea",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -2147,7 +1081,7 @@ const MainInfo = () => {
                             updateSaleableArea(
                               area.id,
                               "builtupBudget",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -2161,7 +1095,7 @@ const MainInfo = () => {
                             updateSaleableArea(
                               area.id,
                               "carpetArea",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"
@@ -2175,7 +1109,7 @@ const MainInfo = () => {
                             updateSaleableArea(
                               area.id,
                               "carpetBudget",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           className="w-full p-1 border-none bg-transparent"

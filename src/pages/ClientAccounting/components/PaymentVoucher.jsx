@@ -1,1005 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect, useRef } from "react";
 import { Trash2, Plus, Search, UserPlus } from "lucide-react";
 import Swal from "sweetalert2";
@@ -1008,7 +6,6 @@ import { useCompany } from "../context/CompanyContext";
 import BulkImportButton from "./BulkImportButton";
 import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
-
 
 const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -1024,7 +21,7 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew }) => {
   }, [selectedLedger]);
 
   const filtered = ledgers.filter((l) =>
-    l.name.toLowerCase().includes(searchTerm.toLowerCase())
+    l.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   useEffect(() => {
@@ -1075,7 +72,9 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew }) => {
               </div>
             ))
           ) : (
-            <div className="px-3 py-2 text-sm text-slate-500 italic">No matches found</div>
+            <div className="px-3 py-2 text-sm text-slate-500 italic">
+              No matches found
+            </div>
           )}
 
           <div
@@ -1107,7 +106,14 @@ const PaymentVoucher = () => {
   const [narration, setNarration] = useState("");
   const [savedVouchers, setSavedVouchers] = useState([]);
   const [entries, setEntries] = useState([
-    { ledger: "", amount: "", openingBalance: 0, closingBalance: 0, remainingBalance: 0, balanceType: "Debit" },
+    {
+      ledger: "",
+      amount: "",
+      openingBalance: 0,
+      closingBalance: 0,
+      remainingBalance: 0,
+      balanceType: "Debit",
+    },
   ]);
   const [groups, setGroups] = useState([]);
 
@@ -1117,13 +123,13 @@ const PaymentVoucher = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
         );
         const allLedgers = res.data || [];
         setLedgers(allLedgers);
 
         const bankRes = await axios.get(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`,
         );
         const banks = bankRes.data.accounts || [];
 
@@ -1138,20 +144,26 @@ const PaymentVoucher = () => {
           (l) =>
             l.name.toLowerCase().includes("cash") ||
             l.underGroup === "Cash-in-Hand" ||
-            l.under === "Cash-in-Hand"
+            l.under === "Cash-in-Hand",
         );
 
         bankOptions.push(
           cashLedger
-            ? { id: `ledger_${cashLedger.id}`, name: cashLedger.name, type: "cash", originalId: cashLedger.id }
-            : { id: "cash", name: "Cash", type: "cash", originalId: "cash" }
+            ? {
+                id: `ledger_${cashLedger.id}`,
+                name: cashLedger.name,
+                type: "cash",
+                originalId: cashLedger.id,
+              }
+            : { id: "cash", name: "Cash", type: "cash", originalId: "cash" },
         );
 
         setBankCashLedgers(bankOptions);
 
-        const groupRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`);
+        const groupRes = await axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`,
+        );
         setGroups(groupRes.data || []);
-
 
         const savedState = sessionStorage.getItem("paymentVoucherState");
         if (savedState) {
@@ -1167,26 +179,29 @@ const PaymentVoucher = () => {
             text: "Your voucher progress has been restored.",
             icon: "info",
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
         }
-
 
         if (id) {
           setIsEditMode(true);
           const voucherRes = await axios.get(
-            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/get/${id}`
+            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/get/${id}`,
           );
           const v = voucherRes.data;
           if (v && v.voucherNo) {
             setVoucherNo(v.voucherNo);
-            setDate(v.date ? new Date(v.date).toISOString().split('T')[0] : "");
-
+            setDate(v.date ? new Date(v.date).toISOString().split("T")[0] : "");
 
             let rawAccType = v.accountType;
-            if (rawAccType && !rawAccType.toString().startsWith("bank_") && !rawAccType.toString().startsWith("ledger_")) {
-
-              const isBank = banks.some(b => String(b.id) === String(rawAccType));
+            if (
+              rawAccType &&
+              !rawAccType.toString().startsWith("bank_") &&
+              !rawAccType.toString().startsWith("ledger_")
+            ) {
+              const isBank = banks.some(
+                (b) => String(b.id) === String(rawAccType),
+              );
               if (isBank) {
                 rawAccType = `bank_${rawAccType}`;
               } else {
@@ -1198,45 +213,54 @@ const PaymentVoucher = () => {
             setNarration(v.narration || "");
             const entriesList = v.entries || v.items || [];
             if (entriesList.length > 0) {
-              setEntries(entriesList.map(item => {
-                const ledgerObj = allLedgers.find(l => String(l.id) === String(item.ledgerId));
-                const opening = parseFloat(ledgerObj?.openingBalance) || 0;
-                const debit = parseFloat(ledgerObj?.debit) || 0;
-                const credit = parseFloat(ledgerObj?.credit) || 0;
-                const type = ledgerObj?.balanceType || ledgerObj?.type || "Debit";
+              setEntries(
+                entriesList.map((item) => {
+                  const ledgerObj = allLedgers.find(
+                    (l) => String(l.id) === String(item.ledgerId),
+                  );
+                  const opening = parseFloat(ledgerObj?.openingBalance) || 0;
+                  const debit = parseFloat(ledgerObj?.debit) || 0;
+                  const credit = parseFloat(ledgerObj?.credit) || 0;
+                  const type =
+                    ledgerObj?.balanceType || ledgerObj?.type || "Debit";
 
-                let closing = 0;
-                if (type === "Debit") {
-                  closing = opening + debit - credit;
-                } else {
-                  closing = opening - debit + credit;
-                }
+                  let closing = 0;
+                  if (type === "Debit") {
+                    closing = opening + debit - credit;
+                  } else {
+                    closing = opening - debit + credit;
+                  }
 
-                const amt = parseFloat(item.amount) || 0;
-                let rem = 0;
-                if (type === "Debit") {
-                  rem = closing + amt;
-                } else {
-                  rem = closing - amt;
-                }
-                return {
-                  ledger: item.ledgerId,
-                  amount: item.amount,
-                  openingBalance: opening,
-                  closingBalance: closing,
-                  remainingBalance: rem,
-                  balanceType: type
-                };
-              }));
+                  const amt = parseFloat(item.amount) || 0;
+                  let rem = 0;
+                  if (type === "Debit") {
+                    rem = closing + amt;
+                  } else {
+                    rem = closing - amt;
+                  }
+                  return {
+                    ledger: item.ledgerId,
+                    amount: item.amount,
+                    openingBalance: opening,
+                    closingBalance: closing,
+                    remainingBalance: rem,
+                    balanceType: type,
+                  };
+                }),
+              );
             }
           }
         } else if (companyId) {
           try {
-            const nextRes = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/payment`);
+            const nextRes = await axios.get(
+              `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/payment`,
+            );
             if (nextRes.data && nextRes.data.nextNumber) {
               setVoucherNo(nextRes.data.nextNumber);
             }
-          } catch (e) { console.error(e); }
+          } catch (e) {
+            console.error(e);
+          }
         }
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -1249,7 +273,7 @@ const PaymentVoucher = () => {
     const fetchVouchers = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/all/${companyId}`
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/all/${companyId}`,
         );
         setSavedVouchers(res.data);
       } catch (err) {
@@ -1273,7 +297,14 @@ const PaymentVoucher = () => {
   const addRow = () => {
     setEntries([
       ...entries,
-      { ledger: "", amount: "", openingBalance: 0, closingBalance: 0, remainingBalance: 0, balanceType: "Debit" },
+      {
+        ledger: "",
+        amount: "",
+        openingBalance: 0,
+        closingBalance: 0,
+        remainingBalance: 0,
+        balanceType: "Debit",
+      },
     ]);
   };
 
@@ -1310,16 +341,14 @@ const PaymentVoucher = () => {
     setEntries(updated);
   };
 
-
   const handleQuickCreateLedger = async (index, initialName) => {
-
     const stateToSave = {
       voucherNo,
       date,
       accountType,
       narration,
       entries,
-      editingIndex: index
+      editingIndex: index,
     };
     sessionStorage.setItem("paymentVoucherState", JSON.stringify(stateToSave));
 
@@ -1329,11 +358,17 @@ const PaymentVoucher = () => {
       const userObj = JSON.parse(userStr);
       role = userObj.role || "admin";
     }
-    const basePath = role === "employee" ? "/employee/hr/accounting/client" : "/accounting/client";
+    const basePath =
+      role === "employee"
+        ? "/employee/hr/accounting/client"
+        : "/accounting/client";
 
-
-    const redirectPath = id ? `${basePath}/paymentvoucher/${id}` : `${basePath}/paymentvoucher`;
-    navigate(`${basePath}/ledger?redirect=${redirectPath}&name=${encodeURIComponent(initialName)}`);
+    const redirectPath = id
+      ? `${basePath}/paymentvoucher/${id}`
+      : `${basePath}/paymentvoucher`;
+    navigate(
+      `${basePath}/ledger?redirect=${redirectPath}&name=${encodeURIComponent(initialName)}`,
+    );
   };
 
   const updateAmount = (index, value) => {
@@ -1352,301 +387,192 @@ const PaymentVoucher = () => {
     setEntries(updated);
   };
 
-  const totalAmount = entries.reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
+  const totalAmount = entries.reduce(
+    (sum, r) => sum + (parseFloat(r.amount) || 0),
+    0,
+  );
 
   const resetForm = () => {
     setVoucherNo(String(Number(voucherNo) + 1));
     setDate("");
     setAccountType("");
-    setEntries([{ ledger: "", amount: "", openingBalance: 0, closingBalance: 0, remainingBalance: 0, balanceType: "Debit" }]);
+    setEntries([
+      {
+        ledger: "",
+        amount: "",
+        openingBalance: 0,
+        closingBalance: 0,
+        remainingBalance: 0,
+        balanceType: "Debit",
+      },
+    ]);
     setNarration("");
   };
 
   const handleBulkImport = async (data) => {
-
     try {
-
       if (!data || data.length === 0) {
-
-        Swal.fire(
-          "Error",
-          "No data found in file",
-          "error"
-        );
+        Swal.fire("Error", "No data found in file", "error");
 
         return;
       }
 
       const firstRow = data[0];
 
+      const ledgerRes = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
+      );
 
+      let latestLedgers = ledgerRes.data || [];
 
-      const ledgerRes =
-        await axios.get(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`
-        );
+      const bankRes = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`,
+      );
 
-      let latestLedgers =
-        ledgerRes.data || [];
+      const latestBanks = bankRes.data.accounts || [];
 
+      const latestBankCash = latestBanks.map((b) => ({
+        id: `bank_${b.id}`,
 
+        name: b.bankName ? `${b.accountName} (${b.bankName})` : b.accountName,
 
-      const bankRes =
-        await axios.get(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`
-        );
+        type: "bank",
+      }));
 
-      const latestBanks =
-        bankRes.data.accounts || [];
-
-
-
-      const latestBankCash =
-        latestBanks.map((b) => ({
-
-          id:
-            `bank_${b.id}`,
-
-          name:
-            b.bankName
-              ? `${b.accountName} (${b.bankName})`
-              : b.accountName,
-
-          type: "bank",
-        }));
-
-      const cashLedger =
-        latestLedgers.find(
-          (l) =>
-            l.name
-              ?.toLowerCase()
-              .includes("cash") ||
-
-            l.underGroup ===
-            "Cash-in-Hand" ||
-
-            l.under ===
-            "Cash-in-Hand"
-        );
+      const cashLedger = latestLedgers.find(
+        (l) =>
+          l.name?.toLowerCase().includes("cash") ||
+          l.underGroup === "Cash-in-Hand" ||
+          l.under === "Cash-in-Hand",
+      );
 
       if (cashLedger) {
-
         latestBankCash.push({
+          id: `ledger_${cashLedger.id}`,
 
-          id:
-            `ledger_${cashLedger.id}`,
-
-          name:
-            cashLedger.name,
+          name: cashLedger.name,
 
           type: "cash",
         });
-
       } else {
-
         latestBankCash.push({
-
           id: "cash",
           name: "Cash",
           type: "cash",
         });
       }
 
-
-
-      const rawPaymentMode =
-        String(
-          firstRow["Payment Mode"] ||
-          firstRow["accountType"] ||
-          ""
-        )
-          .trim()
-          .toLowerCase();
+      const rawPaymentMode = String(
+        firstRow["Payment Mode"] || firstRow["accountType"] || "",
+      )
+        .trim()
+        .toLowerCase();
 
       let selectedAccount = "";
 
       if (rawPaymentMode === "cash") {
-
-        selectedAccount =
-          cashLedger
-            ? `ledger_${cashLedger.id}`
-            : "cash";
-
+        selectedAccount = cashLedger ? `ledger_${cashLedger.id}` : "cash";
       } else {
-
-        let matchedBank =
-          latestBankCash.find(
-            (b) =>
-              b.name
-                ?.toLowerCase()
-                ?.trim() ===
-              rawPaymentMode
-          );
-
-
+        let matchedBank = latestBankCash.find(
+          (b) => b.name?.toLowerCase()?.trim() === rawPaymentMode,
+        );
 
         if (!matchedBank && rawPaymentMode) {
-
           try {
+            const createBank = await axios.post(
+              `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/create`,
+              {
+                accountName: rawPaymentMode,
 
-            const createBank =
-              await axios.post(
-                `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/create`,
-                {
+                bankName: rawPaymentMode,
 
-                  accountName:
-                    rawPaymentMode,
-
-                  bankName:
-                    rawPaymentMode,
-
-                  currentBalance: 0,
-                }
-              );
+                currentBalance: 0,
+              },
+            );
 
             matchedBank = {
+              id: `bank_${createBank.data.id}`,
 
-              id:
-                `bank_${createBank.data.id}`,
-
-              name:
-                rawPaymentMode,
+              name: rawPaymentMode,
 
               type: "bank",
             };
 
-            latestBankCash.push(
-              matchedBank
-            );
-
-          } catch (err) {
-
-
-          }
+            latestBankCash.push(matchedBank);
+          } catch (err) {}
         }
 
-        selectedAccount =
-          matchedBank?.id || "";
+        selectedAccount = matchedBank?.id || "";
       }
-
-
 
       const importedEntries = [];
 
       for (const row of data) {
+        const ledgerName = String(
+          row["Paid To"] || row["ledgerId"] || "",
+        ).trim();
 
-        const ledgerName =
-          String(
-            row["Paid To"] ||
-            row["ledgerId"] ||
-            ""
-          )
-            .trim();
-
-        let matchedLedger =
-          latestLedgers.find(
-            (l) =>
-              l.name
-                ?.toLowerCase()
-                ?.trim() ===
-              ledgerName
-                ?.toLowerCase()
-                ?.trim()
-          );
-
-
+        let matchedLedger = latestLedgers.find(
+          (l) =>
+            l.name?.toLowerCase()?.trim() === ledgerName?.toLowerCase()?.trim(),
+        );
 
         if (!matchedLedger && ledgerName) {
-
           try {
+            const creditorGroup = groups.find(
+              (g) => g.groupName === "Sundry Creditors",
+            );
 
+            const createRes = await axios.post(
+              `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`,
+              {
+                name: ledgerName,
 
+                under: JSON.stringify({
+                  id: creditorGroup?.id,
 
-            const creditorGroup =
-              groups.find(
-                (g) =>
-                  g.groupName ===
-                  "Sundry Creditors"
-              );
+                  name: "Sundry Creditors",
+                }),
 
+                openingBalance: 0,
 
+                mailingName: ledgerName,
 
-            const createRes =
-              await axios.post(
-                `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`,
-                {
+                address: "",
 
-                  name:
-                    ledgerName,
+                city: "",
 
-                  under:
-                    JSON.stringify({
+                state: "Odisha",
 
-                      id:
-                        creditorGroup?.id,
+                country: "India",
 
-                      name:
-                        "Sundry Creditors",
-                    }),
+                pincode: "",
 
-                  openingBalance: 0,
+                pan: "",
 
-                  mailingName:
-                    ledgerName,
+                gstin: "",
 
-                  address: "",
+                registrationType: "Regular",
 
-                  city: "",
-
-                  state:
-                    "Odisha",
-
-                  country:
-                    "India",
-
-                  pincode: "",
-
-                  pan: "",
-
-                  gstin: "",
-
-                  registrationType:
-                    "Regular",
-
-                  companyId,
-                }
-              );
-
-
+                companyId,
+              },
+            );
 
             matchedLedger = {
+              id: createRes.data.id,
 
-              id:
-                createRes.data.id,
-
-              name:
-                ledgerName,
+              name: ledgerName,
 
               openingBalance: 0,
 
               closingBalance: 0,
 
-              balanceType:
-                "Debit",
+              balanceType: "Debit",
             };
 
-
-
-            latestLedgers.push(
-              matchedLedger
-            );
-
-          } catch (err) {
-
-
-          }
+            latestLedgers.push(matchedLedger);
+          } catch (err) {}
         }
-
 
         const opening = parseFloat(matchedLedger?.openingBalance) || 0;
         const debit = parseFloat(matchedLedger?.debit) || 0;
@@ -1660,105 +586,59 @@ const PaymentVoucher = () => {
           closing = opening - debit + credit;
         }
 
-
-
         importedEntries.push({
+          ledger: matchedLedger ? matchedLedger.id : "",
 
-          ledger:
-            matchedLedger
-              ? matchedLedger.id
-              : "",
+          amount: row["Amount"] || row["amount"] || "",
 
-          amount:
-            row["Amount"] ||
-            row["amount"] ||
-            "",
+          openingBalance: opening,
 
-          openingBalance:
-            opening,
+          closingBalance: closing,
 
-          closingBalance:
-            closing,
+          remainingBalance: closing,
 
-          remainingBalance:
-            closing,
-
-          balanceType:
-            type,
+          balanceType: type,
         });
       }
 
+      setLedgers(latestLedgers);
 
+      setBankCashLedgers(latestBankCash);
 
-      setLedgers(
-        latestLedgers
-      );
-
-      setBankCashLedgers(
-        latestBankCash
-      );
-
-      setVoucherNo(
-        firstRow["Voucher No"] ||
-        firstRow["voucherNo"] ||
-        ""
-      );
+      setVoucherNo(firstRow["Voucher No"] || firstRow["voucherNo"] || "");
 
       setDate(
         firstRow["Date"]
-          ? new Date(
-            firstRow["Date"]
-          )
-            .toISOString()
-            .split("T")[0]
-          : new Date()
-            .toISOString()
-            .split("T")[0]
+          ? new Date(firstRow["Date"]).toISOString().split("T")[0]
+          : new Date().toISOString().split("T")[0],
       );
 
       setNarration(
-        firstRow[
-        "Voucher Narration"
-        ] ||
-        firstRow["narration"] ||
-        ""
+        firstRow["Voucher Narration"] || firstRow["narration"] || "",
       );
 
-      setAccountType(
-        selectedAccount
-      );
+      setAccountType(selectedAccount);
 
-      setEntries(
-        importedEntries
-      );
+      setEntries(importedEntries);
 
       Swal.fire({
-
         icon: "success",
 
-        title:
-          "Import Successful",
+        title: "Import Successful",
 
-        text:
-          "Imported data loaded successfully. Review and click Save Voucher.",
+        text: "Imported data loaded successfully. Review and click Save Voucher.",
       });
-
     } catch (err) {
-
-
-
-      Swal.fire(
-        "Error",
-        "Import failed",
-        "error"
-      );
+      Swal.fire("Error", "Import failed", "error");
     }
   };
 
   const saveVoucher = async () => {
     if (!date) return Swal.fire("Error", "Please select a date", "error");
-    if (!accountType) return Swal.fire("Error", "Please select Account Type", "error");
-    if (entries.some((e) => !e.ledger)) return Swal.fire("Error", "Select all debit ledgers", "error");
+    if (!accountType)
+      return Swal.fire("Error", "Please select Account Type", "error");
+    if (entries.some((e) => !e.ledger))
+      return Swal.fire("Error", "Select all debit ledgers", "error");
 
     const formattedItems = entries.map((e) => ({
       ledgerId: Number(e.ledger),
@@ -1768,13 +648,23 @@ const PaymentVoucher = () => {
     const employeeId = user?.employee_id || null;
     const role = user?.role || "admin";
 
-    const payload = { voucherNo, date, accountType, narration, totalAmount, companyId, items: formattedItems, ...(employeeId && { employee_id: employeeId }), role };
+    const payload = {
+      voucherNo,
+      date,
+      accountType,
+      narration,
+      totalAmount,
+      companyId,
+      items: formattedItems,
+      ...(employeeId && { employee_id: employeeId }),
+      role,
+    };
 
     try {
       if (isEditMode) {
         await axios.put(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/update/${id}`,
-          payload
+          payload,
         );
         Swal.fire("Success", "Voucher updated successfully", "success");
         if (role === "employee") {
@@ -1785,7 +675,7 @@ const PaymentVoucher = () => {
       } else {
         const res = await axios.post(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/create/${companyId}`,
-          payload
+          payload,
         );
 
         Swal.fire({
@@ -1800,7 +690,6 @@ const PaymentVoucher = () => {
             const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
 
             window.open(pdfUrl, "_blank");
-            
 
             fetch(pdfUrl)
               .then((response) => response.blob())
@@ -1808,7 +697,8 @@ const PaymentVoucher = () => {
                 const blobUrl = window.URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.href = blobUrl;
-                link.download = res.data.pdf_path.split("/").pop() || "PaymentVoucher.pdf";
+                link.download =
+                  res.data.pdf_path.split("/").pop() || "PaymentVoucher.pdf";
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -1828,7 +718,11 @@ const PaymentVoucher = () => {
       if (err.response && err.response.status === 409) {
         Swal.fire("Warning", "Voucher Number Already Exists!", "warning");
       } else {
-        Swal.fire("Error", `Failed to ${isEditMode ? 'update' : 'save'} voucher`, "error");
+        Swal.fire(
+          "Error",
+          `Failed to ${isEditMode ? "update" : "save"} voucher`,
+          "error",
+        );
       }
     }
   };
@@ -1841,18 +735,17 @@ const PaymentVoucher = () => {
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-6 mx-auto">
-
-
       <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
         <div className="flex items-center gap-2">
-          <h1 className="text-base font-semibold text-slate-800">Payment Voucher</h1>
+          <h1 className="text-base font-semibold text-slate-800">
+            Payment Voucher
+          </h1>
           <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700">
             PV
           </span>
         </div>
         <BulkImportButton onImport={handleBulkImport} />
       </div>
-
 
       <div className="flex flex-col gap-1 mb-5">
         <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
@@ -1871,7 +764,6 @@ const PaymentVoucher = () => {
           ))}
         </select>
       </div>
-
 
       <div className="grid grid-cols-2 gap-4 mb-5">
         <div className="flex flex-col gap-1">
@@ -1898,21 +790,29 @@ const PaymentVoucher = () => {
         </div>
       </div>
 
-
       <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-2">
         Transaction Details
       </p>
-
 
       <div className="rounded-lg border border-slate-200 overflow-visible mb-3">
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-left">Particulars</th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">Opening</th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">Closing</th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">Amount (₹)</th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">Remaining</th>
+              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-left">
+                Particulars
+              </th>
+              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
+                Opening
+              </th>
+              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
+                Closing
+              </th>
+              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
+                Amount (₹)
+              </th>
+              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
+                Remaining
+              </th>
               <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-center w-10"></th>
             </tr>
           </thead>
@@ -1923,7 +823,6 @@ const PaymentVoucher = () => {
                 key={index}
                 className="border-b border-slate-100 last:border-b-0 hover:bg-slate-50 transition-colors relative hover:z-50"
               >
-
                 <td className="px-2 py-1">
                   <SearchableLedgerSelect
                     ledgers={ledgers}
@@ -1933,16 +832,17 @@ const PaymentVoucher = () => {
                   />
                 </td>
 
-
                 <td className="px-3 py-2 text-right text-slate-500 text-sm">
-                  {row.ledger ? formatBalance(row.openingBalance, row.balanceType) : "0.00"}
+                  {row.ledger
+                    ? formatBalance(row.openingBalance, row.balanceType)
+                    : "0.00"}
                 </td>
 
-
                 <td className="px-3 py-2 text-right text-slate-500 text-sm">
-                  {row.ledger ? formatBalance(row.closingBalance, row.balanceType) : "0.00"}
+                  {row.ledger
+                    ? formatBalance(row.closingBalance, row.balanceType)
+                    : "0.00"}
                 </td>
-
 
                 <td className="px-2 py-1">
                   <input
@@ -1954,11 +854,11 @@ const PaymentVoucher = () => {
                   />
                 </td>
 
-
                 <td className="px-3 py-2 text-right text-slate-800 font-medium text-sm">
-                  {row.ledger ? formatBalance(row.remainingBalance, row.balanceType) : "0.00"}
+                  {row.ledger
+                    ? formatBalance(row.remainingBalance, row.balanceType)
+                    : "0.00"}
                 </td>
-
 
                 <td className="px-2 py-1 text-center">
                   {index > 0 && (
@@ -1973,7 +873,6 @@ const PaymentVoucher = () => {
               </tr>
             ))}
           </tbody>
-
 
           <tfoot>
             <tr className="bg-slate-50 border-t border-slate-200">
@@ -1992,14 +891,12 @@ const PaymentVoucher = () => {
         </table>
       </div>
 
-
       <button
         onClick={addRow}
         className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline transition-colors mb-5"
       >
         <Plus size={13} /> Add Row
       </button>
-
 
       <div className="flex justify-end mb-5">
         <div className="bg-slate-50 rounded-lg px-5 py-3 flex flex-col items-end gap-1 min-w-48">
@@ -2009,7 +906,6 @@ const PaymentVoucher = () => {
           </div>
         </div>
       </div>
-
 
       <div className="flex flex-col gap-1 mb-5">
         <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
@@ -2023,7 +919,6 @@ const PaymentVoucher = () => {
           onChange={(e) => setNarration(e.target.value)}
         />
       </div>
-
 
       <div className="flex justify-end gap-2">
         <button

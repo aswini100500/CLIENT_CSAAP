@@ -48,9 +48,17 @@ function firstValue(values) {
 }
 
 function resolveQrScope(user) {
-  const companyId = user?.company_id ?? user?.companyId ?? user?.id ?? user?.user_id ?? "";
-  const companySlug = user?.slug ?? user?.subdomain ?? user?.company_slug ?? user?.companySlug ?? user?.company ?? "";
-  const companyName = user?.companyName ?? user?.name ?? user?.company ?? user?.subdomain ?? "";
+  const companyId =
+    user?.company_id ?? user?.companyId ?? user?.id ?? user?.user_id ?? "";
+  const companySlug =
+    user?.slug ??
+    user?.subdomain ??
+    user?.company_slug ??
+    user?.companySlug ??
+    user?.company ??
+    "";
+  const companyName =
+    user?.companyName ?? user?.name ?? user?.company ?? user?.subdomain ?? "";
 
   return {
     companyId,
@@ -526,9 +534,7 @@ const Attendance2 = () => {
           <div className="rounded-xl border border-(--border-soft) bg-(--brand-soft) p-2 text-(--brand) shrink-0">
             <Calendar className="w-5 h-5" />
           </div>
-          <h2 className="app-heading">
-            {getAttendanceHeading()}
-          </h2>
+          <h2 className="app-heading">{getAttendanceHeading()}</h2>
         </div>
 
         <label className="flex items-center gap-3 rounded-xl border border-(--border-soft) bg-white px-4 py-2 text-[13px] font-semibold text-(--text-soft)">
@@ -712,9 +718,7 @@ const Attendance2 = () => {
                     <ShieldAlert className="h-6 w-6" />
                   </div>
                   <div className="min-w-0">
-                    <h2 className="app-heading">
-                      Geofence Exemptions
-                    </h2>
+                    <h2 className="app-heading">Geofence Exemptions</h2>
                     <p className="mt-1 text-[13px] font-medium text-(--text-soft)">
                       Manage location-based attendance overrides for remote and
                       field personnel.

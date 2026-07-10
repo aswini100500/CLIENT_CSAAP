@@ -25,16 +25,13 @@ const Drivers = () => {
       setLoading(true);
       const response = await operationApi.getDrivers();
 
-      
       setDrivers(response.data.data);
     } catch (error) {
-
       console.error("Error fetching drivers:", error);
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleAddDriver = async () => {
     if (
@@ -46,7 +43,6 @@ const Drivers = () => {
       alert("Please fill all fields before adding a driver.");
       return;
     }
-
 
     try {
       setLoading(true);
@@ -66,13 +62,11 @@ const Drivers = () => {
     }
   };
 
-
   const handleEdit = (id) => {
     const driver = drivers.find((d) => d.id === id);
     setNewDriver(driver);
     setEditingId(id);
   };
-
 
   const handleUpdate = async () => {
     try {
@@ -94,7 +88,6 @@ const Drivers = () => {
     }
   };
 
-
   const handleDelete = async (id) => {
     try {
       setLoading(true);
@@ -115,7 +108,6 @@ const Drivers = () => {
           Driver Management
         </h2>
       </div>
-
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
         <input
@@ -155,10 +147,11 @@ const Drivers = () => {
         <button
           onClick={editingId ? handleUpdate : handleAddDriver}
           disabled={loading}
-          className={`flex items-center justify-center gap-1 px-4 py-2 rounded-lg text-sm transition-all ${loading
+          className={`flex items-center justify-center gap-1 px-4 py-2 rounded-lg text-sm transition-all ${
+            loading
               ? "bg-gray-400 cursor-not-allowed text-white"
               : "bg-blue-600 hover:bg-blue-700 text-white"
-            }`}
+          }`}
         >
           {loading ? (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -168,7 +161,6 @@ const Drivers = () => {
           {loading ? "Processing..." : editingId ? "Update" : "Add"}
         </button>
       </div>
-
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
@@ -208,10 +200,11 @@ const Drivers = () => {
                   </td>
                   <td className="border border-gray-200 p-2">
                     <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${driver.status === "Available"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                        }`}
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        driver.status === "Available"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
                     >
                       {driver.status}
                     </span>

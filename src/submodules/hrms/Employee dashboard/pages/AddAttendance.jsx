@@ -17,7 +17,8 @@ import {
 } from "../../utils/attendanceTime";
 
 const API_BASE = import.meta.env.VITE_HRMS_BASE_URL;
-const EMPLOYEE_API_BASE = "https://csaapnodeapi.csaap.com/api/tenant/hrms/get-employee";
+const EMPLOYEE_API_BASE =
+  "https://csaapnodeapi.csaap.com/api/tenant/hrms/get-employee";
 const currentIndiaDate = getCurrentIndiaDate();
 
 const panelClass =
@@ -213,11 +214,11 @@ const AddAttendance = () => {
 
             const data = response.data?.data || null;
 
-            
             if (data && active) {
               setEmployeeProfile({
                 employeeId: data.id || user?.employee_id || user?.id || 0,
-                employeeName: data.name || data.employee_name || user?.name || "Employee",
+                employeeName:
+                  data.name || data.employee_name || user?.name || "Employee",
                 department:
                   data.department ||
                   user?.department ||
@@ -238,7 +239,12 @@ const AddAttendance = () => {
                   user?.companyName ||
                   user?.company ||
                   "",
-                slug: data.slug || data.company_slug || user?.slug || user?.company_slug || "",
+                slug:
+                  data.slug ||
+                  data.company_slug ||
+                  user?.slug ||
+                  user?.company_slug ||
+                  "",
                 shiftName:
                   data.employeeShift ||
                   data.shift_name ||
@@ -246,15 +252,26 @@ const AddAttendance = () => {
                   user?.shift_name ||
                   "General",
                 shiftStart: normalizeTimeValue(
-                  data.shift_start || data.shiftStart || user?.shift_start || user?.shiftStart || "",
+                  data.shift_start ||
+                    data.shiftStart ||
+                    user?.shift_start ||
+                    user?.shiftStart ||
+                    "",
                 ),
                 shiftEnd: normalizeTimeValue(
-                  data.shift_end || data.shiftEnd || user?.shift_end || user?.shiftEnd || "",
+                  data.shift_end ||
+                    data.shiftEnd ||
+                    user?.shift_end ||
+                    user?.shiftEnd ||
+                    "",
                 ),
               });
             }
           } catch (error) {
-            console.warn("Failed to fetch employee profile for attendance", error);
+            console.warn(
+              "Failed to fetch employee profile for attendance",
+              error,
+            );
           }
         }
 
@@ -419,7 +436,9 @@ const AddAttendance = () => {
       Swal.fire({
         icon: "success",
         title: "Attendance submitted",
-        text: response.data?.message || "Your attendance application has been saved.",
+        text:
+          response.data?.message ||
+          "Your attendance application has been saved.",
         confirmButtonColor: "#4f46e5",
       });
 
@@ -453,7 +472,9 @@ const AddAttendance = () => {
         <div className="space-y-4 text-center">
           <Loader2 className="mx-auto h-10 w-10 animate-spin text-slate-900" />
           <div>
-            <h3 className="text-lg font-bold text-slate-900">Loading attendance form</h3>
+            <h3 className="text-lg font-bold text-slate-900">
+              Loading attendance form
+            </h3>
             <p className="mt-1 text-sm font-medium text-slate-500">
               Please wait while we prepare your submission form
             </p>
@@ -477,7 +498,8 @@ const AddAttendance = () => {
                   Add Attendance Request
                 </h1>
                 <p className="mt-1 text-sm font-medium text-slate-500">
-                  Submit a request for a date that does not already have a record.
+                  Submit a request for a date that does not already have a
+                  record.
                 </p>
               </div>
             </div>
@@ -579,7 +601,8 @@ const AddAttendance = () => {
                     Claim overtime
                   </span>
                   <span className="mt-1 block text-xs leading-5 text-slate-600">
-                    Overtime is calculated automatically. Select this only if you want to claim it.
+                    Overtime is calculated automatically. Select this only if
+                    you want to claim it.
                   </span>
                 </span>
               </label>
@@ -619,7 +642,8 @@ const AddAttendance = () => {
               )}
             </button>
             <p className="pt-1 text-[11px] leading-5 text-slate-500 text-center">
-              The request will be rejected if a record already exists for the selected date.
+              The request will be rejected if a record already exists for the
+              selected date.
             </p>
           </form>
         </div>

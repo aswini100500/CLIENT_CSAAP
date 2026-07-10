@@ -10,7 +10,6 @@ import { saveAs } from "file-saver";
 import { formatINR } from "../payrollUtils";
 import React from "react";
 
-
 const safeFormat = (amount) => {
   if (amount === undefined || amount === null) return "0";
   const formatted = formatINR(amount);
@@ -62,7 +61,6 @@ const styles = StyleSheet.create({
     fontSize: 6,
     color: "#9ca3af",
   },
-
 
   table: {
     width: "100%",
@@ -124,7 +122,6 @@ const styles = StyleSheet.create({
     paddingLeft: 2,
   },
 
-
   totalRow: {
     flexDirection: "row",
     backgroundColor: "#e5e7eb",
@@ -140,12 +137,10 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
 
-
   colId: { width: "3%" },
   colName: { width: "12%" },
   colAttendance: { width: "3.5%" },
   colLop: { width: "2.5%" },
-
 
   colFixedGross: { width: "6.5%", textAlign: "right" },
   colEarnedBasic: { width: "5%", textAlign: "right" },
@@ -156,7 +151,6 @@ const styles = StyleSheet.create({
   colOtherEarn: { width: "6%", textAlign: "right" },
   colOT: { width: "4%", textAlign: "right" },
   colTotalGross: { width: "7%", textAlign: "right", fontWeight: "bold" },
-
 
   colEpf: { width: "5%", textAlign: "right" },
   colEsi: { width: "4.5%", textAlign: "right" },
@@ -172,7 +166,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#111827",
   },
-
 
   summarySection: {
     marginTop: 15,
@@ -246,7 +239,6 @@ const PayrollReportDocument = ({
 
   const periodLabel = month && year ? `${monthNames[month - 1]} ${year}` : "";
 
-
   let gtFixedGross = 0;
   let gtGrossEarned = 0;
   let gtDeductions = 0;
@@ -295,7 +287,6 @@ const PayrollReportDocument = ({
     const special =
       p.proratedEarnings?.specialAllowance || p.specialAllowance || 0;
 
-
     gtFixedGross += p.monthlyCTC || 0;
     gtGrossEarned += p.gross || 0;
     gtDeductions += p.totalDeductions || 0;
@@ -343,7 +334,6 @@ const PayrollReportDocument = ({
   return (
     <Document title={`Payroll Register - ${periodLabel}`}>
       <Page size="A4" orientation="landscape" style={styles.page}>
-
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <Text style={styles.title}>Payroll Register</Text>
@@ -358,9 +348,7 @@ const PayrollReportDocument = ({
           </View>
         </View>
 
-
         <View style={styles.table}>
-
           <View style={styles.groupHeader}>
             <View style={{ width: "21%" }}>
               <Text style={styles.groupHeaderText}>Employee Info</Text>
@@ -375,7 +363,6 @@ const PayrollReportDocument = ({
               <Text style={styles.groupHeaderText}>Net</Text>
             </View>
           </View>
-
 
           <View style={styles.tableHeader}>
             <Text style={[styles.headerText, styles.colId]}>ID</Text>
@@ -419,7 +406,6 @@ const PayrollReportDocument = ({
 
             <Text style={[styles.headerText, styles.colNet]}>Net Pay</Text>
           </View>
-
 
           {rows.map((row, idx) => (
             <View
@@ -506,7 +492,6 @@ const PayrollReportDocument = ({
             </View>
           ))}
 
-
           {rows.length > 0 && (
             <View style={styles.totalRow}>
               <Text style={[styles.colId]}></Text>
@@ -592,7 +577,6 @@ const PayrollReportDocument = ({
             </View>
           )}
         </View>
-
 
         <View style={styles.summarySection}>
           <View style={styles.summaryCard}>

@@ -1,16 +1,23 @@
 import React, { useMemo } from "react";
-import { FaBuilding, FaMapMarkerAlt, FaEdit, FaTrash, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import {
+  FaBuilding,
+  FaMapMarkerAlt,
+  FaEdit,
+  FaTrash,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
 import ProjectDetailsTable from "./ProjectDetailsTable";
 import { getProjectOverallStatus } from "./shared/utils";
 
-const ProjectList = ({ 
-  projects, 
-  expandedProject, 
-  toggleProjectExpansion, 
-  editProject, 
-  deleteProject, 
-  editPlotFromTable, 
-  editUnitFromTable 
+const ProjectList = ({
+  projects,
+  expandedProject,
+  toggleProjectExpansion,
+  editProject,
+  deleteProject,
+  editPlotFromTable,
+  editUnitFromTable,
 }) => {
   const sortedProjects = useMemo(() => {
     try {
@@ -89,27 +96,27 @@ const ProjectList = ({
                               project.type === "plotting"
                                 ? "bg-green-500"
                                 : project.type === "duplex"
-                                ? "bg-blue-500"
-                                : project.type === "triplex"
-                                ? "bg-orange-500"
-                                : project.type === "apartment"
-                                ? "bg-purple-500"
-                                : project.type === "custom"
-                                ? "bg-pink-500"
-                                : "bg-gray-500"
+                                  ? "bg-blue-500"
+                                  : project.type === "triplex"
+                                    ? "bg-orange-500"
+                                    : project.type === "apartment"
+                                      ? "bg-purple-500"
+                                      : project.type === "custom"
+                                        ? "bg-pink-500"
+                                        : "bg-gray-500"
                             }`}
                           >
                             {project.type === "plotting"
                               ? "P"
                               : project.type === "duplex"
-                              ? "D"
-                              : project.type === "triplex"
-                              ? "T"
-                              : project.type === "apartment"
-                              ? "A"
-                              : project.type === "custom"
-                              ? "C"
-                              : "C"}
+                                ? "D"
+                                : project.type === "triplex"
+                                  ? "T"
+                                  : project.type === "apartment"
+                                    ? "A"
+                                    : project.type === "custom"
+                                      ? "C"
+                                      : "C"}
                           </div>
                         </div>
                         <div className="ml-4">
@@ -176,7 +183,7 @@ const ProjectList = ({
                                   floor.roomTypes?.[0] ||
                                   "Unit";
                                 names.push(
-                                  `${floor.floorName} - ${i + 1} (${roomType})`
+                                  `${floor.floorName} - ${i + 1} (${roomType})`,
                                 );
                               }
                               return names;
@@ -186,7 +193,7 @@ const ProjectList = ({
                             .join(", ") +
                           (project.floorConfigurations.reduce(
                             (s, f) => s + (f.rooms || 0),
-                            0
+                            0,
                           ) > 6
                             ? "..."
                             : "")
@@ -204,25 +211,34 @@ const ProjectList = ({
                       <div className="flex flex-col gap-1 items-start">
                         <span
                           className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
-                            project.plots?.length > 0 || project.units?.length > 0
+                            project.plots?.length > 0 ||
+                            project.units?.length > 0
                               ? "bg-green-100 text-green-800"
                               : "bg-yellow-100 text-yellow-800"
                           }`}
                         >
-                          {project.plots?.length > 0 || project.units?.length > 0
+                          {project.plots?.length > 0 ||
+                          project.units?.length > 0
                             ? "Active"
                             : "Draft"}
                         </span>
                         {(() => {
-                          const overallStatus = getProjectOverallStatus(project);
+                          const overallStatus =
+                            getProjectOverallStatus(project);
                           return (
-                            <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
-                              overallStatus === "Completed" ? "bg-emerald-100 text-emerald-700" :
-                              overallStatus === "Pending" ? "bg-amber-100 text-amber-700" :
-                              overallStatus === "In Progress" ? "bg-blue-100 text-blue-700" :
-                              overallStatus === "Ready to Move" ? "bg-indigo-100 text-indigo-700" :
-                              "bg-slate-100 text-slate-600"
-                            }`}>
+                            <span
+                              className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
+                                overallStatus === "Completed"
+                                  ? "bg-emerald-100 text-emerald-700"
+                                  : overallStatus === "Pending"
+                                    ? "bg-amber-100 text-amber-700"
+                                    : overallStatus === "In Progress"
+                                      ? "bg-blue-100 text-blue-700"
+                                      : overallStatus === "Ready to Move"
+                                        ? "bg-indigo-100 text-indigo-700"
+                                        : "bg-slate-100 text-slate-600"
+                              }`}
+                            >
                               {overallStatus}
                             </span>
                           );

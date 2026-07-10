@@ -2,15 +2,51 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import operationApi from "../../../api/operation";
 
-const StagePassing = ({ projectSetup }) => {  
+const StagePassing = ({ projectSetup }) => {
   const [stages, setStages] = useState([
-    { id: 1, name: "Site Preparation", completed: false, remark: "", subStages: [] },
-    { id: 2, name: "Foundation Work", completed: false, remark: "", subStages: [] },
-    { id: 3, name: "Structural Framework", completed: false, remark: "", subStages: [] },
-    { id: 4, name: "Wall Construction", completed: false, remark: "", subStages: [] },
+    {
+      id: 1,
+      name: "Site Preparation",
+      completed: false,
+      remark: "",
+      subStages: [],
+    },
+    {
+      id: 2,
+      name: "Foundation Work",
+      completed: false,
+      remark: "",
+      subStages: [],
+    },
+    {
+      id: 3,
+      name: "Structural Framework",
+      completed: false,
+      remark: "",
+      subStages: [],
+    },
+    {
+      id: 4,
+      name: "Wall Construction",
+      completed: false,
+      remark: "",
+      subStages: [],
+    },
     { id: 5, name: "Roofing", completed: false, remark: "", subStages: [] },
-    { id: 6, name: "Electrical & Plumbing", completed: false, remark: "", subStages: [] },
-    { id: 7, name: "Finishing Work", completed: false, remark: "", subStages: [] },
+    {
+      id: 6,
+      name: "Electrical & Plumbing",
+      completed: false,
+      remark: "",
+      subStages: [],
+    },
+    {
+      id: 7,
+      name: "Finishing Work",
+      completed: false,
+      remark: "",
+      subStages: [],
+    },
   ]);
 
   const [remarks, setRemarks] = useState({});
@@ -27,35 +63,40 @@ const StagePassing = ({ projectSetup }) => {
     try {
       setLoading(true);
       const res = await operationApi.getStagePassings();
-      const details = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-      const existingData = details.filter(d => d.project_setup_id === projectSetup.id);
-      
+      const details = Array.isArray(res.data) ? res.data : res.data?.data || [];
+      const existingData = details.filter(
+        (d) => d.project_setup_id === projectSetup.id,
+      );
 
       let projectStages = projectSetup.stages || [];
-      if (typeof projectStages === 'string') {
-        try { projectStages = JSON.parse(projectStages); } catch (e) { projectStages = []; }
+      if (typeof projectStages === "string") {
+        try {
+          projectStages = JSON.parse(projectStages);
+        } catch (e) {
+          projectStages = [];
+        }
       }
 
-
       if (projectStages.length === 0) {
-
-
-
       } else {
-
         const mappedStages = projectStages.map((ps, index) => {
-          const savedRecord = existingData.find(d => d.stage_name === ps.name);
-          
+          const savedRecord = existingData.find(
+            (d) => d.stage_name === ps.name,
+          );
 
           let subStages = ps.sub_stages || ps.subStages || [];
           if (savedRecord) {
-             let savedSubs = savedRecord.sub_stages;
-             if (typeof savedSubs === 'string') {
-                try { savedSubs = JSON.parse(savedSubs); } catch (e) { savedSubs = []; }
-             }
-             if (savedSubs && savedSubs.length > 0) {
-                subStages = savedSubs;
-             }
+            let savedSubs = savedRecord.sub_stages;
+            if (typeof savedSubs === "string") {
+              try {
+                savedSubs = JSON.parse(savedSubs);
+              } catch (e) {
+                savedSubs = [];
+              }
+            }
+            if (savedSubs && savedSubs.length > 0) {
+              subStages = savedSubs;
+            }
           }
 
           return {
@@ -64,11 +105,11 @@ const StagePassing = ({ projectSetup }) => {
             completed: savedRecord ? !!savedRecord.completed : false,
             remark: savedRecord ? savedRecord.remark : "",
             subStages: subStages.map((ss, sIndex) => ({
-                id: ss.id || `ss-${index}-${sIndex}`,
-                name: ss.name,
-                completed: ss.completed || false,
-                remark: ss.remark || ""
-            }))
+              id: ss.id || `ss-${index}-${sIndex}`,
+              name: ss.name,
+              completed: ss.completed || false,
+              remark: ss.remark || "",
+            })),
           };
         });
         setStages(mappedStages);
@@ -83,29 +124,32 @@ const StagePassing = ({ projectSetup }) => {
   const handleSave = async (stageId, updatedStage) => {
     if (!projectSetup) return;
     try {
-        const submissionData = {
-            project_setup_id: projectSetup.id,
-            stage_name: updatedStage.name,
-            completed: updatedStage.completed ? 1 : 0,
-            remark: updatedStage.remark,
-            sub_stages: JSON.stringify(updatedStage.subStages)
-        };
+      const submissionData = {
+        project_setup_id: projectSetup.id,
+        stage_name: updatedStage.name,
+        completed: updatedStage.completed ? 1 : 0,
+        remark: updatedStage.remark,
+        sub_stages: JSON.stringify(updatedStage.subStages),
+      };
 
-        const res = await operationApi.getStagePassings();
-        const details = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-        const existing = details.find(d => d.project_setup_id === projectSetup.id && d.stage_name === updatedStage.name);
+      const res = await operationApi.getStagePassings();
+      const details = Array.isArray(res.data) ? res.data : res.data?.data || [];
+      const existing = details.find(
+        (d) =>
+          d.project_setup_id === projectSetup.id &&
+          d.stage_name === updatedStage.name,
+      );
 
-        if (existing) {
-            await operationApi.updateStagePassing(existing.id, submissionData);
-        } else {
-            await operationApi.createStagePassing(submissionData);
-        }
+      if (existing) {
+        await operationApi.updateStagePassing(existing.id, submissionData);
+      } else {
+        await operationApi.createStagePassing(submissionData);
+      }
     } catch (error) {
-        console.error("Error saving stage passing:", error);
-        Swal.fire("Error", "Failed to save stage progress.", "error");
+      console.error("Error saving stage passing:", error);
+      Swal.fire("Error", "Failed to save stage progress.", "error");
     }
   };
-
 
   const addSubStage = (stageId) => {
     Swal.fire({
@@ -119,12 +163,15 @@ const StagePassing = ({ projectSetup }) => {
         const updated = stages.map((stage) => {
           if (stage.id === stageId) {
             const newSub = {
-                id: Date.now(),
-                name: result.value.trim(),
-                completed: false,
-                remark: "",
+              id: Date.now(),
+              name: result.value.trim(),
+              completed: false,
+              remark: "",
             };
-            const newStage = { ...stage, subStages: [...stage.subStages, newSub] };
+            const newStage = {
+              ...stage,
+              subStages: [...stage.subStages, newSub],
+            };
             handleSave(stage.id, newStage);
             return newStage;
           }
@@ -136,20 +183,23 @@ const StagePassing = ({ projectSetup }) => {
     });
   };
 
-
   const completeSubStage = (stageId, subId) => {
     const remark = remarks[subId]?.trim();
     if (!remark) {
-      return Swal.fire("Remark Required", "Please enter a remark first.", "warning");
+      return Swal.fire(
+        "Remark Required",
+        "Please enter a remark first.",
+        "warning",
+      );
     }
 
     const updated = stages.map((stage) => {
       if (stage.id === stageId) {
         const newStage = {
-            ...stage,
-            subStages: stage.subStages.map((sub) =>
-              sub.id === subId ? { ...sub, completed: true, remark } : sub
-            ),
+          ...stage,
+          subStages: stage.subStages.map((sub) =>
+            sub.id === subId ? { ...sub, completed: true, remark } : sub,
+          ),
         };
         handleSave(stage.id, newStage);
         return newStage;
@@ -160,7 +210,6 @@ const StagePassing = ({ projectSetup }) => {
     setRemarks({ ...remarks, [subId]: "" });
     Swal.fire("Completed!", "Sub-Stage marked as completed.", "success");
   };
-
 
   const editSubStageRemark = (stageId, subId, currentRemark) => {
     Swal.fire({
@@ -174,10 +223,10 @@ const StagePassing = ({ projectSetup }) => {
         const updated = stages.map((stage) => {
           if (stage.id === stageId) {
             const newStage = {
-                ...stage,
-                subStages: stage.subStages.map((sub) =>
-                  sub.id === subId ? { ...sub, remark: result.value } : sub
-                ),
+              ...stage,
+              subStages: stage.subStages.map((sub) =>
+                sub.id === subId ? { ...sub, remark: result.value } : sub,
+              ),
             };
             handleSave(stage.id, newStage);
             return newStage;
@@ -190,26 +239,28 @@ const StagePassing = ({ projectSetup }) => {
     });
   };
 
-
   const completeStage = (stageId) => {
     const remark = remarks[stageId]?.trim();
     if (!remark) {
-      return Swal.fire("Remark Required", "Please enter a remark before completing.", "warning");
+      return Swal.fire(
+        "Remark Required",
+        "Please enter a remark before completing.",
+        "warning",
+      );
     }
 
     const updated = stages.map((stage) => {
-        if (stage.id === stageId) {
-            const newStage = { ...stage, completed: true, remark };
-            handleSave(stage.id, newStage);
-            return newStage;
-        }
-        return stage;
+      if (stage.id === stageId) {
+        const newStage = { ...stage, completed: true, remark };
+        handleSave(stage.id, newStage);
+        return newStage;
+      }
+      return stage;
     });
     setStages(updated);
     setRemarks({ ...remarks, [stageId]: "" });
     Swal.fire("Completed!", "Stage marked as completed.", "success");
   };
-
 
   const editStageRemark = (stageId, currentRemark) => {
     Swal.fire({
@@ -221,12 +272,12 @@ const StagePassing = ({ projectSetup }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         const updated = stages.map((stage) => {
-            if (stage.id === stageId) {
-                const newStage = { ...stage, remark: result.value };
-                handleSave(stage.id, newStage);
-                return newStage;
-            }
-            return stage;
+          if (stage.id === stageId) {
+            const newStage = { ...stage, remark: result.value };
+            handleSave(stage.id, newStage);
+            return newStage;
+          }
+          return stage;
         });
         setStages(updated);
         Swal.fire("Updated!", "Remark updated successfully.", "success");
@@ -248,8 +299,19 @@ const StagePassing = ({ projectSetup }) => {
           <button
             onClick={() => {
               const name = (newStage || "").trim();
-              if (!name) return Swal.fire("Oops!", "Please enter a stage name.", "warning");
-              const newStageObj = { id: Date.now(), name, completed: false, remark: "", subStages: [] };
+              if (!name)
+                return Swal.fire(
+                  "Oops!",
+                  "Please enter a stage name.",
+                  "warning",
+                );
+              const newStageObj = {
+                id: Date.now(),
+                name,
+                completed: false,
+                remark: "",
+                subStages: [],
+              };
               setStages((prev) => [...prev, newStageObj]);
               setNewStage("");
               Swal.fire("Added!", `${name} added to stages.`, "success");
@@ -263,9 +325,14 @@ const StagePassing = ({ projectSetup }) => {
 
       <ul className="space-y-4">
         {stages.map((stage) => (
-          <li key={stage.id} className="bg-white shadow-md rounded-lg border border-gray-200 p-4">
+          <li
+            key={stage.id}
+            className="bg-white shadow-md rounded-lg border border-gray-200 p-4"
+          >
             <div className="flex justify-between items-center">
-              <h3 className="font-semibold text-lg text-gray-700">{stage.name}</h3>
+              <h3 className="font-semibold text-lg text-gray-700">
+                {stage.name}
+              </h3>
 
               {!stage.completed ? (
                 <div className="flex gap-2 items-center">
@@ -273,7 +340,9 @@ const StagePassing = ({ projectSetup }) => {
                     type="text"
                     placeholder="Remark..."
                     value={remarks[stage.id] || ""}
-                    onChange={(e) => setRemarks({ ...remarks, [stage.id]: e.target.value })}
+                    onChange={(e) =>
+                      setRemarks({ ...remarks, [stage.id]: e.target.value })
+                    }
                     className="border w-[40vh] border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-400"
                   />
                   <button
@@ -285,7 +354,9 @@ const StagePassing = ({ projectSetup }) => {
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
-                  <span className="text-green-600 font-medium">✅ Completed</span>
+                  <span className="text-green-600 font-medium">
+                    ✅ Completed
+                  </span>
                   <button
                     onClick={() => editStageRemark(stage.id, stage.remark)}
                     className="text-blue-600 text-sm font-medium hover:underline"
@@ -302,7 +373,6 @@ const StagePassing = ({ projectSetup }) => {
               </p>
             )}
 
-
             <div className="mt-4 ml-4 border-l-2 pl-4">
               <div className="flex justify-between items-center mb-2">
                 <h4 className="font-medium text-gray-700">Sub-Stages</h4>
@@ -315,7 +385,9 @@ const StagePassing = ({ projectSetup }) => {
               </div>
 
               {stage.subStages.length === 0 && (
-                <p className="text-gray-400 text-sm">No sub-stages added yet.</p>
+                <p className="text-gray-400 text-sm">
+                  No sub-stages added yet.
+                </p>
               )}
 
               {stage.subStages.map((sub) => (
@@ -338,7 +410,9 @@ const StagePassing = ({ projectSetup }) => {
                         type="text"
                         placeholder="Enter remark..."
                         value={remarks[sub.id] || ""}
-                        onChange={(e) => setRemarks({ ...remarks, [sub.id]: e.target.value })}
+                        onChange={(e) =>
+                          setRemarks({ ...remarks, [sub.id]: e.target.value })
+                        }
                         className="border border-gray-300 p-1 rounded focus:ring-2 focus:ring-blue-400"
                       />
                       <button
@@ -350,9 +424,13 @@ const StagePassing = ({ projectSetup }) => {
                     </div>
                   ) : (
                     <div className="flex items-center gap-3">
-                      <span className="text-green-600 text-sm font-medium">✅ Completed</span>
+                      <span className="text-green-600 text-sm font-medium">
+                        ✅ Completed
+                      </span>
                       <button
-                        onClick={() => editSubStageRemark(stage.id, sub.id, sub.remark)}
+                        onClick={() =>
+                          editSubStageRemark(stage.id, sub.id, sub.remark)
+                        }
                         className="text-blue-600 text-xs font-medium hover:underline"
                       >
                         ✏️ Edit
@@ -370,419 +448,3 @@ const StagePassing = ({ projectSetup }) => {
 };
 
 export default StagePassing;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

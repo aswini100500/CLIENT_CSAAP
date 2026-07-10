@@ -1,5 +1,5 @@
-import React from 'react';
-import { Construction } from 'lucide-react';
+import React from "react";
+import { Construction } from "lucide-react";
 
 const ComingSoon = ({ title }) => {
   return (
@@ -9,7 +9,8 @@ const ComingSoon = ({ title }) => {
       </div>
       <h1 className="text-3xl font-bold text-(--text-strong) mb-2">{title}</h1>
       <p className="text-(--text-faint) max-w-md">
-        We're working hard to bring you the <strong>{title}</strong> module. Stay tuned for updates!
+        We're working hard to bring you the <strong>{title}</strong> module.
+        Stay tuned for updates!
       </p>
     </div>
   );

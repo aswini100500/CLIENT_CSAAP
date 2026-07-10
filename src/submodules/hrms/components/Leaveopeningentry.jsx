@@ -46,7 +46,6 @@ export default function LeaveOpeningEntry() {
       emp.branch.toLowerCase().includes(search.toLowerCase()),
   );
 
-
   const handleAddBalance = () => {
     if (selectedEmployee && cl > 0) {
       const emp = employees.find((e) => e.name === selectedEmployee);
@@ -57,7 +56,6 @@ export default function LeaveOpeningEntry() {
           icon: "success",
           confirmButtonColor: "#16a34a",
         });
-
       }
     } else {
       Swal.fire({
@@ -91,15 +89,12 @@ export default function LeaveOpeningEntry() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-
       <div className="bg-blue-600 text-white px-4 py-3 flex items-center font-semibold text-lg">
         <span className="mr-2">📋</span> Leave Opening Entry
       </div>
 
-
       <div className="bg-white shadow p-4 rounded-md m-4 border">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
               Select Employee
@@ -118,7 +113,6 @@ export default function LeaveOpeningEntry() {
             </select>
           </div>
 
-
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
               Search
@@ -131,7 +125,6 @@ export default function LeaveOpeningEntry() {
               className="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
-
 
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -150,7 +143,6 @@ export default function LeaveOpeningEntry() {
             </select>
           </div>
 
-
           <div className="flex justify-end">
             <button
               onClick={handleClearAllBalance}
@@ -161,7 +153,6 @@ export default function LeaveOpeningEntry() {
           </div>
         </div>
       </div>
-
 
       <div className="bg-white shadow p-4 rounded-md m-4 border">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -191,7 +182,6 @@ export default function LeaveOpeningEntry() {
           </div>
         </div>
       </div>
-
 
       <div className="bg-white shadow rounded-md m-4 border overflow-x-auto">
         <table className="w-full text-sm border border-gray-200">

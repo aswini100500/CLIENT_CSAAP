@@ -19,7 +19,6 @@ export default function AdminRoutes() {
         <Route path="quotation-form" element={<QuotationForm />} />
         <Route path="brokers" element={<Brokers />} />
 
-
         <Route
           path="site-visits"
           element={<ComingSoon title="Site Visits" />}
@@ -32,7 +31,10 @@ export default function AdminRoutes() {
         />
         <Route path="customers" element={<CustomerList />} />
         <Route path="customers/:customerId" element={<ViewProfile />} />
-        <Route path="customers/:customerId/ledger" element={<CustomerLedger />} />
+        <Route
+          path="customers/:customerId/ledger"
+          element={<CustomerLedger />}
+        />
         <Route
           path="reports/leads"
           element={<ComingSoon title="Lead Reports" />}
@@ -41,7 +43,6 @@ export default function AdminRoutes() {
           path="reports/sales"
           element={<ComingSoon title="Sales Reports" />}
         />
-
 
         <Route path="/" element={<Navigate to="/crm/lead-list" replace />} />
         <Route path="*" element={<Navigate to="/crm/lead-list" replace />} />

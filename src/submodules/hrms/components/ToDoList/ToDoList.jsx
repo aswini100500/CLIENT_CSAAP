@@ -45,7 +45,9 @@ const StatCard = ({ label, value, icon, bg }) => (
           {value}
         </div>
       </div>
-      <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${bg}`}>
+      <div
+        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${bg}`}
+      >
         {icon}
       </div>
     </div>
@@ -269,11 +271,12 @@ const ToDoList = () => {
 
   return (
     <div className="crm-module-root w-full space-y-6">
-
       <div className="app-panel p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h3 className="app-heading">{visibleTitle}</h3>
-          <p className="app-subtitle mt-0.5">Plan, track, and finish your day-to-day checklist.</p>
+          <p className="app-subtitle mt-0.5">
+            Plan, track, and finish your day-to-day checklist.
+          </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -302,7 +305,6 @@ const ToDoList = () => {
         </div>
       </div>
 
-
       <div className="app-grid-4">
         <StatCard
           label="Total"
@@ -329,7 +331,6 @@ const ToDoList = () => {
           bg="bg-rose-50 border-rose-100"
         />
       </div>
-
 
       <div className="app-panel p-4">
         <div className="grid gap-3 lg:grid-cols-[1.5fr_repeat(4,minmax(0,1fr))]">
@@ -510,15 +511,12 @@ const ToDoList = () => {
                         key={todo.id}
                         className={`group transition-colors ${todo.status === "completed" ? "opacity-75" : ""}`}
                       >
-
                         <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-(--bg-subtle)/30 transition-colors">
-
                           <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-slate-100 to-slate-200/60 border border-slate-300/50 shadow-xs shadow-slate-100 select-none">
                             <span className="text-[10px] font-bold tabular-nums text-slate-600">
                               {serialIndex}
                             </span>
                           </div>
-
 
                           <button
                             type="button"
@@ -536,7 +534,6 @@ const ToDoList = () => {
                               <Circle className="h-4.5 w-4.5 text-gray-300 hover:text-(--brand)" />
                             )}
                           </button>
-
 
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
@@ -556,7 +553,6 @@ const ToDoList = () => {
                                 {todo.status}
                               </span>
                             </div>
-
 
                             <div className="mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5">
                               {hasDescription && (
@@ -608,7 +604,6 @@ const ToDoList = () => {
                             </div>
                           </div>
 
-
                           <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
                             <button
                               type="button"
@@ -637,10 +632,8 @@ const ToDoList = () => {
                           </div>
                         </div>
 
-
                         {hasSubtasks && isExpanded && (
                           <div className="mx-4 mb-3 overflow-hidden rounded-xl border border-(--border-soft) bg-(--bg-subtle)/20">
-
                             <div className="flex items-center justify-between border-b border-(--border-soft) px-3 py-1.5">
                               <span className="text-[10px] font-extrabold uppercase tracking-wider text-(--text-soft)">
                                 Subtasks
@@ -649,8 +642,8 @@ const ToDoList = () => {
                                 {
                                   todo.subtasks.filter((s) => s.is_completed)
                                     .length
-                                }
-                                {" "}of {todo.subtasks.length} done
+                                }{" "}
+                                of {todo.subtasks.length} done
                               </span>
                             </div>
 
@@ -680,9 +673,7 @@ const ToDoList = () => {
                                   <span
                                     className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold ${subtask.is_completed ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-500"}`}
                                   >
-                                    {subtask.is_completed
-                                      ? "Done"
-                                      : "Pending"}
+                                    {subtask.is_completed ? "Done" : "Pending"}
                                   </span>
                                 </button>
                               ))}
@@ -692,7 +683,6 @@ const ToDoList = () => {
                       </div>
                     );
                   }
-
 
                   return (
                     <div
@@ -769,9 +759,7 @@ const ToDoList = () => {
                               <button
                                 key={subtask.id || `${todo.id}-${index}`}
                                 type="button"
-                                onClick={() =>
-                                  handleSubtaskToggle(todo, index)
-                                }
+                                onClick={() => handleSubtaskToggle(todo, index)}
                                 className="flex w-full items-center justify-between rounded-lg border border-(--border-soft) bg-gray-50 px-2.5 py-1.5 text-left transition hover:border-(--brand) hover:bg-(--brand-soft) cursor-pointer"
                               >
                                 <div className="flex items-center gap-2 min-w-0">
@@ -836,7 +824,8 @@ const ToDoList = () => {
             No todos found
           </h3>
           <p className="mt-1.5 text-xs text-(--text-soft) max-w-sm mx-auto leading-relaxed">
-            Create your first item or adjust the filters to bring tasks back into view.
+            Create your first item or adjust the filters to bring tasks back
+            into view.
           </p>
           <button
             type="button"
@@ -877,9 +866,7 @@ const ToDoList = () => {
               <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-6 py-5">
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="block md:col-span-2">
-                    <span className="modal-label mb-1.5 block">
-                      Title
-                    </span>
+                    <span className="modal-label mb-1.5 block">Title</span>
                     <input
                       type="text"
                       value={form.title}
@@ -893,9 +880,7 @@ const ToDoList = () => {
                   </label>
 
                   <label className="block">
-                    <span className="modal-label mb-1.5 block">
-                      Priority
-                    </span>
+                    <span className="modal-label mb-1.5 block">Priority</span>
                     <select
                       value={form.priority}
                       onChange={(event) =>
@@ -914,9 +899,7 @@ const ToDoList = () => {
                   </label>
 
                   <label className="block">
-                    <span className="modal-label mb-1.5 block">
-                      Due Date
-                    </span>
+                    <span className="modal-label mb-1.5 block">Due Date</span>
                     <input
                       type="datetime-local"
                       value={form.due_date}

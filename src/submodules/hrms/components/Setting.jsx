@@ -1,228 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-    
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -255,11 +31,12 @@ const CompanySettings = () => {
     },
   });
 
-
   useEffect(() => {
     const fetchCompany = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/company`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_HRMS_BASE_URL}/api/company`,
+        );
         if (res.data && res.data.length > 0) {
           setCompany({
             ...res.data[0],
@@ -289,10 +66,12 @@ const CompanySettings = () => {
     }
   };
 
-
   const handleSubmit = async () => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_HRMS_BASE_URL}/api/company`, company);
+      const res = await axios.post(
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/company`,
+        company,
+      );
 
       if (res.data.success) {
         Swal.fire("Success", res.data.message, "success");
@@ -301,16 +80,21 @@ const CompanySettings = () => {
       }
     } catch (error) {
       console.error("Error saving company:", error);
-      Swal.fire("Error", "Something went wrong while saving company settings.", "error");
+      Swal.fire(
+        "Error",
+        "Something went wrong while saving company settings.",
+        "error",
+      );
     }
   };
 
   return (
     <div className="space-y-6">
-
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h3 className="text-lg font-medium text-gray-900">Basic Information</h3>
+          <h3 className="text-lg font-medium text-gray-900">
+            Basic Information
+          </h3>
           <button
             onClick={handleSubmit}
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
@@ -321,7 +105,9 @@ const CompanySettings = () => {
 
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Company Name *</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Company Name *
+            </label>
             <input
               type="text"
               value={company.companyName}
@@ -331,7 +117,9 @@ const CompanySettings = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Legal Name</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Legal Name
+            </label>
             <input
               type="text"
               value={company.legalName}
@@ -341,7 +129,9 @@ const CompanySettings = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Website URL</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Website URL
+            </label>
             <input
               type="url"
               value={company.companyUrl}
@@ -351,7 +141,9 @@ const CompanySettings = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Contact Email *</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Contact Email *
+            </label>
             <input
               type="email"
               value={company.contactEmail}
@@ -360,7 +152,9 @@ const CompanySettings = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">phoneNumber *</label>
+            <label className="block text-sm font-medium text-gray-700">
+              phoneNumber *
+            </label>
             <input
               type="tel"
               value={company.phoneNumber}
@@ -371,44 +165,61 @@ const CompanySettings = () => {
         </div>
       </div>
 
-
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">Headquarters Address</h3>
+          <h3 className="text-lg font-medium text-gray-900">
+            Headquarters Address
+          </h3>
         </div>
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">Street Address</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Street Address
+            </label>
             <input
               type="text"
               value={company.headquarters.street}
-              onChange={(e) => handleChange("headquarters.street", e.target.value)}
+              onChange={(e) =>
+                handleChange("headquarters.street", e.target.value)
+              }
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">City</label>
+            <label className="block text-sm font-medium text-gray-700">
+              City
+            </label>
             <input
               type="text"
               value={company.headquarters.city}
-              onChange={(e) => handleChange("headquarters.city", e.target.value)}
+              onChange={(e) =>
+                handleChange("headquarters.city", e.target.value)
+              }
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">State/Province</label>
+            <label className="block text-sm font-medium text-gray-700">
+              State/Province
+            </label>
             <input
               type="text"
               value={company.headquarters.state}
-              onChange={(e) => handleChange("headquarters.state", e.target.value)}
+              onChange={(e) =>
+                handleChange("headquarters.state", e.target.value)
+              }
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Country</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Country
+            </label>
             <select
               value={company.headquarters.country}
-              onChange={(e) => handleChange("headquarters.country", e.target.value)}
+              onChange={(e) =>
+                handleChange("headquarters.country", e.target.value)
+              }
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Select Country</option>
@@ -420,25 +231,32 @@ const CompanySettings = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">ZIP/Postal Code</label>
+            <label className="block text-sm font-medium text-gray-700">
+              ZIP/Postal Code
+            </label>
             <input
               type="text"
               value={company.headquarters.zipCode}
-              onChange={(e) => handleChange("headquarters.zipCode", e.target.value)}
+              onChange={(e) =>
+                handleChange("headquarters.zipCode", e.target.value)
+              }
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
         </div>
       </div>
 
-
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">Legal & Compliance</h3>
+          <h3 className="text-lg font-medium text-gray-900">
+            Legal & Compliance
+          </h3>
         </div>
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Tax ID / EIN</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Tax ID / EIN
+            </label>
             <input
               type="text"
               value={company.taxId}
@@ -447,16 +265,22 @@ const CompanySettings = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Business Registration #</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Business Registration #
+            </label>
             <input
               type="text"
               value={company.registrationNumber}
-              onChange={(e) => handleChange("registrationNumber", e.target.value)}
+              onChange={(e) =>
+                handleChange("registrationNumber", e.target.value)
+              }
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Legal Structure</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Legal Structure
+            </label>
             <select
               value={company.legalStructure}
               onChange={(e) => handleChange("legalStructure", e.target.value)}
@@ -470,7 +294,9 @@ const CompanySettings = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Industry</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Industry
+            </label>
             <select
               value={company.industry}
               onChange={(e) => handleChange("industry", e.target.value)}
@@ -491,4 +317,3 @@ const CompanySettings = () => {
 };
 
 export default CompanySettings;
-

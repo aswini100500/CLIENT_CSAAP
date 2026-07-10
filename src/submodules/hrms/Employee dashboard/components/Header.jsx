@@ -26,7 +26,6 @@ import parse from "html-react-parser";
 const renderRichText = (html) => {
   if (!html) return null;
 
-
   const cleanHtml = String(html).replace(/&nbsp;/g, " ");
 
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -61,10 +60,8 @@ const renderRichText = (html) => {
     },
   };
 
-
   return <>{parse(cleanHtml, options)}</>;
 };
-
 
 const NOTIF_CONFIG = {
   task: {
@@ -148,15 +145,14 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
   const employeeProfileId =
     user?.employeeProfileId || user?.employee_id || user?.id;
   const companySlug = user?.slug;
-  const resolvedCompanyId =
-    user?.company_id || company_id;
+  const resolvedCompanyId = user?.company_id || company_id;
   const roleLabel = String(user?.role || "").toLowerCase();
   const isAdminOrHR = roleLabel.includes("admin") || roleLabel.includes("hr");
 
-  const userName = user?.name || (user?.email ? user.email.split('@')[0] : "Employee");
+  const userName =
+    user?.name || (user?.email ? user.email.split("@")[0] : "Employee");
   const userRole = user?.role || "Employee";
   const userInitials = userName.substring(0, 2).toUpperCase();
-
 
   const [timer, setTimer] = useState("00:00:00");
   const [punchIn, setPunchIn] = useState(null);
@@ -167,14 +163,14 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
       timeZone: "Asia/Kolkata",
     }).format(new Date());
 
-
   useEffect(() => {
     const fetchAttendanceForTimer = async () => {
       if (!employeeProfileId) return;
 
       try {
         const baseUrl =
-          import.meta.env.VITE_HRMS_BASE_URL || "https://csaapnodeapi.csaap.com";
+          import.meta.env.VITE_HRMS_BASE_URL ||
+          "https://csaapnodeapi.csaap.com";
         const today = getTodayKey();
         const todayUrl = companySlug
           ? `${baseUrl}/api/attendance/${companySlug}?date=${today}`
@@ -244,7 +240,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     fetchAttendanceForTimer();
   }, [companySlug, employeeProfileId]);
 
-
   useEffect(() => {
     if (!punchIn) return;
 
@@ -267,7 +262,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
 
     return () => clearInterval(interval);
   }, [punchIn, leaveTime]);
-
 
   useEffect(() => {
     if (!employeeProfileId || !token) {
@@ -295,10 +289,8 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     fetchEmployee();
   }, [employeeProfileId, token]);
 
-
   const fetchNotifications = async () => {
     if (!employeeProfileId) {
-
       return;
     }
 
@@ -307,7 +299,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         import.meta.env.VITE_HRMS_BASE_URL || "https://csaapnodeapi.csaap.com";
       const apiBaseUrl =
         import.meta.env.VITE_ACCOUNTING_URL || "https://csaapnodeapi.csaap.com";
-
 
       const notifRes = await axios.get(
         `${baseUrl}/api/notifications/employee/${employeeProfileId}`,
@@ -350,7 +341,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         }
       }
 
-
       try {
         const leadRes = await axios.get(
           `${import.meta.env.VITE_CSAAP_URL}/api/tenant/lead-assignments/employee/${employeeProfileId}`,
@@ -374,7 +364,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         console.error("Error fetching leads for notifications:", leadErr);
       }
 
-
       const uniqueNotifs = Array.from(
         new Map(allNotifs.map((item) => [item.id, item])).values(),
       );
@@ -384,7 +373,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         const dateB = new Date(b.createdAt || 0);
         return dateB - dateA;
       });
-
 
       setNotifications(uniqueNotifs.slice(0, 30));
     } catch (err) {
@@ -397,11 +385,9 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
 
     fetchNotifications();
 
-
     const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
   }, [employeeProfileId, companySlug, isAdminOrHR, resolvedCompanyId]);
-
 
   useEffect(() => {
     if (!employeeProfileId) return;
@@ -417,7 +403,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
       setHasNewNotification(false);
     }
   }, [notifications, employeeProfileId]);
-
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -435,7 +420,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
     };
   }, [isNotificationOpen]);
 
-
   useEffect(() => {
     const handleNewNotification = () => {
       fetchNotifications();
@@ -446,7 +430,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
       window.removeEventListener("new-notification", handleNewNotification);
     };
   }, [employeeProfileId]);
-
 
   const timeAgo = (dateStr) => {
     const diff = Date.now() - new Date(dateStr).getTime();
@@ -468,7 +451,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
       className="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-4 sticky top-0 z-40 transition-all duration-300 shrink-0"
       style={{ fontFamily: "'Manrope', 'Inter', 'Segoe UI', sans-serif" }}
     >
-
       <div className="flex items-center gap-3 min-w-50">
         {!isSidebarCollapsed && (
           <button
@@ -481,7 +463,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
           </button>
         )}
       </div>
-
 
       <div className="flex items-center justify-center flex-1">
         <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-100 shadow-sm">
@@ -500,9 +481,7 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         </div>
       </div>
 
-
       <div className="flex items-center justify-end gap-3 min-w-50">
-
         <button
           onClick={() => setIsQRModalOpen(true)}
           className="w-9 h-9 rounded-xl hover:bg-slate-50 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-all duration-200 cursor-pointer"
@@ -510,7 +489,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
         >
           <QrCode className="w-4 h-4" />
         </button>
-
 
         <div className="relative notification-container">
           <button
@@ -520,7 +498,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
               setIsNotificationOpen(!isNotificationOpen);
 
               if (!isNotificationOpen && notifications.length > 0) {
-
                 const allIds = notifications.map((n) => n.id);
                 localStorage.setItem(
                   `seenNotifIds_${employeeProfileId}`,
@@ -543,16 +520,13 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
             )}
           </button>
 
-
           {isNotificationOpen && (
             <div
               className="absolute right-0 mt-2 w-96 bg-white rounded-2xl shadow-xl border border-gray-100 z-9999 overflow-hidden"
               style={{
-                animation:
-                  "fadeIn 0.2s ease-out, slideInFromTop 0.2s ease-out",
+                animation: "fadeIn 0.2s ease-out, slideInFromTop 0.2s ease-out",
               }}
             >
-
               <div className="p-3 border-b border-gray-50 bg-slate-50/80 flex items-center justify-between">
                 <h3 className="font-semibold text-slate-800 text-sm">
                   Notifications
@@ -564,7 +538,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                 )}
               </div>
 
-
               <div
                 className="max-h-96 overflow-y-auto"
                 style={{ scrollbarWidth: "thin" }}
@@ -573,7 +546,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                   notifications.map((notif) => {
                     const style = getNotifStyle(notif);
                     const Icon = style.icon;
-
 
                     const raw = localStorage.getItem(
                       `seenNotifIds_${employeeProfileId}`,
@@ -592,13 +564,11 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                         }`}
                       >
                         <div className="flex gap-3">
-
                           <div
                             className={`w-9 h-9 rounded-xl ${style.bg} flex items-center justify-center shrink-0 mt-0.5`}
                           >
                             <Icon className={`w-4 h-4 ${style.color}`} />
                           </div>
-
 
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-2 mb-1">
@@ -618,21 +588,19 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                               {renderRichText(notif.message)}
                             </p>
 
-
-                            {notif.type === "task" &&
-                              notif.meta?.priority && (
-                                <span
-                                  className={`inline-block mt-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                                    notif.meta.priority === "High"
-                                      ? "bg-rose-50 text-rose-600"
-                                      : notif.meta.priority === "Medium"
-                                        ? "bg-amber-50 text-amber-600"
-                                        : "bg-slate-100 text-slate-500"
-                                  }`}
-                                >
-                                  {notif.meta.priority} Priority
-                                </span>
-                              )}
+                            {notif.type === "task" && notif.meta?.priority && (
+                              <span
+                                className={`inline-block mt-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                                  notif.meta.priority === "High"
+                                    ? "bg-rose-50 text-rose-600"
+                                    : notif.meta.priority === "Medium"
+                                      ? "bg-amber-50 text-amber-600"
+                                      : "bg-slate-100 text-slate-500"
+                                }`}
+                              >
+                                {notif.meta.priority} Priority
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -658,17 +626,14 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
 
         <div className="w-px h-7 bg-slate-200 mx-1 shrink-0" />
 
-
         <button
           onClick={() => navigate("/employee/profile")}
           className="flex items-center gap-2.5 cursor-pointer py-1.5 px-2 rounded-xl hover:bg-slate-50 transition-colors duration-200 group text-left outline-none"
           title="My Profile"
         >
-
           <div className="w-8 h-8 rounded-xl bg-linear-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shadow-green-200">
             {userInitials}
           </div>
-          
 
           <div className="hidden sm:block text-left">
             <p className="text-[13px] font-semibold text-slate-700 capitalize leading-tight">
@@ -680,7 +645,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
           </div>
         </button>
       </div>
-
 
       {selectedNotif && (
         <div
@@ -695,7 +659,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
               animation: "zoomIn 0.3s ease-out",
             }}
           >
-
             <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-slate-50/50">
               <div className="flex items-center gap-3">
                 <div
@@ -724,7 +687,6 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                 />
               </button>
             </div>
-
 
             <div
               className="p-8 overflow-y-auto max-h-[60vh]"
@@ -760,19 +722,14 @@ const Header = ({ isSidebarCollapsed, toggleSidebar }) => {
                   </div>
                 )}
             </div>
-
-
-
           </div>
         </div>
       )}
-
 
       <AttendanceQRModal
         isOpen={isQRModalOpen}
         onClose={() => setIsQRModalOpen(false)}
       />
-
 
       <style jsx>{`
         @keyframes fadeIn {

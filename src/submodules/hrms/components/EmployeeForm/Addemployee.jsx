@@ -36,10 +36,8 @@ import { TABS } from "./constants";
 import useEmployeeForm from "./useEmployeeForm";
 import React from "react";
 
-const 
-EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
+const EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
   const {
-
     activeTab,
     setActiveTab,
     showPassword,
@@ -80,26 +78,21 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
     handleConfirmEmployee,
     handleSubmit,
 
-
     addEducation,
     removeEducation,
     updateEducation,
-
 
     addExperience,
     removeExperience,
     updateExperience,
 
-
     addOtherComponent,
     updateOtherComponent,
     removeOtherComponent,
 
-
     currentTabIndex,
     goNext,
     goPrev,
-
 
     isSessionExpired,
     navigate,
@@ -153,7 +146,9 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
               {isEditMode ? "Edit Employee" : "Add New Employee"}
             </h1>
             <p className="app-subtitle text-xs text-(--text-faint) mt-1 mx-auto">
-              {isEditMode ? "Update employee profile records, settings and leave configurations" : "Create a new employee profile in the system database"}
+              {isEditMode
+                ? "Update employee profile records, settings and leave configurations"
+                : "Create a new employee profile in the system database"}
             </p>
           </div>
 
@@ -163,7 +158,6 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
             </div>
           </div>
         </div>
-
 
         <div className="mb-6 border-b border-(--border-soft) pb-3">
           <div className="flex items-center justify-start md:justify-center gap-2 overflow-x-auto scrollbar-hide">
@@ -209,11 +203,12 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
         {isInitialLoading ? (
           <div className="app-panel border border-(--border-soft) p-10 text-center text-(--text-soft) flex flex-col items-center justify-center gap-3">
             <Loader2 className="animate-spin size-8 text-(--brand)" />
-            <span className="font-semibold text-sm">Loading employee details...</span>
+            <span className="font-semibold text-sm">
+              Loading employee details...
+            </span>
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
-
             <div className="mb-6">
               {activeTab === "basic" && (
                 <BasicInfoTab
@@ -302,9 +297,7 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
               />
             )}
 
-
             <div className="flex items-center justify-between pt-6 border-t border-(--border-soft)">
-
               <div>
                 {currentTabIndex > 0 && (
                   <button
@@ -321,7 +314,6 @@ EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
                   </button>
                 )}
               </div>
-
 
               <div className="flex gap-3">
                 {isEditMode ? (

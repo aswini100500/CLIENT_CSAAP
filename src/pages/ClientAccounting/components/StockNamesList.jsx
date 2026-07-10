@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useCompany } from '../context/CompanyContext';
-import Swal from 'sweetalert2';
-import * as XLSX from 'xlsx';
-import { FileSpreadsheet, Printer, Search, Package, RefreshCw } from 'lucide-react';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useCompany } from "../context/CompanyContext";
+import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
+import {
+  FileSpreadsheet,
+  Printer,
+  Search,
+  Package,
+  RefreshCw,
+} from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import useAuth from "../../../hooks/useAuth";
 const StockNamesList = () => {
   const { user } = useAuth();
   const [stockNames, setStockNames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [showEmployeeActivity, setShowEmployeeActivity] = useState(false);
   const { companyId, employees } = useCompany();
 
   const loggedInRole = user?.role?.toLowerCase() || "admin";
   const loggedInEmployeeId = user?.employee_id || null;
-  const isEmployeeDashboard = loggedInRole === 'employee';
+  const isEmployeeDashboard = loggedInRole === "employee";
 
   const getEmployeeName = (id) => {
-    const emp = employees?.find(e => e.id == id);
+    const emp = employees?.find((e) => e.id == id);
     return emp ? emp.name : "Unknown Employee";
   };
 
@@ -33,16 +39,16 @@ const StockNamesList = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockNames/${companyId}`
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockNames/${companyId}`,
       );
-      if (response.data.message === 'Stock names fetched successfully') {
+      if (response.data.message === "Stock names fetched successfully") {
         setStockNames(response.data.data);
       } else {
-        throw new Error('Failed to fetch stock names');
+        throw new Error("Failed to fetch stock names");
       }
     } catch (err) {
       setError(err.message);
-      Swal.fire('Error', 'Failed to load stock names: ' + err.message, 'error');
+      Swal.fire("Error", "Failed to load stock names: " + err.message, "error");
     } finally {
       setLoading(false);
     }
@@ -52,7 +58,8 @@ const StockNamesList = () => {
     if (isEmployeeDashboard) {
       if (stock.employee_id != loggedInEmployeeId) return false;
     } else {
-      const isCreatedByEmployee = stock.employee_id && (stock.role?.toLowerCase() === 'employee');
+      const isCreatedByEmployee =
+        stock.employee_id && stock.role?.toLowerCase() === "employee";
       if (showEmployeeActivity) {
         if (!isCreatedByEmployee) return false;
       } else {
@@ -65,44 +72,31 @@ const StockNamesList = () => {
   const handleExportExcel = () => {
     if (stockNames.length === 0) return;
     const exportData = stockNames.map((stock, index) => ({
-      'S.No': index + 1,
-      'Stock Name': stock.name,
+      "S.No": index + 1,
+      "Stock Name": stock.name,
     }));
     const ws = XLSX.utils.json_to_sheet(exportData);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'StockNames');
-    XLSX.writeFile(wb, 'Stock_Names_Report.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, "StockNames");
+    XLSX.writeFile(wb, "Stock_Names_Report.xlsx");
   };
 
-
   const handleExportPDF = (isPrint = false) => {
-
     const doc = new jsPDF();
 
     doc.setFontSize(18);
 
-    doc.text(
-      'Stock Names Report',
-      14,
-      18
-    );
+    doc.text("Stock Names Report", 14, 18);
 
-    const tableData =
-      filteredNames.map(
-        (stock, index) => ([
-          index + 1,
-          stock.name,
-        ])
-      );
+    const tableData = filteredNames.map((stock, index) => [
+      index + 1,
+      stock.name,
+    ]);
 
     autoTable(doc, {
-
       startY: 28,
 
-      head: [[
-        'S.No',
-        'Stock Name',
-      ]],
+      head: [["S.No", "Stock Name"]],
 
       body: tableData,
 
@@ -115,52 +109,35 @@ const StockNamesList = () => {
       },
     });
 
-
-
     if (isPrint) {
+      const blobURL = doc.output("bloburl");
 
-      const blobURL =
-        doc.output('bloburl');
-
-      const printWindow =
-        window.open(blobURL);
+      const printWindow = window.open(blobURL);
 
       printWindow.onload = () => {
-
         printWindow.focus();
 
         printWindow.print();
       };
-
-    }
-
-
-
-    else {
-
-      doc.save(
-        'Stock_Names_Report.pdf'
-      );
+    } else {
+      doc.save("Stock_Names_Report.pdf");
     }
   };
 
-
   const handlePrint = () => {
-
     handleExportPDF(true);
-
   };
 
   const getInitialColor = (name) => {
     const colors = [
-      'bg-blue-100 text-blue-700',
-      'bg-emerald-100 text-emerald-700',
-      'bg-violet-100 text-violet-700',
-      'bg-amber-100 text-amber-700',
-      'bg-rose-100 text-rose-700',
-      'bg-cyan-100 text-cyan-700',
-      'bg-orange-100 text-orange-700',
-      'bg-teal-100 text-teal-700',
+      "bg-blue-100 text-blue-700",
+      "bg-emerald-100 text-emerald-700",
+      "bg-violet-100 text-violet-700",
+      "bg-amber-100 text-amber-700",
+      "bg-rose-100 text-rose-700",
+      "bg-cyan-100 text-cyan-700",
+      "bg-orange-100 text-orange-700",
+      "bg-teal-100 text-teal-700",
     ];
     const index = name.charCodeAt(0) % colors.length;
     return colors[index];
@@ -182,7 +159,9 @@ const StockNamesList = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Package className="mx-auto mb-3 text-gray-300" size={40} />
-          <p className="text-gray-700 font-medium">Failed to load stock names</p>
+          <p className="text-gray-700 font-medium">
+            Failed to load stock names
+          </p>
           <p className="text-gray-400 text-sm mt-1">{error}</p>
           <button
             onClick={fetchStockNames}
@@ -205,16 +184,18 @@ const StockNamesList = () => {
 
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-2xl mx-auto">
-
-
           <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-lg bg-blue-100 flex items-center justify-center">
                 <Package className="text-blue-600" size={22} />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-gray-800">Stock Names</h1>
-                <p className="text-xs text-gray-400 mt-0.5">All stock item names</p>
+                <h1 className="text-lg font-semibold text-gray-800">
+                  Stock Names
+                </h1>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  All stock item names
+                </p>
               </div>
             </div>
             <div className="flex gap-2 no-print">
@@ -226,14 +207,14 @@ const StockNamesList = () => {
               </button>
               {!isEmployeeDashboard && (
                 <button
-                  onClick={() => setShowEmployeeActivity(prev => !prev)}
+                  onClick={() => setShowEmployeeActivity((prev) => !prev)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 text-sm border rounded-lg transition-colors ${
                     showEmployeeActivity
                       ? "bg-slate-800 text-white border-slate-800"
                       : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <Package size={14} /> 
+                  <Package size={14} />
                   {showEmployeeActivity ? "Back to Stock" : "Employee Activity"}
                 </button>
               )}
@@ -244,11 +225,6 @@ const StockNamesList = () => {
                 <Printer size={14} /> Print
               </button>
               <div className="flex gap-2 no-print">
-
-
-
-
-
                 <button
                   onClick={handleExportExcel}
                   className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
@@ -264,26 +240,30 @@ const StockNamesList = () => {
                   <Printer size={14} />
                   PDF
                 </button>
-
               </div>
             </div>
           </div>
 
-
           <div className="grid grid-cols-2 gap-3 mb-5">
             <div className="bg-gray-100 rounded-lg px-4 py-3">
               <p className="text-xs text-gray-500 mb-1">Total items</p>
-              <p className="text-2xl font-semibold text-gray-800">{stockNames.length}</p>
+              <p className="text-2xl font-semibold text-gray-800">
+                {stockNames.length}
+              </p>
             </div>
             <div className="bg-gray-100 rounded-lg px-4 py-3">
               <p className="text-xs text-gray-500 mb-1">Showing</p>
-              <p className="text-2xl font-semibold text-blue-600">{filteredNames.length}</p>
+              <p className="text-2xl font-semibold text-blue-600">
+                {filteredNames.length}
+              </p>
             </div>
           </div>
 
-
           <div className="relative mb-4 no-print">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={15}
+            />
             <input
               type="text"
               placeholder="Search stock names..."
@@ -293,10 +273,11 @@ const StockNamesList = () => {
             />
           </div>
 
-
           <div className="bg-white border border-gray-100 rounded-xl overflow-hidden">
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <span className="text-sm font-medium text-gray-700">Stock items</span>
+              <span className="text-sm font-medium text-gray-700">
+                Stock items
+              </span>
               <span className="text-xs bg-blue-100 text-blue-600 font-medium px-2.5 py-0.5 rounded-full">
                 {filteredNames.length} shown
               </span>
@@ -316,8 +297,13 @@ const StockNamesList = () => {
               <tbody className="divide-y divide-gray-50">
                 {filteredNames.length > 0 ? (
                   filteredNames.map((stock, index) => (
-                    <tr key={stock.id} className="hover:bg-blue-50/40 transition-colors">
-                      <td className="px-4 py-3 text-sm text-gray-400">{index + 1}</td>
+                    <tr
+                      key={stock.id}
+                      className="hover:bg-blue-50/40 transition-colors"
+                    >
+                      <td className="px-4 py-3 text-sm text-gray-400">
+                        {index + 1}
+                      </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2.5">
                           <div
@@ -327,11 +313,13 @@ const StockNamesList = () => {
                           </div>
                           <span className="text-sm font-medium text-gray-800">
                             {stock.name}
-                            {stock.employee_id && stock.role?.toLowerCase() === 'employee' && (
-                              <span className="ml-2 text-xs text-gray-500 font-normal">
-                                (Created by: {getEmployeeName(stock.employee_id)})
-                              </span>
-                            )}
+                            {stock.employee_id &&
+                              stock.role?.toLowerCase() === "employee" && (
+                                <span className="ml-2 text-xs text-gray-500 font-normal">
+                                  (Created by:{" "}
+                                  {getEmployeeName(stock.employee_id)})
+                                </span>
+                              )}
                           </span>
                         </div>
                       </td>
@@ -340,10 +328,17 @@ const StockNamesList = () => {
                 ) : (
                   <tr>
                     <td colSpan="2" className="px-4 py-12 text-center">
-                      <Package className="mx-auto mb-2 text-gray-300" size={32} />
-                      <p className="text-sm text-gray-400 font-medium">No stock names found</p>
+                      <Package
+                        className="mx-auto mb-2 text-gray-300"
+                        size={32}
+                      />
+                      <p className="text-sm text-gray-400 font-medium">
+                        No stock names found
+                      </p>
                       <p className="text-xs text-gray-300 mt-1">
-                        {searchTerm ? 'Try a different search term' : 'Add stock items to see them here'}
+                        {searchTerm
+                          ? "Try a different search term"
+                          : "Add stock items to see them here"}
                       </p>
                     </td>
                   </tr>
@@ -351,7 +346,6 @@ const StockNamesList = () => {
               </tbody>
             </table>
           </div>
-
         </div>
       </div>
     </>

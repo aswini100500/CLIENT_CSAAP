@@ -1,287 +1,297 @@
-
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-import { 
-  Search, 
-  Filter, 
-  AlertCircle, 
-  CheckCircle, 
-  Clock, 
+import {
+  Search,
+  Filter,
+  AlertCircle,
+  CheckCircle,
+  Clock,
   Eye,
   MessageSquare,
   User,
   Calendar,
   ChevronDown,
   XCircle,
-  RefreshCw
-} from 'lucide-react';
-import useAuth from '../../../hooks/useAuth';
-import { usePermission } from '../../../hooks/usePermission';
+  RefreshCw,
+} from "lucide-react";
+import useAuth from "../../../hooks/useAuth";
+import { usePermission } from "../../../hooks/usePermission";
 
 const ComplaintsManagement = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [showResolveModal, setShowResolveModal] = useState(false);
-  const [resolutionNote, setResolutionNote] = useState('');
+  const [resolutionNote, setResolutionNote] = useState("");
   const [complaints, setComplaints] = useState([]);
-const [loading, setLoading] = useState(true);
-const [employees, setEmployees] = useState([]);
-const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [employees, setEmployees] = useState([]);
+  const [error, setError] = useState(null);
   const { user } = useAuth();
   const { has } = usePermission();
 
   useEffect(() => {
-  const fetchAllData = async () => {
-    try {
-      setLoading(true);
+    const fetchAllData = async () => {
+      try {
+        setLoading(true);
 
-      const token = user?.token;
+        const token = user?.token;
 
-      const [empRes, complaintRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get(
-          user?.slug 
+        const [empRes, complaintRes] = await Promise.all([
+          axios.get(
+            `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },
+          ),
+          axios.get(
+            user?.slug
+              ? `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/company/${user.slug}`
+              : `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/`,
+          ),
+        ]);
+
+        const employeesData = empRes.data.data || empRes.data || [];
+
+        const formattedData = complaintRes.data.map((item) => {
+          const employee = employeesData.find(
+            (emp) => String(emp.id) === String(item.employee_id),
+          );
+
+          return {
+            id: item.id,
+            employeeName: employee?.name || "Unknown Employee",
+            employeeId: item.employee_id?.toString() || "N/A",
+            subject: item.complain || "No Subject",
+            department: employee?.department || "N/A",
+            description: item.complain,
+            status: item.status || "Pending",
+            dateSubmitted: new Date(item.date).toLocaleDateString("en-GB"),
+            attachments: Array.isArray(item.attachments)
+              ? item.attachments
+              : [],
+          };
+        });
+
+        setEmployees(employeesData);
+        setComplaints(formattedData);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Failed to load data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user?.token) {
+      fetchAllData();
+    }
+  }, [user]);
+  useEffect(() => {
+    const fetchComplaints = async () => {
+      try {
+        setLoading(true);
+
+        const res = await axios.get(
+          user?.slug
             ? `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/company/${user.slug}`
-            : `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/`
-        ),
-      ]);
-
-      const employeesData = empRes.data.data || empRes.data || [];
-
-      const formattedData = complaintRes.data.map((item) => {
-        const employee = employeesData.find(
-          (emp) => String(emp.id) === String(item.employee_id)
+            : `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/`,
         );
 
-        return {
-          id: item.id,
-          employeeName: employee?.name || "Unknown Employee",
-          employeeId: item.employee_id?.toString() || "N/A",
-          subject: item.complain || "No Subject",
-          department: employee?.department || "N/A",
-          description: item.complain,
-          status: item.status || "Pending",
-          dateSubmitted: new Date(item.date).toLocaleDateString("en-GB"),
-          attachments: Array.isArray(item.attachments) ? item.attachments : [],
-        };
-      });
+        const formattedData = res.data.map((item) => {
+          const employee = employees.find(
+            (emp) => String(emp.id) === String(item.employee_id),
+          );
 
-      setEmployees(employeesData);
-      setComplaints(formattedData);
-      setError(null);
+          return {
+            id: item.id,
+            employeeName: employee?.name,
+            employeeId: item.employee_id?.toString() || "N/A",
+            subject: item.complain || "No Subject",
+            department: employee?.department || "N/A",
+            description: item.complain,
+            status: item.status || "Pending",
+            dateSubmitted: new Date(item.date).toLocaleDateString("en-GB"),
+            attachments: Array.isArray(item.attachments)
+              ? item.attachments
+              : [],
+          };
+        });
 
-    } catch (err) {
-      console.error("Error fetching data:", err);
-      setError("Failed to load data");
-    } finally {
-      setLoading(false);
-    }
-  };
+        setComplaints(formattedData);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching complaints:", err);
+        setError("Failed to load complaints");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (user?.token) {
-    fetchAllData();
-  }
-}, [user]);
-useEffect(() => {
+    fetchComplaints();
+  }, [employees]);
 
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const token = user?.token;
 
-  const fetchComplaints = async () => {
-    try {
-      setLoading(true);
-
-      const res = await axios.get(
-        user?.slug 
-          ? `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/company/${user.slug}`
-          : `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/`
-      );
-
-      const formattedData = res.data.map((item) => {
-        const employee = employees.find(
-          (emp) => String(emp.id) === String(item.employee_id)
-        );
-
-        return {
-          id: item.id,
-          employeeName: employee?.name ,
-          employeeId: item.employee_id?.toString() || "N/A",
-          subject: item.complain || "No Subject",
-          department: employee?.department || "N/A",
-          description: item.complain,
-          status: item.status || "Pending",
-          dateSubmitted: new Date(item.date).toLocaleDateString("en-GB"),
-          attachments: Array.isArray(item.attachments) ? item.attachments : [],
-        };
-      });
-
-      setComplaints(formattedData);
-      setError(null);
-    } catch (err) {
-      console.error("Error fetching complaints:", err);
-      setError("Failed to load complaints");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchComplaints();
-}, [employees]);
-
-useEffect(() => {
-  const fetchEmployees = async () => {
-    try {
-      const token = user?.token;
-
-      const res = await axios.get(
-        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const res = await axios.get(
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        }
-      );
+        );
 
-      setEmployees(res.data);
-    } catch (err) {
-      console.error("Error fetching employees:", err);
+        setEmployees(res.data);
+      } catch (err) {
+        console.error("Error fetching employees:", err);
+      }
+    };
+
+    if (user?.token) {
+      fetchEmployees();
     }
-  };
+  }, [user]);
 
-  if (user?.token) {
-    fetchEmployees();
+  {
+    loading && (
+      <div className="text-center py-10">
+        <RefreshCw className="w-6 h-6 animate-spin mx-auto text-blue-600" />
+        <p className="text-gray-600 mt-2">Loading complaints...</p>
+      </div>
+    );
   }
-}, [user]);
 
-{loading && (
-  <div className="text-center py-10">
-    <RefreshCw className="w-6 h-6 animate-spin mx-auto text-blue-600" />
-    <p className="text-gray-600 mt-2">Loading complaints...</p>
-  </div>
-)}
+  {
+    error && <div className="text-center py-10 text-red-600">{error}</div>;
+  }
 
-{error && (
-  <div className="text-center py-10 text-red-600">
-    {error}
-  </div>
-)}
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      Pending: {
+        color: "bg-yellow-100 text-yellow-800",
+        icon: Clock,
+        text: "Pending",
+      },
+      Approved: {
+        color: "bg-green-100 text-green-800",
+        icon: CheckCircle,
+        text: "Approved",
+      },
+      Rejected: {
+        color: "bg-red-100 text-red-800",
+        icon: XCircle,
+        text: "Rejected",
+      },
+    };
 
+    const config = statusConfig[status] || statusConfig.Pending;
+    const Icon = config.icon;
 
-
- const getStatusBadge = (status) => {
-  const statusConfig = {
-    Pending: {
-      color: "bg-yellow-100 text-yellow-800",
-      icon: Clock,
-      text: "Pending",
-    },
-    Approved: {
-      color: "bg-green-100 text-green-800",
-      icon: CheckCircle,
-      text: "Approved",
-    },
-    Rejected: {
-      color: "bg-red-100 text-red-800",
-      icon: XCircle,
-      text: "Rejected",
-    },
+    return (
+      <span
+        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}
+      >
+        <Icon className="w-3 h-3 mr-1" />
+        {config.text}
+      </span>
+    );
   };
-
-  const config = statusConfig[status] || statusConfig.Pending;
-  const Icon = config.icon;
-
-  return (
-    <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}
-    >
-      <Icon className="w-3 h-3 mr-1" />
-      {config.text}
-    </span>
-  );
-};
   const getPriorityBadge = (priority) => {
     const priorityColors = {
-      High: 'bg-red-100 text-red-800',
-      Medium: 'bg-yellow-100 text-yellow-800',
-      Low: 'bg-green-100 text-green-800'
+      High: "bg-red-100 text-red-800",
+      Medium: "bg-yellow-100 text-yellow-800",
+      Low: "bg-green-100 text-green-800",
     };
-    
+
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${priorityColors[priority]}`}>
+      <span
+        className={`px-2 py-1 rounded-full text-xs font-medium ${priorityColors[priority]}`}
+      >
         {priority}
       </span>
     );
   };
 
-const filteredComplaints = complaints.filter((complaint) => {
-  const employeeName = complaint.employeeName || "";
-  const subject = complaint.subject || "";
-  const employeeId = complaint.employeeId?.toString() || "";
-  const id = complaint.id?.toString() || "";
+  const filteredComplaints = complaints.filter((complaint) => {
+    const employeeName = complaint.employeeName || "";
+    const subject = complaint.subject || "";
+    const employeeId = complaint.employeeId?.toString() || "";
+    const id = complaint.id?.toString() || "";
 
-  const search = searchTerm.toLowerCase();
+    const search = searchTerm.toLowerCase();
 
-  const matchesSearch =
-    employeeName.toLowerCase().includes(search) ||
-    subject.toLowerCase().includes(search) ||
-    employeeId.toLowerCase().includes(search) ||
-    id.toLowerCase().includes(search);
+    const matchesSearch =
+      employeeName.toLowerCase().includes(search) ||
+      subject.toLowerCase().includes(search) ||
+      employeeId.toLowerCase().includes(search) ||
+      id.toLowerCase().includes(search);
 
-  const matchesStatus =
-    statusFilter === "all" || complaint.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "all" || complaint.status === statusFilter;
 
-  return matchesSearch && matchesStatus;
-});
+    return matchesSearch && matchesStatus;
+  });
 
   const handleResolveComplaint = (complaintId) => {
     if (!has("hrms.message.complaints.resolve")) {
-      Swal.fire("Access Denied", "You do not have permission to resolve complaints.", "error");
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to resolve complaints.",
+        "error",
+      );
       return;
     }
 
-    setComplaints(complaints.map(c => 
-      c.id === complaintId 
-        ? { ...c, status: 'resolved', lastUpdated: new Date().toISOString().split('T')[0] }
-        : c
-    ));
+    setComplaints(
+      complaints.map((c) =>
+        c.id === complaintId
+          ? {
+              ...c,
+              status: "resolved",
+              lastUpdated: new Date().toISOString().split("T")[0],
+            }
+          : c,
+      ),
+    );
     setShowResolveModal(false);
-    setResolutionNote('');
+    setResolutionNote("");
     setSelectedComplaint(null);
   };
 
-const handleUpdateStatus = async (complaintId, newStatus) => {
-  if (!has("hrms.message.complaints.resolve")) {
-    Swal.fire("Access Denied", "You do not have permission to resolve complaints.", "error");
-    return;
-  }
-  try {
-    await axios.put(
-      `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/status/${complaintId}`,
-      { status: newStatus }
-    );
+  const handleUpdateStatus = async (complaintId, newStatus) => {
+    if (!has("hrms.message.complaints.resolve")) {
+      Swal.fire(
+        "Access Denied",
+        "You do not have permission to resolve complaints.",
+        "error",
+      );
+      return;
+    }
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee-complaints/status/${complaintId}`,
+        { status: newStatus },
+      );
 
-    setComplaints((prev) =>
-      prev.map((c) =>
-        c.id === complaintId
-          ? { ...c, status: newStatus }
-          : c
-      )
-    );
-
-  } catch (error) {
-    console.error("Error updating status:", error);
-    alert("Failed to update status");
-  }
-};
+      setComplaints((prev) =>
+        prev.map((c) =>
+          c.id === complaintId ? { ...c, status: newStatus } : c,
+        ),
+      );
+    } catch (error) {
+      console.error("Error updating status:", error);
+      alert("Failed to update status");
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      
-
-
-
       <div className="bg-white rounded-lg shadow p-4 mb-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
           <div className="flex items-center space-x-4">
@@ -295,29 +305,29 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            
+
             <div className="relative">
               <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-<select
-  className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-  value={statusFilter}
-  onChange={(e) => setStatusFilter(e.target.value)}
->
-  <option value="all">All</option>
-  <option value="Pending">Pending</option>
-  <option value="Approved">Approved</option>
-  <option value="Rejected">Rejected</option>
-</select>
+              <select
+                className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option value="all">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+              </select>
               <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             </div>
           </div>
-          
+
           <div className="text-sm text-gray-500">
-            Showing {filteredComplaints.length} of {complaints.length} complaints
+            Showing {filteredComplaints.length} of {complaints.length}{" "}
+            complaints
           </div>
         </div>
       </div>
-
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
@@ -326,14 +336,13 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Complaint ID
               </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Employee
               </th>
-            
-           
+
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
@@ -347,29 +356,35 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
             {filteredComplaints.map((complaint) => (
               <tr key={complaint.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm font-medium text-blue-600">{complaint.id}</span>
+                  <span className="text-sm font-medium text-blue-600">
+                    {complaint.id}
+                  </span>
                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 text-gray-400 mr-1" />
-                    <span className="text-sm text-gray-500">{complaint.dateSubmitted}</span>
+                    <span className="text-sm text-gray-500">
+                      {complaint.dateSubmitted}
+                    </span>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <User className="w-4 h-4 text-gray-400 mr-2" />
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{complaint.employeeName}</div>
-                      <div className="text-xs text-gray-500">{complaint.employeeId}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {complaint.employeeName}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {complaint.employeeId}
+                      </div>
                     </div>
                   </div>
                 </td>
-              
-             
 
                 <td className="px-6 py-4 whitespace-nowrap">
                   {getStatusBadge(complaint.status)}
-                  {complaint.status === 'unresolved' && (
+                  {complaint.status === "unresolved" && (
                     <button
                       onClick={() => {
                         setSelectedComplaint(complaint);
@@ -392,66 +407,68 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
                     >
                       <Eye className="w-5 h-5" />
                     </button>
-                    {has("hrms.message.complaints.resolve") && complaint.status !== 'Approved' && (
-                      <button
-                        onClick={() => {
-                          Swal.fire({
-                            title: "Are you sure?",
-                            text: "Change status to Approved?",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#10B981",
-                            cancelButtonColor: "#3b82f6",
-                            confirmButtonText: "Yes, Approve!"
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              handleUpdateStatus(complaint.id, "Approved");
-                              Swal.fire({
-                                title: "Approved!",
-                                text: "Complaint has been approved.",
-                                icon: "success",
-                                timer: 1500,
-                                showConfirmButton: false
-                              });
-                            }
-                          });
-                        }}
-                        className="text-green-600 hover:text-green-800"
-                        title="Approve"
-                      >
-                        <CheckCircle className="w-5 h-5" />
-                      </button>
-                    )}
-                    {has("hrms.message.complaints.resolve") && complaint.status !== 'Rejected' && (
-                      <button
-                        onClick={() => {
-                          Swal.fire({
-                            title: "Are you sure?",
-                            text: "Change status to Rejected?",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#ef4444",
-                            cancelButtonColor: "#3b82f6",
-                            confirmButtonText: "Yes, Reject!"
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              handleUpdateStatus(complaint.id, "Rejected");
-                              Swal.fire({
-                                title: "Rejected!",
-                                text: "Complaint has been rejected.",
-                                icon: "success",
-                                timer: 1500,
-                                showConfirmButton: false
-                              });
-                            }
-                          });
-                        }}
-                        className="text-red-600 hover:text-red-800"
-                        title="Reject"
-                      >
-                        <XCircle className="w-5 h-5" />
-                      </button>
-                    )}
+                    {has("hrms.message.complaints.resolve") &&
+                      complaint.status !== "Approved" && (
+                        <button
+                          onClick={() => {
+                            Swal.fire({
+                              title: "Are you sure?",
+                              text: "Change status to Approved?",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#10B981",
+                              cancelButtonColor: "#3b82f6",
+                              confirmButtonText: "Yes, Approve!",
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                handleUpdateStatus(complaint.id, "Approved");
+                                Swal.fire({
+                                  title: "Approved!",
+                                  text: "Complaint has been approved.",
+                                  icon: "success",
+                                  timer: 1500,
+                                  showConfirmButton: false,
+                                });
+                              }
+                            });
+                          }}
+                          className="text-green-600 hover:text-green-800"
+                          title="Approve"
+                        >
+                          <CheckCircle className="w-5 h-5" />
+                        </button>
+                      )}
+                    {has("hrms.message.complaints.resolve") &&
+                      complaint.status !== "Rejected" && (
+                        <button
+                          onClick={() => {
+                            Swal.fire({
+                              title: "Are you sure?",
+                              text: "Change status to Rejected?",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#ef4444",
+                              cancelButtonColor: "#3b82f6",
+                              confirmButtonText: "Yes, Reject!",
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                handleUpdateStatus(complaint.id, "Rejected");
+                                Swal.fire({
+                                  title: "Rejected!",
+                                  text: "Complaint has been rejected.",
+                                  icon: "success",
+                                  timer: 1500,
+                                  showConfirmButton: false,
+                                });
+                              }
+                            });
+                          }}
+                          className="text-red-600 hover:text-red-800"
+                          title="Reject"
+                        >
+                          <XCircle className="w-5 h-5" />
+                        </button>
+                      )}
                   </div>
                 </td>
               </tr>
@@ -462,21 +479,25 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
         {filteredComplaints.length === 0 && (
           <div className="text-center py-12">
             <AlertCircle className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No complaints found</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No complaints found
+            </h3>
             <p className="mt-1 text-sm text-gray-500">
-              Try adjusting your search or filter to find what you're looking for.
+              Try adjusting your search or filter to find what you're looking
+              for.
             </p>
           </div>
         )}
       </div>
-
 
       {selectedComplaint && !showResolveModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-xs bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Complaint Details</h2>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Complaint Details
+                </h2>
                 <button
                   onClick={() => setSelectedComplaint(null)}
                   className="text-gray-400 hover:text-gray-600"
@@ -489,13 +510,16 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Complaint ID</p>
-                    <p className="text-base font-medium text-gray-900">{selectedComplaint.id}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedComplaint.id}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 font-semibold mb-1">Status</p>
+                    <p className="text-sm text-gray-500 font-semibold mb-1">
+                      Status
+                    </p>
                     <div className="mt-1 flex items-center gap-2">
                       {getStatusBadge(selectedComplaint.status)}
-                     
                     </div>
                   </div>
                 </div>
@@ -503,12 +527,13 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
                 <div>
                   <p className="text-sm text-gray-500">Employee</p>
                   <p className="text-base font-medium text-gray-900">
-                    {selectedComplaint.employeeName} ({selectedComplaint.employeeId})
+                    {selectedComplaint.employeeName} (
+                    {selectedComplaint.employeeId})
                   </p>
-                  <p className="text-sm text-gray-600">{selectedComplaint.department}</p>
+                  <p className="text-sm text-gray-600">
+                    {selectedComplaint.department}
+                  </p>
                 </div>
-
-              
 
                 <div>
                   <p className="text-sm text-gray-500">Description</p>
@@ -517,16 +542,17 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
                   </p>
                 </div>
 
-                {selectedComplaint.status === 'unresolved' && selectedComplaint.unresolvedReason && (
-                  <div>
-                    <p className="text-sm text-gray-500">Reason for being unresolved</p>
-                    <p className="text-base text-red-600 bg-red-50 p-4 rounded-lg">
-                      {selectedComplaint.unresolvedReason}
-                    </p>
-                  </div>
-                )}
-
-
+                {selectedComplaint.status === "unresolved" &&
+                  selectedComplaint.unresolvedReason && (
+                    <div>
+                      <p className="text-sm text-gray-500">
+                        Reason for being unresolved
+                      </p>
+                      <p className="text-base text-red-600 bg-red-50 p-4 rounded-lg">
+                        {selectedComplaint.unresolvedReason}
+                      </p>
+                    </div>
+                  )}
 
                 <div>
                   <p className="text-sm text-gray-500">Attachments</p>
@@ -564,7 +590,6 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
         </div>
       )}
 
-
       {showResolveModal && selectedComplaint && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-xs bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full">
@@ -572,7 +597,7 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
               <h3 className="text-lg font-bold text-gray-900 mb-4">
                 Update Complaint Status
               </h3>
-              
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -584,18 +609,17 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
                     onChange={(e) => {
                       setSelectedComplaint({
                         ...selectedComplaint,
-                        status: e.target.value
+                        status: e.target.value,
                       });
                     }}
                   >
-               <option value="Pending">Pending</option>
-<option value="Approved">Approved</option>
-<option value="Rejected">Rejected</option>
-                 
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
                   </select>
                 </div>
 
-                {selectedComplaint.status === 'unresolved' && (
+                {selectedComplaint.status === "unresolved" && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Reason for being unresolved
@@ -614,37 +638,37 @@ const handleUpdateStatus = async (complaintId, newStatus) => {
                   <button
                     onClick={() => {
                       setShowResolveModal(false);
-                      setResolutionNote('');
+                      setResolutionNote("");
                       setSelectedComplaint(null);
                     }}
                     className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
                   >
                     Cancel
                   </button>
-<button
-  onClick={() => {
-    if (
-      selectedComplaint.status === "unresolved" &&
-      !resolutionNote.trim()
-    ) {
-      alert("Please provide a reason for unresolved status");
-      return;
-    }
+                  <button
+                    onClick={() => {
+                      if (
+                        selectedComplaint.status === "unresolved" &&
+                        !resolutionNote.trim()
+                      ) {
+                        alert("Please provide a reason for unresolved status");
+                        return;
+                      }
 
-    handleUpdateStatus(
-      selectedComplaint.id,
-      selectedComplaint.status,
-      resolutionNote
-    );
+                      handleUpdateStatus(
+                        selectedComplaint.id,
+                        selectedComplaint.status,
+                        resolutionNote,
+                      );
 
-    setShowResolveModal(false);
-    setResolutionNote("");
-    setSelectedComplaint(null);
-  }}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
->
-  Update
-</button>
+                      setShowResolveModal(false);
+                      setResolutionNote("");
+                      setSelectedComplaint(null);
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  >
+                    Update
+                  </button>
                 </div>
               </div>
             </div>

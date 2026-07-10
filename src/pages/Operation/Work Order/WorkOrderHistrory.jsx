@@ -11,7 +11,6 @@ const WorkOrderHistory = () => {
   const [error, setError] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-
   useEffect(() => {
     fetchWorkOrders();
   }, []);
@@ -31,15 +30,17 @@ const WorkOrderHistory = () => {
     }
   };
 
-
   const filteredOrders = workOrders.filter(
     (order) =>
-      (order.subject?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (order.project_name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (order.contractor?.name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (order.tender?.tender_title?.toLowerCase().includes(searchTerm.toLowerCase()))
+      order.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.project_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.contractor?.name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      order.tender?.tender_title
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()),
   );
-
 
   const handleDownloadPDF = (order) => {
     const doc = new jsPDF();
@@ -52,7 +53,6 @@ const WorkOrderHistory = () => {
     doc.setDrawColor(37, 99, 235);
     doc.line(20, y, 190, y);
     y += 15;
-
 
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
@@ -70,23 +70,24 @@ const WorkOrderHistory = () => {
     doc.text(`Completion Date: ${order.completion_date || "-"}`, 20, y);
     y += 8;
 
-
     if (order.tender) {
       doc.setFont(undefined, "bold");
       doc.text("TENDER INFORMATION:", 20, y);
       y += 6;
       doc.setFont(undefined, "normal");
-      doc.text(`Tender: ${order.tender.tender_title || order.tender.title || "-"}`, 20, y);
+      doc.text(
+        `Tender: ${order.tender.tender_title || order.tender.title || "-"}`,
+        20,
+        y,
+      );
       y += 6;
     }
-
 
     if (order.project_name) {
       doc.text(`Project: ${order.project_name}`, 20, y);
       y += 6;
     }
     y += 6;
-
 
     if (order.contractor) {
       doc.setFont(undefined, "bold");
@@ -110,7 +111,6 @@ const WorkOrderHistory = () => {
       y += 6;
     }
 
-
     if (order.items && order.items.length > 0) {
       doc.setFont(undefined, "bold");
       doc.text("ITEMS:", 20, y);
@@ -128,7 +128,8 @@ const WorkOrderHistory = () => {
       doc.setFont(undefined, "normal");
       let itemTotal = 0;
       order.items.forEach((item, index) => {
-        const itemAmount = (parseFloat(item.quantity) || 0) * (parseFloat(item.rate) || 0);
+        const itemAmount =
+          (parseFloat(item.quantity) || 0) * (parseFloat(item.rate) || 0);
         itemTotal += itemAmount;
 
         doc.text(`${index + 1}`, 22, y);
@@ -147,7 +148,6 @@ const WorkOrderHistory = () => {
       doc.text(`Total Amount: ₹${itemTotal.toFixed(2)}`, 140, y);
     }
 
-
     if (order.note) {
       y += 15;
       doc.setFont(undefined, "bold");
@@ -158,14 +158,19 @@ const WorkOrderHistory = () => {
       doc.text(noteText, 20, y);
     }
 
-    doc.save(`work-order-${order.subject?.replace(/\s+/g, "-") || order.id}.pdf`);
+    doc.save(
+      `work-order-${order.subject?.replace(/\s+/g, "-") || order.id}.pdf`,
+    );
   };
 
-
   const handleViewDetails = (order) => {
-    const itemsText = order.items
-      ?.map((item, idx) => `${idx + 1}. ${item.description} - ${item.quantity} ${item.unit} @ ₹${item.rate}`)
-      .join("\n") || "No items";
+    const itemsText =
+      order.items
+        ?.map(
+          (item, idx) =>
+            `${idx + 1}. ${item.description} - ${item.quantity} ${item.unit} @ ₹${item.rate}`,
+        )
+        .join("\n") || "No items";
 
     Swal.fire({
       title: order.subject || "Work Order Details",
@@ -175,8 +180,8 @@ const WorkOrderHistory = () => {
           <p><strong>Tender:</strong> ${order.tender?.item || "-"}</p>
           <p><strong>Project:</strong> ${order.project?.name || "-"}</p>
           <p><strong>Contractor:</strong> ${order.contractor?.name || "-"}</p>
-          <p><strong>Work Order Date:</strong> ${order.issue_date ? order.issue_date.split('T')[0] : "-"}</p>
-          <p><strong>Completion Date:</strong> ${order.completion_date ? order.completion_date.split('T')[0] : "-"}</p>
+          <p><strong>Work Order Date:</strong> ${order.issue_date ? order.issue_date.split("T")[0] : "-"}</p>
+          <p><strong>Completion Date:</strong> ${order.completion_date ? order.completion_date.split("T")[0] : "-"}</p>
           <p><strong>Items:</strong></p>
           <pre style="text-align: left; max-height: 200px; overflow-y: auto;">${itemsText}</pre>
           <p><strong>Status:</strong> ${order.status || "Active"}</p>
@@ -190,19 +195,20 @@ const WorkOrderHistory = () => {
   return (
     <div className="max-w-7xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-blue-700">
-          Work Order History
-        </h2>
+        <h2 className="text-2xl font-bold text-blue-700">Work Order History</h2>
         <button
           onClick={fetchWorkOrders}
           disabled={loading}
           className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
         >
-          {loading ? <Loader size={18} className="animate-spin" /> : <Search size={18} />}
+          {loading ? (
+            <Loader size={18} className="animate-spin" />
+          ) : (
+            <Search size={18} />
+          )}
           {loading ? "Refreshing..." : "Refresh"}
         </button>
       </div>
-
 
       <div className="mb-6 flex items-center gap-3">
         <Search size={20} className="text-gray-500" />
@@ -215,28 +221,26 @@ const WorkOrderHistory = () => {
         />
       </div>
 
-
       {error && (
         <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300">
           {error}
         </div>
       )}
 
-
       {loading ? (
         <div className="flex justify-center items-center py-12">
           <Loader size={32} className="animate-spin text-blue-600" />
-          <span className="ml-3 text-gray-600 dark:text-gray-300">Loading work orders...</span>
+          <span className="ml-3 text-gray-600 dark:text-gray-300">
+            Loading work orders...
+          </span>
         </div>
       ) : (
         <>
-
           <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
             {filteredOrders.length > 0
               ? `Showing ${filteredOrders.length} of ${workOrders.length} work orders`
               : "No work orders found"}
           </div>
-
 
           <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
@@ -244,12 +248,20 @@ const WorkOrderHistory = () => {
                 <tr>
                   <th className="px-4 py-3 text-left font-semibold">#</th>
                   <th className="px-4 py-3 text-left font-semibold">Subject</th>
-                  <th className="px-4 py-3 text-left font-semibold">Contractor</th>
+                  <th className="px-4 py-3 text-left font-semibold">
+                    Contractor
+                  </th>
                   <th className="px-4 py-3 text-left font-semibold">Tender</th>
                   <th className="px-4 py-3 text-left font-semibold">Project</th>
-                  <th className="px-4 py-3 text-left font-semibold">Work Date</th>
-                  <th className="px-4 py-3 text-left font-semibold">Completion</th>
-                  <th className="px-4 py-3 text-center font-semibold">Actions</th>
+                  <th className="px-4 py-3 text-left font-semibold">
+                    Work Date
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold">
+                    Completion
+                  </th>
+                  <th className="px-4 py-3 text-center font-semibold">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -259,7 +271,9 @@ const WorkOrderHistory = () => {
                       key={order.id || index}
                       className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{index + 1}</td>
+                      <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
+                        {index + 1}
+                      </td>
                       <td className="px-4 py-3 text-gray-700 dark:text-gray-300 font-medium">
                         {order.subject || "-"}
                       </td>
@@ -273,10 +287,14 @@ const WorkOrderHistory = () => {
                         {order.project?.name || "-"}
                       </td>
                       <td className="px-4 py-3 text-gray-700 dark:text-gray-300 text-sm">
-                        {order.issue_date ? order.issue_date.split('T')[0] : "-"}
+                        {order.issue_date
+                          ? order.issue_date.split("T")[0]
+                          : "-"}
                       </td>
                       <td className="px-4 py-3 text-gray-700 dark:text-gray-300 text-sm">
-                        {order.completion_date ? order.completion_date.split('T')[0] : "-"}
+                        {order.completion_date
+                          ? order.completion_date.split("T")[0]
+                          : "-"}
                       </td>
                       <td className="px-4 py-3 flex justify-center gap-2">
                         <button
@@ -302,7 +320,9 @@ const WorkOrderHistory = () => {
                       colSpan="8"
                       className="text-center py-8 text-gray-500 dark:text-gray-400"
                     >
-                      {searchTerm ? "No work orders match your search." : "No work orders found."}
+                      {searchTerm
+                        ? "No work orders match your search."
+                        : "No work orders found."}
                     </td>
                   </tr>
                 )}
@@ -316,5 +336,3 @@ const WorkOrderHistory = () => {
 };
 
 export default WorkOrderHistory;
-
-

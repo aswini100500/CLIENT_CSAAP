@@ -23,13 +23,9 @@ const userSlice = createSlice({
       state.id = action.payload.user_id ?? action.payload.id ?? null;
       state.user_id = action.payload.user_id ?? action.payload.id ?? null;
       state.employee_id =
-        action.payload.employee_id ??
-        action.payload.employeeProfileId ??
-        null;
+        action.payload.employee_id ?? action.payload.employeeProfileId ?? null;
       state.employeeProfileId =
-        action.payload.employee_id ??
-        action.payload.employeeProfileId ??
-        null;
+        action.payload.employee_id ?? action.payload.employeeProfileId ?? null;
       state.name = action.payload.name || "";
       state.email = action.payload.email || "";
       state.token = action.payload.token || "";
@@ -41,7 +37,8 @@ const userSlice = createSlice({
         "";
       state.slug = action.payload.slug || action.payload.subdomain || "";
       state.role = action.payload.role || "";
-      state.company_id = action.payload.company_id ?? action.payload.tenant_id ?? null;
+      state.company_id =
+        action.payload.company_id ?? action.payload.tenant_id ?? null;
       state.isEmployee = Boolean(action.payload.isEmployee);
     },
     clearUser: (state) => {

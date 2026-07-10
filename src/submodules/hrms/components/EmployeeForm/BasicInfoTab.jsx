@@ -9,7 +9,12 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { BANK_DETAILS_FIELDS, BASIC_INFO_FIELDS, SALARY_FIELDS, COUNTRY_CODES } from "./constants";
+import {
+  BANK_DETAILS_FIELDS,
+  BASIC_INFO_FIELDS,
+  SALARY_FIELDS,
+  COUNTRY_CODES,
+} from "./constants";
 import React from "react";
 
 const AUTO_CALC_FIELDS = [
@@ -48,18 +53,17 @@ const BasicInfoTab = ({
   departmentsList = [],
   designationsList = [],
 }) => {
-
   const getFilteredDesignations = () => {
     if (!formData.department) return [];
-    
 
-
-    if (designationsList.length > 0 && typeof designationsList[0] === 'object') {
+    if (
+      designationsList.length > 0 &&
+      typeof designationsList[0] === "object"
+    ) {
       return designationsList
-        .filter(item => item.department === formData.department)
-        .map(item => item.designation);
+        .filter((item) => item.department === formData.department)
+        .map((item) => item.designation);
     }
-    
 
     return designationsList;
   };
@@ -77,12 +81,10 @@ const BasicInfoTab = ({
           if (field.name === "department") {
             field.options = departmentsList;
           }
-          
 
           if (field.name === "postApplied") {
             field.options = filteredDesignations;
           }
-
 
           if (field.name === "postApplied" && !formData.department) {
             return null;
@@ -145,7 +147,9 @@ const BasicInfoTab = ({
                     value={formData[field.name]}
                     onChange={handleInputChange}
                     required={field.required}
-                    disabled={field.name === "postApplied" && !formData.department}
+                    disabled={
+                      field.name === "postApplied" && !formData.department
+                    }
                     className={`app-input w-full appearance-none ${
                       !formData[field.name] ? "text-gray-400" : "text-gray-900"
                     } ${
@@ -160,7 +164,11 @@ const BasicInfoTab = ({
                         : `Select ${field.label}`}
                     </option>
                     {field.options.map((option, idx) => (
-                      <option key={idx} value={option} className="text-gray-900">
+                      <option
+                        key={idx}
+                        value={option}
+                        className="text-gray-900"
+                      >
                         {option}
                       </option>
                     ))}
@@ -180,7 +188,9 @@ const BasicInfoTab = ({
                       onChange={handleInputChange}
                       className="h-4 w-4 rounded border-(--border-soft) text-(--brand) focus:ring-(--brand-ring) accent-(--brand)"
                     />
-                    <span className="text-sm text-(--text-body)">Allow overtime</span>
+                    <span className="text-sm text-(--text-body)">
+                      Allow overtime
+                    </span>
                   </label>
                 </div>
               ) : field.type === "time" ? (
@@ -205,7 +215,9 @@ const BasicInfoTab = ({
                   />
                   <div
                     className={`app-input w-full pr-10 transition-colors flex items-center ${
-                      formData[field.name] ? "text-gray-900" : "text-gray-400/80"
+                      formData[field.name]
+                        ? "text-gray-900"
+                        : "text-gray-400/80"
                     }`}
                   >
                     {formData[field.name]
@@ -256,32 +268,32 @@ const BasicInfoTab = ({
                     className="app-input w-full pr-10"
                   />
 
-                {field.name === "password" && (
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        );
-      })}
+                  {field.name === "password" && (
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-10 mb-4 border-b border-(--border-soft) pb-3">
-        <h2 className="app-heading text-lg font-bold text-(--text-strong)">Bank Details</h2>
+        <h2 className="app-heading text-lg font-bold text-(--text-strong)">
+          Bank Details
+        </h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {BANK_DETAILS_FIELDS.map((field, i) => (
           <div key={`bank-${i}`}>
-            <label className="app-label block mb-1.5">
-              {field.label}
-            </label>
+            <label className="app-label block mb-1.5">{field.label}</label>
 
             {field.type === "select" ? (
               <div className="relative">
@@ -297,7 +309,11 @@ const BasicInfoTab = ({
                     Select {field.label}
                   </option>
                   {field.options.map((option) => (
-                    <option key={option} value={option} className="text-gray-900">
+                    <option
+                      key={option}
+                      value={option}
+                      className="text-gray-900"
+                    >
                       {option}
                     </option>
                   ))}
@@ -322,7 +338,9 @@ const BasicInfoTab = ({
       </div>
 
       <div className="mt-10 mb-4 border-b border-(--border-soft) pb-3">
-        <h2 className="app-heading text-lg font-bold text-(--text-strong)">Salary Breakdown</h2>
+        <h2 className="app-heading text-lg font-bold text-(--text-strong)">
+          Salary Breakdown
+        </h2>
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-5 mb-8 p-4 bg-(--bg-subtle)/35 rounded-xl border border-(--border-soft)">
@@ -335,7 +353,9 @@ const BasicInfoTab = ({
                 onChange={(e) => setReadOnlyFields(e.target.checked)}
                 className="h-4 w-4 text-(--brand) border-(--border-soft) rounded focus:ring-(--brand-ring) accent-(--brand)"
               />
-              <span className="text-sm font-semibold text-(--text-soft)">Read Only</span>
+              <span className="text-sm font-semibold text-(--text-soft)">
+                Read Only
+              </span>
             </label>
           )}
           <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -386,7 +406,9 @@ const BasicInfoTab = ({
                   ...(isEditMode && formData.effective_from
                     ? []
                     : ["effective_from"]),
-                ].includes(field.name) && <span className="text-red-500">*</span>}
+                ].includes(field.name) && (
+                  <span className="text-red-500">*</span>
+                )}
                 {autoCalculate && isCalcField && !isManual && (
                   <span className="text-xs font-normal text-gray-400 ml-1">
                     (auto)
@@ -420,9 +442,7 @@ const BasicInfoTab = ({
         })}
 
         <div>
-          <label className="app-label block mb-1.5">
-            Regime
-          </label>
+          <label className="app-label block mb-1.5">Regime</label>
           <div className="relative">
             <select
               name="tax_regime"
@@ -450,9 +470,7 @@ const BasicInfoTab = ({
           className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end mb-5 p-4 bg-white rounded-xl border border-(--border-soft) hover:shadow-sm transition-all duration-200"
         >
           <div>
-            <label className="app-label block mb-1.5">
-              Name
-            </label>
+            <label className="app-label block mb-1.5">Name</label>
             <input
               type="text"
               value={comp.name}
@@ -464,9 +482,7 @@ const BasicInfoTab = ({
             />
           </div>
           <div>
-            <label className="app-label block mb-1.5">
-              Amount
-            </label>
+            <label className="app-label block mb-1.5">Amount</label>
             <input
               type="number"
               value={comp.amount}
@@ -479,9 +495,7 @@ const BasicInfoTab = ({
             />
           </div>
           <div>
-            <label className="app-label block mb-1.5">
-              Type
-            </label>
+            <label className="app-label block mb-1.5">Type</label>
             <div className="relative">
               <select
                 value={comp.type}
@@ -508,9 +522,7 @@ const BasicInfoTab = ({
               }
               className="h-4 w-4 text-(--brand) border-(--border-soft) rounded focus:ring-(--brand-ring) accent-(--brand)"
             />
-            <label className="app-label mb-0">
-              Taxable
-            </label>
+            <label className="app-label mb-0">Taxable</label>
           </div>
           <div className="flex justify-end mb-1">
             <button

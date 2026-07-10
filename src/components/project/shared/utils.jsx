@@ -26,16 +26,19 @@ export const hasData = (item) => {
 
 export const getProjectOverallStatus = (project) => {
   if (!project) return "Pending";
-  
+
   let statuses = [];
 
-
   let effectiveProject = project;
-  if ((project.type === "custom" || project.type === "Custom") && project.configuration) {
+  if (
+    (project.type === "custom" || project.type === "Custom") &&
+    project.configuration
+  ) {
     try {
-      const config = typeof project.configuration === "string"
-        ? JSON.parse(project.configuration)
-        : project.configuration;
+      const config =
+        typeof project.configuration === "string"
+          ? JSON.parse(project.configuration)
+          : project.configuration;
       if (config && typeof config === "object") {
         effectiveProject = { ...project, ...config };
       }
@@ -47,56 +50,89 @@ export const getProjectOverallStatus = (project) => {
     let s = item.possessionStatus || item.possession_status;
     if (!s && item.propertyFeatures) {
       let features = item.propertyFeatures;
-      if (typeof features === 'string') {
-        try { features = JSON.parse(features); } catch(e) {}
+      if (typeof features === "string") {
+        try {
+          features = JSON.parse(features);
+        } catch (e) {}
       }
       s = features?.possessionStatus;
     }
     if (!s && item.transactionType) {
-      s = item.transactionType.possessionStatus || item.transactionType.possession_status;
+      s =
+        item.transactionType.possessionStatus ||
+        item.transactionType.possession_status;
     }
     return s || "Pending";
   };
 
-  if (effectiveProject.type === "apartment" || effectiveProject.customType === "apartment" || effectiveProject.blocks || effectiveProject.blocks_data) {
+  if (
+    effectiveProject.type === "apartment" ||
+    effectiveProject.customType === "apartment" ||
+    effectiveProject.blocks ||
+    effectiveProject.blocks_data
+  ) {
     let blocks = effectiveProject.blocks || effectiveProject.blocks_data || [];
     if (typeof blocks === "string") {
-      try { blocks = JSON.parse(blocks); } catch (e) { blocks = []; }
+      try {
+        blocks = JSON.parse(blocks);
+      } catch (e) {
+        blocks = [];
+      }
     }
     if (Array.isArray(blocks)) {
-      blocks.forEach(block => {
+      blocks.forEach((block) => {
         const floors = block.floors || [];
-        floors.forEach(floor => {
+        floors.forEach((floor) => {
           const units = floor.units || [];
-          units.forEach(unit => {
+          units.forEach((unit) => {
             statuses.push(getStatus(unit));
           });
         });
       });
     }
-  } else if (effectiveProject.type === "plotting" || effectiveProject.customType === "plotting" || effectiveProject.plots || effectiveProject.plots_data) {
+  } else if (
+    effectiveProject.type === "plotting" ||
+    effectiveProject.customType === "plotting" ||
+    effectiveProject.plots ||
+    effectiveProject.plots_data
+  ) {
     let plots = effectiveProject.plots || effectiveProject.plots_data || [];
     if (typeof plots === "string") {
-      try { plots = JSON.parse(plots); } catch (e) { plots = []; }
+      try {
+        plots = JSON.parse(plots);
+      } catch (e) {
+        plots = [];
+      }
     }
     if (Array.isArray(plots)) {
-      plots.forEach(plot => {
+      plots.forEach((plot) => {
         statuses.push(getStatus(plot));
       });
     }
-  } else if (effectiveProject.type === "commercial" || effectiveProject.type === "duplex" || effectiveProject.type === "triplex" || effectiveProject.units || effectiveProject.units_data) {
+  } else if (
+    effectiveProject.type === "commercial" ||
+    effectiveProject.type === "duplex" ||
+    effectiveProject.type === "triplex" ||
+    effectiveProject.units ||
+    effectiveProject.units_data
+  ) {
     let units = effectiveProject.units || effectiveProject.units_data || [];
     if (typeof units === "string") {
-      try { units = JSON.parse(units); } catch (e) { units = []; }
+      try {
+        units = JSON.parse(units);
+      } catch (e) {
+        units = [];
+      }
     }
     if (Array.isArray(units)) {
-      units.forEach(unit => {
+      units.forEach((unit) => {
         statuses.push(getStatus(unit));
       });
     }
   }
 
-  if (statuses.length === 0) return project.overall_status || project.status || "Pending";
+  if (statuses.length === 0)
+    return project.overall_status || project.status || "Pending";
 
   const total = statuses.length;
   let pendingCount = 0;

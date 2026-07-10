@@ -19,7 +19,9 @@ const ExperienceTab = ({
         className="border border-(--border-soft) rounded-xl p-4 mb-4 hover:shadow-sm transition-all duration-200 bg-(--bg-app)/30"
       >
         <div className="flex justify-between mb-4">
-          <h3 className="font-bold text-sm text-(--text-strong)">Experience {index + 1}</h3>
+          <h3 className="font-bold text-sm text-(--text-strong)">
+            Experience {index + 1}
+          </h3>
           {experienceList.length > 1 && (
             <button
               type="button"
@@ -33,9 +35,7 @@ const ExperienceTab = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {EXPERIENCE_FIELDS.map((field) => (
             <div key={field.name}>
-              <label className="app-label block mb-1.5">
-                {field.label}
-              </label>
+              <label className="app-label block mb-1.5">{field.label}</label>
               <input
                 type={field.type || "text"}
                 value={exp[field.name]}
@@ -49,9 +49,7 @@ const ExperienceTab = ({
           ))}
         </div>
         <div className="mt-4">
-          <label className="app-label block mb-1.5">
-            Description
-          </label>
+          <label className="app-label block mb-1.5">Description</label>
           <textarea
             value={exp.description}
             onChange={(e) =>

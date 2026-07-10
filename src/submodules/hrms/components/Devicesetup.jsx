@@ -3,7 +3,6 @@ import React, { useState } from "react";
 export default function Devicesetup({ setActiveMenu }) {
   const [selectedDevice, setSelectedDevice] = useState("");
 
-
   const devices = {
     "ZKTeco K20": "/ZKTeco K20.jpg",
     "EClock X5": "/EClock X5.jpg",
@@ -12,9 +11,7 @@ export default function Devicesetup({ setActiveMenu }) {
   };
   return (
     <div className="min-h-screen bg-white font-sans">
-
       <div className="bg-blue-600 flex items-center justify-between px-4 py-2 shadow-sm">
-
         <div className="flex items-center gap-2 text-white font-medium">
           <svg
             className="w-5 h-5"
@@ -33,7 +30,6 @@ export default function Devicesetup({ setActiveMenu }) {
           <span>Device Selection</span>
         </div>
 
-
         <div className="flex gap-2">
           <button
             onClick={() => setActiveMenu("Add details")}
@@ -47,15 +43,12 @@ export default function Devicesetup({ setActiveMenu }) {
         </div>
       </div>
 
-
       <div className="flex flex-col items-center justify-center mt-20 space-y-4">
         <label className="text-lg font-medium text-gray-800">
           Select your Device
         </label>
 
-
         <div className="relative w-64">
-
           <select
             className="block w-full appearance-none bg-white border border-gray-300 rounded-md px-3 py-2 pr-10 text-base text-gray-700 
                        focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 

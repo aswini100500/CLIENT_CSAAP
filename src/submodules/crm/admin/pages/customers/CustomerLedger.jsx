@@ -60,11 +60,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => setVisible(true), []);
 
-
-  const {
-    data: customer,
-    isLoading: loadingCustomer,
-  } = useQuery({
+  const { data: customer, isLoading: loadingCustomer } = useQuery({
     queryKey: ["customer", customerId, companyId],
     queryFn: async () => {
       const response = await api.get(`/api/customers/${customerId}`, {
@@ -75,15 +71,22 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
     enabled: !!customerId && !!companyId,
   });
 
-
   const { data: paymentPlan, isLoading: loadingPlan } = useQuery({
-    queryKey: ["payment-plan-customer", customer?.ledger_id, customer?.lead_id, companyId],
+    queryKey: [
+      "payment-plan-customer",
+      customer?.ledger_id,
+      customer?.lead_id,
+      companyId,
+    ],
     queryFn: async () => {
       const planId = customer.ledger_id;
       if (planId) {
-        const response = await accountingApi.get(`/api/v1/project-payment/${planId}`, {
-          params: { company_id: companyId },
-        });
+        const response = await accountingApi.get(
+          `/api/v1/project-payment/${planId}`,
+          {
+            params: { company_id: companyId },
+          },
+        );
         return response.data.data || null;
       } else if (customer.lead_id) {
         const response = await accountingApi.get("/api/v1/project-payment", {
@@ -96,41 +99,34 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
     enabled: (!!customer?.ledger_id || !!customer?.lead_id) && !!companyId,
   });
 
-
   const { data: paymentHistory = [], isLoading: loadingHistory } = useQuery({
     queryKey: ["payment-history", paymentPlan?.id, companyId],
     queryFn: async () => {
       const response = await accountingApi.get(
         `/api/v1/project-payment/${paymentPlan.ledger_id || paymentPlan.id}/history`,
-        { params: { company_id: companyId } }
+        { params: { company_id: companyId } },
       );
       return response.data.data || [];
     },
     enabled: !!paymentPlan?.id && !!companyId,
   });
 
-
-
   const mergedPayments = useMemo(() => {
     if (!paymentHistory || paymentHistory.length === 0) return [];
-
 
     const parentMap = new Map();
     const standaloneList = [];
 
-
     const referencedParentIds = new Set(
       paymentHistory
         .filter((tx) => tx.parent_payment_id)
-        .map((tx) => Number(tx.parent_payment_id))
+        .map((tx) => Number(tx.parent_payment_id)),
     );
-
 
     for (const tx of paymentHistory) {
       const txId = Number(tx.id);
 
       if (tx.parent_payment_id) {
-
         const pid = Number(tx.parent_payment_id);
         if (!parentMap.has(pid)) {
           parentMap.set(pid, {
@@ -146,7 +142,6 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
         group.slabNames.push(tx.stage_name);
         group.segments.push({ ...tx, isOverflow: true });
       } else if (referencedParentIds.has(txId)) {
-
         if (!parentMap.has(txId)) {
           parentMap.set(txId, {
             totalAmount: 0,
@@ -172,7 +167,6 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           isMerged: group.segments.length > 1,
         });
       } else {
-
         standaloneList.push({
           ...tx,
           totalAmount: Number(tx.amount) || 0,
@@ -184,13 +178,10 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
       }
     }
 
-
     const all = [...parentMap.values(), ...standaloneList];
     all.sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
     return all;
   }, [paymentHistory]);
-
-
 
   const [downloadingId, setDownloadingId] = useState(null);
 
@@ -244,10 +235,11 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
   }
 
   const dealVal = Number(paymentPlan?.total_deal_value) || 0;
-  const paidVal = paymentPlan?.slabs?.reduce(
-    (sum, slab) => sum + (Number(slab.paid_amount) || 0),
-    0
-  ) || 0;
+  const paidVal =
+    paymentPlan?.slabs?.reduce(
+      (sum, slab) => sum + (Number(slab.paid_amount) || 0),
+      0,
+    ) || 0;
   const remaining = dealVal - paidVal;
   const progressPct =
     dealVal > 0 ? Math.min(Math.round((paidVal / dealVal) * 100), 100) : 0;
@@ -259,7 +251,6 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
         }`}
       >
-
         <div className="flex items-center gap-3">
           <button
             onClick={() => {
@@ -278,7 +269,6 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
             <p className="app-subtitle mt-0.5">{customer.name}</p>
           </div>
         </div>
-
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div className="app-panel p-4 flex items-center justify-between gap-3">
@@ -351,7 +341,6 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           </div>
         </div>
 
-
         {paymentPlan?.slabs && paymentPlan.slabs.length > 0 && (
           <div className="app-panel overflow-hidden">
             <div className="app-section-bar px-4 py-3">
@@ -388,9 +377,7 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
                     const allocated = Number(slab.allocated_amount) || 0;
                     const paid = Number(slab.paid_amount) || 0;
                     const slabPct =
-                      allocated > 0
-                        ? Math.round((paid / allocated) * 100)
-                        : 0;
+                      allocated > 0 ? Math.round((paid / allocated) * 100) : 0;
 
                     return (
                       <tr
@@ -461,11 +448,11 @@ export default function CustomerLedger({ customerId: propCustomerId, onBack }) {
           </div>
         )}
 
-
         <div className="app-panel overflow-hidden">
           <div className="app-section-bar px-4 py-3">
             <h3 className="app-heading">
-              Payment History ({mergedPayments.length} transaction{mergedPayments.length !== 1 ? "s" : ""})
+              Payment History ({mergedPayments.length} transaction
+              {mergedPayments.length !== 1 ? "s" : ""})
             </h3>
           </div>
 

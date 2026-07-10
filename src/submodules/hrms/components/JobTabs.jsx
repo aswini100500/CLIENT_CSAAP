@@ -4,7 +4,7 @@ import {
   FaCalendarAlt,
   FaFileContract,
   FaFileSignature,
-  FaUserCheck
+  FaUserCheck,
 } from "react-icons/fa";
 import FormsApplied from "./FormsApplied";
 import RecruitmentTablePage from "./InterviewDetails";
@@ -73,11 +73,11 @@ const JobTabs = ({ basePath = "/superadmin/hrms" }) => {
     return () => clearTimeout(timer);
   }, [activeTab]);
 
-  const activeTabData = filteredTabs.find((tab) => tab.id === activeTab) || filteredTabs[0];
+  const activeTabData =
+    filteredTabs.find((tab) => tab.id === activeTab) || filteredTabs[0];
 
   return (
     <div className="w-full bg-linear-to-br from-gray-50 to-blue-50/30">
-
       <div className="w-full mb-6">
         <div className="flex justify-center">
           <div className="bg-white rounded-2xl p-1.5 gap-4 border border-gray-200 shadow-sm inline-flex flex-wrap">
@@ -115,9 +115,7 @@ const JobTabs = ({ basePath = "/superadmin/hrms" }) => {
         </div>
       </div>
 
-
       <div className="w-full bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-sm ">
-
         <div className="border-b border-gray-200 bg-gray-50/50">
           <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -130,7 +128,6 @@ const JobTabs = ({ basePath = "/superadmin/hrms" }) => {
             </div>
           </div>
         </div>
-
 
         <div className="w-full p-2 sm:p-3">
           <div

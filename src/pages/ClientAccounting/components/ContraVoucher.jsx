@@ -1,571 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -588,14 +20,10 @@ const ContraVoucher = () => {
     date: new Date().toISOString().split("T")[0],
     voucherNo: "",
     narration: "",
-    transactions: [
-      { fromAccount: "", toAccount: "", amount: "" },
-    ],
-
+    transactions: [{ fromAccount: "", toAccount: "", amount: "" }],
   });
 
   const [gst, setGst] = useState({ applied: false, percentage: 0, amount: 0 });
-
 
   const [accounts, setAccounts] = useState([]);
 
@@ -608,18 +36,20 @@ const ContraVoucher = () => {
         name: b.bankName ? `${b.accountName} (${b.bankName})` : b.accountName,
       }));
 
-
       const ledgerRes = await axios.get(`${API}/ledger/${companyId}/all`);
       const allLedgers = ledgerRes.data || [];
       const cashLedger = allLedgers.find(
         (l) =>
           l.name?.toLowerCase().includes("cash") ||
           l.underGroup === "Cash-in-Hand" ||
-          l.under === "Cash-in-Hand"
+          l.under === "Cash-in-Hand",
       );
 
       if (cashLedger) {
-        contraOptions.push({ id: `ledger_${cashLedger.id}`, name: cashLedger.name });
+        contraOptions.push({
+          id: `ledger_${cashLedger.id}`,
+          name: cashLedger.name,
+        });
       } else {
         contraOptions.push({ id: "cash", name: "Cash" });
       }
@@ -638,10 +68,14 @@ const ContraVoucher = () => {
       const data = res.data;
       const vData = data.voucher || {};
       setVoucher({
-        date: vData.date ? new Date(vData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        date: vData.date
+          ? new Date(vData.date).toISOString().split("T")[0]
+          : new Date().toISOString().split("T")[0],
         voucherNo: vData.voucherNo || "",
         narration: vData.narration || "",
-        transactions: data.transactions?.length ? data.transactions : [{ fromAccount: "", toAccount: "", amount: "" }],
+        transactions: data.transactions?.length
+          ? data.transactions
+          : [{ fromAccount: "", toAccount: "", amount: "" }],
       });
     } catch (err) {
       console.error("Error fetching voucher:", err);
@@ -659,20 +93,24 @@ const ContraVoucher = () => {
     if (id && companyId) {
       fetchVoucher();
     } else if (companyId) {
-      axios.get(`${API}/voucher-util/next/${companyId}/contra`)
-        .then(res => setVoucher(prev => ({ ...prev, voucherNo: res.data.nextNumber })))
+      axios
+        .get(`${API}/voucher-util/next/${companyId}/contra`)
+        .then((res) =>
+          setVoucher((prev) => ({ ...prev, voucherNo: res.data.nextNumber })),
+        )
         .catch(console.error);
     }
   }, [id, companyId]);
-
 
   const handleTransactionChange = (index, field, value) => {
     const updated = [...voucher.transactions];
     updated[index][field] = value;
 
-
     if (field === "amount" && gst.applied) {
-      const totalAmount = updated.reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
+      const totalAmount = updated.reduce(
+        (sum, t) => sum + (parseFloat(t.amount) || 0),
+        0,
+      );
       const gstAmount = (totalAmount * gst.percentage) / 100;
       setGst({ ...gst, amount: gstAmount });
     }
@@ -692,95 +130,14 @@ const ContraVoucher = () => {
 
   const totalAmount = voucher.transactions.reduce(
     (sum, t) => sum + (parseFloat(t.amount) || 0),
-    0
+    0,
   );
   const grandTotal = totalAmount + (gst.applied ? gst.amount : 0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const saveVoucher = async () => {
     if (
       voucher.transactions.some(
-        (t) => !t.fromAccount || !t.toAccount || !t.amount
+        (t) => !t.fromAccount || !t.toAccount || !t.amount,
       )
     ) {
       Swal.fire({
@@ -806,16 +163,9 @@ const ContraVoucher = () => {
 
     try {
       if (isEditMode) {
-        await axios.put(
-          `${API}/contra-voucher/update/${id}`,
-          payload
-        );
+        await axios.put(`${API}/contra-voucher/update/${id}`, payload);
 
-        Swal.fire(
-          "Success",
-          "Contra Voucher updated successfully",
-          "success"
-        );
+        Swal.fire("Success", "Contra Voucher updated successfully", "success");
 
         navigate("/accounting/client/listOfContraVoucher");
         return;
@@ -823,21 +173,17 @@ const ContraVoucher = () => {
 
       const res = await axios.post(
         `${API}/contra-voucher/${companyId}/create`,
-        payload
+        payload,
       );
 
-
-      await axios.post(
-        `${API}/voucher/createVoucher`,
-        {
-          companyId,
-          voucherNo: voucher.voucherNo,
-          voucherType: "Contra",
-          date: voucher.date,
-          narration: voucher.narration,
-          items: payload.transactions,
-        }
-      );
+      await axios.post(`${API}/voucher/createVoucher`, {
+        companyId,
+        voucherNo: voucher.voucherNo,
+        voucherType: "Contra",
+        date: voucher.date,
+        narration: voucher.narration,
+        items: payload.transactions,
+      });
 
       Swal.fire({
         title: "Saved",
@@ -850,9 +196,7 @@ const ContraVoucher = () => {
         if (res.data?.pdf_path) {
           const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
           if (result.isConfirmed) {
-
             window.open(pdfUrl, "_blank");
-            
 
             fetch(pdfUrl)
               .then((response) => response.blob())
@@ -860,7 +204,8 @@ const ContraVoucher = () => {
                 const blobUrl = window.URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.href = blobUrl;
-                link.download = res.data.pdf_path.split("/").pop() || "ContraVoucher.pdf";
+                link.download =
+                  res.data.pdf_path.split("/").pop() || "ContraVoucher.pdf";
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -871,11 +216,8 @@ const ContraVoucher = () => {
         }
       });
 
-
       setVoucher({
-        date: new Date()
-          .toISOString()
-          .split("T")[0],
+        date: new Date().toISOString().split("T")[0],
         voucherNo: "",
         narration: "",
         transactions: [
@@ -892,10 +234,7 @@ const ContraVoucher = () => {
         percentage: 0,
         amount: 0,
       });
-
     } catch (err) {
-
-
       if (err.response && err.response.status === 409) {
         Swal.fire("Warning", "Voucher Number Already Exists!", "warning");
       } else {
@@ -908,187 +247,93 @@ const ContraVoucher = () => {
     }
   };
   const handleBulkImport = async (data) => {
-
     try {
-
       if (!data || data.length === 0) {
-
-        Swal.fire(
-          "Error",
-          "No data found in file",
-          "error"
-        );
+        Swal.fire("Error", "No data found in file", "error");
 
         return;
       }
 
-
-
       const firstRow = data[0];
 
+      const bankRes = await axios.get(`${API}/bank/${companyId}/all`);
 
+      const latestBanks = bankRes.data.accounts || [];
 
+      const ledgerRes = await axios.get(`${API}/ledger/${companyId}/all`);
 
+      const allLedgers = ledgerRes.data || [];
 
-      const bankRes =
-        await axios.get(
-          `${API}/bank/${companyId}/all`
-        );
+      const latestAccounts = latestBanks.map((b) => ({
+        id: `bank_${b.id}`,
 
-      const latestBanks =
-        bankRes.data.accounts || [];
+        name: b.bankName ? `${b.accountName} (${b.bankName})` : b.accountName,
+      }));
 
-
-
-      const ledgerRes =
-        await axios.get(
-          `${API}/ledger/${companyId}/all`
-        );
-
-      const allLedgers =
-        ledgerRes.data || [];
-
-
-
-      const latestAccounts =
-        latestBanks.map((b) => ({
-
-          id: `bank_${b.id}`,
-
-          name:
-            b.bankName
-              ? `${b.accountName} (${b.bankName})`
-              : b.accountName,
-        }));
-
-
-
-      const cashLedger =
-        allLedgers.find(
-          (l) =>
-            l.name
-              ?.toLowerCase()
-              .includes("cash") ||
-
-            l.underGroup ===
-            "Cash-in-Hand" ||
-
-            l.under ===
-            "Cash-in-Hand"
-        );
+      const cashLedger = allLedgers.find(
+        (l) =>
+          l.name?.toLowerCase().includes("cash") ||
+          l.underGroup === "Cash-in-Hand" ||
+          l.under === "Cash-in-Hand",
+      );
 
       if (cashLedger) {
-
         latestAccounts.push({
+          id: `ledger_${cashLedger.id}`,
 
-          id:
-            `ledger_${cashLedger.id}`,
-
-          name:
-            cashLedger.name,
+          name: cashLedger.name,
         });
-
       } else {
-
         latestAccounts.push({
           id: "cash",
           name: "Cash",
         });
       }
 
-
-
       const importedTransactions = [];
 
       for (const row of data) {
+        const fromName = row.FromAccount?.trim()?.toLowerCase();
 
-        const fromName =
-          row.FromAccount
-            ?.trim()
-            ?.toLowerCase();
+        const toName = row.ToAccount?.trim()?.toLowerCase();
 
-        const toName =
-          row.ToAccount
-            ?.trim()
-            ?.toLowerCase();
+        const createBankIfMissing = async (name) => {
+          if (!name || name === "cash") return;
 
-
-
-        const createBankIfMissing =
-          async (name) => {
-
-            if (
-              !name ||
-              name === "cash"
-            ) return;
-
-            const exists =
-              latestAccounts.find(
-                (a) =>
-                  a.name
-                    ?.toLowerCase()
-                    ?.trim() === name
-              );
-
-            if (!exists) {
-
-              try {
-
-                const res =
-                  await axios.post(
-                    `${API}/bank/${companyId}/create`,
-                    {
-                      accountName: name,
-                      bankName: name,
-                      currentBalance: 0,
-                    }
-                  );
-
-                latestAccounts.push({
-
-                  id:
-                    `bank_${res.data.id}`,
-
-                  name,
-                });
-
-              } catch (err) {
-
-
-              }
-            }
-          };
-
-        await createBankIfMissing(
-          fromName
-        );
-
-        await createBankIfMissing(
-          toName
-        );
-
-
-
-        const fromAcc =
-          latestAccounts.find(
-            (a) =>
-              a.name
-                ?.toLowerCase()
-                ?.trim() ===
-              fromName
+          const exists = latestAccounts.find(
+            (a) => a.name?.toLowerCase()?.trim() === name,
           );
 
-        const toAcc =
-          latestAccounts.find(
-            (a) =>
-              a.name
-                ?.toLowerCase()
-                ?.trim() ===
-              toName
-          );
+          if (!exists) {
+            try {
+              const res = await axios.post(`${API}/bank/${companyId}/create`, {
+                accountName: name,
+                bankName: name,
+                currentBalance: 0,
+              });
+
+              latestAccounts.push({
+                id: `bank_${res.data.id}`,
+
+                name,
+              });
+            } catch (err) {}
+          }
+        };
+
+        await createBankIfMissing(fromName);
+
+        await createBankIfMissing(toName);
+
+        const fromAcc = latestAccounts.find(
+          (a) => a.name?.toLowerCase()?.trim() === fromName,
+        );
+
+        const toAcc = latestAccounts.find(
+          (a) => a.name?.toLowerCase()?.trim() === toName,
+        );
 
         importedTransactions.push({
-
           fromAccount:
             fromName === "cash"
               ? cashLedger
@@ -1103,61 +348,34 @@ const ContraVoucher = () => {
                 : "cash"
               : toAcc?.id || "",
 
-          amount:
-            parseFloat(
-              row.Amount || 0
-            ),
+          amount: parseFloat(row.Amount || 0),
         });
       }
 
-
-
       setAccounts(latestAccounts);
 
-
-
       setVoucher({
-
         ...voucher,
 
-        voucherNo:
-          firstRow.VoucherNo ||
-          "",
+        voucherNo: firstRow.VoucherNo || "",
 
-        date:
-          firstRow.Date
-            ? new Date(
-              firstRow.Date
-            )
-              .toISOString()
-              .split("T")[0]
-            : new Date()
-              .toISOString()
-              .split("T")[0],
+        date: firstRow.Date
+          ? new Date(firstRow.Date).toISOString().split("T")[0]
+          : new Date().toISOString().split("T")[0],
 
-        narration:
-          firstRow.Narration ||
-          "",
+        narration: firstRow.Narration || "",
 
-        transactions:
-          importedTransactions,
+        transactions: importedTransactions,
       });
 
+      const refreshedBankRes = await axios.get(`${API}/bank/${companyId}/all`);
 
+      const banks = refreshedBankRes.data.accounts || [];
 
-      const refreshedBankRes =
-        await axios.get(
-          `${API}/bank/${companyId}/all`
-        );
-
-      const banks =
-        refreshedBankRes.data.accounts || [];
-
-      const contraOptions =
-        banks.map((b) => ({
-          id: `bank_${b.id}`,
-          name: b.bankName ? `${b.accountName} (${b.bankName})` : b.accountName,
-        }));
+      const contraOptions = banks.map((b) => ({
+        id: `bank_${b.id}`,
+        name: b.bankName ? `${b.accountName} (${b.bankName})` : b.accountName,
+      }));
 
       contraOptions.push({ id: "cash", name: "Cash" });
 
@@ -1166,19 +384,10 @@ const ContraVoucher = () => {
       Swal.fire({
         icon: "success",
         title: "Import Successful",
-        text:
-          "Imported data loaded successfully. Review and click Save Voucher.",
+        text: "Imported data loaded successfully. Review and click Save Voucher.",
       });
-
     } catch (error) {
-
-
-
-      Swal.fire(
-        "Error",
-        "Import failed",
-        "error"
-      );
+      Swal.fire("Error", "Import failed", "error");
     }
   };
 
@@ -1211,7 +420,6 @@ const ContraVoucher = () => {
 
   return (
     <div className="p-6 bg-white mx-auto shadow-md rounded-xl border border-gray-300">
-
       <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
         <div className="flex items-center gap-2">
           <h1 className="text-base font-semibold text-slate-800">
@@ -1262,7 +470,6 @@ const ContraVoucher = () => {
         </div>
       </div>
 
-
       <div className="overflow-x-auto mb-2 border border-slate-100 rounded-lg">
         <table className="w-full border-collapse">
           <thead>
@@ -1297,13 +504,11 @@ const ContraVoucher = () => {
                       handleTransactionChange(
                         index,
                         "fromAccount",
-                        e.target.value
+                        e.target.value,
                       )
                     }
                   >
-                    <option value="">
-                      Select account
-                    </option>
+                    <option value="">Select account</option>
 
                     {accounts.map((acc) => (
                       <option key={acc.id} value={acc.id}>
@@ -1321,20 +526,17 @@ const ContraVoucher = () => {
                       handleTransactionChange(
                         index,
                         "toAccount",
-                        e.target.value
+                        e.target.value,
                       )
                     }
                   >
-                    <option value="">
-                      Select account
-                    </option>
+                    <option value="">Select account</option>
 
                     {accounts.map((acc) => (
                       <option key={acc.id} value={acc.id}>
                         {acc.name}
                       </option>
                     ))}
-
                   </select>
                 </td>
 
@@ -1345,11 +547,7 @@ const ContraVoucher = () => {
                     placeholder="0.00"
                     value={transaction.amount}
                     onChange={(e) =>
-                      handleTransactionChange(
-                        index,
-                        "amount",
-                        e.target.value
-                      )
+                      handleTransactionChange(index, "amount", e.target.value)
                     }
                   />
                 </td>
@@ -1359,22 +557,18 @@ const ContraVoucher = () => {
                     type="button"
                     className="text-slate-300 hover:text-red-400 hover:bg-red-50 rounded px-1.5 py-0.5 transition-colors text-xs"
                     onClick={() => {
-                      const updated =
-                        voucher.transactions.filter(
-                          (_, i) => i !== index
-                        );
+                      const updated = voucher.transactions.filter(
+                        (_, i) => i !== index,
+                      );
 
                       setVoucher({
                         ...voucher,
-                        transactions:
-                          updated.length
-                            ? updated
-                            : [
+                        transactions: updated.length
+                          ? updated
+                          : [
                               {
-                                fromAccount:
-                                  "",
-                                toAccount:
-                                  "",
+                                fromAccount: "",
+                                toAccount: "",
                                 amount: "",
                               },
                             ],
@@ -1394,10 +588,6 @@ const ContraVoucher = () => {
         + Add Transaction
       </button>
 
-
-
-
-
       <div className="flex justify-end mt-4">
         <div className="text-right space-y-1">
           <p className="font-medium">Subtotal: ₹ {totalAmount.toFixed(2)}</p>
@@ -1412,7 +602,6 @@ const ContraVoucher = () => {
         </div>
       </div>
 
-
       <div className="mt-6">
         <label className="text-sm font-medium">Narration</label>
         <textarea
@@ -1426,14 +615,11 @@ const ContraVoucher = () => {
         ></textarea>
       </div>
 
-
       <button
         onClick={saveVoucher}
         className="mt-6 bg-blue-700 text-white px-6 py-2 rounded"
       >
-        {isEditMode
-          ? "Update Voucher"
-          : "Save Voucher"}
+        {isEditMode ? "Update Voucher" : "Save Voucher"}
       </button>
     </div>
   );

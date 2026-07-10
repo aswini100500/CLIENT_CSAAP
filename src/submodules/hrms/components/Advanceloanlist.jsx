@@ -9,9 +9,7 @@ export default function AdvanceLoanList({ setActiveMenu }) {
 
   return (
     <div className="w-full min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6 font-sans">
-
       <div className="max-w-7xl mx-auto">
-
         <div className="bg-linear-to-r from-blue-500 to-blue-700 text-white px-6 py-4 rounded-2xl shadow-lg mb-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-3">
@@ -32,7 +30,6 @@ export default function AdvanceLoanList({ setActiveMenu }) {
           </div>
         </div>
 
-
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 mb-6 overflow-hidden">
           <div className="p-6">
             <div className="flex items-center gap-2 mb-4">
@@ -43,7 +40,6 @@ export default function AdvanceLoanList({ setActiveMenu }) {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-
               <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Search Employee
@@ -63,7 +59,6 @@ export default function AdvanceLoanList({ setActiveMenu }) {
                 </div>
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Loan Type
@@ -77,7 +72,6 @@ export default function AdvanceLoanList({ setActiveMenu }) {
                   <option>Closure Loan</option>
                 </select>
               </div>
-
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -97,7 +91,6 @@ export default function AdvanceLoanList({ setActiveMenu }) {
                 </div>
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   To Date
@@ -116,7 +109,6 @@ export default function AdvanceLoanList({ setActiveMenu }) {
                 </div>
               </div>
             </div>
-
 
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-gray-100">
               <div className="flex items-center gap-4">
@@ -140,7 +132,6 @@ export default function AdvanceLoanList({ setActiveMenu }) {
             </div>
           </div>
         </div>
-
 
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-12 text-center">
           <div className="max-w-md mx-auto">

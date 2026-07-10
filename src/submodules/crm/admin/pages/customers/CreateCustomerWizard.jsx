@@ -21,7 +21,7 @@ import {
   User,
   UserPlus,
   X,
-  ChevronDown
+  ChevronDown,
 } from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
@@ -64,7 +64,6 @@ const getArrayData = (res) => {
   if (Array.isArray(res.data.data)) return res.data.data;
   return [];
 };
-
 
 const fetchProjectStages = async (
   projectId,
@@ -116,7 +115,6 @@ const fetchProjectStages = async (
     console.warn("Failed fetching project stages from API:", err.message);
   }
 
-
   return [
     {
       id: "stage_1",
@@ -136,7 +134,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [validationError, setValidationError] = useState("");
-
 
   const [personalForm, setPersonalForm] = useState({
     name: "",
@@ -160,7 +157,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
   });
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
-
   const [brokerSearch, setBrokerSearch] = useState("");
   const [showBrokerDropdown, setShowBrokerDropdown] = useState(false);
   const brokerDropdownRef = useRef(null);
@@ -171,9 +167,12 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
   const { data: brokerOptions = [], isLoading: isLoadingBrokers } = useQuery({
     queryKey: ["broker-options", token],
     queryFn: async () => {
-      const response = await axios.get("https://csaapnodeapi.csaap.com/api/tenant/broker", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axios.get(
+        "https://csaapnodeapi.csaap.com/api/tenant/broker",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       return response.data?.brokers || response.data?.data || [];
     },
     enabled: !!token,
@@ -181,18 +180,22 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
 
   const selectedBroker = React.useMemo(() => {
     return (
-      brokerOptions.find((broker) => String(broker.id) === String(personalForm.broker_id)) ||
-      null
+      brokerOptions.find(
+        (broker) => String(broker.id) === String(personalForm.broker_id),
+      ) || null
     );
   }, [brokerOptions, personalForm.broker_id]);
 
   const filteredBrokers = React.useMemo(() => {
     const term = brokerSearch.trim().toLowerCase();
-    const selectedDisplay = selectedBroker ? selectedBroker.name.trim().toLowerCase() : "";
+    const selectedDisplay = selectedBroker
+      ? selectedBroker.name.trim().toLowerCase()
+      : "";
     if (!term || term === selectedDisplay) return brokerOptions;
-    return brokerOptions.filter((broker) =>
-      (broker.name || "").toLowerCase().includes(term) ||
-      (broker.phone || "").toLowerCase().includes(term)
+    return brokerOptions.filter(
+      (broker) =>
+        (broker.name || "").toLowerCase().includes(term) ||
+        (broker.phone || "").toLowerCase().includes(term),
     );
   }, [brokerOptions, brokerSearch, selectedBroker]);
 
@@ -273,7 +276,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     };
   }, [showBrokerDropdown]);
 
-
   const [projectsList, setProjectsList] = useState([]);
   const [projectSearchTerm, setProjectSearchTerm] = useState("");
   const [showProjectDropdown, setShowProjectDropdown] = useState(false);
@@ -287,14 +289,12 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
   const [hasSetup, setHasSetup] = useState(true);
   const [isFinished, setIsFinished] = useState(false);
 
-
   const [stages, setStages] = useState([]);
   const [totalDealValue, setTotalDealValue] = useState("");
   const [amounts, setAmounts] = useState({});
   const [percentages, setPercentages] = useState({});
   const [bookingAmount, setBookingAmount] = useState("");
   const [bookingPercentage, setBookingPercentage] = useState("");
-
 
   useEffect(() => {
     let active = true;
@@ -365,7 +365,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     };
   }, []);
 
-
   const handleProjectSelect = async (project) => {
     setSelectedProject(project);
     setProjectSearchTerm(project.name || project.project_name || "");
@@ -373,7 +372,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     setSelectedUnit(null);
     setUnitSearchTerm("");
     setValidationError("");
-
 
     let units = [];
     const pType = normalizeProjectTypeKey(project.type);
@@ -399,7 +397,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     }
   };
 
-
   const handleUnitSelect = async (unit) => {
     setSelectedUnit(unit);
     setUnitSearchTerm(unit.unit_name || "");
@@ -410,7 +407,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     setIsFinished(unitIsFinished);
 
     if (unitIsFinished) {
-
       setHasSetup(true);
       setStages([
         {
@@ -425,14 +421,15 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
       setAmounts({ balance_payment: "" });
       setPercentages({ balance_payment: "" });
     } else {
-
       try {
         setLoading(true);
         const setupsRes = await operationApi.getProjectSetups();
         const setups = getArrayData(setupsRes);
         const projectHasSetup = setups.some(
-          (s) => String(s.project_id) === String(selectedProject.id) &&
-                 String(s.project_type).toLowerCase() === normalizeProjectTypeKey(selectedProject.type).toLowerCase()
+          (s) =>
+            String(s.project_id) === String(selectedProject.id) &&
+            String(s.project_type).toLowerCase() ===
+              normalizeProjectTypeKey(selectedProject.type).toLowerCase(),
         );
 
         if (!projectHasSetup) {
@@ -452,7 +449,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
         );
         setStages(stagesList);
 
-
         setBookingAmount("");
         setBookingPercentage("");
         const initialSlabs = {};
@@ -469,7 +465,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
       }
     }
   };
-
 
   const dealValueNum = parseFloat(totalDealValue) || 0;
 
@@ -637,7 +632,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-
   const handleNextStep = () => {
     setValidationError("");
     if (step === 1) {
@@ -664,7 +658,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
       setStep(3);
     }
   };
-
 
   const mutation = useMutation({
     mutationFn: async (formData) => {
@@ -728,11 +721,9 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
     formData.append("total_deal_value", dealValueNum);
     formData.append("slabs", JSON.stringify(slabs));
 
-
     Object.keys(personalForm).forEach((key) => {
       formData.append(key, personalForm[key]);
     });
-
 
     uploadedFiles.forEach((file) => {
       formData.append("files", file);
@@ -780,7 +771,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
       <div
         className={`app-modal w-full max-w-3xl max-h-[90vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-(--border-soft) ${step === 2 ? "overflow-visible" : "overflow-hidden"}`}
       >
-
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-center bg-white rounded-t-2xl shrink-0">
           <div className="flex items-center gap-3">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-emerald-50 border border-emerald-100 shrink-0">
@@ -802,7 +792,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
             <X className="size-5" />
           </button>
         </div>
-
 
         <div className="px-5 py-3 border-b border-(--border-soft) bg-slate-50/50 flex items-center shrink-0">
           {[1, 2, 3].map((num) => (
@@ -837,7 +826,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
           ))}
         </div>
 
-
         <div
           className={`flex-1 p-5 space-y-5 custom-scrollbar ${step === 2 ? "overflow-visible" : "overflow-y-auto"}`}
         >
@@ -857,10 +845,8 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
             </div>
           ) : (
             <>
-
               {step === 1 && (
                 <div className="space-y-6">
-
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <User className="size-4 text-(--brand)" />
@@ -924,7 +910,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                       />
                     </div>
                   </div>
-
 
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
@@ -1001,7 +986,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                       </div>
                     </div>
                   </div>
-
 
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
@@ -1103,7 +1087,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <Briefcase className="size-4 text-amber-600" />
@@ -1121,12 +1104,22 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-(--text-faint)" />
                             <input
                               type="text"
-                              value={showBrokerDropdown ? brokerSearch : (selectedBroker ? selectedBroker.name : "")}
+                              value={
+                                showBrokerDropdown
+                                  ? brokerSearch
+                                  : selectedBroker
+                                    ? selectedBroker.name
+                                    : ""
+                              }
                               onChange={(event) => {
                                 setBrokerSearch(event.target.value);
                                 setShowBrokerDropdown(true);
                                 if (personalForm.broker_id) {
-                                  setPersonalForm((prev) => ({ ...prev, broker_id: "", commission: "" }));
+                                  setPersonalForm((prev) => ({
+                                    ...prev,
+                                    broker_id: "",
+                                    commission: "",
+                                  }));
                                 }
                               }}
                               onFocus={handleBrokerInputFocus}
@@ -1136,7 +1129,13 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                             {isLoadingBrokers ? (
                               <Loader2 className="absolute right-12 top-1/2 -translate-y-1/2 size-4 text-(--text-faint) animate-spin" />
                             ) : null}
-                            {(showBrokerDropdown ? brokerSearch : (selectedBroker ? selectedBroker.name : "")) ? (
+                            {(
+                              showBrokerDropdown
+                                ? brokerSearch
+                                : selectedBroker
+                                  ? selectedBroker.name
+                                  : ""
+                            ) ? (
                               <button
                                 type="button"
                                 onClick={clearBrokerSelection}
@@ -1162,7 +1161,9 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                                       <button
                                         key={broker.id}
                                         type="button"
-                                        onClick={() => handleBrokerSelect(broker)}
+                                        onClick={() =>
+                                          handleBrokerSelect(broker)
+                                        }
                                         className="w-full px-4 py-2.5 flex items-start gap-3 hover:bg-(--bg-subtle) transition-colors text-left"
                                       >
                                         <div className="flex-1 min-w-0">
@@ -1177,10 +1178,13 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                                             )}
                                           </div>
                                           <div className="text-[11px] text-(--text-faint) truncate mt-0.5">
-                                            {broker.phone || broker.email || "No contact info"}
+                                            {broker.phone ||
+                                              broker.email ||
+                                              "No contact info"}
                                           </div>
                                         </div>
-                                        {String(personalForm.broker_id) === String(broker.id) ? (
+                                        {String(personalForm.broker_id) ===
+                                        String(broker.id) ? (
                                           <Check className="size-4 text-(--brand) shrink-0 mt-0.5" />
                                         ) : null}
                                       </button>
@@ -1206,7 +1210,10 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                           step="0.01"
                           value={personalForm.commission}
                           onChange={(event) =>
-                            setPersonalForm((prev) => ({ ...prev, commission: event.target.value }))
+                            setPersonalForm((prev) => ({
+                              ...prev,
+                              commission: event.target.value,
+                            }))
                           }
                           className={inputClass}
                           placeholder="Commission percentage (e.g. 2.50)"
@@ -1215,7 +1222,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                       </div>
                     </div>
                   </div>
-
 
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
@@ -1287,7 +1293,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <Upload className="size-4 text-sky-600" />
@@ -1346,10 +1351,8 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                 </div>
               )}
 
-
               {step === 2 && (
                 <div className="space-y-6">
-
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <Building className="size-4 text-(--brand)" />
@@ -1418,7 +1421,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                       </div>
                     </div>
                   </div>
-
 
                   {selectedProject && (
                     <div className="space-y-4 animate-sub-menu">
@@ -1495,7 +1497,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                         </div>
                       </div>
 
-
                       {selectedUnit && (
                         <div className="p-3.5 bg-slate-50 border border-(--border-soft) rounded-2xl flex items-start justify-between gap-3 text-xs animate-sub-menu">
                           <div>
@@ -1524,10 +1525,8 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                 </div>
               )}
 
-
               {step === 3 && (
                 <div className="space-y-6 animate-sub-menu">
-
                   <div className="space-y-4">
                     <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
                       <IndianRupee className="size-4 text-(--brand)" />
@@ -1571,7 +1570,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   </div>
 
-
                   {dealValueNum > 0 && (
                     <div className="app-panel p-4 space-y-3.5 bg-slate-50/50 rounded-2xl border border-(--border-soft) animate-sub-menu">
                       <div className="flex items-center justify-between text-xs font-bold text-(--text-strong)">
@@ -1581,7 +1579,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                         </span>
                         <span>Remaining: {formatINR(remainingBalance)}</span>
                       </div>
-
 
                       <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
                         <div
@@ -1627,7 +1624,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                     </div>
                   )}
 
-
                   {dealValueNum > 0 && (
                     <div className="space-y-4">
                       <div className="border-b border-(--border-soft) pb-1.5 flex items-center gap-2">
@@ -1638,7 +1634,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                       </div>
 
                       <div className="space-y-3.5">
-
                         <div className="app-panel p-4 bg-white rounded-2xl border border-(--border-soft) hover:border-(--border-strong) transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
                           <div className="min-w-0">
                             <span className="text-[13px] font-extrabold text-(--text-strong)">
@@ -1650,7 +1645,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                           </div>
 
                           <div className="flex items-center gap-3 shrink-0">
-
                             <div className="relative w-28">
                               <input
                                 type="text"
@@ -1666,7 +1660,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
 
                             <ArrowRight className="size-3.5 text-slate-300" />
 
-
                             <div className="relative w-36">
                               <input
                                 type="text"
@@ -1681,7 +1674,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                             </div>
                           </div>
                         </div>
-
 
                         {stages.map((stage) => (
                           <div
@@ -1700,7 +1692,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                             </div>
 
                             <div className="flex items-center gap-3 shrink-0">
-
                               <div className="relative w-28">
                                 <input
                                   type="text"
@@ -1718,7 +1709,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
                               </div>
 
                               <ArrowRight className="size-3.5 text-slate-300" />
-
 
                               <div className="relative w-36">
                                 <input
@@ -1743,7 +1733,6 @@ export default function CreateCustomerWizard({ onClose, onSaveSuccess }) {
             </>
           )}
         </div>
-
 
         <div className="px-5 py-4 border-t border-(--border-soft) flex items-center justify-between bg-white rounded-b-2xl shrink-0">
           <div>

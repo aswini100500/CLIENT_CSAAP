@@ -30,7 +30,6 @@ export default function MonthlyLateComingReport() {
     (_, i) => new Date().getFullYear() - i,
   );
 
-
   const [employees, setEmployees] = useState([]);
 
   async function handleSubmit(e) {
@@ -45,7 +44,6 @@ export default function MonthlyLateComingReport() {
       const res = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/late-reports?month=${month}&year=${year}`,
       );
-
 
       const data = res.data;
       const grouped = {};
@@ -63,7 +61,6 @@ export default function MonthlyLateComingReport() {
           };
         }
 
-
         if (row.status === "Late" && row.day <= 31) {
           grouped[row.empCode].lateDays[row.day - 1] = true;
         }
@@ -76,7 +73,6 @@ export default function MonthlyLateComingReport() {
       alert("Failed to load late coming data");
     }
   }
-
 
   const handleExportExcel = () => {
     if (employees.length === 0) {
@@ -107,8 +103,6 @@ export default function MonthlyLateComingReport() {
     XLSX.writeFile(wb, `LateComingReport_${month}_${year}.xlsx`);
   };
 
-
-
   const handleExportPDF = () => {
     if (employees.length === 0) {
       alert("No data to export!");
@@ -119,7 +113,6 @@ export default function MonthlyLateComingReport() {
     pdf.setFontSize(14);
     pdf.text(`Late Coming Report - ${month} ${year}`, 40, 40);
 
-
     const headers = [
       "Sl",
       "Emp Code",
@@ -129,7 +122,6 @@ export default function MonthlyLateComingReport() {
       "Location",
       ...Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString()),
     ];
-
 
     const data = employees.map((emp) => [
       emp.sl,
@@ -142,7 +134,6 @@ export default function MonthlyLateComingReport() {
         emp.lateDays[i] ? "Late" : "On Time",
       ),
     ]);
-
 
     autoTable(pdf, {
       head: [headers],

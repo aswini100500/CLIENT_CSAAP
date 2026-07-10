@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
-import { Eye, FileDown, FileSpreadsheet, Printer, Search, Edit, Trash2, Download, UserRound } from "lucide-react";
+import {
+  Eye,
+  FileDown,
+  FileSpreadsheet,
+  Printer,
+  Search,
+  Edit,
+  Trash2,
+  Download,
+  UserRound,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BulkImportButton from "./BulkImportButton";
 import Swal from "sweetalert2";
@@ -24,13 +34,15 @@ const ListOfJournalVoucher = () => {
   const [modalData, setModalData] = useState(null);
 
   const getEmployeeName = (id) => {
-    const emp = employees?.find(e => e.id == id);
-    return emp ? (emp.name || emp.first_name || "Employee") : "Unknown Employee";
+    const emp = employees?.find((e) => e.id == id);
+    return emp ? emp.name || emp.first_name || "Employee" : "Unknown Employee";
   };
 
   const fetchCompanyDetails = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`,
+      );
       setCompanyDetails(res.data);
     } catch (err) {
       console.error("Error fetching company details:", err);
@@ -39,7 +51,9 @@ const ListOfJournalVoucher = () => {
 
   const fetchLedgers = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
+      );
       const ledgers = Array.isArray(res.data) ? res.data : res.data.data || [];
       setLedgersList(ledgers);
     } catch (err) {
@@ -58,7 +72,7 @@ const ListOfJournalVoucher = () => {
   const fetchVouchers = async () => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/all/${companyId}`
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/all/${companyId}`,
       );
       setVouchers(res.data);
     } catch (error) {
@@ -68,7 +82,7 @@ const ListOfJournalVoucher = () => {
   const handleViewDetails = async (id) => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/${id}`
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/${id}`,
       );
       setModalData(res.data);
     } catch (error) {
@@ -89,12 +103,14 @@ const ListOfJournalVoucher = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/delete/${id}`);
+        await axios.delete(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/delete/${id}`,
+        );
         Swal.fire("Deleted!", "Your voucher has been deleted.", "success");
         fetchVouchers();
       } catch (err) {
@@ -104,26 +120,30 @@ const ListOfJournalVoucher = () => {
     }
   };
 
-
   const handleBulkImport = async (data) => {
     try {
       const grouped = {};
       data.forEach((row) => {
-        const vNo = row["Voucher No"] || row["voucherNo"] || `JRN-${Date.now()}`;
+        const vNo =
+          row["Voucher No"] || row["voucherNo"] || `JRN-${Date.now()}`;
         if (!grouped[vNo]) {
           grouped[vNo] = {
-            date: row["Date"] || row["date"] || new Date().toISOString().split('T')[0],
+            date:
+              row["Date"] ||
+              row["date"] ||
+              new Date().toISOString().split("T")[0],
             narration: row["Voucher Narration"] || row["narration"] || "",
-            transactions: []
+            transactions: [],
           };
         }
 
-        const ledgerName = row["Particulars"] || row["ledgerId"] || row["Ledger"];
+        const ledgerName =
+          row["Particulars"] || row["ledgerId"] || row["Ledger"];
         grouped[vNo].transactions.push({
           ledgerId: resolveLedgerId(ledgerName),
           particulars: ledgerName || "",
           debit: Number(row["Debit"] || row["debit"] || 0),
-          credit: Number(row["Credit"] || row["credit"] || 0)
+          credit: Number(row["Credit"] || row["credit"] || 0),
         });
       });
 
@@ -133,28 +153,38 @@ const ListOfJournalVoucher = () => {
         return;
       }
 
-      await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/bulk-create`, {
-        companyId,
-        vouchers: vouchersPayload
-      });
+      await axios.post(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/bulk-create`,
+        {
+          companyId,
+          vouchers: vouchersPayload,
+        },
+      );
 
       Swal.fire("Success", "Vouchers imported successfully!", "success");
       fetchVouchers();
     } catch (err) {
       console.error(err);
-      Swal.fire("Error", "Failed to import vouchers. " + (err.response?.data?.message || err.message), "error");
+      Swal.fire(
+        "Error",
+        "Failed to import vouchers. " +
+          (err.response?.data?.message || err.message),
+        "error",
+      );
     }
   };
 
   const generatePDF = (shouldPrint = false) => {
     const doc = new jsPDF();
-    const companyNameForExport = companyDetails?.name || companyName || "Company";
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
     const today = new Date().toLocaleDateString("en-IN");
-    const filtered = vouchers.filter((v) =>
-      (v.narration || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-      String(v.voucherNo || v.voucherno || v.id)
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
+    const filtered = vouchers.filter(
+      (v) =>
+        (v.narration || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        String(v.voucherNo || v.voucherno || v.id)
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()),
     );
 
     const formatAmount = (amount) => {
@@ -186,14 +216,25 @@ const ListOfJournalVoucher = () => {
       generatedOn: today,
     });
 
-    const totalDebit = filtered.reduce((acc, v) => acc + Number(v.totalDebit || 0), 0);
-    const totalCredit = filtered.reduce((acc, v) => acc + Number(v.totalCredit || 0), 0);
+    const totalDebit = filtered.reduce(
+      (acc, v) => acc + Number(v.totalDebit || 0),
+      0,
+    );
+    const totalCredit = filtered.reduce(
+      (acc, v) => acc + Number(v.totalCredit || 0),
+      0,
+    );
     doc.setFontSize(10);
     doc.setTextColor(40);
     doc.text(`Total Vouchers: ${filtered.length}`, 14, summaryY);
 
     doc.setFont("helvetica", "bold");
-    doc.text(`Total Debit: ${formatAmount(totalDebit)}   Total Credit: ${formatAmount(totalCredit)}`, 195, summaryY, { align: "right" });
+    doc.text(
+      `Total Debit: ${formatAmount(totalDebit)}   Total Credit: ${formatAmount(totalCredit)}`,
+      195,
+      summaryY,
+      { align: "right" },
+    );
 
     const tableData = filtered.map((v, i) => [
       i + 1,
@@ -201,14 +242,23 @@ const ListOfJournalVoucher = () => {
       v.voucherNo || v.voucherno || v.id,
       v.narration || "-",
       formatAmount(v.totalDebit),
-      formatAmount(v.totalCredit)
+      formatAmount(v.totalCredit),
     ]);
 
     autoTable(doc, {
       startY: tableStartY,
       head: [["#", "Date", "Voucher No.", "Narration", "Debit", "Credit"]],
       body: tableData,
-      foot: [["", "", "", "TOTAL", formatAmount(totalDebit), formatAmount(totalCredit)]],
+      foot: [
+        [
+          "",
+          "",
+          "",
+          "TOTAL",
+          formatAmount(totalDebit),
+          formatAmount(totalCredit),
+        ],
+      ],
       theme: "striped",
       styles: { fontSize: 9, cellPadding: 5, valign: "middle" },
       headStyles: {
@@ -226,8 +276,8 @@ const ListOfJournalVoucher = () => {
       columnStyles: {
         0: { halign: "center", cellWidth: 12 },
         4: { halign: "right", cellWidth: 32 },
-        5: { halign: "right", cellWidth: 32 }
-      }
+        5: { halign: "right", cellWidth: 32 },
+      },
     });
 
     const pageCount = doc.internal.getNumberOfPages();
@@ -257,21 +307,23 @@ const ListOfJournalVoucher = () => {
   const handlePrint = () => generatePDF(true);
 
   const handleExportExcel = () => {
-    const filtered = vouchers.filter((v) =>
-      (v.narration || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-      String(v.voucherNo || v.voucherno || v.id)
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
+    const filtered = vouchers.filter(
+      (v) =>
+        (v.narration || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        String(v.voucherNo || v.voucherno || v.id)
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()),
     );
     if (filtered.length === 0) return;
     const today = new Date().toLocaleDateString("en-IN");
-    const companyNameForExport = companyDetails?.name || companyName || "Company";
-    const exportData = filtered.map(v => ({
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
+    const exportData = filtered.map((v) => ({
       Date: new Date(v.date).toLocaleDateString(),
       "Voucher No": v.voucherNo || v.voucherno || v.id,
       Narration: v.narration || "-",
       Debit: v.totalDebit,
-      Credit: v.totalCredit
+      Credit: v.totalCredit,
     }));
     const ws = XLSX.utils.json_to_sheet(exportData, { origin: "A6" });
     addWorkbookHeader(XLSX, ws, {
@@ -288,12 +340,16 @@ const ListOfJournalVoucher = () => {
   const loggedInRole = role?.toLowerCase() || "admin";
   const loggedInEmployeeId = user?.employee_id || null;
 
-
   const filtered = vouchers.filter((v) => {
     if (loggedInRole === "employee") {
-      if (v.employee_id != loggedInEmployeeId || v.role?.toLowerCase() !== 'employee') return false;
+      if (
+        v.employee_id != loggedInEmployeeId ||
+        v.role?.toLowerCase() !== "employee"
+      )
+        return false;
     } else {
-      const isCreatedByEmployee = v.employee_id && v.role?.toLowerCase() === 'employee';
+      const isCreatedByEmployee =
+        v.employee_id && v.role?.toLowerCase() === "employee";
       if (showEmployeeActivity) {
         if (!isCreatedByEmployee) return false;
       } else {
@@ -301,24 +357,20 @@ const ListOfJournalVoucher = () => {
       }
     }
 
-    return (v.narration || "").toLowerCase().includes(searchQuery.toLowerCase());
+    return (v.narration || "")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
   });
 
   return (
     <div className="p-4 bg-white font-[monospace] min-h-screen">
-
-
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
-
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Journal Vouchers
           </h1>
 
-
           <div className="flex items-center gap-2.5 flex-wrap">
-
-
             <div className="relative">
               <Search
                 size={15}
@@ -333,17 +385,29 @@ const ListOfJournalVoucher = () => {
               />
             </div>
 
-
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
-                  const basePath = loggedInRole === "employee" ? "/employee/hr/accounting/client" : "/accounting/client";
+                  const basePath =
+                    loggedInRole === "employee"
+                      ? "/employee/hr/accounting/client"
+                      : "/accounting/client";
                   navigate(`${basePath}/journalvoucher`);
                 }}
                 className="flex items-center gap-1.5 bg-[#1a56db] hover:bg-blue-600 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap"
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Create
               </button>
@@ -355,7 +419,6 @@ const ListOfJournalVoucher = () => {
                 <Printer size={14} /> Print
               </button>
 
-
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -363,8 +426,18 @@ const ListOfJournalVoucher = () => {
                   className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <FileDown size={14} /> Export
-                  <svg className="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className="w-3 h-3 ml-0.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
 
@@ -377,7 +450,8 @@ const ListOfJournalVoucher = () => {
                       }}
                       className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
                     >
-                      <FileSpreadsheet size={14} className="text-green-600" /> Excel
+                      <FileSpreadsheet size={14} className="text-green-600" />{" "}
+                      Excel
                     </button>
                     <button
                       onClick={() => {
@@ -394,15 +468,17 @@ const ListOfJournalVoucher = () => {
 
               {loggedInRole !== "employee" && (
                 <button
-                  onClick={() => setShowEmployeeActivity(prev => !prev)}
+                  onClick={() => setShowEmployeeActivity((prev) => !prev)}
                   className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap border ${
-                    showEmployeeActivity 
-                      ? "bg-slate-900 text-white border-slate-900" 
+                    showEmployeeActivity
+                      ? "bg-slate-900 text-white border-slate-900"
                       : "bg-white/10 text-white border-white/20 hover:bg-white/20"
                   }`}
                 >
                   <UserRound size={14} />
-                  {showEmployeeActivity ? "Back to Vouchers" : "Employee Activity"}
+                  {showEmployeeActivity
+                    ? "Back to Vouchers"
+                    : "Employee Activity"}
                 </button>
               )}
             </div>
@@ -411,18 +487,27 @@ const ListOfJournalVoucher = () => {
       </div>
 
       <div className="mx-auto border border-black rounded-md">
-
-
         <div className="grid grid-cols-12 bg-gray-200 border-b border-black text-sm font-semibold">
           <div className="col-span-1 p-2 border-r border-black">Voucher ID</div>
           <div className="col-span-2 p-2 border-r border-black">Date</div>
           <div className="col-span-3 p-2 border-r border-black">Narration</div>
-          <div className="col-span-1 p-2 border-r border-black text-right">Debit</div>
-          <div className="col-span-1 p-2 border-r border-black text-right">Credit</div>
-          {showEmployeeActivity && <div className="col-span-2 p-2 border-r border-black">Employee Name</div>}
-          <div className={`${showEmployeeActivity ? 'col-span-2' : 'col-span-4'} p-2 text-center`}>Actions</div>
+          <div className="col-span-1 p-2 border-r border-black text-right">
+            Debit
+          </div>
+          <div className="col-span-1 p-2 border-r border-black text-right">
+            Credit
+          </div>
+          {showEmployeeActivity && (
+            <div className="col-span-2 p-2 border-r border-black">
+              Employee Name
+            </div>
+          )}
+          <div
+            className={`${showEmployeeActivity ? "col-span-2" : "col-span-4"} p-2 text-center`}
+          >
+            Actions
+          </div>
         </div>
-
 
         {filtered.length === 0 ? (
           <div className="text-center p-4 text-gray-500">No vouchers found</div>
@@ -433,7 +518,9 @@ const ListOfJournalVoucher = () => {
               className="grid grid-cols-12 text-sm border-b border-gray-300 hover:bg-gray-100 cursor-pointer"
               onClick={() => handleViewDetails(v.id)}
             >
-              <div className="col-span-1 p-2 border-r border-gray-300">{v.voucherNo || v.voucherno || v.id}</div>
+              <div className="col-span-1 p-2 border-r border-gray-300">
+                {v.voucherNo || v.voucherno || v.id}
+              </div>
 
               <div className="col-span-2 p-2 border-r border-gray-300">
                 {new Date(v.date).toLocaleDateString()}
@@ -457,23 +544,34 @@ const ListOfJournalVoucher = () => {
                 </div>
               )}
 
-              <div className={`${showEmployeeActivity ? 'col-span-2' : 'col-span-4'} px-2 py-2 text-center flex items-center justify-center gap-3`}>
+              <div
+                className={`${showEmployeeActivity ? "col-span-2" : "col-span-4"} px-2 py-2 text-center flex items-center justify-center gap-3`}
+              >
                 <button
-                  onClick={(e) => { e.stopPropagation(); handleViewDetails(v.id); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleViewDetails(v.id);
+                  }}
                   className="text-blue-600 hover:text-blue-800 transition"
                   title="View Details"
                 >
                   <Eye size={18} />
                 </button>
                 <button
-                  onClick={(e) => { e.stopPropagation(); handleEdit(v.id); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(v.id);
+                  }}
                   className="text-yellow-600 hover:text-yellow-800 transition"
                   title="Edit Voucher"
                 >
                   <Edit size={18} />
                 </button>
                 <button
-                  onClick={(e) => { e.stopPropagation(); handleDelete(v.id); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(v.id);
+                  }}
                   className="text-red-600 hover:text-red-800 transition"
                   title="Delete Voucher"
                 >
@@ -504,14 +602,15 @@ const ListOfJournalVoucher = () => {
             className="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-
             <div className="bg-[#005AB3] px-5 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center">
                   <FileDown size={18} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-medium text-[15px]">Journal voucher</p>
+                  <p className="text-white font-medium text-[15px]">
+                    Journal voucher
+                  </p>
                   <p className="text-white/70 text-xs">
                     {modalData.voucher?.voucherNo || modalData.voucher?.id}
                   </p>
@@ -530,20 +629,29 @@ const ListOfJournalVoucher = () => {
               </div>
             </div>
 
-
             <div className="grid grid-cols-3 divide-x divide-gray-200 border-b border-gray-200 bg-gray-50">
               {[
-                ["Date", new Date(modalData.voucher?.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })],
-                ["Voucher no.", modalData.voucher?.voucherNo || modalData.voucher?.id],
+                [
+                  "Date",
+                  new Date(modalData.voucher?.date).toLocaleDateString(
+                    "en-IN",
+                    { day: "2-digit", month: "short", year: "numeric" },
+                  ),
+                ],
+                [
+                  "Voucher no.",
+                  modalData.voucher?.voucherNo || modalData.voucher?.id,
+                ],
                 ["Entries", `${modalData.transactions?.length} lines`],
               ].map(([label, value]) => (
                 <div key={label} className="px-4 py-3">
-                  <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-0.5">{label}</p>
+                  <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-0.5">
+                    {label}
+                  </p>
                   <p className="text-sm font-medium text-gray-800">{value}</p>
                 </div>
               ))}
             </div>
-
 
             {modalData.voucher?.narration && (
               <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-200 text-sm text-gray-500 flex items-center gap-2">
@@ -551,71 +659,121 @@ const ListOfJournalVoucher = () => {
               </div>
             )}
 
-
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-200">
-                    <th className="px-4 py-2.5 text-left text-xs text-gray-400 font-medium w-8">#</th>
-                    <th className="px-4 py-2.5 text-left text-xs text-gray-400 font-medium">Particulars</th>
-                    <th className="px-4 py-2.5 text-right text-xs text-gray-400 font-medium w-28">Debit (₹)</th>
-                    <th className="px-4 py-2.5 text-right text-xs text-gray-400 font-medium w-28">Credit (₹)</th>
+                    <th className="px-4 py-2.5 text-left text-xs text-gray-400 font-medium w-8">
+                      #
+                    </th>
+                    <th className="px-4 py-2.5 text-left text-xs text-gray-400 font-medium">
+                      Particulars
+                    </th>
+                    <th className="px-4 py-2.5 text-right text-xs text-gray-400 font-medium w-28">
+                      Debit (₹)
+                    </th>
+                    <th className="px-4 py-2.5 text-right text-xs text-gray-400 font-medium w-28">
+                      Credit (₹)
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {modalData.transactions?.map((t, i) => (
                     <tr key={i} className="hover:bg-gray-50">
-                      <td className="px-4 py-2.5 text-xs text-gray-400">{i + 1}</td>
+                      <td className="px-4 py-2.5 text-xs text-gray-400">
+                        {i + 1}
+                      </td>
                       <td className="px-4 py-2.5">
-                        <p className="font-medium text-gray-800">{t.particulars || "N/A"}</p>
-                        <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${t.debit > 0 ? "bg-red-50 text-red-600" : "bg-green-50 text-green-600"
-                          }`}>
+                        <p className="font-medium text-gray-800">
+                          {t.particulars || "N/A"}
+                        </p>
+                        <span
+                          className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+                            t.debit > 0
+                              ? "bg-red-50 text-red-600"
+                              : "bg-green-50 text-green-600"
+                          }`}
+                        >
                           {t.debit > 0 ? "Dr" : "Cr"}
                         </span>
                       </td>
                       <td className="px-4 py-2.5 text-right font-mono text-red-600">
-                        {t.debit > 0 ? Number(t.debit).toLocaleString("en-IN", { minimumFractionDigits: 2 }) : "—"}
+                        {t.debit > 0
+                          ? Number(t.debit).toLocaleString("en-IN", {
+                              minimumFractionDigits: 2,
+                            })
+                          : "—"}
                       </td>
                       <td className="px-4 py-2.5 text-right font-mono text-green-600">
-                        {t.credit > 0 ? Number(t.credit).toLocaleString("en-IN", { minimumFractionDigits: 2 }) : "—"}
+                        {t.credit > 0
+                          ? Number(t.credit).toLocaleString("en-IN", {
+                              minimumFractionDigits: 2,
+                            })
+                          : "—"}
                       </td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr className="bg-gray-50 border-t border-gray-200">
-                    <td colSpan={2} className="px-4 py-2.5 text-xs text-gray-400 font-medium">Total</td>
+                    <td
+                      colSpan={2}
+                      className="px-4 py-2.5 text-xs text-gray-400 font-medium"
+                    >
+                      Total
+                    </td>
                     <td className="px-4 py-2.5 text-right font-mono font-medium text-red-600">
-                      {Number(modalData.voucher?.totalDebit || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      {Number(
+                        modalData.voucher?.totalDebit || 0,
+                      ).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </td>
                     <td className="px-4 py-2.5 text-right font-mono font-medium text-green-600">
-                      {Number(modalData.voucher?.totalCredit || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      {Number(
+                        modalData.voucher?.totalCredit || 0,
+                      ).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
                 </tfoot>
               </table>
             </div>
 
-
             <div className="grid grid-cols-3 divide-x divide-gray-200 border-t border-gray-200">
               {[
                 ["Total debit", modalData.voucher?.totalDebit, "text-red-600"],
-                ["Total credit", modalData.voucher?.totalCredit, "text-green-600"],
-                ["Difference", Math.abs((modalData.voucher?.totalDebit || 0) - (modalData.voucher?.totalCredit || 0)), "text-gray-800"],
+                [
+                  "Total credit",
+                  modalData.voucher?.totalCredit,
+                  "text-green-600",
+                ],
+                [
+                  "Difference",
+                  Math.abs(
+                    (modalData.voucher?.totalDebit || 0) -
+                      (modalData.voucher?.totalCredit || 0),
+                  ),
+                  "text-gray-800",
+                ],
               ].map(([label, val, cls]) => (
                 <div key={label} className="px-4 py-3">
-                  <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-1">{label}</p>
+                  <p className="text-[11px] uppercase tracking-wide text-gray-400 mb-1">
+                    {label}
+                  </p>
                   <p className={`text-lg font-medium font-mono ${cls}`}>
-                    ₹{Number(val || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                    ₹
+                    {Number(val || 0).toLocaleString("en-IN", {
+                      minimumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               ))}
             </div>
 
-
             <div className="px-5 py-3 border-t border-gray-200 flex items-center justify-between">
               <span className="text-xs text-gray-400">
-                Created {new Date(modalData.voucher?.createdAt || modalData.voucher?.date).toLocaleString("en-IN")}
+                Created{" "}
+                {new Date(
+                  modalData.voucher?.createdAt || modalData.voucher?.date,
+                ).toLocaleString("en-IN")}
               </span>
               <div className="flex gap-2">
                 <button

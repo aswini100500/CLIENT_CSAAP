@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
-import { Trash2, Pencil, FileDown, FileSpreadsheet, Printer, UserRound } from "lucide-react";
+import {
+  Trash2,
+  Pencil,
+  FileDown,
+  FileSpreadsheet,
+  Printer,
+  UserRound,
+} from "lucide-react";
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
@@ -15,10 +22,9 @@ const ListOfGroups = () => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEmployeeActivity, setShowEmployeeActivity] = useState(false);
-  
+
   const { companyId, companyName } = useCompany();
   const API = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group`;
-
 
   const demoGroups = [
     {
@@ -62,7 +68,6 @@ const ListOfGroups = () => {
     if (!companyId) return;
     setLoading(true);
     try {
-
       const res = await axios.get(`${API}/all/${companyId}`);
       if (res.data && res.data.length > 0) {
         setGroups(res.data);
@@ -71,15 +76,11 @@ const ListOfGroups = () => {
         throw new Error("No backend data");
       }
     } catch (err) {
-
-
-
       const storedGroups = JSON.parse(localStorage.getItem("tallyGroups"));
 
       if (storedGroups && storedGroups.length > 0) {
         setGroups(storedGroups);
       } else {
-
         localStorage.setItem("tallyGroups", JSON.stringify(demoGroups));
         setGroups(demoGroups);
       }
@@ -96,7 +97,11 @@ const ListOfGroups = () => {
 
   const handleDelete = async (id) => {
     if (!id) {
-      Swal.fire("Error", "Cannot delete default/demo groups from backend.", "error");
+      Swal.fire(
+        "Error",
+        "Cannot delete default/demo groups from backend.",
+        "error",
+      );
       return;
     }
 
@@ -119,7 +124,11 @@ const ListOfGroups = () => {
         }
       } catch (err) {
         console.error(err);
-        Swal.fire("Error", "Failed to delete group. It might be in use.", "error");
+        Swal.fire(
+          "Error",
+          "Failed to delete group. It might be in use.",
+          "error",
+        );
       }
     }
   };
@@ -129,9 +138,13 @@ const ListOfGroups = () => {
 
   const filteredGroups = groups.filter((g) => {
     if (loggedInRole === "employee") {
-      return g.employee_id == loggedInEmployeeId && g.role?.toLowerCase() === 'employee';
+      return (
+        g.employee_id == loggedInEmployeeId &&
+        g.role?.toLowerCase() === "employee"
+      );
     }
-    const isCreatedByEmployee = g.employee_id && g.role?.toLowerCase() === 'employee';
+    const isCreatedByEmployee =
+      g.employee_id && g.role?.toLowerCase() === "employee";
     if (showEmployeeActivity) {
       return isCreatedByEmployee;
     } else {
@@ -142,7 +155,6 @@ const ListOfGroups = () => {
   const handleExportPDF = () => {
     const doc = new jsPDF();
     const today = new Date().toLocaleDateString("en-IN");
-
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
@@ -161,14 +173,13 @@ const ListOfGroups = () => {
     doc.setDrawColor(220);
     doc.line(14, 32, 195, 32);
 
-
     const tableData = filteredGroups.map((g, i) => [
       i + 1,
       g.groupName || "-",
       g.alias || "-",
       g.under || "-",
       g.nature || "-",
-      g.subLedger || "No"
+      g.subLedger || "No",
     ]);
 
     autoTable(doc, {
@@ -189,10 +200,9 @@ const ListOfGroups = () => {
         2: { cellWidth: 30 },
         3: { cellWidth: 40 },
         4: { cellWidth: 30 },
-        5: { halign: "center", cellWidth: 25 }
-      }
+        5: { halign: "center", cellWidth: 25 },
+      },
     });
-
 
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
@@ -210,12 +220,12 @@ const ListOfGroups = () => {
 
   const handleExportExcel = () => {
     if (filteredGroups.length === 0) return;
-    const exportData = filteredGroups.map(g => ({
+    const exportData = filteredGroups.map((g) => ({
       "Group Name": g.groupName,
       Alias: g.alias || "-",
       Under: g.under || "-",
       Nature: g.nature || "-",
-      "Sub-Ledger": g.subLedger || "No"
+      "Sub-Ledger": g.subLedger || "No",
     }));
     const ws = XLSX.utils.json_to_sheet(exportData);
     const wb = XLSX.utils.book_new();
@@ -231,7 +241,6 @@ const ListOfGroups = () => {
 
     const doc = new jsPDF();
     const today = new Date().toLocaleDateString("en-IN");
-
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
@@ -250,14 +259,13 @@ const ListOfGroups = () => {
     doc.setDrawColor(220);
     doc.line(14, 32, 195, 32);
 
-
     const tableData = filteredGroups.map((g, i) => [
       i + 1,
       g.groupName || "-",
       g.alias || "-",
       g.under || "-",
       g.nature || "-",
-      g.subLedger || "No"
+      g.subLedger || "No",
     ]);
 
     autoTable(doc, {
@@ -278,10 +286,9 @@ const ListOfGroups = () => {
         2: { cellWidth: 30 },
         3: { cellWidth: 40 },
         4: { cellWidth: 30 },
-        5: { halign: "center", cellWidth: 25 }
-      }
+        5: { halign: "center", cellWidth: 25 },
+      },
     });
-
 
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
@@ -302,12 +309,12 @@ const ListOfGroups = () => {
   return (
     <div className="min-h-screen bg-white p-6 font-[monospace]">
       <div className="max-w-5xl mx-auto border border-gray-300 rounded-md shadow-md bg-[#fffef7]">
-        
-
         <div className="flex flex-wrap justify-between items-center border-b border-gray-300 py-3 px-4 gap-4">
           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-semibold text-blue-800">List of Groups</h2>
-            
+            <h2 className="text-xl font-semibold text-blue-800">
+              List of Groups
+            </h2>
+
             {loggedInRole !== "employee" && (
               <button
                 onClick={() => setShowEmployeeActivity(!showEmployeeActivity)}
@@ -317,7 +324,12 @@ const ListOfGroups = () => {
                     : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                 }`}
               >
-                <UserRound size={16} className={showEmployeeActivity ? "text-purple-600" : "text-gray-500"} />
+                <UserRound
+                  size={16}
+                  className={
+                    showEmployeeActivity ? "text-purple-600" : "text-gray-500"
+                  }
+                />
                 {showEmployeeActivity ? "Employee Activity" : "My Groups"}
               </button>
             )}
@@ -337,7 +349,7 @@ const ListOfGroups = () => {
               className="flex items-center gap-1.5 bg-green-600 text-white px-3 py-1.5 rounded border border-green-500 hover:bg-green-700 transition-colors text-sm font-medium shadow-sm disabled:opacity-50"
             >
               <FileSpreadsheet size={16} />
-               Excel
+              Excel
             </button>
             <button
               onClick={handleExportPDF}
@@ -345,7 +357,7 @@ const ListOfGroups = () => {
               className="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1.5 rounded border border-blue-200 hover:bg-blue-100 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FileDown size={16} />
-               PDF
+              PDF
             </button>
             <Link
               to="/groupCreation"
@@ -356,23 +368,36 @@ const ListOfGroups = () => {
           </div>
         </div>
 
-
         {loading ? (
           <p className="text-center text-gray-500 py-6">Loading...</p>
         ) : filteredGroups.length === 0 ? (
           <p className="text-center text-gray-500 py-6">
-            {showEmployeeActivity ? "No employee groups created yet." : "No groups created yet."}
+            {showEmployeeActivity
+              ? "No employee groups created yet."
+              : "No groups created yet."}
           </p>
         ) : (
           <table className="w-full text-sm border-collapse">
             <thead className="bg-[#2563eb] text-white">
               <tr className="text-left font-bold">
-                <th className="py-3 px-3 border-r border-blue-400 w-10 text-center">#</th>
-                <th className="py-3 px-3 border-r border-blue-400">Group Name</th>
-                <th className="py-3 px-3 border-r border-blue-400 text-center">Alias</th>
-                <th className="py-3 px-3 border-r border-blue-400 text-center">Under</th>
-                <th className="py-3 px-3 border-r border-blue-400 text-center">Nature</th>
-                <th className="py-3 px-3 border-r border-blue-400 text-center">Sub-Ledger</th>
+                <th className="py-3 px-3 border-r border-blue-400 w-10 text-center">
+                  #
+                </th>
+                <th className="py-3 px-3 border-r border-blue-400">
+                  Group Name
+                </th>
+                <th className="py-3 px-3 border-r border-blue-400 text-center">
+                  Alias
+                </th>
+                <th className="py-3 px-3 border-r border-blue-400 text-center">
+                  Under
+                </th>
+                <th className="py-3 px-3 border-r border-blue-400 text-center">
+                  Nature
+                </th>
+                <th className="py-3 px-3 border-r border-blue-400 text-center">
+                  Sub-Ledger
+                </th>
                 <th className="py-3 px-3 text-center">Action</th>
               </tr>
             </thead>
@@ -382,7 +407,9 @@ const ListOfGroups = () => {
                   key={idx}
                   className="hover:bg-blue-50 border-b border-gray-200 transition"
                 >
-                  <td className="py-3 px-3 border-r border-gray-300 text-center">{idx + 1}</td>
+                  <td className="py-3 px-3 border-r border-gray-300 text-center">
+                    {idx + 1}
+                  </td>
                   <td className="py-3 px-3 border-r border-gray-300 font-medium text-gray-800">
                     {g.groupName}
                   </td>

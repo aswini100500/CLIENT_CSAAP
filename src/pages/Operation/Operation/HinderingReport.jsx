@@ -44,7 +44,7 @@ const HinderingReport = () => {
       setLoading(true);
       await operationApi.createHinderingRecord({
         ...newRecord,
-        status: "pending"
+        status: "pending",
       });
       setNewRecord({ record_date: "", description: "", remark: "" });
       fetchRecords();
@@ -72,7 +72,6 @@ const HinderingReport = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-8 bg-linear-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg space-y-6 border border-gray-200 dark:border-gray-700 transition-all duration-300">
-
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
           Hindering Records
@@ -81,7 +80,6 @@ const HinderingReport = () => {
           Total Records: {records.length}
         </span>
       </div>
-
 
       <div className="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
         <h3 className="font-semibold text-lg text-gray-800 dark:text-white mb-4">
@@ -121,7 +119,6 @@ const HinderingReport = () => {
         </button>
       </div>
 
-
       <div className="overflow-x-auto">
         <table className="w-full border-collapse rounded-lg overflow-hidden">
           <thead>
@@ -136,7 +133,10 @@ const HinderingReport = () => {
           <tbody>
             {records.length === 0 ? (
               <tr>
-                <td colSpan="5" className="text-center p-6 text-gray-500 dark:text-gray-400">
+                <td
+                  colSpan="5"
+                  className="text-center p-6 text-gray-500 dark:text-gray-400"
+                >
                   {loading ? "Loading..." : "No records available"}
                 </td>
               </tr>

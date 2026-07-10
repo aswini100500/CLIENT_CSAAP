@@ -25,33 +25,31 @@ const Bill = () => {
   const [expanded, setExpanded] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-
   useEffect(() => {
     setProjects([
-      { 
-        id: 1, 
+      {
+        id: 1,
         name: "Project A - Housing Complex",
         location: "Mumbai",
         startDate: "2024-01-15",
-        budget: "₹25 Cr"
+        budget: "₹25 Cr",
       },
-      { 
-        id: 2, 
+      {
+        id: 2,
         name: "Project B - Shopping Mall",
         location: "Delhi",
         startDate: "2024-02-01",
-        budget: "₹45 Cr"
+        budget: "₹45 Cr",
       },
-      { 
-        id: 3, 
+      {
+        id: 3,
         name: "Project C - Highway Expansion",
         location: "Bangalore",
         startDate: "2024-03-10",
-        budget: "₹120 Cr"
+        budget: "₹120 Cr",
       },
     ]);
   }, []);
-
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -59,14 +57,28 @@ const Bill = () => {
     setTimeout(() => {
       const demoEmployers = {
         1: [
-          { id: 101, name: "ABC Constructions Ltd", contact: "contact@abcconstructions.com" },
+          {
+            id: 101,
+            name: "ABC Constructions Ltd",
+            contact: "contact@abcconstructions.com",
+          },
           { id: 102, name: "MegaBuild Corp", contact: "info@megabuild.com" },
         ],
         2: [
           { id: 103, name: "Skyline Developers", contact: "hello@skyline.dev" },
-          { id: 104, name: "UrbanRise Group", contact: "contact@urbanrise.com" },
+          {
+            id: 104,
+            name: "UrbanRise Group",
+            contact: "contact@urbanrise.com",
+          },
         ],
-        3: [{ id: 105, name: "Highway Infra Pvt Ltd", contact: "projects@highwayinfra.com" }],
+        3: [
+          {
+            id: 105,
+            name: "Highway Infra Pvt Ltd",
+            contact: "projects@highwayinfra.com",
+          },
+        ],
       };
       setEmployers(demoEmployers[selectedProject] || []);
       setSelectedEmployer("");
@@ -74,7 +86,6 @@ const Bill = () => {
       setLoading(false);
     }, 500);
   }, [selectedProject]);
-
 
   useEffect(() => {
     if (!selectedEmployer) return;
@@ -88,8 +99,18 @@ const Bill = () => {
           contractor: "Sharma Earth Movers",
           contact: "sharma.earth@email.com",
           fields: [
-            { label: "Benchmark Price", key: "benchmarkPrice", value: 500, unit: "m³" },
-            { label: "Coated Price", key: "coatedPrice", value: 480, unit: "m³" },
+            {
+              label: "Benchmark Price",
+              key: "benchmarkPrice",
+              value: 500,
+              unit: "m³",
+            },
+            {
+              label: "Coated Price",
+              key: "coatedPrice",
+              value: 480,
+              unit: "m³",
+            },
             { label: "Final Price", key: "finalPrice", value: 490, unit: "m³" },
             { label: "Quantity", key: "quantity", value: 120, unit: "m³" },
           ],
@@ -103,8 +124,18 @@ const Bill = () => {
           contractor: "ABC Cement Works",
           contact: "concrete@abcworks.com",
           fields: [
-            { label: "Benchmark Price", key: "benchmarkPrice", value: 650, unit: "m³" },
-            { label: "Coated Price", key: "coatedPrice", value: 640, unit: "m³" },
+            {
+              label: "Benchmark Price",
+              key: "benchmarkPrice",
+              value: 650,
+              unit: "m³",
+            },
+            {
+              label: "Coated Price",
+              key: "coatedPrice",
+              value: 640,
+              unit: "m³",
+            },
             { label: "Final Price", key: "finalPrice", value: 645, unit: "m³" },
             { label: "Quantity", key: "quantity", value: 80, unit: "m³" },
           ],
@@ -117,10 +148,10 @@ const Bill = () => {
     }, 800);
   }, [selectedEmployer]);
 
-
-  const filteredSubletting = subletting.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.contractor.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredSubletting = subletting.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.contractor.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const toggleExpand = (id) => {
@@ -134,52 +165,50 @@ const Bill = () => {
           ? {
               ...item,
               fields: item.fields?.map((f) =>
-                f.key === fieldKey ? { ...f, value: Number(value) } : f
+                f.key === fieldKey ? { ...f, value: Number(value) } : f,
               ),
             }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
   const handleContractorChange = (id, field, value) => {
     setSubletting((prev) =>
-      prev.map((item) => 
-        item.id === id ? { ...item, [field]: value } : item
-      )
+      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     );
   };
 
   const handleEditToggle = (id) => {
     setSubletting((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, editing: !item.editing } : item
-      )
+        item.id === id ? { ...item, editing: !item.editing } : item,
+      ),
     );
   };
 
   const deleteSublettingItem = async (id, name) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: `Delete "${name}"?`,
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel'
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     });
 
     if (result.isConfirmed) {
-      setSubletting(prev => prev.filter(item => item.id !== id));
+      setSubletting((prev) => prev.filter((item) => item.id !== id));
       if (expanded === id) setExpanded(null);
-      Swal.fire('Deleted!', 'Subletting item has been deleted.', 'success');
+      Swal.fire("Deleted!", "Subletting item has been deleted.", "success");
     }
   };
 
   const addSublettingItem = async () => {
     const { value: formValues } = await Swal.fire({
-      title: 'Add New Subletting Item',
+      title: "Add New Subletting Item",
       html: `
         <input id="swal-name" class="swal2-input" placeholder="Work Item Name" required>
         <input id="swal-description" class="swal2-input" placeholder="Description">
@@ -188,21 +217,21 @@ const Bill = () => {
       `,
       focusConfirm: false,
       showCancelButton: true,
-      confirmButtonText: 'Add Item',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: "Add Item",
+      cancelButtonText: "Cancel",
       preConfirm: () => {
         return {
-          name: document.getElementById('swal-name').value,
-          description: document.getElementById('swal-description').value,
-          contractor: document.getElementById('swal-contractor').value,
-          contact: document.getElementById('swal-contact').value
+          name: document.getElementById("swal-name").value,
+          description: document.getElementById("swal-description").value,
+          contractor: document.getElementById("swal-contractor").value,
+          contact: document.getElementById("swal-contact").value,
         };
       },
       validation: (values) => {
         if (!values.name) {
-          Swal.showValidationMessage('Please enter a work item name');
+          Swal.showValidationMessage("Please enter a work item name");
         }
-      }
+      },
     });
 
     if (!formValues) return;
@@ -210,11 +239,16 @@ const Bill = () => {
     const newItem = {
       id: Date.now(),
       name: formValues.name,
-      description: formValues.description || '',
-      contractor: formValues.contractor || '',
-      contact: formValues.contact || '',
+      description: formValues.description || "",
+      contractor: formValues.contractor || "",
+      contact: formValues.contact || "",
       fields: [
-        { label: "Benchmark Price", key: "benchmarkPrice", value: 0, unit: "unit" },
+        {
+          label: "Benchmark Price",
+          key: "benchmarkPrice",
+          value: 0,
+          unit: "unit",
+        },
         { label: "Coated Price", key: "coatedPrice", value: 0, unit: "unit" },
         { label: "Final Price", key: "finalPrice", value: 0, unit: "unit" },
         { label: "Quantity", key: "quantity", value: 0, unit: "unit" },
@@ -229,23 +263,23 @@ const Bill = () => {
 
   const addFieldToItem = async (itemId) => {
     const { value: fieldName } = await Swal.fire({
-      title: 'Add New Field',
-      input: 'text',
-      inputPlaceholder: 'Field Name (e.g., Material Cost, Labor Cost)',
+      title: "Add New Field",
+      input: "text",
+      inputPlaceholder: "Field Name (e.g., Material Cost, Labor Cost)",
       showCancelButton: true,
-      confirmButtonText: 'Add Field',
-      cancelButtonText: 'Cancel'
+      confirmButtonText: "Add Field",
+      cancelButtonText: "Cancel",
     });
 
     if (!fieldName) return;
 
     const { value: unit } = await Swal.fire({
-      title: 'Unit of Measurement',
-      input: 'text',
-      inputPlaceholder: 'e.g., m³, kg, unit',
+      title: "Unit of Measurement",
+      input: "text",
+      inputPlaceholder: "e.g., m³, kg, unit",
       showCancelButton: true,
-      confirmButtonText: 'Add',
-      cancelButtonText: 'Skip'
+      confirmButtonText: "Add",
+      cancelButtonText: "Skip",
     });
 
     setSubletting((prev) =>
@@ -259,25 +293,25 @@ const Bill = () => {
                   label: fieldName,
                   key: `field_${Date.now()}`,
                   value: 0,
-                  unit: unit || 'unit'
+                  unit: unit || "unit",
                 },
               ],
             }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
   const removeField = (itemId, fieldKey) => {
-    setSubletting(prev =>
-      prev.map(item =>
+    setSubletting((prev) =>
+      prev.map((item) =>
         item.id === itemId
           ? {
               ...item,
-              fields: item.fields.filter(f => f.key !== fieldKey)
+              fields: item.fields.filter((f) => f.key !== fieldKey),
             }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
@@ -290,22 +324,32 @@ const Bill = () => {
 
   const calculateSavings = (item) => {
     if (!item || !Array.isArray(item.fields)) return 0;
-    const benchmark = item.fields.find((f) => f.key === "benchmarkPrice")?.value || 0;
+    const benchmark =
+      item.fields.find((f) => f.key === "benchmarkPrice")?.value || 0;
     const final = item.fields.find((f) => f.key === "finalPrice")?.value || 0;
     const qty = item.fields.find((f) => f.key === "quantity")?.value || 0;
     return (Number(benchmark) - Number(final)) * Number(qty);
   };
 
-  const grandTotal = subletting.reduce((acc, item) => acc + calculateTotal(item), 0);
-  const totalSavings = subletting.reduce((acc, item) => acc + calculateSavings(item), 0);
+  const grandTotal = subletting.reduce(
+    (acc, item) => acc + calculateTotal(item),
+    0,
+  );
+  const totalSavings = subletting.reduce(
+    (acc, item) => acc + calculateSavings(item),
+    0,
+  );
 
-  const selectedProjectData = projects.find(p => p.id === Number(selectedProject));
-  const selectedEmployerData = employers.find(e => e.id === Number(selectedEmployer));
+  const selectedProjectData = projects.find(
+    (p) => p.id === Number(selectedProject),
+  );
+  const selectedEmployerData = employers.find(
+    (e) => e.id === Number(selectedEmployer),
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <FileText className="h-8 w-8 text-blue-600" />
@@ -318,10 +362,8 @@ const Bill = () => {
           </p>
         </div>
 
-
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Building className="h-5 w-5 text-blue-600" />
@@ -341,17 +383,16 @@ const Bill = () => {
                   </option>
                 ))}
               </select>
-              
+
               {selectedProjectData && (
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
                   <p className="text-sm text-blue-800 dark:text-blue-200">
-                    <strong>Location:</strong> {selectedProjectData.location} • 
+                    <strong>Location:</strong> {selectedProjectData.location} •
                     <strong> Budget:</strong> {selectedProjectData.budget}
                   </p>
                 </div>
               )}
             </div>
-
 
             <div className="space-y-4">
               <div className="flex items-center gap-3">
@@ -373,7 +414,7 @@ const Bill = () => {
                   </option>
                 ))}
               </select>
-              
+
               {selectedEmployerData && (
                 <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
                   <p className="text-sm text-green-800 dark:text-green-200">
@@ -385,7 +426,6 @@ const Bill = () => {
           </div>
         </div>
 
-
         {loading && (
           <div className="flex justify-center items-center py-12">
             <Loader2 className="animate-spin text-blue-600 h-8 w-8" />
@@ -395,10 +435,8 @@ const Bill = () => {
           </div>
         )}
 
-
         {!loading && selectedEmployer && (
           <div className="space-y-6">
-
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
@@ -410,9 +448,8 @@ const Bill = () => {
                     {subletting.length} items • ₹{grandTotal.toFixed(2)} total
                   </p>
                 </div>
-                
-                <div className="flex flex-col sm:flex-row gap-3">
 
+                <div className="flex flex-col sm:flex-row gap-3">
                   <div className="relative">
                     <input
                       type="text"
@@ -422,12 +459,22 @@ const Bill = () => {
                       className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      <svg
+                        className="h-5 w-5 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
                       </svg>
                     </div>
                   </div>
-                  
+
                   <button
                     onClick={addSublettingItem}
                     className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors duration-200"
@@ -437,23 +484,33 @@ const Bill = () => {
                 </div>
               </div>
 
-
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <p className="text-sm text-blue-600 dark:text-blue-400">Total Value</p>
-                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">₹{grandTotal.toFixed(2)}</p>
+                  <p className="text-sm text-blue-600 dark:text-blue-400">
+                    Total Value
+                  </p>
+                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+                    ₹{grandTotal.toFixed(2)}
+                  </p>
                 </div>
                 <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                  <p className="text-sm text-green-600 dark:text-green-400">Total Savings</p>
-                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">₹{totalSavings.toFixed(2)}</p>
+                  <p className="text-sm text-green-600 dark:text-green-400">
+                    Total Savings
+                  </p>
+                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">
+                    ₹{totalSavings.toFixed(2)}
+                  </p>
                 </div>
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                  <p className="text-sm text-purple-600 dark:text-purple-400">Items Count</p>
-                  <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{subletting.length}</p>
+                  <p className="text-sm text-purple-600 dark:text-purple-400">
+                    Items Count
+                  </p>
+                  <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+                    {subletting.length}
+                  </p>
                 </div>
               </div>
             </div>
-
 
             <div className="space-y-4">
               {filteredSubletting.length === 0 ? (
@@ -463,7 +520,9 @@ const Bill = () => {
                     No subletting items found
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400 mb-4">
-                    {searchTerm ? 'Try adjusting your search terms' : 'Get started by adding your first subletting item'}
+                    {searchTerm
+                      ? "Try adjusting your search terms"
+                      : "Get started by adding your first subletting item"}
                   </p>
                   <button
                     onClick={addSublettingItem}
@@ -478,7 +537,6 @@ const Bill = () => {
                     key={item.id}
                     className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700"
                   >
-
                     <button
                       onClick={() => toggleExpand(item.id)}
                       className="w-full flex justify-between items-center p-6 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-200"
@@ -497,26 +555,32 @@ const Bill = () => {
                             ₹{calculateTotal(item).toFixed(2)}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {item.fields?.find(f => f.key === 'quantity')?.value || 0} units
+                            {item.fields?.find((f) => f.key === "quantity")
+                              ?.value || 0}{" "}
+                            units
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4 ml-4">
-                        <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          item.status === 'active' 
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
-                        }`}>
+                        <div
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            item.status === "active"
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                              : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                          }`}
+                        >
                           {item.status}
                         </div>
-                        {expanded === item.id ? <ChevronUp className="text-gray-500" /> : <ChevronDown className="text-gray-500" />}
+                        {expanded === item.id ? (
+                          <ChevronUp className="text-gray-500" />
+                        ) : (
+                          <ChevronDown className="text-gray-500" />
+                        )}
                       </div>
                     </button>
 
-
                     {expanded === item.id && (
                       <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-750">
-
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -525,21 +589,33 @@ const Bill = () => {
                             <input
                               type="text"
                               value={item.name}
-                              onChange={(e) => handleContractorChange(item.id, 'name', e.target.value)}
+                              onChange={(e) =>
+                                handleContractorChange(
+                                  item.id,
+                                  "name",
+                                  e.target.value,
+                                )
+                              }
                               disabled={!item.editing}
                               className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 mb-3"
                               placeholder="Work item name"
                             />
                             <textarea
                               value={item.description}
-                              onChange={(e) => handleContractorChange(item.id, 'description', e.target.value)}
+                              onChange={(e) =>
+                                handleContractorChange(
+                                  item.id,
+                                  "description",
+                                  e.target.value,
+                                )
+                              }
                               disabled={!item.editing}
                               className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
                               placeholder="Description"
                               rows="2"
                             />
                           </div>
-                          
+
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                               Contractor Details
@@ -547,7 +623,13 @@ const Bill = () => {
                             <input
                               type="text"
                               value={item.contractor}
-                              onChange={(e) => handleContractorChange(item.id, 'contractor', e.target.value)}
+                              onChange={(e) =>
+                                handleContractorChange(
+                                  item.id,
+                                  "contractor",
+                                  e.target.value,
+                                )
+                              }
                               disabled={!item.editing}
                               className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 mb-3"
                               placeholder="Contractor name"
@@ -555,14 +637,19 @@ const Bill = () => {
                             <input
                               type="text"
                               value={item.contact}
-                              onChange={(e) => handleContractorChange(item.id, 'contact', e.target.value)}
+                              onChange={(e) =>
+                                handleContractorChange(
+                                  item.id,
+                                  "contact",
+                                  e.target.value,
+                                )
+                              }
                               disabled={!item.editing}
                               className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
                               placeholder="Contact information"
                             />
                           </div>
                         </div>
-
 
                         <div className="mb-6">
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
@@ -578,7 +665,11 @@ const Bill = () => {
                                   type="number"
                                   value={field.value}
                                   onChange={(e) =>
-                                    handleFieldChange(item.id, field.key, e.target.value)
+                                    handleFieldChange(
+                                      item.id,
+                                      field.key,
+                                      e.target.value,
+                                    )
                                   }
                                   disabled={!item.editing}
                                   className="w-full p-2 pr-16 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
@@ -586,19 +677,21 @@ const Bill = () => {
                                 <span className="absolute right-2 top-7 text-xs text-gray-500 dark:text-gray-400">
                                   {field.unit}
                                 </span>
-                                {item.editing && field.key.includes('extraField') && (
-                                  <button
-                                    onClick={() => removeField(item.id, field.key)}
-                                    className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
-                                  >
-                                    <Trash2 size={12} />
-                                  </button>
-                                )}
+                                {item.editing &&
+                                  field.key.includes("extraField") && (
+                                    <button
+                                      onClick={() =>
+                                        removeField(item.id, field.key)
+                                      }
+                                      className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                                    >
+                                      <Trash2 size={12} />
+                                    </button>
+                                  )}
                               </div>
                             ))}
                           </div>
                         </div>
-
 
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4 border-t border-gray-200 dark:border-gray-600">
                           <div className="flex gap-3">
@@ -609,9 +702,11 @@ const Bill = () => {
                             >
                               <Plus size={16} /> Add Field
                             </button>
-                            
+
                             <button
-                              onClick={() => deleteSublettingItem(item.id, item.name)}
+                              onClick={() =>
+                                deleteSublettingItem(item.id, item.name)
+                              }
                               className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200"
                             >
                               <Trash2 size={16} /> Delete
@@ -620,7 +715,9 @@ const Bill = () => {
 
                           <div className="flex items-center gap-6">
                             <div className="text-right">
-                              <p className="text-sm text-gray-600 dark:text-gray-400">Item Total</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Item Total
+                              </p>
                               <p className="text-xl font-bold text-green-600 dark:text-green-400">
                                 ₹{calculateTotal(item).toFixed(2)}
                               </p>
@@ -630,17 +727,21 @@ const Bill = () => {
                                 </p>
                               )}
                             </div>
-                            
+
                             <button
                               onClick={() => handleEditToggle(item.id)}
                               className={`flex items-center gap-2 px-6 py-2 rounded-lg transition-colors duration-200 ${
                                 item.editing
-                                  ? 'bg-green-600 hover:bg-green-700 text-white'
-                                  : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                  ? "bg-green-600 hover:bg-green-700 text-white"
+                                  : "bg-blue-600 hover:bg-blue-700 text-white"
                               }`}
                             >
-                              {item.editing ? <Save size={16} /> : <Edit size={16} />}
-                              {item.editing ? 'Save Changes' : 'Edit Item'}
+                              {item.editing ? (
+                                <Save size={16} />
+                              ) : (
+                                <Edit size={16} />
+                              )}
+                              {item.editing ? "Save Changes" : "Edit Item"}
                             </button>
                           </div>
                         </div>
@@ -651,26 +752,29 @@ const Bill = () => {
               )}
             </div>
 
-
             {filteredSubletting.length > 0 && (
               <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white p-6 rounded-2xl shadow-lg">
                 <div className="flex justify-between items-center">
                   <div>
                     <h3 className="text-xl font-bold">Grand Total</h3>
                     <p className="text-blue-100">
-                      {subletting.length} items • Total Savings: ₹{totalSavings.toFixed(2)}
+                      {subletting.length} items • Total Savings: ₹
+                      {totalSavings.toFixed(2)}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-3xl font-bold">₹{grandTotal.toFixed(2)}</p>
-                    <p className="text-blue-100 text-sm">Inclusive of all items</p>
+                    <p className="text-3xl font-bold">
+                      ₹{grandTotal.toFixed(2)}
+                    </p>
+                    <p className="text-blue-100 text-sm">
+                      Inclusive of all items
+                    </p>
                   </div>
                 </div>
               </div>
             )}
           </div>
         )}
-
 
         {!loading && !selectedEmployer && selectedProject && (
           <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
@@ -679,11 +783,11 @@ const Bill = () => {
               Select a Principal Employer
             </h3>
             <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
-              Choose a principal employer from the dropdown above to start managing subletting items and quantities for your project.
+              Choose a principal employer from the dropdown above to start
+              managing subletting items and quantities for your project.
             </p>
           </div>
         )}
-
 
         {!loading && !selectedProject && (
           <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
@@ -692,7 +796,8 @@ const Bill = () => {
               Select a Project
             </h3>
             <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
-              Choose a project from the dropdown above to get started with your Bill of Quantities management.
+              Choose a project from the dropdown above to get started with your
+              Bill of Quantities management.
             </p>
           </div>
         )}
@@ -702,5 +807,3 @@ const Bill = () => {
 };
 
 export default Bill;
-
-

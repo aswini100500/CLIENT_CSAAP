@@ -208,9 +208,7 @@ const PayrollEditModal = ({
     <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="app-modal w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar text-sm">
         <div className="flex items-center justify-between p-4 border-b border-(--border-soft) bg-(--bg-panel) sticky top-0 z-10">
-          <h2 className="modal-title">
-            {employee?.name}
-          </h2>
+          <h2 className="modal-title">{employee?.name}</h2>
           <button
             onClick={onCancel}
             className="app-icon-button p-2 text-(--text-soft) hover:bg-black/5 hover:text-(--text-strong) transition-colors"
@@ -243,7 +241,9 @@ const PayrollEditModal = ({
                   Earnings
                 </h3>
                 <div className="flex items-center justify-between">
-                  <label className="modal-label text-(--text-body)">Basic</label>
+                  <label className="modal-label text-(--text-body)">
+                    Basic
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -307,7 +307,9 @@ const PayrollEditModal = ({
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <label className="modal-label text-(--text-body)">Special Allowance</label>
+                  <label className="modal-label text-(--text-body)">
+                    Special Allowance
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -330,7 +332,9 @@ const PayrollEditModal = ({
                         key={`o-earn-${idx}`}
                         className="flex items-center justify-between"
                       >
-                        <label className="modal-label text-(--text-body)">{comp.name}</label>
+                        <label className="modal-label text-(--text-body)">
+                          {comp.name}
+                        </label>
                         <input
                           type="number"
                           min="0"
@@ -360,7 +364,6 @@ const PayrollEditModal = ({
                   <span>{baseGross === gross ? "Gross" : "Base Gross"}</span>
                   <span>{formatINR(baseGross)}</span>
                 </div>
-
 
                 {localExtraEarnings.map((comp, idx) => (
                   <div
@@ -495,7 +498,9 @@ const PayrollEditModal = ({
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <label className="modal-label text-(--text-body)">Professional Tax</label>
+                  <label className="modal-label text-(--text-body)">
+                    Professional Tax
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -527,7 +532,6 @@ const PayrollEditModal = ({
                   />
                 </div>
 
-
                 {localOtherComps.map(
                   (comp, idx) =>
                     comp.type === "deduction" && (
@@ -535,7 +539,9 @@ const PayrollEditModal = ({
                         key={`o-ded-${idx}`}
                         className="flex items-center justify-between"
                       >
-                        <label className="modal-label text-(--text-body)">{comp.name}</label>
+                        <label className="modal-label text-(--text-body)">
+                          {comp.name}
+                        </label>
                         <input
                           type="number"
                           min="0"
@@ -560,7 +566,6 @@ const PayrollEditModal = ({
                       </div>
                     ),
                 )}
-
 
                 {localExtraDeductions.map((comp, idx) => (
                   <div
@@ -628,7 +633,9 @@ const PayrollEditModal = ({
                   + Add Extra Deduction
                 </button>
                 <div className="flex items-center justify-between">
-                  <label className="modal-label text-(--text-body) font-bold">TDS</label>
+                  <label className="modal-label text-(--text-body) font-bold">
+                    TDS
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -644,7 +651,9 @@ const PayrollEditModal = ({
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <label className="modal-label text-rose-600 font-bold">LOP Deduction</label>
+                  <label className="modal-label text-rose-600 font-bold">
+                    LOP Deduction
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -663,14 +672,18 @@ const PayrollEditModal = ({
                 </div>
                 {halfDayDeduction > 0 && (
                   <div className="flex items-center justify-between">
-                    <label className="modal-label text-rose-600 font-bold">Half-day Deduction</label>
+                    <label className="modal-label text-rose-600 font-bold">
+                      Half-day Deduction
+                    </label>
                     <span className="app-input w-32 px-2 py-1 text-right text-rose-700 bg-rose-50/50 border border-rose-200">
                       {formatINR(halfDayDeduction)}
                     </span>
                   </div>
                 )}
                 <div className="flex items-center justify-between">
-                  <label className="modal-label text-(--text-soft)">Attendance Ratio</label>
+                  <label className="modal-label text-(--text-soft)">
+                    Attendance Ratio
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -685,8 +698,8 @@ const PayrollEditModal = ({
                       const parsed = parseFloat(e.target.value);
                       setLocalAttendanceRatio(
                         Number.isNaN(parsed)
-                           ? 1
-                           : Math.min(1, Math.max(0, parsed)),
+                          ? 1
+                          : Math.min(1, Math.max(0, parsed)),
                       );
                     }}
                     onKeyDown={handleKeyDown}
@@ -712,7 +725,9 @@ const PayrollEditModal = ({
                 <div className="text-2xl font-bold text-(--text-strong)">
                   {uiPresentDays}
                 </div>
-                <div className="text-xs text-(--text-soft) mt-1">Days Present</div>
+                <div className="text-xs text-(--text-soft) mt-1">
+                  Days Present
+                </div>
               </div>
               <div className="app-panel-muted p-4 text-center">
                 <div className="text-2xl font-bold text-amber-600">
@@ -738,7 +753,9 @@ const PayrollEditModal = ({
                 <div className="text-2xl font-bold text-purple-600">
                   {formatWorkHours(payroll.otHoursDecimal)}
                 </div>
-                <div className="text-xs text-(--text-soft) mt-1">Overtime Hours</div>
+                <div className="text-xs text-(--text-soft) mt-1">
+                  Overtime Hours
+                </div>
               </div>
             </div>
           )}
@@ -764,7 +781,9 @@ const PayrollEditModal = ({
                   <div className="text-base md:text-lg font-bold text-emerald-800">
                     {formatINR(netSalary)}
                   </div>
-                  <div className="text-emerald-700 text-xs mt-1">Net Payable</div>
+                  <div className="text-emerald-700 text-xs mt-1">
+                    Net Payable
+                  </div>
                 </div>
               </div>
               <div className="text-center text-xs text-(--text-faint) font-medium">

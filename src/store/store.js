@@ -11,18 +11,16 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage/session";
 
-import companyApiReducer from './slices/companyApiSlice';
+import companyApiReducer from "./slices/companyApiSlice";
 import userReducer from "./slices/userSlice";
 import superAdminReducer from "../submodules/hrms/redux/slices/superAdminSlice";
 import employeeReducer from "../submodules/hrms/redux/slices/employeeSlice";
-
 
 const persistConfig = {
   key: "root",
   storage,
   whitelist: ["user", "superAdmin", "employee"],
 };
-
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -31,9 +29,7 @@ const rootReducer = combineReducers({
   employee: employeeReducer,
 });
 
-
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -44,6 +40,5 @@ export const store = configureStore({
       },
     }),
 });
-
 
 export const persistor = persistStore(store);

@@ -141,8 +141,6 @@ const emptyForm = {
 };
 
 const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
-
-  
   const attendanceId =
     attendanceRecord?.attendance_id ||
     attendanceRecord?.id ||
@@ -224,9 +222,12 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
     const fetchEmployeeDetails = async (employeeId) => {
       if (!employeeId || !token) return null;
 
-      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/get-employee/${employeeId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/get-employee/${employeeId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       return response.data?.data || null;
     };
@@ -367,7 +368,6 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
     const { name, value } = event.target;
     setForm((current) => {
       const next = { ...current, [name]: value };
-
 
       if (name === "punchOutTime" && (!value || value === "N/A")) {
         next.timesheetDetails = "";

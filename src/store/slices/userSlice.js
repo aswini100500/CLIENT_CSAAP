@@ -22,7 +22,7 @@ export const normalizeUserPayload = (payload = {}) => ({
   id: payload.user_id ?? payload.id ?? null,
   user_id: payload.user_id ?? payload.id ?? null,
   employee_id: payload.employee_id ?? payload.employeeProfileId ?? null,
-  employeeProfileId: payload.employee_id ?? payload.employeeProfileId ??  null,
+  employeeProfileId: payload.employee_id ?? payload.employeeProfileId ?? null,
   name: payload.name || "",
   email: payload.email || "",
   token: payload.token || "",

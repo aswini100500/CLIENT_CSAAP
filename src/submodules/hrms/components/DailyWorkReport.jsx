@@ -210,7 +210,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
     };
   };
 
-
   useEffect(() => {
     const fetchProjectScope = async () => {
       const activeCompanyId = companyId || user?.company_id;
@@ -225,20 +224,19 @@ const DailyWorkReport = ({ hideHeader = false }) => {
       try {
         const headers = { Authorization: `Bearer ${token}` };
 
-
         const projRes = await axios.get(
           `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
           {
             params: { company_id: activeCompanyId },
             headers,
-          }
+          },
         );
 
         const projectsData = Array.isArray(projRes.data?.data)
           ? projRes.data.data
           : Array.isArray(projRes.data)
-          ? projRes.data
-          : [];
+            ? projRes.data
+            : [];
 
         const allProjects = projectsData
           .map((project) => {
@@ -251,7 +249,9 @@ const DailyWorkReport = ({ hideHeader = false }) => {
               locality: project.locality || "",
               city: project.city || "",
               composite_key: `${property_type}:${project.id}`,
-              location: [project?.locality, project?.city].filter(Boolean).join(", "),
+              location: [project?.locality, project?.city]
+                .filter(Boolean)
+                .join(", "),
             };
           })
           .filter((project) => project && project.name)
@@ -266,13 +266,14 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           return;
         }
 
-
         const employeesRes = await axios
-          .get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`, { headers })
+          .get(
+            `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/all-employees`,
+            { headers },
+          )
           .catch(() => ({ data: [] }));
 
         const employees = employeesRes.data?.data || employeesRes.data || [];
-
 
         const currentEmployee = employees.find(
           (employee) =>
@@ -282,14 +283,15 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           currentEmployee?.department || user?.department || "",
         );
 
+        const assignmentsRes = await axios
+          .get(
+            `${import.meta.env.VITE_CSAAP_URL}/api/tenant/project-assignments`,
+            { headers },
+          )
+          .catch(() => ({ data: { data: [] } }));
 
-        const assignmentsRes = await axios.get(
-          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/project-assignments`,
-          { headers }
-        ).catch(() => ({ data: { data: [] } }));
-
-        const allAssignments = assignmentsRes.data?.data || assignmentsRes.data || [];
-
+        const allAssignments =
+          assignmentsRes.data?.data || assignmentsRes.data || [];
 
         const allAuthorizedEmployeeIds = new Set();
         const consolidatedDepts = {};
@@ -298,21 +300,23 @@ const DailyWorkReport = ({ hideHeader = false }) => {
         const departmentIds =
           isDepartmentReviewer && !canViewAllReports && currentDepartment
             ? employees
-              .filter(
-                (employee) =>
-                  normalizeDepartment(employee?.department || "") ===
-                  currentDepartment,
-              )
-              .map((employee) => String(getEmployeeRecordId(employee)))
-              .filter(Boolean)
+                .filter(
+                  (employee) =>
+                    normalizeDepartment(employee?.department || "") ===
+                    currentDepartment,
+                )
+                .map((employee) => String(getEmployeeRecordId(employee)))
+                .filter(Boolean)
             : [];
 
         allProjects.forEach((project) => {
-
           const assignments = allAssignments.filter(
             (a) =>
               String(a.projectid) === String(project.id) &&
-              String(a.projectbranch || "").trim().toLowerCase() === String(project.property_type).trim().toLowerCase()
+              String(a.projectbranch || "")
+                .trim()
+                .toLowerCase() ===
+                String(project.property_type).trim().toLowerCase(),
           );
 
           const isManagerOfThisProject = assignments.some(
@@ -405,7 +409,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
   const filteredRecords = useMemo(() => {
     let nextRecords = [...records];
 
-
     if (selectedProjectKey) {
       const selectedProject = managedProjects.find(
         (p) => p.key === selectedProjectKey,
@@ -417,12 +420,10 @@ const DailyWorkReport = ({ hideHeader = false }) => {
         );
       }
     } else {
-
       const allManagedIds = new Set();
       managedProjects.forEach((p) =>
         p.employeeIds.forEach((id) => allManagedIds.add(id)),
       );
-
 
       const allDepartmentIds = new Set(departmentEmployeeIds);
       const allowedEmployeeIds = new Set(allManagedIds);
@@ -439,7 +440,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           allowedEmployeeIds.has(String(item.employeeId)),
         );
       }
-
     }
 
     if (selectedDepartment !== "all") {
@@ -548,7 +548,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
     if (isAdmin) return true;
     if (departmentEmployeeIds.includes(String(record.employeeId))) return true;
 
-
     return managedProjects.some((p) =>
       p.employeeIds.includes(String(record.employeeId)),
     );
@@ -560,9 +559,9 @@ const DailyWorkReport = ({ hideHeader = false }) => {
     reviewedByRole: user?.role,
     ...(selectedManagedProject
       ? {
-        projectId: selectedManagedProject.id,
-        projectBranch: selectedManagedProject.branch,
-      }
+          projectId: selectedManagedProject.id,
+          projectBranch: selectedManagedProject.branch,
+        }
       : {}),
   });
 
@@ -739,7 +738,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
 
   return (
     <div className="space-y-4 font-sans bg-transparent">
-
       {!hideHeader && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-(--border-soft) shadow-[0_2px_8px_rgba(0,166,81,0.02)] flex items-center gap-4 transition-all hover:shadow-md">
@@ -797,7 +795,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
         </div>
       )}
 
-
       <div className={`${panelClass} p-4`}>
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-wrap items-center gap-3">
@@ -819,9 +816,7 @@ const DailyWorkReport = ({ hideHeader = false }) => {
             </div>
             <select
               value={selectedYear}
-              onChange={(event) =>
-                setSelectedYear(Number(event.target.value))
-              }
+              onChange={(event) => setSelectedYear(Number(event.target.value))}
               className="h-9 px-3 bg-white border border-(--border-soft) rounded-xl focus:outline-none focus:ring-2 focus:ring-(--brand-ring) transition-all text-(--text-body) font-semibold cursor-pointer text-sm"
             >
               {availableYears.map((year) => (
@@ -852,16 +847,19 @@ const DailyWorkReport = ({ hideHeader = false }) => {
                     </option>
                   ))
                 ) : (
-                  <option value="" disabled>No managed projects found</option>
+                  <option value="" disabled>
+                    No managed projects found
+                  </option>
                 )}
               </select>
             )}
             <button
               onClick={() => setShowFilter((current) => !current)}
-              className={`inline-flex h-9 items-center gap-2 rounded-xl border px-3 text-sm font-semibold transition-all ${showFilter
+              className={`inline-flex h-9 items-center gap-2 rounded-xl border px-3 text-sm font-semibold transition-all ${
+                showFilter
                   ? "border-(--brand) bg-(--brand-soft) text-(--brand)"
                   : "border-(--border-soft) bg-white text-(--text-body) hover:bg-slate-50"
-                }`}
+              }`}
             >
               <Filter className="h-4 w-4" />
               Filters
@@ -907,10 +905,11 @@ const DailyWorkReport = ({ hideHeader = false }) => {
                   <button
                     key={dept}
                     onClick={() => setSelectedDepartment(dept)}
-                    className={`rounded-lg border px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all ${selectedDepartment === dept
+                    className={`rounded-lg border px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all ${
+                      selectedDepartment === dept
                         ? "border-(--brand) bg-(--brand-soft) text-(--brand) shadow-sm font-extrabold"
                         : "border-(--border-soft) bg-white text-slate-600 hover:border-slate-300"
-                      }`}
+                    }`}
                   >
                     {dept === "all" ? "All Departments" : dept}
                   </button>
@@ -927,10 +926,11 @@ const DailyWorkReport = ({ hideHeader = false }) => {
                   <button
                     key={status}
                     onClick={() => setSelectedStatus(status)}
-                    className={`rounded-lg border px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all ${selectedStatus === status
+                    className={`rounded-lg border px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all ${
+                      selectedStatus === status
                         ? "border-(--brand) bg-(--brand-soft) text-(--brand) shadow-sm font-extrabold"
                         : "border-(--border-soft) bg-white text-slate-600 hover:border-slate-300"
-                      }`}
+                    }`}
                   >
                     {status === "all" ? "All Status" : status}
                   </button>
@@ -940,7 +940,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           </div>
         )}
       </div>
-
 
       <div className={panelClass}>
         <div className="flex flex-col gap-2 border-b border-(--border-soft) bg-white px-5 py-3 md:flex-row md:items-center md:justify-between sticky top-0 z-10">
@@ -978,7 +977,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
             </button>
           </div>
         </div>
-
 
         {selectedCount > 0 && (
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-(--border-strong) bg-(--brand-soft)/40 px-5 py-2.5 animate-in slide-in-from-top duration-200">
@@ -1137,9 +1135,9 @@ const DailyWorkReport = ({ hideHeader = false }) => {
                               </button>
 
                               {canReviewRecord(record) ||
-                                String(record.employeeId) ===
+                              String(record.employeeId) ===
                                 String(employeeId) ||
-                                canViewAllReports ? (
+                              canViewAllReports ? (
                                 <div className="flex items-center gap-1.5">
                                   <button
                                     onClick={(e) =>
@@ -1154,15 +1152,17 @@ const DailyWorkReport = ({ hideHeader = false }) => {
                                       record.status !== "Pending" ||
                                       !canReviewRecord(record)
                                     }
-                                    className={`p-1.5 rounded-lg transition-all border ${record.status !== "Pending" || !canReviewRecord(record)
+                                    className={`p-1.5 rounded-lg transition-all border ${
+                                      record.status !== "Pending" ||
+                                      !canReviewRecord(record)
                                         ? "bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed opacity-50"
                                         : "bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-600 hover:text-white"
-                                      }`}
+                                    }`}
                                     title={
                                       record.status !== "Pending"
                                         ? `Already ${record.status}`
                                         : String(record.employeeId) ===
-                                          String(employeeId)
+                                            String(employeeId)
                                           ? "Self-approval not allowed"
                                           : !canReviewRecord(record)
                                             ? "Permission denied"
@@ -1184,15 +1184,17 @@ const DailyWorkReport = ({ hideHeader = false }) => {
                                       record.status !== "Pending" ||
                                       !canReviewRecord(record)
                                     }
-                                    className={`p-1.5 rounded-lg transition-all border ${record.status !== "Pending" || !canReviewRecord(record)
+                                    className={`p-1.5 rounded-lg transition-all border ${
+                                      record.status !== "Pending" ||
+                                      !canReviewRecord(record)
                                         ? "bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed opacity-50"
                                         : "bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-600 hover:text-white"
-                                      }`}
+                                    }`}
                                     title={
                                       record.status !== "Pending"
                                         ? `Already ${record.status}`
                                         : String(record.employeeId) ===
-                                          String(employeeId)
+                                            String(employeeId)
                                           ? "Self-rejection not allowed"
                                           : !canReviewRecord(record)
                                             ? "Permission denied"
@@ -1215,7 +1217,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           )}
         </div>
       </div>
-
 
       <div className="flex items-center justify-between bg-white px-5 py-3 rounded-2xl border border-(--border-soft) shadow-[0_2px_8px_rgba(0,166,81,0.02)]">
         <div className="flex items-center gap-2">
@@ -1248,7 +1249,6 @@ const DailyWorkReport = ({ hideHeader = false }) => {
           </button>
         </div>
       </div>
-
 
       {showDetails && selectedRecord && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md p-4">
@@ -1314,41 +1314,45 @@ const DailyWorkReport = ({ hideHeader = false }) => {
               {(canReviewRecord(selectedRecord) ||
                 String(selectedRecord.employeeId) === String(employeeId) ||
                 canViewAllReports) && (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={(e) => {
-                        updateTimesheetStatus(selectedRecord, "Rejected", e);
-                        setShowDetails(false);
-                      }}
-                      disabled={
-                        selectedRecord.status !== "Pending" ||
-                        !canReviewRecord(selectedRecord)
-                      }
-                      className={`px-5 py-2 text-sm font-bold rounded-xl transition-all border ${selectedRecord.status !== "Pending" || !canReviewRecord(selectedRecord)
-                          ? "bg-slate-50 border-slate-100 text-slate-200 cursor-not-allowed opacity-60"
-                          : "bg-rose-50 text-rose-700 hover:bg-rose-100 border-rose-200"
-                        }`}
-                    >
-                      Reject
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        updateTimesheetStatus(selectedRecord, "Approved", e);
-                        setShowDetails(false);
-                      }}
-                      disabled={
-                        selectedRecord.status !== "Pending" ||
-                        !canReviewRecord(selectedRecord)
-                      }
-                      className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${selectedRecord.status !== "Pending" || !canReviewRecord(selectedRecord)
-                          ? "bg-slate-100 text-slate-300 cursor-not-allowed opacity-60"
-                          : "bg-linear-to-r from-(--brand) to-(--brand-strong) text-white hover:opacity-95 shadow-sm shadow-(--brand)/20"
-                        }`}
-                    >
-                      Approve
-                    </button>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => {
+                      updateTimesheetStatus(selectedRecord, "Rejected", e);
+                      setShowDetails(false);
+                    }}
+                    disabled={
+                      selectedRecord.status !== "Pending" ||
+                      !canReviewRecord(selectedRecord)
+                    }
+                    className={`px-5 py-2 text-sm font-bold rounded-xl transition-all border ${
+                      selectedRecord.status !== "Pending" ||
+                      !canReviewRecord(selectedRecord)
+                        ? "bg-slate-50 border-slate-100 text-slate-200 cursor-not-allowed opacity-60"
+                        : "bg-rose-50 text-rose-700 hover:bg-rose-100 border-rose-200"
+                    }`}
+                  >
+                    Reject
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      updateTimesheetStatus(selectedRecord, "Approved", e);
+                      setShowDetails(false);
+                    }}
+                    disabled={
+                      selectedRecord.status !== "Pending" ||
+                      !canReviewRecord(selectedRecord)
+                    }
+                    className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${
+                      selectedRecord.status !== "Pending" ||
+                      !canReviewRecord(selectedRecord)
+                        ? "bg-slate-100 text-slate-300 cursor-not-allowed opacity-60"
+                        : "bg-linear-to-r from-(--brand) to-(--brand-strong) text-white hover:opacity-95 shadow-sm shadow-(--brand)/20"
+                    }`}
+                  >
+                    Approve
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

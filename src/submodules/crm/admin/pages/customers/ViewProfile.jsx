@@ -44,7 +44,6 @@ export default function ViewProfile() {
   const [visible, setVisible] = useState(false);
   useEffect(() => setVisible(true), []);
 
-
   const {
     data: customer,
     isLoading,
@@ -60,23 +59,27 @@ export default function ViewProfile() {
     enabled: !!customerId && !!companyId,
   });
 
-
   const { data: projectOptions = [] } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
-      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`, {
-        params: { company_id: companyId },
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
+        {
+          params: { company_id: companyId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const projects = response.data?.data || [];
       return projects.map((p) => ({
         project_id: p.id,
         composite_key: p.id,
         name: p.project_name,
         display_type: p.project_code || p.status || "",
-        location: p.client_company_name ? `Client: ${p.client_company_name}` : "",
+        location: p.client_company_name
+          ? `Client: ${p.client_company_name}`
+          : "",
       }));
     },
     enabled: !!token && !!companyId,
@@ -84,18 +87,27 @@ export default function ViewProfile() {
 
   const projectName = useMemo(() => {
     if (!customer?.project_id) return null;
-    const p = projectOptions.find((opt) => opt.project_id === customer.project_id);
+    const p = projectOptions.find(
+      (opt) => opt.project_id === customer.project_id,
+    );
     return p?.name || customer.project_id;
   }, [customer, projectOptions]);
 
-
   const { data: paymentPlan } = useQuery({
-    queryKey: ["payment-plan-customer", customer?.ledger_id, customer?.lead_id, companyId],
+    queryKey: [
+      "payment-plan-customer",
+      customer?.ledger_id,
+      customer?.lead_id,
+      companyId,
+    ],
     queryFn: async () => {
       const response = customer.ledger_id
-        ? await accountingApi.get(`/api/v1/project-payment/${customer.ledger_id}`, {
-            params: { company_id: companyId },
-          })
+        ? await accountingApi.get(
+            `/api/v1/project-payment/${customer.ledger_id}`,
+            {
+              params: { company_id: companyId },
+            },
+          )
         : await accountingApi.get("/api/v1/project-payment", {
             params: { company_id: companyId, lead_id: customer.lead_id },
           });
@@ -138,10 +150,11 @@ export default function ViewProfile() {
   }
 
   const dealVal = Number(paymentPlan?.total_deal_value) || 0;
-  const paidVal = paymentPlan?.slabs?.reduce(
-    (sum, slab) => sum + (Number(slab.paid_amount) || 0),
-    0
-  ) || 0;
+  const paidVal =
+    paymentPlan?.slabs?.reduce(
+      (sum, slab) => sum + (Number(slab.paid_amount) || 0),
+      0,
+    ) || 0;
   const remaining = dealVal - paidVal;
   const progressPct =
     dealVal > 0 ? Math.min(Math.round((paidVal / dealVal) * 100), 100) : 0;
@@ -153,7 +166,6 @@ export default function ViewProfile() {
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
         }`}
       >
-
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/crm/customers")}
@@ -168,9 +180,7 @@ export default function ViewProfile() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
           <div className="lg:col-span-2 space-y-5">
-
             <div className="app-panel p-5 space-y-4">
               <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5">
                 Contact Information
@@ -199,7 +209,6 @@ export default function ViewProfile() {
               </div>
             </div>
 
-
             <div className="app-panel p-5 space-y-4">
               <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5">
                 Profile Details
@@ -214,8 +223,9 @@ export default function ViewProfile() {
                   icon={MapPin}
                   label="City / State"
                   value={
-                    [customer.city, customer.state].filter(Boolean).join(", ") ||
-                    "—"
+                    [customer.city, customer.state]
+                      .filter(Boolean)
+                      .join(", ") || "—"
                   }
                 />
                 <InfoRow
@@ -255,7 +265,6 @@ export default function ViewProfile() {
               </div>
             </div>
 
-
             {(customer.nominee_name ||
               customer.nominee_relation ||
               customer.nominee_phone) && (
@@ -283,7 +292,6 @@ export default function ViewProfile() {
               </div>
             )}
 
-
             {customer.profile_notes && (
               <div className="app-panel p-5">
                 <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5 mb-3">
@@ -296,9 +304,7 @@ export default function ViewProfile() {
             )}
           </div>
 
-
           <div className="space-y-5">
-
             <div className="app-panel p-5 space-y-4">
               <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5">
                 Payment Summary
@@ -333,7 +339,6 @@ export default function ViewProfile() {
                 />
               </div>
 
-
               <div className="space-y-1.5 pt-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-(--text-soft)">
@@ -359,7 +364,6 @@ export default function ViewProfile() {
                 </div>
               </div>
 
-
               {canViewLedger && (
                 <button
                   onClick={() =>
@@ -373,7 +377,6 @@ export default function ViewProfile() {
               )}
             </div>
 
-
             {paymentPlan?.slabs && paymentPlan.slabs.length > 0 && (
               <div className="app-panel p-5 space-y-3">
                 <h3 className="text-[12px] font-bold text-(--text-strong) uppercase tracking-widest border-b border-(--border-soft) pb-1.5">
@@ -384,9 +387,7 @@ export default function ViewProfile() {
                     const allocated = Number(slab.allocated_amount) || 0;
                     const paid = Number(slab.paid_amount) || 0;
                     const slabPct =
-                      allocated > 0
-                        ? Math.round((paid / allocated) * 100)
-                        : 0;
+                      allocated > 0 ? Math.round((paid / allocated) * 100) : 0;
 
                     return (
                       <div
@@ -438,7 +439,6 @@ export default function ViewProfile() {
               </div>
             )}
 
-
             <div className="app-panel p-5">
               <div className="flex items-center justify-between">
                 <span className="text-[12px] font-bold text-(--text-soft)">
@@ -464,7 +464,6 @@ export default function ViewProfile() {
   );
 }
 
-
 function InfoRow({ icon: Icon, label, value }) {
   return (
     <div className="flex items-start gap-2.5">
@@ -480,7 +479,6 @@ function InfoRow({ icon: Icon, label, value }) {
     </div>
   );
 }
-
 
 function SummaryRow({ label, value, color }) {
   return (

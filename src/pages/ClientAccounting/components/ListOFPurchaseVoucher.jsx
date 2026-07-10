@@ -5,9 +5,28 @@ import { useCompany } from "../context/CompanyContext";
 import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { ArrowLeft, Search, Download, Eye, Edit, Trash2, FileDown, FileSpreadsheet, Printer, X, Package, MapPin, Truck, UserRound } from "lucide-react";
+import {
+  ArrowLeft,
+  Search,
+  Download,
+  Eye,
+  Edit,
+  Trash2,
+  FileDown,
+  FileSpreadsheet,
+  Printer,
+  X,
+  Package,
+  MapPin,
+  Truck,
+  UserRound,
+} from "lucide-react";
 import * as XLSX from "xlsx";
-import { addReportHeader, addWorkbookHeader, getCompanyAddress } from "../utils/exportReportUtils";
+import {
+  addReportHeader,
+  addWorkbookHeader,
+  getCompanyAddress,
+} from "../utils/exportReportUtils";
 import BulkImportButton from "./BulkImportButton";
 import useAuth from "../../../hooks/useAuth";
 
@@ -23,8 +42,8 @@ const ListOfPurchaseVoucher = () => {
   const { companyId, companyName, employees } = useCompany();
 
   const getEmployeeName = (id) => {
-    const emp = employees?.find(e => e.id == id);
-    return emp ? (emp.name || emp.first_name || "Employee") : "Unknown Employee";
+    const emp = employees?.find((e) => e.id == id);
+    return emp ? emp.name || emp.first_name || "Employee" : "Unknown Employee";
   };
 
   const navigate = useNavigate();
@@ -50,7 +69,9 @@ const ListOfPurchaseVoucher = () => {
 
   const fetchLedgers = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
+      );
       const ledgers = Array.isArray(res.data) ? res.data : res.data.data || [];
       setLedgersList(ledgers);
     } catch (err) {
@@ -61,7 +82,9 @@ const ListOfPurchaseVoucher = () => {
   const resolveLedgerId = (name) => {
     if (!name) return "";
     const cleanName = String(name).trim().toLowerCase();
-    const found = ledgersList.find(l => String(l.name).trim().toLowerCase() === cleanName);
+    const found = ledgersList.find(
+      (l) => String(l.name).trim().toLowerCase() === cleanName,
+    );
     return found ? found.id : name;
   };
 
@@ -69,42 +92,50 @@ const ListOfPurchaseVoucher = () => {
     try {
       const grouped = {};
       data.forEach((row) => {
-        const vNo = row["Voucher No"] || row["voucherNo"] || `PUR-${Date.now()}`;
+        const vNo =
+          row["Voucher No"] || row["voucherNo"] || `PUR-${Date.now()}`;
         if (!grouped[vNo]) {
           grouped[vNo] = {
-            date: row["Date"] || row["date"] || new Date().toISOString().split('T')[0],
-            customer: row["Supplier Name"] || row["supplier"] || "Walk-in Supplier",
+            date:
+              row["Date"] ||
+              row["date"] ||
+              new Date().toISOString().split("T")[0],
+            customer:
+              row["Supplier Name"] || row["supplier"] || "Walk-in Supplier",
             ledger: resolveLedgerId(row["Supplier Name"] || row["supplier"]),
             narration: row["Voucher Narration"] || row["narration"] || "",
             invoiceNo: vNo,
             subtotal: 0,
-            gst_percentage: Number(row["GST Percentage"] || row["gst_percentage"] || 0),
+            gst_percentage: Number(
+              row["GST Percentage"] || row["gst_percentage"] || 0,
+            ),
             gst_amount: 0,
             grand_total: 0,
-            items: []
+            items: [],
           };
         }
-        
+
         const itemQty = Number(row["Qty"] || row["qty"] || 0);
         const itemRate = Number(row["Rate"] || row["rate"] || 0);
-        const itemAmount = itemQty * itemRate || Number(row["Amount"] || row["amount"] || 0);
-        
+        const itemAmount =
+          itemQty * itemRate || Number(row["Amount"] || row["amount"] || 0);
+
         grouped[vNo].subtotal += itemAmount;
         grouped[vNo].items.push({
           item: row["Item Name"] || row["item"] || "Stock Item",
           qty: itemQty,
           rate: itemRate,
           amount: itemAmount,
-          hsn_code: String(row["HSN Code"] || row["hsn_code"] || "")
+          hsn_code: String(row["HSN Code"] || row["hsn_code"] || ""),
         });
       });
 
-      const vouchersPayload = Object.values(grouped).map(v => {
+      const vouchersPayload = Object.values(grouped).map((v) => {
         const gst_amount = (v.subtotal * v.gst_percentage) / 100;
         return {
           ...v,
           gst_amount,
-          grand_total: v.subtotal + gst_amount
+          grand_total: v.subtotal + gst_amount,
         };
       });
 
@@ -113,22 +144,32 @@ const ListOfPurchaseVoucher = () => {
         return;
       }
 
-      await axios.post(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/bulk-create`, {
-        companyId,
-        vouchers: vouchersPayload
-      });
+      await axios.post(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/bulk-create`,
+        {
+          companyId,
+          vouchers: vouchersPayload,
+        },
+      );
 
       Swal.fire("Success", "Vouchers imported successfully!", "success");
       fetchVouchers();
     } catch (err) {
       console.error(err);
-      Swal.fire("Error", "Failed to import vouchers. " + (err.response?.data?.message || err.message), "error");
+      Swal.fire(
+        "Error",
+        "Failed to import vouchers. " +
+          (err.response?.data?.message || err.message),
+        "error",
+      );
     }
   };
 
   const fetchCompanyDetails = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`,
+      );
       setCompanyDetails(res.data);
     } catch (err) {
       console.error("Error fetching company details:", err);
@@ -139,7 +180,8 @@ const ListOfPurchaseVoucher = () => {
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
-    const companyNameForExport = companyDetails?.name || companyName || "Company";
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
     const today = new Date().toLocaleDateString("en-IN");
 
     const formatAmount = (amount) => {
@@ -158,22 +200,25 @@ const ListOfPurchaseVoucher = () => {
       generatedOn: today,
     });
 
-
-    const totalAmount = filteredVouchers.reduce((acc, v) => acc + (Number(v.amount) || 0), 0);
+    const totalAmount = filteredVouchers.reduce(
+      (acc, v) => acc + (Number(v.amount) || 0),
+      0,
+    );
     doc.setFontSize(10);
     doc.setTextColor(40);
     doc.text(`Total Vouchers: ${filteredVouchers.length}`, 14, summaryY);
 
     doc.setFont("helvetica", "bold");
-    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, { align: "right" });
-
+    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, {
+      align: "right",
+    });
 
     const tableData = filteredVouchers.map((v, i) => [
       i + 1,
       v.date,
       v.voucherNumber,
       v.supplierName,
-      formatAmount(v.amount)
+      formatAmount(v.amount),
     ]);
 
     autoTable(doc, {
@@ -199,10 +244,9 @@ const ListOfPurchaseVoucher = () => {
         0: { halign: "center", cellWidth: 12 },
         1: { cellWidth: 30 },
         2: { cellWidth: 35 },
-        4: { halign: "right", cellWidth: 40 }
-      }
+        4: { halign: "right", cellWidth: 40 },
+      },
     });
-
 
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
@@ -221,12 +265,13 @@ const ListOfPurchaseVoucher = () => {
   const handleExportExcel = () => {
     if (vouchers.length === 0) return;
     const today = new Date().toLocaleDateString("en-IN");
-    const companyNameForExport = companyDetails?.name || companyName || "Company";
-    const exportData = filteredVouchers.map(v => ({
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
+    const exportData = filteredVouchers.map((v) => ({
       Date: v.date,
       "Voucher No": v.voucherNumber,
       Supplier: v.supplierName,
-      Amount: v.amount
+      Amount: v.amount,
     }));
     const ws = XLSX.utils.json_to_sheet(exportData, { origin: "A6" });
     addWorkbookHeader(XLSX, ws, {
@@ -240,353 +285,222 @@ const ListOfPurchaseVoucher = () => {
     XLSX.writeFile(wb, "Purchase_Vouchers_Report.xlsx");
   };
 
-const handlePrint = () => {
+  const handlePrint = () => {
+    if (filteredVouchers.length === 0) {
+      Swal.fire("Info", "No purchase vouchers to print", "info");
 
-  if (filteredVouchers.length === 0) {
+      return;
+    }
 
-    Swal.fire(
-      "Info",
-      "No purchase vouchers to print",
-      "info"
-    );
+    const doc = new jsPDF();
 
-    return;
-  }
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
 
-  const doc = new jsPDF();
+    const today = new Date().toLocaleDateString("en-IN");
 
-  const companyNameForExport =
-    companyDetails?.name ||
-    companyName ||
-    "Company";
+    const formatAmount = (amount) => {
+      const num = Number(amount || 0);
 
-  const today =
-    new Date().toLocaleDateString(
-      "en-IN"
-    );
+      const formatted = Math.abs(num).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
 
-  const formatAmount =
-    (amount) => {
-
-      const num =
-        Number(amount || 0);
-
-      const formatted =
-        Math.abs(num)
-          .toLocaleString(
-            "en-IN",
-            {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }
-          );
-
-      return num < 0
-        ? `-Rs. ${formatted}`
-        : `Rs. ${formatted}`;
+      return num < 0 ? `-Rs. ${formatted}` : `Rs. ${formatted}`;
     };
 
-  const {
-    company,
-    summaryY,
-    tableStartY,
-  } = addReportHeader(doc, {
+    const { company, summaryY, tableStartY } = addReportHeader(doc, {
+      companyName: companyNameForExport,
 
-    companyName:
-      companyNameForExport,
+      companyAddress,
 
-    companyAddress,
+      reportTitle: "Purchase Voucher Report",
 
-    reportTitle:
-      "Purchase Voucher Report",
+      generatedOn: today,
+    });
 
-    generatedOn: today,
-  });
-
-
-
-  const totalAmount =
-    filteredVouchers.reduce(
-      (acc, v) =>
-        acc +
-        (Number(v.amount) || 0),
-      0
+    const totalAmount = filteredVouchers.reduce(
+      (acc, v) => acc + (Number(v.amount) || 0),
+      0,
     );
 
-  doc.setFontSize(10);
+    doc.setFontSize(10);
 
-  doc.setTextColor(40);
+    doc.setTextColor(40);
 
-  doc.text(
-    `Total Vouchers: ${filteredVouchers.length}`,
-    14,
-    summaryY
-  );
+    doc.text(`Total Vouchers: ${filteredVouchers.length}`, 14, summaryY);
 
-  doc.setFont(
-    "helvetica",
-    "bold"
-  );
+    doc.setFont("helvetica", "bold");
 
-  doc.text(
-    `Total Amount: ${formatAmount(totalAmount)}`,
-    195,
-    summaryY,
-    {
-      align: "right"
-    }
-  );
+    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, {
+      align: "right",
+    });
 
+    const tableData = filteredVouchers.map((v, i) => [
+      i + 1,
+      v.date,
+      v.voucherNumber,
+      v.supplierName,
+      formatAmount(v.amount),
+    ]);
 
+    autoTable(doc, {
+      startY: tableStartY,
 
-  const tableData =
-    filteredVouchers.map(
-      (v, i) => [
-        i + 1,
-        v.date,
-        v.voucherNumber,
-        v.supplierName,
-        formatAmount(
-          v.amount
-        )
-      ]
-    );
+      head: [["#", "Date", "Voucher No.", "Supplier Name", "Amount"]],
 
-autoTable(doc, {
+      body: tableData,
 
-  startY: tableStartY,
+      foot: [["", "", "", "TOTAL", formatAmount(totalAmount)]],
 
-  head: [[
-    "#",
-    "Date",
-    "Voucher No.",
-    "Supplier Name",
-    "Amount"
-  ]],
+      theme: "grid",
 
-  body: tableData,
+      tableWidth: "auto",
 
-  foot: [[
-    "",
-    "",
-    "",
-    "TOTAL",
-    formatAmount(totalAmount)
-  ]],
+      styles: {
+        fontSize: 9,
 
-  theme: "grid",
+        cellPadding: {
+          top: 5,
+          right: 5,
+          bottom: 5,
+          left: 5,
+        },
 
-  tableWidth: "auto",
+        valign: "middle",
 
-  styles: {
+        lineColor: [220, 220, 220],
 
-    fontSize: 9,
+        lineWidth: 0.3,
 
-    cellPadding: {
-      top: 5,
-      right: 5,
-      bottom: 5,
-      left: 5,
-    },
+        overflow: "linebreak",
 
-    valign: "middle",
+        textColor: [40, 40, 40],
+      },
 
-    lineColor: [220, 220, 220],
+      headStyles: {
+        fillColor: [37, 99, 235],
 
-    lineWidth: 0.3,
+        textColor: [255, 255, 255],
 
-    overflow: "linebreak",
+        fontStyle: "bold",
 
-    textColor: [40, 40, 40],
-  },
+        halign: "center",
 
-  headStyles: {
+        valign: "middle",
 
-    fillColor: [37, 99, 235],
+        fontSize: 10,
+      },
 
-    textColor: [255, 255, 255],
+      bodyStyles: {
+        valign: "middle",
+      },
 
-    fontStyle: "bold",
+      footStyles: {
+        fillColor: [245, 245, 245],
 
-    halign: "center",
+        textColor: [15, 23, 42],
 
-    valign: "middle",
+        fontStyle: "bold",
 
-    fontSize: 10,
-  },
+        fontSize: 10,
+      },
 
-  bodyStyles: {
+      alternateRowStyles: {
+        fillColor: [252, 252, 252],
+      },
 
-    valign: "middle",
-  },
+      columnStyles: {
+        0: {
+          halign: "center",
 
-  footStyles: {
+          cellWidth: 12,
+        },
 
-    fillColor: [245, 245, 245],
+        1: {
+          halign: "center",
 
-    textColor: [15, 23, 42],
+          cellWidth: 32,
+        },
 
-    fontStyle: "bold",
+        2: {
+          halign: "center",
 
-    fontSize: 10,
-  },
+          cellWidth: 38,
+        },
 
-  alternateRowStyles: {
+        3: {
+          halign: "left",
 
-    fillColor: [252, 252, 252],
-  },
+          cellWidth: 78,
+        },
 
-columnStyles: {
+        4: {
+          halign: "right",
 
+          cellWidth: 28,
+        },
+      },
 
+      didParseCell: function (data) {
+        if (data.section === "head") {
+          data.cell.styles.halign = "center";
+        }
 
-  0: {
+        if (data.section === "foot" && data.column.index === 3) {
+          data.cell.styles.halign = "right";
+        }
+      },
+    });
 
-    halign: "center",
+    const pageCount = doc.internal.getNumberOfPages();
 
-    cellWidth: 12,
-  },
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
 
+      doc.setDrawColor(230);
 
+      doc.line(14, 285, 195, 285);
 
-  1: {
+      doc.setFontSize(8);
 
-    halign: "center",
+      doc.setTextColor(120);
 
-    cellWidth: 32,
-  },
+      doc.text(`${company} • Purchase Voucher Report`, 14, 290);
 
-
-
-  2: {
-
-    halign: "center",
-
-    cellWidth: 38,
-  },
-
-
-
-  3: {
-
-    halign: "left",
-
-    cellWidth: 78,
-  },
-
-
-
-  4: {
-
-    halign: "right",
-
-    cellWidth: 28,
-  },
-},
-
-  didParseCell: function (data) {
-
-
-
-    if (data.section === "head") {
-
-      data.cell.styles.halign =
-        "center";
+      doc.text(`Page ${i} of ${pageCount}`, 195, 290, {
+        align: "right",
+      });
     }
 
+    const blobURL = doc.output("bloburl");
 
+    const printWindow = window.open(blobURL);
 
-    if (
-      data.section === "foot" &&
-      data.column.index === 3
-    ) {
-
-      data.cell.styles.halign =
-        "right";
-    }
-  },
-});
-
-
-  const pageCount =
-    doc.internal.getNumberOfPages();
-
-  for (
-    let i = 1;
-    i <= pageCount;
-    i++
-  ) {
-
-    doc.setPage(i);
-
-    doc.setDrawColor(230);
-
-    doc.line(
-      14,
-      285,
-      195,
-      285
-    );
-
-    doc.setFontSize(8);
-
-    doc.setTextColor(120);
-
-    doc.text(
-      `${company} • Purchase Voucher Report`,
-      14,
-      290
-    );
-
-    doc.text(
-      `Page ${i} of ${pageCount}`,
-      195,
-      290,
-      {
-        align: "right"
-      }
-    );
-  }
-
-
-
-  const blobURL =
-    doc.output(
-      "bloburl"
-    );
-
-  const printWindow =
-    window.open(
-      blobURL
-    );
-
-  printWindow.onload =
-    () => {
-
+    printWindow.onload = () => {
       printWindow.focus();
 
       printWindow.print();
     };
-};
+  };
 
   const fetchVouchers = async () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/${companyId}`
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/${companyId}`,
       );
-setVouchers(
-  res.data.map((v) => ({
-    ...v,
-    voucherNumber: v.voucherNo || v.invoiceNo || v.id,
-    supplierName: v.customer,
-    amount: v.grand_total,
-    date: v.date?.split("T")[0]
-  }))
-);
-
+      setVouchers(
+        res.data.map((v) => ({
+          ...v,
+          voucherNumber: v.voucherNo || v.invoiceNo || v.id,
+          supplierName: v.customer,
+          amount: v.grand_total,
+          date: v.date?.split("T")[0],
+        })),
+      );
     } catch (error) {
-
       Swal.fire("Error", "Failed to fetch purchase vouchers.", "error");
     }
     setLoading(false);
@@ -594,7 +508,9 @@ setVouchers(
 
   const handleView = async (id) => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/single/${id}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/single/${id}`,
+      );
       setSelectedVoucher(res.data);
       setViewModalOpen(true);
     } catch (err) {
@@ -620,7 +536,9 @@ setVouchers(
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/${id}`);
+        await axios.delete(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/${id}`,
+        );
         Swal.fire("Deleted!", "Voucher has been deleted.", "success");
         fetchVouchers();
       } catch {
@@ -634,9 +552,14 @@ setVouchers(
 
   const filteredVouchers = vouchers.filter((v) => {
     if (loggedInRole === "employee") {
-      if (v.employee_id != loggedInEmployeeId || v.role?.toLowerCase() !== 'employee') return false;
+      if (
+        v.employee_id != loggedInEmployeeId ||
+        v.role?.toLowerCase() !== "employee"
+      )
+        return false;
     } else {
-      const isCreatedByEmployee = v.employee_id && v.role?.toLowerCase() === 'employee';
+      const isCreatedByEmployee =
+        v.employee_id && v.role?.toLowerCase() === "employee";
       if (showEmployeeActivity) {
         if (!isCreatedByEmployee) return false;
       } else {
@@ -652,21 +575,18 @@ setVouchers(
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-[monospace]">
-
       <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
         <div className="flex items-center justify-between gap-4 flex-wrap">
-
-
           <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
             List of Purchase Vouchers
           </h1>
 
-
           <div className="flex items-center gap-2.5 flex-wrap">
-
-
             <div className="relative">
-              <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search
+                size={15}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+              />
               <input
                 type="text"
                 placeholder="Search Supplier / Voucher No."
@@ -676,17 +596,29 @@ setVouchers(
               />
             </div>
 
-
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => {
-                  const basePath = loggedInRole === "employee" ? "/employee/hr/accounting/client" : "/accounting/client";
+                  const basePath =
+                    loggedInRole === "employee"
+                      ? "/employee/hr/accounting/client"
+                      : "/accounting/client";
                   navigate(`${basePath}/purchasevoucher`);
                 }}
                 className="flex items-center gap-1.5 bg-[#1a56db] hover:bg-blue-600 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap"
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Create
               </button>
@@ -698,7 +630,6 @@ setVouchers(
                 <Printer size={14} /> Print
               </button>
 
-
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
@@ -706,8 +637,18 @@ setVouchers(
                   className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <FileDown size={14} /> Export
-                  <svg className="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className="w-3 h-3 ml-0.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
 
@@ -720,7 +661,8 @@ setVouchers(
                       }}
                       className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
                     >
-                      <FileSpreadsheet size={14} className="text-green-600" /> Excel
+                      <FileSpreadsheet size={14} className="text-green-600" />{" "}
+                      Excel
                     </button>
                     <button
                       onClick={() => {
@@ -737,22 +679,23 @@ setVouchers(
 
               {loggedInRole !== "employee" && (
                 <button
-                  onClick={() => setShowEmployeeActivity(prev => !prev)}
+                  onClick={() => setShowEmployeeActivity((prev) => !prev)}
                   className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap border ${
-                    showEmployeeActivity 
-                      ? "bg-slate-900 text-white border-slate-900" 
+                    showEmployeeActivity
+                      ? "bg-slate-900 text-white border-slate-900"
                       : "bg-white/10 text-white border-white/20 hover:bg-white/20"
                   }`}
                 >
                   <UserRound size={14} />
-                  {showEmployeeActivity ? "Back to Vouchers" : "Employee Activity"}
+                  {showEmployeeActivity
+                    ? "Back to Vouchers"
+                    : "Employee Activity"}
                 </button>
               )}
             </div>
           </div>
         </div>
       </div>
-
 
       <div className="max-w-6xl mx-auto mt-6 bg-white shadow rounded-lg border border-gray-300">
         <div className="overflow-x-auto">
@@ -763,7 +706,9 @@ setVouchers(
                 <th className="px-4 py-2 border-r">Voucher No.</th>
                 <th className="px-4 py-2 border-r">Supplier Name</th>
                 <th className="px-4 py-2 border-r">Amount (₹)</th>
-                {showEmployeeActivity && <th className="text-left px-2 py-2">Employee Name</th>}
+                {showEmployeeActivity && (
+                  <th className="text-left px-2 py-2">Employee Name</th>
+                )}
                 <th className="px-4 py-2 border-r text-center">Actions</th>
               </tr>
             </thead>
@@ -781,22 +726,21 @@ setVouchers(
                 filteredVouchers.map((voucher, index) => (
                   <tr
                     key={index}
-                    className={`border-b border-gray-200 hover:bg-[#F9FCFF] transition ${index % 2 === 0 ? "bg-white" : "bg-[#F7F9FB]"
-                      }`}
+                    className={`border-b border-gray-200 hover:bg-[#F9FCFF] transition ${
+                      index % 2 === 0 ? "bg-white" : "bg-[#F7F9FB]"
+                    }`}
                   >
                     <td className="px-4 py-2">{voucher.date}</td>
                     <td className="px-4 py-2">{voucher.voucherNumber}</td>
                     <td className="px-4 py-2">{voucher.supplierName}</td>
-                    <td className="px-4 py-2 text-right">
-                      {voucher.amount}</td>
-
+                    <td className="px-4 py-2 text-right">{voucher.amount}</td>
 
                     {showEmployeeActivity && (
-                        <td className="px-4 py-2 truncate max-w-37.5">
-                          {getEmployeeName(voucher.employee_id)}
-                        </td>
-                      )}
-                      <td className="px-4 py-2 text-center flex items-center justify-center gap-3">
+                      <td className="px-4 py-2 truncate max-w-37.5">
+                        {getEmployeeName(voucher.employee_id)}
+                      </td>
+                    )}
+                    <td className="px-4 py-2 text-center flex items-center justify-center gap-3">
                       <button
                         onClick={() => handleView(voucher.id)}
                         className="text-blue-600 hover:text-blue-800 transition"
@@ -821,7 +765,11 @@ setVouchers(
                       <button
                         onClick={() => {
                           if (!voucher.pdf_path) {
-                            Swal.fire("Info", "No PDF available for this voucher.", "info");
+                            Swal.fire(
+                              "Info",
+                              "No PDF available for this voucher.",
+                              "info",
+                            );
                             return;
                           }
                           const url = `${import.meta.env.VITE_ACCOUNTING_URL}/${voucher.pdf_path}`;
@@ -851,40 +799,56 @@ setVouchers(
       </div>
 
       {viewModalOpen && selectedVoucher && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setViewModalOpen(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-
-
+        <div
+          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          onClick={() => setViewModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between px-6 py-4 bg-linear-to-r from-blue-700 to-blue-500 rounded-t-2xl">
               <div>
-                <p className="text-blue-100 text-xs font-semibold uppercase tracking-widest">Purchase Voucher</p>
-                <h2 className="text-white text-xl font-bold">{selectedVoucher.invoiceNo || `#${selectedVoucher.id}`}</h2>
+                <p className="text-blue-100 text-xs font-semibold uppercase tracking-widest">
+                  Purchase Voucher
+                </p>
+                <h2 className="text-white text-xl font-bold">
+                  {selectedVoucher.invoiceNo || `#${selectedVoucher.id}`}
+                </h2>
               </div>
-              <button onClick={() => setViewModalOpen(false)} className="text-white hover:text-blue-200 transition">
+              <button
+                onClick={() => setViewModalOpen(false)}
+                className="text-white hover:text-blue-200 transition"
+              >
                 <X size={22} />
               </button>
             </div>
 
             <div className="p-6 space-y-6">
-
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   ["Date", selectedVoucher.date?.split("T")[0] || "—"],
                   ["Supplier", selectedVoucher.customer || "—"],
-                  ["Voucher No", selectedVoucher.invoiceNo || `#${selectedVoucher.id}`],
+                  [
+                    "Voucher No",
+                    selectedVoucher.invoiceNo || `#${selectedVoucher.id}`,
+                  ],
                   ["Place of Supply", selectedVoucher.placeOfSupply || "—"],
                 ].map(([label, val]) => (
                   <div key={label} className="bg-gray-50 rounded-xl p-3">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">{label}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">
+                      {label}
+                    </p>
                     <p className="text-sm font-semibold text-gray-800">{val}</p>
                   </div>
                 ))}
               </div>
 
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600 mb-3 flex items-center gap-1"><MapPin size={12} /> Supplier Details</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600 mb-3 flex items-center gap-1">
+                    <MapPin size={12} /> Supplier Details
+                  </p>
                   <div className="space-y-1.5 text-sm">
                     {[
                       ["Mailing Name", selectedVoucher.mailingName],
@@ -893,23 +857,41 @@ setVouchers(
                       ["Country", selectedVoucher.country],
                       ["GSTIN", selectedVoucher.gstin],
                       ["GST Reg. Type", selectedVoucher.gstRegistrationType],
-                    ].filter(([, v]) => v).map(([label, val]) => (
-                      <div key={label} className="flex justify-between">
-                        <span className="text-gray-500">{label}</span>
-                        <span className="font-medium text-gray-800 text-right max-w-[60%]">{val}</span>
-                      </div>
-                    ))}
+                    ]
+                      .filter(([, v]) => v)
+                      .map(([label, val]) => (
+                        <div key={label} className="flex justify-between">
+                          <span className="text-gray-500">{label}</span>
+                          <span className="font-medium text-gray-800 text-right max-w-[60%]">
+                            {val}
+                          </span>
+                        </div>
+                      ))}
                   </div>
                 </div>
 
                 <div className="bg-green-50/50 rounded-xl p-4 border border-green-100">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-green-600 mb-3">Tax Summary</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-green-600 mb-3">
+                    Tax Summary
+                  </p>
                   <div className="space-y-1.5 text-sm">
                     {[
-                      ["Subtotal", `₹ ${Number(selectedVoucher.subtotal || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`],
-                      ["IGST", `₹ ${Number(selectedVoucher.igst || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`],
-                      ["CGST", `₹ ${Number(selectedVoucher.cgst || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`],
-                      ["SGST", `₹ ${Number(selectedVoucher.sgst || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`],
+                      [
+                        "Subtotal",
+                        `₹ ${Number(selectedVoucher.subtotal || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`,
+                      ],
+                      [
+                        "IGST",
+                        `₹ ${Number(selectedVoucher.igst || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`,
+                      ],
+                      [
+                        "CGST",
+                        `₹ ${Number(selectedVoucher.cgst || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`,
+                      ],
+                      [
+                        "SGST",
+                        `₹ ${Number(selectedVoucher.sgst || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`,
+                      ],
                     ].map(([label, val]) => (
                       <div key={label} className="flex justify-between">
                         <span className="text-gray-500">{label}</span>
@@ -917,17 +899,25 @@ setVouchers(
                       </div>
                     ))}
                     <div className="flex justify-between border-t pt-2 mt-2">
-                      <span className="font-bold text-gray-700">Grand Total</span>
-                      <span className="font-bold text-blue-700 text-base">₹ {Number(selectedVoucher.grand_total || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</span>
+                      <span className="font-bold text-gray-700">
+                        Grand Total
+                      </span>
+                      <span className="font-bold text-blue-700 text-base">
+                        ₹{" "}
+                        {Number(
+                          selectedVoucher.grand_total || 0,
+                        ).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
 
-
               {selectedVoucher.items && selectedVoucher.items.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3 flex items-center gap-1"><Package size={12} /> Line Items</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3 flex items-center gap-1">
+                    <Package size={12} /> Line Items
+                  </p>
                   <div className="overflow-x-auto rounded-xl border border-gray-200">
                     <table className="w-full text-sm">
                       <thead className="bg-gray-100 text-gray-600 text-xs uppercase">
@@ -943,14 +933,33 @@ setVouchers(
                       </thead>
                       <tbody>
                         {selectedVoucher.items.map((item, i) => (
-                          <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                          <tr
+                            key={i}
+                            className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                          >
                             <td className="px-4 py-2 text-gray-400">{i + 1}</td>
-                            <td className="px-4 py-2 font-medium text-gray-800">{item.item || item.itemName}</td>
-                            <td className="px-4 py-2 text-gray-500">{item.hsn_code || "—"}</td>
+                            <td className="px-4 py-2 font-medium text-gray-800">
+                              {item.item || item.itemName}
+                            </td>
+                            <td className="px-4 py-2 text-gray-500">
+                              {item.hsn_code || "—"}
+                            </td>
                             <td className="px-4 py-2 text-right">{item.qty}</td>
-                            <td className="px-4 py-2 text-center text-gray-500">{item.per || "Nos"}</td>
-                            <td className="px-4 py-2 text-right">₹ {Number(item.rate).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</td>
-                            <td className="px-4 py-2 text-right font-semibold">₹ {Number(item.amount).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</td>
+                            <td className="px-4 py-2 text-center text-gray-500">
+                              {item.per || "Nos"}
+                            </td>
+                            <td className="px-4 py-2 text-right">
+                              ₹{" "}
+                              {Number(item.rate).toLocaleString("en-IN", {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
+                            <td className="px-4 py-2 text-right font-semibold">
+                              ₹{" "}
+                              {Number(item.amount).toLocaleString("en-IN", {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -959,10 +968,13 @@ setVouchers(
                 </div>
               )}
 
-
-              {(selectedVoucher.dispatchedThrough || selectedVoucher.destination || selectedVoucher.receiptNoteNo) && (
+              {(selectedVoucher.dispatchedThrough ||
+                selectedVoucher.destination ||
+                selectedVoucher.receiptNoteNo) && (
                 <div className="bg-orange-50/50 rounded-xl p-4 border border-orange-100">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-orange-600 mb-3 flex items-center gap-1"><Truck size={12} /> Receipt / Dispatch</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-orange-600 mb-3 flex items-center gap-1">
+                    <Truck size={12} /> Receipt / Dispatch
+                  </p>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
                     {[
                       ["Receipt Note No.", selectedVoucher.receiptNoteNo],
@@ -970,29 +982,41 @@ setVouchers(
                       ["Destination", selectedVoucher.destination],
                       ["Vehicle No.", selectedVoucher.motorVehicleNo],
                       ["Bill of Lading", selectedVoucher.billOfLading],
-                      ["Supplier Invoice No.", selectedVoucher.supplierInvoiceNo],
-                    ].filter(([, v]) => v).map(([label, val]) => (
-                      <div key={label}>
-                        <p className="text-[10px] text-gray-400 uppercase font-semibold">{label}</p>
-                        <p className="text-gray-800 font-medium">{val}</p>
-                      </div>
-                    ))}
+                      [
+                        "Supplier Invoice No.",
+                        selectedVoucher.supplierInvoiceNo,
+                      ],
+                    ]
+                      .filter(([, v]) => v)
+                      .map(([label, val]) => (
+                        <div key={label}>
+                          <p className="text-[10px] text-gray-400 uppercase font-semibold">
+                            {label}
+                          </p>
+                          <p className="text-gray-800 font-medium">{val}</p>
+                        </div>
+                      ))}
                   </div>
                 </div>
               )}
 
-
               {selectedVoucher.narration && (
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Narration</p>
-                  <p className="text-sm text-gray-700 italic">{selectedVoucher.narration}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">
+                    Narration
+                  </p>
+                  <p className="text-sm text-gray-700 italic">
+                    {selectedVoucher.narration}
+                  </p>
                 </div>
               )}
 
-
               <div className="flex justify-between items-center pt-2">
                 <button
-                  onClick={() => { setViewModalOpen(false); handleEdit(selectedVoucher.id); }}
+                  onClick={() => {
+                    setViewModalOpen(false);
+                    handleEdit(selectedVoucher.id);
+                  }}
                   className="px-5 py-2 border border-yellow-400 text-yellow-600 rounded-lg hover:bg-yellow-50 text-sm font-medium transition"
                 >
                   Edit Voucher

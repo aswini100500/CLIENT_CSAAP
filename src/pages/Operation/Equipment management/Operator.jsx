@@ -3,7 +3,7 @@ import { UserCog, PlusCircle, Edit2, Trash2 } from "lucide-react";
 import operationApi from "../../../api/operation";
 
 const Operator = () => {
-     const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [operators, setOperators] = useState([]);
 
   const [newOperator, setNewOperator] = useState({
@@ -26,16 +26,13 @@ const Operator = () => {
       setLoading(true);
       const response = await operationApi.getOperators();
 
-      
       setOperators(response.data.data);
     } catch (error) {
-
       console.error("Error fetching operators:", error);
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleAddOperator = async () => {
     if (
@@ -52,7 +49,6 @@ const Operator = () => {
     try {
       setLoading(true);
 
-      
       await operationApi.createOperator(newOperator);
       setNewOperator({
         name: "",
@@ -70,13 +66,11 @@ const Operator = () => {
     }
   };
 
-
   const handleEdit = (id) => {
     const operator = operators.find((o) => o.id === id);
     setNewOperator(operator);
     setEditingId(id);
   };
-
 
   const handleUpdate = async () => {
     try {
@@ -99,7 +93,6 @@ const Operator = () => {
     }
   };
 
-
   const handleDelete = async (id) => {
     try {
       setLoading(true);
@@ -114,14 +107,12 @@ const Operator = () => {
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-md border border-gray-200">
-
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-blue-700 flex items-center gap-2">
           <UserCog className="w-6 h-6 text-blue-600" />
           Operator Management
         </h2>
       </div>
-
 
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
         <input
@@ -178,7 +169,6 @@ const Operator = () => {
         </button>
       </div>
 
-
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
           <thead className="bg-blue-50">
@@ -193,9 +183,7 @@ const Operator = () => {
               <th className="border border-gray-200 p-2 text-left">
                 Assigned Machine
               </th>
-              <th className="border border-gray-200 p-2 text-left">
-                Contact
-              </th>
+              <th className="border border-gray-200 p-2 text-left">Contact</th>
               <th className="border border-gray-200 p-2 text-left">
                 Experience
               </th>
@@ -210,7 +198,9 @@ const Operator = () => {
               operators.map((operator, index) => (
                 <tr key={operator.id} className="hover:bg-gray-50">
                   <td className="border border-gray-200 p-2">{index + 1}</td>
-                  <td className="border border-gray-200 p-2">{operator.name}</td>
+                  <td className="border border-gray-200 p-2">
+                    {operator.name}
+                  </td>
                   <td className="border border-gray-200 p-2">
                     {operator.licence_number}
                   </td>
@@ -225,10 +215,11 @@ const Operator = () => {
                   </td>
                   <td className="border border-gray-200 p-2">
                     <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${operator.status === "Available"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                        }`}
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        operator.status === "Available"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
                     >
                       {operator.status}
                     </span>

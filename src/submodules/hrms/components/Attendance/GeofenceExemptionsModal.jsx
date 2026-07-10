@@ -1,12 +1,5 @@
 import axios from "axios";
-import {
-  Edit3,
-  Loader2,
-  Plus,
-  ShieldAlert,
-  Trash2,
-  X
-} from "lucide-react";
+import { Edit3, Loader2, Plus, ShieldAlert, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import GeofenceExemptionFormModal from "./GeofenceExemptionFormModal";
 import React from "react";
@@ -68,10 +61,7 @@ const GeofenceExemptionsModal = ({
   const [searchTerm, setSearchTerm] = useState("");
 
   const formattedEmployees = useMemo(
-    () =>
-      employees
-        .map(normalizeEmployee)
-        .filter((employee) => employee.id),
+    () => employees.map(normalizeEmployee).filter((employee) => employee.id),
     [employees],
   );
 
@@ -220,10 +210,7 @@ const GeofenceExemptionsModal = ({
 
   return (
     <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
-      <div
-        className="absolute inset-0"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0" onClick={onClose} />
 
       <div className="app-modal relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden">
         <div className="flex items-start justify-between border-b border-(--border-soft) bg-white px-5 py-3 sm:px-6">
@@ -232,9 +219,7 @@ const GeofenceExemptionsModal = ({
               <ShieldAlert className="h-6 w-6" />
             </div>
             <div className="min-w-0">
-              <h2 className="modal-title">
-                Geofence Exemptions
-              </h2>
+              <h2 className="modal-title">Geofence Exemptions</h2>
               <p className="modal-subtitle mt-1">
                 Manage attendance overrides for off-site and remote personnel.
               </p>

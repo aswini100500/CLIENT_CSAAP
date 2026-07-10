@@ -60,7 +60,6 @@ import { getAuthSlug } from "../../store/authSession";
 
 const getSlug = () => getAuthSlug();
 
-
 const getFloorName = (floorNumber, floorType = "residential") => {
   const residentialNames = [
     "Ground Floor",
@@ -127,7 +126,6 @@ const ApartmentProject = ({
   onClose,
   openInUnitsTab = false,
 }) => {
-
   const [blocks, setBlocks] = useState([]);
   const [totalUnits, setTotalUnits] = useState(0);
   const [units, setUnits] = useState([]);
@@ -167,7 +165,6 @@ const ApartmentProject = ({
   const [expandedBlocks, setExpandedBlocks] = useState({});
   const [expandedFloors, setExpandedFloors] = useState({});
 
-
   const [manualBlockCount, setManualBlockCount] = useState(0);
   const [manualResidentialFloors, setManualResidentialFloors] = useState({});
   const [manualParkingFloors, setManualParkingFloors] = useState({});
@@ -187,11 +184,9 @@ const ApartmentProject = ({
   const [loadingBrokers, setLoadingBrokers] = useState(false);
   const [loadingContractors, setLoadingContractors] = useState(false);
 
-
   useEffect(() => {
     if (selectedProject && editingProjectId) {
       let parsedBlocks = [];
-
 
       if (selectedProject.blocks_data) {
         try {
@@ -204,7 +199,6 @@ const ApartmentProject = ({
         }
       }
 
-
       const extractedUnits = [];
       parsedBlocks.forEach((block) => {
         block.floors?.forEach((floor) => {
@@ -213,7 +207,6 @@ const ApartmentProject = ({
           });
         });
       });
-
 
       setBlocks(parsedBlocks);
       setUnits(extractedUnits);
@@ -238,7 +231,6 @@ const ApartmentProject = ({
       }
     }
   }, [selectedProject, editingProjectId]);
-
 
   const handleRevenuePlotsCountChange = (newCount) => {
     setRevenuePlotsCount(newCount);
@@ -320,7 +312,6 @@ const ApartmentProject = ({
     }
   }, [editingProjectId, selectedProject, openInUnitsTab]);
 
-
   const toggleBlockExpansion = (blockId) => {
     setExpandedBlocks((prev) => ({
       ...prev,
@@ -328,14 +319,12 @@ const ApartmentProject = ({
     }));
   };
 
-
   const toggleFloorExpansion = (blockId, floorId) => {
     setExpandedFloors((prev) => ({
       ...prev,
       [`${blockId}-${floorId}`]: !prev[`${blockId}-${floorId}`],
     }));
   };
-
 
   const handleSaveProject = async () => {
     if (!projectName || !projectType) {
@@ -346,7 +335,6 @@ const ApartmentProject = ({
     setIsSaving(true);
 
     try {
-
       let finalBlocks = blocks.map((block) => {
         const updatedFloors = block.floors.map((floor) => {
           const updatedUnits = floor.units.map((unit) => {
@@ -382,7 +370,6 @@ const ApartmentProject = ({
       });
 
       if (selectedUnit) {
-
         setBlocks(finalBlocks);
         setUnits((prev) =>
           prev.map((u) => {
@@ -440,10 +427,7 @@ const ApartmentProject = ({
         constructor,
       };
 
-
       if (isSubtype) {
-
-
         onSaveProject?.({ ...projectData, id: projectId });
         setSuccessMessage("Project saved successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -452,14 +436,12 @@ const ApartmentProject = ({
       }
 
       if (projectId) {
-
         await projectService.updateApartment(projectId, projectData);
         alert("Apartment project updated successfully!");
         if (onSaveProject) {
           onSaveProject({ ...projectData, id: projectId });
         }
       } else {
-
         const response = await projectService.createApartment(projectData);
         setProjectId(response.id);
         alert(`Apartment project created successfully with ID: ${response.id}`);
@@ -513,7 +495,6 @@ const ApartmentProject = ({
 
     return (
       <div className="space-y-6">
-
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowBlockUnitOverview(false)}
@@ -530,7 +511,6 @@ const ApartmentProject = ({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
           <div className="space-y-3">
             {blocks.map((block) => (
               <div
@@ -550,7 +530,6 @@ const ApartmentProject = ({
               </div>
             ))}
           </div>
-
 
           <div className="lg:col-span-2">
             {!selectedBlock ? (
@@ -593,7 +572,9 @@ const ApartmentProject = ({
                         </td>
                         <td className="px-4 py-3 text-sm">
                           <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-slate-100 text-slate-800">
-                            {unit?.propertyFeatures?.possessionStatus || unit?.possessionStatus || "Pending"}
+                            {unit?.propertyFeatures?.possessionStatus ||
+                              unit?.possessionStatus ||
+                              "Pending"}
                           </span>
                         </td>
                         <td className="px-4 py-3 text-sm">
@@ -626,9 +607,6 @@ const ApartmentProject = ({
     );
   };
 
-
-
-
   const handleRoomAreaChange = (roomType, index, value) => {
     setRoomAreas((prev) => {
       const currentArray = [...(prev[roomType] || [])];
@@ -654,15 +632,12 @@ const ApartmentProject = ({
   const calculateTotalBathroomArea = () => calculateTotalRoomArea("bathrooms");
   const calculateTotalBalconyArea = () => calculateTotalRoomArea("balconies");
 
-
   const generateId = () => Date.now() + Math.floor(Math.random() * 1000);
-
 
   const startEditing = (type, id, currentValue) => {
     setEditingName(`${type}-${id}`);
     setEditingValue(currentValue);
   };
-
 
   const saveEditing = (type, id) => {
     const [entityType, entityId] = type.split("-");
@@ -693,12 +668,10 @@ const ApartmentProject = ({
     setEditingValue("");
   };
 
-
   const cancelEditing = () => {
     setEditingName(null);
     setEditingValue("");
   };
-
 
   const handleKeyPress = (e, type, id) => {
     if (e.key === "Enter") {
@@ -707,7 +680,6 @@ const ApartmentProject = ({
       cancelEditing();
     }
   };
-
 
   const addMultipleBlocks = () => {
     if (manualBlockCount <= 0) {
@@ -744,7 +716,6 @@ const ApartmentProject = ({
     alert(`Added ${manualBlockCount} blocks successfully!`);
   };
 
-
   const addFloorsToBlock = (blockId) => {
     const residentialCount = manualResidentialFloors[blockId] || 0;
     const parkingCount = manualParkingFloors[blockId] || 0;
@@ -758,7 +729,6 @@ const ApartmentProject = ({
     if (!block) return;
 
     const newFloors = [];
-
 
     for (let i = 1; i <= residentialCount; i++) {
       const floorNumber =
@@ -778,7 +748,6 @@ const ApartmentProject = ({
       };
       newFloors.push(newFloor);
     }
-
 
     for (let i = 1; i <= parkingCount; i++) {
       const floorNumber =
@@ -826,9 +795,7 @@ const ApartmentProject = ({
     );
   };
 
-
   const BHK_OPTIONS = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK", "6BHK", "7BHK"];
-
 
   const addMultipleUnitsToFloor = (blockId, floorId) => {
     const unitCount = manualUnitCounts[`${blockId}-${floorId}`] || 0;
@@ -924,14 +891,12 @@ const ApartmentProject = ({
     alert(`Added ${newUnits.length} units to ${floor.floorName} successfully!`);
   };
 
-
   const updateBlock = (blockId, field, value) => {
     const updatedBlocks = blocks.map((block) =>
       block.id === blockId ? { ...block, [field]: value } : block,
     );
     setBlocks(updatedBlocks);
   };
-
 
   const updateFloor = (blockId, floorId, field, value) => {
     const updatedBlocks = blocks.map((block) => {
@@ -945,7 +910,6 @@ const ApartmentProject = ({
     });
     setBlocks(updatedBlocks);
   };
-
 
   const updateUnit = (unitId, field, value) => {
     const updatedUnits = units.map((unit) =>
@@ -964,7 +928,6 @@ const ApartmentProject = ({
     });
     setBlocks(updatedBlocks);
   };
-
 
   const removeBlock = (blockId) => {
     if (
@@ -988,7 +951,6 @@ const ApartmentProject = ({
       alert("Block removed successfully!");
     }
   };
-
 
   const removeFloor = (blockId, floorId) => {
     if (
@@ -1035,7 +997,6 @@ const ApartmentProject = ({
     }
   };
 
-
   const removeUnit = (unitId) => {
     if (window.confirm("Are you sure you want to remove this unit?")) {
       const unitToRemove = units.find((u) => u.id === unitId);
@@ -1076,7 +1037,6 @@ const ApartmentProject = ({
     }
   };
 
-
   const handleUnitNameChange = (unitId, newName) => {
     setUnits((prev) =>
       prev.map((u) => {
@@ -1102,7 +1062,6 @@ const ApartmentProject = ({
       setSelectedUnit((prev) => ({ ...prev, name: newName }));
     }
   };
-
 
   const handleUnitTypeChange = (unitId, newType) => {
     const bhkNumber = parseInt(newType.charAt(0)) || 1;
@@ -1168,9 +1127,7 @@ const ApartmentProject = ({
     }
   };
 
-
   const handleUnitClick = (unit) => {
-
     if (selectedUnit) {
       const updatedUnit = {
         ...selectedUnit,
@@ -1214,7 +1171,6 @@ const ApartmentProject = ({
       );
     }
 
-
     setSelectedUnit(unit);
     setPropertyFeatures(unit.propertyFeatures || INITIAL_PROPERTY_FEATURES);
     setAreaDetails(unit.areaDetails || INITIAL_AREA_DETAILS);
@@ -1226,7 +1182,6 @@ const ApartmentProject = ({
     setLoanProvider(unit.loanProvider || "");
     setLoan(unit.loan || "");
 
-
     const formattedFacilities = (unit.facilities || []).map((f, i) =>
       typeof f === "string" ? { id: Date.now() + i, name: f } : f,
     );
@@ -1235,11 +1190,9 @@ const ApartmentProject = ({
     setApprovalStatus(unit.approvalStatus || INITIAL_APPROVAL_STATUS);
     setTransactionType(unit.transactionType || INITIAL_TRANSACTION_TYPE);
 
-
     if (unit.roomAreas) {
       setRoomAreas(unit.roomAreas);
     } else {
-
       setRoomAreas({
         bedrooms: [],
         bathrooms: [],
@@ -1248,7 +1201,6 @@ const ApartmentProject = ({
     }
   };
 
-
   const renderRoomAreaInputs = () => {
     const beds = propertyFeatures.bedrooms || 0;
     const baths = propertyFeatures.bathrooms || 0;
@@ -1256,7 +1208,6 @@ const ApartmentProject = ({
 
     return (
       <div className="space-y-3.5 mt-3">
-
         {beds > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-3">
@@ -1291,7 +1242,6 @@ const ApartmentProject = ({
           </div>
         )}
 
-
         {baths > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-3">
@@ -1325,7 +1275,6 @@ const ApartmentProject = ({
             </div>
           </div>
         )}
-
 
         {balcs > 0 && (
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
@@ -1363,7 +1312,6 @@ const ApartmentProject = ({
       </div>
     );
   };
-
 
   const NavigationTabs = () => {
     const tabs = [
@@ -1408,7 +1356,6 @@ const ApartmentProject = ({
     );
   };
 
-
   const StatisticsCard = ({ icon, label, value, color }) => (
     <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3">
@@ -1431,14 +1378,12 @@ const ApartmentProject = ({
 
   const renderProjectInfo = () => (
     <div className="space-y-4">
-
       {successMessage && (
         <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-lg px-3.5 py-2.5 text-sm text-emerald-800">
           <FaCheckCircle className="text-emerald-500 w-4 h-4 shrink-0" />
           {successMessage}
         </div>
       )}
-
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
         <StatisticsCard
@@ -1471,9 +1416,7 @@ const ApartmentProject = ({
         />
       </div>
 
-
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-2.5">
-
         <div className="bg-white border border-slate-200 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-7 h-7 rounded-[7px] bg-emerald-50 flex items-center justify-center">
@@ -1518,7 +1461,6 @@ const ApartmentProject = ({
             </div>
           </div>
         </div>
-
 
         <div className="bg-white border border-slate-200 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-4">
@@ -1565,7 +1507,6 @@ const ApartmentProject = ({
           </div>
         </div>
       </div>
-
 
       <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
@@ -1717,7 +1658,6 @@ const ApartmentProject = ({
         )}
       </div>
 
-
       <div className="flex justify-end pt-1">
         <button
           onClick={() => setActiveTab("blocks")}
@@ -1768,7 +1708,6 @@ const ApartmentProject = ({
               </button>
             </div>
 
-
             <div className="mt-2 grid grid-cols-2 md:grid-cols-6 gap-1">
               {block.floors
                 .flatMap((f) => f.units)
@@ -1795,11 +1734,8 @@ const ApartmentProject = ({
     </div>
   );
 
-
-
   const renderBlocks = () => (
     <div className="space-y-4">
-
       <div className="flex items-center justify-between gap-4 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
         <div>
           <div className="flex items-center gap-2 text-[13px] font-medium text-slate-800">
@@ -1830,7 +1766,6 @@ const ApartmentProject = ({
           </button>
         </div>
       </div>
-
 
       <div className="space-y-2">
         {blocks.length === 0 ? (
@@ -1875,7 +1810,6 @@ const ApartmentProject = ({
         )}
       </div>
 
-
       <div className="flex items-center justify-between pt-1">
         <button
           onClick={() => setActiveTab("project-info")}
@@ -1895,10 +1829,8 @@ const ApartmentProject = ({
     </div>
   );
 
-
   const renderUnits = () => (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
       <div className="lg:col-span-1 bg-white border border-slate-200 rounded-xl p-4 flex flex-col h-[calc(100vh-10rem)] min-h-125">
         <div className="flex items-center justify-between mb-3 shrink-0">
           <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 uppercase tracking-wide">
@@ -2039,7 +1971,6 @@ const ApartmentProject = ({
         </div>
       </div>
 
-
       <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-4 flex flex-col h-[calc(100vh-10rem)] min-h-125 overflow-y-auto">
         {selectedUnit ? (
           <div className="space-y-4">
@@ -2065,7 +1996,6 @@ const ApartmentProject = ({
                 )}
               </div>
             </div>
-
 
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaLayerGroup}>
@@ -2175,10 +2105,8 @@ const ApartmentProject = ({
                 </div>
               </div>
 
-
               {renderRoomAreaInputs()}
             </div>
-
 
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaRuler}>Area Details</SectionTitle>
@@ -2321,10 +2249,8 @@ const ApartmentProject = ({
               </div>
             </div>
 
-
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaCogs}>Facilities</SectionTitle>
-
 
               {facilities.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-2.5">
@@ -2354,7 +2280,6 @@ const ApartmentProject = ({
                 </div>
               )}
 
-
               {facilities.length > 6 && (
                 <button
                   onClick={() => setShowAllFacilities((v) => !v)}
@@ -2365,7 +2290,6 @@ const ApartmentProject = ({
                     : `Show ${facilities.length - 6} more`}
                 </button>
               )}
-
 
               <div className="flex gap-2">
                 <input
@@ -2379,7 +2303,6 @@ const ApartmentProject = ({
                   onClick={() => {
                     const value = newFacility.trim();
                     if (!value) return;
-
 
                     if (
                       facilities.some((f) => {
@@ -2405,21 +2328,27 @@ const ApartmentProject = ({
               </div>
             </div>
 
-
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaInfoCircle}>
                 Additional Information
               </SectionTitle>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-
                 <div className="col-span-full">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide mb-2 block">
                     Possession Status
                   </label>
                   <div className="flex flex-wrap gap-4">
-                    {["Ready to Move", "In Progress", "Completed", "Pending"].map((status) => (
-                      <label key={status} className="inline-flex items-center cursor-pointer">
+                    {[
+                      "Ready to Move",
+                      "In Progress",
+                      "Completed",
+                      "Pending",
+                    ].map((status) => (
+                      <label
+                        key={status}
+                        className="inline-flex items-center cursor-pointer"
+                      >
                         <input
                           type="radio"
                           name="possessionStatus"
@@ -2439,7 +2368,6 @@ const ApartmentProject = ({
                     ))}
                   </div>
                 </div>
-
 
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide">
@@ -2461,7 +2389,6 @@ const ApartmentProject = ({
                     ))}
                   </select>
                 </div>
-
 
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide">
@@ -2486,7 +2413,6 @@ const ApartmentProject = ({
                   </select>
                 </div>
 
-
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide">
                     Staff Engaged
@@ -2499,7 +2425,6 @@ const ApartmentProject = ({
                     className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-[13px] text-slate-800 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all bg-white placeholder:text-slate-300"
                   />
                 </div>
-
 
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] font-medium text-slate-400 tracking-wide">
@@ -2535,7 +2460,6 @@ const ApartmentProject = ({
                   </div>
                 )}
               </div>
-
 
               <div className="mt-4 pt-4 border-t border-slate-200/60">
                 <label className="text-[11px] font-medium text-slate-400 uppercase tracking-wide block mb-2.5">
@@ -2603,7 +2527,6 @@ const ApartmentProject = ({
               </div>
             </div>
 
-
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
               <SectionTitle icon={FaCog}>Price Details</SectionTitle>
               <div className="grid grid-cols-2 gap-3">
@@ -2641,7 +2564,6 @@ const ApartmentProject = ({
                 </div>
               </div>
             </div>
-
 
             <div className="flex gap-3 pt-2">
               <button
@@ -2724,7 +2646,6 @@ const ApartmentProject = ({
         )}
       </div>
 
-
       <div className="lg:col-span-3 flex items-center justify-between pt-3 mt-1 border-t border-slate-200/60">
         <button
           onClick={() => setActiveTab("blocks")}
@@ -2742,12 +2663,8 @@ const ApartmentProject = ({
     </div>
   );
 
-
-
-
   return (
     <div className="bg-linear-to-br from-gray-50 to-gray-100 p-2 md:p-4 font-sans relative">
-
       {onClose && (
         <button
           onClick={onClose}
@@ -2762,7 +2679,6 @@ const ApartmentProject = ({
         </button>
       )}
       <div className="max-w-7xl mx-auto space-y-4 mt-4 ">
-
         <NavigationTabs />
 
         {activeTab === "project-info" && renderProjectInfo()}
@@ -2778,15 +2694,10 @@ const ApartmentProject = ({
         )}
 
         {activeTab === "units" && renderUnits()}
-
-
-
       </div>
     </div>
   );
 };
-
-
 
 const Pill = ({ children, color = "green" }) => {
   const colors = {
@@ -2978,7 +2889,6 @@ const FloorCard = ({
 
   return (
     <div className="border border-slate-200 rounded-xl overflow-hidden">
-
       <div
         onClick={() => toggleFloorExpansion(block.id, floor.id)}
         className={`flex items-center justify-between px-3 py-2 cursor-pointer transition-colors
@@ -3057,7 +2967,6 @@ const FloorCard = ({
           />
         </div>
       </div>
-
 
       {isExpanded && (
         <div className="p-3 space-y-3 bg-white">
@@ -3151,7 +3060,6 @@ const BlockCard = ({
 
   return (
     <div className="border border-slate-200 rounded-xl overflow-hidden bg-white">
-
       <div
         onClick={() => toggleBlockExpansion(block.id)}
         className={`flex items-center justify-between px-3.5 py-2.5 cursor-pointer transition-colors
@@ -3206,10 +3114,8 @@ const BlockCard = ({
         />
       </div>
 
-
       {isExpanded && (
         <div className="p-4 space-y-4">
-
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
             <SectionTitle icon={FaCogs}>Block configuration</SectionTitle>
             <div className="grid grid-cols-3 gap-2 mb-4">
@@ -3291,7 +3197,6 @@ const BlockCard = ({
               </BtnDanger>
             </div>
           </div>
-
 
           <div className="space-y-2">
             <div className="flex items-center gap-1.5 text-[12px] font-medium text-slate-500">

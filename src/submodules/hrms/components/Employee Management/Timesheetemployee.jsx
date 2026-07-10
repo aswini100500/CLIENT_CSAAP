@@ -12,7 +12,6 @@ const parseAttendanceDate = (value) => {
   return Number.isNaN(date.getTime()) ? null : date;
 };
 
-
 const TimesheetOfEmployeesWithData = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -85,7 +84,6 @@ const TimesheetOfEmployeesWithData = () => {
     }
   };
 
-
   const handleEdit = (employee) => {
     setSelectedEmployee(employee);
     setEditedData(employee);
@@ -105,7 +103,6 @@ const TimesheetOfEmployeesWithData = () => {
           notes: editedData.entryDate,
         },
       );
-
 
       setEmployees((prev) =>
         prev.map((emp) =>
@@ -136,19 +133,16 @@ const TimesheetOfEmployeesWithData = () => {
     }));
   };
 
-
   const handleDelete = (employee) => {
     setSelectedEmployee(employee);
     setDeleteModalOpen(true);
   };
-
 
   const handleApprove = async (employee) => {
     try {
       const response = await axios.put(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/timesheets/${employee.id}/approve`,
       );
-
 
       setEmployees((prev) =>
         prev.map((emp) =>
@@ -181,13 +175,11 @@ const TimesheetOfEmployeesWithData = () => {
     }
   };
 
-
   const totalEntries = employees.length;
   const startIndex = (currentPage - 1) * entriesPerPage;
   const endIndex = Math.min(startIndex + entriesPerPage, totalEntries);
   const currentEntries = employees.slice(startIndex, endIndex);
   const totalPages = Math.ceil(totalEntries / entriesPerPage);
-
 
   const StatusBadge = ({ status }) => {
     const statusConfig = {
@@ -220,7 +212,6 @@ const TimesheetOfEmployeesWithData = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-md">
-
         <div className="px-6 py-4 border-b border-gray-200">
           <h1 className="text-2xl font-bold text-gray-800">
             Employee Timesheet
@@ -229,7 +220,6 @@ const TimesheetOfEmployeesWithData = () => {
             Manage and track employee attendance records
           </p>
         </div>
-
 
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
           <div className="flex items-center space-x-2">
@@ -253,7 +243,6 @@ const TimesheetOfEmployeesWithData = () => {
             Total: {totalEntries} employees
           </div>
         </div>
-
 
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -320,7 +309,6 @@ const TimesheetOfEmployeesWithData = () => {
 
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center space-x-3">
-
                         <button
                           onClick={() => handleDelete(employee)}
                           className="text-red-600 hover:text-red-900 font-medium flex items-center transition-colors duration-200"
@@ -343,7 +331,6 @@ const TimesheetOfEmployeesWithData = () => {
             </tbody>
           </table>
         </div>
-
 
         <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center">
           <div className="text-sm text-gray-600">
@@ -399,7 +386,6 @@ const TimesheetOfEmployeesWithData = () => {
           </div>
         </div>
       </div>
-
 
       {editModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -472,7 +458,6 @@ const TimesheetOfEmployeesWithData = () => {
           </div>
         </div>
       )}
-
 
       {deleteModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">

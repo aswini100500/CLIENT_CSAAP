@@ -31,7 +31,6 @@ const AddNewLoan = () => {
   };
 
   const handleSave = () => {
-
     alert("Loan saved successfully!");
   };
 
@@ -50,13 +49,11 @@ const AddNewLoan = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
-
       <div className="bg-linear-to-r from-blue-500 to-blue-700 text-white font-semibold text-base px-6 py-3 rounded-t-lg flex items-center gap-2 shadow-sm">
         <span className="text-lg">Add New Loan</span>
       </div>
 
       <div className="bg-white rounded-b-lg shadow-md p-6 space-y-5">
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -105,7 +102,6 @@ const AddNewLoan = () => {
           </div>
         </div>
 
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -151,7 +147,6 @@ const AddNewLoan = () => {
           </div>
         </div>
 
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -181,7 +176,6 @@ const AddNewLoan = () => {
           </div>
         </div>
 
-
         <div className="pt-1">
           <button
             onClick={calculateEMI}
@@ -190,7 +184,6 @@ const AddNewLoan = () => {
             Calculate EMI
           </button>
         </div>
-
 
         <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
           <button

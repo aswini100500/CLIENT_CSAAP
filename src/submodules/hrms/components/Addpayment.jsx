@@ -1,14 +1,12 @@
 import { useState } from "react";
 
 const AdvancePayment = () => {
-
   const [formData, setFormData] = useState({
     advanceAmount: "",
     duration: "",
     modeOfPayment: "",
     paymentDate: "",
   });
-
 
   const [advanceRecords, setAdvanceRecords] = useState([
     {
@@ -31,12 +29,9 @@ const AdvancePayment = () => {
     },
   ]);
 
-
   const [searchTerm, setSearchTerm] = useState("");
 
-
   const [entriesPerPage, setEntriesPerPage] = useState(10);
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,10 +41,8 @@ const AdvancePayment = () => {
     });
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
 
     const newRecord = {
       id: Date.now(),
@@ -67,9 +60,7 @@ const AdvancePayment = () => {
       amountPending: formData.advanceAmount,
     };
 
-
     setAdvanceRecords([...advanceRecords, newRecord]);
-
 
     setFormData({
       advanceAmount: "",
@@ -81,14 +72,12 @@ const AdvancePayment = () => {
     alert("Advance payment saved successfully!");
   };
 
-
   const filteredRecords = advanceRecords.filter(
     (record) =>
       record.advanceAmount.toLowerCase().includes(searchTerm.toLowerCase()) ||
       record.modeOfPayment.toLowerCase().includes(searchTerm.toLowerCase()) ||
       record.duration.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
 
   const toggleClearance = (id) => {
     setAdvanceRecords(
@@ -104,7 +93,6 @@ const AdvancePayment = () => {
     );
   };
 
-
   const deleteRecord = (id) => {
     if (window.confirm("Are you sure you want to delete this record?")) {
       setAdvanceRecords(advanceRecords.filter((record) => record.id !== id));
@@ -114,7 +102,6 @@ const AdvancePayment = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-
         <header className="mb-6">
           <h2 className="text-2xl md:text-2xl font-bold text-gray-800">
             Advance Payment Management
@@ -123,7 +110,6 @@ const AdvancePayment = () => {
             Manage employee advance payments efficiently
           </p>
         </header>
-
 
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
           <div className="flex items-center mb-6">
@@ -149,9 +135,7 @@ const AdvancePayment = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
               <div className="space-y-5">
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Advance Amount
@@ -174,7 +158,6 @@ const AdvancePayment = () => {
                   </div>
                 </div>
 
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Duration
@@ -191,9 +174,7 @@ const AdvancePayment = () => {
                 </div>
               </div>
 
-
               <div className="space-y-5">
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Mode of Payment
@@ -213,7 +194,6 @@ const AdvancePayment = () => {
                   </select>
                 </div>
 
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Payment Date
@@ -229,7 +209,6 @@ const AdvancePayment = () => {
                 </div>
               </div>
             </div>
-
 
             <div className="mt-6 pt-4 border-t border-gray-200">
               <button
@@ -255,7 +234,6 @@ const AdvancePayment = () => {
           </form>
         </div>
 
-
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center mb-6">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mr-3">
@@ -277,7 +255,6 @@ const AdvancePayment = () => {
               Advance Details
             </h2>
           </div>
-
 
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
             <div className="flex items-center">
@@ -320,7 +297,6 @@ const AdvancePayment = () => {
               />
             </div>
           </div>
-
 
           <div className="overflow-x-auto rounded-md border border-gray-200">
             <table className="min-w-full divide-y divide-gray-200">
@@ -464,7 +440,6 @@ const AdvancePayment = () => {
               </tbody>
             </table>
           </div>
-
 
           <div className="flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-700">
             <div>

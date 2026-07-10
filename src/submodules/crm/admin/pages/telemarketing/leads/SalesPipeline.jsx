@@ -22,7 +22,6 @@ import LeadTimelineModal from "./LeadTimelineModal";
 import { usePermission } from "../../../../../../hooks/usePermission";
 import useAuth from "../../../../../../hooks/useAuth";
 
-
 const formatDateTime = (value) => {
   if (!value) return "NA";
   const date = new Date(value);
@@ -73,7 +72,7 @@ const SalesPipeline = () => {
       alert(
         `Error logging interaction: ${
           error.response?.data?.message || error.message
-        }`
+        }`,
       );
     },
   });
@@ -116,7 +115,6 @@ const SalesPipeline = () => {
     return () => clearTimeout(revealTimer);
   }, []);
 
-
   const {
     data: rawLeads = [],
     isLoading,
@@ -132,23 +130,27 @@ const SalesPipeline = () => {
     enabled: !!companyId,
   });
 
-
   const { data: projectOptions = [] } = useQuery({
     queryKey: ["project-options", token, companyId],
     queryFn: async () => {
-      const response = await axios.get(`${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`, {
-        params: { company_id: companyId },
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/clprojects`,
+        {
+          params: { company_id: companyId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const projects = response.data?.data || [];
       return projects.map((p) => ({
         project_id: p.id,
         composite_key: p.id,
         name: p.project_name,
         display_type: p.project_code || p.status || "",
-        location: p.client_company_name ? `Client: ${p.client_company_name}` : "",
+        location: p.client_company_name
+          ? `Client: ${p.client_company_name}`
+          : "",
       }));
     },
     enabled: !!token && !!companyId,
@@ -164,7 +166,6 @@ const SalesPipeline = () => {
     return map;
   }, [projectOptions]);
 
-
   const leads = useMemo(
     () =>
       rawLeads
@@ -174,9 +175,8 @@ const SalesPipeline = () => {
           email: lead.email || "",
         }))
         .filter((lead) => lead.stage === "SITE_VISIT"),
-    [rawLeads]
+    [rawLeads],
   );
-
 
   const uniqueProjects = useMemo(() => {
     const ids = [...new Set(leads.map((l) => l.project_id).filter(Boolean))];
@@ -226,7 +226,13 @@ const SalesPipeline = () => {
       selectedStatus ||
       selectedAssignee
     );
-  }, [searchTerm, selectedProject, selectedSource, selectedStatus, selectedAssignee]);
+  }, [
+    searchTerm,
+    selectedProject,
+    selectedSource,
+    selectedStatus,
+    selectedAssignee,
+  ]);
 
   const clearAllFilters = () => {
     setSearchTerm("");
@@ -235,7 +241,6 @@ const SalesPipeline = () => {
     setSelectedStatus("");
     setSelectedAssignee("");
   };
-
 
   const visibleLeads = useMemo(() => {
     let result = [...leads];
@@ -246,7 +251,7 @@ const SalesPipeline = () => {
         (lead) =>
           lead.name?.toLowerCase().includes(term) ||
           lead.phone?.toLowerCase().includes(term) ||
-          lead.email?.toLowerCase().includes(term)
+          lead.email?.toLowerCase().includes(term),
       );
     }
 
@@ -256,13 +261,13 @@ const SalesPipeline = () => {
 
     if (selectedSource) {
       result = result.filter(
-        (lead) => lead.source?.toUpperCase() === selectedSource.toUpperCase()
+        (lead) => lead.source?.toUpperCase() === selectedSource.toUpperCase(),
       );
     }
 
     if (selectedStatus) {
       result = result.filter(
-        (lead) => lead.status?.toUpperCase() === selectedStatus.toUpperCase()
+        (lead) => lead.status?.toUpperCase() === selectedStatus.toUpperCase(),
       );
     }
 
@@ -273,15 +278,21 @@ const SalesPipeline = () => {
       });
     }
 
-
     result.sort(
       (first, second) =>
         new Date(second.created_at || 0).getTime() -
-        new Date(first.created_at || 0).getTime()
+        new Date(first.created_at || 0).getTime(),
     );
 
     return result;
-  }, [leads, searchTerm, selectedProject, selectedSource, selectedStatus, selectedAssignee]);
+  }, [
+    leads,
+    searchTerm,
+    selectedProject,
+    selectedSource,
+    selectedStatus,
+    selectedAssignee,
+  ]);
 
   const handleExportLeads = (leadSubset = leads) => {
     if (leadSubset.length === 0) {
@@ -311,7 +322,7 @@ const SalesPipeline = () => {
           `"${lead.last_contacted_at || ""}"`,
           `"${lead.next_follow_up_at || ""}"`,
           `"${lead.assignee?.name || lead.assigned_to || ""}"`,
-        ].join(",")
+        ].join(","),
       ),
     ];
 
@@ -322,7 +333,7 @@ const SalesPipeline = () => {
     link.href = url;
     link.setAttribute(
       "download",
-      `sales_pipeline_${new Date().toISOString().split("T")[0]}.csv`
+      `sales_pipeline_${new Date().toISOString().split("T")[0]}.csv`,
     );
     document.body.appendChild(link);
     link.click();
@@ -337,7 +348,7 @@ const SalesPipeline = () => {
 
   return (
     <div
-      className={`crm-module-root app-shell p-4 transition-all duration-400 ease-out ${ contentVisible ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-sm translate-y-2" }`}
+      className={`crm-module-root app-shell p-4 transition-all duration-400 ease-out ${contentVisible ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-sm translate-y-2"}`}
     >
       <div className="max-w-7xl mx-auto space-y-6">
         {queryError && (
@@ -348,7 +359,9 @@ const SalesPipeline = () => {
                 <h3 className="text-sm font-semibold text-red-800">
                   Error loading leads
                 </h3>
-                <p className="mt-1 text-sm text-red-700">{queryError.message}</p>
+                <p className="mt-1 text-sm text-red-700">
+                  {queryError.message}
+                </p>
               </div>
             </div>
           </div>
@@ -379,7 +392,6 @@ const SalesPipeline = () => {
 
             <div className="app-panel p-4">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-
                 <div className="flex-1 min-w-0">
                   <label className="app-label block mb-1.5 font-bold tracking-wide">
                     Search Leads
@@ -396,9 +408,7 @@ const SalesPipeline = () => {
                   </div>
                 </div>
 
-
                 <div className="flex flex-wrap items-center gap-3 shrink-0">
-
                   <div className="w-full sm:w-44">
                     <label className="app-label block mb-1.5">Project</label>
                     <div className="relative">
@@ -431,7 +441,6 @@ const SalesPipeline = () => {
                       </div>
                     </div>
                   </div>
-
 
                   <div className="w-full sm:w-36">
                     <label className="app-label block mb-1.5">Source</label>
@@ -466,7 +475,6 @@ const SalesPipeline = () => {
                     </div>
                   </div>
 
-
                   <div className="w-full sm:w-36">
                     <label className="app-label block mb-1.5">Status</label>
                     <div className="relative">
@@ -500,7 +508,6 @@ const SalesPipeline = () => {
                     </div>
                   </div>
 
-
                   <div className="w-full sm:w-40">
                     <label className="app-label block mb-1.5">Assignee</label>
                     <div className="relative">
@@ -533,7 +540,6 @@ const SalesPipeline = () => {
                       </div>
                     </div>
                   </div>
-
 
                   {hasActiveFilters && (
                     <div className="w-full sm:w-auto self-end pt-1 lg:pt-0">
@@ -613,7 +619,7 @@ const SalesPipeline = () => {
                           </td>
                           <td className="px-4 py-3 whitespace-nowrap">
                             <span
-                              className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium ${getStatusColor( lead.status )}`}
+                              className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium ${getStatusColor(lead.status)}`}
                             >
                               {formatStatus(lead.status)}
                             </span>
@@ -629,14 +635,15 @@ const SalesPipeline = () => {
                           </td>
                           <td className="px-4 py-3 whitespace-nowrap">
                             <div className="flex items-center gap-1">
-                              {canReportEntry && lead.status !== "SITE_VISIT_COMPLETE" && (
-                                <ActionIconButton
-                                  icon={MapPin}
-                                  label="Site Visited"
-                                  onClick={() => handleReportEntry(lead)}
-                                  className="app-icon-button p-1.5 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200"
-                                />
-                              )}
+                              {canReportEntry &&
+                                lead.status !== "SITE_VISIT_COMPLETE" && (
+                                  <ActionIconButton
+                                    icon={MapPin}
+                                    label="Site Visited"
+                                    onClick={() => handleReportEntry(lead)}
+                                    className="app-icon-button p-1.5 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200"
+                                  />
+                                )}
                               <ActionIconButton
                                 icon={Eye}
                                 label="View details"
@@ -668,7 +675,8 @@ const SalesPipeline = () => {
                               No leads found
                             </p>
                             <p className="text-[13px] mt-1 text-(--text-soft)">
-                              There are currently no leads in the Site Visit stage.
+                              There are currently no leads in the Site Visit
+                              stage.
                             </p>
                           </div>
                         </td>

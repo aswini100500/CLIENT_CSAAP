@@ -1,310 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
@@ -348,7 +41,6 @@ function CompanyForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-
   useEffect(() => {
     if (companyId) {
       setIsLoading(true);
@@ -365,10 +57,8 @@ function CompanyForm() {
     }
   }, [companyId, API]);
 
-
   const resetForm = () => {
     if (companyId) {
-
       axios.get(`${API}/${companyId}`).then((res) => {
         setForm((prev) => ({ ...prev, ...res.data }));
       });
@@ -396,14 +86,12 @@ function CompanyForm() {
     }
   };
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
 
     if (errors[name]) setErrors({ ...errors, [name]: "" });
   };
-
 
   const handleGstRegisteredChange = (e) => {
     const value = e.target.value;
@@ -414,7 +102,6 @@ function CompanyForm() {
     });
   };
 
-
   const validateForm = () => {
     const newErrors = {};
     if (!form.name.trim()) newErrors.name = "Company name is required";
@@ -424,7 +111,6 @@ function CompanyForm() {
 
     return newErrors;
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -443,7 +129,6 @@ function CompanyForm() {
     setIsSubmitting(true);
 
     try {
-
       const res = await axios.put(`${API}/${companyId}`, form);
       alert(res.data.message || "Company updated successfully!");
     } catch (error) {
@@ -461,32 +146,24 @@ function CompanyForm() {
   if (!companyId) {
     return (
       <div className="min-h-screen bg-white font-[monospace] p-10 flex flex-col items-center">
-        <h2 className="text-xl font-bold text-red-600 mb-4">No Company Selected</h2>
+        <h2 className="text-xl font-bold text-red-600 mb-4">
+          No Company Selected
+        </h2>
         <p>Please select a company from the dashboard or login again.</p>
       </div>
-    )
+    );
   }
 
   return (
     <div className="min-h-screen bg-white font-[monospace]">
-
-
       <div className="bg-[#004c99] text-white px-6 py-3 shadow">
-        <span className="font-bold text-lg tracking-wide">
-          Company Profile
-        </span>
+        <span className="font-bold text-lg tracking-wide">Company Profile</span>
       </div>
 
-
       <div className="max-w-5xl mx-auto bg-white mt-6 p-4 sm:p-6 rounded-lg shadow border">
-
-        <h2 className="text-xl font-bold mb-4 text-blue-800">
-          Edit Company
-        </h2>
+        <h2 className="text-xl font-bold mb-4 text-blue-800">Edit Company</h2>
 
         <form onSubmit={handleSubmit}>
-
-
           <div className="mb-3">
             <label className="font-semibold block mb-1">Company Name*</label>
             <input
@@ -501,7 +178,6 @@ function CompanyForm() {
             )}
           </div>
 
-
           <div className="mb-3">
             <label className="font-semibold block mb-1">Email*</label>
             <input
@@ -515,7 +191,6 @@ function CompanyForm() {
               <p className="text-red-500 text-sm mt-1">{errors.email}</p>
             )}
           </div>
-
 
           <div className="mb-3">
             <label className="font-semibold block mb-1">Address</label>
@@ -551,8 +226,6 @@ function CompanyForm() {
             </div>
           </div>
 
-
-
           <div className="mb-3">
             <label className="font-semibold block mb-1">GST Registered</label>
             <select
@@ -566,7 +239,6 @@ function CompanyForm() {
             </select>
           </div>
 
-
           {form.gstRegistered === "Yes" && (
             <div className="mb-3">
               <label className="font-semibold block mb-1">GSTIN</label>
@@ -579,7 +251,6 @@ function CompanyForm() {
               />
             </div>
           )}
-
 
           <div className="flex justify-end gap-3 mt-6">
             <button
@@ -597,7 +268,6 @@ function CompanyForm() {
               {isSubmitting ? "Updating..." : "Update Company"}
             </button>
           </div>
-
         </form>
       </div>
     </div>
@@ -605,308 +275,3 @@ function CompanyForm() {
 }
 
 export default CompanyForm;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

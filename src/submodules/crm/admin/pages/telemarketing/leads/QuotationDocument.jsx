@@ -9,7 +9,6 @@ import {
 } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
 
-
 const formatValue = (amount, country) => {
   if (amount === undefined || amount === null || amount === "") return "0.00";
   const num = parseFloat(amount);
@@ -300,7 +299,6 @@ const QuotationDocument = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-
         <View style={styles.headerContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.quotationTitle}>QUOTATION</Text>
@@ -319,9 +317,7 @@ const QuotationDocument = ({
           </View>
         </View>
 
-
         <View style={styles.detailsGrid}>
-
           <View style={styles.detailsCard}>
             <View style={styles.cardTitleContainer}>
               <Text style={styles.cardTitle}>Quotation From</Text>
@@ -356,7 +352,6 @@ const QuotationDocument = ({
               </Text>
             ))}
           </View>
-
 
           <View style={styles.detailsCard}>
             <View style={styles.cardTitleContainer}>
@@ -394,9 +389,7 @@ const QuotationDocument = ({
           </View>
         </View>
 
-
         <View style={styles.table}>
-
           <View style={styles.tableHeader}>
             <Text style={[styles.headerCell, styles.descCol]}>
               Item Description
@@ -411,7 +404,6 @@ const QuotationDocument = ({
               Total ({country.symbol})
             </Text>
           </View>
-
 
           {items.map((item, idx) => {
             const isLast = idx === items.length - 1;
@@ -447,16 +439,13 @@ const QuotationDocument = ({
           })}
         </View>
 
-
         <View style={styles.bottomSection}>
-
           <View style={styles.termsCard}>
             <Text style={styles.termsTitle}>Terms & Conditions</Text>
             <Text style={styles.termsText}>
               {terms || "No terms specified."}
             </Text>
           </View>
-
 
           <View style={styles.summaryCard}>
             <Text style={styles.summaryTitle}>Breakdown</Text>
@@ -503,7 +492,6 @@ const QuotationDocument = ({
             </View>
           </View>
         </View>
-
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>

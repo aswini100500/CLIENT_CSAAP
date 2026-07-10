@@ -41,11 +41,11 @@ const CalendarTabs = () => {
     return filteredTabs[0]?.id || "holiday";
   });
 
-  const activeTabData = filteredTabs.find((tab) => tab.id === activeTab) || filteredTabs[0];
+  const activeTabData =
+    filteredTabs.find((tab) => tab.id === activeTab) || filteredTabs[0];
 
   return (
     <div className="w-full bg-[#f8fafc]  lg:p-2 font-sans">
-
       <div className="flex justify-start mb-8">
         <nav className="flex p-1.5 bg-white border border-slate-200 rounded-xl shadow-sm relative">
           {filteredTabs.map((tab) => {
@@ -60,7 +60,6 @@ const CalendarTabs = () => {
                   ${isActive ? "text-white" : "text-slate-500 hover:text-slate-800"}
                 `}
               >
-
                 {isActive && (
                   <motion.div
                     layoutId="calendarActivePill"
@@ -83,9 +82,7 @@ const CalendarTabs = () => {
         </nav>
       </div>
 
-
       <div className="w-full bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
-
         <div className="w-full relative">
           <AnimatePresence mode="wait">
             <motion.div

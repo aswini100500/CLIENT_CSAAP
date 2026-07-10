@@ -42,7 +42,7 @@ const StockItemCreation = () => {
       const fetchGroups = async () => {
         try {
           const res = await axios.get(
-            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`
+            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`,
           );
           setGroups(res.data || []);
         } catch (err) {
@@ -70,9 +70,13 @@ const StockItemCreation = () => {
           alias: data.alias || "",
           under: data.under || "",
           units: data.units || "",
-          maintainInBatches: data.maintainInBatches === 1 || data.maintainInBatches === true,
-          trackDateOfManufacture: data.trackDateOfManufacture === 1 || data.trackDateOfManufacture === true,
-          expiryDateOfBatches: data.expiryDateOfBatches === 1 || data.expiryDateOfBatches === true,
+          maintainInBatches:
+            data.maintainInBatches === 1 || data.maintainInBatches === true,
+          trackDateOfManufacture:
+            data.trackDateOfManufacture === 1 ||
+            data.trackDateOfManufacture === true,
+          expiryDateOfBatches:
+            data.expiryDateOfBatches === 1 || data.expiryDateOfBatches === true,
           rateOfDuty: data.rateOfDuty || "",
           gstApplicable: data.gstApplicable || "",
           hsn: data.hsn || "",
@@ -81,7 +85,10 @@ const StockItemCreation = () => {
           openingBalanceValue: data.openingBalanceValue || "",
         });
       } else {
-        axios.get(`${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockById/${companyId}/${id}`)
+        axios
+          .get(
+            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockById/${companyId}/${id}`,
+          )
           .then((res) => {
             if (res.data.success) {
               const data = res.data.data;
@@ -91,9 +98,15 @@ const StockItemCreation = () => {
                 alias: data.alias || "",
                 under: data.under || "",
                 units: data.units || "",
-                maintainInBatches: data.maintainInBatches === 1 || data.maintainInBatches === true,
-                trackDateOfManufacture: data.trackDateOfManufacture === 1 || data.trackDateOfManufacture === true,
-                expiryDateOfBatches: data.expiryDateOfBatches === 1 || data.expiryDateOfBatches === true,
+                maintainInBatches:
+                  data.maintainInBatches === 1 ||
+                  data.maintainInBatches === true,
+                trackDateOfManufacture:
+                  data.trackDateOfManufacture === 1 ||
+                  data.trackDateOfManufacture === true,
+                expiryDateOfBatches:
+                  data.expiryDateOfBatches === 1 ||
+                  data.expiryDateOfBatches === true,
                 rateOfDuty: data.rateOfDuty || "",
                 gstApplicable: data.gstApplicable || "",
                 hsn: data.hsn || "",
@@ -115,7 +128,6 @@ const StockItemCreation = () => {
       }));
     }
   }, [companyId]);
-
 
   const handleAccept = async () => {
     if (!form.name.trim()) {
@@ -144,17 +156,14 @@ const StockItemCreation = () => {
 
     const payload = {
       ...form,
-      units:
-        form.units === "Other"
-          ? form.customUnit
-          : form.units,
+      units: form.units === "Other" ? form.customUnit : form.units,
     };
 
     try {
       if (stockId) {
         const { data } = await axios.put(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/updateStock/${companyId}/${stockId}`,
-          payload
+          payload,
         );
         Swal.fire({
           icon: "success",
@@ -172,7 +181,7 @@ const StockItemCreation = () => {
       } else {
         const { data } = await axios.post(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/createStock/${companyId}`,
-          payload
+          payload,
         );
         Swal.fire({
           icon: "success",
@@ -192,9 +201,7 @@ const StockItemCreation = () => {
       Swal.fire({
         icon: "error",
         title: "Failed to Save",
-        text:
-          err?.response?.data?.message ||
-          "Failed to save stock item",
+        text: err?.response?.data?.message || "Failed to save stock item",
       });
     }
   };
@@ -211,20 +218,13 @@ const StockItemCreation = () => {
 
   return (
     <div className="w-full  bg-[#f6f3e9] p-4 font-mono text-sm overflow-auto">
-
-
       <h1 className="text-center font-bold text-lg mb-4">
         {stockId ? "Edit: Stock Item" : "Create: Stock Item"}
       </h1>
 
       <div className="grid grid-cols-12 gap-4">
-
-
         <div className="col-span-9 pl-4">
-
-
           <div className="space-y-3">
-
             <div className="flex items-center">
               <label className="w-48">Name:</label>
               <input
@@ -269,7 +269,6 @@ const StockItemCreation = () => {
               <label className="w-48 pt-2">Units:</label>
 
               <div className="flex flex-col gap-2 w-80">
-
                 <select
                   name="units"
                   value={form.units}
@@ -328,9 +327,7 @@ const StockItemCreation = () => {
                   <option value="Pipe">Pipe</option>
                   <option value="Block">Block</option>
 
-                  <option value="Other">
-                    Other (Add Manually)
-                  </option>
+                  <option value="Other">Other (Add Manually)</option>
                 </select>
 
                 {form.units === "Other" && (
@@ -351,14 +348,11 @@ const StockItemCreation = () => {
                 <p className="text-[11px] text-gray-500">
                   Select predefined unit or add your own custom unit.
                 </p>
-
               </div>
             </div>
-
           </div>
 
           <hr className="my-4 border-black" />
-
 
           <div className="space-y-2">
             <div className="flex items-center">
@@ -394,7 +388,6 @@ const StockItemCreation = () => {
 
           <hr className="my-4 border-black" />
 
-
           <div className="space-y-3">
             <p className="font-semibold">GST Details</p>
 
@@ -425,7 +418,6 @@ const StockItemCreation = () => {
           </div>
 
           <hr className="my-4 border-black" />
-
 
           <div>
             <p className="font-semibold mb-2">Opening Balance</p>
@@ -465,10 +457,8 @@ const StockItemCreation = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
-
 
       <div className="flex justify-center mt-6 space-x-6 font-semibold">
         <button

@@ -47,7 +47,6 @@ const Reports = () => {
     { id: 5, name: "Robert Brown" },
   ];
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -63,12 +62,10 @@ const Reports = () => {
     });
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (isEdit && editingReportId) {
-
       setReports(
         reports.map((report) =>
           report.id === editingReportId
@@ -77,15 +74,14 @@ const Reports = () => {
                 reportName: formData.reportName,
                 engineer:
                   engineers.find(
-                    (eng) => eng.id === parseInt(formData.engineer)
+                    (eng) => eng.id === parseInt(formData.engineer),
                   )?.name || "",
                 description: formData.description,
               }
-            : report
-        )
+            : report,
+        ),
       );
     } else {
-
       const newReport = {
         id: reports.length + 1,
         reportName: formData.reportName,
@@ -98,7 +94,6 @@ const Reports = () => {
       };
       setReports([...reports, newReport]);
     }
-
 
     setFormData({
       engineer: "",
@@ -116,7 +111,6 @@ const Reports = () => {
   };
 
   const handleEdit = (report) => {
-
     const engineerObj = engineers.find((eng) => eng.name === report.engineer);
     setFormData({
       engineer: engineerObj ? engineerObj.id.toString() : "",
@@ -142,7 +136,6 @@ const Reports = () => {
 
   return (
     <div className="flex min-h-screen w-full bg-gray-100">
-
       <div className="flex-1 p-7">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Reports</h2>
@@ -150,7 +143,12 @@ const Reports = () => {
             onClick={() => {
               setIsEdit(false);
               setIsFormOpen(true);
-              setFormData({ engineer: "", reportName: "", description: "", file: null });
+              setFormData({
+                engineer: "",
+                reportName: "",
+                description: "",
+                file: null,
+              });
             }}
             className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center"
           >
@@ -170,7 +168,6 @@ const Reports = () => {
             Submit Report
           </button>
         </div>
-
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="overflow-x-auto">
@@ -195,7 +192,7 @@ const Reports = () => {
                     <td className="px-4 py-2">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                          report.status
+                          report.status,
                         )}`}
                       >
                         {report.status}
@@ -203,7 +200,6 @@ const Reports = () => {
                     </td>
                     <td className="px-4 py-2 flex space-x-2 ">
                       <button
-
                         className="text-red-600 hover:text-red-900 cursor-pointer"
                         title="Delete"
                       >
@@ -225,7 +221,6 @@ const Reports = () => {
         </div>
       </div>
 
-
       {isFormOpen && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md relative">
@@ -241,7 +236,6 @@ const Reports = () => {
               </button>
             </div>
             <form onSubmit={handleSubmit} className="px-6 py-4">
-
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-2">
                   Select Engineer

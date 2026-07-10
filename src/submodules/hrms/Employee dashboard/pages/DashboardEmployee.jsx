@@ -1,5 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { TrendingUp, Users, Clock, Calendar, MoreVertical, Gift, FileText, MessageSquare, CheckCircle, Target } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import {
+  TrendingUp,
+  Users,
+  Clock,
+  Calendar,
+  MoreVertical,
+  Gift,
+  FileText,
+  MessageSquare,
+  CheckCircle,
+  Target,
+} from "lucide-react";
 import useAuth from "../../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -20,8 +31,18 @@ const localizer = dateFnsLocalizer({
 });
 
 const monthNames = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const getMonthEndReportInfo = (dateValue) => {
@@ -74,9 +95,7 @@ const DashboardEmployee = () => {
     }).format(new Date());
 
   const roleLabel = String(user?.role || "").toLowerCase();
-  const isAdminOrHR =
-    roleLabel.includes("admin") || roleLabel.includes("hr");
-
+  const isAdminOrHR = roleLabel.includes("admin") || roleLabel.includes("hr");
 
   const getAuthToken = () => {
     return token;
@@ -99,7 +118,9 @@ const DashboardEmployee = () => {
       }
 
       try {
-        const res = await axios.get(`${import.meta.env.VITE_HRMS_BASE_URL}/api/employee/by-id/${welcomeEmployeeId}`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee/by-id/${welcomeEmployeeId}`,
+        );
         const empData = res.data?.data;
 
         if (empData && empData.first_login === 1) {
@@ -112,7 +133,9 @@ const DashboardEmployee = () => {
           }).then(async () => {
             localStorage.setItem(welcomeKey, "true");
             try {
-              await axios.put(`${import.meta.env.VITE_HRMS_BASE_URL}/api/employee/first-login-done/${welcomeEmployeeId}`);
+              await axios.put(
+                `${import.meta.env.VITE_HRMS_BASE_URL}/api/employee/first-login-done/${welcomeEmployeeId}`,
+              );
             } catch (err) {
               console.error("Error marking first login done:", err);
             }
@@ -124,7 +147,13 @@ const DashboardEmployee = () => {
     };
 
     checkFirstLogin();
-  }, [employeeId, employeeName, isAdminOrHR, user?.employeeProfileId, user?.id]);
+  }, [
+    employeeId,
+    employeeName,
+    isAdminOrHR,
+    user?.employeeProfileId,
+    user?.id,
+  ]);
 
   useEffect(() => {
     const checkMonthlyReport = async () => {
@@ -140,14 +169,15 @@ const DashboardEmployee = () => {
         const token = getAuthToken();
         const reportRes = await axios.get(
           `${import.meta.env.VITE_HRMS_BASE_URL}/api/monthly-reports/${companySlug}/employee/${currentEmployeeId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
 
         const reports = Array.isArray(reportRes.data) ? reportRes.data : [];
         const alreadySubmitted = reports.some(
           (r) =>
-            String(r.month).toLowerCase() === monthEndReport.month.toLowerCase() &&
-            Number(r.year) === Number(monthEndReport.year)
+            String(r.month).toLowerCase() ===
+              monthEndReport.month.toLowerCase() &&
+            Number(r.year) === Number(monthEndReport.year),
         );
 
         if (!alreadySubmitted) {
@@ -161,7 +191,9 @@ const DashboardEmployee = () => {
             confirmButtonColor: "#2563eb",
           }).then((result) => {
             if (result.isConfirmed) {
-              navigate(`/employee/work-report?tab=monthly&openForm=1&month=${encodeURIComponent(monthEndReport.month)}&year=${monthEndReport.year}`);
+              navigate(
+                `/employee/work-report?tab=monthly&openForm=1&month=${encodeURIComponent(monthEndReport.month)}&year=${monthEndReport.year}`,
+              );
             }
           });
         }
@@ -171,7 +203,13 @@ const DashboardEmployee = () => {
     };
 
     checkMonthlyReport();
-  }, [employeeId, companySlug, isAdminOrHR, user?.employeeProfileId, user?.slug]);
+  }, [
+    employeeId,
+    companySlug,
+    isAdminOrHR,
+    user?.employeeProfileId,
+    user?.slug,
+  ]);
 
   useEffect(() => {
     if (isAdminOrHR) {
@@ -188,7 +226,7 @@ const DashboardEmployee = () => {
           params: {
             slug: companySlug,
           },
-        }
+        },
       );
 
       const alerts = res.data?.data || [];
@@ -210,7 +248,10 @@ const DashboardEmployee = () => {
       let extraDays = 0;
 
       if (action === "extend") {
-        const input = window.prompt(`Enter extension days for ${item.name}`, "7");
+        const input = window.prompt(
+          `Enter extension days for ${item.name}`,
+          "7",
+        );
         if (input === null) return;
 
         extraDays = Number.parseInt(input, 10);
@@ -224,7 +265,7 @@ const DashboardEmployee = () => {
         const confirmed = window.confirm(
           action === "regularise"
             ? `Regularise ${item.name} and move status to Permanent?`
-            : `Reject extension/regularisation for ${item.name} and continue notice period?`
+            : `Reject extension/regularisation for ${item.name} and continue notice period?`,
         );
 
         if (!confirmed) return;
@@ -232,29 +273,37 @@ const DashboardEmployee = () => {
 
       setNoticeActionLoading(`${item.source}-${item.id}-${action}`);
 
-      await axios.post(`${import.meta.env.VITE_HRMS_BASE_URL}/api/notice-period/action`, {
-        source: item.source,
-        recordId: item.id,
-        action,
-        extraDays,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/notice-period/action`,
+        {
+          source: item.source,
+          recordId: item.id,
+          action,
+          extraDays,
+        },
+      );
 
       await fetchNoticeAlerts();
     } catch (error) {
       console.error("Failed to update notice action", error);
-      window.alert(error.response?.data?.message || "Failed to update notice action");
+      window.alert(
+        error.response?.data?.message || "Failed to update notice action",
+      );
     } finally {
       setNoticeActionLoading("");
     }
   };
 
-
   const fetchTasks = async () => {
     if (!employeeId || !companyId || !companySlug) {
-      console.warn("Missing required data for tasks fetch:", { employeeId, companyId, companySlug });
+      console.warn("Missing required data for tasks fetch:", {
+        employeeId,
+        companyId,
+        companySlug,
+      });
       return;
     }
-    
+
     setTasksLoading(true);
     try {
       const token = getAuthToken();
@@ -264,36 +313,38 @@ const DashboardEmployee = () => {
           params: {
             employeeId: employeeId,
             company_id: companyId,
-            slug: companySlug
+            slug: companySlug,
           },
-          headers: { 
+          headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+            "Content-Type": "application/json",
+          },
+        },
       );
-      
+
       if (response.data && response.data.success) {
         const tasks = response.data.data || [];
         setTotalTasks(tasks.length);
-        
 
-        const completed = tasks.filter(task => {
-          const status = (task.status || '').toLowerCase();
-          return status === 'completed' || 
-                 status === 'approved' || 
-                 status === 'done' || 
-                 status === 'finished';
+        const completed = tasks.filter((task) => {
+          const status = (task.status || "").toLowerCase();
+          return (
+            status === "completed" ||
+            status === "approved" ||
+            status === "done" ||
+            status === "finished"
+          );
         }).length;
         setCompletedTasks(completed);
-        
 
-        const pending = tasks.filter(task => {
-          const status = (task.status || '').toLowerCase();
-          return status !== 'completed' && 
-                 status !== 'approved' && 
-                 status !== 'done' && 
-                 status !== 'finished';
+        const pending = tasks.filter((task) => {
+          const status = (task.status || "").toLowerCase();
+          return (
+            status !== "completed" &&
+            status !== "approved" &&
+            status !== "done" &&
+            status !== "finished"
+          );
         }).length;
         setPendingTasks(pending);
       } else {
@@ -313,13 +364,16 @@ const DashboardEmployee = () => {
     }
   };
 
-
   const fetchMessages = async () => {
     if (!employeeId || !companyId || !companySlug) {
-      console.warn("Missing required data for messages fetch:", { employeeId, companyId, companySlug });
+      console.warn("Missing required data for messages fetch:", {
+        employeeId,
+        companyId,
+        companySlug,
+      });
       return;
     }
-    
+
     setMessagesLoading(true);
     try {
       const token = getAuthToken();
@@ -329,15 +383,14 @@ const DashboardEmployee = () => {
           params: {
             employee_id: employeeId,
             company_id: companyId,
-            slug: companySlug
+            slug: companySlug,
           },
-          headers: { 
+          headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+            "Content-Type": "application/json",
+          },
+        },
       );
-      
 
       let messages = [];
       if (response.data) {
@@ -345,13 +398,15 @@ const DashboardEmployee = () => {
           messages = response.data;
         } else if (response.data.data && Array.isArray(response.data.data)) {
           messages = response.data.data;
-        } else if (response.data.messages && Array.isArray(response.data.messages)) {
+        } else if (
+          response.data.messages &&
+          Array.isArray(response.data.messages)
+        ) {
           messages = response.data.messages;
         }
       }
-      
+
       setAdminMessages(messages.length);
-      
     } catch (err) {
       console.error("Error fetching messages:", err);
       setAdminMessages(0);
@@ -360,54 +415,57 @@ const DashboardEmployee = () => {
     }
   };
 
-
   const fetchPresentDays = async () => {
     if (!employeeId || !companySlug) {
-      console.warn("Missing required data for attendance fetch:", { employeeId, companySlug });
+      console.warn("Missing required data for attendance fetch:", {
+        employeeId,
+        companySlug,
+      });
       return;
     }
-    
+
     setAttendanceLoading(true);
     try {
       const token = getAuthToken();
       const currentYear = new Date().getFullYear();
       const currentMonth = new Date().getMonth() + 1;
-      
+
       const response = await axios.get(
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/attendance/${companySlug}/employee/${employeeId}/year/${currentYear}`,
-        { 
-          headers: { 
+        {
+          headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          } 
-        }
+            "Content-Type": "application/json",
+          },
+        },
       );
-      
+
       if (response.data && response.data.success) {
         const attendanceData = response.data.data || [];
-        
 
-        const currentMonthRecords = attendanceData.filter(record => {
+        const currentMonthRecords = attendanceData.filter((record) => {
           const recordDate = new Date(record.date || record.attendance_date);
           return recordDate.getMonth() + 1 === currentMonth;
         });
-        
 
-        const presents = currentMonthRecords.filter(record => {
-          const status = (record.status || '').toLowerCase();
+        const presents = currentMonthRecords.filter((record) => {
+          const status = (record.status || "").toLowerCase();
           const isPresent = record.isPresent === true;
-          const hasMispunch = record.mispunch_time !== null && record.mispunch_time !== undefined;
-          const hasCheckIn = record.check_in !== null && record.check_in !== undefined;
-          
-          return status === 'present' || 
-                 status === 'p' || 
-                 isPresent || 
-                 hasMispunch || 
-                 hasCheckIn;
+          const hasMispunch =
+            record.mispunch_time !== null && record.mispunch_time !== undefined;
+          const hasCheckIn =
+            record.check_in !== null && record.check_in !== undefined;
+
+          return (
+            status === "present" ||
+            status === "p" ||
+            isPresent ||
+            hasMispunch ||
+            hasCheckIn
+          );
         }).length;
-        
+
         setMyPresentDays(presents);
-        
 
         const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
         let workingDays = 0;
@@ -421,7 +479,10 @@ const DashboardEmployee = () => {
         }
         setTotalWorkingDays(workingDays);
       } else {
-        console.warn("Attendance API returned unsuccessful or unexpected structure:", response.data);
+        console.warn(
+          "Attendance API returned unsuccessful or unexpected structure:",
+          response.data,
+        );
         setMyPresentDays(0);
       }
     } catch (err) {
@@ -431,38 +492,44 @@ const DashboardEmployee = () => {
       setAttendanceLoading(false);
     }
   };
-  
 
   const fetchServiceRequests = async () => {
     if (!companySlug || !employeeId) {
-      console.warn("Missing required data for service requests fetch:", { companySlug, employeeId });
+      console.warn("Missing required data for service requests fetch:", {
+        companySlug,
+        employeeId,
+      });
       return;
     }
-    
+
     try {
       const token = getAuthToken();
       const response = await axios.get(
-
         `${import.meta.env.VITE_HRMS_BASE_URL}/api/service-requests/employee-search?employeeId=${employeeId}&company_id=${company_id}&slug=${slug}`,
-        { 
-          headers: { 
+        {
+          headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          } 
-        }
+            "Content-Type": "application/json",
+          },
+        },
       );
-      
+
       if (response.data && response.data.success) {
         const requests = response.data.data || [];
 
         setServiceRequestsCount(requests.length);
-        const pendingCount = requests.filter(r => {
-          const status = (r.status || '').toLowerCase();
-          return status === 'pending' || status === 'p' || status === 'in-progress';
+        const pendingCount = requests.filter((r) => {
+          const status = (r.status || "").toLowerCase();
+          return (
+            status === "pending" || status === "p" || status === "in-progress"
+          );
         }).length;
         setPendingRequestsCount(pendingCount);
       } else {
-        console.warn("Service requests API returned unsuccessful:", response.data);
+        console.warn(
+          "Service requests API returned unsuccessful:",
+          response.data,
+        );
         setServiceRequestsCount(0);
         setPendingRequestsCount(0);
       }
@@ -473,37 +540,36 @@ const DashboardEmployee = () => {
     }
   };
 
-
   useEffect(() => {
     const loadDashboardData = async () => {
       if (employeeId && companyId && companySlug) {
-
         await Promise.allSettled([
           fetchTasks(),
           fetchMessages(),
           fetchPresentDays(),
-          fetchServiceRequests()
+          fetchServiceRequests(),
         ]);
       }
     };
-    
+
     loadDashboardData();
   }, [employeeId, companyId, companySlug]);
 
-
   useEffect(() => {
     if (!employeeId || !companyId || !companySlug) return;
-    
-    const interval = setInterval(() => {
-      fetchTasks();
-      fetchMessages();
-      fetchPresentDays();
-      fetchServiceRequests();
-    }, 5 * 60 * 1000);
-    
+
+    const interval = setInterval(
+      () => {
+        fetchTasks();
+        fetchMessages();
+        fetchPresentDays();
+        fetchServiceRequests();
+      },
+      5 * 60 * 1000,
+    );
+
     return () => clearInterval(interval);
   }, [employeeId, companyId, companySlug]);
-
 
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -520,15 +586,15 @@ const DashboardEmployee = () => {
 
         const baseUrl = import.meta.env.VITE_HRMS_BASE_URL;
         const today = getTodayKey();
-        
 
         let attendanceRes = null;
         let data = [];
-        
 
         try {
           if (companySlug) {
-            attendanceRes = await axios.get(`${baseUrl}/api/attendance/${companySlug}?date=${today}`);
+            attendanceRes = await axios.get(
+              `${baseUrl}/api/attendance/${companySlug}?date=${today}`,
+            );
             if (attendanceRes?.data?.data) {
               data = attendanceRes.data.data;
             }
@@ -536,33 +602,41 @@ const DashboardEmployee = () => {
         } catch (err) {
           console.warn("Primary attendance endpoint failed:", err.message);
         }
-        
 
         if (!data.length && companySlug) {
           try {
-            attendanceRes = await axios.get(`${baseUrl}/api/attendance/company/${companySlug}/employee/${employeeId}`);
+            attendanceRes = await axios.get(
+              `${baseUrl}/api/attendance/company/${companySlug}/employee/${employeeId}`,
+            );
             if (attendanceRes?.data?.data) {
-              data = Array.isArray(attendanceRes.data.data) ? attendanceRes.data.data : [attendanceRes.data.data];
+              data = Array.isArray(attendanceRes.data.data)
+                ? attendanceRes.data.data
+                : [attendanceRes.data.data];
             }
           } catch (err) {
             console.warn("Employee attendance endpoint failed:", err.message);
           }
         }
-        
 
         if (!data.length) {
           try {
-            attendanceRes = await axios.get(`${baseUrl}/api/attendance/timesheet/${employeeId}`);
+            attendanceRes = await axios.get(
+              `${baseUrl}/api/attendance/timesheet/${employeeId}`,
+            );
             if (attendanceRes?.data?.data) {
-              data = Array.isArray(attendanceRes.data.data) ? attendanceRes.data.data : [attendanceRes.data.data];
+              data = Array.isArray(attendanceRes.data.data)
+                ? attendanceRes.data.data
+                : [attendanceRes.data.data];
             }
           } catch (err) {
             console.warn("Timesheet endpoint failed:", err.message);
           }
         }
 
-        const currentRecord = data.find((item) => String(item.employee_id) === String(employeeId));
-        
+        const currentRecord = data.find(
+          (item) => String(item.employee_id) === String(employeeId),
+        );
+
         if (currentRecord) {
           setShiftEnd(currentRecord.shift_end || null);
           if (currentRecord.mispunch_time) {
@@ -588,8 +662,7 @@ const DashboardEmployee = () => {
         const todayAttendance = data.filter((item) => {
           const attendanceDate = item.attendance_date || item.date;
           return (
-            attendanceDate === today &&
-            item.department?.trim() === department
+            attendanceDate === today && item.department?.trim() === department
           );
         });
 
@@ -599,10 +672,10 @@ const DashboardEmployee = () => {
           role: item.post_applied || item.designation || "Team Member",
           avatar: item.employee_name
             ? item.employee_name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")
-              .toUpperCase()
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase()
             : "NA",
           present: Boolean(item.mispunch_time || item.check_in),
         }));
@@ -619,7 +692,6 @@ const DashboardEmployee = () => {
     fetchAttendance();
   }, [companySlug, employeeId]);
 
-
   useEffect(() => {
     const fetchUpcomingHolidays = async () => {
       try {
@@ -633,30 +705,35 @@ const DashboardEmployee = () => {
 
         const baseUrl = import.meta.env.VITE_HRMS_BASE_URL;
         const res = await axios.get(
-          `${baseUrl}/api/holiday/upcoming?company_id=${user.company_id}&slug=${user.slug}`
+          `${baseUrl}/api/holiday/upcoming?company_id=${user.company_id}&slug=${user.slug}`,
         );
 
         const data = res?.data?.data || [];
 
-        const formatted = data.map((h, index) => {
-          const dateObj = new Date(h.date);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          
-          const daysLeft = Math.ceil((dateObj - today) / (1000 * 60 * 60 * 24));
+        const formatted = data
+          .map((h, index) => {
+            const dateObj = new Date(h.date);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
 
-          return {
-            id: h.id || index,
-            name: h.name,
-            originalDate: h.date,
-            date: dateObj.getDate(),
-            month: dateObj.toLocaleString("en-US", { month: "short" }).toUpperCase(),
-            day: dateObj.toLocaleString("en-US", { weekday: "long" }),
-            type: h.type || "Holiday",
-            daysLeft: daysLeft,
-          };
-        })
-          .filter(h => h.daysLeft >= 0)
+            const daysLeft = Math.ceil(
+              (dateObj - today) / (1000 * 60 * 60 * 24),
+            );
+
+            return {
+              id: h.id || index,
+              name: h.name,
+              originalDate: h.date,
+              date: dateObj.getDate(),
+              month: dateObj
+                .toLocaleString("en-US", { month: "short" })
+                .toUpperCase(),
+              day: dateObj.toLocaleString("en-US", { weekday: "long" }),
+              type: h.type || "Holiday",
+              daysLeft: daysLeft,
+            };
+          })
+          .filter((h) => h.daysLeft >= 0)
           .sort((a, b) => a.daysLeft - b.daysLeft);
 
         setHolidays(formatted);
@@ -672,7 +749,6 @@ const DashboardEmployee = () => {
       fetchUpcomingHolidays();
     }
   }, [user]);
-
 
   useEffect(() => {
     if (!punchIn) return;
@@ -692,7 +768,7 @@ const DashboardEmployee = () => {
       const seconds = Math.floor((diff / 1000) % 60);
 
       setTimer(
-        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`,
       );
 
       if (leaveTime) {
@@ -703,49 +779,54 @@ const DashboardEmployee = () => {
     return () => clearInterval(interval);
   }, [punchIn, leaveTime]);
 
-
   const getInitials = (name) => {
     if (!name) return "NA";
-    return name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'NA';
+    return (
+      name
+        ?.split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2) || "NA"
+    );
   };
 
-
-  const presentCount = teamMembers.filter(member => member.present).length;
+  const presentCount = teamMembers.filter((member) => member.present).length;
   const totalMembers = teamMembers.length;
-  const attendancePercentage = totalMembers > 0 ? Math.round((presentCount / totalMembers) * 100) : 0;
-
+  const attendancePercentage =
+    totalMembers > 0 ? Math.round((presentCount / totalMembers) * 100) : 0;
 
   const handleRefreshData = async () => {
     Swal.fire({
-      title: 'Refreshing...',
-      text: 'Please wait while we update your dashboard',
+      title: "Refreshing...",
+      text: "Please wait while we update your dashboard",
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
-      }
+      },
     });
-    
+
     try {
       await Promise.allSettled([
         fetchTasks(),
         fetchMessages(),
         fetchPresentDays(),
-        fetchServiceRequests()
+        fetchServiceRequests(),
       ]);
-      
+
       Swal.fire({
-        icon: 'success',
-        title: 'Refreshed!',
-        text: 'Dashboard data has been updated',
+        icon: "success",
+        title: "Refreshed!",
+        text: "Dashboard data has been updated",
         timer: 1500,
-        showConfirmButton: false
+        showConfirmButton: false,
       });
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Refresh Failed',
-        text: 'Some data could not be updated. Please try again.',
-        confirmButtonColor: '#2563eb'
+        icon: "error",
+        title: "Refresh Failed",
+        text: "Some data could not be updated. Please try again.",
+        confirmButtonColor: "#2563eb",
       });
     }
   };
@@ -759,7 +840,9 @@ const DashboardEmployee = () => {
       lightColor: "bg-blue-50 text-blue-600",
       iconColor: "text-blue-600",
       accentColor: "bg-blue-500",
-      onClick: () => { navigate('/tasks'); }
+      onClick: () => {
+        navigate("/tasks");
+      },
     },
     {
       label: "Present Days",
@@ -769,7 +852,9 @@ const DashboardEmployee = () => {
       lightColor: "bg-emerald-50 text-emerald-600",
       iconColor: "text-emerald-600",
       accentColor: "bg-emerald-500",
-      onClick: () => { navigate('/employee/attendance'); }
+      onClick: () => {
+        navigate("/employee/attendance");
+      },
     },
     {
       label: "Messages",
@@ -779,7 +864,9 @@ const DashboardEmployee = () => {
       lightColor: "bg-amber-50 text-amber-600",
       iconColor: "text-amber-600",
       accentColor: "bg-amber-500",
-      onClick: () => { navigate('/employee/message'); }
+      onClick: () => {
+        navigate("/employee/message");
+      },
     },
     {
       label: "Service Requests",
@@ -789,14 +876,15 @@ const DashboardEmployee = () => {
       lightColor: "bg-rose-50 text-rose-600",
       iconColor: "text-rose-600",
       accentColor: "bg-rose-500",
-      onClick: () => { navigate('/employee/service-request'); }
-    }
+      onClick: () => {
+        navigate("/employee/service-request");
+      },
+    },
   ];
 
   return (
-    <div className="space-y-6" style={{ animation: 'fadeIn 0.4s ease-in-out' }}>
+    <div className="space-y-6" style={{ animation: "fadeIn 0.4s ease-in-out" }}>
       <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
-      
 
       <div className="flex justify-end">
         <button
@@ -806,7 +894,7 @@ const DashboardEmployee = () => {
           🔄 Refresh Data
         </button>
       </div>
-      
+
       {isAdminOrHR && (
         <NoticePeriodAlertModal
           isOpen={isNoticeModalOpen}
@@ -816,12 +904,15 @@ const DashboardEmployee = () => {
           actionLoading={noticeActionLoading}
         />
       )}
-      
-      <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">Dashboard Overview</h2>
-        <p className="text-slate-500 mt-1 font-medium text-sm">Welcome back, here's what's happening today.</p>
-      </div>
 
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">
+          Dashboard Overview
+        </h2>
+        <p className="text-slate-500 mt-1 font-medium text-sm">
+          Welcome back, here's what's happening today.
+        </p>
+      </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {stats.map((stat, index) => (
@@ -830,31 +921,41 @@ const DashboardEmployee = () => {
             onClick={stat.onClick}
             className="w-full text-left relative bg-white rounded-xl border border-slate-100 overflow-hidden p-3 sm:p-4 hover:border-slate-200 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md group"
           >
-
-            <div className={`absolute top-0 inset-x-0 h-0.5 ${stat.accentColor} group-hover:opacity-80 transition-opacity`} />
+            <div
+              className={`absolute top-0 inset-x-0 h-0.5 ${stat.accentColor} group-hover:opacity-80 transition-opacity`}
+            />
 
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-xl sm:text-2xl font-bold text-slate-800 leading-none mb-1">{stat.value}</p>
-                <p className="text-[10px] sm:text-xs text-slate-500 group-hover:text-slate-800 transition-colors font-medium">{stat.label}</p>
+                <p className="text-xl sm:text-2xl font-bold text-slate-800 leading-none mb-1">
+                  {stat.value}
+                </p>
+                <p className="text-[10px] sm:text-xs text-slate-500 group-hover:text-slate-800 transition-colors font-medium">
+                  {stat.label}
+                </p>
               </div>
-              <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg ${stat.lightColor} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
+              <div
+                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg ${stat.lightColor} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}
+              >
                 <stat.icon size={15} className="sm:w-4 sm:h-4" />
               </div>
             </div>
             <div className="mt-2 pt-1.5 border-t border-slate-50">
-              <p className="text-[9px] sm:text-[10px] font-medium text-slate-400">{stat.subtext}</p>
+              <p className="text-[9px] sm:text-[10px] font-medium text-slate-400">
+                {stat.subtext}
+              </p>
             </div>
           </button>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
         <div className="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="font-bold text-base text-slate-800">Team Attendance</h3>
+              <h3 className="font-bold text-base text-slate-800">
+                Team Attendance
+              </h3>
               <p className="text-xs text-slate-500 mt-0.5">
                 {presentCount} of {totalMembers} members present
               </p>
@@ -864,11 +965,14 @@ const DashboardEmployee = () => {
             </button>
           </div>
 
-
           <div className="mb-4">
             <div className="flex justify-between items-center mb-1.5">
-              <span className="text-[11px] font-medium text-slate-500">Today's attendance</span>
-              <span className="text-xs font-bold text-slate-700">{attendancePercentage}%</span>
+              <span className="text-[11px] font-medium text-slate-500">
+                Today's attendance
+              </span>
+              <span className="text-xs font-bold text-slate-700">
+                {attendancePercentage}%
+              </span>
             </div>
             <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
               <div
@@ -878,12 +982,14 @@ const DashboardEmployee = () => {
             </div>
           </div>
 
-
           <div className="overflow-y-auto pr-1 custom-scrollbar max-h-72">
             <div className="space-y-1.5">
               {loading ? (
                 [1, 2, 3, 4].map((i) => (
-                  <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-slate-50 animate-pulse">
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 p-2 rounded-lg bg-slate-50 animate-pulse"
+                  >
                     <div className="w-8 h-8 rounded-full bg-slate-200"></div>
                     <div className="flex-1">
                       <div className="h-3 bg-slate-200 rounded w-24 mb-1"></div>
@@ -901,18 +1007,26 @@ const DashboardEmployee = () => {
                       <div className="w-8 h-8 rounded-lg bg-linear-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xs shadow-sm">
                         {member.avatar || getInitials(member.name)}
                       </div>
-                      <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${member.present ? 'bg-emerald-500' : 'bg-rose-500'}`}>
+                      <div
+                        className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${member.present ? "bg-emerald-500" : "bg-rose-500"}`}
+                      >
                         {member.present && (
                           <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-50"></span>
                         )}
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-xs text-slate-800 truncate">{member.name}</h4>
-                      <p className="text-[10px] text-slate-500 truncate">{member.role}</p>
+                      <h4 className="font-semibold text-xs text-slate-800 truncate">
+                        {member.name}
+                      </h4>
+                      <p className="text-[10px] text-slate-500 truncate">
+                        {member.role}
+                      </p>
                     </div>
-                    <div className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md ${member.present ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}>
-                      {member.present ? 'Present' : 'Absent'}
+                    <div
+                      className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md ${member.present ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-600"}`}
+                    >
+                      {member.present ? "Present" : "Absent"}
                     </div>
                   </div>
                 ))
@@ -926,12 +1040,15 @@ const DashboardEmployee = () => {
           </div>
         </div>
 
-
         <div className="bg-white border border-slate-100 rounded-2xl p-4 sm:p-5 flex flex-col">
           <div className="flex items-start justify-between mb-4 shrink-0">
             <div>
-              <h3 className="font-bold text-base text-slate-800">Holiday Calendar</h3>
-              <p className="text-xs text-slate-400 mt-0.5">Upcoming holidays & events</p>
+              <h3 className="font-bold text-base text-slate-800">
+                Holiday Calendar
+              </h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Upcoming holidays & events
+              </p>
             </div>
             <div className="flex gap-2">
               <div className="flex items-center gap-1.5">
@@ -947,16 +1064,15 @@ const DashboardEmployee = () => {
             </div>
           </div>
 
-
-          <div className="flex-1" style={{ minHeight: '410px' }}>
+          <div className="flex-1" style={{ minHeight: "410px" }}>
             <BigCalendar
               localizer={localizer}
-              events={holidays.map(h => ({
+              events={holidays.map((h) => ({
                 title: h.name,
                 start: new Date(h.originalDate),
                 end: new Date(h.originalDate),
                 allDay: true,
-                type: 'holiday',
+                type: "holiday",
               }))}
               startAccessor="start"
               endAccessor="end"
@@ -966,30 +1082,38 @@ const DashboardEmployee = () => {
               className="custom-calendar-small"
               eventPropGetter={() => ({
                 style: {
-                  backgroundColor: '#10B981',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '9px',
-                  padding: '2px 4px',
+                  backgroundColor: "#10B981",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  fontSize: "9px",
+                  padding: "2px 4px",
                   fontWeight: 500,
-                }
+                },
               })}
             />
           </div>
 
-
           {holidays.length > 0 && (
             <div className="mt-4 pt-3 border-t border-slate-100">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Upcoming</p>
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                Upcoming
+              </p>
               <div className="space-y-1.5">
                 {holidays.slice(0, 3).map((holiday) => (
-                  <div key={holiday.id} className="flex items-center justify-between">
+                  <div
+                    key={holiday.id}
+                    className="flex items-center justify-between"
+                  >
                     <div className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                      <span className="text-xs font-medium text-slate-700">{holiday.name}</span>
+                      <span className="text-xs font-medium text-slate-700">
+                        {holiday.name}
+                      </span>
                     </div>
-                    <span className="text-[10px] text-slate-400">{holiday.daysLeft} days left</span>
+                    <span className="text-[10px] text-slate-400">
+                      {holiday.daysLeft} days left
+                    </span>
                   </div>
                 ))}
               </div>
@@ -997,7 +1121,6 @@ const DashboardEmployee = () => {
           )}
         </div>
       </div>
-
 
       <style>{`
         /* Custom Scrollbar */

@@ -1,12 +1,28 @@
 import { createPortal } from "react-dom";
 import { useMemo, useState, useEffect, useRef } from "react";
-import { CalendarClock, MessageSquareText, PhoneCall, X, Search, User, UserPlus, Loader2, Check } from "lucide-react";
+import {
+  CalendarClock,
+  MessageSquareText,
+  PhoneCall,
+  X,
+  Search,
+  User,
+  UserPlus,
+  Loader2,
+  Check,
+} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../../api";
-import { formatStatus, getOutcomesForStage, getOutcomesForTab, getStatusColor } from "./leadUtils";
+import {
+  formatStatus,
+  getOutcomesForStage,
+  getOutcomesForTab,
+  getStatusColor,
+} from "./leadUtils";
 import useAuth from "../../../../../../hooks/useAuth";
 
-const inputClass = "app-input w-full rounded-2xl px-4 py-3 text-[14px] font-medium";
+const inputClass =
+  "app-input w-full rounded-2xl px-4 py-3 text-[14px] font-medium";
 
 const ReportEntryModal = ({
   lead,
@@ -57,14 +73,17 @@ const ReportEntryModal = ({
   }, [employees, search]);
 
   const selectedEmployee = useMemo(
-    () => employees.find((emp) => String(emp.user_id) === reportData.siteVisitAssignedTo),
+    () =>
+      employees.find(
+        (emp) => String(emp.user_id) === reportData.siteVisitAssignedTo,
+      ),
     [employees, reportData.siteVisitAssignedTo],
   );
 
   useEffect(() => {
     if (reportData.siteVisitAssignedTo) {
       const emp = employees.find(
-        (e) => String(e.user_id) === reportData.siteVisitAssignedTo
+        (e) => String(e.user_id) === reportData.siteVisitAssignedTo,
       );
       if (emp) {
         setSearch(emp.name);
@@ -172,16 +191,14 @@ const ReportEntryModal = ({
       <div className="app-modal w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="pr-4">
-            <h3 className="modal-title">
-              Log interaction
-            </h3>
+            <h3 className="modal-title">Log interaction</h3>
             <div className="flex items-center gap-2 mt-1.5">
               <span className="text-[13px] font-medium text-(--text-soft)">
                 {lead.name}
               </span>
               <span className="text-(--text-faint)">&middot;</span>
               <span
-                className={`px-2 py-0.5 rounded text-[11px] font-medium ${getStatusColor( lead.status, )}`}
+                className={`px-2 py-0.5 rounded text-[11px] font-medium ${getStatusColor(lead.status)}`}
               >
                 {formatStatus(lead.status)}
               </span>
@@ -213,7 +230,10 @@ const ReportEntryModal = ({
                     setReportData({
                       ...reportData,
                       outcome: nextOutcome,
-                      siteVisitAssignedTo: nextOutcome === "SITE_VISIT_SCHEDULED" ? reportData.siteVisitAssignedTo : "",
+                      siteVisitAssignedTo:
+                        nextOutcome === "SITE_VISIT_SCHEDULED"
+                          ? reportData.siteVisitAssignedTo
+                          : "",
                       nextFollowUpAt: [
                         "INTERESTED",
                         "REJECTED",
@@ -275,7 +295,8 @@ const ReportEntryModal = ({
                     Assign Employee for Visit *
                   </label>
                   <p className="modal-helper mb-3">
-                    Search by name, email, or role and choose exactly one assignee.
+                    Search by name, email, or role and choose exactly one
+                    assignee.
                   </p>
                   <div className="relative" ref={dropdownRef}>
                     <div className="relative" ref={anchorRef}>
@@ -308,57 +329,61 @@ const ReportEntryModal = ({
                       </div>
                     </div>
 
-
                     {showDropdown && dropdownStyle
                       ? createPortal(
-                      <div
-                        ref={portalDropdownRef}
-                        style={dropdownStyle}
-                        className="app-floating bg-white rounded-2xl max-h-50 overflow-y-auto custom-scrollbar py-1"
-                      >
-                        {filteredEmployees.length > 0 ? (
-                          filteredEmployees.map((emp) => (
-                            <button
-                              key={emp.id}
-                              onClick={() => handleSelect(emp)}
-                              className="w-full px-3.5 py-2 flex items-center gap-3 hover:bg-(--bg-subtle) transition-colors text-left group"
-                              type="button"
-                            >
-                              <div className="size-8 rounded-xl bg-(--brand-soft) border border-(--border-soft) flex items-center justify-center shrink-0 overflow-hidden">
-                                {emp.profile_photo ? (
-                                  <img
-                                    src={emp.profile_photo}
-                                    alt={emp.name}
-                                    className="size-full object-cover"
-                                  />
-                                ) : (
-                                  <User className="size-3.5 text-(--brand)" />
-                                )}
+                          <div
+                            ref={portalDropdownRef}
+                            style={dropdownStyle}
+                            className="app-floating bg-white rounded-2xl max-h-50 overflow-y-auto custom-scrollbar py-1"
+                          >
+                            {filteredEmployees.length > 0 ? (
+                              filteredEmployees.map((emp) => (
+                                <button
+                                  key={emp.id}
+                                  onClick={() => handleSelect(emp)}
+                                  className="w-full px-3.5 py-2 flex items-center gap-3 hover:bg-(--bg-subtle) transition-colors text-left group"
+                                  type="button"
+                                >
+                                  <div className="size-8 rounded-xl bg-(--brand-soft) border border-(--border-soft) flex items-center justify-center shrink-0 overflow-hidden">
+                                    {emp.profile_photo ? (
+                                      <img
+                                        src={emp.profile_photo}
+                                        alt={emp.name}
+                                        className="size-full object-cover"
+                                      />
+                                    ) : (
+                                      <User className="size-3.5 text-(--brand)" />
+                                    )}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="text-[13px] font-medium text-(--text-strong) truncate">
+                                      {emp.name}
+                                    </div>
+                                    <div className="text-[11px] text-(--text-faint) truncate">
+                                      {emp.designation || "No designation"}
+                                      {emp.department
+                                        ? ` • ${emp.department}`
+                                        : ""}
+                                    </div>
+                                  </div>
+                                  {selectedEmployee?.user_id ===
+                                    emp.user_id && (
+                                    <Check className="size-3.5 text-(--brand) shrink-0" />
+                                  )}
+                                </button>
+                              ))
+                            ) : (
+                              <div className="px-4 py-6 text-center">
+                                <p className="text-[12px] text-(--text-faint)">
+                                  No employees found
+                                </p>
                               </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="text-[13px] font-medium text-(--text-strong) truncate">
-                                  {emp.name}
-                                </div>
-                                <div className="text-[11px] text-(--text-faint) truncate">
-                                  {emp.designation || "No designation"}{emp.department ? ` • ${emp.department}` : ""}
-                                </div>
-                              </div>
-                              {selectedEmployee?.user_id === emp.user_id && (
-                                <Check className="size-3.5 text-(--brand) shrink-0" />
-                              )}
-                            </button>
-                          ))
-                        ) : (
-                          <div className="px-4 py-6 text-center">
-                            <p className="text-[12px] text-(--text-faint)">No employees found</p>
-                          </div>
-                        )}
-                      </div>,
-                      document.body,
-                    )
+                            )}
+                          </div>,
+                          document.body,
+                        )
                       : null}
                   </div>
-
 
                   {selectedEmployee && !showDropdown && (
                     <div className="mt-4 app-panel overflow-hidden">
@@ -369,22 +394,25 @@ const ReportEntryModal = ({
                       </div>
                       <div className="p-4 flex items-center gap-3.5">
                         <div className="size-11 rounded-2xl bg-white border border-(--border-soft) flex items-center justify-center shrink-0 overflow-hidden">
-                           {selectedEmployee.profile_photo ? (
-                              <img
-                                src={selectedEmployee.profile_photo}
-                                alt={selectedEmployee.name}
-                                className="size-full object-cover"
-                              />
-                            ) : (
-                              <User className="size-5 text-(--brand)" />
-                            )}
+                          {selectedEmployee.profile_photo ? (
+                            <img
+                              src={selectedEmployee.profile_photo}
+                              alt={selectedEmployee.name}
+                              className="size-full object-cover"
+                            />
+                          ) : (
+                            <User className="size-5 text-(--brand)" />
+                          )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="text-[15px] font-bold tracking-[-0.02em] text-(--text-strong) truncate">
                             {selectedEmployee.name}
                           </div>
                           <div className="text-[12px] font-medium text-(--text-faint) truncate mt-0.5">
-                            {selectedEmployee.designation || "No designation"}{selectedEmployee.department ? ` • ${selectedEmployee.department}` : ""}
+                            {selectedEmployee.designation || "No designation"}
+                            {selectedEmployee.department
+                              ? ` • ${selectedEmployee.department}`
+                              : ""}
                           </div>
                           <div className="text-[11px] text-(--text-faint) truncate mt-0.5">
                             {selectedEmployee.email}

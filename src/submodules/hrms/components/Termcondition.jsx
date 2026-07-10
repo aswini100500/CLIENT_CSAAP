@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { FileText, Download, Calendar, User, X, CheckCircle } from "lucide-react";
+import {
+  FileText,
+  Download,
+  Calendar,
+  User,
+  X,
+  CheckCircle,
+} from "lucide-react";
 
 const ViewTermsConditions = ({ employee, onClose }) => {
   const [termsData, setTermsData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
   const defaultEmployee = {
     id: 1,
     name: "John Doe",
     position: "Software Engineer",
-    email: "john.doe@company.com"
+    email: "john.doe@company.com",
   };
 
   const currentEmployee = employee || defaultEmployee;
@@ -23,13 +29,15 @@ const ViewTermsConditions = ({ employee, onClose }) => {
 
   const fetchTermsData = () => {
     if (!currentEmployee || !currentEmployee.id) return;
-    
+
     setLoading(true);
-    
+
     setTimeout(() => {
-      const storedTerms = JSON.parse(localStorage.getItem('employeeTerms') || '{}');
+      const storedTerms = JSON.parse(
+        localStorage.getItem("employeeTerms") || "{}",
+      );
       const employeeTerms = storedTerms[currentEmployee.id];
-      
+
       setTermsData(employeeTerms || null);
       setLoading(false);
     }, 500);
@@ -38,7 +46,9 @@ const ViewTermsConditions = ({ employee, onClose }) => {
   const handleDownload = () => {
     if (termsData && currentEmployee) {
       const element = document.createElement("a");
-      const file = new Blob([`TERMS AND CONDITIONS ACCEPTANCE CERTIFICATE
+      const file = new Blob(
+        [
+          `TERMS AND CONDITIONS ACCEPTANCE CERTIFICATE
 
 Employee Information:
 -------------------
@@ -58,16 +68,19 @@ File Size: ${termsData.fileSize}
 
 HR Remarks:
 -----------
-${termsData.remarks || 'No remarks provided'}
+${termsData.remarks || "No remarks provided"}
 
 This certifies that the above-mentioned employee has accepted 
 all terms and conditions of employment.
 
 Generated on: ${new Date().toLocaleString()}
-`], { type: 'text/plain' });
-      
+`,
+        ],
+        { type: "text/plain" },
+      );
+
       element.href = URL.createObjectURL(file);
-      const fileName = `terms_acceptance_${currentEmployee.name.replace(/\s+/g, '_')}_${currentEmployee.id}.txt`;
+      const fileName = `terms_acceptance_${currentEmployee.name.replace(/\s+/g, "_")}_${currentEmployee.id}.txt`;
       element.download = fileName;
       document.body.appendChild(element);
       element.click();
@@ -77,8 +90,8 @@ Generated on: ${new Date().toLocaleString()}
 
   const getFileIcon = (fileType) => {
     if (!fileType) return "📎";
-    if (fileType.includes('pdf')) return "📄";
-    if (fileType.includes('word') || fileType.includes('document')) return "📝";
+    if (fileType.includes("pdf")) return "📄";
+    if (fileType.includes("word") || fileType.includes("document")) return "📝";
     return "📎";
   };
 
@@ -109,7 +122,9 @@ Generated on: ${new Date().toLocaleString()}
         </div>
 
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
-          <h3 className="font-medium text-gray-900 mb-2">Employee Information</h3>
+          <h3 className="font-medium text-gray-900 mb-2">
+            Employee Information
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <span className="text-gray-600">Name:</span>
@@ -125,8 +140,10 @@ Generated on: ${new Date().toLocaleString()}
             </div>
             <div>
               <span className="text-gray-600">Status:</span>
-              <p className={`font-medium ${termsData ? 'text-green-600' : 'text-yellow-600'}`}>
-                {termsData ? 'Accepted' : 'Pending'}
+              <p
+                className={`font-medium ${termsData ? "text-green-600" : "text-yellow-600"}`}
+              >
+                {termsData ? "Accepted" : "Pending"}
               </p>
             </div>
           </div>
@@ -136,12 +153,16 @@ Generated on: ${new Date().toLocaleString()}
           <div className="space-y-6">
             <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
               <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-green-800">Terms & Conditions Accepted</span>
+              <span className="font-medium text-green-800">
+                Terms & Conditions Accepted
+              </span>
             </div>
 
             <div className="border border-gray-200 rounded-lg p-4">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900">Accepted Document</h3>
+                <h3 className="font-semibold text-gray-900">
+                  Accepted Document
+                </h3>
                 <button
                   onClick={handleDownload}
                   className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -150,11 +171,15 @@ Generated on: ${new Date().toLocaleString()}
                   Download Certificate
                 </button>
               </div>
-              
+
               <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                <div className="text-2xl">{getFileIcon(termsData.fileType)}</div>
+                <div className="text-2xl">
+                  {getFileIcon(termsData.fileType)}
+                </div>
                 <div className="flex-1">
-                  <p className="font-medium text-blue-900">{termsData.fileName}</p>
+                  <p className="font-medium text-blue-900">
+                    {termsData.fileName}
+                  </p>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-blue-700 mt-1">
                     <span>{termsData.fileSize}</span>
                     <span className="flex items-center gap-1">
@@ -171,9 +196,13 @@ Generated on: ${new Date().toLocaleString()}
             </div>
 
             <div className="border border-gray-200 rounded-lg p-4">
-              <h3 className="font-semibold text-gray-900 mb-3">Accepted Declaration</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">
+                Accepted Declaration
+              </h3>
               <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                <p className="text-gray-700 italic">"{termsData.declaration}"</p>
+                <p className="text-gray-700 italic">
+                  "{termsData.declaration}"
+                </p>
               </div>
               <p className="text-xs text-gray-500 mt-2">
                 Accepted on {new Date(termsData.uploadedAt).toLocaleString()}
@@ -183,7 +212,9 @@ Generated on: ${new Date().toLocaleString()}
             {termsData.remarks && (
               <div className="border border-gray-200 rounded-lg p-4">
                 <h3 className="font-semibold text-gray-900 mb-3">HR Remarks</h3>
-                <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">{termsData.remarks}</p>
+                <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">
+                  {termsData.remarks}
+                </p>
               </div>
             )}
           </div>
@@ -194,14 +225,16 @@ Generated on: ${new Date().toLocaleString()}
               No Terms & Conditions Uploaded
             </h3>
             <p className="text-gray-500 mb-4">
-              Terms and conditions acceptance document has not been uploaded for this employee.
+              Terms and conditions acceptance document has not been uploaded for
+              this employee.
             </p>
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 max-w-md mx-auto">
               <p className="text-sm text-yellow-800">
                 <strong>Status:</strong> Pending acceptance
               </p>
               <p className="text-xs text-yellow-600 mt-1">
-                Use the "Upload Terms Acceptance" action to record the employee's acceptance.
+                Use the "Upload Terms Acceptance" action to record the
+                employee's acceptance.
               </p>
             </div>
           </div>
