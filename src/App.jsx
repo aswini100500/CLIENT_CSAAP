@@ -26,40 +26,9 @@ import { setSuperAdmin } from "./submodules/hrms/redux/slices/superAdminSlice";
 
 import AdminLayout from "./components/AdminLayout";
 
-import Bill from "./pages/Operation/BOQ/Bill";
-import Drivers from "./pages/Operation/Equipment management/Drivers";
-import EquipmentManage from "./pages/Operation/Equipment management/EquipmentManage";
-import Operator from "./pages/Operation/Equipment management/Operator";
-import Vehicle from "./pages/Operation/Equipment management/Vehicle";
-import AttachementContractor from "./pages/Operation/Operation/AttachementContractor";
-import BillInward from "./pages/Operation/Operation/BillInward";
-import ChangeHistoryContractor from "./pages/Operation/Operation/ChangeHistoryContractor";
-import Compliances from "./pages/Operation/Operation/Compliances";
-import Contractor from "./pages/Operation/Operation/Contractor";
-import Equipment from "./pages/Operation/Operation/Equipment";
-import HinderingReport from "./pages/Operation/Operation/HinderingReport";
-import LabourRates from "./pages/Operation/Operation/LabourRates";
-import Tendering from "./pages/Operation/Operation/Tendering";
-import Vendor from "./pages/Operation/Operation/Vendor";
-import ApprovalHistoryPage from "./pages/Operation/Operation/projectBudget/ApprovalHistrory";
-import ProjectBudgetTabs from "./pages/Operation/Operation/projectBudget/ProjectBudget";
-import DailyWorkReport from "./pages/Operation/Work Diary/DailyWorkReport";
-import WorkDiary from "./pages/Operation/Work Diary/WorkDiary";
-import Work from "./pages/Operation/Work Order/Work";
-import IndentEntryO from "./pages/Operation/material mangement/IndentEntryO";
-
 import EmployeeForm from "./components/EmployeeForm";
 import ProjectsPage from "./components/projectCl/projectCl";
-import BrokerPage from "./pages/BrokerPage";
-import ContractorsPage from "./pages/ContractorPage";
 import DashboardHome from "./pages/DashboardHome";
-import BarcodeSale from "./pages/Stock&inventory/BarcodeSale";
-import IndentEntry from "./pages/Stock&inventory/IndentEntry";
-import PurchaseMain from "./pages/Stock&inventory/PurchaseMain";
-import SalesEntry from "./pages/Stock&inventory/SaleEntry";
-import StockEntry from "./pages/Stock&inventory/StockEntry";
-import SupplierList from "./pages/Stock&inventory/SupplierList";
-import SupplierPage from "./pages/SupplierPage";
 
 import ClientBankActivites from "./pages/ClientAccounting/components/BankActivites";
 import ClientCompanyForm from "./pages/ClientAccounting/components/CompanyForm";
@@ -369,33 +338,7 @@ const App = () => {
             <Route path="/crm/*" element={<AdminRoutes />} />
             <Route path="/hrms/*" element={<HRMSAdminRoutes />} />
 
-            <Route path="/project-budget" element={<ProjectBudgetTabs />} />
-            <Route path="/bill" element={<Bill />} />
-            <Route path="/bill-inward" element={<BillInward />} />
-            <Route path="/work-order" element={<Work />} />
-            <Route path="/contractor" element={<Contractor />} />
-            <Route path="/vendor" element={<Vendor />} />
-            <Route path="/tendering" element={<Tendering />} />
-            <Route path="/equipment-standard" element={<Equipment />} />
-            <Route path="/indent-main" element={<IndentEntryO />} />
-            <Route path="/work-diary" element={<WorkDiary />} />
-            <Route path="/daily-work-report" element={<DailyWorkReport />} />
-            <Route path="/hindering-report" element={<HinderingReport />} />
-            <Route path="/labour-rates" element={<LabourRates />} />
-            <Route path="/compliances" element={<Compliances />} />
-            <Route path="/vehicles" element={<Vehicle />} />
-            <Route path="/equipment-manage" element={<EquipmentManage />} />
-            <Route path="/operator" element={<Operator />} />
-            <Route path="/drivers" element={<Drivers />} />
-            <Route
-              path="/attachment-contractor"
-              element={<AttachementContractor />}
-            />
-            <Route path="/approval-history" element={<ApprovalHistoryPage />} />
-            <Route
-              path="/change-history"
-              element={<ChangeHistoryContractor />}
-            />
+
 
             <Route
               path="/accounting/client/dashboard"
@@ -591,33 +534,7 @@ const App = () => {
               element={<StockNamesList />}
             />
 
-            <Route path="/brokers" element={<BrokerPage />} />
-            <Route path="/suppliers" element={<SupplierPage />} />
-            <Route path="/contractors" element={<ContractorsPage />} />
-            <Route
-              path="/builder-erp/admin/purchase-main"
-              element={<PurchaseMain />}
-            />
-            <Route
-              path="/builder-erp/admin/stock-entry"
-              element={<StockEntry />}
-            />
-            <Route
-              path="/builder-erp/admin/sale-main"
-              element={<SalesEntry />}
-            />
-            <Route
-              path="/builder-erp/admin/indent-main"
-              element={<IndentEntry />}
-            />
-            <Route
-              path="/builder-erp/admin/supplier-list"
-              element={<SupplierList />}
-            />
-            <Route
-              path="/builder-erp/admin/barcode-sale"
-              element={<BarcodeSale />}
-            />
+
             <Route
               path="/builder-erp/admin/employee-form"
               element={<EmployeeForm />}
