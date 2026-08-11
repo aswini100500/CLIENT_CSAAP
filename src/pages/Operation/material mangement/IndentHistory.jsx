@@ -100,10 +100,10 @@ const IndentHistory = () => {
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div className="flex gap-3">
+          <div className="erp-root flex gap-3">
             <button
               onClick={exportToExcel}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 flex items-center gap-2"
+              className="app-btn-primary flex items-center gap-2"
             >
               <svg
                 className="w-4 h-4"
@@ -122,7 +122,7 @@ const IndentHistory = () => {
             </button>
             <button
               onClick={exportToPDF}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200 flex items-center gap-2"
+              className="app-btn-secondary flex items-center gap-2 border-red-200 hover:border-red-300 text-red-600 hover:text-red-700"
             >
               <svg
                 className="w-4 h-4"
@@ -147,7 +147,7 @@ const IndentHistory = () => {
               placeholder="Search indents..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
             <svg
               className="absolute left-3 top-2.5 w-4 h-4 text-gray-400"
@@ -233,7 +233,7 @@ const IndentHistory = () => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => viewIndent(indent.id)}
-                          className="text-blue-600 hover:text-blue-900 transition duration-150"
+                          className="text-green-600 hover:text-green-900 transition duration-150"
                           title="View Indent"
                         >
                           <svg
@@ -357,17 +357,17 @@ const IndentHistory = () => {
               <div className="flex space-x-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                   (page) => (
-                    <button
-                      key={page}
-                      onClick={() => handlePageClick(page)}
-                      className={`px-3 py-1 rounded border ${
-                        currentPage === page
-                          ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-white text-gray-700 hover:bg-gray-50 border-gray-300"
-                      }`}
-                    >
-                      {page}
-                    </button>
+                     <button
+                       key={page}
+                       onClick={() => handlePageClick(page)}
+                       className={`px-3 py-1 rounded border ${
+                         currentPage === page
+                           ? "bg-green-700 text-white border-green-700"
+                           : "bg-white text-gray-700 hover:bg-gray-50 border-gray-300"
+                       }`}
+                     >
+                       {page}
+                     </button>
                   ),
                 )}
               </div>

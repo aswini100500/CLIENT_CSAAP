@@ -241,10 +241,10 @@ const Vehicle = () => {
           </select>
         </div>
 
-        <div className="flex flex-col justify-end">
+        <div className="erp-root flex flex-col justify-end">
           <button
             onClick={editingId ? handleUpdate : handleAddVehicle}
-            className="flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
+            className="app-btn-primary flex items-center justify-center gap-1"
           >
             <PlusCircle className="w-4 h-4" />
             {editingId ? "Update" : "Add"}
@@ -254,7 +254,7 @@ const Vehicle = () => {
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
-          <thead className="bg-blue-50">
+          <thead className="bg-green-50 text-green-900">
             <tr>
               <th className="border border-gray-200 p-2 text-left">#</th>
               <th className="border border-gray-200 p-2 text-left">

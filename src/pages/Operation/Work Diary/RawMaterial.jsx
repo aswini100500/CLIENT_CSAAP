@@ -73,7 +73,7 @@ const RawMaterial = ({ projectSetup }) => {
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-8">
       <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-        <FaWarehouse className="text-blue-600" /> Equipment & Raw Materials
+        <FaWarehouse className="text-green-700" /> Equipment & Raw Materials
       </h2>
 
       <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
@@ -86,7 +86,7 @@ const RawMaterial = ({ projectSetup }) => {
             <input
               type="text"
               placeholder="Equipment/Material Name"
-              className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-400 outline-none"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-green-500 outline-none"
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={isLoading}
@@ -96,7 +96,7 @@ const RawMaterial = ({ projectSetup }) => {
             <input
               type="number"
               placeholder="Quantity"
-              className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-400 outline-none"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-green-500 outline-none"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
               disabled={isLoading}
@@ -104,7 +104,7 @@ const RawMaterial = ({ projectSetup }) => {
           </div>
           <div className="w-full md:w-40">
             <select
-              className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-400 outline-none bg-white"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-green-500 outline-none bg-white"
               value={type}
               onChange={(e) => setType(e.target.value)}
               disabled={isLoading}
@@ -113,19 +113,21 @@ const RawMaterial = ({ projectSetup }) => {
               <option value="own">Own</option>
             </select>
           </div>
-          <button
-            onClick={addEquipment}
-            disabled={isLoading || !projectSetup}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors disabled:bg-gray-400"
-          >
-            {isLoading ? (
-              "Adding..."
-            ) : (
-              <>
-                <FaPlus /> Add
-              </>
-            )}
-          </button>
+          <div className="erp-root">
+            <button
+              onClick={addEquipment}
+              disabled={isLoading || !projectSetup}
+              className="app-btn-primary flex items-center justify-center gap-2 w-full md:w-auto"
+            >
+              {isLoading ? (
+                "Adding..."
+              ) : (
+                <>
+                  <FaPlus /> Add
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -156,11 +158,10 @@ const RawMaterial = ({ projectSetup }) => {
                   </td>
                   <td className="p-4">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        eq.source_type === "store"
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${eq.source_type === "store"
                           ? "bg-amber-100 text-amber-700"
-                          : "bg-blue-100 text-blue-700"
-                      }`}
+                          : "bg-green-100 text-green-700"
+                        }`}
                     >
                       {eq.source_type}
                     </span>

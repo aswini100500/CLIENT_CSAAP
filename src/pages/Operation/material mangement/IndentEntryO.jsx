@@ -282,7 +282,7 @@ const IndentEntryO = () => {
             onClick={() => setActiveTab("entry")}
             className={`flex-1 py-3 text-center font-medium transition-colors ${
               activeTab === "entry"
-                ? "text-blue-600 border-b-2 border-blue-600"
+                ? "text-green-700 border-b-2 border-green-600"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -292,7 +292,7 @@ const IndentEntryO = () => {
             onClick={() => setActiveTab("history")}
             className={`flex-1 py-3 text-center font-medium transition-colors ${
               activeTab === "history"
-                ? "text-blue-600 border-b-2 border-blue-600"
+                ? "text-green-700 border-b-2 border-green-600"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -433,14 +433,16 @@ const IndentEntryO = () => {
                         placeholder="New Category Name"
                         autoFocus
                       />
-                      <button
-                        type="button"
-                        onClick={saveCategory}
-                        disabled={loadingConfig}
-                        className="px-4 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 font-semibold"
-                      >
-                        Save
-                      </button>
+                      <div className="erp-root flex">
+                        <button
+                          type="button"
+                          onClick={saveCategory}
+                          disabled={loadingConfig}
+                          className="app-btn-primary text-xs py-1 px-3 min-h-[36px]"
+                        >
+                          Save
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <select
@@ -523,14 +525,16 @@ const IndentEntryO = () => {
                         placeholder="New Product Name"
                         autoFocus
                       />
-                      <button
-                        type="button"
-                        onClick={saveProduct}
-                        disabled={loadingConfig}
-                        className="px-4 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 font-semibold"
-                      >
-                        Save
-                      </button>
+                      <div className="erp-root flex">
+                        <button
+                          type="button"
+                          onClick={saveProduct}
+                          disabled={loadingConfig}
+                          className="app-btn-primary text-xs py-1 px-3 min-h-[36px]"
+                        >
+                          Save
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <select
@@ -606,12 +610,14 @@ const IndentEntryO = () => {
                 />
               </div>
 
-              <button
-                onClick={addProductToList}
-                className="mt-6 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:scale-101 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
-              >
-                Add Product To List
-              </button>
+              <div className="erp-root">
+                <button
+                  onClick={addProductToList}
+                  className="app-btn-primary"
+                >
+                  Add Product To List
+                </button>
+              </div>
             </div>
           </div>
 
@@ -703,7 +709,7 @@ const IndentEntryO = () => {
             </div>
           </div>
 
-          <div className="flex justify-end space-x-4">
+          <div className="erp-root flex justify-end space-x-4">
             <button
               onClick={() => {
                 setSupplier({ id: "", name: "", contact: "", gst: "" });
@@ -716,7 +722,7 @@ const IndentEntryO = () => {
                   description: "",
                 });
               }}
-              className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200"
+              className="app-btn-secondary"
             >
               Clear Form
             </button>
@@ -724,9 +730,7 @@ const IndentEntryO = () => {
             <button
               onClick={saveIndent}
               disabled={loadingConfig}
-              className={`px-8 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 ${
-                loadingConfig ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className="app-btn-primary"
             >
               {loadingConfig ? "Saving..." : "Save Indent"}
             </button>

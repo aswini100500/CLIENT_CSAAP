@@ -51,6 +51,7 @@ const AttachementContractor = () => {
         />
         <div className="erp-root">
           <button
+            type="button"
             onClick={handleFileUpload}
             className="app-btn-primary flex items-center gap-2"
           >
@@ -77,10 +78,11 @@ const AttachementContractor = () => {
               <td className="px-4 py-2 border">{file.size}</td>
               <td className="px-4 py-2 border">{file.remark}</td>
               <td className="px-4 py-2 border text-center space-x-3">
-                <button className="text-green-600 hover:text-green-800">
+                <button type="button" className="text-green-600 hover:text-green-800">
                   <FaDownload />
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleDelete(file.id)}
                   className="text-red-600 hover:text-red-800"
                 >

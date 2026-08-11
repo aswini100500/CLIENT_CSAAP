@@ -143,17 +143,17 @@ const LabourDetails = ({ projectSetup }) => {
         Labour Details
       </h2>
 
-      <div className="flex flex-col sm:flex-row items-center gap-3 mb-6">
+      <div className="erp-root flex flex-col sm:flex-row items-center gap-3 mb-6">
         <input
           type="text"
           placeholder="Enter new role (e.g., Electrician)"
-          className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-500"
           value={newRole}
           onChange={(e) => setNewRole(e.target.value)}
         />
         <button
           onClick={handleAddRole}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          className="app-btn-primary flex items-center gap-2"
         >
           <PlusCircle size={18} /> Add Role
         </button>
@@ -172,29 +172,27 @@ const LabourDetails = ({ projectSetup }) => {
               <input
                 type="number"
                 min="0"
-                name={role}
+                className="w-16 border border-gray-300 rounded p-1 text-center focus:ring-2 focus:ring-green-500 focus:outline-none"
                 value={labour[role]}
-                onChange={handleChange}
-                className="border border-gray-300 p-1.5 rounded w-24 text-center focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                onChange={(e) =>
+                  handleLabourChange(role, parseInt(e.target.value) || 0)
+                }
               />
             </div>
-
-            {!DEFAULT_ROLES.includes(role) && (
-              <button
-                onClick={() => handleDeleteRole(role)}
-                className="text-red-500 hover:text-red-700"
-              >
-                <Trash2 size={18} />
-              </button>
-            )}
+            <button
+              onClick={() => handleRemoveRole(role)}
+              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded transition"
+            >
+              <Trash2 size={16} />
+            </button>
           </div>
         ))}
       </div>
 
-      <div className="mt-8 text-right">
+      <div className="erp-root mt-8 text-right">
         <button
           onClick={handleSave}
-          className="flex items-center gap-2 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition mx-auto sm:mx-0"
+          className="app-btn-primary flex items-center gap-2 ml-auto"
         >
           <Save size={18} /> Save Labour Details
         </button>
@@ -215,7 +213,7 @@ const LabourDetails = ({ projectSetup }) => {
                 <p className="font-semibold capitalize text-gray-800">
                   {role.replace(/_/g, " ")}
                 </p>
-                <p className="text-xl font-bold text-blue-700 mt-1">{count}</p>
+                <p className="text-xl font-bold text-green-700 mt-1">{count}</p>
               </div>
             ))}
           </div>

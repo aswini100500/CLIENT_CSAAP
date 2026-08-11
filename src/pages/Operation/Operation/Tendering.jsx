@@ -350,7 +350,7 @@ const Tendering = () => {
           text: workOrderContent,
           url: window.location.href,
         })
-        .catch((error) => {});
+        .catch((error) => { });
     } else {
       navigator.clipboard
         .writeText(workOrderContent)
@@ -377,21 +377,20 @@ TIMELINE:
 - Work Completion Date: ${workOrder.completionDate}
 
 SCOPE OF WORK:
-${
-  workOrder.scopeOfWork
-    ? workOrder.scopeOfWork
-        .map(
-          (item, index) => `
+${workOrder.scopeOfWork
+        ? workOrder.scopeOfWork
+          .map(
+            (item, index) => `
 ${index + 1}. ${item.description}
    Unit: ${item.unit}
    Quantity: ${item.quantity}
    Rate: $${item.rate}
    Amount: $${item.amount}
 `,
-        )
-        .join("")
-    : "No items specified"
-}
+          )
+          .join("")
+        : "No items specified"
+      }
 
 TOTAL AMOUNT: $${(workOrder.totalAmount || 0).toFixed(2)}
 
@@ -456,32 +455,32 @@ Tender Management System
         <div className="bg-white rounded-xl shadow-sm mb-6">
           <div className="flex">
             <button
+              type="button"
               onClick={() => setActiveTab("create")}
-              className={`flex-1 py-4 px-6 text-center font-medium transition-all ${
-                activeTab === "create"
+              className={`flex-1 py-4 px-6 text-center font-medium transition-all ${activeTab === "create"
                   ? "text-green-800 border-b-2 border-green-600 bg-green-50 font-semibold"
                   : "text-gray-500 hover:text-gray-700"
-              }`}
+                }`}
             >
               Create Tender
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("view")}
-              className={`flex-1 py-4 px-6 text-center font-medium transition-all ${
-                activeTab === "view"
+              className={`flex-1 py-4 px-6 text-center font-medium transition-all ${activeTab === "view"
                   ? "text-green-800 border-b-2 border-green-600 bg-green-50 font-semibold"
                   : "text-gray-500 hover:text-gray-700"
-              }`}
+                }`}
             >
               View Tenders ({tenders.length})
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("work-orders")}
-              className={`flex-1 py-4 px-6 text-center font-medium transition-all ${
-                activeTab === "work-orders"
+              className={`flex-1 py-4 px-6 text-center font-medium transition-all ${activeTab === "work-orders"
                   ? "text-green-800 border-b-2 border-green-600 bg-green-50 font-semibold"
                   : "text-gray-500 hover:text-gray-700"
-              }`}
+                }`}
             >
               Work Orders ({issuedWorkOrders.length})
             </button>
@@ -726,7 +725,7 @@ Tender Management System
                                 <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                                   <span className="text-blue-600 font-medium">
                                     {typeof applicant.name === "string" &&
-                                    applicant.name
+                                      applicant.name
                                       ? applicant.name.charAt(0).toUpperCase()
                                       : "?"}
                                   </span>

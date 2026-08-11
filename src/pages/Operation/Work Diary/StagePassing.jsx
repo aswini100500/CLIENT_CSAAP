@@ -296,30 +296,33 @@ const StagePassing = ({ projectSetup }) => {
             onChange={(e) => setNewStage(e.target.value)}
             className="border border-gray-300 rounded p-2 flex-1 focus:ring-2 focus:ring-blue-400"
           />
-          <button
-            onClick={() => {
-              const name = (newStage || "").trim();
-              if (!name)
-                return Swal.fire(
-                  "Oops!",
-                  "Please enter a stage name.",
-                  "warning",
-                );
-              const newStageObj = {
-                id: Date.now(),
-                name,
-                completed: false,
-                remark: "",
-                subStages: [],
-              };
-              setStages((prev) => [...prev, newStageObj]);
-              setNewStage("");
-              Swal.fire("Added!", `${name} added to stages.`, "success");
-            }}
-            className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Add Stage
-          </button>
+          <div className="erp-root">
+            <button
+              onClick={() => {
+                const name = (newStage || "").trim();
+                if (!name) {
+                  return Swal.fire(
+                    "Oops!",
+                    "Please enter a stage name.",
+                    "warning"
+                  );
+                }
+                const newStageObj = {
+                  id: Date.now(),
+                  name,
+                  completed: false,
+                  remark: "",
+                  subStages: [],
+                };
+                setStages((prev) => [...prev, newStageObj]);
+                setNewStage("");
+                Swal.fire("Added!", `${name} added to stages.`, "success");
+              }}
+              className="app-btn-primary"
+            >
+              Add Stage
+            </button>
+          </div>
         </div>
       </div>
 
@@ -359,7 +362,7 @@ const StagePassing = ({ projectSetup }) => {
                   </span>
                   <button
                     onClick={() => editStageRemark(stage.id, stage.remark)}
-                    className="text-blue-600 text-sm font-medium hover:underline"
+                    className="text-green-700 text-sm font-medium hover:underline"
                   >
                     ✏️ Edit
                   </button>
@@ -375,17 +378,19 @@ const StagePassing = ({ projectSetup }) => {
 
             <div className="mt-4 ml-4 border-l-2 pl-4">
               <div className="flex justify-between items-center mb-2">
-                <h4 className="font-medium text-gray-700">Sub-Stages</h4>
-                <button
-                  onClick={() => addSubStage(stage.id)}
-                  className="text-sm px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-                >
-                  + Add Sub-Stage
-                </button>
+                <h4 className="font-semibold text-gray-900">Sub-Stages</h4>
+                <div className="erp-root">
+                  <button
+                    onClick={() => addSubStage(stage.id)}
+                    className="border border-dashed border-green-600 bg-green-50/40 hover:bg-green-50 text-green-700 hover:text-green-800 flex items-center gap-1.5 py-1 px-4 min-h-[36px] rounded-xl text-xs font-semibold transition-all"
+                  >
+                    + Add Sub-Stage
+                  </button>
+                </div>
               </div>
 
               {stage.subStages.length === 0 && (
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-500 text-sm">
                   No sub-stages added yet.
                 </p>
               )}
@@ -396,9 +401,9 @@ const StagePassing = ({ projectSetup }) => {
                   className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2 bg-gray-50 p-2 rounded"
                 >
                   <div>
-                    <p className="font-medium text-gray-700">{sub.name}</p>
+                    <p className="font-semibold text-gray-900">{sub.name}</p>
                     {sub.completed && (
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-gray-700 text-sm">
                         <strong>Remark:</strong> {sub.remark}
                       </p>
                     )}
@@ -413,14 +418,16 @@ const StagePassing = ({ projectSetup }) => {
                         onChange={(e) =>
                           setRemarks({ ...remarks, [sub.id]: e.target.value })
                         }
-                        className="border border-gray-300 p-1 rounded focus:ring-2 focus:ring-blue-400"
+                        className="border border-gray-300 p-1 rounded focus:ring-2 focus:ring-green-500"
                       />
-                      <button
-                        onClick={() => completeSubStage(stage.id, sub.id)}
-                        className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-                      >
-                        Complete
-                      </button>
+                      <div className="erp-root">
+                        <button
+                          onClick={() => completeSubStage(stage.id, sub.id)}
+                          className="app-btn-primary"
+                        >
+                          Complete
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <div className="flex items-center gap-3">
@@ -431,7 +438,7 @@ const StagePassing = ({ projectSetup }) => {
                         onClick={() =>
                           editSubStageRemark(stage.id, sub.id, sub.remark)
                         }
-                        className="text-blue-600 text-xs font-medium hover:underline"
+                        className="text-green-700 text-xs font-medium hover:underline"
                       >
                         ✏️ Edit
                       </button>

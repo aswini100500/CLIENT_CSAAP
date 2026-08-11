@@ -108,8 +108,8 @@ const Operator = () => {
   return (
     <div className="p-6 bg-white rounded-xl shadow-md border border-gray-200">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-semibold text-blue-700 flex items-center gap-2">
-          <UserCog className="w-6 h-6 text-blue-600" />
+        <h2 className="text-2xl font-semibold text-green-700 flex items-center gap-2">
+          <UserCog className="w-6 h-6 text-green-600" />
           Operator Management
         </h2>
       </div>
@@ -160,18 +160,20 @@ const Operator = () => {
           }
           className="border border-gray-300 rounded-lg p-2 text-sm"
         />
-        <button
-          onClick={editingId ? handleUpdate : handleAddOperator}
-          className="flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
-        >
-          <PlusCircle className="w-4 h-4" />
-          {editingId ? "Update" : "Add"}
-        </button>
+        <div className="erp-root">
+          <button
+            onClick={editingId ? handleUpdate : handleAddOperator}
+            className="app-btn-primary flex items-center justify-center gap-1"
+          >
+            <PlusCircle className="w-4 h-4" />
+            {editingId ? "Update" : "Add"}
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
-          <thead className="bg-blue-50">
+          <thead className="bg-green-50 text-green-900">
             <tr>
               <th className="border border-gray-200 p-2 text-left">#</th>
               <th className="border border-gray-200 p-2 text-left">
@@ -215,11 +217,10 @@ const Operator = () => {
                   </td>
                   <td className="border border-gray-200 p-2">
                     <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        operator.status === "Available"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${operator.status === "Available"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                        }`}
                     >
                       {operator.status}
                     </span>

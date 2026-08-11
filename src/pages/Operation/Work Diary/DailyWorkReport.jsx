@@ -138,7 +138,7 @@ const DailyWorkReport = ({ projectSetup }) => {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
               <h2 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-3 flex items-center gap-2">
-                <Calendar size={20} className="text-blue-600" />
+                <Calendar size={20} className="text-green-700" />
                 New Work Entry
               </h2>
 
@@ -203,12 +203,14 @@ const DailyWorkReport = ({ projectSetup }) => {
                       <option value="Carrying Forward">Carrying Forward</option>
                     </select>
                   </div>
-                  <button
-                    onClick={handleAddWork}
-                    className="bg-blue-600 text-white p-2 px-4 rounded-lg hover:bg-blue-700"
-                  >
-                    Add Work
-                  </button>
+                  <div className="erp-root flex justify-end">
+                    <button
+                      onClick={handleAddWork}
+                      className="app-btn-primary w-full md:w-auto"
+                    >
+                      Add Work
+                    </button>
+                  </div>
                 </div>
 
                 {workList.length > 0 && (
@@ -239,12 +241,14 @@ const DailyWorkReport = ({ projectSetup }) => {
                         </div>
                       ))}
                     </div>
-                    <button
-                      onClick={handleSaveReport}
-                      className="mt-4 bg-green-600 text-white px-8 py-2 rounded-lg hover:bg-green-700 mx-auto block"
-                    >
-                      Save Daily Report
-                    </button>
+                    <div className="erp-root flex justify-center mt-4">
+                      <button
+                        onClick={handleSaveReport}
+                        className="app-btn-primary"
+                      >
+                        Save Daily Report
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

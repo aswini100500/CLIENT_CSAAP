@@ -820,8 +820,8 @@ const Vendor = () => {
           <div className="flex items-center">
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center ${index <= currentTabIndex
-                  ? "bg-green-600 text-white"
-                  : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
+                ? "bg-green-600 text-white"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
                 }`}
             >
               {tabCompletion[tab.id] && index <= currentTabIndex ? (
@@ -832,8 +832,8 @@ const Vendor = () => {
             </div>
             <span
               className={`ml-2 text-sm hidden sm:inline ${index === currentTabIndex
-                  ? "text-green-800 font-semibold"
-                  : "text-gray-600 dark:text-gray-400"
+                ? "text-green-800 font-semibold"
+                : "text-gray-600 dark:text-gray-400"
                 }`}
             >
               {tab.label}
@@ -842,8 +842,8 @@ const Vendor = () => {
           {index < tabs.length - 1 && (
             <div
               className={`flex-1 h-0.5 mx-4 ${index < currentTabIndex
-                  ? "bg-green-600"
-                  : "bg-gray-200 dark:bg-gray-700"
+                ? "bg-green-600"
+                : "bg-gray-200 dark:bg-gray-700"
                 }`}
             />
           )}
@@ -890,6 +890,7 @@ const Vendor = () => {
           <option value="recent">Recent (Last 7 days)</option>
         </select>
         <button
+          type="button"
           onClick={fetchVendors}
           className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center space-x-2"
         >
@@ -1035,8 +1036,8 @@ const Vendor = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-4 border-b-2 font-medium text-sm flex items-center space-x-2 ${activeTab === tab.id
-                    ? "border-green-600 text-green-800 font-semibold"
-                    : "border-transparent text-gray-500 hover:text-gray-900"
+                  ? "border-green-600 text-green-800 font-semibold"
+                  : "border-transparent text-gray-500 hover:text-gray-900"
                   }`}
               >
                 <tab.icon />
@@ -1841,8 +1842,8 @@ const Vendor = () => {
                     <div className="bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 p-6">
                       <div
                         className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${dragActive
-                            ? "border-green-500 bg-green-50"
-                            : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+                          ? "border-green-500 bg-green-50"
+                          : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
                           }`}
                         onDragEnter={handleDrag}
                         onDragLeave={handleDrag}
@@ -2076,8 +2077,8 @@ const Vendor = () => {
                   onClick={handlePrevious}
                   disabled={currentTabIndex === 0}
                   className={`px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center space-x-2 ${currentTabIndex === 0
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
                     }`}
                 >
                   <FaArrowLeft />

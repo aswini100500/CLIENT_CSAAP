@@ -623,17 +623,36 @@ const Contractor = () => {
                     placeholder="Enter additional notes or comments"
                   />
                 </div>
-                <div className="border border-gray-300 rounded-lg p-4 w-[40vh] bg-white shadow-sm">
-                  <label className="block text-gray-700 font-medium mb-2">
+                <div className="border border-gray-200 rounded-lg p-4 w-[40vh] bg-gray-50 shadow-sm">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
                     Clearance Document
                   </label>
-
+                  <div className="flex items-center gap-3">
+                    <label
+                      htmlFor="clearance-file-input"
+                      className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors select-none"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586a4 4 0 10-5.656-5.656L5.757 11.757a6 6 0 108.485 8.485L20 14" />
+                      </svg>
+                      Choose File
+                    </label>
+                    <span className="text-sm text-gray-500 truncate max-w-[140px]">
+                      {clearanceFile ? clearanceFile.name : "No file chosen"}
+                    </span>
+                  </div>
                   <input
+                    id="clearance-file-input"
                     type="file"
                     accept=".pdf,.jpg,.jpeg,.png"
                     onChange={(e) => setClearanceFile(e.target.files[0])}
-                    className="block w-full text-sm text-gray-700  border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="hidden"
                   />
+                  {clearanceFile && (
+                    <p className="mt-2 text-xs text-green-700 font-medium">
+                      ✓ {clearanceFile.name}
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-8 border-t border-gray-200">
@@ -641,18 +660,18 @@ const Contractor = () => {
                     <span className="text-red-500">*</span> indicates required
                     fields
                   </div>
-                  <div className="erp-root flex flex-col sm:flex-row gap-3">
+                  <div className="flex flex-col sm:flex-row gap-3">
                     <button
                       type="button"
                       onClick={handleCancel}
-                      className="app-btn-secondary"
+                      className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={loading}
-                      className="app-btn-primary flex items-center gap-2"
+                      className="px-6 py-2 rounded-lg bg-green-700 hover:bg-green-800 text-white font-semibold flex items-center gap-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       <FaCheck className="w-4 h-4" />
                       {loading ? "Submitting..." : "Submit"}

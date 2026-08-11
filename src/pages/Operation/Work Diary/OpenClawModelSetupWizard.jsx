@@ -475,7 +475,7 @@ const OpenClawModelSetupWizard = () => {
               key={item.step}
               type="button"
               onClick={() => goToStep(item.step)}
-              className={`rounded-xl p-4 text-left border ${activeStep === item.step ? "border-blue-600 bg-blue-50 text-blue-700 shadow" : "border-slate-200 bg-white text-slate-700 hover:border-blue-300"}`}
+              className={`rounded-xl p-4 text-left border ${activeStep === item.step ? "border-green-700 bg-green-50 text-green-800 shadow" : "border-slate-200 bg-white text-slate-700 hover:border-green-300"}`}
             >
               <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
                 Step {item.step}
@@ -635,7 +635,7 @@ const OpenClawModelSetupWizard = () => {
           {activeStep === 2 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <FaHome className="text-blue-600" />
+                <FaHome className="text-green-700" />
                 <h2 className="text-xl font-semibold text-slate-900">
                   Unit Plans
                 </h2>
@@ -723,7 +723,7 @@ const OpenClawModelSetupWizard = () => {
           {activeStep === 3 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <FaCalendarAlt className="text-blue-600" />
+                <FaCalendarAlt className="text-green-700" />
                 <h2 className="text-xl font-semibold text-slate-900">
                   Project Stages
                 </h2>
@@ -734,13 +734,15 @@ const OpenClawModelSetupWizard = () => {
                   <p className="text-sm text-slate-500">
                     Build the execution stages for your model setup.
                   </p>
-                  <button
-                    type="button"
-                    onClick={addStage}
-                    className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-                  >
-                    <FaPlus className="inline mr-2" /> Add Stage
-                  </button>
+                  <div className="erp-root">
+                    <button
+                      type="button"
+                      onClick={addStage}
+                      className="app-btn-primary"
+                    >
+                      <FaPlus className="inline mr-2" /> Add Stage
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -759,7 +761,7 @@ const OpenClawModelSetupWizard = () => {
                             updateStage(stage.id, "name", e.target.value)
                           }
                           placeholder={`Stage ${index + 1} name`}
-                          className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                         <textarea
                           value={stage.description}
@@ -768,7 +770,7 @@ const OpenClawModelSetupWizard = () => {
                           }
                           rows={3}
                           placeholder="Stage description"
-                          className="mt-4 w-full rounded-2xl border border-slate-300 p-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="mt-4 w-full rounded-2xl border border-slate-300 p-4 focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>
                       <div className="flex flex-col gap-3 min-w-55">
@@ -778,7 +780,7 @@ const OpenClawModelSetupWizard = () => {
                           onChange={(e) =>
                             updateStage(stage.id, "start", e.target.value)
                           }
-                          className="rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                         <input
                           type="date"
@@ -786,7 +788,7 @@ const OpenClawModelSetupWizard = () => {
                           onChange={(e) =>
                             updateStage(stage.id, "end", e.target.value)
                           }
-                          className="rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                         <button
                           type="button"
@@ -804,13 +806,15 @@ const OpenClawModelSetupWizard = () => {
                         <div className="text-sm font-medium text-slate-700">
                           Sub-stages
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => addSubStage(stage.id)}
-                          className="rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-                        >
-                          <FaPlus className="inline mr-2" /> Add
-                        </button>
+                        <div className="erp-root">
+                          <button
+                            type="button"
+                            onClick={() => addSubStage(stage.id)}
+                            className="app-btn-primary"
+                          >
+                            <FaPlus className="inline mr-2" /> Add
+                          </button>
+                        </div>
                       </div>
                       <div className="mt-4 space-y-3">
                         {(stage.subStages || []).map((sub) => (
@@ -830,7 +834,7 @@ const OpenClawModelSetupWizard = () => {
                                 )
                               }
                               placeholder="Sub-stage name"
-                              className="w-full rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                             <button
                               type="button"
@@ -990,12 +994,12 @@ const OpenClawModelSetupWizard = () => {
             </div>
           )}
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-between">
+          <div className="erp-root mt-8 flex flex-col gap-3 sm:flex-row sm:justify-between">
             <button
               type="button"
               onClick={handleBack}
               disabled={activeStep === 1}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-100"
+              className="app-btn-secondary flex items-center justify-center gap-2"
             >
               <FaArrowLeft /> Back
             </button>
@@ -1004,7 +1008,7 @@ const OpenClawModelSetupWizard = () => {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700"
+                  className="app-btn-primary flex items-center justify-center gap-2"
                 >
                   Continue <FaArrowRight />
                 </button>
@@ -1013,7 +1017,7 @@ const OpenClawModelSetupWizard = () => {
                   type="button"
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="app-btn-primary bg-emerald-600 hover:bg-emerald-700 flex items-center justify-center gap-2"
                 >
                   {loading ? "Saving..." : "Submit Setup"}
                 </button>

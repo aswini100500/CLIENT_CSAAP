@@ -187,27 +187,25 @@ const EquipmentManage = () => {
           <option value="Hybrid">Hybrid</option>
         </select>
 
-        <button
-          onClick={editingId ? handleUpdate : handleAddEquipment}
-          disabled={loading}
-          className={`flex items-center justify-center gap-1 px-4 py-2 rounded-lg text-sm transition-all ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed text-white"
-              : "bg-blue-600 hover:bg-blue-700 text-white"
-          }`}
-        >
-          {loading ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-          ) : (
-            <PlusCircle className="w-4 h-4" />
-          )}
-          {loading ? "Processing..." : editingId ? "Update" : "Add"}
-        </button>
+        <div className="erp-root">
+          <button
+            onClick={editingId ? handleUpdate : handleAddEquipment}
+            disabled={loading}
+            className="app-btn-primary flex items-center justify-center gap-1"
+          >
+            {loading ? (
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              <PlusCircle className="w-4 h-4" />
+            )}
+            {loading ? "Processing..." : editingId ? "Update" : "Add"}
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
-          <thead className="bg-blue-50">
+          <thead className="bg-green-50 text-green-900">
             <tr>
               <th className="border border-gray-200 p-2 text-left">#</th>
               <th className="border border-gray-200 p-2 text-left">

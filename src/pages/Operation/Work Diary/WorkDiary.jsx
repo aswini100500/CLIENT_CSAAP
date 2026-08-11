@@ -126,7 +126,7 @@ const WorkDiary = () => {
         />
 
         {selectedProject && (
-          <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-100 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <span className="text-xs text-gray-500 uppercase font-bold">
                 Project
@@ -160,11 +160,10 @@ const WorkDiary = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 rounded-md whitespace-nowrap transition-all ${
-              activeTab === tab.id
-                ? "bg-blue-600 text-white font-semibold shadow-md"
+            className={`px-4 py-2 rounded-md whitespace-nowrap transition-all ${activeTab === tab.id
+                ? "bg-green-700 text-white font-semibold shadow-md"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+              }`}
           >
             {tab.label}
           </button>
