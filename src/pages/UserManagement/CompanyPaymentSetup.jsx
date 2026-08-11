@@ -128,7 +128,7 @@ const CompanyPaymentSetup = () => {
 
   if (loading) {
     return (
-      <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)] flex justify-center items-center">
+      <div className="erp-root min-h-screen p-6 bg-[var(--bg-app)] flex justify-center items-center">
         <div className="flex items-center gap-3 app-panel p-6 shadow-sm">
           <Loader2 className="animate-spin text-[var(--brand)] h-6 w-6" />
           <span className="text-[var(--text-soft)] font-medium">
@@ -141,7 +141,7 @@ const CompanyPaymentSetup = () => {
 
   if (error && !company) {
     return (
-      <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)]">
+      <div className="erp-root min-h-screen p-6 bg-[var(--bg-app)]">
         <button
           onClick={() => navigate("/users/all-companies")}
           className="mb-4 text-[var(--brand)] hover:text-[var(--brand-strong)] flex items-center text-sm font-medium transition-colors"
@@ -156,7 +156,7 @@ const CompanyPaymentSetup = () => {
   }
 
   return (
-    <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)]">
+    <div className="erp-root min-h-screen p-6 bg-[var(--bg-app)]">
       <button
         onClick={() => navigate("/users/all-companies")}
         className="mb-6 text-[var(--text-soft)] hover:text-[var(--text-strong)] flex items-center text-sm font-medium transition-colors"

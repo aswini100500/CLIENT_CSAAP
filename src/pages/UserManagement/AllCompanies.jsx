@@ -54,7 +54,7 @@ const AllCompanies = () => {
   );
 
   return (
-    <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)]">
+    <div className="erp-root min-h-screen p-6 bg-[var(--bg-app)]">
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="app-title flex items-center gap-2">

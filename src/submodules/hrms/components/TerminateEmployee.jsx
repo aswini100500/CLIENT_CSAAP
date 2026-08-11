@@ -212,7 +212,7 @@ export default function TerminateEmployeePage() {
   }
 
   return (
-    <div className="crm-module-root app-shell font-sans">
+    <div className="erp-root app-shell font-sans">
       <div className="mx-auto max-w-7xl px-3 py-4 lg:px-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-2">
           <div>

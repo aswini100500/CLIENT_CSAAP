@@ -1288,7 +1288,7 @@ const Task = () => {
   const totalPages = Math.ceil(filteredTasks.length / itemsPerPage);
 
   return (
-    <div className="crm-module-root app-shell min-h-[calc(100vh-80px)] font-sans bg-(--bg-app) w-full overflow-x-hidden">
+    <div className="erp-root app-shell min-h-[calc(100vh-80px)] font-sans bg-(--bg-app) w-full overflow-x-hidden">
       <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 w-full">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div>

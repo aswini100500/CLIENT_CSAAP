@@ -45,7 +45,7 @@ const AttendanceCloudsat = () => {
   ];
 
   return (
-    <div className="crm-module-root app-shell min-h-[calc(100vh-80px)] font-sans">
+    <div className="erp-root app-shell min-h-[calc(100vh-80px)] font-sans">
       <div className="mx-auto max-w-7xl px-3 py-4 lg:px-4">
         <div
           className="-mx-3 mb-5 border-b border-(--border-soft) px-3 py-3 lg:-mx-4 lg:px-4"

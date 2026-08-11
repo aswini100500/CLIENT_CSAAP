@@ -157,7 +157,7 @@ export default function ViewProfile() {
     dealVal > 0 ? Math.min(Math.round((paidVal / dealVal) * 100), 100) : 0;
 
   return (
-    <div className="crm-module-root size-full min-h-screen">
+    <div className="erp-root size-full min-h-screen">
       <div
         className={`app-shell p-4 space-y-6 max-w-6xl mx-auto transition-all duration-300 ease-out ${
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"

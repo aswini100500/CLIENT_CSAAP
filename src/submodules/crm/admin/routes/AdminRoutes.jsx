@@ -12,7 +12,7 @@ import Brokers from "../pages/brokers/Brokers";
 
 export default function AdminRoutes() {
   return (
-    <div className="crm-module-root">
+    <div className="erp-root">
       <Routes>
         <Route path="upload-leads" element={<SimpleCSVUpload />} />
         <Route path="lead-list" element={<LeadList />} />

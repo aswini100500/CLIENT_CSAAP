@@ -35,7 +35,7 @@ const ContactUs = () => {
   }, [location]);
 
   return (
-    <div className="crm-module-root p-4 max-w-7xl mx-auto space-y-6">
+    <div className="erp-root p-4 max-w-7xl mx-auto space-y-6">
       <div className="border-b border-(--border-soft) pb-4">
         <h1 className="app-title">Contact Us</h1>
         <p className="app-subtitle mt-1">

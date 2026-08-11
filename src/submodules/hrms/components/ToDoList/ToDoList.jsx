@@ -269,7 +269,7 @@ const ToDoList = () => {
   }, [groupedTodos]);
 
   return (
-    <div className="crm-module-root w-full space-y-6">
+    <div className="erp-root w-full space-y-6">
       <div className="app-panel p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h3 className="app-heading">{visibleTitle}</h3>

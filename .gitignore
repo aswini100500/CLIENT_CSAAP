@@ -27,8 +27,13 @@ dist-ssr
 # Environment Variables
 # .env
 
-.agents/*
+.agents/
 skills-lock.json
+AGENTS.md
+CONTEXT.md
+docs/agents/
+docs/adr/
+.scratch/
 
 # Custom exclusions
 temp/

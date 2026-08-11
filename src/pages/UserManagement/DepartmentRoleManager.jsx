@@ -193,7 +193,7 @@ const DepartmentRoleManager = () => {
   };
 
   return (
-    <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)] relative">
+    <div className="erp-root min-h-screen p-6 bg-[var(--bg-app)] relative">
       <Toaster
         position="top-center"
         toastOptions={{

@@ -348,7 +348,7 @@ const SalesPipeline = () => {
 
   return (
     <div
-      className={`crm-module-root app-shell p-4 transition-all duration-400 ease-out ${contentVisible ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-sm translate-y-2"}`}
+      className={`erp-root app-shell p-4 transition-all duration-400 ease-out ${contentVisible ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-sm translate-y-2"}`}
     >
       <div className="max-w-7xl mx-auto space-y-6">
         {queryError && (

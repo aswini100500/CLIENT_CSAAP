@@ -152,7 +152,7 @@ const DashboardHome = () => {
   const showError = error && !loading;
 
   return (
-    <div className="crm-module-root">
+    <div className="erp-root">
       <div className="space-y-6">
         <div>
           <h1 className="app-title max-w-3xl">Superadmin Overview</h1>

@@ -122,7 +122,7 @@ const EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
 
   return (
     <div
-      className={`crm-module-root app-shell min-h-screen p-4 py-8 transition-all duration-400 ease-out ${
+      className={`erp-root app-shell min-h-screen p-4 py-8 transition-all duration-400 ease-out ${
         contentVisible
           ? "opacity-100 blur-0 translate-y-0"
           : "opacity-0 blur-sm translate-y-2"

@@ -270,7 +270,7 @@ const QuotationForm = () => {
   };
 
   return (
-    <div className="crm-module-root">
+    <div className="erp-root">
       <div
         className={`app-shell p-4 transition-all duration-400 ease-out ${contentVisible ? "opacity-100 blur-0 translate-y-0" : "opacity-0 blur-xs translate-y-2"}`}
       >

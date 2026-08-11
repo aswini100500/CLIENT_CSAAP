@@ -79,7 +79,7 @@ const CandidateDetailsUpdate = ({ employee, onClose }) => {
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   return (
-    <div className="crm-module-root font-sans">
+    <div className="erp-root font-sans">
       <div className="max-w-5xl mx-auto">
         <form
           onSubmit={handleSubmit}

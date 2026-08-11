@@ -290,7 +290,7 @@ export default function CustomerList() {
   };
 
   return (
-    <div className="crm-module-root size-full min-h-screen">
+    <div className="erp-root size-full min-h-screen">
       <div
         className={`app-shell p-4 space-y-6 transition-all duration-300 ease-out ${
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"

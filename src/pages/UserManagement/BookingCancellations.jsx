@@ -283,7 +283,7 @@ const BookingCancellations = () => {
   ).length;
 
   return (
-    <div className="crm-module-root size-full min-h-screen">
+    <div className="erp-root size-full min-h-screen">
       <Toaster position="top-right" />
 
       <div className="app-shell p-4 space-y-6">

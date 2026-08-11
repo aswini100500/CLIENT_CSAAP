@@ -726,7 +726,7 @@ const PayrollPage = () => {
   };
 
   return (
-    <div className="crm-module-root app-shell p-4">
+    <div className="erp-root app-shell p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {successMessage && (
           <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl border border-emerald-700 shadow-lg z-50 flex items-center gap-2 animate-in fade-in slide-in-from-top duration-200">

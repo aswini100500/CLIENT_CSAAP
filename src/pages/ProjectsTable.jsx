@@ -106,7 +106,7 @@ const ProjectsTable = () => {
 
   if (loading) {
     return (
-      <div className="crm-module-root">
+      <div className="erp-root">
         <div className="app-panel p-8">
           <div className="flex flex-col justify-center items-center h-40 gap-3">
             <Loader2
@@ -124,7 +124,7 @@ const ProjectsTable = () => {
 
   if (error) {
     return (
-      <div className="crm-module-root">
+      <div className="erp-root">
         <div className="app-panel p-8 border-rose-100 bg-rose-50/10">
           <div className="text-center">
             <div className="text-rose-600 mb-4 flex flex-col items-center gap-2">
@@ -147,7 +147,7 @@ const ProjectsTable = () => {
   }
 
   return (
-    <div className="crm-module-root">
+    <div className="erp-root">
       <div className="app-panel overflow-hidden">
         <div className="app-section-bar p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="app-heading">Active Projects ({projects.length})</h2>

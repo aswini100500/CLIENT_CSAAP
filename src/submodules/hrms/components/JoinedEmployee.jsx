@@ -1013,7 +1013,7 @@ const JobJoinedList = ({ basePath }) => {
 
   return (
     <>
-      <div className="crm-module-root app-shell p-4 min-h-screen">
+      <div className="erp-root app-shell p-4 min-h-screen">
         <div className="max-w-7xl mx-auto space-y-6">
           {successMessage && (
             <div className="fixed top-4 right-4 bg-(--brand-strong) text-white px-6 py-3 rounded-xl shadow-lg z-50 font-bold animate-in fade-in slide-in-from-top-4 duration-300">

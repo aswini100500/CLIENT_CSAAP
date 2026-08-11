@@ -510,7 +510,7 @@ const ExperienceCertificateManagement = () => {
   }, [newCertificate.startDate, newCertificate.endDate]);
 
   return (
-    <div className="crm-module-root app-shell font-sans">
+    <div className="erp-root app-shell font-sans">
       <div className="mx-auto max-w-7xl px-3 py-4 lg:px-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
           <div>

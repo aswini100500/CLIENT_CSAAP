@@ -219,7 +219,7 @@ const ArchivedTasks = () => {
   };
 
   return (
-    <div className="crm-module-root min-h-screen bg-(--bg-app) w-full p-4 flex flex-col">
+    <div className="erp-root min-h-screen bg-(--bg-app) w-full p-4 flex flex-col">
       <div className="max-w-7xl mx-auto w-full space-y-6 flex-1">
         <div className="space-y-4">
           <button

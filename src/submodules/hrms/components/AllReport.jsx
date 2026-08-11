@@ -30,7 +30,7 @@ export default function AllReport() {
   });
 
   return (
-    <div className="crm-module-root app-shell min-h-[calc(100vh-80px)] font-sans">
+    <div className="erp-root app-shell min-h-[calc(100vh-80px)] font-sans">
       <div className="mx-auto max-w-7xl px-3 py-4 lg:px-4">
         <div className="mb-4">
           <h1 className="app-title max-w-3xl">HRMS Advanced Reports</h1>
