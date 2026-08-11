@@ -49,12 +49,14 @@ const AttachementContractor = () => {
           onChange={(e) => setRemark(e.target.value)}
           className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full md:w-1/3"
         />
-        <button
-          onClick={handleFileUpload}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          <FaPlusCircle /> Upload
-        </button>
+        <div className="erp-root">
+          <button
+            onClick={handleFileUpload}
+            className="app-btn-primary flex items-center gap-2"
+          >
+            <FaPlusCircle /> Upload
+          </button>
+        </div>
       </div>
 
       <table className="min-w-full border border-gray-200 text-sm text-left">
@@ -75,7 +77,7 @@ const AttachementContractor = () => {
               <td className="px-4 py-2 border">{file.size}</td>
               <td className="px-4 py-2 border">{file.remark}</td>
               <td className="px-4 py-2 border text-center space-x-3">
-                <button className="text-blue-600 hover:text-blue-800">
+                <button className="text-green-600 hover:text-green-800">
                   <FaDownload />
                 </button>
                 <button

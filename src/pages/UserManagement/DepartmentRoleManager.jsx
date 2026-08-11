@@ -302,6 +302,7 @@ const DepartmentRoleManager = () => {
                       </span>
                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
+                          type="button"
                           onClick={() => handleEditDept(dept)}
                           className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                           title="Edit"
@@ -309,6 +310,7 @@ const DepartmentRoleManager = () => {
                           <Edit2 size={14} />
                         </button>
                         <button
+                          type="button"
                           onClick={() => handleDeleteDept(dept.id)}
                           className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
                           title="Delete"

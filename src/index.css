@@ -226,6 +226,7 @@
 
 /* 🎯 Page & Backdrop Base Styles */
 .erp-root,
+.crm-module-root,
 .app-modal-backdrop {
   background: var(--bg-app);
   color: var(--text-body);
@@ -233,6 +234,7 @@
 }
 
 .erp-root,
+.crm-module-root,
 .app-modal-backdrop,
 .app-floating {
 
@@ -268,17 +270,19 @@
   }
 
   .app-title {
+    font-family: var(--font-display);
     color: var(--text-strong);
     font-size: clamp(1.32rem, 1.12rem + 0.55vw, 1.62rem);
-    font-weight: 750;
+    font-weight: 600;
     line-height: 1.12;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.02em;
   }
 
   .app-heading {
+    font-family: var(--font-display);
     color: var(--text-strong);
     font-size: 1rem;
-    font-weight: 750;
+    font-weight: 600;
     line-height: 1.2;
     letter-spacing: -0.03em;
   }
@@ -344,7 +348,7 @@
   }
 
   .app-btn-primary {
-    background: linear-gradient(135deg, var(--brand), #00c853);
+    background: linear-gradient(135deg, var(--brand), #01c251);
     border: 1px solid transparent;
     border-radius: 14px;
     min-height: 44px;

@@ -148,17 +148,19 @@ const Compliances = () => {
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-200 space-y-8">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-blue-700 flex items-center gap-2">
-          <FileText className="w-6 h-6 text-blue-600" />
+        <h2 className="text-2xl font-semibold text-green-700 flex items-center gap-2">
+          <FileText className="w-6 h-6 text-green-600" />
           Contractor Compliances
         </h2>
-        <button
-          onClick={() => setShowForm((v) => !v)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
-        >
-          <PlusCircle className="w-4 h-4" />
-          {showForm ? "Close Form" : "Add Compliance"}
-        </button>
+        <div className="erp-root">
+          <button
+            onClick={() => setShowForm((v) => !v)}
+            className="app-btn-primary flex items-center gap-2"
+          >
+            <PlusCircle className="w-4 h-4" />
+            {showForm ? "Close Form" : "Add Compliance"}
+          </button>
+        </div>
       </div>
 
       {showForm && (
@@ -175,7 +177,7 @@ const Compliances = () => {
                 name="contractor_select"
                 value={formData.contractor_id}
                 onChange={handleFormChange}
-                className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="">-- Select Contractor --</option>
                 {contractors.map((c) => (
@@ -195,7 +197,7 @@ const Compliances = () => {
                   name={field.name}
                   value={formData[field.name]}
                   onChange={handleFormChange}
-                  className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
             ))}
@@ -207,7 +209,7 @@ const Compliances = () => {
                 name="billing_type"
                 value={formData.billing_type}
                 onChange={handleFormChange}
-                className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="Monthly">Monthly</option>
                 <option value="One-time">One-time</option>
@@ -223,7 +225,7 @@ const Compliances = () => {
                 name="narration"
                 value={formData.narration}
                 onChange={handleFormChange}
-                className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
             <div>
@@ -237,17 +239,17 @@ const Compliances = () => {
               />
             </div>
           </div>
-          <div className="flex justify-end gap-3 mt-4">
+          <div className="erp-root flex justify-end gap-3 mt-4">
             <button
               onClick={() => setShowForm(false)}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-100"
+              className="app-btn-secondary"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm disabled:opacity-50"
+              className="app-btn-primary"
             >
               {loading ? "Saving..." : "Save Compliance"}
             </button>
@@ -257,7 +259,7 @@ const Compliances = () => {
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-sm">
-          <thead className="bg-blue-50">
+          <thead className="bg-green-50 text-green-900">
             <tr>
               {[
                 "#",

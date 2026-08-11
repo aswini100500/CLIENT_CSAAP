@@ -671,24 +671,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
         },
       ],
     },
-    {
-      id: "support",
-      label: "Support",
-      icon: <HeadphonesIcon size={20} className="text-green-700" />,
-      path: "/support",
-    },
-    {
-      id: "meetings",
-      label: "Task & Meetings",
-      icon: <Calendar size={20} className="text-green-700" />,
-      path: "/meetings",
-    },
-    {
-      id: "feedback",
-      label: "Feedback",
-      icon: <MessageCircle size={20} className="text-green-700" />,
-      path: "/feedback",
-    },
+
     {
       id: "contact-us",
       label: "Contact Us",
@@ -745,32 +728,30 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
               const isItemActive = (isActive || checkActiveItem(item.path)) && item.path && item.path !== "#";
               const stackShadow = isInactiveFolder
                 ? {
-                    boxShadow:
-                      "0 3px 0 -1px #fff, 0 3px 0 0 #e2e8f0, 0 6px 0 -1px #f8fafc, 0 6px 0 0 #e2e8f080",
-                  }
+                  boxShadow:
+                    "0 3px 0 -1px #fff, 0 3px 0 0 #e2e8f0, 0 6px 0 -1px #f8fafc, 0 6px 0 0 #e2e8f080",
+                }
                 : {};
               return (
                 <>
                   <div
-                    className={`absolute inset-0 rounded-lg transition-all duration-200 ${
-                      isItemActive && !hasChildren
+                    className={`absolute inset-0 rounded-lg transition-all duration-200 ${isItemActive && !hasChildren
                         ? "bg-linear-to-r from-green-600 to-emerald-500 shadow-md shadow-green-100"
                         : isFolderExpanded
                           ? "bg-white shadow-sm ring-1 ring-slate-200"
                           : isInactiveFolder
                             ? "bg-white border border-slate-200"
                             : "bg-transparent group-hover:bg-slate-50"
-                    }`}
+                      }`}
                     style={stackShadow}
                   />
                   <span
-                    className={`relative z-10 transition-colors duration-200 ${
-                      isItemActive && !hasChildren
+                    className={`relative z-10 transition-colors duration-200 ${isItemActive && !hasChildren
                         ? "text-white [&_svg]:text-white!"
                         : isFolderExpanded
                           ? "[&_svg]:text-green-600!"
                           : "text-slate-500 group-hover:text-green-600"
-                    }`}
+                      }`}
                   >
                     {item.icon ? (
                       React.cloneElement(item.icon, {
@@ -806,11 +787,10 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           <div className="space-y-1">
             <button
               onClick={() => toggleMenu(item.id)}
-              className={`w-full flex items-center justify-between transition-all duration-200 py-2 outline-none rounded-lg border border-transparent ${paddingLeft} ${textSize} ${
-                isExpanded
+              className={`w-full flex items-center justify-between transition-all duration-200 py-2 outline-none rounded-lg border border-transparent ${paddingLeft} ${textSize} ${isExpanded
                   ? "bg-slate-100 text-slate-900 font-semibold shadow-sm border-slate-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:border-slate-100"
-              }`}
+                }`}
             >
               <div className="flex items-center min-w-0">
                 {item.icon && (
@@ -836,11 +816,10 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             </button>
 
             <div
-              className={`transition-all duration-300 ease-out overflow-hidden ${
-                isExpanded
+              className={`transition-all duration-300 ease-out overflow-hidden ${isExpanded
                   ? "max-h-500 opacity-100 mt-1 mb-2 bg-slate-50/50 rounded-lg p-0.5"
                   : "max-h-0 opacity-0"
-              }`}
+                }`}
             >
               <div className="ml-3.5 border-l border-slate-100 pl-1 py-1 space-y-1">
                 {item.children.map((child) => renderItem(child, level + 1))}
@@ -857,11 +836,10 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             }}
             className={({ isActive }) => {
               const isItemActive = (isActive || checkActiveItem(item.path)) && item.path && item.path !== "#";
-              return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${
-                isItemActive
+              return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${isItemActive
                   ? "bg-linear-to-r from-green-600 to-emerald-500 text-white font-medium shadow-md shadow-green-100 border-green-500/50"
                   : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:translate-x-1 hover:border-slate-100"
-              }`;
+                }`;
             }}
           >
             {({ isActive }) => {

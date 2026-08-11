@@ -1,4 +1,16 @@
 import React, { useState } from "react";
+import {
+  User,
+  BarChart2,
+  CheckCircle,
+  Clock,
+  XCircle,
+  Search,
+  Calendar,
+  FileText,
+  Lightbulb,
+  Hourglass,
+} from "lucide-react";
 
 const ApprovalHistoryPage = () => {
   const [approvalData, setApprovalData] = useState({
@@ -90,17 +102,17 @@ const ApprovalHistoryPage = () => {
     approved: {
       label: "Approved",
       color: "bg-green-100 text-green-800 border-green-200",
-      icon: "✅",
+      icon: <CheckCircle className="w-3.5 h-3.5 text-green-600" />,
     },
     pending: {
       label: "Pending",
       color: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      icon: "⏳",
+      icon: <Clock className="w-3.5 h-3.5 text-yellow-600" />,
     },
     rejected: {
       label: "Rejected",
       color: "bg-red-100 text-red-800 border-red-200",
-      icon: "❌",
+      icon: <XCircle className="w-3.5 h-3.5 text-red-600" />,
     },
   };
 
@@ -142,7 +154,7 @@ const ApprovalHistoryPage = () => {
   const getStatusBadge = (status, priority = null) => (
     <div className="flex items-center gap-2">
       <span
-        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusConfig[status].color}`}
+        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusConfig[status].color}`}
       >
         {statusConfig[status].icon} {statusConfig[status].label}
       </span>
@@ -165,7 +177,7 @@ const ApprovalHistoryPage = () => {
           <p className="text-sm font-medium text-gray-600">{title}</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">{count}</p>
         </div>
-        <span className="text-2xl">{icon}</span>
+        <div>{icon}</div>
       </div>
     </div>
   );
@@ -186,26 +198,26 @@ const ApprovalHistoryPage = () => {
           <StatCard
             title="Total Approvals"
             count={allItems.length}
-            color="border-blue-500"
-            icon="📊"
+            color="border-green-500"
+            icon={<BarChart2 className="w-6 h-6 text-green-600" />}
           />
           <StatCard
             title="Approved"
             count={approvalData.approved.length}
-            color="border-green-500"
-            icon="✅"
+            color="border-emerald-500"
+            icon={<CheckCircle className="w-6 h-6 text-emerald-600" />}
           />
           <StatCard
             title="Pending"
             count={approvalData.pending.length}
             color="border-yellow-500"
-            icon="⏳"
+            icon={<Clock className="w-6 h-6 text-yellow-600" />}
           />
           <StatCard
             title="Rejected"
             count={approvalData.rejected.length}
             color="border-red-500"
-            icon="❌"
+            icon={<XCircle className="w-6 h-6 text-red-600" />}
           />
         </div>
 
@@ -218,10 +230,10 @@ const ApprovalHistoryPage = () => {
                   placeholder="Search by name, profile, or action..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  🔍
+                  <Search size={18} />
                 </span>
               </div>
             </div>
@@ -250,7 +262,7 @@ const ApprovalHistoryPage = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeTab === tab.id
-                      ? "bg-blue-600 text-white"
+                      ? "bg-green-600 text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
@@ -278,7 +290,7 @@ const ApprovalHistoryPage = () => {
                   >
                     <div className="shrink-0">
                       <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-lg">
-                        {item.avatar}
+                        <User className="w-5 h-5 text-gray-500" />
                       </div>
                     </div>
 
@@ -302,20 +314,34 @@ const ApprovalHistoryPage = () => {
                       </p>
 
                       <div className="flex flex-wrap gap-4 text-xs text-gray-500">
-                        {item.dateTime && <span>🕒 {item.dateTime}</span>}
-                        {item.duration && <span>⏱️ {item.duration}</span>}
+                        {item.dateTime && (
+                          <span className="flex items-center gap-1">
+                            <Clock size={13} /> {item.dateTime}
+                          </span>
+                        )}
+                        {item.duration && (
+                          <span className="flex items-center gap-1">
+                            <Hourglass size={13} /> {item.duration}
+                          </span>
+                        )}
                         {item.assignedDate && (
-                          <span>📅 Assigned: {item.assignedDate}</span>
+                          <span className="flex items-center gap-1">
+                            <Calendar size={13} /> Assigned: {item.assignedDate}
+                          </span>
                         )}
                         {item.expectedDate && (
-                          <span>🎯 Expected: {item.expectedDate}</span>
+                          <span className="flex items-center gap-1">
+                            <Calendar size={13} /> Expected: {item.expectedDate}
+                          </span>
                         )}
-                        <span>👤 Created by: {item.createdBy}</span>
+                        <span className="flex items-center gap-1">
+                          <User size={13} /> Created by: {item.createdBy}
+                        </span>
                       </div>
 
                       {item.remarks && (
-                        <div className="mt-2 p-2 bg-blue-50 rounded border border-blue-200">
-                          <p className="text-xs text-blue-800">
+                        <div className="mt-2 p-2 bg-green-50 rounded border border-green-200">
+                          <p className="text-xs text-green-800">
                             <span className="font-medium">Remarks:</span>{" "}
                             {item.remarks}
                           </p>
@@ -338,7 +364,7 @@ const ApprovalHistoryPage = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="text-6xl mb-4">📝</div>
+                <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500 text-lg mb-2">
                   No approval records found
                 </p>
@@ -352,14 +378,14 @@ const ApprovalHistoryPage = () => {
           </div>
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
           <div className="flex items-start space-x-3">
-            <span className="text-blue-500 text-xl">💡</span>
+            <Lightbulb className="text-green-600 w-5 h-5 mt-0.5 shrink-0" />
             <div>
-              <h3 className="font-semibold text-blue-900 mb-1">
+              <h3 className="font-semibold text-green-900 mb-1">
                 Approval Process Info
               </h3>
-              <p className="text-blue-800 text-sm">
+              <p className="text-green-800 text-sm">
                 The approval workflow follows a sequential process. Each stage
                 must be completed before moving to the next. Pending approvals
                 will be automatically reminded after 48 hours.

@@ -1207,7 +1207,7 @@ const Bill = () => {
                                                 handleViewAttachment(att)
                                               }
                                               title="View document"
-                                              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-750 text-blue-600 dark:text-blue-400 rounded"
+                                              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-750 text-green-600 dark:text-green-400 rounded"
                                             >
                                               <Eye size={14} />
                                             </button>
@@ -1254,7 +1254,7 @@ const Bill = () => {
                                     {item.status !== "approved" && (
                                       <button
                                         onClick={() => handleApproveItem(item)}
-                                        className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                                        className="app-btn-primary flex items-center gap-1.5"
                                       >
                                         <UserCheck size={16} /> Approve Item
                                       </button>
@@ -1263,7 +1263,7 @@ const Bill = () => {
                                       onClick={() =>
                                         handleSaveItemChanges(item)
                                       }
-                                      className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                                      className="app-btn-secondary flex items-center gap-1.5"
                                     >
                                       <Save size={16} /> Save Changes
                                     </button>
@@ -1298,7 +1298,7 @@ const Bill = () => {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <FileText className="h-5 w-5 text-blue-600 shrink-0" />
+                        <FileText className="h-5 w-5 text-green-600 shrink-0" />
                         <span className="font-medium text-gray-800 dark:text-white">
                           {item.name}
                         </span>
@@ -1337,7 +1337,7 @@ const Bill = () => {
                             </label>
                             <button
                               onClick={() => addContractor(item.id)}
-                              className="flex items-center gap-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs"
+                              className="app-btn-primary flex items-center gap-1.5 !min-h-[32px] !py-1 !px-3 text-xs"
                             >
                               <Plus size={12} />
                               Add Contractor
@@ -1416,10 +1416,10 @@ const Bill = () => {
                                     {field.key === "file" ? (
                                       <div className="flex-1">
                                         {field.value ? (
-                                          <div className="flex items-center justify-between p-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                                          <div className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                                             <div className="flex items-center gap-2">
-                                              <Paperclip className="h-4 w-4 text-blue-600" />
-                                              <span className="text-sm text-blue-700 dark:text-blue-300 truncate max-w-37.5">
+                                              <Paperclip className="h-4 w-4 text-green-600" />
+                                              <span className="text-sm text-green-700 dark:text-green-300 truncate max-w-37.5">
                                                 {field.value}
                                               </span>
                                             </div>
@@ -1487,7 +1487,7 @@ const Bill = () => {
                                               fieldIndex,
                                             )
                                           }
-                                          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                         />
                                         {(field.key === "quantity" ||
                                           field.key.startsWith("custom_")) && (
@@ -1501,7 +1501,7 @@ const Bill = () => {
                                                 fieldIndex,
                                               )
                                             }
-                                            className="px-2 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                                            className="px-2 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                                           >
                                             <option value="unit">unit</option>
                                             <option value="m²">m²</option>

@@ -29,22 +29,22 @@ const ProjectBudgetTabs = () => {
   const activeContent = tabs.find((tab) => tab.id === activeTab)?.component;
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-6 bg-white shadow rounded-md">
-      <div className="flex border-b border-gray-300 bg-gray-100">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 text-sm font-medium border-r border-gray-300
-              ${
-                activeTab === tab.id
-                  ? "bg-white text-blue-600 font-semibold border-b-2 border-blue-600"
-                  : "text-gray-600 hover:text-blue-600"
-              }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+    <div className="w-full max-w-6xl mx-auto mt-6 bg-white shadow rounded-md overflow-hidden">
+      <div className="bg-gray-200">
+        <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${activeTab === tab.id
+                  ? "bg-white text-green-700 border-t-2 border-green-600 font-semibold"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-white"
+                }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="p-6">{activeContent}</div>

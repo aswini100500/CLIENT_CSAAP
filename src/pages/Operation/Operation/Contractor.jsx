@@ -284,13 +284,13 @@ const Contractor = () => {
           <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
             {navigationItems.map((item) => (
               <button
+                type="button"
                 key={item}
                 onClick={() => setActiveTab(item)}
-                className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
-                  activeTab === item
-                    ? "bg-white text-blue-700 border-t-2 border-blue-500"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-white"
-                }`}
+                className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${activeTab === item
+                  ? "bg-white text-green-800 border-t-2 border-green-600 font-semibold"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-white"
+                  }`}
               >
                 {item}
               </button>
@@ -641,18 +641,18 @@ const Contractor = () => {
                     <span className="text-red-500">*</span> indicates required
                     fields
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="erp-root flex flex-col sm:flex-row gap-3">
                     <button
                       type="button"
                       onClick={handleCancel}
-                      className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-medium"
+                      className="app-btn-secondary"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={loading}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-medium flex items-center gap-2 disabled:opacity-50"
+                      className="app-btn-primary flex items-center gap-2"
                     >
                       <FaCheck className="w-4 h-4" />
                       {loading ? "Submitting..." : "Submit"}

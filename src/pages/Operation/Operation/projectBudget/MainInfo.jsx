@@ -449,7 +449,7 @@ const MainInfo = () => {
   return (
     <div className="max-w-7xl mx-auto p-8 bg-white dark:bg-gray-900 shadow-lg rounded-2xl">
       <div className="flex items-center gap-2 mb-6">
-        <ClipboardList className="text-blue-600 w-6 h-6" />
+        <ClipboardList className="text-green-600 w-6 h-6" />
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
           Project Budget Details
         </h2>
@@ -464,7 +464,7 @@ const MainInfo = () => {
             name="projectName"
             value={formData.projectName}
             onChange={handleChange}
-            className="w-full border border-gray-300 dark:border-gray-700 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-gray-800 dark:text-gray-100"
+            className="w-full border border-gray-300 dark:border-gray-700 p-2 rounded-lg focus:ring-2 focus:ring-green-500 outline-none bg-white dark:bg-gray-800 dark:text-gray-100"
             disabled={loading}
           >
             <option value="">-- Select Project --</option>
@@ -498,7 +498,7 @@ const MainInfo = () => {
               name="documentSubject"
               value={formData.documentSubject}
               onChange={handleChange}
-              className="w-full border border-gray-300 dark:border-gray-700 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+              className="w-full border border-gray-300 dark:border-gray-700 p-2 rounded-lg focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-800 dark:text-gray-100"
               placeholder="Enter document subject"
             />
           </div>
@@ -512,7 +512,7 @@ const MainInfo = () => {
               name="documentDate"
               value={formData.documentDate}
               onChange={handleChange}
-              className="w-full border border-gray-300 dark:border-gray-700 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100"
+              className="w-full border border-gray-300 dark:border-gray-700 p-2 rounded-lg focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-800 dark:text-gray-100"
             />
           </div>
 
@@ -538,7 +538,7 @@ const MainInfo = () => {
             <button
               type="button"
               onClick={addLandArea}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg flex items-center gap-2 hover:bg-green-700 transition shadow-md"
+              className="app-btn-primary flex items-center gap-2"
             >
               <Plus size={18} /> Add Land Area
             </button>
@@ -693,7 +693,7 @@ const MainInfo = () => {
               <button
                 type="button"
                 onClick={addLandArea}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg flex items-center gap-2 hover:bg-green-700 transition mx-auto"
+                className="app-btn-primary flex items-center gap-2 mx-auto"
               >
                 <Plus size={18} /> Add Your First Land Area
               </button>
@@ -704,13 +704,13 @@ const MainInfo = () => {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-gray-100">
-              <Building2 className="w-5 h-5 text-blue-600" /> Construction Area
+              <Building2 className="w-5 h-5 text-green-600" /> Construction Area
               Details
             </h3>
             <button
               type="button"
               onClick={addConstructionArea}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
+              className="app-btn-primary flex items-center gap-2"
             >
               <Plus size={18} /> Add Construction Area
             </button>
@@ -909,12 +909,12 @@ const MainInfo = () => {
         <div>
           <div className="flex items-center justify-between">
             <h3 className="flex  items-center gap-2 text-lg font-semibold mt-8 mb-3 text-gray-800 dark:text-gray-100">
-              <FileText className="w-5 h-5 text-blue-600" /> Common Facilities
+              <FileText className="w-5 h-5 text-green-600" /> Common Facilities
             </h3>
             <button
               type="button"
               onClick={addFacility}
-              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
+              className="mt-3 app-btn-primary flex items-center gap-2"
             >
               <Plus size={18} /> Add Facility
             </button>
@@ -969,7 +969,7 @@ const MainInfo = () => {
             <button
               type="button"
               onClick={addSaleableArea}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg flex items-center gap-2 hover:bg-green-700 transition"
+              className="app-btn-primary flex items-center gap-2"
             >
               <Plus size={18} /> Add Saleable Area
             </button>
@@ -1172,14 +1172,14 @@ const MainInfo = () => {
         <div className="flex gap-4">
           <button
             type="submit"
-            className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="app-btn-primary flex items-center gap-2"
           >
             <Save size={18} /> Submit
           </button>
           <button
             type="button"
             onClick={downloadPDF}
-            className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            className="app-btn-secondary flex items-center gap-2"
           >
             <Download size={18} /> Download PDF
           </button>

@@ -65,13 +65,13 @@ const WorkOrder = () => {
         <div className="max-w-7xl mx-auto flex space-x-1 px-6">
           {navigationItems.map((tab) => (
             <button
+              type="button"
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-3 text-sm font-medium rounded-t-lg ${
-                activeTab === tab
-                  ? "bg-white text-blue-700 border-t-2 border-blue-600"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
+              className={`px-4 py-3 text-sm font-medium rounded-t-lg ${activeTab === tab
+                ? "bg-white text-green-700 border-t-2 border-green-600"
+                : "text-gray-600 hover:bg-gray-100"
+                }`}
             >
               {tab}
             </button>
