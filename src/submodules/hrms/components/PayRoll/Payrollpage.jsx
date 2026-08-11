@@ -33,7 +33,7 @@ import PayrollConfigModal from "./PayrollConfigModal";
 import PayrollEditModal from "./PayrollEditModal";
 import PayrollSkeleton from "./PayrollSkeleton";
 import PayrollStatusBadge from "./PayrollStatusBadge";
-import { formatINR, getUiPresentDays } from "./payrollUtils";
+import { formatINR, getUiPresentDays, mapPayslipPayload } from "./payrollUtils";
 
 const MONTH_NAMES = [
   "January",
@@ -1508,7 +1508,12 @@ const PayrollPage = () => {
                                 <button
                                   className="app-btn-secondary text-(--brand) hover:text-(--brand-strong) border-(--border-soft) text-xs min-h-8 h-8 flex items-center gap-1"
                                   onClick={() => {
-                                    downloadIndividualPayslip(record, payroll);
+                                    const { employeeRecord, payrollRecord } =
+                                      mapPayslipPayload(record);
+                                    downloadIndividualPayslip(
+                                      employeeRecord,
+                                      payrollRecord,
+                                    );
                                     showSuccess("Payslip downloaded!");
                                   }}
                                 >
