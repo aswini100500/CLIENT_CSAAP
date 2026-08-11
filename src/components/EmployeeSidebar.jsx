@@ -888,21 +888,21 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                 <>
                   <div
                     className={`absolute inset-0 rounded-lg transition-all duration-200 ${isItemActive && !hasChildren
-                        ? "bg-linear-to-r from-green-600 to-emerald-500 shadow-md shadow-green-100"
-                        : isFolderExpanded
-                          ? "bg-white shadow-sm ring-1 ring-slate-200"
-                          : isInactiveFolder
-                            ? "bg-white border border-slate-200"
-                            : "bg-transparent group-hover:bg-slate-50"
+                      ? "bg-linear-to-r from-green-600 to-emerald-500 shadow-md shadow-green-100"
+                      : isFolderExpanded
+                        ? "bg-white shadow-sm ring-1 ring-slate-200"
+                        : isInactiveFolder
+                          ? "bg-white border border-slate-200"
+                          : "bg-transparent group-hover:bg-slate-50"
                       }`}
                     style={stackShadow}
                   />
                   <span
                     className={`relative z-10 transition-colors duration-200 ${isItemActive && !hasChildren
-                        ? "text-white [&_svg]:text-white!"
-                        : isFolderExpanded
-                          ? "[&_svg]:text-green-600!"
-                          : "text-slate-500 group-hover:text-green-600"
+                      ? "text-white [&_svg]:text-white!"
+                      : isFolderExpanded
+                        ? "[&_svg]:text-green-600!"
+                        : "text-slate-500 group-hover:text-green-600"
                       }`}
                   >
                     {item.icon ? (
@@ -912,8 +912,8 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                     ) : (
                       <div
                         className={`flex items-center justify-center font-bold uppercase ${level > 0
-                            ? "w-5 h-5 text-[11px]"
-                            : "size-6  text-[13px]"
+                          ? "w-5 h-5 text-[11px]"
+                          : "size-6  text-[13px]"
                           }`}
                       >
                         {item.label.charAt(0)}
@@ -943,16 +943,16 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
             <button
               onClick={() => toggleMenu(item.id)}
               className={`w-full flex items-center justify-between transition-all duration-200 py-2 outline-none rounded-lg border border-transparent ${paddingLeft} ${textSize} ${isExpanded
-                  ? "bg-slate-100 text-slate-900 font-semibold shadow-sm border-slate-100"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:border-slate-100"
+                ? "bg-slate-100 text-slate-900 font-semibold shadow-sm border-slate-100"
+                : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:border-slate-100"
                 }`}
             >
               <div className="flex items-center min-w-0">
                 {item.icon && (
                   <span
                     className={`mr-3 transition-colors duration-200 shrink-0 ${isExpanded
-                        ? "text-green-600"
-                        : "text-slate-400 group-hover:text-green-600"
+                      ? "text-green-600"
+                      : "text-slate-400 group-hover:text-green-600"
                       }`}
                   >
                     {React.cloneElement(item.icon, {
@@ -977,8 +977,8 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
             <div
               className={`transition-all duration-300 ease-out overflow-hidden ${isExpanded
-                  ? "max-h-500 opacity-100 mt-1 mb-2 bg-slate-50/50 rounded-lg p-0.5"
-                  : "max-h-0 opacity-0"
+                ? "max-h-500 opacity-100 mt-1 mb-2 bg-slate-50/50 rounded-lg p-0.5"
+                : "max-h-0 opacity-0"
                 }`}
             >
               <div className="ml-3.5 border-l border-slate-100 pl-1 py-1 space-y-1">
@@ -997,8 +997,8 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
             className={({ isActive }) => {
               const isItemActive = isActive && item.path && item.path !== "#";
               return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${isItemActive
-                  ? "bg-linear-to-r from-green-600 to-emerald-500 text-white font-medium shadow-md shadow-green-100 border-green-500/50"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:translate-x-1 hover:border-slate-100"
+                ? "bg-linear-to-r from-green-600 to-emerald-500 text-white font-medium shadow-md shadow-green-100 border-green-500/50"
+                : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:translate-x-1 hover:border-slate-100"
                 }`;
             }}
           >
@@ -1009,8 +1009,8 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                   {item.icon && (
                     <span
                       className={`mr-3 transition-colors duration-200 shrink-0 ${isItemActive
-                          ? "text-white"
-                          : "text-slate-400 group-hover:text-green-600"
+                        ? "text-white"
+                        : "text-slate-400 group-hover:text-green-600"
                         }`}
                     >
                       {React.cloneElement(item.icon, {
@@ -1101,7 +1101,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                   console.error("Logo failed to load in expanded mode");
                   setLogoError(true);
                 }}
-                onLoad={() =>}
               />
             ) : (
               <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0">
@@ -1129,6 +1128,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       <div className="border-t border-slate-100 p-3 shrink-0">
         {isCollapsed ? (
           <button
+            type="button"
             onClick={handleLogout}
             onMouseEnter={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();

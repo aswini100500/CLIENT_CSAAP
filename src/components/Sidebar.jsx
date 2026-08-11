@@ -753,7 +753,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
                   console.error("Logo failed to load in expanded mode");
                   setLogoError(true);
                 }}
-                onLoad={() =>}
               />
             ) : (
               <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0">
