@@ -82,6 +82,17 @@ export function toIndiaDateTime(value) {
   return parseIndiaDateTime(datePart, timePart);
 }
 
+export function parseIndiaDateTimeString(str) {
+  if (!str) return null;
+  const normalized = String(str).trim().replace(" ", "T");
+  const d = new Date(
+    normalized.includes("+") || normalized.includes("Z")
+      ? normalized
+      : `${normalized}${INDIA_OFFSET}`
+  );
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
 export function calculateAttendanceDuration(checkIn, checkOut) {
   const checkInDate = toIndiaDateTime(checkIn);
   const checkOutDate = toIndiaDateTime(checkOut);
@@ -95,3 +106,14 @@ export function calculateAttendanceDuration(checkIn, checkOut) {
   const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
   return `${hours}h ${minutes}m`;
 }
+
+export function formatBreakDuration(seconds) {
+  if (!seconds || seconds <= 0) return "0m";
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  if (hrs > 0) return `${hrs}h ${mins}m`;
+  if (mins > 0) return `${mins}m ${secs}s`;
+  return `${secs}s`;
+}
+
