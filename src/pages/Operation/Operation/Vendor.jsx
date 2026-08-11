@@ -819,11 +819,10 @@ const Vendor = () => {
         <React.Fragment key={tab.id}>
           <div className="flex items-center">
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                index <= currentTabIndex
-                  ? "bg-blue-600 text-white"
+              className={`w-8 h-8 rounded-full flex items-center justify-center ${index <= currentTabIndex
+                  ? "bg-green-600 text-white"
                   : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
-              }`}
+                }`}
             >
               {tabCompletion[tab.id] && index <= currentTabIndex ? (
                 <FaCheckCircle className="text-white" />
@@ -832,22 +831,20 @@ const Vendor = () => {
               )}
             </div>
             <span
-              className={`ml-2 text-sm hidden sm:inline ${
-                index === currentTabIndex
-                  ? "text-blue-600 font-semibold"
+              className={`ml-2 text-sm hidden sm:inline ${index === currentTabIndex
+                  ? "text-green-800 font-semibold"
                   : "text-gray-600 dark:text-gray-400"
-              }`}
+                }`}
             >
               {tab.label}
             </span>
           </div>
           {index < tabs.length - 1 && (
             <div
-              className={`flex-1 h-0.5 mx-4 ${
-                index < currentTabIndex
-                  ? "bg-blue-600"
+              className={`flex-1 h-0.5 mx-4 ${index < currentTabIndex
+                  ? "bg-green-600"
                   : "bg-gray-200 dark:bg-gray-700"
-              }`}
+                }`}
             />
           )}
         </React.Fragment>
@@ -861,13 +858,16 @@ const Vendor = () => {
         <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
           Vendors List
         </h2>
-        <button
-          onClick={() => setViewMode("form")}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
-        >
-          <FaPlus />
-          <span>Add New Vendor</span>
-        </button>
+        <div className="erp-root">
+          <button
+            type="button"
+            onClick={() => setViewMode("form")}
+            className="app-btn-primary flex items-center space-x-2"
+          >
+            <FaPlus />
+            <span>Add New Vendor</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
@@ -984,10 +984,10 @@ const Vendor = () => {
               : "Get started by creating a new vendor."}
           </p>
           {!vendorSearchTerm && (
-            <div className="mt-6">
+            <div className="mt-6 erp-root">
               <button
                 onClick={() => setViewMode("form")}
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="app-btn-primary inline-flex items-center"
               >
                 <FaPlus className="-ml-1 mr-2 h-5 w-5" />
                 New Vendor
@@ -1034,11 +1034,10 @@ const Vendor = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-4 border-b-2 font-medium text-sm flex items-center space-x-2 ${
-                  activeTab === tab.id
-                    ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                    : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                }`}
+                className={`py-4 px-4 border-b-2 font-medium text-sm flex items-center space-x-2 ${activeTab === tab.id
+                    ? "border-green-600 text-green-800 font-semibold"
+                    : "border-transparent text-gray-500 hover:text-gray-900"
+                  }`}
               >
                 <tab.icon />
                 <span>{tab.label}</span>
@@ -1587,13 +1586,15 @@ const Vendor = () => {
                   </tbody>
                 </table>
 
-                <button
-                  type="button"
-                  onClick={addMachine}
-                  className="mt-3 px-4 py-2 bg-blue-600 text-white rounded flex items-center gap-2 hover:bg-blue-700"
-                >
-                  <FaPlus /> Add Machine
-                </button>
+                <div className="erp-root">
+                  <button
+                    type="button"
+                    onClick={addMachine}
+                    className="app-btn-primary flex items-center gap-2 mt-3"
+                  >
+                    <FaPlus /> Add Machine
+                  </button>
+                </div>
 
                 <hr className="my-6 border-gray-300 dark:border-gray-600" />
 
@@ -1839,11 +1840,10 @@ const Vendor = () => {
                   <div className="space-y-6">
                     <div className="bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 p-6">
                       <div
-                        className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                          dragActive
-                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                        className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${dragActive
+                            ? "border-green-500 bg-green-50"
                             : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
-                        }`}
+                          }`}
                         onDragEnter={handleDrag}
                         onDragLeave={handleDrag}
                         onDragOver={handleDrag}
@@ -1866,12 +1866,14 @@ const Vendor = () => {
                             className="hidden"
                             id="file-upload"
                           />
-                          <label
-                            htmlFor="file-upload"
-                            className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 cursor-pointer transition-colors"
-                          >
-                            Choose File
-                          </label>
+                          <div className="erp-root">
+                            <label
+                              htmlFor="file-upload"
+                              className="app-btn-primary cursor-pointer inline-block"
+                            >
+                              Choose File
+                            </label>
+                          </div>
                         </div>
                       </div>
 
@@ -1913,7 +1915,7 @@ const Vendor = () => {
                               </div>
                               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                 <div
-                                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
                                   style={{ width: `${uploadProgress}%` }}
                                 ></div>
                               </div>
@@ -1929,13 +1931,15 @@ const Vendor = () => {
                               className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                               disabled={isUploading}
                             />
-                            <button
-                              onClick={handleUpload}
-                              disabled={isUploading || !file || !remark.trim()}
-                              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-                            >
-                              {isUploading ? "Uploading..." : "Upload"}
-                            </button>
+                            <div className="erp-root">
+                              <button
+                                onClick={handleUpload}
+                                disabled={isUploading || !file || !remark.trim()}
+                                className="app-btn-primary"
+                              >
+                                {isUploading ? "Uploading..." : "Upload"}
+                              </button>
+                            </div>
                           </div>
                         </div>
                       )}
@@ -2071,51 +2075,50 @@ const Vendor = () => {
                 <button
                   onClick={handlePrevious}
                   disabled={currentTabIndex === 0}
-                  className={`px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center space-x-2 ${
-                    currentTabIndex === 0
+                  className={`px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center space-x-2 ${currentTabIndex === 0
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
-                  }`}
+                    }`}
                 >
                   <FaArrowLeft />
                   <span>Previous</span>
                 </button>
               </div>
 
-              <div className="flex space-x-4">
+              <div className="erp-root flex space-x-4">
                 <button
                   onClick={handleCancel}
-                  className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className="app-btn-secondary"
                 >
-                  <FaTimes />
-                  <span>Cancel</span>
+                  <FaTimes className="inline mr-2" />
+                  Cancel
                 </button>
 
                 {currentTabIndex === tabs.length - 1 ? (
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="px-8 py-2 bg-green-600 text-white rounded-lg flex items-center space-x-2 hover:bg-green-700 disabled:bg-green-400"
+                    className="app-btn-primary disabled:opacity-50"
                   >
                     {saving ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white inline-block mr-2"></div>
                         <span>Saving...</span>
                       </>
                     ) : (
                       <>
-                        <FaSave />
-                        <span>Save Vendor</span>
+                        <FaSave className="inline mr-2" />
+                        Save Vendor
                       </>
                     )}
                   </button>
                 ) : (
                   <button
                     onClick={handleNext}
-                    className="px-8 py-2 bg-blue-600 text-white rounded-lg flex items-center space-x-2 hover:bg-blue-700"
+                    className="app-btn-primary"
                   >
                     <span>Next</span>
-                    <FaArrowRight />
+                    <FaArrowRight className="inline ml-2" />
                   </button>
                 )}
               </div>
