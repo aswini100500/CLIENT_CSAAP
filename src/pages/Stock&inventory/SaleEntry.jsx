@@ -4,6 +4,7 @@ import useSWR, { mutate } from "swr";
 import { getAuthToken } from "../../store/authSession";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Plus, History } from "lucide-react";
 import SaleHistory from "./SaleHistory";
 
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
@@ -427,41 +428,41 @@ const SaleEntry = () => {
       return (
         <div className="bg-white rounded-2xl shadow-xl p-8 flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading master data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading master data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div className="bg-linear-to-r from-green-600 to-emerald-700 px-8 py-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-white">
+              New Sale Transaction
+            </h2>
+            <p className="text-green-100 mt-1">
+              Fill in the details below to create a new sale
+            </p>
+          </div>
+          <div className="bg-white/20 rounded-lg px-4 py-2">
+            <span className="text-white font-semibold">
+              #{Date.now().toString().slice(-6)}
+            </span>
           </div>
         </div>
-      );
-    }
+      </div>
 
-    return (
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="bg-linear-to-r from-blue-600 to-indigo-700 px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-white">
-                New Sale Transaction
-              </h2>
-              <p className="text-blue-100 mt-1">
-                Fill in the details below to create a new sale
-              </p>
-            </div>
-            <div className="bg-white/20 rounded-lg px-4 py-2">
-              <span className="text-white font-semibold">
-                #{Date.now().toString().slice(-6)}
-              </span>
-            </div>
+      <form onSubmit={handleSaleSubmit} className="p-8">
+        <div className="mb-12">
+          <div className="flex items-center mb-6">
+            <div className="w-3 h-8 bg-green-600 rounded-full mr-4"></div>
+            <h3 className="text-xl font-bold text-gray-800">
+              Customer Information
+            </h3>
           </div>
-        </div>
-
-        <form onSubmit={handleSaleSubmit} className="p-8">
-          <div className="mb-12">
-            <div className="flex items-center mb-6">
-              <div className="w-3 h-8 bg-blue-600 rounded-full mr-4"></div>
-              <h3 className="text-xl font-bold text-gray-800">
-                Customer Information
-              </h3>
-            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {[
@@ -901,34 +902,19 @@ const SaleEntry = () => {
             </div>
           </div>
 
-          <div className="flex justify-end pt-8 border-t border-gray-200">
+          <div className="erp-root flex justify-end pt-8 border-t border-gray-200">
             <button
               type="submit"
               disabled={loading}
-              className="bg-linear-to-r from-green-600 to-emerald-600 text-white px-12 py-4 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="app-btn-primary"
             >
               {loading ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                   Processing...
                 </>
               ) : (
-                <>
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Complete Sale
-                </>
+                "Save Sale Entry"
               )}
             </button>
           </div>
@@ -938,7 +924,7 @@ const SaleEntry = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-8 px-4">
+    <div className="min-h-screen bg-linear-to-br from-green-50/50 to-emerald-100/30 py-8 px-4">
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -962,60 +948,32 @@ const SaleEntry = () => {
           </p>
         </div>
 
-        <div className="mb-8">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8">
-              <button
-                onClick={() => setActiveTab("saleEntry")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "saleEntry"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                  Sale Entry
-                </div>
-              </button>
-              <button
-                onClick={() => setActiveTab("saleHistory")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "saleHistory"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                    />
-                  </svg>
-                  Sale History
-                </div>
-              </button>
-            </nav>
+        <div className="bg-gray-100/90 border-b border-gray-200/80 pt-2.5 mb-6">
+          <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
+            <button
+              type="button"
+              onClick={() => setActiveTab("saleEntry")}
+              className={`px-5 py-3 text-sm font-medium rounded-t-xl transition-all duration-200 flex items-center ${
+                activeTab === "saleEntry"
+                  ? "bg-white text-green-700 border-t-2 border-green-600 font-semibold shadow-xs"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-white/80"
+              }`}
+            >
+              <Plus className="w-4 h-4 text-green-600 mr-2" />
+              Sale Entry
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("saleHistory")}
+              className={`px-5 py-3 text-sm font-medium rounded-t-xl transition-all duration-200 flex items-center ${
+                activeTab === "saleHistory"
+                  ? "bg-white text-green-700 border-t-2 border-green-600 font-semibold shadow-xs"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-white/80"
+              }`}
+            >
+              <History className="w-4 h-4 text-green-600 mr-2" />
+              Sale History
+            </button>
           </div>
         </div>
 

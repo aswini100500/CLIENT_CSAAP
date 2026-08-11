@@ -215,7 +215,7 @@ const PurchaseLedger = () => {
     return (
       <div className="p-6 bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading purchase ledger...</p>
         </div>
       </div>
@@ -330,7 +330,7 @@ const PurchaseLedger = () => {
           <div className="flex items-end space-x-2">
             <button
               onClick={handleApplyFilters}
-              className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center"
+              className="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center"
             >
               <Filter size={18} className="mr-2" />
               Apply Filters
@@ -351,7 +351,7 @@ const PurchaseLedger = () => {
               setFromDate(dateOptions.lastWeek);
               setToDate(dateOptions.today);
             }}
-            className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
+            className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-md hover:bg-green-200"
           >
             Last Week
           </button>
@@ -360,7 +360,7 @@ const PurchaseLedger = () => {
               setFromDate(dateOptions.lastMonth);
               setToDate(dateOptions.today);
             }}
-            className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
+            className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-md hover:bg-green-200"
           >
             Last Month
           </button>
@@ -369,7 +369,7 @@ const PurchaseLedger = () => {
               setFromDate(dateOptions.lastQuarter);
               setToDate(dateOptions.today);
             }}
-            className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
+            className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-md hover:bg-green-200"
           >
             Last Quarter
           </button>
@@ -378,20 +378,20 @@ const PurchaseLedger = () => {
               setFromDate(dateOptions.lastYear);
               setToDate(dateOptions.today);
             }}
-            className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
+            className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-md hover:bg-green-200"
           >
             Last Year
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+          <div className="bg-green-50 p-4 rounded-lg border border-green-100">
             <div className="flex items-center">
-              <div className="p-2 rounded-full bg-blue-100 mr-3">
-                <div className="text-blue-600 font-bold">₹</div>
+              <div className="p-2 rounded-full bg-green-100 mr-3">
+                <div className="text-green-600 font-bold">₹</div>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-blue-800">
+                <h3 className="text-sm font-medium text-green-800">
                   Total Debit
                 </h3>
                 <p className="text-xl font-bold text-gray-800">
@@ -616,7 +616,7 @@ const PurchaseLedger = () => {
                       onClick={() => setCurrentPage(pageNum)}
                       className={`px-3 py-1 rounded-md ${
                         currentPage === pageNum
-                          ? "bg-blue-500 text-white"
+                          ? "bg-green-600 text-white"
                           : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                       }`}
                     >
@@ -633,7 +633,7 @@ const PurchaseLedger = () => {
                     onClick={() => setCurrentPage(totalPages)}
                     className={`px-3 py-1 rounded-md ${
                       currentPage === totalPages
-                        ? "bg-blue-500 text-white"
+                        ? "bg-green-600 text-white"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
                   >

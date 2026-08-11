@@ -732,10 +732,10 @@ const PurchaseEntry = () => {
   }, [productList, formData.paidAmount]);
 
   if (
-    storesLoading ||
-    suppliersLoading ||
-    categoriesLoading ||
-    productsLoading
+    (storesLoading && !storesData) ||
+    (suppliersLoading && !suppliersData) ||
+    (categoriesLoading && !categoriesData) ||
+    (productsLoading && !productsData)
   ) {
     return (
       <div className="container mx-auto p-4 bg-gray-50 min-h-screen flex items-center justify-center">
@@ -751,23 +751,21 @@ const PurchaseEntry = () => {
     <div className="container mx-auto p-4 bg-gray-50 min-h-screen">
       {notification.show && (
         <div
-          className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
-            notification.type === "success"
-              ? "bg-green-50 border-l-4 border-green-500"
-              : notification.type === "error"
-                ? "bg-red-50 border-l-4 border-red-500"
-                : "bg-blue-50 border-l-4 border-blue-500"
-          } p-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out`}
+          className={`fixed top-4 right-4 z-50 max-w-sm w-full ${notification.type === "success"
+            ? "bg-green-50 border-l-4 border-green-500"
+            : notification.type === "error"
+              ? "bg-red-50 border-l-4 border-red-500"
+              : "bg-blue-50 border-l-4 border-blue-500"
+            } p-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out`}
         >
           <div className="flex items-start">
             <div
-              className={`shrink-0 ${
-                notification.type === "success"
-                  ? "text-green-600"
-                  : notification.type === "error"
-                    ? "text-red-600"
-                    : "text-blue-600"
-              }`}
+              className={`shrink-0 ${notification.type === "success"
+                ? "text-green-600"
+                : notification.type === "error"
+                  ? "text-red-600"
+                  : "text-blue-600"
+                }`}
             >
               {notification.type === "success" ? (
                 <CheckCircle size={24} />
@@ -779,24 +777,22 @@ const PurchaseEntry = () => {
             </div>
             <div className="ml-3">
               <p
-                className={`text-sm font-medium ${
-                  notification.type === "success"
-                    ? "text-green-800"
-                    : notification.type === "error"
-                      ? "text-red-800"
-                      : "text-blue-800"
-                }`}
+                className={`text-sm font-medium ${notification.type === "success"
+                  ? "text-green-800"
+                  : notification.type === "error"
+                    ? "text-red-800"
+                    : "text-blue-800"
+                  }`}
               >
                 {notification.title}
               </p>
               <p
-                className={`mt-1 text-sm ${
-                  notification.type === "success"
-                    ? "text-green-700"
-                    : notification.type === "error"
-                      ? "text-red-700"
-                      : "text-blue-700"
-                }`}
+                className={`mt-1 text-sm ${notification.type === "success"
+                  ? "text-green-700"
+                  : notification.type === "error"
+                    ? "text-red-700"
+                    : "text-blue-700"
+                  }`}
               >
                 {notification.message}
               </p>
@@ -811,7 +807,7 @@ const PurchaseEntry = () => {
         </div>
       )}
 
-      <h1 className="text-2xl font-bold mb-6 text-center text-blue-800">
+      <h1 className="text-2xl font-bold mb-6 text-center text-green-800">
         Purchase Entry
       </h1>
 
@@ -933,7 +929,7 @@ const PurchaseEntry = () => {
                 <button
                   type="button"
                   onClick={() => setShowAddStoreForm(true)}
-                  className="bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600 flex items-center"
+                  className="bg-green-700 text-white px-3 py-2 rounded-md hover:bg-green-800 flex items-center"
                   title="Add new store"
                 >
                   <svg
@@ -1148,7 +1144,7 @@ const PurchaseEntry = () => {
                   <button
                     type="button"
                     onClick={() => setShowAddCategoryForm(true)}
-                    className="bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600 flex items-center"
+                    className="bg-green-700 text-white px-3 py-2 rounded-md hover:bg-green-800 flex items-center"
                     title="Add new category"
                   >
                     <svg
@@ -1253,7 +1249,7 @@ const PurchaseEntry = () => {
                   <button
                     type="button"
                     onClick={() => setShowAddProductForm(true)}
-                    className="bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600 flex items-center"
+                    className="bg-green-700 text-white px-3 py-2 rounded-md hover:bg-green-800 flex items-center"
                     title="Add new product"
                   >
                     <svg
@@ -1408,7 +1404,7 @@ const PurchaseEntry = () => {
           <button
             type="button"
             onClick={addProductToList}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+            className="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-800 transition-colors"
           >
             Add Product To List
           </button>
@@ -1626,27 +1622,24 @@ const PurchaseEntry = () => {
               Pending Amount
             </label>
             <div
-              className={`mt-1 block w-full border rounded-md p-2 font-bold text-lg ${
-                calculatePendingAmount() > 0
-                  ? "bg-red-50 border-red-300 text-red-600"
-                  : "bg-green-50 border-green-300 text-green-600"
-              }`}
+              className={`mt-1 block w-full border rounded-md p-2 font-bold text-lg ${calculatePendingAmount() > 0
+                ? "bg-red-50 border-red-300 text-red-600"
+                : "bg-green-50 border-green-300 text-green-600"
+                }`}
             >
               ₹{formatNumber(calculatePendingAmount())}
             </div>
           </div>
         </div>
 
-        <div className="flex justify-end space-x-3">
+        <div className="erp-root flex space-x-3">
           <button
             type="button"
             onClick={() => {
               setFormData({
-                billNo: "",
-                toStore: "",
-                supplierName: "",
-                contactNo: "",
-                supplierGST: "",
+                partyBillNo: "",
+                partyBillDate: "",
+                remarks: "",
                 storeGST: "",
                 gstType: "NoGST",
                 purchaseDate: new Date().toISOString().split("T")[0],
@@ -1664,14 +1657,14 @@ const PurchaseEntry = () => {
               setProductList([]);
               showNotification("info", "Form Reset", "Form has been reset.");
             }}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+            className="app-btn-secondary"
           >
             Reset Form
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+            className="app-btn-primary"
           >
             {isSubmitting ? (
               <>

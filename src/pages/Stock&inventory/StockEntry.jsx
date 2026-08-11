@@ -9,6 +9,9 @@ import {
   Download,
   Upload,
   Plus,
+  ClipboardList,
+  ArrowLeftRight,
+  CheckSquare
 } from "lucide-react";
 import StockTransferEntry from "./StockTransferEntry";
 import StockList from "./StockList";
@@ -61,8 +64,8 @@ const StockEntry = () => {
     "/api/tenant/stores",
     fetcher,
     {
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     },
   );
 
@@ -70,8 +73,8 @@ const StockEntry = () => {
     "/api/tenant/categories",
     fetcher,
     {
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     },
   );
 
@@ -79,8 +82,8 @@ const StockEntry = () => {
     "/api/tenant/products",
     fetcher,
     {
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     },
   );
 
@@ -548,23 +551,21 @@ const StockEntry = () => {
     <div>
       {notification.show && (
         <div
-          className={`fixed top-4 right-4 z-50 max-w-sm w-full ${
-            notification.type === "success"
-              ? "bg-green-50 border-l-4 border-green-500"
-              : notification.type === "error"
-                ? "bg-red-50 border-l-4 border-red-500"
-                : "bg-blue-50 border-l-4 border-blue-500"
-          } p-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out`}
+          className={`fixed top-4 right-4 z-50 max-w-sm w-full ${notification.type === "success"
+            ? "bg-green-50 border-l-4 border-green-500"
+            : notification.type === "error"
+              ? "bg-red-50 border-l-4 border-red-500"
+              : "bg-blue-50 border-l-4 border-blue-500"
+            } p-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out`}
         >
           <div className="flex items-start">
             <div
-              className={`shrink-0 ${
-                notification.type === "success"
-                  ? "text-green-600"
-                  : notification.type === "error"
-                    ? "text-red-600"
-                    : "text-blue-600"
-              }`}
+              className={`shrink-0 ${notification.type === "success"
+                ? "text-green-600"
+                : notification.type === "error"
+                  ? "text-red-600"
+                  : "text-blue-600"
+                }`}
             >
               {notification.type === "success" ? (
                 <CheckCircle size={24} />
@@ -576,24 +577,22 @@ const StockEntry = () => {
             </div>
             <div className="ml-3">
               <p
-                className={`text-sm font-medium ${
-                  notification.type === "success"
-                    ? "text-green-800"
-                    : notification.type === "error"
-                      ? "text-red-800"
-                      : "text-blue-800"
-                }`}
+                className={`text-sm font-medium ${notification.type === "success"
+                  ? "text-green-800"
+                  : notification.type === "error"
+                    ? "text-red-800"
+                    : "text-blue-800"
+                  }`}
               >
                 {notification.title}
               </p>
               <p
-                className={`mt-1 text-sm ${
-                  notification.type === "success"
-                    ? "text-green-700"
-                    : notification.type === "error"
-                      ? "text-red-700"
-                      : "text-blue-700"
-                }`}
+                className={`mt-1 text-sm ${notification.type === "success"
+                  ? "text-green-700"
+                  : notification.type === "error"
+                    ? "text-red-700"
+                    : "text-blue-700"
+                  }`}
               >
                 {notification.message}
               </p>
@@ -693,7 +692,7 @@ const StockEntry = () => {
                 <button
                   type="button"
                   onClick={() => setShowAddStore(true)}
-                  className="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-green-700 text-white p-2 rounded-r-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   title="Add New Store"
                 >
                   <Plus size={20} />
@@ -799,7 +798,7 @@ const StockEntry = () => {
                 <button
                   type="button"
                   onClick={() => setShowAddCategory(true)}
-                  className="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-green-700 text-white p-2 rounded-r-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   title="Add New Category"
                 >
                   <Plus size={20} />
@@ -872,7 +871,7 @@ const StockEntry = () => {
                 <button
                   type="button"
                   onClick={() => setShowAddProduct(true)}
-                  className="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-green-700 text-white p-2 rounded-r-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   title="Add New Product"
                   disabled={!formData.category_id}
                 >
@@ -996,7 +995,7 @@ const StockEntry = () => {
                 <button
                   type="button"
                   onClick={() => setShowAddRack(true)}
-                  className="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-green-700 text-white p-2 rounded-r-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   title="Add New Rack"
                 >
                   <Plus size={20} />
@@ -1120,11 +1119,11 @@ const StockEntry = () => {
             </select>
           </div>
 
-          <div className="md:col-span-2 lg:col-span-3 flex justify-end mt-4">
+          <div className="erp-root md:col-span-2 lg:col-span-3 flex justify-end mt-4">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 flex items-center"
+              className="app-btn-primary flex items-center"
             >
               {isSubmitting ? (
                 <>
@@ -1238,10 +1237,10 @@ const StockEntry = () => {
           />
         </div>
 
-        <div className="md:col-span-2 flex justify-end">
+        <div className="erp-root md:col-span-2 flex justify-end">
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="app-btn-primary"
           >
             Request Transfer
           </button>
@@ -1250,7 +1249,7 @@ const StockEntry = () => {
     </div>
   );
 
-  if (storesLoading || categoriesLoading || productsLoading) {
+  if ((storesLoading && !storesData) || (categoriesLoading && !categoriesData) || (productsLoading && !productsData)) {
     return (
       <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
         <div className="text-center">
@@ -1268,49 +1267,57 @@ const StockEntry = () => {
           Stock Management
         </h1>
 
-        <div className="mb-6 border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
+        <div className="bg-gray-100/90 border-b border-gray-200/80 pt-2.5 mb-6">
+          <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
             <button
+              type="button"
               onClick={() => setActiveTab("stockEntry")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`px-5 py-3 text-sm font-medium rounded-t-xl transition-all duration-200 flex items-center ${
                 activeTab === "stockEntry"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "bg-white text-green-700 border-t-2 border-green-600 font-semibold shadow-xs"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-white/80"
               }`}
             >
+              <Plus className="w-4 h-4 text-green-600 mr-2" />
               Stock Entry
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("stockList")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`px-5 py-3 text-sm font-medium rounded-t-xl transition-all duration-200 flex items-center ${
                 activeTab === "stockList"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "bg-white text-green-700 border-t-2 border-green-600 font-semibold shadow-xs"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-white/80"
               }`}
             >
+              <ClipboardList className="w-4 h-4 text-green-600 mr-2" />
               Stock List
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("stockTransferHistory")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`px-5 py-3 text-sm font-medium rounded-t-xl transition-all duration-200 flex items-center ${
                 activeTab === "stockTransferHistory"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "bg-white text-green-700 border-t-2 border-green-600 font-semibold shadow-xs"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-white/80"
               }`}
             >
+              <ArrowLeftRight className="w-4 h-4 text-green-600 mr-2" />
               Stock Transfer History
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("stockTransferAccept")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`px-5 py-3 text-sm font-medium rounded-t-xl transition-all duration-200 flex items-center ${
                 activeTab === "stockTransferAccept"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "bg-white text-green-700 border-t-2 border-green-600 font-semibold shadow-xs"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-white/80"
               }`}
             >
+              <CheckSquare className="w-4 h-4 text-green-600 mr-2" />
               Stock Transfer Accept
             </button>
-          </nav>
+          </div>
         </div>
 
         {activeTab === "stockEntry" && renderStockEntry()}

@@ -381,6 +381,7 @@ const StagePassing = ({ projectSetup }) => {
                 <h4 className="font-semibold text-gray-900">Sub-Stages</h4>
                 <div className="erp-root">
                   <button
+                    type="button"
                     onClick={() => addSubStage(stage.id)}
                     className="border border-dashed border-green-600 bg-green-50/40 hover:bg-green-50 text-green-700 hover:text-green-800 flex items-center gap-1.5 py-1 px-4 min-h-[36px] rounded-xl text-xs font-semibold transition-all"
                   >
@@ -422,6 +423,7 @@ const StagePassing = ({ projectSetup }) => {
                       />
                       <div className="erp-root">
                         <button
+                          type="button"
                           onClick={() => completeSubStage(stage.id, sub.id)}
                           className="app-btn-primary"
                         >
@@ -435,6 +437,7 @@ const StagePassing = ({ projectSetup }) => {
                         ✅ Completed
                       </span>
                       <button
+                        type="button"
                         onClick={() =>
                           editSubStageRemark(stage.id, sub.id, sub.remark)
                         }

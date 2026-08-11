@@ -4,6 +4,7 @@ import useSWR, { mutate } from "swr";
 import { getAuthToken } from "../../store/authSession";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Plus, ClipboardList } from "lucide-react";
 import IndentHistory from "./IndentHistory";
 
 const API_BASE_URL = import.meta.env.VITE_CSAAP_URL;
@@ -348,30 +349,32 @@ const IndentEntry = () => {
           </p>
         </div>
 
-        <div className="mb-8">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8">
-              <button
-                onClick={() => setActiveTab("entry")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "entry"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Create Indent
-              </button>
-              <button
-                onClick={() => setActiveTab("list")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "list"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Indent List
-              </button>
-            </nav>
+        <div className="bg-gray-100/90 border-b border-gray-200/80 pt-2.5 mb-6">
+          <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
+            <button
+              type="button"
+              onClick={() => setActiveTab("entry")}
+              className={`px-5 py-3 text-sm font-medium rounded-t-xl transition-all duration-200 flex items-center ${
+                activeTab === "entry"
+                  ? "bg-white text-green-700 border-t-2 border-green-600 font-semibold shadow-xs"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-white/80"
+              }`}
+            >
+              <Plus className="w-4 h-4 text-green-600 mr-2" />
+              Create Indent
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("list")}
+              className={`px-5 py-3 text-sm font-medium rounded-t-xl transition-all duration-200 flex items-center ${
+                activeTab === "list"
+                  ? "bg-white text-green-700 border-t-2 border-green-600 font-semibold shadow-xs"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-white/80"
+              }`}
+            >
+              <ClipboardList className="w-4 h-4 text-green-600 mr-2" />
+              Indent List
+            </button>
           </div>
         </div>
 
@@ -663,7 +666,7 @@ const IndentEntry = () => {
               </div>
             )}
 
-            <div className="flex justify-end space-x-4 pt-6">
+            <div className="erp-root flex justify-end space-x-4 pt-6">
               <button
                 onClick={() => {
                   setSupplier({ name: "", contact: "", gst: "" });
@@ -681,7 +684,7 @@ const IndentEntry = () => {
                   });
                 }}
                 disabled={loading}
-                className="px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50"
+                className="app-btn-secondary"
               >
                 Clear Form
               </button>
@@ -693,30 +696,15 @@ const IndentEntry = () => {
                   productList.length === 0 ||
                   (!selectedSupplierId && !supplier.name)
                 }
-                className="px-8 py-3 bg-linear-to-r from-green-600 to-emerald-600 text-white font-medium rounded-xl hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="app-btn-primary"
               >
                 {loading ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                     Saving...
                   </>
                 ) : (
-                  <>
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    Save Indent
-                  </>
+                  "Save Indent"
                 )}
               </button>
             </div>

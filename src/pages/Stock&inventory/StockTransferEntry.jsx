@@ -232,7 +232,7 @@ const StockTransferEntry = () => {
     }
   };
 
-  if (masterLoading) {
+  if (masterLoading && !masterData) {
     return (
       <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
         <div className="text-center">
@@ -513,7 +513,7 @@ const StockTransferEntry = () => {
         </div>
       </div>
 
-      <div className="flex justify-end mt-8 space-x-4">
+      <div className="erp-root flex justify-end mt-8 space-x-4">
         <button
           onClick={() => {
             setFromStore("");
@@ -529,14 +529,14 @@ const StockTransferEntry = () => {
               "Form has been reset to default values",
             );
           }}
-          className="px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+          className="app-btn-secondary"
           disabled={isSubmitting}
         >
           Reset Form
         </button>
         <button
           onClick={handleTransfer}
-          className="px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
+          className="app-btn-primary"
           disabled={
             isSubmitting ||
             !fromStore ||

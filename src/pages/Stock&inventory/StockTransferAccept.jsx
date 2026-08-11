@@ -668,14 +668,14 @@ const StockTransferAccept = () => {
 
                 {(selectedTransfer.status === "pending" ||
                   selectedTransfer.status === "Pending") && (
-                  <div className="pt-4 border-t border-gray-200">
+                  <div className="erp-root pt-4 border-t border-gray-200">
                     <div className="flex justify-end space-x-3">
                       <button
                         onClick={() =>
                           handleRejectTransfer(selectedTransfer.id)
                         }
                         disabled={isProcessing}
-                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50"
+                        className="app-btn-secondary border-red-200 hover:border-red-300 text-red-600 hover:text-red-700"
                       >
                         {isProcessing ? "Processing..." : "Reject Transfer"}
                       </button>
@@ -684,7 +684,7 @@ const StockTransferAccept = () => {
                           handleAcceptTransfer(selectedTransfer.id)
                         }
                         disabled={isProcessing}
-                        className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 flex items-center"
+                        className="app-btn-primary flex items-center"
                       >
                         {isProcessing ? (
                           <>

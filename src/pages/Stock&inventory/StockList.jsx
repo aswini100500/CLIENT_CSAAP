@@ -48,8 +48,8 @@ const StockList = () => {
     isLoading: stockEntriesLoading,
     error,
   } = useSWR("/api/tenant/stock/entry", fetcher, {
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
   });
 
   const master = masterData?.success ? masterData.data : {};
@@ -65,31 +65,31 @@ const StockList = () => {
 
   const filteredData = Array.isArray(stockEntries)
     ? stockEntries.filter((item) => {
-        if (!item) return false;
+      if (!item) return false;
 
-        const storeName =
-          stores.find((store) => store.id === item.store_id)?.name || "";
-        const productName =
-          products.find((product) => product.id === item.product_id)?.name ||
-          "";
-        const category = products.find(
-          (product) => product.id === item.product_id,
-        );
-        const categoryName = category
-          ? categories.find((cat) => cat.id === category.category_id)?.name
-          : "";
+      const storeName =
+        stores.find((store) => store.id === item.store_id)?.name || "";
+      const productName =
+        products.find((product) => product.id === item.product_id)?.name ||
+        "";
+      const category = products.find(
+        (product) => product.id === item.product_id,
+      );
+      const categoryName = category
+        ? categories.find((cat) => cat.id === category.category_id)?.name
+        : "";
 
-        return (
-          storeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (item.batch &&
-            item.batch.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (item.rack &&
-            item.rack.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (categoryName &&
-            categoryName.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-      })
+      return (
+        storeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (item.batch &&
+          item.batch.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (item.rack &&
+          item.rack.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (categoryName &&
+          categoryName.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    })
     : [];
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
@@ -300,10 +300,10 @@ const StockList = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="erp-root flex items-center space-x-2">
               <button
                 onClick={handleExportCSV}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
+                className="app-btn-primary flex items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -321,7 +321,7 @@ const StockList = () => {
                 </svg>
                 Export CSV
               </button>
-              <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center">
+              <button className="app-btn-secondary flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 mr-2"
@@ -417,11 +417,10 @@ const StockList = () => {
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
                           <span
-                            className={`px-2 py-1 text-xs rounded-full ${
-                              parseFloat(item.quantity || 0) < 10
+                            className={`px-2 py-1 text-xs rounded-full ${parseFloat(item.quantity || 0) < 10
                                 ? "bg-red-100 text-red-800"
                                 : "bg-green-100 text-green-800"
-                            }`}
+                              }`}
                           >
                             {item.quantity || "0"} {item.units || ""}
                           </span>
@@ -526,11 +525,10 @@ const StockList = () => {
                         <button
                           key={pageNum}
                           onClick={() => setCurrentPage(pageNum)}
-                          className={`px-3 py-1 rounded-md ${
-                            currentPage === pageNum
+                          className={`px-3 py-1 rounded-md ${currentPage === pageNum
                               ? "bg-blue-500 text-white"
                               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                          }`}
+                            }`}
                         >
                           {pageNum}
                         </button>

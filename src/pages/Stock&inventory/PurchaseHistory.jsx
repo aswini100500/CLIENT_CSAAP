@@ -242,8 +242,9 @@ const PurchaseHistory = () => {
   if (isLoading) {
     return (
       <div className="bg-white rounded-lg shadow-md p-6 mx-auto max-w-7xl">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+          <p className="mt-4 text-gray-500 font-medium">Loading history...</p>
         </div>
       </div>
     );
@@ -258,7 +259,7 @@ const PurchaseHistory = () => {
           </div>
           <button
             onClick={() => mutate()}
-            className="text-blue-600 hover:text-blue-800 underline"
+            className="text-green-600 hover:text-green-800 underline"
           >
             Retry
           </button>
@@ -271,10 +272,8 @@ const PurchaseHistory = () => {
     <div className="bg-white rounded-lg shadow-md p-6 mx-auto max-w-7xl">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
-            Purchase History
-          </h1>
-          <div className="w-20 h-1 bg-blue-500"></div>
+          <h2 className="text-xl font-bold text-gray-800">Purchase History</h2>
+          <div className="w-20 h-1 bg-green-600"></div>
         </div>
 
         {purchases.length > 0 && (
@@ -296,7 +295,7 @@ const PurchaseHistory = () => {
           <select
             value={month}
             onChange={(e) => setMonth(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             {months.map((m) => (
               <option key={m.value} value={m.value}>
@@ -334,7 +333,7 @@ const PurchaseHistory = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={handleSearch}
-              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search size={18} className="text-gray-400" />
@@ -345,7 +344,7 @@ const PurchaseHistory = () => {
         <div className="flex items-end space-x-2">
           <button
             onClick={handleDisplay}
-            className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center"
+            className="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center"
           >
             <Search size={18} className="mr-2" />
             Search
@@ -634,7 +633,7 @@ const PurchaseHistory = () => {
                     onClick={() => handlePageChange(pageNum)}
                     className={`px-3 py-1 text-sm rounded-md ${
                       currentPage === pageNum
-                        ? "bg-blue-500 text-white"
+                        ? "bg-green-600 text-white"
                         : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
                     }`}
                   >

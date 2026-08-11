@@ -258,12 +258,11 @@ const SaleHistory = () => {
                 ))}
               </select>
             </div>
-
             <div>
               <button
                 onClick={handleSearch}
                 disabled={swrLoading || isLoading}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {swrLoading ? "Loading..." : "Search"}
               </button>
