@@ -509,7 +509,7 @@ const ChequeRegister = () => {
           dateIssued: cheque.date_issued,
           bankName: selectedAccount?.bankName || "Unknown Bank",
         }));
-        console.log("Transformed cheques:", transformedCheques);
+        // console.log("Transformed cheques:", transformedCheques);
         setCheques(transformedCheques);
       } else {
         Swal.fire(
@@ -670,7 +670,7 @@ const ChequeRegister = () => {
         amount: chequeForm.amount || "0.00",
       };
 
-      console.log("Saving cheque data:", chequeData);
+      // console.log("Saving cheque data:", chequeData);
 
       if (editingChequeId) {
         const response = await axios.put(
