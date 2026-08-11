@@ -476,25 +476,25 @@ const PayslipDocument = ({ employee, payroll }) => {
       arrears: 0,
     },
     {
-      label: "D.A.",
+      label: "Dearness Allowance",
       rate: payroll.da || 0,
       earning: prorated.da || payroll.da || 0,
       arrears: 0,
     },
     {
-      label: "T.A.",
+      label: "Travel Allowance",
       rate: payroll.ta || 0,
       earning: prorated.ta || payroll.ta || 0,
       arrears: 0,
     },
     {
-      label: "HRA",
+      label: "House Rent Allowance",
       rate: payroll.hra || 0,
       earning: prorated.hra || payroll.hra || 0,
       arrears: 0,
     },
     {
-      label: "Incentive",
+      label: "Special Allowance",
       rate: payroll.specialAllowance || 0,
       earning: prorated.specialAllowance || payroll.specialAllowance || 0,
       arrears: 0,
@@ -533,6 +533,9 @@ const PayslipDocument = ({ employee, payroll }) => {
           "special allowance",
           "g.basic pay",
           "basic pay",
+          "dearness allowance",
+          "travel allowance",
+          "house rent allowance",
         ].includes(lower)
       ) {
         earningsList.push({
@@ -566,6 +569,21 @@ const PayslipDocument = ({ employee, payroll }) => {
     deductionsList.push({
       label: "LOP Deduction",
       amount: payroll.lopDeduction || 0,
+    });
+  }
+  if (payroll.halfDayDeduction > 0) {
+    deductionsList.push({
+      label: "Half-day Deduction",
+      amount: payroll.halfDayDeduction,
+    });
+  }
+  if (payroll.latePenaltyDeduction > 0) {
+    const suffix = payroll.latePenaltyHalfDays
+      ? ` (${payroll.latePenaltyHalfDays} half day${payroll.latePenaltyHalfDays > 1 ? "s" : ""})`
+      : "";
+    deductionsList.push({
+      label: `Late Penalty${suffix}`,
+      amount: payroll.latePenaltyDeduction,
     });
   }
 
@@ -610,50 +628,73 @@ const PayslipDocument = ({ employee, payroll }) => {
 
   const netPay = payroll.netSalary || totalEarning - totalDeductions;
 
-  const hasLop = payroll.lopDays > 0 || payroll.lopDeduction > 0;
   const displayEarningVal = (rate, earning) => {
-    if (!hasLop) return "";
     return formatValue(earning);
   };
-  const totalEarningDisplay = hasLop ? formatValue(totalEarning) : "0.00";
+  const totalEarningDisplay = formatValue(totalEarning);
 
-  const netPayInWords = `(${convertToTitleCase(numberToWords(netPay))} Rupees)`;
+  const netPayInWords = payroll.netPayInWords
+    ? payroll.netPayInWords.startsWith("(")
+      ? payroll.netPayInWords
+      : `(${convertToTitleCase(payroll.netPayInWords)})`
+    : `(${convertToTitleCase(numberToWords(netPay))} Rupees)`;
+
+  const workingDaysVal =
+    payroll.workingDays ??
+    30 - (payroll.weeklyOffs || 4) - (payroll.holidays || 0);
+  const holidaysVal = payroll.holidays ?? 0;
+  const weeklyOffVal = payroll.weeklyOffs ?? 4;
+  const onDutyVal = payroll.daysOnDuty ?? uiPresentDays;
+  const paidDaysVal =
+    payroll.paidDays ??
+    (uiPresentDays || 0) + (payroll.paidOffs || payroll.leaveDays || 0);
+  const paidLeaveDaysVal =
+    payroll.paidOffs ?? payroll.paidLeaveDays ?? payroll.leaveDays ?? 0;
+  const lopDaysVal = payroll.lopDays ?? 0;
+  const fullDayLeaveVal =
+    payroll.fullDayLeaveDays ?? payroll.fullDayLeave ?? payroll.lopDays ?? 0;
+  const halfDayLeaveVal =
+    payroll.halfDayLeaveDays ?? payroll.halfDayLeave ?? payroll.halfDays ?? 0;
+  const clVal = payroll.clDays ?? payroll.casualLeave ?? 0;
+  const elVal = payroll.elDays ?? payroll.earnedLeave ?? 0;
+  const mlVal = payroll.mlDays ?? payroll.medicalLeave ?? 0;
+  const trainingDaysVal = payroll.trainingDays ?? 0;
 
   const attendanceRows = [
     [
-      { label: "Daily work", value: "0.00" },
-      { label: "On duty", value: formatValueDeduction(uiPresentDays || 30) },
-      { label: "Consumed", value: "" },
+      { label: "Working Days", value: String(workingDaysVal) },
+      { label: "Days On Duty", value: String(onDutyVal) },
+      { label: "Casual Leave", value: String(clVal) },
     ],
     [
-      { label: "Holidays", value: "0.00" },
-      { label: "Training Days", value: "0.00" },
-      { label: "EL", value: formatValue(payroll.leaveDays || 0) },
+      { label: "Holidays", value: String(holidaysVal) },
+      { label: "Paid Days", value: String(paidDaysVal) },
+      { label: "Earned Leave", value: String(elVal) },
     ],
     [
-      { label: "Weekly Off", value: "0.00" },
-      { label: "Maternity Off", value: "0.00" },
-      { label: "CL", value: "0.00" },
+      { label: "Weekly Offs", value: String(weeklyOffVal) },
+      { label: "Training Days", value: String(trainingDaysVal) },
+      { label: "Medical Leave", value: String(mlVal) },
     ],
     [
-      { label: "Without Pay", value: formatValue(payroll.lopDays || 0) },
-      { label: "Paid Days", value: formatValueDeduction(uiPresentDays || 30) },
-      { label: "", value: "" },
-    ],
-    [
-      { label: "Absent", value: "0.00" },
+      { label: "LOP Days", value: String(lopDaysVal) },
       { label: "", value: "" },
       { label: "", value: "" },
     ],
     [
-      { label: "Compen. Holi", value: "0.00" },
+      { label: "Paid Leave Days", value: String(paidLeaveDaysVal) },
       { label: "", value: "" },
       { label: "", value: "" },
     ],
     [
-      { label: "Restricted", value: "0.00" },
+      { label: "Full Day Leave Days", value: String(fullDayLeaveVal) },
       { label: "", value: "" },
-      { label: "L2", value: "0.00" },
+      { label: "", value: "" },
+    ],
+    [
+      { label: "Half Day Leave Days", value: String(halfDayLeaveVal) },
+      { label: "", value: "" },
+      { label: "", value: "" },
     ],
   ];
 
