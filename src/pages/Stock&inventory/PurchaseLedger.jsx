@@ -231,6 +231,7 @@ const PurchaseLedger = () => {
               Error loading purchase ledger
             </div>
             <button
+              type="button"
               onClick={() => mutate(buildApiUrl())}
               className="text-blue-600 hover:text-blue-800 underline"
             >
@@ -257,6 +258,7 @@ const PurchaseLedger = () => {
 
           {filteredData.length > 0 && (
             <button
+              type="button"
               onClick={handleDownloadCSV}
               className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
             >
@@ -522,11 +524,10 @@ const PurchaseLedger = () => {
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span
-                        className={`px-2 py-1 text-xs rounded-full ${
-                          parseFloat(entry.debit || 0) > 0
-                            ? "bg-red-100 text-red-800"
-                            : "bg-green-100 text-green-800"
-                        }`}
+                        className={`px-2 py-1 text-xs rounded-full ${parseFloat(entry.debit || 0) > 0
+                          ? "bg-red-100 text-red-800"
+                          : "bg-green-100 text-green-800"
+                          }`}
                       >
                         {parseFloat(entry.debit || 0) > 0 ? "Debit" : "Credit"}
                       </span>
@@ -538,11 +539,10 @@ const PurchaseLedger = () => {
                       {formatCurrency(entry.credit)}
                     </td>
                     <td
-                      className={`px-4 py-3 whitespace-nowrap text-sm font-medium text-right ${
-                        parseFloat(entry.balance || 0) < 0
-                          ? "text-red-600"
-                          : "text-green-600"
-                      }`}
+                      className={`px-4 py-3 whitespace-nowrap text-sm font-medium text-right ${parseFloat(entry.balance || 0) < 0
+                        ? "text-red-600"
+                        : "text-green-600"
+                        }`}
                     >
                       {formatCurrency(entry.balance)}
                     </td>
@@ -614,11 +614,10 @@ const PurchaseLedger = () => {
                     <button
                       key={pageNum}
                       onClick={() => setCurrentPage(pageNum)}
-                      className={`px-3 py-1 rounded-md ${
-                        currentPage === pageNum
-                          ? "bg-green-600 text-white"
-                          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                      }`}
+                      className={`px-3 py-1 rounded-md ${currentPage === pageNum
+                        ? "bg-green-600 text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
                     >
                       {pageNum}
                     </button>
@@ -631,11 +630,10 @@ const PurchaseLedger = () => {
                   <span className="px-1 text-gray-500">...</span>
                   <button
                     onClick={() => setCurrentPage(totalPages)}
-                    className={`px-3 py-1 rounded-md ${
-                      currentPage === totalPages
-                        ? "bg-green-600 text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
+                    className={`px-3 py-1 rounded-md ${currentPage === totalPages
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                      }`}
                   >
                     {totalPages}
                   </button>
