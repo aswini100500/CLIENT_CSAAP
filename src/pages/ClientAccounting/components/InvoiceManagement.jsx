@@ -108,7 +108,7 @@ const InvoiceManagement = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/${companyId}`,
       );
-      console.log(response);
+
 
       const vouchersData = response.data;
       setVouchers(vouchersData);
@@ -150,13 +150,13 @@ const InvoiceManagement = () => {
   };
 
   const fetchVoucherItems = async (voucherId) => {
-    console.log(voucherId);
+
 
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/getItems/${voucherId}`,
       );
-      console.log(response);
+
 
       setVoucherItems((prev) => ({
         ...prev,
@@ -251,8 +251,8 @@ const InvoiceManagement = () => {
     const itemsHtml =
       items.length > 0
         ? items
-            .map(
-              (item) => `
+          .map(
+            (item) => `
           <tr>
             <td>${item.item_name}</td>
             <td>${item.qty}</td>
@@ -260,8 +260,8 @@ const InvoiceManagement = () => {
             <td>₹${parseFloat(item.amount || 0).toLocaleString("en-IN")}</td>
           </tr>
         `,
-            )
-            .join("")
+          )
+          .join("")
         : `<tr><td colspan="4" style="text-align: center;">No items found</td></tr>`;
 
     printWindow.document.write(`

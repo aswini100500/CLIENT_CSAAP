@@ -44,11 +44,7 @@ const Subscription = () => {
           params: { userId },
           withCredentials: true,
         },
-      );
-
-      console.log("Subscriptions data:", data);
-
-      if (data.success) {
+      );if (data.success) {
         setMySubscriptions(data.subscriptions);
         const active = data.subscriptions.find(
           (sub) =>
@@ -64,18 +60,11 @@ const Subscription = () => {
   };
 
   const handleSubscribe = async (planId, planPrice) => {
-    try {
-      console.log("Starting subscription for plan:", planId, "user:", userId);
-
-      const { data: orderData } = await axios.post(
+    try {const { data: orderData } = await axios.post(
         `${API_BASE_URL}/api/v1/subscription/order`,
         { plan_id: planId, user_id: userId },
         { withCredentials: true },
-      );
-
-      console.log("Order response:", orderData);
-
-      if (!orderData.success) {
+      );if (!orderData.success) {
         Swal.fire({
           icon: "error",
           title: "Order Failed",
@@ -127,10 +116,7 @@ const Subscription = () => {
           ? `${orderData.plan_type} Subscription Renewal (₹${orderData.amount})`
           : `${orderData.plan_type} Subscription`,
         order_id: orderData.order.id,
-        handler: async function (response) {
-          console.log("Payment successful, verifying...", response);
-
-          try {
+        handler: async function (response) {try {
             const { data: verifyData } = await axios.post(
               `${API_BASE_URL}/api/v1/subscription/verify`,
               {
@@ -141,11 +127,7 @@ const Subscription = () => {
                 user_id: userId,
               },
               { withCredentials: true },
-            );
-
-            console.log("Verification response:", verifyData);
-
-            if (verifyData.success) {
+            );if (verifyData.success) {
               await Swal.fire({
                 icon: "success",
                 title: "Success!",

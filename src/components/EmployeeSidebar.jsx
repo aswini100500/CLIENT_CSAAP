@@ -169,8 +169,8 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
   const companyLogoText = companyName.charAt(0).toUpperCase();
 
-  console.log("Company Data:", companyData);
-  console.log("Company Logo URL:", companyLogo);
+  // console.log("Company Data:", companyData);
+  // console.log("Company Logo URL:", companyLogo);
 
   const toggleMenu = (id) => {
     setExpandedMenus((prev) => ({
@@ -848,9 +848,8 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       return (
         <div
           key={`${item.id}-col`}
-          className={`flex flex-col items-center w-full ${
-            isInactiveFolder ? "mb-2.5" : "mb-0.5"
-          }`}
+          className={`flex flex-col items-center w-full ${isInactiveFolder ? "mb-2.5" : "mb-0.5"
+            }`}
         >
           <NavLink
             to={item.path || "#"}
@@ -873,41 +872,38 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
               });
             }}
             onMouseLeave={() => setHoveredItem(null)}
-            className={`flex items-center justify-center ${
-              level > 0 ? "p-2" : "p-2.5"
-            } rounded-lg transition-all duration-200 group w-full relative`}
+            className={`flex items-center justify-center ${level > 0 ? "p-2" : "p-2.5"
+              } rounded-lg transition-all duration-200 group w-full relative`}
           >
             {({ isActive }) => {
               const isFolderExpanded = hasChildren && isExpanded;
               const isItemActive = isActive && item.path && item.path !== "#";
               const stackShadow = isInactiveFolder
                 ? {
-                    boxShadow:
-                      "0 3px 0 -1px #fff, 0 3px 0 0 #e2e8f0, 0 6px 0 -1px #f8fafc, 0 6px 0 0 #e2e8f080",
-                  }
+                  boxShadow:
+                    "0 3px 0 -1px #fff, 0 3px 0 0 #e2e8f0, 0 6px 0 -1px #f8fafc, 0 6px 0 0 #e2e8f080",
+                }
                 : {};
               return (
                 <>
                   <div
-                    className={`absolute inset-0 rounded-lg transition-all duration-200 ${
-                      isItemActive && !hasChildren
+                    className={`absolute inset-0 rounded-lg transition-all duration-200 ${isItemActive && !hasChildren
                         ? "bg-linear-to-r from-green-600 to-emerald-500 shadow-md shadow-green-100"
                         : isFolderExpanded
                           ? "bg-white shadow-sm ring-1 ring-slate-200"
                           : isInactiveFolder
                             ? "bg-white border border-slate-200"
                             : "bg-transparent group-hover:bg-slate-50"
-                    }`}
+                      }`}
                     style={stackShadow}
                   />
                   <span
-                    className={`relative z-10 transition-colors duration-200 ${
-                      isItemActive && !hasChildren
+                    className={`relative z-10 transition-colors duration-200 ${isItemActive && !hasChildren
                         ? "text-white [&_svg]:text-white!"
                         : isFolderExpanded
                           ? "[&_svg]:text-green-600!"
                           : "text-slate-500 group-hover:text-green-600"
-                    }`}
+                      }`}
                   >
                     {item.icon ? (
                       React.cloneElement(item.icon, {
@@ -915,11 +911,10 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                       })
                     ) : (
                       <div
-                        className={`flex items-center justify-center font-bold uppercase ${
-                          level > 0
+                        className={`flex items-center justify-center font-bold uppercase ${level > 0
                             ? "w-5 h-5 text-[11px]"
                             : "size-6  text-[13px]"
-                        }`}
+                          }`}
                       >
                         {item.label.charAt(0)}
                       </div>
@@ -947,20 +942,18 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
           <div className="space-y-1">
             <button
               onClick={() => toggleMenu(item.id)}
-              className={`w-full flex items-center justify-between transition-all duration-200 py-2 outline-none rounded-lg border border-transparent ${paddingLeft} ${textSize} ${
-                isExpanded
+              className={`w-full flex items-center justify-between transition-all duration-200 py-2 outline-none rounded-lg border border-transparent ${paddingLeft} ${textSize} ${isExpanded
                   ? "bg-slate-100 text-slate-900 font-semibold shadow-sm border-slate-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:border-slate-100"
-              }`}
+                }`}
             >
               <div className="flex items-center min-w-0">
                 {item.icon && (
                   <span
-                    className={`mr-3 transition-colors duration-200 shrink-0 ${
-                      isExpanded
+                    className={`mr-3 transition-colors duration-200 shrink-0 ${isExpanded
                         ? "text-green-600"
                         : "text-slate-400 group-hover:text-green-600"
-                    }`}
+                      }`}
                   >
                     {React.cloneElement(item.icon, {
                       size: iconSize,
@@ -969,27 +962,24 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                   </span>
                 )}
                 <span
-                  className={`truncate text-left ${
-                    item.isMainFolder ? "tracking-tight" : ""
-                  }`}
+                  className={`truncate text-left ${item.isMainFolder ? "tracking-tight" : ""
+                    }`}
                 >
                   {item.label}
                 </span>
               </div>
               <ChevronRight
                 size={14}
-                className={`transition-transform duration-300 ${
-                  isExpanded ? "rotate-90 text-green-600" : "text-slate-300"
-                }`}
+                className={`transition-transform duration-300 ${isExpanded ? "rotate-90 text-green-600" : "text-slate-300"
+                  }`}
               />
             </button>
 
             <div
-              className={`transition-all duration-300 ease-out overflow-hidden ${
-                isExpanded
+              className={`transition-all duration-300 ease-out overflow-hidden ${isExpanded
                   ? "max-h-500 opacity-100 mt-1 mb-2 bg-slate-50/50 rounded-lg p-0.5"
                   : "max-h-0 opacity-0"
-              }`}
+                }`}
             >
               <div className="ml-3.5 border-l border-slate-100 pl-1 py-1 space-y-1">
                 {item.children.map((child) => renderItem(child, level + 1))}
@@ -1006,11 +996,10 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
             }}
             className={({ isActive }) => {
               const isItemActive = isActive && item.path && item.path !== "#";
-              return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${
-                isItemActive
+              return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${isItemActive
                   ? "bg-linear-to-r from-green-600 to-emerald-500 text-white font-medium shadow-md shadow-green-100 border-green-500/50"
                   : "text-slate-600 hover:bg-slate-50 hover:text-green-600 hover:translate-x-1 hover:border-slate-100"
-              }`;
+                }`;
             }}
           >
             {({ isActive }) => {
@@ -1019,11 +1008,10 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                 <>
                   {item.icon && (
                     <span
-                      className={`mr-3 transition-colors duration-200 shrink-0 ${
-                        isItemActive
+                      className={`mr-3 transition-colors duration-200 shrink-0 ${isItemActive
                           ? "text-white"
                           : "text-slate-400 group-hover:text-green-600"
-                      }`}
+                        }`}
                     >
                       {React.cloneElement(item.icon, {
                         size: iconSize,
@@ -1113,9 +1101,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                   console.error("Logo failed to load in expanded mode");
                   setLogoError(true);
                 }}
-                onLoad={() =>
-                  console.log("Logo loaded successfully in expanded mode")
-                }
+                onLoad={() =>}
               />
             ) : (
               <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0">

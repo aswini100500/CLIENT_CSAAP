@@ -451,19 +451,11 @@ const CustomerManagementAccounting = () => {
             const isAlreadyBooked = checkIfBooked(bookingRes.data, itemId);
 
             if (!isAlreadyBooked) {
-              console.log(
-                `Unit/Item ${itemId} is not booked. Toggling booking status...`,
-              );
               await axios.put(
                 `${import.meta.env.VITE_CSAAP_URL}/api/tenant/type/${projectType}/${projectId}/items/${itemId}/toggle-booking-status`,
                 {},
                 { headers },
               );
-              console.log(
-                `Booking status successfully toggled for item ${itemId}.`,
-              );
-            } else {
-              console.log(`Unit/Item ${itemId} is already booked.`);
             }
           } catch (err) {
             console.error(

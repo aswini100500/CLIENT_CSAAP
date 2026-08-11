@@ -218,11 +218,7 @@ const RecordPaymentModal = ({
             amount: amtNum,
           },
         ],
-      };
-
-      console.log("[RecordPaymentModal] Submitting payment payload:", payload);
-
-      const response = await accountingApi.post(
+      };const response = await accountingApi.post(
         `/api/v1/receive-voucher/createReciptVoucher/${lead.company_id}`,
         payload,
       );

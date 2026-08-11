@@ -38,11 +38,7 @@ const ListOfLedger = () => {
         isEditing: false,
         debit: item.debit || 0,
         credit: item.credit || 0,
-      }));
-
-      console.log("Fetched Ledgers from API:", formatted);
-
-      setLedgers(formatted);
+      }));setLedgers(formatted);
     } catch (err) {
       console.error("Error fetching ledgers:", err);
       setLedgers([]);

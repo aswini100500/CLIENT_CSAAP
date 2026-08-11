@@ -179,25 +179,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       path: "/projects",
     },
     {
-      id: "contractors",
-      label: "Contractors",
-      icon: <HardHat size={20} className="text-green-700" />,
-      path: "/contractors",
-    },
-    {
-      id: "brokers",
-      label: "Brokers",
-      icon: <Users size={20} className="text-green-700" />,
-      path: "/brokers",
-    },
-    {
-      id: "suppliers",
-      label: "Suppliers",
-      icon: <Truck size={20} className="text-green-700" />,
-      path: "/suppliers",
-    },
-
-    {
       id: "users",
       label: "User Management",
       icon: <Users size={20} className="text-green-700" />,
@@ -221,7 +202,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           path: "/users/project-assignment",
           icon: <Target size={18} className="text-green-700" />,
         },
-
         {
           id: "u_user_list",
           label: "UserDetails",
@@ -236,155 +216,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
         },
       ],
     },
-
-    {
-      id: "operation",
-      icon: <Wrench size={20} className="text-green-700" />,
-      label: "Operation",
-      isMainFolder: true,
-      children: [
-        {
-          id: "general",
-          label: "Engineering",
-          icon: <HardHat size={18} className="text-green-700" />,
-          children: [
-            {
-              id: "projectbudget",
-              label: "Project Budget",
-              path: "/project-budget",
-              icon: <DollarSign size={16} className="text-green-700" />,
-            },
-            {
-              id: "bill",
-              label: "Bill Of Quantity",
-              path: "/bill",
-              icon: <FileText size={16} className="text-green-700" />,
-            },
-            {
-              id: "work",
-              label: "Work Order",
-              path: "/work-order",
-              icon: <ClipboardList size={16} className="text-green-700" />,
-            },
-            {
-              id: "bill_inward",
-              label: "Bill Inward",
-              path: "/bill-inward",
-              icon: <FileCheck size={16} className="text-green-700" />,
-            },
-            {
-              id: "contract",
-              label: "Contractor Management",
-              path: "/contractor",
-              icon: <FileText size={16} className="text-green-700" />,
-            },
-            {
-              id: "labour",
-              label: "Labour Rates & Analysis",
-              path: "/labour-rates",
-              icon: <Users size={16} className="text-green-700" />,
-            },
-          ],
-        },
-        {
-          id: "tendering",
-          label: "Tendering",
-          icon: <FileText size={18} className="text-green-700 " />,
-          children: [
-            {
-              id: "vendor",
-              label: "Vendor Onboarding",
-              path: "/vendor",
-              icon: <Users size={16} className="text-green-700 " />,
-            },
-            {
-              id: "Tendor",
-              label: "Tendor",
-              path: "/tendering",
-              icon: <FileText size={16} className="text-green-700" />,
-            },
-          ],
-        },
-        {
-          id: "Equipment",
-          label: "Equipment Management",
-          icon: <Truck size={18} className="text-green-700" />,
-          children: [
-            {
-              id: "standard",
-              label: "Standard Efficiency",
-              path: "/equipment-standard",
-              icon: <BarChart size={16} className="text-green-700 " />,
-            },
-          ],
-        },
-        {
-          id: "material",
-          label: "Material Management",
-          icon: <Layers size={18} className="text-green-700" />,
-          children: [
-            {
-              id: "indent",
-              label: "Indent Entry",
-              path: "/indent-main",
-              icon: <ClipboardList size={16} className="text-green-700 " />,
-            },
-          ],
-        },
-        {
-          id: "work-diary",
-          label: "Work Diary",
-          path: "/work-diary",
-          icon: <BookOpen size={18} className="text-green-700" />,
-        },
-        {
-          id: "hindering",
-          label: "Hindering Record",
-          path: "/hindering-report",
-          icon: <AlertTriangle size={18} className="text-green-700" />,
-        },
-      ],
-    },
-
-    {
-      id: "stock-inventory",
-      icon: <Warehouse size={20} className="text-green-700" />,
-      label: "Stock & Inventory",
-      isMainFolder: true,
-      children: [
-        {
-          id: "stock-management",
-          label: "Stock Management",
-          icon: <Warehouse size={18} className="text-green-700" />,
-          path: "/builder-erp/admin/stock-entry",
-        },
-        {
-          id: "inv_indent",
-          label: "Indent",
-          icon: <FileText size={18} className="text-green-700" />,
-          path: "/builder-erp/admin/indent-main",
-        },
-        {
-          id: "supplier-list",
-          label: "Supplier List",
-          icon: <Users size={18} className="text-green-700" />,
-          path: "/builder-erp/admin/supplier-list",
-        },
-        {
-          id: "purchase",
-          label: "Purchase",
-          icon: <ShoppingCart size={18} className="text-green-700" />,
-          path: "/builder-erp/admin/purchase-main",
-        },
-        {
-          id: "sale",
-          label: "Sale",
-          icon: <TrendingUp size={18} className="text-green-700" />,
-          path: "/builder-erp/admin/sale-main",
-        },
-      ],
-    },
-
     {
       id: "hrms",
       label: "HRMS ",
@@ -922,9 +753,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
                   console.error("Logo failed to load in expanded mode");
                   setLogoError(true);
                 }}
-                onLoad={() =>
-                  console.log("Logo loaded successfully in expanded mode")
-                }
+                onLoad={() =>}
               />
             ) : (
               <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0">
