@@ -1,6 +1,6 @@
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 import useAuth from "../../../../hooks/useAuth";
@@ -8,9 +8,13 @@ import AttendanceSubmissionSkeleton from "../skeletons/AttendanceSubmissionSkele
 import {
   getCurrentIndiaDate,
   parseIndiaDateTime,
+  formatBreakDuration,
+  parseIndiaDateTimeString,
 } from "../../utils/attendanceTime";
 import {
   Clock,
+  Coffee,
+  Play,
   MapPinOff,
   TriangleAlert,
   CircleAlert,
@@ -18,6 +22,7 @@ import {
   Sparkles,
   AlertCircle,
 } from "lucide-react";
+import BreakActionModal from "./BreakActionModal";
 
 const getDistanceMetres = (lat1, lon1, lat2, lon2) => {
   const toRad = (v) => (v * Math.PI) / 180;
@@ -222,6 +227,32 @@ const XYZ = () => {
   const [isExempt, setIsExempt] = useState(false);
   const [exemptionType, setExemptionType] = useState(null);
   const [autofillError, setAutofillError] = useState(false);
+  const [sessionStatus, setSessionStatus] = useState("IDLE");
+  const [totalBreakSeconds, setTotalBreakSeconds] = useState(0);
+  const [lastBreakStart, setLastBreakStart] = useState(null);
+  const [isBreakModalOpen, setIsBreakModalOpen] = useState(false);
+  const [breakModalAction, setBreakModalAction] = useState("BREAK_START");
+
+  const activeBreakSeconds = useMemo(() => {
+    if (sessionStatus !== "ON_BREAK" || !lastBreakStart) return 0;
+    const parsedStart = parseIndiaDateTimeString(lastBreakStart);
+    const startMs = parsedStart
+      ? parsedStart.getTime()
+      : new Date(lastBreakStart.replace(" ", "T")).getTime();
+
+    if (Number.isNaN(startMs)) return 0;
+    return Math.max(Math.floor((currentTimeTick - startMs) / 1000), 0);
+  }, [sessionStatus, lastBreakStart, currentTimeTick]);
+
+  const openBreakModal = (actionType) => {
+    setBreakModalAction(actionType);
+    setIsBreakModalOpen(true);
+  };
+
+  const handleBreakModalSubmit = async (reasonText) => {
+    setIsBreakModalOpen(false);
+    await handleBreakAction(breakModalAction, reasonText);
+  };
 
   const applyTodayAttendanceState = (record) => {
     if (record) {
@@ -231,6 +262,16 @@ const XYZ = () => {
       setEmployeeOtClaim(Boolean(record.employee_ot_claim));
       setOtEligibleFromApi(Boolean(record.ot_eligible));
       setActiveSessionDate(getAttendanceRecordDate(record));
+      setSessionStatus(
+        record.session_status ||
+          (record.punch_out
+            ? "COMPLETED"
+            : record.punch_in
+              ? "WORKING"
+              : "IDLE"),
+      );
+      setTotalBreakSeconds(Number(record.total_break_seconds || 0));
+      setLastBreakStart(record.last_break_start || null);
       setReason("");
       return;
     }
@@ -241,6 +282,9 @@ const XYZ = () => {
     setEmployeeOtClaim(false);
     setOtEligibleFromApi(false);
     setActiveSessionDate(null);
+    setSessionStatus("IDLE");
+    setTotalBreakSeconds(0);
+    setLastBreakStart(null);
   };
 
   const loadTodayAttendance = async (employeeId) => {
@@ -682,6 +726,72 @@ const XYZ = () => {
     }
   };
 
+  const handleBreakAction = async (actionType, reasonOverride) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
+      const selectedReason =
+        reasonOverride ||
+        (actionType === "BREAK_START"
+          ? reason.trim() || "General Break"
+          : undefined);
+
+      const payload = {
+        employee_id: formData.employeeId,
+        employee_name: formData.employeeName,
+        department: formData.department,
+        company_id,
+        company: companyName,
+        slug: user?.slug,
+        latitude: parseFloat(deviceLat || qrLat || params.get("lat") || 0),
+        longitude: parseFloat(deviceLon || qrLon || params.get("lon") || 0),
+        qr_latitude: parseFloat(qrLat || 0),
+        qr_longitude: parseFloat(qrLon || 0),
+        qr_sig: params.get("sig") || "",
+        device: /Mobi|Android/i.test(navigator.userAgent)
+          ? "mobile"
+          : "desktop",
+        action: actionType,
+        reason: selectedReason,
+      };
+
+      const res = await axios.post(
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/attendance/submit`,
+        payload,
+      );
+
+      if (res.data.success) {
+        setSessionStatus(res.data.session_status);
+        if (res.data.total_break_seconds !== undefined) {
+          setTotalBreakSeconds(res.data.total_break_seconds);
+        }
+        if (res.data.last_break_start) {
+          setLastBreakStart(res.data.last_break_start);
+        }
+        Swal.fire({
+          icon: "success",
+          title:
+            actionType === "BREAK_START" ? "Break Started" : "Work Resumed",
+          text: res.data.message || "Attendance updated successfully",
+          confirmButtonColor: "#4f46e5",
+        });
+        await loadTodayAttendance(formData.employeeId);
+      }
+    } catch (error) {
+      const message =
+        error?.response?.data?.message || "Failed to update break status";
+      Swal.fire({
+        icon: "warning",
+        title: "Break Info",
+        text: message,
+        confirmButtonColor: "#4f46e5",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleAutofillTimesheet = async () => {
     setIsAutofilling(true);
     try {
@@ -1022,7 +1132,7 @@ const XYZ = () => {
                   </div>
                 )}
 
-                {mispunchTime && !leaveTime && (
+                {mispunchTime && !leaveTime && sessionStatus !== "ON_BREAK" && (
                   <div className="space-y-3">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                       <label className="text-xs font-semibold text-slate-700">
@@ -1072,7 +1182,7 @@ const XYZ = () => {
                   </div>
                 )}
 
-                {showOtClaimCheckbox && (
+                {showOtClaimCheckbox && sessionStatus !== "ON_BREAK" && (
                   <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3.5">
                     <input
                       type="checkbox"
@@ -1135,24 +1245,82 @@ const XYZ = () => {
                     </div>
                   )}
 
-                {!hasPunchedOut && (
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || geofenceBlocked}
-                    className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-slate-900 via-slate-800 to-sky-700 px-4 py-3 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(15,23,42,0.16)] transition duration-200 hover:-translate-y-0.5 hover:from-slate-800 hover:via-slate-700 hover:to-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-200 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Check className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
-                        {hasPunchedIn ? "Punch Out" : "Punch In"}
-                      </>
+                {!hasPunchedOut && sessionStatus === "ON_BREAK" && (
+                  <div className="rounded-2xl border border-amber-200/90 bg-amber-50/70 p-4 sm:p-5 shadow-xs transition-all">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3.5 sm:gap-4">
+                      <div className="flex items-start sm:items-center gap-3">
+                        <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-700 border border-amber-200/80 mt-0.5 sm:mt-0 shadow-2xs">
+                          <Coffee className="h-5 w-5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between sm:justify-start gap-2">
+                            <h4 className="text-xs sm:text-sm font-bold text-amber-950">
+                              You are currently on break
+                            </h4>
+                            <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300/80 bg-white/90 px-2 py-0.5 text-xs font-mono font-bold text-amber-900 shadow-2xs shrink-0">
+                              <Clock
+                                className="h-3 w-3 text-amber-600 animate-spin"
+                                style={{ animationDuration: "4s" }}
+                              />
+                              {formatBreakDuration(activeBreakSeconds)}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-xs text-amber-800/90 leading-relaxed">
+                            Click "Resume Work" when you return to your desk.
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleBreakAction("BREAK_END")}
+                        disabled={isSubmitting || geofenceBlocked}
+                        className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 hover:bg-amber-700 active:bg-amber-800 px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-xs transition duration-150 disabled:opacity-60"
+                      >
+                        <Play className="h-4 w-4" />
+                        {isSubmitting
+                          ? "Resuming..."
+                          : "Resume Work (Break In)"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {!hasPunchedOut && sessionStatus !== "ON_BREAK" && (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {hasPunchedIn && sessionStatus === "WORKING" && (
+                      <button
+                        type="button"
+                        onClick={() => openBreakModal("BREAK_START")}
+                        disabled={isSubmitting || geofenceBlocked}
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs sm:text-sm font-semibold text-slate-800 shadow-xs transition hover:bg-slate-50 hover:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <Coffee className="h-4 w-4 text-slate-600" />
+                        Take a Break
+                      </button>
                     )}
-                  </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting || geofenceBlocked}
+                      className={`group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-slate-900 via-slate-800 to-sky-700 px-4 py-3 text-xs sm:text-sm font-semibold text-white shadow-[0_14px_28px_rgba(15,23,42,0.16)] transition duration-200 hover:-translate-y-0.5 hover:from-slate-800 hover:via-slate-700 hover:to-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-200 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 ${
+                        hasPunchedIn && sessionStatus === "WORKING"
+                          ? ""
+                          : "sm:col-span-2"
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Check className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+                          {hasPunchedIn ? "Punch Out" : "Punch In"}
+                        </>
+                      )}
+                    </button>
+                  </div>
                 )}
 
                 {hasPunchedOut && (
@@ -1175,6 +1343,13 @@ const XYZ = () => {
           </section>
         </div>
       </div>
+
+      <BreakActionModal
+        isOpen={isBreakModalOpen}
+        onClose={() => setIsBreakModalOpen(false)}
+        onSubmit={handleBreakModalSubmit}
+        isSubmitting={isSubmitting}
+      />
     </>
   );
 };
