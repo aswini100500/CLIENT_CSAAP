@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
+import useAuth from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
 function CompanyForm() {
   const { userId, user } = useUser();
   const navigate = useNavigate();
-  const { companyId } = useCompany();
+  const { companyId } = useAuth();
 
   useEffect(() => {
     if (!userId || !user) {

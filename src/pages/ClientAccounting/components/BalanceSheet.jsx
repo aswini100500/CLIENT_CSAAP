@@ -1,13 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
-import { Printer, RefreshCw, FileSpreadsheet, FileText } from "lucide-react";
+import useAuth from "../../../hooks/useAuth";
+import {
+  Printer,
+  RefreshCw,
+  FileSpreadsheet,
+  FileText,
+  Building2,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 const BalanceSheet = () => {
-  const { companyId, companyName } = useCompany();
+  const { companyId, companyName } = useAuth();
 
   const [balanceData, setBalanceData] = useState({
     assets: [],
@@ -217,14 +226,31 @@ const BalanceSheet = () => {
     });
   }
 
+  const { totalAssets, totalLiabilities } = balanceData.totals;
+  const isBalanced = Math.abs(totalAssets - totalLiabilities) < 5;
+
   const RenderSide = ({ title, groups, total }) => {
+    const isLiab = title === "Liabilities";
     return (
-      <div className="flex-1 border border-gray-300 min-h-150 flex flex-col bg-white">
-        <div className="bg-blue-800 text-white text-center py-2 font-bold uppercase tracking-wider border-b border-blue-900">
-          {title}
+      <div className="flex-1 app-panel overflow-hidden border border-(--border-soft) bg-white flex flex-col min-h-112.5">
+        <div
+          className={`py-3.5 px-4 font-extrabold uppercase tracking-wider text-xs border-b flex items-center justify-between ${
+            isLiab
+              ? "bg-emerald-50/60 text-emerald-800 border-emerald-100"
+              : "bg-sky-50/60 text-sky-800 border-sky-100"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <span
+              className={`size-2 rounded-full ${
+                isLiab ? "bg-emerald-600" : "bg-sky-600"
+              }`}
+            />
+            <span>{title}</span>
+          </div>
         </div>
 
-        <div className="p-4 grow space-y-4">
+        <div className="p-4 grow space-y-3.5 overflow-y-auto">
           {Object.keys(groups)
             .sort()
             .map((groupName) => {
@@ -238,10 +264,10 @@ const BalanceSheet = () => {
               );
 
               return (
-                <div key={groupName}>
-                  <div className="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-1 flex justify-between">
+                <div key={groupName} className="space-y-1">
+                  <div className="font-bold text-(--text-strong) text-xs border-b border-(--border-soft) pb-1 mb-1 flex justify-between items-center">
                     <span>{groupName}</span>
-                    <span>
+                    <span className="font-bold text-(--text-strong) tabular-nums">
                       {formatCurrency(Math.abs(groupTotal))}{" "}
                       {groupTotal < 0
                         ? title === "Liabilities"
@@ -250,7 +276,7 @@ const BalanceSheet = () => {
                         : ""}
                     </span>
                   </div>
-                  <div className="pl-4 space-y-1">
+                  <div className="pl-3 space-y-1 border-l-2 border-(--border-soft) ml-1">
                     {groupName !== "Difference in opening balances" &&
                       groupName !== "Profit & Loss" &&
                       groups[groupName].map((ledger) => {
@@ -261,10 +287,16 @@ const BalanceSheet = () => {
                         return (
                           <div
                             key={ledger.ledgerId}
-                            className="flex justify-between text-sm text-gray-600 hover:text-blue-600 cursor-pointer"
+                            className={`flex justify-between text-xs text-(--text-soft) hover:text-(--text-strong) py-1 px-1.5 rounded-lg transition-colors cursor-pointer ${
+                              isLiab
+                                ? "hover:bg-(--bg-subtle)/50"
+                                : "hover:bg-sky-50/50"
+                            }`}
                           >
-                            <span>{ledger.ledgerName}</span>
-                            <span>
+                            <span className="font-medium">
+                              {ledger.ledgerName}
+                            </span>
+                            <span className="font-semibold text-(--text-strong) tabular-nums text-[11px]">
                               {formatCurrency(Math.abs(ledgerVal))}{" "}
                               {ledgerVal < 0
                                 ? title === "Liabilities"
@@ -281,9 +313,15 @@ const BalanceSheet = () => {
             })}
         </div>
 
-        <div className="bg-gray-100 p-3 border-t border-gray-300 flex justify-between font-bold text-gray-900 text-lg">
-          <span>Total</span>
-          <span>{formatCurrency(total)}</span>
+        <div className="bg-(--bg-subtle)/40 p-3.5 border-t border-(--border-soft) flex justify-between font-extrabold text-(--text-strong) text-sm mt-auto">
+          <span>Total {title}</span>
+          <span
+            className={`font-extrabold tabular-nums ${
+              isLiab ? "text-emerald-700" : "text-sky-700"
+            }`}
+          >
+            {formatCurrency(total)}
+          </span>
         </div>
       </div>
     );
@@ -291,60 +329,75 @@ const BalanceSheet = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="app-panel p-10 flex flex-col justify-center items-center bg-white border border-(--border-soft)">
+        <Loader2 className="size-8 animate-spin text-(--brand) mb-3" />
+        <p className="text-xs font-semibold text-(--text-soft)">
+          Loading Balance Sheet Data...
+        </p>
       </div>
     );
   }
 
-  const { totalAssets, totalLiabilities } = balanceData.totals;
-  const isBalanced = Math.abs(totalAssets - totalLiabilities) < 5;
-
   return (
-    <div className="min-h-screen bg-gray-50 p-6 font-mono print:bg-white print:p-0">
-      <div className="mb-6 flex justify-between items-center print:hidden">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">Balance Sheet</h1>
-          <p className="text-gray-600">{companyName}</p>
-          <p className="text-sm text-gray-500">
-            As on {new Date().toLocaleDateString()}
-          </p>
+    <div className="space-y-6 font-sans text-sm print:bg-white print:p-0">
+      <div className="app-panel p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 print:hidden">
+        <div className="flex items-center gap-2.5 text-[13px] font-bold text-(--text-strong)">
+          <div className="size-8 rounded-xl bg-(--brand-soft) border border-(--border-strong) flex items-center justify-center text-(--brand)">
+            <Building2 size={16} />
+          </div>
+          <div>
+            <span className="block leading-tight">
+              {companyName || companyId || "Company Accounting"}
+            </span>
+            <span className="text-[11px] font-medium text-(--text-faint)">
+              As on {new Date().toLocaleDateString("en-IN")}
+            </span>
+          </div>
         </div>
-        <div className="flex gap-3">
+
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={fetchBalanceSheet}
-            className="flex items-center gap-2 bg-gray-200 text-gray-700 px-3 py-2 rounded hover:bg-gray-300"
+            className="app-btn-secondary flex items-center gap-2 min-h-9 px-3 text-[13px]"
           >
-            <RefreshCw size={16} /> Refresh
+            <RefreshCw size={14} className="text-(--text-soft)" />
+            <span>Refresh</span>
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition"
+            className="app-btn-secondary flex items-center gap-2 min-h-9 px-3 text-[13px]"
           >
-            <Printer size={16} /> Print
+            <Printer size={14} className="text-(--text-soft)" />
+            <span>Print</span>
           </button>
           <button
             onClick={handleExportPDF}
-            className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+            className="app-btn-secondary flex items-center gap-2 min-h-9 px-3 text-[13px]"
           >
-            <FileText size={16} /> Export PDF
+            <FileText size={14} className="text-rose-600" />
+            <span>Export PDF</span>
           </button>
           <button
             onClick={handleExportExcel}
-            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+            className="app-btn-primary flex items-center gap-2 min-h-9 px-3 text-[13px]"
           >
-            <FileSpreadsheet size={16} /> Export Excel
+            <FileSpreadsheet size={14} className="text-white" />
+            <span>Export Excel</span>
           </button>
         </div>
       </div>
 
       <div className="hidden print:block text-center mb-6">
-        <h1 className="text-2xl font-bold uppercase">{companyName}</h1>
-        <h2 className="text-xl font-bold uppercase mt-1">Balance Sheet</h2>
-        <p className="text-sm mt-1">As on {new Date().toLocaleDateString()}</p>
+        <h1 className="text-xl font-bold">{companyName}</h1>
+        <h2 className="text-lg font-semibold text-gray-700">
+          Balance Sheet Report
+        </h2>
+        <p className="text-sm text-gray-500">
+          As on {new Date().toLocaleDateString()}
+        </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-0 md:gap-4 shadow-lg print:hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print:hidden">
         <RenderSide
           title="Liabilities"
           groups={liabilityGroups}
@@ -375,35 +428,45 @@ const BalanceSheet = () => {
             {tableRows.map((row, idx) => {
               const l = row.liab || { name: "", amount: "" };
               const a = row.asset || { name: "", amount: "" };
-
               const lAmt =
                 l.amount !== ""
-                  ? `${formatCurrency(Math.abs(l.amount))} ${l.amount < 0 ? "Dr" : ""}`.trim()
+                  ? `${formatCurrency(Math.abs(l.amount))} ${
+                      l.amount < 0 ? "Dr" : ""
+                    }`.trim()
                   : "";
               const aAmt =
                 a.amount !== ""
-                  ? `${formatCurrency(Math.abs(a.amount))} ${a.amount < 0 ? "Cr" : ""}`.trim()
+                  ? `${formatCurrency(Math.abs(a.amount))} ${
+                      a.amount < 0 ? "Cr" : ""
+                    }`.trim()
                   : "";
-
               return (
                 <tr key={idx}>
                   <td
-                    className={`p-2 border border-gray-300 text-gray-800 ${l.isGroup ? "font-semibold" : "pl-6 text-gray-600"}`}
+                    className={`p-2 border border-gray-300 text-gray-800 ${
+                      l.isGroup ? "font-semibold" : "pl-6 text-gray-600"
+                    }`}
                   >
                     {l.name}
                   </td>
                   <td
-                    className={`p-2 border border-gray-300 ${l.isGroup ? "font-semibold" : ""}`}
+                    className={`p-2 border border-gray-300 ${
+                      l.isGroup ? "font-semibold" : ""
+                    }`}
                   >
                     {lAmt}
                   </td>
                   <td
-                    className={`p-2 border border-gray-300 text-gray-800 ${a.isGroup ? "font-semibold" : "pl-6 text-gray-600"}`}
+                    className={`p-2 border border-gray-300 text-gray-800 ${
+                      a.isGroup ? "font-semibold" : "pl-6 text-gray-600"
+                    }`}
                   >
                     {a.name}
                   </td>
                   <td
-                    className={`p-2 border border-gray-300 ${a.isGroup ? "font-semibold" : ""}`}
+                    className={`p-2 border border-gray-300 ${
+                      a.isGroup ? "font-semibold" : ""
+                    }`}
                   >
                     {aAmt}
                   </td>
@@ -427,9 +490,12 @@ const BalanceSheet = () => {
       </div>
 
       {!isBalanced && (
-        <div className="mt-4 p-4 bg-red-100 text-red-800 border-l-4 border-red-500 rounded font-bold text-center print:border-red-500">
-          DIFFERENCE IN OPENING BALANCES:{" "}
-          {formatCurrency(Math.abs(totalAssets - totalLiabilities))}
+        <div className="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl font-bold text-center flex items-center justify-center gap-2 shadow-2xs print:border-red-500">
+          <AlertCircle size={18} className="text-rose-600" />
+          <span>
+            DIFFERENCE IN OPENING BALANCES:{" "}
+            {formatCurrency(Math.abs(totalAssets - totalLiabilities))}
+          </span>
         </div>
       )}
     </div>

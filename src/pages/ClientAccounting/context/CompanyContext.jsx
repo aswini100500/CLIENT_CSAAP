@@ -1,23 +1,32 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useRef,
-} from "react";
+import React from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
 
 const CompanyContext = createContext();
 
 export const CompanyProvider = ({ children }) => {
-  const { user, token } = useAuth();
-  const API_BASE_URL =
-    import.meta.env.VITE_CSAAP_URL || "https://csaapnodeapi.csaap.com";
-  const [companyId, setCompanyId] = useState(null);
-  const [companyName, setcompanyName] = useState("");
+  const {
+    user,
+    token,
+    companyId: authCompanyId,
+    companyName: authCompanyName,
+  } = useAuth();
+  const [companyId, setCompanyId] = useState(authCompanyId || null);
+  const [companyName, setcompanyName] = useState(authCompanyName || "");
   const [employees, setEmployees] = useState([]);
   const isFetching = useRef(false);
+
+  useEffect(() => {
+    if (authCompanyId) {
+      setCompanyId(authCompanyId);
+      sessionStorage.setItem("selectedCompanyId", authCompanyId);
+    }
+    if (authCompanyName) {
+      setcompanyName(authCompanyName);
+      sessionStorage.setItem("selectedCompanyName", authCompanyName);
+    }
+  }, [authCompanyId, authCompanyName]);
 
   const fetchCompanyByEmail = async () => {
     if (isFetching.current) return;
@@ -37,11 +46,14 @@ export const CompanyProvider = ({ children }) => {
         if (res.data) {
           const company = res.data;
 
-          setCompanyId(company.id);
-          setcompanyName(company.name);
+          const resolvedId = authCompanyId || company.id;
+          const resolvedName = authCompanyName || company.name;
 
-          sessionStorage.setItem("selectedCompanyId", company.id);
-          sessionStorage.setItem("selectedCompanyName", company.name);
+          setCompanyId(resolvedId);
+          setcompanyName(resolvedName);
+
+          sessionStorage.setItem("selectedCompanyId", resolvedId);
+          sessionStorage.setItem("selectedCompanyName", resolvedName);
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
@@ -50,6 +62,7 @@ export const CompanyProvider = ({ children }) => {
               `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/create`,
               {
                 name:
+                  authCompanyName ||
                   user?.companyName ||
                   user?.company ||
                   user?.slug ||
@@ -65,8 +78,9 @@ export const CompanyProvider = ({ children }) => {
             );
 
             if (createRes.data && createRes.data.id) {
-              const newCompanyId = createRes.data.id;
+              const newCompanyId = authCompanyId || createRes.data.id;
               const newCompanyName =
+                authCompanyName ||
                 user?.companyName ||
                 user?.company ||
                 user?.slug ||
@@ -96,7 +110,7 @@ export const CompanyProvider = ({ children }) => {
   const fetchEmployeesList = async (id) => {
     try {
       const res = await axios.get(
-        `${API_BASE_URL}/api/tenant/hrms/all-employees`,
+        `https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees`,
         {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         },
@@ -111,8 +125,10 @@ export const CompanyProvider = ({ children }) => {
 
   useEffect(() => {
     if (user?.email) {
-      const savedId = sessionStorage.getItem("selectedCompanyId");
-      const savedName = sessionStorage.getItem("selectedCompanyName");
+      const savedId =
+        sessionStorage.getItem("selectedCompanyId") || authCompanyId;
+      const savedName =
+        sessionStorage.getItem("selectedCompanyName") || authCompanyName;
 
       if (savedId && savedName) {
         setCompanyId(Number(savedId));
@@ -120,19 +136,20 @@ export const CompanyProvider = ({ children }) => {
         fetchEmployeesList(Number(savedId));
       } else {
         fetchCompanyByEmail().then(() => {
-          const id = sessionStorage.getItem("selectedCompanyId");
+          const id =
+            sessionStorage.getItem("selectedCompanyId") || authCompanyId;
           if (id) fetchEmployeesList(Number(id));
         });
       }
     }
-  }, [user?.email, token]);
+  }, [user?.email, token, authCompanyId, authCompanyName]);
 
   return (
     <CompanyContext.Provider
       value={{
-        companyId,
+        companyId: companyId || authCompanyId,
         setCompanyId,
-        companyName,
+        companyName: companyName || authCompanyName,
         setcompanyName,
         employees,
       }}
@@ -142,4 +159,18 @@ export const CompanyProvider = ({ children }) => {
   );
 };
 
-export const useCompany = () => useContext(CompanyContext);
+export const useCompany = () => {
+  const context = useContext(CompanyContext);
+  const auth = useAuth();
+
+  const companyId = auth?.companyId || context?.companyId;
+  const companyName = auth?.companyName || context?.companyName;
+
+  return {
+    ...context,
+    companyId,
+    companyName,
+    user: auth?.user,
+    token: auth?.token,
+  };
+};

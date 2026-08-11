@@ -1,8 +1,19 @@
+import React from "react";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { useCompany } from "../context/CompanyContext";
+import { useState, useEffect } from "react";
+import useAuth from "../../../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
+import {
+  PackagePlus,
+  Save,
+  ArrowLeft,
+  Barcode,
+  Scale,
+  CalendarClock,
+  X,
+  Boxes,
+} from "lucide-react";
 
 const StockItemCreation = () => {
   const navigate = useNavigate();
@@ -26,8 +37,8 @@ const StockItemCreation = () => {
   });
 
   const [groups, setGroups] = useState([]);
-
-  const { companyId } = useCompany();
+  const [stockId, setStockId] = useState(null);
+  const { companyId } = useAuth();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -42,7 +53,7 @@ const StockItemCreation = () => {
       const fetchGroups = async () => {
         try {
           const res = await axios.get(
-            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`,
+            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group/all/${companyId}`
           );
           setGroups(res.data || []);
         } catch (err) {
@@ -53,8 +64,6 @@ const StockItemCreation = () => {
       fetchGroups();
     }
   }, [companyId]);
-
-  const [stockId, setStockId] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -87,7 +96,7 @@ const StockItemCreation = () => {
       } else {
         axios
           .get(
-            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockById/${companyId}/${id}`,
+            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockById/${companyId}/${id}`
           )
           .then((res) => {
             if (res.data.success) {
@@ -161,9 +170,9 @@ const StockItemCreation = () => {
 
     try {
       if (stockId) {
-        const { data } = await axios.put(
+        await axios.put(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/updateStock/${companyId}/${stockId}`,
-          payload,
+          payload
         );
         Swal.fire({
           icon: "success",
@@ -179,9 +188,9 @@ const StockItemCreation = () => {
           }
         });
       } else {
-        const { data } = await axios.post(
+        await axios.post(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/createStock/${companyId}`,
-          payload,
+          payload
         );
         Swal.fire({
           icon: "success",
@@ -205,6 +214,7 @@ const StockItemCreation = () => {
       });
     }
   };
+
   const handleReject = () => {
     const params = new URLSearchParams(window.location.search);
     const redirect = params.get("redirect");
@@ -217,262 +227,380 @@ const StockItemCreation = () => {
   };
 
   return (
-    <div className="w-full  bg-[#f6f3e9] p-4 font-mono text-sm overflow-auto">
-      <h1 className="text-center font-bold text-lg mb-4">
-        {stockId ? "Edit: Stock Item" : "Create: Stock Item"}
-      </h1>
-
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-9 pl-4">
-          <div className="space-y-3">
-            <div className="flex items-center">
-              <label className="w-48">Name:</label>
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                className="border px-2 py-1 w-80"
-                type="text"
-              />
+    <div className="erp-root app-shell min-h-screen p-6 font-sans">
+      <div className="max-w-5xl mx-auto space-y-6">
+        {/* Page Header */}
+        <div className="bg-white app-panel border border-[#e2f2e9] rounded-2xl p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="size-11 rounded-2xl bg-[#ecfdf5] border border-[#c6f1d6] flex items-center justify-center shrink-0">
+              <PackagePlus className="size-6 text-[#00a651]" />
             </div>
-
-            <div className="flex items-center">
-              <label className="w-48">Alias:</label>
-              <input
-                name="alias"
-                value={form.alias}
-                onChange={handleChange}
-                className="border px-2 py-1 w-80"
-                type="text"
-              />
+            <div>
+              <h1 className="app-title text-xl font-extrabold text-[#042f2e]">
+                {stockId ? "Edit Stock Item" : "Create Stock Item"}
+              </h1>
+              <p className="app-subtitle text-xs md:text-sm text-[#475569] font-medium mt-0.5">
+                Configure item classification, batch tracking, tax rate, and opening inventory.
+              </p>
             </div>
+          </div>
 
-            <div className="flex items-center">
-              <label className="w-48">Under:</label>
-              <select
-                name="under"
-                value={form.under}
-                onChange={handleChange}
-                className="border px-2 py-1 w-80"
-              >
-                <option value="">Select Group</option>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleReject}
+              className="h-10 px-4 app-btn-secondary text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+            >
+              <ArrowLeft className="size-4" /> Back to Stock Summary
+            </button>
+          </div>
+        </div>
 
-                {groups.map((g) => (
-                  <option key={g.id} value={g.groupName}>
-                    {g.groupName}
-                  </option>
-                ))}
-              </select>
-            </div>
+        {/* Form Layout Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Main Details */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Basic Info Panel */}
+            <div className="app-panel overflow-hidden border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="app-section-bar px-6 py-4 bg-[#f0fdf4]/60 border-b border-[#e2f2e9] flex items-center gap-2">
+                <Boxes className="size-4 text-[#00a651]" />
+                <h3 className="app-heading text-sm font-bold text-[#042f2e]">
+                  Basic Information
+                </h3>
+              </div>
 
-            <div className="flex items-start">
-              <label className="w-48 pt-2">Units:</label>
+              <div className="p-6 space-y-5">
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                    Stock Item Name <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="e.g. Steel Rods 12mm / Cement Bag 50kg"
+                    className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white placeholder-[#94a3b8] focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] outline-none"
+                    type="text"
+                  />
+                </div>
 
-              <div className="flex flex-col gap-2 w-80">
-                <select
-                  name="units"
-                  value={form.units}
-                  onChange={(e) => {
-                    if (e.target.value === "Other") {
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                      Alias / Item Code
+                    </label>
+                    <input
+                      name="alias"
+                      value={form.alias}
+                      onChange={handleChange}
+                      placeholder="e.g. STR-12MM"
+                      className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white placeholder-[#94a3b8] focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] outline-none"
+                      type="text"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                      Under Group <span className="text-rose-500">*</span>
+                    </label>
+                    <select
+                      name="under"
+                      value={form.under}
+                      onChange={handleChange}
+                      className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] outline-none cursor-pointer"
+                    >
+                      <option value="">Select Stock Group</option>
+                      {groups.map((g) => (
+                        <option key={g.id} value={g.groupName}>
+                          {g.groupName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                    Unit of Measurement <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    name="units"
+                    value={form.units}
+                    onChange={(e) => {
+                      if (e.target.value === "Other") {
+                        setForm({
+                          ...form,
+                          units: "Other",
+                          customUnit: "",
+                        });
+                        return;
+                      }
                       setForm({
                         ...form,
-                        units: "Other",
+                        units: e.target.value,
                         customUnit: "",
                       });
-                      return;
-                    }
+                    }}
+                    className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] outline-none cursor-pointer"
+                  >
+                    <option value="">Select Predefined Unit</option>
+                    <optgroup label="Count / Items">
+                      <option value="Nos">Nos</option>
+                      <option value="Piece">Piece</option>
+                      <option value="Pair">Pair</option>
+                      <option value="Set">Set</option>
+                      <option value="Dozen">Dozen</option>
+                    </optgroup>
+                    <optgroup label="Weight / Mass">
+                      <option value="Kg">Kg</option>
+                      <option value="Gram">Gram</option>
+                      <option value="Quintal">Quintal</option>
+                      <option value="Ton">Ton</option>
+                    </optgroup>
+                    <optgroup label="Volume / Liquid">
+                      <option value="Litre">Litre</option>
+                      <option value="ML">ML</option>
+                    </optgroup>
+                    <optgroup label="Length / Area">
+                      <option value="Meter">Meter</option>
+                      <option value="Feet">Feet</option>
+                      <option value="Inch">Inch</option>
+                      <option value="CM">CM</option>
+                    </optgroup>
+                    <optgroup label="Packaging">
+                      <option value="Box">Box</option>
+                      <option value="Bag">Bag</option>
+                      <option value="Packet">Packet</option>
+                      <option value="Bottle">Bottle</option>
+                      <option value="Carton">Carton</option>
+                      <option value="Bundle">Bundle</option>
+                      <option value="Roll">Roll</option>
+                      <option value="Tray">Tray</option>
+                      <option value="Can">Can</option>
+                      <option value="Drum">Drum</option>
+                      <option value="Sheet">Sheet</option>
+                      <option value="Rod">Rod</option>
+                      <option value="Pipe">Pipe</option>
+                      <option value="Block">Block</option>
+                    </optgroup>
+                    <option value="Other">Other (Add Manually)</option>
+                  </select>
 
-                    setForm({
-                      ...form,
-                      units: e.target.value,
-                      customUnit: "",
-                    });
-                  }}
-                  className="border px-2 py-1 w-full"
-                >
-                  <option value="">Select Unit</option>
+                  {form.units === "Other" && (
+                    <input
+                      type="text"
+                      placeholder="Type custom unit (e.g. Barrel, SqFt)"
+                      value={form.customUnit || ""}
+                      onChange={(e) =>
+                        setForm({
+                          ...form,
+                          customUnit: e.target.value,
+                        })
+                      }
+                      className="app-input w-full mt-2 px-3.5 py-2.5 border border-[#c6f1d6] bg-[#f0fdf4] rounded-xl text-sm font-semibold text-[#042f2e] focus:border-[#00a651] outline-none"
+                    />
+                  )}
+                  <p className="text-xs text-[#475569] font-medium mt-1">
+                    Standard measurement unit for stock accounting, purchase vouchers, and sales bills.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-                  <option value="Nos">Nos</option>
-                  <option value="Piece">Piece</option>
-                  <option value="Pair">Pair</option>
-                  <option value="Set">Set</option>
-                  <option value="Dozen">Dozen</option>
+            {/* Opening Balance Panel */}
+            <div className="app-panel overflow-hidden border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="app-section-bar px-6 py-4 bg-[#f0fdf4]/60 border-b border-[#e2f2e9] flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Scale className="size-4 text-[#00a651]" />
+                  <h3 className="app-heading text-sm font-bold text-[#042f2e]">
+                    Opening Balance
+                  </h3>
+                </div>
+                <span className="text-xs font-medium text-[#475569]">
+                  Inventory stock on hand at setup
+                </span>
+              </div>
 
-                  <option value="Kg">Kg</option>
-                  <option value="Gram">Gram</option>
-                  <option value="Quintal">Quintal</option>
-                  <option value="Ton">Ton</option>
+              <div className="p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                      Opening Quantity
+                    </label>
+                    <input
+                      name="openingBalanceQty"
+                      value={form.openingBalanceQty}
+                      onChange={handleChange}
+                      placeholder="0.00"
+                      className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white focus:border-[#00a651] outline-none"
+                      type="text"
+                    />
+                  </div>
 
-                  <option value="Litre">Litre</option>
-                  <option value="ML">ML</option>
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                      Rate per Unit (₹)
+                    </label>
+                    <input
+                      name="openingBalanceRate"
+                      value={form.openingBalanceRate}
+                      onChange={handleChange}
+                      placeholder="0.00"
+                      className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white focus:border-[#00a651] outline-none"
+                      type="text"
+                    />
+                  </div>
 
-                  <option value="Meter">Meter</option>
-                  <option value="Feet">Feet</option>
-                  <option value="Inch">Inch</option>
-                  <option value="CM">CM</option>
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                      Total Value (₹)
+                    </label>
+                    <input
+                      name="openingBalanceValue"
+                      value={form.openingBalanceValue}
+                      onChange={handleChange}
+                      placeholder="0.00"
+                      className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-semibold text-[#042f2e] bg-[#f0fdf4]/60 focus:border-[#00a651] outline-none"
+                      type="text"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                  <option value="Box">Box</option>
-                  <option value="Bag">Bag</option>
-                  <option value="Packet">Packet</option>
-                  <option value="Bottle">Bottle</option>
-                  <option value="Carton">Carton</option>
-                  <option value="Bundle">Bundle</option>
-                  <option value="Roll">Roll</option>
-                  <option value="Tray">Tray</option>
-                  <option value="Can">Can</option>
-                  <option value="Drum">Drum</option>
+          {/* Sidebar Controls */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Batch & Tracking */}
+            <div className="app-panel overflow-hidden border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="app-section-bar px-6 py-4 bg-[#f0fdf4]/60 border-b border-[#e2f2e9] flex items-center gap-2">
+                <CalendarClock className="size-4 text-[#00a651]" />
+                <h3 className="app-heading text-sm font-bold text-[#042f2e]">
+                  Batch & Date Tracking
+                </h3>
+              </div>
 
-                  <option value="Sheet">Sheet</option>
-                  <option value="Rod">Rod</option>
-                  <option value="Pipe">Pipe</option>
-                  <option value="Block">Block</option>
-
-                  <option value="Other">Other (Add Manually)</option>
-                </select>
-
-                {form.units === "Other" && (
+              <div className="p-6 space-y-4">
+                <label className="flex items-start gap-3 p-3.5 rounded-xl border border-[#e2f2e9] hover:border-[#c6f1d6] hover:bg-[#f0fdf4]/40 transition-all cursor-pointer">
                   <input
-                    type="text"
-                    placeholder="Enter custom unit"
-                    value={form.customUnit || ""}
-                    onChange={(e) =>
-                      setForm({
-                        ...form,
-                        customUnit: e.target.value,
-                      })
-                    }
-                    className="border px-2 py-1 w-full"
+                    type="checkbox"
+                    name="maintainInBatches"
+                    checked={form.maintainInBatches}
+                    onChange={handleChange}
+                    className="mt-0.5 rounded text-[#00a651] focus:ring-[#00a651] size-4 cursor-pointer"
                   />
-                )}
+                  <div>
+                    <span className="text-sm font-bold text-[#042f2e] block leading-snug">
+                      Maintain in Batches
+                    </span>
+                    <span className="text-xs font-medium text-[#475569] block mt-0.5 leading-normal">
+                      Lot-wise batch numbers for granular inventory auditing.
+                    </span>
+                  </div>
+                </label>
 
-                <p className="text-[11px] text-gray-500">
-                  Select predefined unit or add your own custom unit.
-                </p>
+                <label className="flex items-start gap-3 p-3.5 rounded-xl border border-[#e2f2e9] hover:border-[#c6f1d6] hover:bg-[#f0fdf4]/40 transition-all cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="trackDateOfManufacture"
+                    checked={form.trackDateOfManufacture}
+                    onChange={handleChange}
+                    className="mt-0.5 rounded text-[#00a651] focus:ring-[#00a651] size-4 cursor-pointer"
+                  />
+                  <div>
+                    <span className="text-sm font-bold text-[#042f2e] block leading-snug">
+                      Track Date of Mfg
+                    </span>
+                    <span className="text-xs font-medium text-[#475569] block mt-0.5 leading-normal">
+                      Record production & manufacturing dates.
+                    </span>
+                  </div>
+                </label>
+
+                <label className="flex items-start gap-3 p-3.5 rounded-xl border border-[#e2f2e9] hover:border-[#c6f1d6] hover:bg-[#f0fdf4]/40 transition-all cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="expiryDateOfBatches"
+                    checked={form.expiryDateOfBatches}
+                    onChange={handleChange}
+                    className="mt-0.5 rounded text-[#00a651] focus:ring-[#00a651] size-4 cursor-pointer"
+                  />
+                  <div>
+                    <span className="text-sm font-bold text-[#042f2e] block leading-snug">
+                      Expiry Date of Batches
+                    </span>
+                    <span className="text-xs font-medium text-[#475569] block mt-0.5 leading-normal">
+                      Track shelf-life & batch expiration limits.
+                    </span>
+                  </div>
+                </label>
               </div>
             </div>
-          </div>
 
-          <hr className="my-4 border-black" />
-
-          <div className="space-y-2">
-            <div className="flex items-center">
-              <label className="w-48">Maintain in Batches:</label>
-              <input
-                type="checkbox"
-                name="maintainInBatches"
-                checked={form.maintainInBatches}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="flex items-center">
-              <label className="w-48">Track Date of Mfg:</label>
-              <input
-                type="checkbox"
-                name="trackDateOfManufacture"
-                checked={form.trackDateOfManufacture}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="flex items-center">
-              <label className="w-48">Expiry Date of Batches:</label>
-              <input
-                type="checkbox"
-                name="expiryDateOfBatches"
-                checked={form.expiryDateOfBatches}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <hr className="my-4 border-black" />
-
-          <div className="space-y-3">
-            <p className="font-semibold">GST Details</p>
-
-            <div className="flex items-center">
-              <label className="w-48">GST Applicable:</label>
-              <select
-                name="gstApplicable"
-                value={form.gstApplicable}
-                onChange={handleChange}
-                className="border px-2 py-1 w-80"
-              >
-                <option value="">Select</option>
-                <option value="Applicable">Applicable</option>
-                <option value="Not Applicable">Not Applicable</option>
-              </select>
-            </div>
-
-            <div className="flex items-center">
-              <label className="w-48">HSN Code:</label>
-              <input
-                name="hsn"
-                value={form.hsn}
-                onChange={handleChange}
-                className="border px-2 py-1 w-80"
-                type="text"
-              />
-            </div>
-          </div>
-
-          <hr className="my-4 border-black" />
-
-          <div>
-            <p className="font-semibold mb-2">Opening Balance</p>
-
-            <div className="grid grid-cols-3 gap-4 w-150">
-              <div>
-                <label>Qty:</label>
-                <input
-                  name="openingBalanceQty"
-                  value={form.openingBalanceQty}
-                  onChange={handleChange}
-                  className="border w-full px-2 py-1"
-                  type="text"
-                />
+            {/* GST Config */}
+            <div className="app-panel overflow-hidden border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="app-section-bar px-6 py-4 bg-[#f0fdf4]/60 border-b border-[#e2f2e9] flex items-center gap-2">
+                <Barcode className="size-4 text-[#00a651]" />
+                <h3 className="app-heading text-sm font-bold text-[#042f2e]">
+                  GST Configuration
+                </h3>
               </div>
 
-              <div>
-                <label>Rate:</label>
-                <input
-                  name="openingBalanceRate"
-                  value={form.openingBalanceRate}
-                  onChange={handleChange}
-                  className="border w-full px-2 py-1"
-                  type="text"
-                />
-              </div>
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                    GST Applicability
+                  </label>
+                  <select
+                    name="gstApplicable"
+                    value={form.gstApplicable}
+                    onChange={handleChange}
+                    className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white focus:border-[#00a651] outline-none cursor-pointer"
+                  >
+                    <option value="">Select Status</option>
+                    <option value="Applicable">Applicable</option>
+                    <option value="Not Applicable">Not Applicable</option>
+                  </select>
+                </div>
 
-              <div>
-                <label>Value:</label>
-                <input
-                  name="openingBalanceValue"
-                  value={form.openingBalanceValue}
-                  onChange={handleChange}
-                  className="border w-full px-2 py-1"
-                  type="text"
-                />
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                    HSN / SAC Code
+                  </label>
+                  <input
+                    name="hsn"
+                    value={form.hsn}
+                    onChange={handleChange}
+                    placeholder="e.g. 72142090"
+                    className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white focus:border-[#00a651] outline-none"
+                    type="text"
+                  />
+                  <p className="text-xs text-[#475569] font-medium mt-1">
+                    Harmonized System tariff code used in GST returns.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex justify-center mt-6 space-x-6 font-semibold">
-        <button
-          onClick={handleAccept}
-          className="bg-green-600 text-white px-6 py-2"
-        >
-          Yes
-        </button>
-        <button
-          onClick={handleReject}
-          className="bg-red-600 text-white px-6 py-2"
-        >
-          No
-        </button>
+        {/* Footer Toolbar */}
+        <div className="flex items-center justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={handleReject}
+            className="h-10 px-5 app-btn-secondary text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+          >
+            <X className="size-4" /> Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleAccept}
+            className="h-10 px-5 app-btn-primary text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+          >
+            <Save className="size-4" /> {stockId ? "Update Stock Item" : "Create Stock Item"}
+          </button>
+        </div>
       </div>
     </div>
   );

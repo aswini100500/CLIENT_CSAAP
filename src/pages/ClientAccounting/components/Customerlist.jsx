@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 import {
   FaPlus,
   FaFileExcel,
@@ -106,7 +108,6 @@ const Customerlist = () => {
           conversionDate: null,
           leadStatus: null,
           leadScore: null,
-
           apiData: {
             broker_id: customer.broker_id,
             project_id: customer.project_id,
@@ -862,9 +863,9 @@ const Customerlist = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading customer data...</p>
+        <div className="flex items-center gap-2.5 text-slate-500 font-medium text-sm">
+          <Loader2 className="size-6 animate-spin text-(--brand)" />
+          <span>Loading customer data...</span>
         </div>
       </div>
     );

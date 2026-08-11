@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import { CreditCard, CheckCircle, XCircle, Crown } from "lucide-react";
 import axios from "axios";
@@ -45,9 +46,10 @@ const Subscription = () => {
         },
       );
 
+      console.log("Subscriptions data:", data);
+
       if (data.success) {
         setMySubscriptions(data.subscriptions);
-
         const active = data.subscriptions.find(
           (sub) =>
             sub.status === "active" && new Date(sub.end_date) >= new Date(),
@@ -63,11 +65,15 @@ const Subscription = () => {
 
   const handleSubscribe = async (planId, planPrice) => {
     try {
+      console.log("Starting subscription for plan:", planId, "user:", userId);
+
       const { data: orderData } = await axios.post(
         `${API_BASE_URL}/api/v1/subscription/order`,
         { plan_id: planId, user_id: userId },
         { withCredentials: true },
       );
+
+      console.log("Order response:", orderData);
 
       if (!orderData.success) {
         Swal.fire({
@@ -122,6 +128,8 @@ const Subscription = () => {
           : `${orderData.plan_type} Subscription`,
         order_id: orderData.order.id,
         handler: async function (response) {
+          console.log("Payment successful, verifying...", response);
+
           try {
             const { data: verifyData } = await axios.post(
               `${API_BASE_URL}/api/v1/subscription/verify`,
@@ -135,6 +143,8 @@ const Subscription = () => {
               { withCredentials: true },
             );
 
+            console.log("Verification response:", verifyData);
+
             if (verifyData.success) {
               await Swal.fire({
                 icon: "success",
@@ -142,7 +152,6 @@ const Subscription = () => {
                 text: "Subscription activated successfully!",
                 confirmButtonColor: "#3B82F6",
               });
-
               window.location.reload();
             } else {
               Swal.fire({

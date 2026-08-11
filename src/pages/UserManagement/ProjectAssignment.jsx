@@ -526,13 +526,13 @@ const ProjectAssignment = () => {
   );
 
   return (
-    <div className="p-6 lg:p-10 bg-[#FDFDFF] min-h-screen relative font-sans">
+    <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)] relative">
       <Toaster
         position="top-center"
         toastOptions={{
           style: {
             borderRadius: "1rem",
-            background: "#333",
+            background: "var(--text-strong)",
             color: "#fff",
             fontWeight: "bold",
             fontSize: "14px",
@@ -541,20 +541,19 @@ const ProjectAssignment = () => {
       />
 
       <div className="mb-8">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-          <ShieldCheck className="text-blue-600" size={32} />
+        <h1 className="app-title flex items-center gap-3">
+          <ShieldCheck className="text-[var(--brand)]" size={28} />
           Project Allocations
         </h1>
-        <p className="text-slate-500 font-medium mt-1 text-sm">
-          Assign Global Managers or allocate staff to department roles across
-          multiple projects.
+        <p className="app-subtitle mt-1">
+          Assign Global Managers or allocate staff to department roles across multiple projects.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-4xl shadow-sm border border-slate-100 p-6 sm:p-8 sticky top-8">
-            <div className="flex bg-slate-100/80 p-1 rounded-xl mb-6">
+          <div className="app-panel p-6 sm:p-8 bg-white sticky top-8">
+            <div className="flex bg-[var(--bg-subtle)] p-1 rounded-xl mb-6 border border-[var(--border-soft)]">
               <button
                 type="button"
                 onClick={() => {
@@ -563,7 +562,7 @@ const ProjectAssignment = () => {
                   setSelectedRoleId("");
                   setSelectedRoleName("");
                 }}
-                className={`flex-1 py-2.5 text-[11px] flex items-center justify-center gap-2 font-black uppercase tracking-widest rounded-lg transition-all ${assignmentMode === "manager" ? "bg-white text-blue-600 shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+                className={`flex-1 py-2.5 text-[11px] flex items-center justify-center gap-2 font-black uppercase tracking-widest rounded-lg transition-all ${assignmentMode === "manager" ? "bg-white text-[var(--brand-strong)] shadow-sm" : "text-[var(--text-soft)] hover:text-[var(--text-strong)]"}`}
               >
                 <Crown size={14} /> Assign Manager
               </button>
@@ -574,7 +573,7 @@ const ProjectAssignment = () => {
                   setSelectedRoleId("");
                   setSelectedRoleName("");
                 }}
-                className={`flex-1 py-2.5 text-[11px] flex items-center justify-center gap-2 font-black uppercase tracking-widest rounded-lg transition-all ${assignmentMode === "team" ? "bg-white text-blue-600 shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+                className={`flex-1 py-2.5 text-[11px] flex items-center justify-center gap-2 font-black uppercase tracking-widest rounded-lg transition-all ${assignmentMode === "team" ? "bg-white text-[var(--brand-strong)] shadow-sm" : "text-[var(--text-soft)] hover:text-[var(--text-strong)]"}`}
               >
                 <UserPlus size={14} /> Assign Team
               </button>
@@ -582,12 +581,12 @@ const ProjectAssignment = () => {
 
             <form onSubmit={handleAssign} className="space-y-5">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                <label className="app-label block mb-1.5">
                   Select Employee(s)
                 </label>
                 <div className="relative" ref={employeeDropdownRef}>
                   <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 z-10"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-soft)] z-10"
                     size={16}
                   />
                   <button
@@ -595,7 +594,7 @@ const ProjectAssignment = () => {
                     onClick={() =>
                       setIsEmployeeDropdownOpen(!isEmployeeDropdownOpen)
                     }
-                    className={`w-full pl-11 pr-4 py-3 bg-slate-50 border rounded-xl text-sm font-bold text-slate-700 outline-none transition-all flex items-center justify-between ${isEmployeeDropdownOpen ? "border-blue-300 ring-4 ring-blue-50" : "border-slate-200"}`}
+                    className={`w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-sm font-bold text-[var(--text-strong)] outline-none transition-all flex items-center justify-between ${isEmployeeDropdownOpen ? "border-[var(--brand)] ring-4 ring-[var(--brand-ring)]" : "border-[var(--border-soft)]"}`}
                   >
                     <span className="truncate">
                       {selectedEmployeeIds.length === 0
@@ -604,13 +603,13 @@ const ProjectAssignment = () => {
                     </span>
                     <ChevronDown
                       size={16}
-                      className={`text-slate-400 transition-transform ${isEmployeeDropdownOpen ? "rotate-180" : ""}`}
+                      className={`text-[var(--text-soft)] transition-transform ${isEmployeeDropdownOpen ? "rotate-180" : ""}`}
                     />
                   </button>
 
                   {isEmployeeDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto p-2">
-                      <label className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer border-b border-slate-100 mb-1">
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[var(--border-soft)] rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto p-2">
+                      <label className="flex items-center gap-3 p-2 hover:bg-[var(--bg-subtle)] rounded-lg cursor-pointer border-b border-[var(--border-soft)] mb-1">
                         <input
                           type="checkbox"
                           checked={
@@ -620,13 +619,13 @@ const ProjectAssignment = () => {
                           onChange={(e) => {
                             e.target.checked
                               ? setSelectedEmployeeIds(
-                                  employees.map((emp) => getEmployeeId(emp)),
+                                  employees.map(getEmployeeId),
                                 )
                               : setSelectedEmployeeIds([]);
                           }}
-                          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          className="w-4 h-4 rounded border-[var(--border-soft)] text-[var(--brand)] focus:ring-[var(--brand)] cursor-pointer accent-[var(--brand)]"
                         />
-                        <span className="text-xs font-black text-blue-600 uppercase tracking-widest">
+                        <span className="text-xs font-black text-[var(--brand-strong)] uppercase tracking-widest">
                           Select All
                         </span>
                       </label>
@@ -636,44 +635,32 @@ const ProjectAssignment = () => {
                         return (
                           <label
                             key={empId}
-                            className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                            className="flex items-center gap-3 p-2 hover:bg-[var(--bg-subtle)] rounded-lg cursor-pointer transition-colors"
                           >
                             <input
                               type="checkbox"
                               checked={selectedEmployeeIds.includes(empId)}
                               onChange={() => handleEmployeeToggle(empId)}
-                              className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                              className="w-4 h-4 rounded border-[var(--border-soft)] text-[var(--brand)] focus:ring-[var(--brand)] cursor-pointer accent-[var(--brand)]"
                             />
-                            <div className="flex flex-col">
-                              <span className="text-sm font-bold text-slate-700">
-                                {emp.name || emp.employee_name}
-                              </span>
-                              {emp.designation && (
-                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                                  {emp.designation}
-                                </span>
-                              )}
-                            </div>
+                            <span className="text-sm font-bold text-[var(--text-strong)]">
+                              {emp.name || emp.employee_name || "Employee"}
+                            </span>
                           </label>
                         );
                       })}
-                      {employees.length === 0 && (
-                        <div className="p-3 text-center text-xs font-bold text-slate-400">
-                          No employees found.
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
-                  1. Select Project Name(s)
+                <label className="app-label block mb-1.5">
+                  1. Select Project(s)
                 </label>
                 <div className="relative" ref={projectDropdownRef}>
-                  <Briefcase
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 z-10"
+                  <Building
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-soft)] z-10"
                     size={16}
                   />
                   <button
@@ -681,22 +668,22 @@ const ProjectAssignment = () => {
                     onClick={() =>
                       setIsProjectDropdownOpen(!isProjectDropdownOpen)
                     }
-                    className={`w-full pl-11 pr-4 py-3 bg-slate-50 border rounded-xl text-sm font-bold text-slate-700 outline-none transition-all flex items-center justify-between ${isProjectDropdownOpen ? "border-blue-300 ring-4 ring-blue-50" : "border-slate-200"}`}
+                    className={`w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-sm font-bold text-[var(--text-strong)] outline-none transition-all flex items-center justify-between ${isProjectDropdownOpen ? "border-[var(--brand)] ring-4 ring-[var(--brand-ring)]" : "border-[var(--border-soft)]"}`}
                   >
                     <span className="truncate">
                       {selectedProjectNames.length === 0
-                        ? "-- Select Project Names --"
+                        ? "-- Select Projects --"
                         : `${selectedProjectNames.length} Project(s) Selected`}
                     </span>
                     <ChevronDown
                       size={16}
-                      className={`text-slate-400 transition-transform ${isProjectDropdownOpen ? "rotate-180" : ""}`}
+                      className={`text-[var(--text-soft)] transition-transform ${isProjectDropdownOpen ? "rotate-180" : ""}`}
                     />
                   </button>
 
                   {isProjectDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto p-2">
-                      <label className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer border-b border-slate-100 mb-1">
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[var(--border-soft)] rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto p-2">
+                      <label className="flex items-center gap-3 p-2 hover:bg-[var(--bg-subtle)] rounded-lg cursor-pointer border-b border-[var(--border-soft)] mb-1">
                         <input
                           type="checkbox"
                           checked={
@@ -709,9 +696,9 @@ const ProjectAssignment = () => {
                               ? setSelectedProjectNames([...uniqueProjectNames])
                               : setSelectedProjectNames([]);
                           }}
-                          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          className="w-4 h-4 rounded border-[var(--border-soft)] text-[var(--brand)] focus:ring-[var(--brand)] cursor-pointer accent-[var(--brand)]"
                         />
-                        <span className="text-xs font-black text-blue-600 uppercase tracking-widest">
+                        <span className="text-xs font-black text-[var(--brand-strong)] uppercase tracking-widest">
                           Select All
                         </span>
                       </label>
@@ -719,15 +706,15 @@ const ProjectAssignment = () => {
                       {uniqueProjectNames.map((name) => (
                         <label
                           key={name}
-                          className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                          className="flex items-center gap-3 p-2 hover:bg-[var(--bg-subtle)] rounded-lg cursor-pointer transition-colors"
                         >
                           <input
                             type="checkbox"
                             checked={selectedProjectNames.includes(name)}
                             onChange={() => handleProjectToggle(name)}
-                            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                            className="w-4 h-4 rounded border-[var(--border-soft)] text-[var(--brand)] focus:ring-[var(--brand)] cursor-pointer accent-[var(--brand)]"
                           />
-                          <span className="text-sm font-bold text-slate-700">
+                          <span className="text-sm font-bold text-[var(--text-strong)]">
                             {name}
                           </span>
                         </label>
@@ -738,12 +725,12 @@ const ProjectAssignment = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                <label className="app-label block mb-1.5">
                   2. Select Location(s)
                 </label>
                 <div className="relative" ref={branchDropdownRef}>
                   <MapPin
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 z-10"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-soft)] z-10"
                     size={16}
                   />
                   <button
@@ -755,7 +742,7 @@ const ProjectAssignment = () => {
                       selectedProjectNames.length === 0 ||
                       availableBranches.length === 0
                     }
-                    className={`w-full pl-11 pr-4 py-3 bg-slate-50 border rounded-xl text-sm font-bold text-slate-700 outline-none transition-all flex items-center justify-between disabled:opacity-50 disabled:bg-slate-100 ${isBranchDropdownOpen ? "border-blue-300 ring-4 ring-blue-50" : "border-slate-200"}`}
+                    className={`w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-sm font-bold text-[var(--text-strong)] outline-none transition-all flex items-center justify-between disabled:opacity-50 disabled:bg-[var(--bg-subtle)] ${isBranchDropdownOpen ? "border-[var(--brand)] ring-4 ring-[var(--brand-ring)]" : "border-[var(--border-soft)]"}`}
                   >
                     <span className="truncate">
                       {selectedBranches.length === 0
@@ -764,13 +751,13 @@ const ProjectAssignment = () => {
                     </span>
                     <ChevronDown
                       size={16}
-                      className={`text-slate-400 transition-transform ${isBranchDropdownOpen ? "rotate-180" : ""}`}
+                      className={`text-[var(--text-soft)] transition-transform ${isBranchDropdownOpen ? "rotate-180" : ""}`}
                     />
                   </button>
 
                   {isBranchDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto p-2">
-                      <label className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer border-b border-slate-100 mb-1">
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[var(--border-soft)] rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto p-2">
+                      <label className="flex items-center gap-3 p-2 hover:bg-[var(--bg-subtle)] rounded-lg cursor-pointer border-b border-[var(--border-soft)] mb-1">
                         <input
                           type="checkbox"
                           checked={
@@ -785,9 +772,9 @@ const ProjectAssignment = () => {
                                 )
                               : setSelectedBranches([]);
                           }}
-                          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          className="w-4 h-4 rounded border-[var(--border-soft)] text-[var(--brand)] focus:ring-[var(--brand)] cursor-pointer accent-[var(--brand)]"
                         />
-                        <span className="text-xs font-black text-blue-600 uppercase tracking-widest">
+                        <span className="text-xs font-black text-[var(--brand-strong)] uppercase tracking-widest">
                           Select All
                         </span>
                       </label>
@@ -795,17 +782,17 @@ const ProjectAssignment = () => {
                       {availableBranches.map((branchObj) => (
                         <label
                           key={branchObj.value}
-                          className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                          className="flex items-center gap-3 p-2 hover:bg-[var(--bg-subtle)] rounded-lg cursor-pointer transition-colors"
                         >
                           <input
                             type="checkbox"
                             checked={selectedBranches.includes(branchObj.value)}
                             onChange={() => handleBranchToggle(branchObj.value)}
-                            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                            className="w-4 h-4 rounded border-[var(--border-soft)] text-[var(--brand)] focus:ring-[var(--brand)] cursor-pointer accent-[var(--brand)]"
                           />
-                          <span className="text-sm font-bold text-slate-700">
+                          <span className="text-sm font-bold text-[var(--text-strong)]">
                             {branchObj.projectName}{" "}
-                            <span className="text-slate-400 font-medium">
+                            <span className="text-[var(--text-soft)] font-medium">
                               ({branchObj.branchName})
                             </span>
                           </span>
@@ -817,16 +804,15 @@ const ProjectAssignment = () => {
                 {selectedProjectNames.length > 0 &&
                   availableBranches.length === 0 && (
                     <p className="text-xs text-rose-500 font-bold ml-1 mt-1 flex items-center gap-1">
-                      <AlertCircle size={12} /> No locations found for selected
-                      projects.
+                      <AlertCircle size={12} /> No locations found for selected projects.
                     </p>
                   )}
               </div>
 
               {assignmentMode === "manager" && (
-                <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-4 animate-in fade-in slide-in-from-top-2">
+                <div className="p-4 bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded-2xl space-y-4 animate-in fade-in slide-in-from-top-2">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                    <label className="app-label block mb-1.5">
                       Assign Global Role
                     </label>
                     <div className="relative">
@@ -845,7 +831,7 @@ const ProjectAssignment = () => {
                           setSelectedRoleName(role?.role_name || "");
                         }}
                         required
-                        className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:ring-4 focus:ring-amber-50 focus:border-amber-300 outline-none transition-all appearance-none cursor-pointer"
+                        className="app-input w-full pl-11 cursor-pointer appearance-none"
                       >
                         <option value="" disabled>
                           -- Choose Global Role --
@@ -858,7 +844,7 @@ const ProjectAssignment = () => {
                       </select>
                       <ChevronDown
                         size={14}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-soft)] pointer-events-none"
                       />
                     </div>
                   </div>
@@ -866,14 +852,14 @@ const ProjectAssignment = () => {
               )}
 
               {assignmentMode === "team" && (
-                <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-4 animate-in fade-in slide-in-from-top-2">
+                <div className="p-4 bg-[var(--bg-subtle)] border border-[var(--border-soft)] rounded-2xl space-y-4 animate-in fade-in slide-in-from-top-2">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                    <label className="app-label block mb-1.5">
                       Department
                     </label>
                     <div className="relative">
                       <Building
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-soft)]"
                         size={16}
                       />
                       <select
@@ -884,7 +870,7 @@ const ProjectAssignment = () => {
                           setSelectedRoleName("");
                         }}
                         required
-                        className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:ring-4 focus:ring-blue-50 focus:border-blue-300 outline-none transition-all appearance-none cursor-pointer"
+                        className="app-input w-full pl-11 cursor-pointer appearance-none"
                       >
                         <option value="" disabled>
                           -- Choose Department --
@@ -897,18 +883,18 @@ const ProjectAssignment = () => {
                       </select>
                       <ChevronDown
                         size={14}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-soft)] pointer-events-none"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                    <label className="app-label block mb-1.5">
                       Project Role
                     </label>
                     <div className="relative">
                       <ShieldCheck
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-soft)]"
                         size={16}
                       />
                       <select
@@ -925,7 +911,7 @@ const ProjectAssignment = () => {
                         disabled={
                           !selectedDepartmentId || departmentRoles.length === 0
                         }
-                        className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:ring-4 focus:ring-blue-50 focus:border-blue-300 outline-none transition-all appearance-none cursor-pointer disabled:opacity-50 disabled:bg-slate-50"
+                        className="app-input w-full pl-11 cursor-pointer appearance-none disabled:opacity-50 disabled:bg-[var(--bg-subtle)]"
                       >
                         <option value="" disabled>
                           -- Choose Role --
@@ -938,7 +924,7 @@ const ProjectAssignment = () => {
                       </select>
                       <ChevronDown
                         size={14}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-soft)] pointer-events-none"
                       />
                     </div>
                   </div>
@@ -955,7 +941,7 @@ const ProjectAssignment = () => {
                     selectedBranches.length === 0 ||
                     !selectedRoleName
                   }
-                  className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-blue-200 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:shadow-none"
+                  className="app-btn-primary w-full flex items-center justify-center gap-2"
                 >
                   {isAssigning ? (
                     <Loader2 size={16} className="animate-spin" />
@@ -974,20 +960,20 @@ const ProjectAssignment = () => {
         </div>
 
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-4xl shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-slate-50 overflow-hidden w-full flex flex-col h-full">
-            <div className="p-6 border-b border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="app-panel overflow-hidden w-full flex flex-col h-full bg-white">
+            <div className="p-6 border-b border-[var(--border-soft)] bg-[var(--bg-subtle)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 className="text-sm font-black text-slate-800 tracking-tight">
+                <h2 className="app-heading">
                   Active Allocations
                 </h2>
-                <p className="text-[10px] font-bold text-slate-400 mt-0.5 uppercase tracking-widest">
+                <p className="app-subtitle mt-0.5 text-xs">
                   Total: {filteredAssignments.length} Records
                 </p>
               </div>
 
               <div className="relative w-full sm:w-64">
                 <Search
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-soft)]"
                   size={14}
                 />
                 <input
@@ -995,38 +981,38 @@ const ProjectAssignment = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search staff or projects..."
-                  className="w-full pl-9 pr-3 py-2 bg-white rounded-xl border border-slate-200 focus:border-blue-300 focus:ring-4 focus:ring-blue-50 outline-none text-xs font-bold transition-all"
+                  className="app-input w-full pl-9"
                 />
               </div>
             </div>
 
-            <div className="overflow-x-auto w-full block flex-1">
+            <div className="overflow-x-auto w-full block flex-1 bg-white">
               <table className="w-full min-w-150">
                 <thead>
-                  <tr className="bg-slate-50/80 border-b border-slate-100">
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  <tr className="bg-[var(--bg-subtle)] border-b border-[var(--border-soft)]">
+                    <th className="px-4 py-3 text-left text-[10px] font-black text-[var(--text-soft)] uppercase tracking-widest">
                       Employee & Project Role
                     </th>
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    <th className="px-4 py-3 text-left text-[10px] font-black text-[var(--text-soft)] uppercase tracking-widest">
                       Global Role
                     </th>
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    <th className="px-4 py-3 text-left text-[10px] font-black text-[var(--text-soft)] uppercase tracking-widest">
                       Assigned Project
                     </th>
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    <th className="px-4 py-3 text-left text-[10px] font-black text-[var(--text-soft)] uppercase tracking-widest">
                       Location
                     </th>
-                    <th className="px-4 py-3 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    <th className="px-4 py-3 text-center text-[10px] font-black text-[var(--text-soft)] uppercase tracking-widest">
                       Action
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50">
+                <tbody className="divide-y divide-[var(--border-soft)]">
                   {isAssignmentsLoading ? (
                     <tr>
                       <td colSpan="5" className="py-20 text-center">
                         <Loader2
-                          className="animate-spin mx-auto text-blue-600"
+                          className="animate-spin mx-auto text-[var(--brand)]"
                           size={32}
                         />
                       </td>
@@ -1034,10 +1020,10 @@ const ProjectAssignment = () => {
                   ) : filteredAssignments.length === 0 ? (
                     <tr>
                       <td colSpan="5" className="py-20 text-center">
-                        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <Briefcase className="text-slate-300" size={24} />
+                        <div className="w-16 h-16 bg-[var(--bg-subtle)] rounded-full flex items-center justify-center mx-auto mb-3 border border-[var(--border-soft)]">
+                          <Briefcase className="text-[var(--brand-strong)] opacity-60" size={24} />
                         </div>
-                        <p className="text-slate-400 font-bold text-sm">
+                        <p className="text-[var(--text-soft)] font-bold text-sm">
                           No assignments found.
                         </p>
                       </td>
@@ -1054,22 +1040,22 @@ const ProjectAssignment = () => {
                       return (
                         <tr
                           key={assignment.id}
-                          className={`hover:bg-slate-50/50 transition-colors ${isManager ? "bg-amber-50/20" : ""}`}
+                          className={`hover:bg-[var(--bg-subtle)] transition-colors ${isManager ? "bg-amber-50/10" : ""}`}
                         >
                           <td className="px-4 py-2.5">
                             <div className="flex items-center gap-3">
                               <div
-                                className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs border uppercase shrink-0 ${isManager ? "bg-amber-100 text-amber-700 border-amber-200" : "bg-blue-50 text-blue-600 border-blue-100"}`}
+                                className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs border uppercase shrink-0 ${isManager ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-[var(--brand-soft)] text-[var(--brand-strong)] border-[var(--border-strong)]"}`}
                               >
                                 {assignment.employeename?.[0] || "E"}
                               </div>
                               <div>
                                 <div className="flex items-center gap-2">
-                                  <p className="text-sm font-black text-slate-700">
+                                  <p className="text-sm font-black text-[var(--text-strong)]">
                                     {assignment.employeename}
                                   </p>
                                 </div>
-                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                                <p className="text-[9px] text-[var(--text-soft)] font-bold uppercase tracking-widest mt-0.5">
                                   Project Role:{" "}
                                   {assignment.project_role || "None"}
                                 </p>
@@ -1083,19 +1069,19 @@ const ProjectAssignment = () => {
                                 {assignment.assigned_global_role}
                               </span>
                             ) : (
-                              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                              <span className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-widest">
                                 -
                               </span>
                             )}
                           </td>
                           <td className="px-4 py-2.5">
-                            <span className="text-xs font-black text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+                            <span className="text-xs font-bold text-[var(--text-strong)] bg-[var(--bg-subtle)] px-2.5 py-1 rounded-md border border-[var(--border-soft)]">
                               {assignment.projectname}
                             </span>
                           </td>
                           <td className="px-4 py-2.5">
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-600">
-                              <MapPin size={12} className="text-slate-400" />{" "}
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-soft)]">
+                              <MapPin size={12} className="text-[var(--text-faint)]" />{" "}
                               {assignment.projectbranch}
                             </div>
                           </td>
@@ -1118,8 +1104,8 @@ const ProjectAssignment = () => {
             </div>
 
             {totalPages > 1 && (
-              <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+              <div className="p-4 border-t border-[var(--border-soft)] flex items-center justify-between bg-[var(--bg-subtle)]">
+                <span className="text-[10px] font-black text-[var(--text-soft)] uppercase tracking-widest">
                   Page {currentPage} of {totalPages}
                 </span>
                 <div className="flex gap-2">
@@ -1128,7 +1114,7 @@ const ProjectAssignment = () => {
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
                     disabled={currentPage === 1}
-                    className="px-3 py-1.5 bg-white border border-slate-200 hover:border-blue-300 text-slate-600 hover:text-blue-600 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:text-slate-600 flex items-center gap-1"
+                    className="app-btn-secondary px-3 !min-h-[34px] !py-1 flex items-center gap-1 text-[10px] font-black"
                   >
                     <ChevronLeft size={14} /> Prev
                   </button>
@@ -1137,7 +1123,7 @@ const ProjectAssignment = () => {
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className="px-3 py-1.5 bg-white border border-slate-200 hover:border-blue-300 text-slate-600 hover:text-blue-600 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:text-slate-600 flex items-center gap-1"
+                    className="app-btn-secondary px-3 !min-h-[34px] !py-1 flex items-center gap-1 text-[10px] font-black"
                   >
                     Next <ChevronRight size={14} />
                   </button>

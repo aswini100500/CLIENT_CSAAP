@@ -54,26 +54,26 @@ const AllCompanies = () => {
   );
 
   return (
-    <div className="p-6 bg-slate-50 min-h-screen">
+    <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)]">
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-            <Building2 className="text-blue-600" />
+          <h1 className="app-title flex items-center gap-2">
+            <Building2 className="text-[var(--brand)]" />
             All Companies
           </h1>
-          <p className="text-slate-500 mt-1 text-sm">
+          <p className="app-subtitle mt-1">
             Manage registered companies and their payments
           </p>
         </div>
 
         <div className="relative w-full md:w-64">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-slate-400" />
+            <Search className="h-4 w-4 text-[var(--text-soft)]" />
           </div>
           <input
             type="text"
             placeholder="Search companies..."
-            className="pl-10 w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm outline-none transition-shadow"
+            className="app-input pl-10 w-full"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -81,23 +81,23 @@ const AllCompanies = () => {
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg text-red-700">
-          <p className="font-medium">Error: {error}</p>
+        <div className="mb-6 p-4 bg-rose-50 border-l-4 border-[var(--rose-500,#f43f5e)] rounded-r-lg text-rose-700">
+          <p className="font-medium text-sm">Error: {error}</p>
         </div>
       )}
 
       {loading ? (
-        <div className="flex justify-center items-center py-20 bg-white rounded-lg border border-slate-200 shadow-sm">
-          <Loader2 className="animate-spin h-8 w-8 text-blue-600 mb-4" />
-          <span className="ml-3 text-slate-500 font-medium">
+        <div className="flex justify-center items-center py-20 app-panel">
+          <Loader2 className="animate-spin h-8 w-8 text-[var(--brand)] mb-4" />
+          <span className="ml-3 text-[var(--text-soft)] font-medium">
             Loading companies...
           </span>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+        <div className="app-panel overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-sm">
-              <thead className="bg-slate-100 text-slate-600 text-left uppercase font-semibold text-xs tracking-wider">
+            <table className="min-w-full divide-y divide-[var(--border-soft)] text-sm">
+              <thead className="bg-[var(--bg-subtle)] text-[var(--text-strong)] text-left uppercase font-semibold text-xs tracking-wider border-b border-[var(--border-soft)]">
                 <tr>
                   <th className="px-6 py-4">Company Name</th>
                   <th className="px-6 py-4">Database</th>
@@ -107,20 +107,20 @@ const AllCompanies = () => {
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody className="divide-y divide-[var(--border-soft)] bg-white">
                 {filteredCompanies.length > 0 ? (
                   filteredCompanies.map((company) => (
                     <tr
                       key={company.id}
-                      className="hover:bg-slate-50 transition-colors"
+                      className="hover:bg-[var(--bg-subtle)] transition-colors"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap font-medium text-slate-900">
+                      <td className="px-6 py-4 whitespace-nowrap font-medium text-[var(--text-strong)]">
                         {company.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-[var(--text-soft)]">
                         {company.db_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-[var(--text-soft)]">
                         {company.admin_email}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -128,22 +128,22 @@ const AllCompanies = () => {
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             company.status === "active" ||
                             company.status === "approved"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-amber-100 text-amber-800"
+                              ? "bg-[var(--brand-soft)] text-[var(--brand-strong)]"
+                              : "bg-amber-50 text-amber-700 border border-amber-200"
                           }`}
                         >
                           {company.status || "Unknown"}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-[var(--text-soft)]">
                         {new Date(company.created_at).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right">
                         <button
                           onClick={() => handleSetPayment(company)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800 font-medium text-xs rounded-md transition-colors"
+                          className="app-btn-secondary !min-h-[34px] !py-1.5 !px-3 inline-flex items-center gap-1.5 text-xs"
                         >
-                          <CreditCard className="w-3.5 h-3.5" />
+                          <CreditCard className="w-3.5 h-3.5 text-[var(--brand)]" />
                           View Details & Pay
                         </button>
                       </td>
@@ -153,7 +153,7 @@ const AllCompanies = () => {
                   <tr>
                     <td
                       colSpan="6"
-                      className="px-6 py-12 text-center text-slate-500"
+                      className="px-6 py-12 text-center text-[var(--text-faint)]"
                     >
                       No companies found matching your search.
                     </td>
@@ -162,7 +162,7 @@ const AllCompanies = () => {
               </tbody>
             </table>
           </div>
-          <div className="bg-slate-50 px-6 py-3 border-t border-slate-200 text-xs text-slate-500 text-right">
+          <div className="bg-[var(--bg-subtle)] px-6 py-3 border-t border-[var(--border-soft)] text-xs text-[var(--text-soft)] text-right font-medium">
             Showing {filteredCompanies.length} companies
           </div>
         </div>

@@ -128,10 +128,10 @@ const CompanyPaymentSetup = () => {
 
   if (loading) {
     return (
-      <div className="p-6 bg-slate-50 min-h-screen flex justify-center items-center">
-        <div className="flex items-center gap-3 bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-          <Loader2 className="animate-spin text-blue-600 h-6 w-6" />
-          <span className="text-slate-600 font-medium">
+      <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)] flex justify-center items-center">
+        <div className="flex items-center gap-3 app-panel p-6 shadow-sm">
+          <Loader2 className="animate-spin text-[var(--brand)] h-6 w-6" />
+          <span className="text-[var(--text-soft)] font-medium">
             Loading company details...
           </span>
         </div>
@@ -141,14 +141,14 @@ const CompanyPaymentSetup = () => {
 
   if (error && !company) {
     return (
-      <div className="p-6 bg-slate-50 min-h-screen">
+      <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)]">
         <button
           onClick={() => navigate("/users/all-companies")}
-          className="mb-4 text-blue-600 hover:text-blue-800 flex items-center text-sm font-medium"
+          className="mb-4 text-[var(--brand)] hover:text-[var(--brand-strong)] flex items-center text-sm font-medium transition-colors"
         >
           <ArrowLeft className="h-4 w-4 mr-1" /> Back to Companies
         </button>
-        <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg">
+        <div className="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-lg text-sm">
           {error}
         </div>
       </div>
@@ -156,90 +156,92 @@ const CompanyPaymentSetup = () => {
   }
 
   return (
-    <div className="p-6 bg-slate-50 min-h-screen">
+    <div className="crm-module-root min-h-screen p-6 bg-[var(--bg-app)]">
       <button
         onClick={() => navigate("/users/all-companies")}
-        className="mb-6 text-slate-600 hover:text-slate-900 flex items-center text-sm font-medium transition-colors"
+        className="mb-6 text-[var(--text-soft)] hover:text-[var(--text-strong)] flex items-center text-sm font-medium transition-colors"
       >
         <ArrowLeft className="h-4 w-4 mr-1.5" /> Back to All Companies
       </button>
 
       <div className="max-w-4xl space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="app-title">
             Company Dashboard
           </h1>
-          <p className="text-slate-500 mt-1">
+          <p className="app-subtitle mt-1">
             View details and configure manual pricing for{" "}
-            {company?.master_company_name ||
-              company?.company_name ||
-              "this company"}
+            <span className="font-semibold text-[var(--text-strong)]">
+              {company?.master_company_name ||
+                company?.company_name ||
+                "this company"}
+            </span>
           </p>
         </div>
 
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
-            <p className="text-red-700 text-sm font-medium">{error}</p>
+          <div className="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r-lg">
+            <p className="text-rose-700 text-sm font-medium">{error}</p>
           </div>
         )}
 
         {successMessage && (
-          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-green-600" />
-            <p className="text-green-800 text-sm font-medium">
+          <div className="bg-green-50 border-l-4 border-[var(--brand)] p-4 rounded-r-lg flex items-center gap-2">
+            <CheckCircle2 className="h-5 w-5 text-[var(--brand)]" />
+            <p className="text-[var(--brand-strong)] text-sm font-medium">
               {successMessage}
             </p>
           </div>
         )}
 
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-          <div className="border-b border-slate-100 bg-slate-50/50 px-6 py-4 flex items-center gap-3">
-            <div className="bg-blue-100 p-2 rounded-lg">
-              <Building2 className="h-5 w-5 text-blue-700" />
+        <div className="app-panel overflow-hidden">
+          <div className="border-b border-[var(--border-soft)] bg-[var(--bg-subtle)] px-6 py-4 flex items-center gap-3">
+            <div className="bg-[var(--brand-soft)] p-2 rounded-lg">
+              <Building2 className="h-5 w-5 text-[var(--brand-strong)]" />
             </div>
-            <h2 className="text-lg font-semibold text-slate-800">
+            <h2 className="app-heading">
               Company Details
             </h2>
           </div>
 
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8">
+          <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8 bg-white">
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <p className="text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1">
                 Company Name
               </p>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-[var(--text-strong)]">
                 {company?.master_company_name || company?.company_name || "N/A"}
               </p>
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <p className="text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1">
                 Registration No.
               </p>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-[var(--text-strong)]">
                 {company?.registration_number || "N/A"}
               </p>
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <p className="text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1">
                 GST Number
               </p>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-[var(--text-strong)]">
                 {company?.gst_number || "N/A"}
               </p>
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <p className="text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1">
                 Database Name
               </p>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-[var(--text-strong)]">
                 {company?.master_db_name || company?.db_name || "N/A"}
               </p>
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <p className="text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1">
                 Admin Email
               </p>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-[var(--text-strong)]">
                 {company?.master_admin_email ||
                   company?.company_email ||
                   company?.email ||
@@ -247,42 +249,44 @@ const CompanyPaymentSetup = () => {
               </p>
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <p className="text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1">
                 Status
               </p>
-              <span
-                className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                  company?.master_status === "active" ||
-                  company?.status === "active" ||
-                  company?.status === "approved"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-amber-100 text-amber-800"
-                }`}
-              >
-                {company?.master_status || company?.status || "Unknown"}
-              </span>
+              <div>
+                <span
+                  className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                    company?.master_status === "active" ||
+                    company?.status === "active" ||
+                    company?.status === "approved"
+                      ? "bg-[var(--brand-soft)] text-[var(--brand-strong)]"
+                      : "bg-amber-50 text-amber-700 border border-amber-200"
+                  }`}
+                >
+                  {company?.master_status || company?.status || "Unknown"}
+                </span>
+              </div>
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <p className="text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1">
                 Company Size
               </p>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-[var(--text-strong)]">
                 {company?.company_size || "N/A"}
               </p>
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <p className="text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1">
                 Year Established
               </p>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-[var(--text-strong)]">
                 {company?.year_established || "N/A"}
               </p>
             </div>
             <div className="md:col-span-2 lg:col-span-3">
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <p className="text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1">
                 Full Address
               </p>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-[var(--text-strong)]">
                 {[
                   company?.street_address,
                   company?.city,
@@ -296,18 +300,18 @@ const CompanyPaymentSetup = () => {
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-          <div className="border-b border-slate-100 bg-slate-50/50 px-6 py-4 flex items-center gap-3">
-            <div className="bg-emerald-100 p-2 rounded-lg">
+        <div className="app-panel overflow-hidden">
+          <div className="border-b border-[var(--border-soft)] bg-[var(--bg-subtle)] px-6 py-4 flex items-center gap-3">
+            <div className="bg-emerald-50 p-2 rounded-lg">
               <IndianRupee className="h-5 w-5 text-emerald-700" />
             </div>
-            <h2 className="text-lg font-semibold text-slate-800">
+            <h2 className="app-heading">
               Project Price Configuration
             </h2>
           </div>
 
-          <div className="p-6">
-            <p className="text-sm text-slate-600 mb-6 max-w-2xl">
+          <div className="p-6 bg-white">
+            <p className="text-sm text-[var(--text-soft)] mb-6 max-w-2xl">
               Set the main project price for this company. This price will be
               used in the User Plan Details instead of the default calculated
               project cost, allowing you to offer custom manual pricing for
@@ -317,19 +321,19 @@ const CompanyPaymentSetup = () => {
             <div className="max-w-sm">
               <label
                 htmlFor="price"
-                className="block text-sm font-medium text-slate-700 mb-1.5"
+                className="block text-xs font-bold text-[var(--text-soft)] uppercase tracking-wider mb-1.5"
               >
                 Manual Project Price (INR)
               </label>
               <div className="relative mb-4">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-slate-500 sm:text-sm">₹</span>
+                  <span className="text-[var(--text-soft)] sm:text-sm">₹</span>
                 </div>
                 <input
                   type="number"
                   name="price"
                   id="price"
-                  className="pl-7 block w-full rounded-md border-slate-300 border py-2.5 px-3 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm outline-none transition-shadow"
+                  className="app-input pl-7 block w-full"
                   placeholder="0.00"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
@@ -339,11 +343,7 @@ const CompanyPaymentSetup = () => {
               <button
                 onClick={handleSavePrice}
                 disabled={savingPrice}
-                className={`w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                  savingPrice
-                    ? "bg-blue-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
-                } transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
+                className="app-btn-primary w-full flex justify-center items-center gap-2"
               >
                 {savingPrice ? (
                   <Loader2 className="animate-spin h-4 w-4" />

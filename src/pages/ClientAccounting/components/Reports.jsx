@@ -1,56 +1,58 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
+import { Scale, TrendingUp } from "lucide-react";
 import ProfitLoss from "./Profit&Loss";
 import BalanceSheet from "./BalanceSheet";
 
 function Reports() {
   const [selectedReport, setSelectedReport] = useState("Profit & Loss Account");
 
-  const reports = ["Profit & Loss Account", "Balance Sheet"];
+  const reports = [
+    {
+      id: "Profit & Loss Account",
+      label: "Profit & Loss Account",
+      icon: TrendingUp,
+    },
+    { id: "Balance Sheet", label: "Balance Sheet", icon: Scale },
+  ];
 
   return (
-    <div className="min-h-screen bg-[#FDFBE6] font-[calibri] text-[15px]">
-      <div className="bg-gray-200 text-gray-800 flex items-center justify-start   shadow">
-        <div className="flex ">
-          {reports.map((report) => (
-            <button
-              key={report}
-              onClick={() => setSelectedReport(report)}
-              className={`px-4 py-1 rounded-sm text-sm transition-all 
-                ${
-                  selectedReport === report
-                    ? "bg-white border-t-2 border-r-2 border-l-2 text-[#1C5D99] shadow-2xl"
-                    : "bg-white "
-                }`}
-            >
-              {report}
-            </button>
-          ))}
+    <div className="erp-root app-shell min-h-screen p-4 md:p-6 font-sans">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="app-panel p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="app-title">Financial Reports</h1>
+            <p className="app-subtitle mt-1">
+              Comprehensive profit & loss statements and balance sheet
+              reporting.
+            </p>
+          </div>
+
+          <div className="inline-flex items-center p-1 bg-[#f0fdf4] rounded-xl border border-[#c6f1d6]/80">
+            {reports.map((report) => {
+              const Icon = report.icon;
+              const isActive = selectedReport === report.id;
+              return (
+                <button
+                  key={report.id}
+                  onClick={() => setSelectedReport(report.id)}
+                  className={`px-4 py-2 rounded-lg text-[13px] font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-[#00a651] text-white shadow-xs font-extrabold active:scale-[0.98]"
+                      : "text-[#475569] hover:text-[#042f2e] hover:bg-white/70"
+                  }`}
+                >
+                  <Icon className="size-4" />
+                  {report.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      <div className="mt-2 py-3 px-2 mx-auto">
-        <h2 className="text-xl font-semibold text-[#1C5D99] mb-4 border-b border-gray-300 pb-1">
-          {selectedReport}
-        </h2>
-
-        <div className="bg-white border border-gray-200 p-6 rounded-sm">
-          {selectedReport === "Trial Balance" && (
-            <p className="text-gray-700">
-              Displaying <span className="font-semibold">Trial Balance</span> —
-              showing debit and credit balances for each ledger.
-            </p>
-          )}
-
+        <div>
           {selectedReport === "Profit & Loss Account" && <ProfitLoss />}
-
           {selectedReport === "Balance Sheet" && <BalanceSheet />}
-
-          {selectedReport === "Ledger Summary" && (
-            <p className="text-gray-700">
-              Displaying <span className="font-semibold">Ledger Summary</span> —
-              details of all ledger accounts with opening and closing balances.
-            </p>
-          )}
         </div>
       </div>
     </div>

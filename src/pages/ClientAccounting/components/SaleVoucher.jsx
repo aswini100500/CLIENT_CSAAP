@@ -1,16 +1,29 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import axios from "axios";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useCompany } from "../context/CompanyContext";
-import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
-import { HiTruck, HiCheck, HiX, HiPlus, HiTrash } from "react-icons/hi";
-import { Search, UserPlus } from "lucide-react";
+import {
+  ArrowLeft,
+  FileText,
+  Layers,
+  Plus,
+  Save,
+  Search,
+  Trash2,
+  Truck,
+  User,
+  UserPlus,
+  Wand2,
+  X,
+} from "lucide-react";
+import { HiPlus, HiX } from "react-icons/hi";
 import BulkImportButton from "./BulkImportButton";
 
 const SearchableLedgerSelect = ({
-  ledgers,
+  ledgers = [],
   value,
   onSelect,
   onCreateNew,
@@ -20,7 +33,8 @@ const SearchableLedgerSelect = ({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const selectedLedger = ledgers.find((l) => String(l.id) === String(value));
+  const ledgerList = Array.isArray(ledgers) ? ledgers : [];
+  const selectedLedger = ledgerList.find((l) => String(l.id) === String(value));
 
   useEffect(() => {
     if (selectedLedger) {
@@ -28,7 +42,7 @@ const SearchableLedgerSelect = ({
     }
   }, [selectedLedger]);
 
-  const filtered = ledgers.filter((l) =>
+  const filtered = ledgerList.filter((l) =>
     (l.name || l.ledgerName || "")
       .toLowerCase()
       .includes(searchTerm.toLowerCase()),
@@ -52,7 +66,7 @@ const SearchableLedgerSelect = ({
       <div className="relative">
         <input
           type="text"
-          className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none pr-10"
+          className="app-input w-full border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium pr-8 py-1.5 text-xs"
           placeholder={placeholder}
           value={searchTerm}
           onChange={(e) => {
@@ -61,18 +75,18 @@ const SearchableLedgerSelect = ({
           }}
           onFocus={() => setIsOpen(true)}
         />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-          <Search size={18} />
+        <div className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#00a651]">
+          <Search size={14} />
         </div>
       </div>
 
       {isOpen && (
-        <div className="absolute z-100 mt-1 w-full bg-white border border-[#e2e2dc] rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-9999 mt-1.5 w-full bg-white border border-[#cbe0d2] rounded-xl shadow-xl max-h-60 overflow-y-auto">
           {filtered.length > 0 ? (
             filtered.map((l) => (
               <div
                 key={l.id}
-                className="px-4 py-2.5 text-sm hover:bg-blue-50 cursor-pointer text-gray-700 border-b border-gray-50 last:border-b-0"
+                className="px-3.5 py-2 text-xs font-semibold hover:bg-[#f0fdf4] hover:text-[#00a651] cursor-pointer text-slate-700 border-b border-[#e2f2e9] last:border-b-0 text-left transition-colors"
                 onClick={() => {
                   onSelect(l.id);
                   setSearchTerm(l.name || l.ledgerName);
@@ -83,19 +97,19 @@ const SearchableLedgerSelect = ({
               </div>
             ))
           ) : (
-            <div className="px-4 py-2.5 text-sm text-gray-500 italic">
+            <div className="px-3.5 py-2 text-xs text-slate-400 italic text-left">
               No matches found
             </div>
           )}
 
           <div
-            className="px-4 py-2.5 text-sm bg-gray-50 hover:bg-blue-100 cursor-pointer text-blue-600 font-medium flex items-center gap-2 border-t border-[#e2e2dc]"
+            className="px-3.5 py-2 text-xs bg-[#f0fdf4] hover:bg-[#e1f9eb] cursor-pointer text-[#00a651] font-bold flex items-center gap-1.5 border-t border-[#cbe0d2] text-left transition-colors"
             onClick={() => {
               onCreateNew(searchTerm);
               setIsOpen(false);
             }}
           >
-            <UserPlus size={18} /> Add "{searchTerm || "New Ledger"}"
+            <UserPlus size={14} /> Add "{searchTerm || "New Ledger"}"
           </div>
         </div>
       )}
@@ -138,7 +152,6 @@ const styles = `
     padding: 32px 24px 80px;
   }
 
-  /* ── Cards ── */
   .pv-card {
     background: var(--surface-card);
     border: 1px solid var(--border);
@@ -188,7 +201,6 @@ const styles = `
     cursor: default;
   }
 
-  /* ── GST Buttons ── */
   .pv-gst-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
 
   .pv-btn {
@@ -206,7 +218,6 @@ const styles = `
   .pv-btn-amber { background: var(--amber); color: #fff; }
   .pv-btn-amber:hover { opacity: .88; }
 
-  /* ── Totals panel ── */
   .pv-totals {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -358,12 +369,11 @@ const StockCreationModal = ({
 );
 
 const SaleVoucher = () => {
-  const { user } = useAuth();
+  const { user, companyId } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   const [ledgers, setLedgers] = useState([]);
   const [availableItems, setAvailableItems] = useState([]);
-  const { companyId } = useCompany();
   const [activeDetailTab, setActiveDetailTab] = useState("party");
   const [ewayBillRequired, setEwayBillRequired] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -575,18 +585,20 @@ const SaleVoucher = () => {
         const ledgerRes = await axios.get(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
         );
-        setLedgers(ledgerRes.data.data || ledgerRes.data || []);
+        const ledgersData = Array.isArray(ledgerRes.data) ? ledgerRes.data : ledgerRes.data?.data || [];
+        setLedgers(ledgersData);
 
         const itemRes = await axios.get(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/manufacturing/getItems/${companyId}`,
         );
-        setAvailableItems(itemRes.data.data || itemRes.data || []);
+        const itemsData = Array.isArray(itemRes.data) ? itemRes.data : itemRes.data?.data || [];
+        setAvailableItems(itemsData);
 
         const savedState = sessionStorage.getItem("saleVoucherState");
         if (savedState) {
           const state = JSON.parse(savedState);
 
-          const loadedItems = itemRes.data.data || itemRes.data || [];
+          const loadedItems = itemsData;
           const updatedItems = state.voucher.items.map((itemRow) => {
             if (!itemRow.itemId && itemRow.item) {
               const selected = loadedItems.find(
@@ -838,7 +850,6 @@ const SaleVoucher = () => {
   const handleAutoGST = () => {
     const rate = 18;
     const amount = (totalAmount * rate) / 100;
-
     setVoucher({
       ...voucher,
       gstType: "Auto",
@@ -1005,6 +1016,48 @@ const SaleVoucher = () => {
     );
   };
 
+  const handleFillPartyDetails = () => {
+    if (!voucher.ledger) {
+      Swal.fire({
+        icon: "warning",
+        title: "No Ledger Selected",
+        text: "Please select a Sales Ledger first.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      return;
+    }
+    const selected = ledgers.find(
+      (l) => String(l.id) === String(voucher.ledger),
+    );
+    if (!selected) return;
+
+    setVoucher((prev) => ({
+      ...prev,
+      customer: prev.customer || selected.name || selected.ledgerName || "",
+      mailingName:
+        selected.mailingName || selected.name || selected.ledgerName || "",
+      address: selected.address || "",
+      state: selected.state || "",
+      country: selected.country || "India",
+      gstRegistrationType:
+        selected.registrationType ||
+        selected.gstRegistrationType ||
+        "Regular",
+      gstin: selected.gstin || "",
+      placeOfSupply: selected.state || "",
+      pincode: selected.pincode || "",
+    }));
+
+    Swal.fire({
+      icon: "success",
+      title: "Party Details Autofilled",
+      text: "Party and billing information updated from selected ledger.",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+  };
+
   const saveVoucher = async () => {
     if (!voucher.date || !voucher.customer || !voucher.ledger)
       return Swal.fire(
@@ -1137,33 +1190,66 @@ const SaleVoucher = () => {
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/sale-voucher`,
           voucherData,
         );
-        Swal.fire({
+        const result = await Swal.fire({
           icon: "success",
-          title: "Saved Successfully",
-          text: "Sales voucher saved successfully!",
+          title: "Sales Voucher Created Successfully",
+          text: "The sales voucher has been saved. What would you like to do next?",
           showCancelButton: true,
-          confirmButtonText: "Download PDF",
-          cancelButtonText: "Close",
-        }).then((result) => {
-          if (result.isConfirmed && res.data?.pdf_path) {
-            const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
-            window.open(pdfUrl, "_blank");
-            fetch(pdfUrl)
-              .then((response) => response.blob())
-              .then((blob) => {
-                const blobUrl = window.URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = blobUrl;
-                link.download =
-                  res.data.pdf_path.split("/").pop() || "SaleVoucher.pdf";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(blobUrl);
-              })
-              .catch((err) => console.error("Error downloading PDF:", err));
-          }
+          showDenyButton: !!res.data?.pdf_path,
+          confirmButtonColor: "#00a651",
+          cancelButtonColor: "#6b7280",
+          denyButtonColor: "#2563eb",
+          confirmButtonText: "Create Another",
+          cancelButtonText: "Go to Sales Voucher List",
+          denyButtonText: "Download PDF",
         });
+
+        if (result.isDenied && res.data?.pdf_path) {
+          const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
+          window.open(pdfUrl, "_blank");
+          fetch(pdfUrl)
+            .then((response) => response.blob())
+            .then((blob) => {
+              const blobUrl = window.URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = blobUrl;
+              link.download =
+                res.data.pdf_path.split("/").pop() || "SaleVoucher.pdf";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(blobUrl);
+            })
+            .catch((err) => console.error("Error downloading PDF:", err));
+
+          const followUp = await Swal.fire({
+            icon: "info",
+            title: "What's Next?",
+            text: "Would you like to create another sales voucher or go to the list?",
+            showCancelButton: true,
+            confirmButtonColor: "#00a651",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: "Create Another",
+            cancelButtonText: "Go to Sales Voucher List",
+          });
+          if (!followUp.isConfirmed) {
+            const role = user?.role || "admin";
+            const basePath =
+              role === "employee"
+                ? "/employee/hr/accounting/client"
+                : "/accounting/client";
+            navigate(`${basePath}/listOfSaleVoucher`);
+            return;
+          }
+        } else if (!result.isConfirmed) {
+          const role = user?.role || "admin";
+          const basePath =
+            role === "employee"
+              ? "/employee/hr/accounting/client"
+              : "/accounting/client";
+          navigate(`${basePath}/listOfSaleVoucher`);
+          return;
+        }
         setVoucher({
           date: "",
           customer: "",
@@ -1486,204 +1572,176 @@ const SaleVoucher = () => {
       );
     } catch (err) {
       console.error(err);
-
-      Swal.fire(
-        "Import Failed",
-        err.response?.data?.message || "Bulk import failed",
-        "error",
-      );
+      Swal.fire("Error", "Bulk import failed", "error");
     }
   };
+
+  const inputClass =
+    "app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium";
+
+  const tableInputClass =
+    "w-full border border-[#c8ddcd] bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] rounded-xl font-semibold py-2.25 px-3 text-xs outline-none transition-all";
+
+  const role = user?.role || "admin";
+  const listPath =
+    role === "employee"
+      ? "/employee/hr/accounting/client/listOfSaleVoucher"
+      : "/accounting/client/listOfSaleVoucher";
 
   return (
     <>
       <style>{styles}</style>
-      <div className="min-h-screen bg-[#f7f7f5] px-6 pt-8 pb-20 font-['DM_Sans',sans-serif] text-[#0f1117]">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-7 pb-5 border-b-[1.5px] border-[#e2e2dc]">
-          <div>
-            <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#1a56db] mb-1">
-              Accounts Receivable
-            </p>
-
-            <h1 className="font-['DM_Serif_Display',serif] text-[30px] text-[#0f1117] leading-[1.15]">
-              Sales Voucher
-            </h1>
-          </div>
-
-          <div className="flex items-center gap-3 flex-wrap">
-            <span
-              className={`
-        inline-flex items-center gap-1.5
-        px-3 py-1
-        rounded-full
-        text-[11.5px]
-        font-semibold
-        tracking-[0.04em]
-        whitespace-nowrap
-        ${
-          isEditMode
-            ? "bg-[#fffbeb] text-[#b45309]"
-            : "bg-[#ecfdf5] text-[#0d7448]"
-        }
-      `}
-            >
-              <span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "currentColor",
-                  display: "inline-block",
-                }}
-              />
-
-              {isEditMode ? "Edit Mode" : "New Voucher"}
-            </span>
-
-            <BulkImportButton
-              onImport={handleBulkImport}
-              buttonText="Import Excel / CSV"
-              className="
-        inline-flex items-center gap-2
-        px-4 py-2.5
-        bg-emerald-600 hover:bg-emerald-700
-        text-white text-sm font-medium
-        rounded-lg
-        shadow-md hover:shadow-lg
-        transition-all duration-200
-      "
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"></div>
-
-        <div className="bg-white border border-[#e2e2dc] rounded-[10px] shadow-sm p-6 mb-5">
-          <p className="text-[12px] font-semibold tracking-widest uppercase text-[#5c6070] mb-4.5 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-[#e2e2dc]">
-            Voucher Details
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1.25">
-              <label className="text-[12px] font-medium text-[#5c6070] tracking-[0.01em]">
-                Invoice No
-              </label>
-              <input
-                className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                placeholder="e.g. SINV-2025-001"
-                value={voucher.invoiceNo}
-                onChange={(e) =>
-                  setVoucher({ ...voucher, invoiceNo: e.target.value })
-                }
-              />
+      <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans">
+        <div className="max-w-6xl mx-auto bg-white app-panel border border-[#e2f2e9]/80 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+          <div className="flex justify-between items-center border-b border-[#e2f2e9] pb-5 mb-8">
+            <div className="flex items-center gap-3">
+              <h2 className="app-title text-xl font-extrabold text-[#042f2e]">
+                {isEditMode
+                  ? "Sales Voucher Alteration"
+                  : "Sales Voucher Creation"}
+              </h2>
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#f0fdf4] text-[#00a651] border border-[#c6f1d6]">
+                SV
+              </span>
             </div>
-            <div className="flex flex-col gap-1.25">
-              <label className="text-[12px] font-medium text-[#5c6070] tracking-[0.01em]">
-                Date <span className="text-[#c0392b] ml-0.5">*</span>
-              </label>
-              <input
-                type="date"
-                className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                value={voucher.date}
-                onChange={(e) =>
-                  setVoucher({ ...voucher, date: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col gap-1.25">
-              <label className="text-[12px] font-medium text-[#5c6070] tracking-[0.01em]">
-                Party Name <span className="text-[#c0392b] ml-0.5">*</span>
-              </label>
-              <input
-                className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                placeholder="Enter customer / party"
-                value={voucher.customer}
-                onChange={(e) =>
-                  setVoucher({ ...voucher, customer: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col gap-1.25">
-              <label className="text-[12px] font-medium text-[#5c6070] tracking-[0.01em]">
-                Sales Ledger <span className="text-[#c0392b] ml-0.5">*</span>
-              </label>
 
-              <SearchableLedgerSelect
-                ledgers={ledgers}
-                value={voucher.ledger}
-                onSelect={(ledgerId) => {
-                  const selectedLedger = ledgers.find(
-                    (l) => String(l.id) === String(ledgerId),
-                  );
-                  setVoucher({
-                    ...voucher,
-                    ledger: ledgerId,
-                    customer: selectedLedger?.name || "",
-                    mailingName: selectedLedger?.mailingName || "",
-                    address: selectedLedger?.address || "",
-                    state: selectedLedger?.state || "",
-                    country: selectedLedger?.country || "India",
-                    pincode: selectedLedger?.pincode || "",
-                    gstRegistrationType:
-                      selectedLedger?.registrationType || "Regular",
-                    gstin: selectedLedger?.gstin || "",
-                    placeOfSupply: selectedLedger?.state || "",
-                    consigneeName: selectedLedger?.mailingName || "",
-                    consigneeAddress: selectedLedger?.address || "",
-                    consigneeState: selectedLedger?.state || "",
-                    consigneePincode: selectedLedger?.pincode || "",
-                    consigneeGSTIN: selectedLedger?.gstin || "",
-                  });
-                }}
-                onCreateNew={(name) => handleQuickCreateLedger(name)}
-                placeholder="— Select ledger —"
-              />
+            <div className="flex items-center gap-3">
+              <BulkImportButton onImport={handleBulkImport} />
+              <button
+                type="button"
+                onClick={() => navigate(listPath)}
+                className="flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors text-sm font-medium cursor-pointer"
+              >
+                <ArrowLeft size={16} /> Back to Sales Vouchers
+              </button>
             </div>
           </div>
-        </div>
 
-        <div className="bg-white border border-[#e2e2dc] rounded-[10px] shadow-sm p-6 mb-5">
-          <div className="flex gap-6 border-b border-[#e2e2dc] mb-5 -mt-2">
-            <button
-              className={`bg-none border-none py-2.5 text-[13px] font-semibold cursor-pointer relative transition-colors duration-200 uppercase tracking-wider ${activeDetailTab === "party" ? "text-[#1a56db] after:content-[''] after:absolute after:-bottom-px after:left-0 after:right-0 after:h-0.5 after:bg-[#1a56db]" : "text-[#9ca3af]"}`}
-              onClick={() => setActiveDetailTab("party")}
-            >
-              Party Details
-            </button>
-            <button
-              className={`bg-none border-none py-2.5 text-[13px] font-semibold cursor-pointer relative transition-colors duration-200 uppercase tracking-wider ${activeDetailTab === "shipping" ? "text-[#1a56db] after:content-[''] after:absolute after:-bottom-px after:left-0 after:right-0 after:h-0.5 after:bg-[#1a56db]" : "text-[#9ca3af]"}`}
-              onClick={() => setActiveDetailTab("shipping")}
-            >
-              Shipping & E-Way Bill
-            </button>
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+              <FileText size={16} className="text-[#00a651]" /> Voucher Details
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+              <div>
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Invoice No :
+                </label>
+                <input
+                  className={inputClass}
+                  placeholder="e.g. SINV-2025-001"
+                  value={voucher.invoiceNo}
+                  onChange={(e) =>
+                    setVoucher({ ...voucher, invoiceNo: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Date * :
+                </label>
+                <input
+                  type="date"
+                  className={inputClass}
+                  value={voucher.date}
+                  onChange={(e) =>
+                    setVoucher({ ...voucher, date: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Party Name * :
+                </label>
+                <input
+                  className={inputClass}
+                  placeholder="Enter customer / party name"
+                  value={voucher.customer}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setVoucher((prev) => ({
+                      ...prev,
+                      customer: val,
+                      mailingName:
+                        prev.mailingName === prev.customer || !prev.mailingName
+                          ? val
+                          : prev.mailingName,
+                    }));
+                  }}
+                />
+              </div>
+              <div>
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Sales Ledger * :
+                </label>
+                <SearchableLedgerSelect
+                  ledgers={ledgers}
+                  value={voucher.ledger}
+                  onSelect={(lid) => setVoucher({ ...voucher, ledger: lid })}
+                  onCreateNew={(name) => handleQuickCreateLedger(name)}
+                  placeholder="Search or select Sales Ledger..."
+                />
+                <button
+                  type="button"
+                  onClick={handleFillPartyDetails}
+                  className="mt-2 text-xs font-bold text-[#00a651] hover:text-white bg-[#f0fdf4] hover:bg-[#00a651] border border-[#cbe0d2] px-3 py-1.5 rounded-xl transition-all cursor-pointer inline-flex items-center gap-1.5 active:scale-95 shadow-xs"
+                >
+                  <Wand2 size={13} />
+                  Autofill Party Info
+                </button>
+              </div>
+            </div>
           </div>
 
-          {activeDetailTab === "party" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="space-y-4">
-                <FieldRow label="Buyer (Bill to)">
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <div className="flex gap-2 border-b border-[#cbe0d2] pb-3 mb-5">
+              <button
+                type="button"
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${activeDetailTab === "party" ? "bg-[#00a651] text-white shadow-sm" : "bg-white text-slate-700 border border-[#cbe0d2] hover:bg-[#f0fdf4]"}`}
+                onClick={() => setActiveDetailTab("party")}
+              >
+                <User size={14} /> Party Details
+              </button>
+              <button
+                type="button"
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${activeDetailTab === "shipping" ? "bg-[#00a651] text-white shadow-sm" : "bg-white text-slate-700 border border-[#cbe0d2] hover:bg-[#f0fdf4]"}`}
+                onClick={() => setActiveDetailTab("shipping")}
+              >
+                <Truck size={14} /> Logistics & E-Way Bill
+              </button>
+            </div>
+
+            {activeDetailTab === "party" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                    Mailing Name :
+                  </label>
                   <input
-                    className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#5c6070] bg-[#f7f7f5] cursor-default transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                    readOnly
-                    value={
-                      ledgers.find(
-                        (l) => String(l.id) === String(voucher.ledger),
-                      )?.name || ""
-                    }
-                    placeholder="Auto-filled from ledger"
-                  />
-                </FieldRow>
-                <FieldRow label="Mailing Name">
-                  <input
-                    className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
+                    className={inputClass}
                     value={voucher.mailingName}
                     onChange={(e) =>
                       setVoucher({ ...voucher, mailingName: e.target.value })
                     }
                   />
-                </FieldRow>
-                <FieldRow label="State">
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    Address :
+                  </label>
+                  <textarea
+                    className={`${inputClass} h-20 resize-none`}
+                    value={voucher.address}
+                    onChange={(e) =>
+                      setVoucher({ ...voucher, address: e.target.value })
+                    }
+                  />
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    State :
+                  </label>
                   <select
-                    className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
+                    className={inputClass}
                     value={voucher.state}
                     onChange={(e) =>
                       setVoucher({ ...voucher, state: e.target.value })
@@ -1697,31 +1755,25 @@ const SaleVoucher = () => {
                       </option>
                     ))}
                   </select>
-                </FieldRow>
-                <FieldRow label="Country">
+                </div>
+
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                    Country :
+                  </label>
                   <input
-                    className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
+                    className={inputClass}
                     value={voucher.country}
                     onChange={(e) =>
                       setVoucher({ ...voucher, country: e.target.value })
                     }
                   />
-                </FieldRow>
-              </div>
-              <div className="space-y-4">
-                <FieldRow label="Address">
-                  <textarea
-                    className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                    rows={2}
-                    value={voucher.address}
-                    onChange={(e) =>
-                      setVoucher({ ...voucher, address: e.target.value })
-                    }
-                  />
-                </FieldRow>
-                <FieldRow label="GST Reg. Type">
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    GST Registration Type :
+                  </label>
                   <select
-                    className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
+                    className={inputClass}
                     value={voucher.gstRegistrationType}
                     onChange={(e) =>
                       setVoucher({
@@ -1734,219 +1786,201 @@ const SaleVoucher = () => {
                     <option>Regular</option>
                     <option>Composition</option>
                   </select>
-                </FieldRow>
-                <FieldRow label="GSTIN/UIN">
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    GSTIN/UIN :
+                  </label>
                   <input
-                    className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none uppercase"
+                    className={`${inputClass} uppercase`}
                     placeholder="22AAAAA0000A1Z5"
                     value={voucher.gstin}
                     onChange={(e) =>
                       setVoucher({ ...voucher, gstin: e.target.value })
                     }
                   />
-                </FieldRow>
-                <FieldRow label="Place of Supply">
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    Place of Supply :
+                  </label>
                   <input
-                    className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
+                    className={inputClass}
                     value={voucher.placeOfSupply}
                     onChange={(e) =>
                       setVoucher({ ...voucher, placeOfSupply: e.target.value })
                     }
                   />
-                </FieldRow>
-                <FieldRow label="Pincode">
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    Pincode :
+                  </label>
                   <input
-                    className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
+                    className={inputClass}
                     placeholder="6-digit PIN"
                     value={voucher.pincode}
                     onChange={(e) =>
                       setVoucher({ ...voucher, pincode: e.target.value })
                     }
                   />
-                </FieldRow>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {activeDetailTab === "shipping" && (
-            <div className="space-y-8 animate-in fade-in duration-300">
-              <div className="bg-blue-50/30 p-6 rounded-2xl border border-blue-100 mt-6">
-                <div className="flex justify-between items-center mb-6">
-                  <div className="flex items-center gap-2">
-                    <HiTruck className="text-blue-600" />
-                    <h4 className="text-xs font-bold text-blue-900 uppercase tracking-widest">
-                      E-Way Bill Compliance
+            {activeDetailTab === "shipping" && (
+              <div className="space-y-6">
+                <div className="bg-white border border-[#cbe0d2] p-6 rounded-2xl">
+                  <div className="flex justify-between items-center mb-4 border-b border-[#e2f2e9] pb-3">
+                    <h4 className="text-xs font-bold text-[#042f2e] uppercase tracking-wider flex items-center gap-2">
+                      <Truck size={16} className="text-[#00a651]" /> E-Way Bill
+                      Compliance
                     </h4>
-                  </div>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <span className="text-[10px] font-bold text-gray-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider">
+                    <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700">
                       Enable E-Way Bill
-                    </span>
-                    <div className="relative">
                       <input
                         type="checkbox"
                         checked={ewayBillRequired}
                         onChange={(e) => setEwayBillRequired(e.target.checked)}
-                        className="sr-only"
-                      />
-                      <div
-                        className={`block w-10 h-6 rounded-full transition-colors ${ewayBillRequired ? "bg-blue-600" : "bg-gray-300"}`}
-                      ></div>
-                      <div
-                        className={`absolute left-0.5 top-0.5 bg-white w-5 h-5 rounded-full transition-transform duration-200 ${ewayBillRequired ? "translate-x-4" : ""}`}
-                      ></div>
-                    </div>
-                  </label>
-                </div>
-
-                {ewayBillRequired && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in slide-in-from-top-2 duration-300">
-                    <div className="flex flex-col gap-1.25">
-                      <label className="text-[12px] font-medium text-[#5c6070] tracking-[0.01em]">
-                        E-Way Bill Number
-                      </label>
-                      <input
-                        className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                        placeholder="12-digit number"
-                        value={ewayBillData.ewayBillNo}
-                        onChange={(e) =>
-                          setEwayBillData({
-                            ...ewayBillData,
-                            ewayBillNo: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1.25">
-                      <label className="text-[12px] font-medium text-[#5c6070] tracking-[0.01em]">
-                        Bill Date
-                      </label>
-                      <input
-                        type="date"
-                        className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                        value={ewayBillData.ewayBillDate}
-                        onChange={(e) =>
-                          setEwayBillData({
-                            ...ewayBillData,
-                            ewayBillDate: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1.25">
-                      <label className="text-[12px] font-medium text-[#5c6070] tracking-[0.01em]">
-                        Distance (KM)
-                      </label>
-                      <input
-                        type="number"
-                        className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                        value={ewayBillData.distanceKM}
-                        onChange={(e) =>
-                          setEwayBillData({
-                            ...ewayBillData,
-                            distanceKM: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-6">
-                <div>
-                  <div className="flex justify-between items-center mb-4">
-                    <h4 className="text-xs font-bold text-gray-700 uppercase tracking-widest">
-                      Consignee (Ship To)
-                    </h4>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase">
-                        Same as Billing?
-                      </span>
-                      <input
-                        type="checkbox"
-                        checked={voucher.consigneeSameAsBilling}
-                        onChange={(e) =>
-                          setVoucher({
-                            ...voucher,
-                            consigneeSameAsBilling: e.target.checked,
-                          })
-                        }
-                        className="w-3.5 h-3.5"
+                        className="w-4 h-4 accent-[#00a651] cursor-pointer"
                       />
                     </label>
                   </div>
-                  {!voucher.consigneeSameAsBilling && (
-                    <div className="space-y-4 p-5 bg-gray-50/50 rounded-2xl border border-gray-100">
-                      <FieldRow label="Name">
+
+                  {ewayBillRequired && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                      <div>
+                        <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                          E-Way Bill No :
+                        </label>
                         <input
-                          className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                          value={voucher.consigneeName}
+                          className={inputClass}
+                          value={ewayBillData.ewayBillNo}
                           onChange={(e) =>
-                            setVoucher({
-                              ...voucher,
-                              consigneeName: e.target.value,
+                            setEwayBillData({
+                              ...ewayBillData,
+                              ewayBillNo: e.target.value,
                             })
                           }
                         />
-                      </FieldRow>
-                      <FieldRow label="GSTIN">
+
+                        <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                          Transporter ID :
+                        </label>
                         <input
-                          className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none uppercase"
-                          value={voucher.consigneeGSTIN}
+                          className={inputClass}
+                          value={ewayBillData.transporterID}
                           onChange={(e) =>
-                            setVoucher({
-                              ...voucher,
-                              consigneeGSTIN: e.target.value,
+                            setEwayBillData({
+                              ...ewayBillData,
+                              transporterID: e.target.value,
                             })
                           }
                         />
-                      </FieldRow>
-                      <FieldRow label="State">
-                        <select
-                          className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                          value={voucher.consigneeState}
+                      </div>
+                      <div>
+                        <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                          Distance (KM) :
+                        </label>
+                        <input
+                          type="number"
+                          className={inputClass}
+                          value={ewayBillData.distanceKM}
                           onChange={(e) =>
-                            setVoucher({
-                              ...voucher,
-                              consigneeState: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">Select State</option>
-                          <option value="Not Applicable">Not Applicable</option>
-                          {statesList.map((st, idx) => (
-                            <option key={idx} value={st}>
-                              {st}
-                            </option>
-                          ))}
-                        </select>
-                      </FieldRow>
-                      <FieldRow label="Address">
-                        <textarea
-                          className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                          rows={2}
-                          value={voucher.consigneeAddress}
-                          onChange={(e) =>
-                            setVoucher({
-                              ...voucher,
-                              consigneeAddress: e.target.value,
+                            setEwayBillData({
+                              ...ewayBillData,
+                              distanceKM: e.target.value,
                             })
                           }
                         />
-                      </FieldRow>
+
+                        <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                          Vehicle Number :
+                        </label>
+                        <input
+                          className={`${inputClass} uppercase`}
+                          value={ewayBillData.vehicleNumber}
+                          onChange={(e) =>
+                            setEwayBillData({
+                              ...ewayBillData,
+                              vehicleNumber: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
-                <div className="flex flex-col justify-end">
-                  <div className="flex flex-col gap-1.25">
-                    <label className="text-[12px] font-medium text-[#5c6070] tracking-[0.01em]">
-                      Terms of Delivery
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                      Buyer Order No :
+                    </label>
+                    <input
+                      className={inputClass}
+                      value={voucher.buyerOrderNo}
+                      onChange={(e) =>
+                        setVoucher({ ...voucher, buyerOrderNo: e.target.value })
+                      }
+                    />
+
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                      Dispatch Doc No :
+                    </label>
+                    <input
+                      className={inputClass}
+                      value={voucher.dispatchDocNo}
+                      onChange={(e) =>
+                        setVoucher({
+                          ...voucher,
+                          dispatchDocNo: e.target.value,
+                        })
+                      }
+                    />
+
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                      Dispatched Through :
+                    </label>
+                    <input
+                      className={inputClass}
+                      value={voucher.dispatchedThrough}
+                      onChange={(e) =>
+                        setVoucher({
+                          ...voucher,
+                          dispatchedThrough: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                      Destination :
+                    </label>
+                    <input
+                      className={inputClass}
+                      value={voucher.destination}
+                      onChange={(e) =>
+                        setVoucher({ ...voucher, destination: e.target.value })
+                      }
+                    />
+
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                      Vehicle No :
+                    </label>
+                    <input
+                      className={`${inputClass} uppercase`}
+                      value={voucher.motorVehicleNo}
+                      onChange={(e) =>
+                        setVoucher({
+                          ...voucher,
+                          motorVehicleNo: e.target.value,
+                        })
+                      }
+                    />
+
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                      Terms of Delivery :
                     </label>
                     <textarea
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      rows={4}
-                      placeholder="Standard terms..."
+                      className={`${inputClass} h-16 resize-none`}
                       value={voucher.termsOfDelivery}
                       onChange={(e) =>
                         setVoucher({
@@ -1958,542 +1992,280 @@ const SaleVoucher = () => {
                   </div>
                 </div>
               </div>
+            )}
+          </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12">
-                <div className="space-y-4">
-                  <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-4 border-b border-blue-50 pb-1">
-                    Logistics
-                  </p>
-                  <FieldRow label="Delivery Note">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.deliveryNoteNo}
-                      onChange={(e) =>
-                        setVoucher({
-                          ...voucher,
-                          deliveryNoteNo: e.target.value,
-                        })
-                      }
-                    />
-                  </FieldRow>
-                  <FieldRow label="Note Date">
-                    <input
-                      type="date"
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.deliveryNoteDate}
-                      onChange={(e) =>
-                        setVoucher({
-                          ...voucher,
-                          deliveryNoteDate: e.target.value,
-                        })
-                      }
-                    />
-                  </FieldRow>
-
-                  <FieldRow label="Payment Terms">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.paymentTerms}
-                      onChange={(e) =>
-                        setVoucher({ ...voucher, paymentTerms: e.target.value })
-                      }
-                    />
-                  </FieldRow>
-                  <FieldRow label="Dispatch Doc No.">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.dispatchDocNo}
-                      onChange={(e) =>
-                        setVoucher({
-                          ...voucher,
-                          dispatchDocNo: e.target.value,
-                        })
-                      }
-                    />
-                  </FieldRow>
-                </div>
-
-                <div className="space-y-4">
-                  <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-4 border-b border-purple-50 pb-1">
-                    References
-                  </p>
-                  <FieldRow label="Ref No.">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.referenceNo}
-                      onChange={(e) =>
-                        setVoucher({ ...voucher, referenceNo: e.target.value })
-                      }
-                    />
-                  </FieldRow>
-                  <FieldRow label="Ref Date">
-                    <input
-                      type="date"
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.referenceDate}
-                      onChange={(e) =>
-                        setVoucher({
-                          ...voucher,
-                          referenceDate: e.target.value,
-                        })
-                      }
-                    />
-                  </FieldRow>
-                  <FieldRow label="Buyer Order No.">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.buyerOrderNo}
-                      onChange={(e) =>
-                        setVoucher({ ...voucher, buyerOrderNo: e.target.value })
-                      }
-                    />
-                  </FieldRow>
-                  <FieldRow label="Order Date">
-                    <input
-                      type="date"
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.buyerOrderDate}
-                      onChange={(e) =>
-                        setVoucher({
-                          ...voucher,
-                          buyerOrderDate: e.target.value,
-                        })
-                      }
-                    />
-                  </FieldRow>
-                  <FieldRow label="Other Reference">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.otherReferences}
-                      onChange={(e) =>
-                        setVoucher({
-                          ...voucher,
-                          otherReferences: e.target.value,
-                        })
-                      }
-                    />
-                  </FieldRow>
-                </div>
-
-                <div className="space-y-4">
-                  <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-4 border-b border-orange-50 pb-1">
-                    Transportation
-                  </p>
-                  <FieldRow label="Dispatched Through">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.dispatchedThrough}
-                      onChange={(e) =>
-                        setVoucher({
-                          ...voucher,
-                          dispatchedThrough: e.target.value,
-                        })
-                      }
-                    />
-                  </FieldRow>
-                  <FieldRow label="Destination">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.destination}
-                      onChange={(e) =>
-                        setVoucher({ ...voucher, destination: e.target.value })
-                      }
-                    />
-                  </FieldRow>
-                  <FieldRow label="Vehicle No.">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none uppercase"
-                      value={voucher.motorVehicleNo}
-                      onChange={(e) =>
-                        setVoucher({
-                          ...voucher,
-                          motorVehicleNo: e.target.value,
-                        })
-                      }
-                    />
-                  </FieldRow>
-                  <FieldRow label="Bill of Lading">
-                    <input
-                      className="w-full px-3 py-2.25 border-[1.5px] border-[#e2e2dc] rounded-md text-[14px] text-[#0f1117] bg-white transition-all focus:border-[#1a56db] focus:ring-[3px] focus:ring-[#1a56db1a] outline-none"
-                      value={voucher.billOfLading}
-                      onChange={(e) =>
-                        setVoucher({ ...voucher, billOfLading: e.target.value })
-                      }
-                    />
-                  </FieldRow>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="bg-white border border-[#e2e2dc] rounded-[10px] shadow-sm p-6 mb-5">
-          <div className="flex justify-between items-center mb-5">
-            <p className="text-[12px] font-semibold tracking-widest uppercase text-[#5c6070] mb-0 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-[#e2e2dc] m-0">
-              Inventory Items
-            </p>
-            <div className="flex gap-3">
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <div className="flex justify-between items-center mb-4 border-b border-[#cbe0d2] pb-1.5">
+              <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider flex items-center gap-2">
+                <Layers size={16} className="text-[#00a651]" /> Inventory Items
+              </h3>
               <button
-                className="inline-flex items-center gap-1.75 px-4.5 py-2.25 border-none rounded-md text-[13.5px] font-medium cursor-pointer transition-all duration-150 active:scale-[0.97] bg-transparent border-[1.5px] border-[#c8c8c0] text-[#5c6070] hover:border-[#1a56db] hover:text-[#1a56db]"
+                type="button"
+                className="flex items-center gap-1 text-xs font-bold text-[#00a651] bg-white border border-[#cbe0d2] px-3 py-1.5 rounded-lg hover:bg-[#f0fdf4] transition-colors cursor-pointer"
                 onClick={addRow}
               >
-                <HiPlus className="w-4 h-4" /> Add Item
+                <Plus size={14} /> Add Item
               </button>
             </div>
-          </div>
 
-          <div className="overflow-x-auto border border-[#e2e2dc] rounded-md">
-            <table className="w-full border-collapse text-[13.5px]">
-              <thead>
-                <tr>
-                  <th
-                    className="px-3 py-2.5 bg-[#f7f7f5] border-b-[1.5px] border-[#e2e2dc] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#5c6070] whitespace-nowrap text-left"
-                    style={{ width: "30%" }}
-                  >
-                    Item Name
-                  </th>
-                  <th className="px-3 py-2.5 bg-[#f7f7f5] border-b-[1.5px] border-[#e2e2dc] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#5c6070] whitespace-nowrap text-left">
-                    HSN Code
-                  </th>
-                  <th className="px-3 py-2.5 bg-[#f7f7f5] border-b-[1.5px] border-[#e2e2dc] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#5c6070] whitespace-nowrap text-right">
-                    Quantity
-                  </th>
-                  <th
-                    className="px-3 py-2.5 bg-[#f7f7f5] border-b-[1.5px] border-[#e2e2dc] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#5c6070] whitespace-nowrap text-center"
-                    style={{ width: "80px" }}
-                  >
-                    per
-                  </th>
-                  <th className="px-3 py-2.5 bg-[#f7f7f5] border-b-[1.5px] border-[#e2e2dc] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#5c6070] whitespace-nowrap text-right">
-                    Rate (₹)
-                  </th>
-                  <th className="px-3 py-2.5 bg-[#f7f7f5] border-b-[1.5px] border-[#e2e2dc] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#5c6070] whitespace-nowrap text-right">
-                    Amount (₹)
-                  </th>
-                  <th className="px-3 py-2.5 bg-[#f7f7f5] border-b-[1.5px] border-[#e2e2dc] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#5c6070] whitespace-nowrap text-center">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {voucher.items.map((row, index) => (
-                  <tr key={index}>
-                    <td className="px-2.5 py-2 border-b border-[#e2e2dc] align-middle">
-                      <div className="relative group">
+            <div className="overflow-x-auto rounded-xl border border-[#cbe0d2] bg-white mb-4">
+              <table className="w-full border-collapse text-xs">
+                <thead>
+                  <tr className="bg-[#f0fdf4] border-b border-[#cbe0d2]">
+                    <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e]">
+                      Item Name
+                    </th>
+                    <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-28">
+                      HSN Code
+                    </th>
+                    <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-24">
+                      Quantity
+                    </th>
+                    <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-20">
+                      Per
+                    </th>
+                    <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-28">
+                      Rate (₹)
+                    </th>
+                    <th className="px-4 py-3 text-right text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-32">
+                      Amount (₹)
+                    </th>
+                    <th className="px-4 py-3 text-center text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-16">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e2f2e9]">
+                  {voucher.items.map((row, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-[#f8faf8] transition-colors"
+                    >
+                      <td className="p-2">
+                        <div className="relative group">
+                          <input
+                            list={`items-${index}`}
+                            className={tableInputClass}
+                            placeholder="Select or enter item"
+                            value={row.item}
+                            onChange={(e) =>
+                              handleItemChange(index, "item", e.target.value)
+                            }
+                          />
+                          <datalist id={`items-${index}`}>
+                            {availableItems.map((ai) => (
+                              <option
+                                key={ai.id}
+                                value={`${ai.productName}${ai.godown ? ` - ${ai.godown}` : ""}`}
+                              />
+                            ))}
+                          </datalist>
+                          <button
+                            type="button"
+                            onClick={() => openStockModal(row.item)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#00a651] opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-[#f0fdf4] rounded cursor-pointer"
+                            title="Create New Stock Item"
+                          >
+                            <HiPlus className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                      <td className="p-2">
                         <input
-                          list={`items-${index}`}
-                          className="w-full px-2.5 py-1.5 border-[1.5px] border-transparent rounded-[5px] text-[13.5px] text-[#0f1117] bg-transparent outline-none transition-all focus:border-[#1a56db] focus:bg-white"
-                          placeholder="Select or enter item"
-                          value={row.item}
+                          className={tableInputClass}
+                          value={row.hsn_code}
                           onChange={(e) =>
-                            handleItemChange(index, "item", e.target.value)
+                            handleItemChange(index, "hsn_code", e.target.value)
                           }
                         />
-                        <datalist id={`items-${index}`}>
-                          {availableItems.map((it) => (
-                            <option
-                              key={it.id}
-                              value={`${it.productName}${it.godown ? ` - ${it.godown}` : ""}`}
-                            />
-                          ))}
-                        </datalist>
+                      </td>
+                      <td className="p-2">
+                        <input
+                          type="number"
+                          className={tableInputClass}
+                          value={row.qty}
+                          onChange={(e) =>
+                            handleItemChange(index, "qty", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2">
+                        <input
+                          className={tableInputClass}
+                          value={row.per}
+                          onChange={(e) =>
+                            handleItemChange(index, "per", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2">
+                        <input
+                          type="number"
+                          className={tableInputClass}
+                          value={row.rate}
+                          onChange={(e) =>
+                            handleItemChange(index, "rate", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2 text-right font-bold text-slate-800">
+                        ₹ {Number(row.amount || 0).toFixed(2)}
+                      </td>
+                      <td className="p-2 text-center">
                         <button
-                          onClick={() => openStockModal(row.item)}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-blue-50 rounded"
-                          title="Create New Stock Item"
+                          type="button"
+                          className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                          onClick={() => removeRow(index)}
+                          title="Remove item"
                         >
-                          <HiPlus className="w-3 h-3" />
+                          <Trash2 size={14} />
                         </button>
-                      </div>
-                    </td>
-                    <td className="px-2.5 py-2 border-b border-[#e2e2dc] align-middle">
-                      <input
-                        className="w-full px-2.5 py-1.5 border-[1.5px] border-transparent rounded-[5px] text-[13.5px] text-[#0f1117] bg-transparent outline-none transition-all focus:border-[#1a56db] focus:bg-white"
-                        value={row.hsn_code}
-                        onChange={(e) =>
-                          handleItemChange(index, "hsn_code", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td className="px-2.5 py-2 border-b border-[#e2e2dc] align-middle">
-                      <input
-                        type="number"
-                        className="w-full px-2.5 py-1.5 border-[1.5px] border-transparent rounded-[5px] text-[13.5px] text-[#0f1117] bg-transparent outline-none transition-all focus:border-[#1a56db] focus:bg-white text-right"
-                        value={row.qty}
-                        onChange={(e) =>
-                          handleItemChange(index, "qty", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td className="px-2.5 py-2 border-b border-[#e2e2dc] align-middle">
-                      <input
-                        className="w-full px-2.5 py-1.5 border-[1.5px] border-transparent rounded-[5px] text-[13.5px] text-[#0f1117] bg-transparent outline-none transition-all focus:border-[#1a56db] focus:bg-white text-center"
-                        value={row.per}
-                        onChange={(e) =>
-                          handleItemChange(index, "per", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td className="px-2.5 py-2 border-b border-[#e2e2dc] align-middle">
-                      <input
-                        type="number"
-                        className="w-full px-2.5 py-1.5 border-[1.5px] border-transparent rounded-[5px] text-[13.5px] text-[#0f1117] bg-transparent outline-none transition-all focus:border-[#1a56db] focus:bg-white text-right"
-                        value={row.rate}
-                        onChange={(e) =>
-                          handleItemChange(index, "rate", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td className="px-2.5 py-2 border-b border-[#e2e2dc] align-middle text-right font-bold text-gray-900">
-                      ₹{Number(row.amount).toFixed(2)}
-                    </td>
-                    <td className="px-2.5 py-2 border-b border-[#e2e2dc] align-middle text-center">
-                      <button
-                        onClick={() => removeRow(index)}
-                        className="text-red-400 hover:text-red-600 p-1.5 rounded-full hover:bg-red-50 transition-colors"
-                      >
-                        <HiTrash className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        <div className="pv-card">
-          <p className="pv-card-title">Tax & Totals</p>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              gap: 24,
-              flexWrap: "wrap",
-            }}
-          >
-            <div style={{ flex: "1 1 320px" }}>
-              <p
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "var(--ink-muted)",
-                  letterSpacing: ".08em",
-                  textTransform: "uppercase",
-                  marginBottom: 12,
-                }}
-              >
-                Apply GST
-              </p>
-              <div className="pv-gst-buttons" style={{ marginBottom: 20 }}>
-                <button className="pv-btn pv-btn-green" onClick={handleAutoGST}>
-                  <svg
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+              <FileText size={16} className="text-[#00a651]" /> Tax & Totals
+            </h3>
+            <div className="flex justify-between items-start gap-6 flex-wrap">
+              <div className="flex-1 min-w-80">
+                <label className="app-label block text-xs font-bold text-slate-800 mb-2">
+                  Apply GST :
+                </label>
+                <div className="flex gap-3 mb-4">
+                  <button
+                    type="button"
+                    className="bg-[#00a651] text-white px-4 py-2 text-xs font-bold rounded-xl hover:bg-[#008c44] transition-colors cursor-pointer shadow-xs"
+                    onClick={handleAutoGST}
                   >
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                  </svg>
-                  Auto GST
-                </button>
-                <button
-                  className="pv-btn pv-btn-amber"
-                  onClick={handleManualGST}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
+                    Auto GST
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-amber-600 text-white px-4 py-2 text-xs font-bold rounded-xl hover:bg-amber-700 transition-colors cursor-pointer shadow-xs"
+                    onClick={handleManualGST}
                   >
-                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-                  </svg>
-                  Manual GST
-                </button>
-              </div>
-
-              {voucher.gstRate > 0 && (
-                <div
-                  style={{
-                    background: "var(--green-light)",
-                    border: "1px solid #a7f3d0",
-                    borderRadius: "var(--radius-sm)",
-                    padding: "10px 14px",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontSize: 13,
-                    color: "var(--green)",
-                    fontWeight: 500,
-                    marginBottom: 16,
-                  }}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    viewBox="0 0 24 24"
-                  >
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  {voucher.gstRate}% GST applied — ₹{gstAmount.toFixed(2)}
+                    Manual GST
+                  </button>
                 </div>
-              )}
-
-              <p
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "var(--ink-muted)",
-                  letterSpacing: ".08em",
-                  textTransform: "uppercase",
-                  marginBottom: 10,
-                }}
-              >
-                Component Breakdown
-              </p>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                {[
-                  ["IGST", "igst"],
-                  ["CGST", "cgst"],
-                  ["SGST", "sgst"],
-                ].map(([label, key]) => (
-                  <div
-                    key={key}
-                    style={{ display: "flex", flexDirection: "column", gap: 4 }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: 11,
-                          fontWeight: 600,
-                          color: "var(--ink-muted)",
-                          letterSpacing: ".06em",
-                        }}
-                      >
-                        {label} (%)
-                      </span>
-                      <span
-                        style={{
-                          fontSize: 10,
-                          fontWeight: 700,
-                          color: "var(--accent)",
-                        }}
-                      >
-                        ₹{" "}
-                        {(
-                          (totalAmount * Number(voucher[key] || 0)) /
-                          100
-                        ).toFixed(2)}
-                      </span>
-                    </div>
-                    <input
-                      type="number"
-                      className="pv-gst-input"
-                      placeholder="Rate %"
-                      value={voucher[key]}
-                      onChange={(e) =>
-                        setVoucher({ ...voucher, [key]: e.target.value })
-                      }
-                    />
+                {voucher.gstRate > 0 && (
+                  <div className="inline-flex items-center gap-2 px-3 py-2 mb-4 rounded-xl text-xs font-bold bg-[#f0fdf4] border border-[#c6f1d6] text-[#00a651]">
+                    {voucher.gstRate}% GST applied — ₹ {gstAmount.toFixed(2)}
                   </div>
-                ))}
+                )}
+                <label className="app-label block text-xs font-bold text-slate-800 mb-2">
+                  Component Breakdown :
+                </label>
+                <div className="flex gap-3 flex-wrap">
+                  {[
+                    ["IGST", "igst"],
+                    ["CGST", "cgst"],
+                    ["SGST", "sgst"],
+                  ].map(([label, key]) => (
+                    <div key={key} className="flex flex-col gap-1">
+                      <span className="text-[11px] font-bold text-slate-700">
+                        {label} (₹)
+                      </span>
+                      <input
+                        type="number"
+                        className="app-input w-28 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] font-medium py-1 px-2 text-xs"
+                        placeholder="Amount"
+                        value={voucher[key]}
+                        readOnly={voucher.gstType !== "Manual"}
+                        onChange={(e) =>
+                          setVoucher({ ...voucher, [key]: e.target.value })
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="pv-totals" style={{ flex: "0 0 auto" }}>
-              <div className="pv-totals-row">
-                <span>Subtotal</span>
-                <span className="val">₹ {totalAmount.toFixed(2)}</span>
-              </div>
-              {voucher.gstRate > 0 && (
-                <div className="pv-totals-row gst-line">
-                  <span>GST ({voucher.gstRate}%)</span>
-                  <span className="val">₹ {gstAmount.toFixed(2)}</span>
-                </div>
-              )}
-              {Number(voucher.igst) > 0 && (
-                <div className="pv-totals-row">
-                  <span>IGST ({voucher.igst}%)</span>
-                  <span className="val">
-                    ₹ {((totalAmount * Number(voucher.igst)) / 100).toFixed(2)}
+              <div className="bg-white border border-[#cbe0d2] rounded-xl p-5 shrink-0 w-full md:w-72 shadow-xs">
+                <div className="flex justify-between items-center py-1.5 text-xs text-slate-600 border-b border-[#e2f2e9]">
+                  <span>Subtotal</span>
+                  <span className="font-bold text-slate-800">
+                    ₹ {totalAmount.toFixed(2)}
                   </span>
                 </div>
-              )}
-              {Number(voucher.cgst) > 0 && (
-                <div className="pv-totals-row">
-                  <span>CGST ({voucher.cgst}%)</span>
-                  <span className="val">
-                    ₹ {((totalAmount * Number(voucher.cgst)) / 100).toFixed(2)}
+                {voucher.gstRate > 0 && (
+                  <div className="flex justify-between items-center py-1.5 text-xs text-emerald-700 border-b border-[#e2f2e9]">
+                    <span>GST ({voucher.gstRate}%)</span>
+                    <span>₹ {gstAmount.toFixed(2)}</span>
+                  </div>
+                )}
+                {Number(voucher.igst) > 0 && (
+                  <div className="flex justify-between items-center py-1.5 text-xs text-slate-600 border-b border-[#e2f2e9]">
+                    <span>IGST ({voucher.igst}%)</span>
+                    <span>
+                      ₹{" "}
+                      {((totalAmount * Number(voucher.igst)) / 100).toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                {Number(voucher.cgst) > 0 && (
+                  <div className="flex justify-between items-center py-1.5 text-xs text-slate-600 border-b border-[#e2f2e9]">
+                    <span>CGST ({voucher.cgst}%)</span>
+                    <span>
+                      ₹{" "}
+                      {((totalAmount * Number(voucher.cgst)) / 100).toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                {Number(voucher.sgst) > 0 && (
+                  <div className="flex justify-between items-center py-1.5 text-xs text-slate-600 border-b border-[#e2f2e9]">
+                    <span>SGST ({voucher.sgst}%)</span>
+                    <span>
+                      ₹{" "}
+                      {((totalAmount * Number(voucher.sgst)) / 100).toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center py-2 text-sm font-extrabold text-[#042f2e] mt-1">
+                  <span>Grand Total</span>
+                  <span className="text-[#00a651]">
+                    ₹ {grandTotal.toFixed(2)}
                   </span>
                 </div>
-              )}
-              {Number(voucher.sgst) > 0 && (
-                <div className="pv-totals-row">
-                  <span>SGST ({voucher.sgst}%)</span>
-                  <span className="val">
-                    ₹ {((totalAmount * Number(voucher.sgst)) / 100).toFixed(2)}
-                  </span>
-                </div>
-              )}
-              <div className="pv-totals-row grand">
-                <span>Grand Total</span>
-                <span className="val">₹ {grandTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="pv-card">
-          <p className="pv-card-title">Narration</p>
-          <textarea
-            className="pv-textarea"
-            rows={3}
-            placeholder="Add internal notes or narration for this voucher…"
-            value={voucher.narration}
-            onChange={(e) =>
-              setVoucher({ ...voucher, narration: e.target.value })
-            }
-          />
-        </div>
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+              Narration / Note :
+            </label>
+            <textarea
+              className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium resize-none h-20"
+              placeholder="Add internal notes or narration for this sales voucher..."
+              value={voucher.narration}
+              onChange={(e) =>
+                setVoucher({ ...voucher, narration: e.target.value })
+              }
+            />
+          </div>
 
-        <div className="bg-white border border-[#e2e2dc] rounded-[10px] shadow-sm p-6 mt-8">
-          <div className="flex justify-between items-center">
+          <div className="mt-8 flex justify-end gap-4 border-t border-[#e2f2e9] pt-6">
             <button
-              className="inline-flex items-center gap-1.75 px-4.5 py-2.25 border-none rounded-md text-[13.5px] font-medium cursor-pointer transition-all duration-150 active:scale-[0.97] bg-transparent border-[1.5px] border-[#c8c8c0] text-[#5c6070] hover:border-[#1a56db] hover:text-[#1a56db]"
-              onClick={() => {
-                const role = user?.role || "admin";
-                const basePath =
-                  role === "employee"
-                    ? "/employee/hr/accounting/client"
-                    : "/accounting/client";
-                navigate(`${basePath}/listOfSaleVoucher`);
-              }}
+              type="button"
+              onClick={saveVoucher}
+              className="app-btn-primary flex items-center justify-center gap-2 cursor-pointer shadow-md min-w-36 transition-all hover:scale-[1.01] active:scale-[0.99]"
             >
-              Cancel
+              <Save size={16} />{" "}
+              {isEditMode ? "Update Sales Voucher" : "Save Sales Voucher"}
             </button>
             <button
-              className="inline-flex items-center gap-1.75 px-4.5 py-2.25 border-none rounded-md text-[13.5px] font-medium cursor-pointer transition-all duration-150 active:scale-[0.97] bg-[#1a56db] text-white hover:bg-[#1648c0]"
-              onClick={saveVoucher}
+              type="button"
+              onClick={() => navigate(listPath)}
+              className="app-btn-secondary flex items-center justify-center gap-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl cursor-pointer hover:bg-rose-100 hover:text-rose-800 hover:border-rose-300 min-w-30 transition-all"
             >
-              <HiCheck className="w-5 h-5 mr-1" />
-              {isEditMode ? "Update Sales Voucher" : "Save Sales Voucher"}
+              <X size={16} /> Cancel
             </button>
           </div>
         </div>

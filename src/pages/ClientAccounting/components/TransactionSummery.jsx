@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Calendar, Filter, FileText, Download } from "lucide-react";
+import React from "react";
+
+import { useState, useEffect } from "react";
+import { Calendar, Filter, FileText, Download, ArrowUp, ArrowDown } from "lucide-react";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
+import useAuth from "../../../hooks/useAuth";
 
 const TransactionSummery = () => {
-  const { companyId } = useCompany();
+  const { companyId } = useAuth();
 
   const [dateRange, setDateRange] = useState({
     from: "",
@@ -14,6 +16,7 @@ const TransactionSummery = () => {
   const [selectedType, setSelectedType] = useState("All");
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState("desc");
 
   const transactionTypes = [
     "All",
@@ -36,7 +39,6 @@ const TransactionSummery = () => {
 
         let cleaned = res.data.map((e) => ({
           ...e,
-
           voucher: String(e.voucher)
             .replace(/\s+/g, " ")
             .trim()
@@ -66,6 +68,7 @@ const TransactionSummery = () => {
 
         setLoading(false);
       } catch (err) {
+        console.log("Transaction Summary Error:", err);
         setLoading(false);
       }
     };
@@ -75,8 +78,10 @@ const TransactionSummery = () => {
 
   if (loading) {
     return (
-      <div className="p-5 text-center text-gray-500 font-mono">
-        Loading Transactions...
+      <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans flex items-center justify-center">
+        <p className="text-center text-slate-500 font-semibold text-sm">
+          Loading Transactions...
+        </p>
       </div>
     );
   }
@@ -94,13 +99,37 @@ const TransactionSummery = () => {
     return matchDate && matchType;
   });
 
-  const totalDebit = filteredData.reduce((a, b) => a + b.debit, 0);
-  const totalCredit = filteredData.reduce((a, b) => a + b.credit, 0);
+  const sortedData = [...filteredData].sort((a, b) => {
+    const dateA = new Date(a.date || 0).getTime();
+    const dateB = new Date(b.date || 0).getTime();
+    if (dateA !== dateB) {
+      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+    }
+    return sortOrder === "desc"
+      ? Number(b.id || 0) - Number(a.id || 0)
+      : Number(a.id || 0) - Number(b.id || 0);
+  });
+
+  const totalDebit = sortedData.reduce((a, b) => a + b.debit, 0);
+  const totalCredit = sortedData.reduce((a, b) => a + b.credit, 0);
+
+  const getVoucherColor = (v) => {
+    const colors = {
+      Sales: "text-emerald-700 bg-emerald-50 border-emerald-200",
+      Purchase: "text-blue-700 bg-blue-50 border-blue-200",
+      Receipt: "text-teal-700 bg-teal-50 border-teal-200",
+      Payment: "text-rose-700 bg-rose-50 border-rose-200",
+      Journal: "text-purple-700 bg-purple-50 border-purple-200",
+      Contra: "text-amber-700 bg-amber-50 border-amber-200",
+      Default: "text-slate-600 bg-slate-50 border-slate-200",
+    };
+    return colors[v] || colors.Default;
+  };
 
   const handleExport = () => {
     const csv = [
       ["Date", "Voucher", "Ledger", "Debit", "Credit"],
-      ...filteredData.map((e) => [
+      ...sortedData.map((e) => [
         new Date(e.date).toLocaleDateString("en-IN"),
         e.voucher,
         e.ledger,
@@ -121,133 +150,181 @@ const TransactionSummery = () => {
   };
 
   return (
-    <div className="flex w-full h-[calc(100vh-70px)] bg-gray-100 overflow-hidden font-[monospace]">
-      <div className="w-64 bg-white border-r shadow-sm p-4 overflow-y-auto">
-        <h2 className="font-bold text-lg mb-4 text-blue-700 flex items-center gap-2">
-          <Filter size={18} /> Filters
-        </h2>
+    <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans">
+      <div className="max-w-7xl mx-auto app-panel overflow-hidden border border-[#e2f2e9] bg-white flex flex-col md:flex-row min-h-[calc(100vh-120px)]">
+        {/* Sidebar Filters */}
+        <div className="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-[#e2f2e9] p-5 shrink-0 overflow-y-auto">
+          <h2 className="font-extrabold text-base mb-4 text-[#042f2e] flex items-center gap-2 border-b border-[#e2f2e9] pb-3">
+            <Filter size={16} className="text-[#00a651]" /> Filters
+          </h2>
 
-        <div className="mb-5">
-          <h3 className="text-sm font-semibold text-gray-700 mb-1">
-            Date Range
-          </h3>
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 bg-gray-50 p-2 rounded">
-              <Calendar size={16} className="text-blue-600" />
-              <input
-                type="date"
-                value={dateRange.from}
-                onChange={(e) =>
-                  setDateRange({ ...dateRange, from: e.target.value })
-                }
-                className="bg-transparent w-full text-sm outline-none"
-              />
-            </div>
-
-            <div className="flex items-center gap-2 bg-gray-50 p-2 rounded">
-              <Calendar size={16} className="text-blue-600" />
-              <input
-                type="date"
-                value={dateRange.to}
-                onChange={(e) =>
-                  setDateRange({ ...dateRange, to: e.target.value })
-                }
-                className="bg-transparent w-full text-sm outline-none"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-1">
-            Voucher Type
-          </h3>
-          <div className="space-y-2">
-            {transactionTypes.map((type) => (
-              <div
-                key={type}
-                onClick={() => setSelectedType(type)}
-                className={`p-2 rounded cursor-pointer text-sm ${
-                  selectedType === type
-                    ? "bg-blue-100 text-blue-700 font-semibold border-l-4 border-blue-600"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                {type}
+          <div className="mb-6">
+            <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569] mb-2">
+              Date Range
+            </h3>
+            <div className="space-y-2.5">
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 mb-1">From</label>
+                <input
+                  type="date"
+                  value={dateRange.from}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, from: e.target.value })
+                  }
+                  className="app-input w-full border-[#c8ddcd] rounded-xl px-3 py-1.5 text-xs text-slate-900 bg-white focus:outline-none focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium transition-all"
+                />
               </div>
-            ))}
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 mb-1">To</label>
+                <input
+                  type="date"
+                  value={dateRange.to}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, to: e.target.value })
+                  }
+                  className="app-input w-full border-[#c8ddcd] rounded-xl px-3 py-1.5 text-xs text-slate-900 bg-white focus:outline-none focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium transition-all"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569] mb-2">
+              Voucher Type
+            </h3>
+            <div className="space-y-1">
+              {transactionTypes.map((type) => (
+                <div
+                  key={type}
+                  onClick={() => setSelectedType(type)}
+                  className={`px-3 py-2 rounded-xl cursor-pointer text-xs transition-all flex items-center justify-between font-semibold border ${
+                    selectedType === type
+                      ? "bg-[#ecfdf5] text-[#00a651] border-[#c6f1d6] shadow-2xs font-bold"
+                      : "text-slate-600 hover:bg-slate-50 border-transparent"
+                  }`}
+                >
+                  <span>{type}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex-1 p-6 overflow-auto">
-        <div className="bg-white rounded-lg shadow-sm p-4 border">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-blue-700 flex items-center gap-2">
-              <FileText size={20} /> Transaction Summary
-            </h2>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden bg-white">
+          <div className="flex flex-wrap justify-between items-center app-section-bar py-5 px-6 border-b border-[#e2f2e9] gap-4 bg-white">
+            <div>
+              <h1 className="app-title text-xl font-extrabold text-[#042f2e] flex items-center gap-2">
+                <FileText size={20} className="text-[#00a651]" /> Transaction Summary
+              </h1>
+              <p className="text-xs text-slate-500 font-medium mt-1">
+                Period: <span className="font-semibold text-slate-700">{dateRange.from}</span> to <span className="font-semibold text-slate-700">{dateRange.to}</span>
+              </p>
+            </div>
 
             <button
               onClick={handleExport}
-              className="bg-blue-600 text-white px-4 py-1 rounded text-sm hover:bg-blue-700 flex items-center gap-1"
+              className="flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-4 h-9 rounded-xl border border-emerald-200 transition-colors text-xs font-semibold cursor-pointer active:scale-[0.98]"
             >
               <Download size={14} /> Export
             </button>
           </div>
 
-          <p className="text-sm text-gray-600 mt-1">
-            Period: <b>{dateRange.from}</b> to <b>{dateRange.to}</b>
-          </p>
-
-          <div className="mt-4 border rounded-lg overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-blue-50 border-b">
-                <tr className="text-left">
-                  <th className="p-2 border-r">Date</th>
-                  <th className="p-2 border-r">Voucher Type</th>
-
-                  <th className="p-2 border-r text-right">Debit (Dr)</th>
-                  <th className="p-2 text-right">Credit (Cr)</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {filteredData.length > 0 ? (
-                  filteredData.map((row, index) => (
-                    <tr
-                      key={index}
-                      className="border-b hover:bg-gray-50 transition"
+          <div className="flex-1 overflow-auto p-6">
+            <div className="border border-[#e2f2e9] rounded-2xl overflow-hidden bg-white shadow-2xs">
+              <table className="w-full text-sm border-collapse bg-white">
+                <thead className="bg-[#f0fdf4]/50 border-b border-[#e2f2e9]">
+                  <tr className="text-left text-slate-700">
+                    <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-center w-12">
+                      #
+                    </th>
+                    <th
+                      onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
+                      className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] cursor-pointer select-none hover:bg-emerald-100/50 transition-colors"
+                      title="Click to toggle sort order"
                     >
-                      <td className="p-2 border-r">
-                        {new Date(row.date).toLocaleDateString("en-IN")}
-                      </td>
-                      <td className="p-2 border-r">{row.voucher}</td>
+                      <div className="flex items-center gap-1.5">
+                        <span>Date</span>
+                        {sortOrder === "desc" ? (
+                          <ArrowDown size={14} className="text-[#00a651]" />
+                        ) : (
+                          <ArrowUp size={14} className="text-[#00a651]" />
+                        )}
+                      </div>
+                    </th>
+                    <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                      Voucher Type
+                    </th>
+                    <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                      Ledger
+                    </th>
+                    <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-right">
+                      Debit (Dr)
+                    </th>
+                    <th className="py-3 px-4 text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-right">
+                      Credit (Cr)
+                    </th>
+                  </tr>
+                </thead>
 
-                      <td className="p-2 text-right border-r text-green-700 font-semibold">
-                        {row.debit !== 0 ? row.debit.toLocaleString() : "-"}
-                      </td>
-                      <td className="p-2 text-right text-red-700 font-semibold">
-                        {row.credit !== 0 ? row.credit.toLocaleString() : "-"}
+                <tbody className="divide-y divide-[#e2f2e9]">
+                  {sortedData.length > 0 ? (
+                    sortedData.map((row, index) => (
+                      <tr
+                        key={index}
+                        className="hover:bg-[#f0fdf4]/20 border-b border-[#e2f2e9] transition-colors duration-200"
+                      >
+                        <td className="py-3 px-4 border-r border-[#e2f2e9] text-center text-[#475569] text-[13px]">
+                          {index + 1}
+                        </td>
+                        <td className="py-3 px-4 border-r border-[#e2f2e9] text-slate-600 text-[13px] whitespace-nowrap">
+                          {new Date(row.date).toLocaleDateString("en-IN")}
+                        </td>
+                        <td className="py-3 px-4 border-r border-[#e2f2e9]">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 text-[11px] border rounded ${getVoucherColor(
+                              row.voucher,
+                            )}`}
+                          >
+                            {row.voucher}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 border-r border-[#e2f2e9] font-bold text-[#042f2e] text-[13px]">
+                          {row.ledger}
+                        </td>
+                        <td className="py-3 px-4 border-r border-[#e2f2e9] text-right font-semibold text-emerald-700 text-[13px] font-mono">
+                          {row.debit !== 0 ? `₹${row.debit.toLocaleString()}` : "-"}
+                        </td>
+                        <td className="py-3 px-4 text-right font-semibold text-rose-700 text-[13px] font-mono">
+                          {row.credit !== 0 ? `₹${row.credit.toLocaleString()}` : "-"}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td className="py-14 text-center text-slate-500" colSpan="6">
+                        <FileText size={32} className="mx-auto mb-3 text-slate-300" />
+                        <p className="text-[14px] font-medium text-slate-600">
+                          No transactions found
+                        </p>
+                        <p className="text-[13px] mt-1 text-slate-400">
+                          Try selecting a different date range or voucher type.
+                        </p>
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td className="p-3 text-center text-gray-500" colSpan="5">
-                      No transactions found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
 
-            <div className="bg-gray-100 flex justify-end px-6 py-2 text-sm font-bold">
-              <span className="mr-10 text-green-700">
-                Total Debit: ₹{totalDebit.toLocaleString()}
-              </span>
-              <span className="text-red-700">
-                Total Credit: ₹{totalCredit.toLocaleString()}
-              </span>
+              <div className="bg-[#f0fdf4]/40 border-t-2 border-[#e2f2e9] flex justify-end items-center px-6 py-3 text-sm font-bold gap-8">
+                <span className="text-emerald-700 font-mono">
+                  Total Debit: ₹{totalDebit.toLocaleString()}
+                </span>
+                <span className="text-rose-700 font-mono">
+                  Total Credit: ₹{totalCredit.toLocaleString()}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -257,3 +334,4 @@ const TransactionSummery = () => {
 };
 
 export default TransactionSummery;
+

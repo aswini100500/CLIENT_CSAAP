@@ -3,6 +3,10 @@ import client from "./client";
 const API_PREFIX = "/api/tenant";
 
 const operationApi = {
+  baseURL:
+    client.defaults.baseURL ||
+    import.meta.env.VITE_CSAAP_URL ||
+    "http://localhost:3002",
   getCategories: () => client.get(`${API_PREFIX}/categories`),
 
   getProducts: () => client.get(`${API_PREFIX}/products`),
@@ -33,6 +37,8 @@ const operationApi = {
   getCustomProjects: () => client.get(`${API_PREFIX}/custom-projects`),
 
   getVendors: () => client.get(`${API_PREFIX}/vendors`),
+  getVendorsByWorkItem: (workitemId) =>
+    client.get(`${API_PREFIX}/vendors/workitem/${workitemId}`),
   getVendor: (id) => client.get(`${API_PREFIX}/vendors/${id}`),
   createVendor: (data) => client.post(`${API_PREFIX}/vendors/create`, data),
   updateVendor: (id, data) => client.put(`${API_PREFIX}/vendors/${id}`, data),
@@ -42,6 +48,7 @@ const operationApi = {
     client.put(`${API_PREFIX}/vendors/${id}/machines`, data),
   updateVendorWorkHistory: (id, data) =>
     client.put(`${API_PREFIX}/vendors/${id}/work-history`, data),
+  verifyVendor: (id) => client.patch(`${API_PREFIX}/vendors/${id}/verify`),
   deleteVendor: (id) => client.delete(`${API_PREFIX}/vendors/${id}`),
 
   getTenders: () => client.get(`${API_PREFIX}/tenders`),
@@ -149,6 +156,11 @@ const operationApi = {
     client.delete(`${API_PREFIX}/tenders/work-order/${id}`),
   getTenderApplicants: (tenderId) =>
     client.get(`${API_PREFIX}/tenders/${tenderId}/applicants`),
+  shortlistTenderApplicant: (tenderId, applicantId, data) =>
+    client.put(
+      `${API_PREFIX}/tenders/${tenderId}/applicant/${applicantId}/shortlist`,
+      data
+    ),
 
   getIndentMasterData: () => client.get(`${API_PREFIX}/indents/master-data`),
   saveIndentEntry: (data) => client.post(`${API_PREFIX}/indents/save`, data),
@@ -158,7 +170,6 @@ const operationApi = {
     client.put(`${API_PREFIX}/indents/status/${id}`, { status }),
   updateIndent: (id, data) => client.put(`${API_PREFIX}/indents/${id}`, data),
   deleteIndent: (id) => client.delete(`${API_PREFIX}/indents/${id}`),
-
   createCategory: (data) => client.post(`${API_PREFIX}/categories`, data),
   createProduct: (data) => client.post(`${API_PREFIX}/products`, data),
 
@@ -219,6 +230,30 @@ const operationApi = {
     client.put(`${API_PREFIX}/work-diary/raw-materials/${id}`, data),
   deleteRawMaterial: (id) =>
     client.delete(`${API_PREFIX}/work-diary/raw-materials/${id}`),
+
+  getWorkItems: () => client.get(`${API_PREFIX}/boq/work-items`),
+  createWorkItem: (data) => client.post(`${API_PREFIX}/boq/work-items`, data),
+
+  getAssignments: (projectId, contractorId, projectType, status) => {
+    const params = new URLSearchParams();
+    if (projectId) params.append("projectId", projectId);
+    if (contractorId) params.append("contractorId", contractorId);
+    if (projectType) params.append("projectType", projectType);
+    if (status) params.append("status", status);
+    return client.get(`${API_PREFIX}/boq/assignments?${params.toString()}`);
+  },
+  createAssignment: (data) =>
+    client.post(`${API_PREFIX}/boq/assignments`, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
+  updateAssignment: (id, data) =>
+    client.put(`${API_PREFIX}/boq/assignments/${id}`, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
+  updateAssignmentStatus: (id, data) =>
+    client.put(`${API_PREFIX}/boq/assignments/${id}/status`, data),
+  deleteAssignment: (id) =>
+    client.delete(`${API_PREFIX}/boq/assignments/${id}`),
 
   getBOQItems: () => client.get(`${API_PREFIX}/document-managements`),
   createBOQItem: (data) =>

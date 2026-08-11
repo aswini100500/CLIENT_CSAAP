@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
+import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import {
   ArrowLeft,
@@ -25,7 +27,7 @@ import {
 const Cheque = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { companyId } = useCompany();
+  const { companyId } = useAuth();
   const [isEditMode, setIsEditMode] = useState(id && id !== "new");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -109,7 +111,6 @@ const Cheque = () => {
 
       if (response.data.success) {
         const data = response.data.data;
-
         const formattedData = {
           ...data,
           chequeDate: data.chequeDate ? data.chequeDate.split("T")[0] : "",

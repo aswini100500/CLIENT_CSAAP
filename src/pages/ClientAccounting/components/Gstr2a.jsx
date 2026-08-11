@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
+import { useState, useEffect } from "react";
 import {
   HiSearch,
   HiPrinter,
@@ -13,7 +15,7 @@ import {
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
+import useAuth from "../../../hooks/useAuth";
 
 const Gstr2a = () => {
   const [activeTab, setActiveTab] = useState("b2b");
@@ -30,7 +32,7 @@ const Gstr2a = () => {
     amendmentsToCreditDebitNotes: [],
   });
 
-  const { companyId } = useCompany();
+  const { companyId } = useAuth();
 
   const tabs = [
     { id: "b2b", label: "B2B Invoices", api: "b2b" },
@@ -278,7 +280,7 @@ const Gstr2a = () => {
 
     return (
       <span
-        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${config[status] || "bg-gray-100 text-gray-800"}`}
+        className={`px-2 inline-flex text-xs/5  font-semibold rounded-full ${config[status] || "bg-gray-100 text-gray-800"}`}
       >
         {status}
       </span>

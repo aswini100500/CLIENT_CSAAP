@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 import { HiReceiptRefund } from "react-icons/hi";
 import { BiReceipt } from "react-icons/bi";
 import { MdPayments } from "react-icons/md";

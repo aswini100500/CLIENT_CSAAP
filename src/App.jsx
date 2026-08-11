@@ -410,6 +410,10 @@ const App = () => {
               element={<ClientGroupCreation />}
             />
             <Route
+              path="/accounting/client/groupCreation/:id"
+              element={<ClientGroupCreation />}
+            />
+            <Route
               path="/accounting/client/listOfGroups"
               element={<ClientListOfGroups />}
             />

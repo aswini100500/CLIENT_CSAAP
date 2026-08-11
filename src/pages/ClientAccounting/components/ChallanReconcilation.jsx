@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Search,
@@ -24,7 +26,7 @@ import {
   Wallet,
   ArrowUpRight,
 } from "lucide-react";
-import { useCompany } from "../context/CompanyContext";
+import useAuth from "../../../hooks/useAuth";
 
 const ChallanReconciliation = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -55,7 +57,7 @@ const ChallanReconciliation = () => {
     remarks: "",
   });
 
-  const { companyId } = useCompany();
+  const { companyId } = useAuth();
 
   const tabs = [
     {
@@ -485,7 +487,7 @@ const ChallanReconciliation = () => {
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        className={`px-2 inline-flex text-xs/5  font-semibold rounded-full ${
                           challan.status === "Matched"
                             ? "bg-green-100 text-green-800"
                             : challan.status === "Pending"
@@ -714,7 +716,7 @@ const ChallanReconciliation = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="space-y-1">
                           <span
-                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            className={`px-2 inline-flex text-xs/5  font-semibold rounded-full ${
                               challan.status === "Matched"
                                 ? "bg-green-100 text-green-800"
                                 : challan.status === "Pending"

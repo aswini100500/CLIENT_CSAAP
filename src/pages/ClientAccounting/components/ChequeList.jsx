@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
+import useAuth from "../../../hooks/useAuth";
 import {
   FileText,
   Calendar,
@@ -27,7 +28,7 @@ import {
 import Swal from "sweetalert2";
 
 const ChequeList = () => {
-  const { companyId } = useCompany();
+  const { companyId } = useAuth();
   const [cheques, setCheques] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -787,7 +788,6 @@ const ChequeList = () => {
                             <div className="text-xs text-gray-500">
                               Last updated: {formatDate(cheque.updatedAt)}
                             </div>
-
                             <div className="flex flex-wrap gap-1 mt-2">
                               {["pending", "cleared", "bounced", "cancelled"]
                                 .filter((status) => status !== cheque.status)
@@ -1113,7 +1113,10 @@ const ChequeList = () => {
                 >
                   Cancel
                 </button>
-                <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <button
+                  onClick={() => {}}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
                   {popupMode === "add" ? "Add Cheque" : "Update Cheque"}
                 </button>
               </div>
@@ -1311,7 +1314,10 @@ const ChequeList = () => {
                 >
                   Cancel
                 </button>
-                <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <button
+                  onClick={() => {}}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
                   Update Cheque
                 </button>
               </div>

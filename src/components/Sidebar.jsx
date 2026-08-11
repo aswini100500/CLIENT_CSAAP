@@ -1,7 +1,8 @@
+import React from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { setCompanyApiData } from "../store/slices/companyApiSlice";
 import useAuth from "../hooks/useAuth";
 
@@ -10,6 +11,7 @@ import {
   BarChart,
   BarChart2,
   BarChart4,
+  BookOpen,
   BookText,
   Briefcase,
   Building,
@@ -20,23 +22,29 @@ import {
   CreditCard,
   DollarSign,
   FileBarChart,
+  FileCheck,
   FileSearch,
-  FileSpreadsheet,
   FileText,
   FolderKanban,
+  HardHat,
   HeadphonesIcon,
   Home,
-  Layers3,
+  Layers,
   LayoutDashboard,
   LogOut,
   MessageCircle,
+  MapPin,
   Phone,
   Shield,
+  ShoppingCart,
   Target,
+  TrendingUp,
+  Truck,
   UserPlus,
   Users,
   Wallet,
   Warehouse,
+  Wrench,
 } from "lucide-react";
 import { clearUser as clearActiveUser } from "../store/slices/userSlice";
 import { resetPersistedAuthState } from "../store/authSession";
@@ -46,10 +54,7 @@ import { FaAddressBook } from "react-icons/fa";
 
 const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
   const { user } = useAuth();
-  const API_BASE_URL =
-    import.meta.env.VITE_CSAAP_URL || "https://csaapnodeapi.csaap.com";
   const tenantId = user?.tenant_id || user?.company_id || user?.id;
-
   const [expandedMenus, setExpandedMenus] = useState({});
   const [hoveredItem, setHoveredItem] = useState(null);
   const [hoveredPos, setHoveredPos] = useState({ top: 0, left: 0 });
@@ -59,6 +64,25 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
   const navigate = useNavigate();
   const companyData = useSelector((state) => state.companyApi.data);
   const queryClient = useQueryClient();
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  const checkActiveItem = (itemPath) => {
+    if (!itemPath || itemPath === "#") return false;
+    if (currentPath === itemPath) return true;
+    if (itemPath === "/accounting/client/listOfContraVoucher" && currentPath.startsWith("/accounting/client/contravoucher")) return true;
+    if (itemPath === "/accounting/client/listOfPaymentVoucher" && currentPath.startsWith("/accounting/client/paymentVoucher")) return true;
+    if (itemPath === "/accounting/client/listOfReciptVoucher" && currentPath.startsWith("/accounting/client/receptVoucher")) return true;
+    if (itemPath === "/accounting/client/listOfJournalVoucher" && currentPath.startsWith("/accounting/client/journalvoucher")) return true;
+    if (itemPath === "/accounting/client/manfacturinglist" && currentPath.startsWith("/accounting/client/manfacturing")) return true;
+    if (itemPath === "/accounting/client/listOfSaleVoucher" && currentPath.startsWith("/accounting/client/salevoucher")) return true;
+    if (itemPath === "/accounting/client/listOfPurchaseVoucher" && currentPath.startsWith("/accounting/client/purchasevoucher")) return true;
+    if (itemPath === "/accounting/client/debitNotesList" && currentPath.startsWith("/accounting/client/debitNote")) return true;
+    if (itemPath === "/accounting/client/creditNotesList" && currentPath.startsWith("/accounting/client/creditNote")) return true;
+    if (itemPath === "/accounting/client/listOfLedgers" && currentPath.startsWith("/accounting/client/ledger")) return true;
+    if (itemPath === "/accounting/client/listOfGroups" && currentPath.startsWith("/accounting/client/groupCreation")) return true;
+    return false;
+  };
 
   const companyName =
     companyData?.master_company_name ||
@@ -67,7 +91,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
   const companyLogoText = companyName.charAt(0).toUpperCase();
 
   const logoUrl = companyData?.logo_path
-    ? `${API_BASE_URL}/${companyData.logo_path}`
+    ? `https://csaapnodeapi.csaap.com/${companyData.logo_path}`
     : null;
 
   const toggleMenu = (id) => {
@@ -83,10 +107,13 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
 
   const handleLogout = async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/builder-companies/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
+      await fetch(
+        "https://csaapnodeapi.csaap.com/api/builder-companies/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        },
+      );
     } catch (error) {
       console.error("API Logout failed:", error);
     }
@@ -116,7 +143,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       try {
         if (tenantId) {
           const response = await axios.get(
-            `${API_BASE_URL}/api/builder-companies/${tenantId}`,
+            `https://csaapnodeapi.csaap.com/api/builder-companies/${tenantId}`,
           );
           const result = response.data;
 
@@ -150,6 +177,24 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
       label: "Projects",
       icon: <Home size={20} className="text-green-700" />,
       path: "/projects",
+    },
+    {
+      id: "contractors",
+      label: "Contractors",
+      icon: <HardHat size={20} className="text-green-700" />,
+      path: "/contractors",
+    },
+    {
+      id: "brokers",
+      label: "Brokers",
+      icon: <Users size={20} className="text-green-700" />,
+      path: "/brokers",
+    },
+    {
+      id: "suppliers",
+      label: "Suppliers",
+      icon: <Truck size={20} className="text-green-700" />,
+      path: "/suppliers",
     },
 
     {
@@ -188,6 +233,154 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           label: "Cancel Booking",
           path: "/users/booking-cancellations",
           icon: <AlertTriangle size={18} className="text-green-700" />,
+        },
+      ],
+    },
+
+    {
+      id: "operation",
+      icon: <Wrench size={20} className="text-green-700" />,
+      label: "Operation",
+      isMainFolder: true,
+      children: [
+        {
+          id: "general",
+          label: "Engineering",
+          icon: <HardHat size={18} className="text-green-700" />,
+          children: [
+            {
+              id: "projectbudget",
+              label: "Project Budget",
+              path: "/project-budget",
+              icon: <DollarSign size={16} className="text-green-700" />,
+            },
+            {
+              id: "bill",
+              label: "Bill Of Quantity",
+              path: "/bill",
+              icon: <FileText size={16} className="text-green-700" />,
+            },
+            {
+              id: "work",
+              label: "Work Order",
+              path: "/work-order",
+              icon: <ClipboardList size={16} className="text-green-700" />,
+            },
+            {
+              id: "bill_inward",
+              label: "Bill Inward",
+              path: "/bill-inward",
+              icon: <FileCheck size={16} className="text-green-700" />,
+            },
+            {
+              id: "contract",
+              label: "Contractor Management",
+              path: "/contractor",
+              icon: <FileText size={16} className="text-green-700" />,
+            },
+            {
+              id: "labour",
+              label: "Labour Rates & Analysis",
+              path: "/labour-rates",
+              icon: <Users size={16} className="text-green-700" />,
+            },
+          ],
+        },
+        {
+          id: "tendering",
+          label: "Tendering",
+          icon: <FileText size={18} className="text-green-700 " />,
+          children: [
+            {
+              id: "vendor",
+              label: "Vendor Onboarding",
+              path: "/vendor",
+              icon: <Users size={16} className="text-green-700 " />,
+            },
+            {
+              id: "Tendor",
+              label: "Tendor",
+              path: "/tendering",
+              icon: <FileText size={16} className="text-green-700" />,
+            },
+          ],
+        },
+        {
+          id: "Equipment",
+          label: "Equipment Management",
+          icon: <Truck size={18} className="text-green-700" />,
+          children: [
+            {
+              id: "standard",
+              label: "Standard Efficiency",
+              path: "/equipment-standard",
+              icon: <BarChart size={16} className="text-green-700 " />,
+            },
+          ],
+        },
+        {
+          id: "material",
+          label: "Material Management",
+          icon: <Layers size={18} className="text-green-700" />,
+          children: [
+            {
+              id: "indent",
+              label: "Indent Entry",
+              path: "/indent-main",
+              icon: <ClipboardList size={16} className="text-green-700 " />,
+            },
+          ],
+        },
+        {
+          id: "work-diary",
+          label: "Work Diary",
+          path: "/work-diary",
+          icon: <BookOpen size={18} className="text-green-700" />,
+        },
+        {
+          id: "hindering",
+          label: "Hindering Record",
+          path: "/hindering-report",
+          icon: <AlertTriangle size={18} className="text-green-700" />,
+        },
+      ],
+    },
+
+    {
+      id: "stock-inventory",
+      icon: <Warehouse size={20} className="text-green-700" />,
+      label: "Stock & Inventory",
+      isMainFolder: true,
+      children: [
+        {
+          id: "stock-management",
+          label: "Stock Management",
+          icon: <Warehouse size={18} className="text-green-700" />,
+          path: "/builder-erp/admin/stock-entry",
+        },
+        {
+          id: "inv_indent",
+          label: "Indent",
+          icon: <FileText size={18} className="text-green-700" />,
+          path: "/builder-erp/admin/indent-main",
+        },
+        {
+          id: "supplier-list",
+          label: "Supplier List",
+          icon: <Users size={18} className="text-green-700" />,
+          path: "/builder-erp/admin/supplier-list",
+        },
+        {
+          id: "purchase",
+          label: "Purchase",
+          icon: <ShoppingCart size={18} className="text-green-700" />,
+          path: "/builder-erp/admin/purchase-main",
+        },
+        {
+          id: "sale",
+          label: "Sale",
+          icon: <TrendingUp size={18} className="text-green-700" />,
+          path: "/builder-erp/admin/sale-main",
         },
       ],
     },
@@ -248,6 +441,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           icon: <CalendarArrowUp size={18} className="text-green-700" />,
           path: "/hrms/calendar",
         },
+
       ],
     },
 
@@ -264,8 +458,14 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           path: "/crm/customers",
         },
         {
-          id: "Lead upload",
-          label: "Lead upload",
+          id: "Escalation Path",
+          label: "Escalation Path",
+          icon: <TrendingUp size={18} className="text-green-700" />,
+          path: "/crm/escalation-path",
+        },
+        {
+          id: "Import Leads",
+          label: "Import Leads",
           icon: <FileText size={18} className="text-green-700" />,
           path: "/crm/upload-leads",
         },
@@ -275,7 +475,12 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           label: "Lead List",
           path: "/crm/lead-list",
         },
-
+        {
+          id: "Site Visit",
+          icon: <MapPin size={18} className="text-green-700" />,
+          label: "Site Visit",
+          path: "/crm/sales-pipeline",
+        },
         {
           id: "crm-brokers",
           label: "Brokers",
@@ -298,7 +503,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           id: "Payment",
           icon: <CreditCard size={18} className="text-green-700" />,
           label: "Payment",
-          path: "",
+          path: "/crm/payment",
         },
       ],
     },
@@ -328,34 +533,16 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           icon: <FileSearch size={16} className="text-green-700 " />,
         },
         {
-          id: "superadmin-activity",
-          label: "Employee Activity",
-          path: "/superadmin/accounting/superadmin/activity",
-          icon: <FileSearch size={16} className="text-green-700 " />,
-        },
-        {
-          id: "client-group-creation",
-          label: "Group Creation",
-          path: "/accounting/client/groupCreation",
-          icon: <Layers3 size={16} className="text-green-700 " />,
-        },
-        {
           id: "client-list-groups",
-          label: "List Of Groups",
+          label: "Groups",
           path: "/accounting/client/listOfGroups",
           icon: <FolderKanban size={16} className="text-green-700 " />,
         },
         {
-          id: "client-ledger",
-          label: "Ledger",
-          path: "/accounting/client/ledger",
-          icon: <BookText size={16} className="text-green-700 " />,
-        },
-        {
           id: "client-list-ledgers",
-          label: "List of Ledger",
+          label: "Ledger",
           path: "/accounting/client/listOfLedgers",
-          icon: <FileSpreadsheet size={16} className="text-green-700 " />,
+          icon: <BookText size={16} className="text-green-700 " />,
         },
         {
           id: "client-statutory",
@@ -372,91 +559,46 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             {
               id: "client-contra",
               label: "Contra Voucher",
-              path: "/accounting/client/contravoucher",
-            },
-            {
-              id: "client-contra-list",
-              label: "List Of Contra Voucher",
               path: "/accounting/client/listOfContraVoucher",
             },
             {
               id: "client-payment",
               label: "Payment Voucher",
-              path: "/accounting/client/paymentVoucher",
-            },
-            {
-              id: "client-payment-list",
-              label: "List Of Payment Voucher",
               path: "/accounting/client/listOfPaymentVoucher",
             },
             {
               id: "client-receipt",
               label: "Receipt Voucher",
-              path: "/accounting/client/receptVoucher",
-            },
-            {
-              id: "client-receipt-list",
-              label: "List Of Receipt Voucher",
               path: "/accounting/client/listOfReciptVoucher",
             },
             {
               id: "client-journal",
               label: "Journal Voucher",
-              path: "/accounting/client/journalvoucher",
-            },
-            {
-              id: "client-journal-list",
-              label: "List Of Journal Voucher",
               path: "/accounting/client/listOfJournalVoucher",
             },
             {
               id: "client-manufacturing",
               label: "Manufacturing",
-              path: "/accounting/client/manfacturing",
-            },
-            {
-              id: "client-manufacturing-list",
-              label: "Manufacturing List",
               path: "/accounting/client/manfacturinglist",
             },
             {
               id: "client-sale",
-              label: "Sale Voucher",
-              path: "/accounting/client/salevoucher",
-            },
-            {
-              id: "client-sale-list",
-              label: "List Of Sale Voucher",
+              label: "Sales Voucher",
               path: "/accounting/client/listOfSaleVoucher",
             },
             {
               id: "client-purchase",
               label: "Purchase Voucher",
-              path: "/accounting/client/purchasevoucher",
-            },
-            {
-              id: "client-purchase-list",
-              label: "List Of Purchase Voucher",
               path: "/accounting/client/listOfPurchaseVoucher",
             },
             {
               id: "client-debit",
               label: "Debit Note",
-              path: "/accounting/client/debitNote",
-            },
-            {
-              id: "client-debit-list",
-              label: "Debit Note List",
               path: "/accounting/client/debitNotesList",
             },
             {
               id: "client-credit",
               label: "Credit Note",
-              path: "/accounting/client/creditNote",
-            },
-            {
-              id: "client-credit-list",
-              label: "Credit Note List",
               path: "/accounting/client/creditNotesList",
             },
           ],
@@ -511,19 +653,9 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           icon: <Warehouse size={16} className="text-green-700" />,
           children: [
             {
-              id: "client-stock-item",
-              label: "Stock Item Creation",
-              path: "/accounting/client/stockItemCreation",
-            },
-            {
               id: "client-stock-group",
-              label: "Stock Group Summary",
+              label: "Stock Summary",
               path: "/accounting/client/stockGroupSummery",
-            },
-            {
-              id: "client-stock-list",
-              label: "All Stocks",
-              path: "/accounting/client/stocklist",
             },
             {
               id: "client-hsn-summery",
@@ -538,6 +670,24 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           ],
         },
       ],
+    },
+    {
+      id: "support",
+      label: "Support",
+      icon: <HeadphonesIcon size={20} className="text-green-700" />,
+      path: "/support",
+    },
+    {
+      id: "meetings",
+      label: "Task & Meetings",
+      icon: <Calendar size={20} className="text-green-700" />,
+      path: "/meetings",
+    },
+    {
+      id: "feedback",
+      label: "Feedback",
+      icon: <MessageCircle size={20} className="text-green-700" />,
+      path: "/feedback",
     },
     {
       id: "contact-us",
@@ -592,8 +742,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           >
             {({ isActive }) => {
               const isFolderExpanded = hasChildren && isExpanded;
-              const isItemActive = isActive && item.path && item.path !== "#";
-
+              const isItemActive = (isActive || checkActiveItem(item.path)) && item.path && item.path !== "#";
               const stackShadow = isInactiveFolder
                 ? {
                     boxShadow:
@@ -617,7 +766,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
                   <span
                     className={`relative z-10 transition-colors duration-200 ${
                       isItemActive && !hasChildren
-                        ? "[&_svg]:text-white!"
+                        ? "text-white [&_svg]:text-white!"
                         : isFolderExpanded
                           ? "[&_svg]:text-green-600!"
                           : "text-slate-500 group-hover:text-green-600"
@@ -629,7 +778,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
                       })
                     ) : (
                       <div
-                        className={`flex items-center justify-center font-bold uppercase ${level > 0 ? "w-4 h-4 text-[9px]" : "w-5 h-5 text-[10px]"}`}
+                        className={`flex items-center justify-center font-bold uppercase ${level > 0 ? "w-5 h-5 text-[11px]" : "w-6 h-6 text-[13px]"}`}
                       >
                         {item.label.charAt(0)}
                       </div>
@@ -707,7 +856,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
               handleItemClick();
             }}
             className={({ isActive }) => {
-              const isItemActive = isActive && item.path && item.path !== "#";
+              const isItemActive = (isActive || checkActiveItem(item.path)) && item.path && item.path !== "#";
               return `flex items-center rounded-lg transition-all duration-200 py-2 group border border-transparent ${paddingLeft} ${textSize} ${
                 isItemActive
                   ? "bg-linear-to-r from-green-600 to-emerald-500 text-white font-medium shadow-md shadow-green-100 border-green-500/50"
@@ -716,7 +865,7 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
             }}
           >
             {({ isActive }) => {
-              const isItemActive = isActive && item.path && item.path !== "#";
+              const isItemActive = (isActive || checkActiveItem(item.path)) && item.path && item.path !== "#";
               return (
                 <>
                   {item.icon && (
@@ -745,9 +894,8 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
     >
       <style>{`
 
-        
         @keyframes tooltipAppear {
-          from { 
+          from {
             opacity: 0;
             transform: scale(0.9) translateY(-55%);
           }
@@ -796,6 +944,9 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
                   console.error("Logo failed to load in expanded mode");
                   setLogoError(true);
                 }}
+                onLoad={() =>
+                  console.log("Logo loaded successfully in expanded mode")
+                }
               />
             ) : (
               <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0">
@@ -866,7 +1017,6 @@ const Sidebar = ({ isCollapsed, onItemClick, onToggleCollapse }) => {
           }}
         >
           {hoveredItem.label}
-
           <div className="absolute -left-1.75 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-white border-l border-b border-slate-200 rotate-45 rounded-sm" />
         </div>
       )}

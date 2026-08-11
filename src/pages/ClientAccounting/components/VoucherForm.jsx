@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 
 function VoucherForm() {
   const [voucher, setVoucher] = useState({
@@ -17,6 +18,7 @@ function VoucherForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("Voucher Recorded Successfully!");
+    console.log(voucher);
   };
 
   return (

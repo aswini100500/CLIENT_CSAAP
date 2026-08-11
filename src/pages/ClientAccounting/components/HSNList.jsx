@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
@@ -11,26 +11,17 @@ import {
   Hash,
   RefreshCw,
   Barcode,
+  FileText,
 } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+
 const HSNList = () => {
   const [hsnData, setHsnData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [showEmployeeActivity, setShowEmployeeActivity] = useState(false);
-  const { companyId, employees } = useCompany();
-
-  const { user, role } = useAuth();
-  const loggedInRole = role?.toLowerCase() || "admin";
-  const loggedInEmployeeId = user?.employee_id || null;
-  const isEmployeeDashboard = loggedInRole === "employee";
-
-  const getEmployeeName = (id) => {
-    const emp = employees?.find((e) => e.id == id);
-    return emp ? emp.name : "Unknown Employee";
-  };
+  const { companyId } = useAuth();
 
   useEffect(() => {
     if (companyId) fetchHSNData();
@@ -39,8 +30,9 @@ const HSNList = () => {
   const fetchHSNData = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockHSN/${companyId}`,
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockHSN/${companyId}`
       );
       if (response.data.message === "HSN data fetched successfully") {
         setHsnData(response.data.data);
@@ -57,9 +49,7 @@ const HSNList = () => {
 
   const handleExportPDF = (isPrint = false) => {
     const doc = new jsPDF();
-
-    doc.setFontSize(18);
-
+    doc.setFontSize(16);
     doc.text("HSN Codes Report", 14, 18);
 
     const tableData = filteredHSN.map((item, index) => [
@@ -69,30 +59,21 @@ const HSNList = () => {
 
     autoTable(doc, {
       startY: 28,
-
       head: [["S.No", "HSN Code"]],
-
       body: tableData,
-
-      styles: {
-        fontSize: 10,
-      },
-
-      headStyles: {
-        fillColor: [147, 51, 234],
-      },
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [0, 166, 81] },
     });
 
     if (isPrint) {
       const blobURL = doc.output("bloburl");
-
       const printWindow = window.open(blobURL);
-
-      printWindow.onload = () => {
-        printWindow.focus();
-
-        printWindow.print();
-      };
+      if (printWindow) {
+        printWindow.onload = () => {
+          printWindow.focus();
+          printWindow.print();
+        };
+      }
     } else {
       doc.save("HSN_Codes_Report.pdf");
     }
@@ -103,17 +84,6 @@ const HSNList = () => {
   };
 
   const filteredHSN = hsnData.filter((item) => {
-    if (isEmployeeDashboard) {
-      if (item.employee_id != loggedInEmployeeId) return false;
-    } else {
-      const isCreatedByEmployee =
-        item.employee_id && item.role?.toLowerCase() === "employee";
-      if (showEmployeeActivity) {
-        if (!isCreatedByEmployee) return false;
-      } else {
-        if (isCreatedByEmployee) return false;
-      }
-    }
     return (item.hsn || "").toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -123,7 +93,7 @@ const HSNList = () => {
 
   const handleExportExcel = () => {
     if (hsnData.length === 0) return;
-    const exportData = hsnData.map((item, index) => ({
+    const exportData = filteredHSN.map((item, index) => ({
       "S.No": index + 1,
       "HSN Code": item.hsn || "N/A",
     }));
@@ -135,10 +105,10 @@ const HSNList = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600 mx-auto" />
-          <p className="mt-4 text-gray-500 text-sm">Loading HSN data...</p>
+      <div className="erp-root app-shell min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#00a651] border-t-transparent mx-auto" />
+          <p className="text-xs font-semibold text-[#475569]">Loading HSN data…</p>
         </div>
       </div>
     );
@@ -146,13 +116,14 @@ const HSNList = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 font-medium">Failed to load HSN data</p>
-          <p className="text-gray-400 text-sm mt-1">{error}</p>
+      <div className="erp-root app-shell min-h-screen flex items-center justify-center p-4">
+        <div className="app-panel p-6 max-w-md text-center border border-rose-200 rounded-2xl bg-white space-y-3">
+          <Barcode className="mx-auto text-rose-500" size={40} />
+          <p className="text-sm font-bold text-rose-700">Failed to load HSN data</p>
+          <p className="text-xs text-[#475569]">{error}</p>
           <button
             onClick={fetchHSNData}
-            className="mt-4 bg-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition-colors"
+            className="h-10 px-4 text-xs font-bold text-white bg-[#00a651] rounded-xl hover:bg-[#008c44] transition-all cursor-pointer inline-flex items-center justify-center"
           >
             Retry
           </button>
@@ -169,177 +140,175 @@ const HSNList = () => {
         }
       `}</style>
 
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-lg bg-purple-100 flex items-center justify-center">
-                <Barcode className="text-purple-600" size={22} />
+      <div className="erp-root app-shell min-h-screen p-6 font-sans">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Header Card */}
+          <div className="bg-white app-panel border border-[#e2f2e9] rounded-2xl p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="size-11 rounded-2xl bg-[#ecfdf5] border border-[#c6f1d6] flex items-center justify-center shrink-0">
+                <Barcode className="size-6 text-[#00a651]" />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-gray-800">
-                  HSN Codes
+                <h1 className="app-title text-xl font-extrabold text-[#042f2e]">
+                  HSN Summary
                 </h1>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  All HSN / SAC codes
+                <p className="app-subtitle text-xs md:text-sm text-[#475569] font-medium mt-0.5">
+                  Harmonized System Nomenclature code index for inventory items.
                 </p>
               </div>
             </div>
-            <div className="flex gap-2 no-print">
+
+            <div className="flex items-center gap-3 flex-wrap no-print">
               <button
                 onClick={fetchHSNData}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white text-gray-600 hover:bg-gray-50 transition-colors"
+                className="h-10 px-4 app-btn-secondary text-xs font-bold flex items-center gap-1.5 cursor-pointer"
               >
-                <RefreshCw size={14} /> Refresh
+                <RefreshCw className="size-4" /> Refresh
               </button>
-              {!isEmployeeDashboard && (
-                <button
-                  onClick={() => setShowEmployeeActivity((prev) => !prev)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 text-sm border rounded-lg transition-colors ${
-                    showEmployeeActivity
-                      ? "bg-purple-800 text-white border-purple-800"
-                      : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
-                  }`}
-                >
-                  <Hash size={14} />
-                  {showEmployeeActivity ? "Back to HSN" : "Employee Activity"}
-                </button>
-              )}
+
               <button
                 onClick={handlePrint}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white text-gray-600 hover:bg-gray-50 transition-colors"
+                className="h-10 px-4 app-btn-secondary text-xs font-bold flex items-center gap-1.5 cursor-pointer"
               >
-                <Printer size={14} /> Print
+                <Printer className="size-4" /> Print
               </button>
-              <div className="flex gap-2 no-print">
-                <button
-                  onClick={handleExportExcel}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
-                >
-                  <FileSpreadsheet size={14} />
-                  Excel
-                </button>
 
-                <button
-                  onClick={() => handleExportPDF()}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg bg-rose-600 text-white hover:bg-rose-700 transition-colors"
-                >
-                  <Printer size={14} />
-                  PDF
-                </button>
+              <button
+                onClick={handleExportExcel}
+                className="h-10 px-4 text-xs font-bold text-[#00a651] bg-[#f0fdf4] border border-[#c6f1d6] rounded-xl hover:bg-[#00a651] hover:text-white transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                <FileSpreadsheet className="size-4" /> Excel
+              </button>
+
+              <button
+                onClick={() => handleExportPDF()}
+                className="h-10 px-4 text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 rounded-xl hover:bg-rose-600 hover:text-white transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                <FileText className="size-4" /> PDF
+              </button>
+            </div>
+          </div>
+
+          {/* Metric Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="app-panel p-5 border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold text-[#475569]">Stock Items with HSN</p>
+                  <div className="mt-2 text-2xl font-extrabold text-[#042f2e]">
+                    {hsnData.length}
+                  </div>
+                  <p className="mt-2 text-xs font-medium text-[#94a3b8]">
+                    Configured stock items
+                  </p>
+                </div>
+                <div className="size-11 rounded-2xl bg-[#ecfdf5] border border-[#c6f1d6] flex items-center justify-center shrink-0">
+                  <Barcode className="size-5 text-[#00a651]" />
+                </div>
+              </div>
+            </div>
+
+            <div className="app-panel p-5 border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold text-[#475569]">Unique HSN Codes</p>
+                  <div className="mt-2 text-2xl font-extrabold text-[#00a651]">
+                    {uniqueHSN.length}
+                  </div>
+                  <p className="mt-2 text-xs font-medium text-[#94a3b8]">
+                    Distinct tax tariff codes
+                  </p>
+                </div>
+                <div className="size-11 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center shrink-0">
+                  <Hash className="size-5 text-purple-600" />
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            <div className="bg-gray-100 rounded-lg px-4 py-3">
-              <p className="text-xs text-gray-500 mb-1">Total items</p>
-              <p className="text-2xl font-semibold text-gray-800">
-                {hsnData.length}
-              </p>
-            </div>
-            <div className="bg-gray-100 rounded-lg px-4 py-3">
-              <p className="text-xs text-gray-500 mb-1">Unique HSN codes</p>
-              <p className="text-2xl font-semibold text-purple-600">
-                {uniqueHSN.length}
-              </p>
+          {/* Search Filter Panel */}
+          <div className="app-panel p-4 border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs no-print">
+            <div className="relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8] size-4" />
+              <input
+                type="text"
+                placeholder="Search by HSN code..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="app-input w-full pl-10 pr-4 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white placeholder-[#94a3b8] focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] outline-none"
+              />
             </div>
           </div>
 
-          <div className="relative mb-4 no-print">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              size={15}
-            />
-            <input
-              type="text"
-              placeholder="Search HSN codes..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
-            />
-          </div>
-
-          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <span className="text-sm font-medium text-gray-700">
-                HSN codes
-              </span>
-              <span className="text-xs bg-purple-100 text-purple-600 font-medium px-2.5 py-0.5 rounded-full">
+          {/* Table Panel */}
+          <div className="app-panel overflow-hidden border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+            <div className="app-section-bar px-6 py-4 bg-[#f0fdf4]/60 border-b border-[#e2f2e9] flex items-center justify-between">
+              <h3 className="app-heading text-sm font-bold text-[#042f2e]">
+                HSN / SAC Code Master Register
+              </h3>
+              <span className="text-xs text-[#00a651] font-bold bg-[#f0fdf4] px-3 py-1 rounded-full border border-[#c6f1d6]">
                 {filteredHSN.length} shown
               </span>
             </div>
 
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-2.5 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-14">
-                    S.No
-                  </th>
-                  <th className="px-4 py-2.5 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    HSN Code
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {filteredHSN.length > 0 ? (
-                  filteredHSN.map((item, index) => (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-purple-50/30 transition-colors"
-                    >
-                      <td className="px-4 py-3 text-sm text-gray-400">
-                        {index + 1}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
-                            <Hash size={12} className="text-purple-600" />
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-[#f8faf8] border-b border-[#e2f2e9]">
+                  <tr>
+                    <th className="px-4 py-3 text-center text-xs font-bold text-slate-700 uppercase tracking-wider w-16">
+                      S.No
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      HSN / SAC Code
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e2f2e9] bg-white">
+                  {filteredHSN.length > 0 ? (
+                    filteredHSN.map((item, index) => (
+                      <tr
+                        key={item.id || index}
+                        className="hover:bg-[#f0fdf4]/50 transition-colors duration-150"
+                      >
+                        <td className="px-4 py-3.5 text-center text-xs font-medium text-slate-500">
+                          {index + 1}
+                        </td>
+                        <td className="px-4 py-3.5">
+                          <div className="flex items-center gap-3">
+                            <div className="size-9 rounded-xl bg-[#ecfdf5] border border-[#c6f1d6] flex items-center justify-center shrink-0">
+                              <Hash className="size-4 text-[#00a651]" />
+                            </div>
+                            {item.hsn ? (
+                              <span className="text-sm font-bold text-slate-900">
+                                {item.hsn}
+                              </span>
+                            ) : (
+                              <span className="text-xs font-medium text-slate-400 italic">
+                                Not specified
+                              </span>
+                            )}
                           </div>
-                          {item.hsn ? (
-                            <span className="font-mono text-sm font-medium text-gray-800">
-                              {item.hsn}
-                              {item.employee_id &&
-                                item.role?.toLowerCase() === "employee" && (
-                                  <span className="ml-2 font-sans text-xs text-gray-500 font-normal">
-                                    (Created by:{" "}
-                                    {getEmployeeName(item.employee_id)})
-                                  </span>
-                                )}
-                            </span>
-                          ) : (
-                            <span className="text-sm text-gray-400 italic">
-                              Not specified
-                              {item.employee_id &&
-                                item.role?.toLowerCase() === "employee" && (
-                                  <span className="ml-2 font-sans text-xs text-gray-500 font-normal">
-                                    (Created by:{" "}
-                                    {getEmployeeName(item.employee_id)})
-                                  </span>
-                                )}
-                            </span>
-                          )}
-                        </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="2" className="px-4 py-12 text-center">
+                        <Hash className="size-8 mx-auto mb-3 text-[#94a3b8]" />
+                        <p className="text-sm font-bold text-[#042f2e]">
+                          No HSN codes found
+                        </p>
+                        <p className="text-xs mt-1 font-medium text-[#475569]">
+                          {searchTerm
+                            ? "Try refining your search filter."
+                            : "Configure HSN codes in stock items to list them here."}
+                        </p>
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="2" className="px-4 py-12 text-center">
-                      <Hash className="mx-auto mb-2 text-gray-300" size={32} />
-                      <p className="text-sm text-gray-400 font-medium">
-                        No HSN codes found
-                      </p>
-                      <p className="text-xs text-gray-300 mt-1">
-                        {searchTerm
-                          ? "Try a different search term"
-                          : "Add HSN codes to stock items"}
-                      </p>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

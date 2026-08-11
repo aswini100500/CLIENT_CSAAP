@@ -1,14 +1,23 @@
-import { Trash, Plus } from "lucide-react";
-import React, { useState, useEffect } from "react";
-import useAuth from "../../../hooks/useAuth";
+import React from "react";
 import axios from "axios";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { useCompany } from "../context/CompanyContext";
+import {
+  ArrowLeft,
+  Factory,
+  FileText,
+  Package,
+  Plus,
+  RotateCcw,
+  Save,
+  Trash,
+  X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAuth from "../../../hooks/useAuth";
 
 export default function ManufacturingJournal() {
-  const { user } = useAuth();
-  const { companyId } = useCompany();
+  const { user, companyId } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -242,6 +251,20 @@ export default function ManufacturingJournal() {
     ? +(grandTotal / finishedQty).toFixed(2)
     : 0;
 
+  const resetForm = () => {
+    setProductName("");
+    setBatchName("");
+    setMfgDate("");
+    setExpDate("");
+    setFinishedQty("");
+    setCostAllocation("");
+    setCostTracking("");
+    setComponents([]);
+    setByProducts([]);
+    setAdditionalCosts([{ type: "", percentage: 0, amount: 0 }]);
+    setNarration("");
+  };
+
   const saveManufacturing = async () => {
     try {
       const role = user?.role || "admin";
@@ -270,47 +293,72 @@ export default function ManufacturingJournal() {
         employee_id: employeeId,
       };
 
+      const API_BASE_URL =
+        import.meta.env.VITE_ACCOUNTING_URL ||
+        import.meta.env.VITE_API_CLIENT_URL ||
+        "http://localhost:5000";
+
       if (isEditMode) {
-        const API_BASE_URL =
-          import.meta.env.VITE_ACCOUNTING_URL ||
-          import.meta.env.VITE_API_CLIENT_URL ||
-          "http://localhost:5000";
         await axios.put(
           `${API_BASE_URL}/api/v1/manufacturing/update/${id}`,
           payload,
         );
-        Swal.fire(
-          "Success",
-          "Manufacturing Journal updated successfully",
-          "success",
-        );
-        navigate(basePath + "/manfacturinglist");
-      } else {
-        const API_BASE_URL =
-          import.meta.env.VITE_ACCOUNTING_URL ||
-          import.meta.env.VITE_API_CLIENT_URL ||
-          "http://localhost:5000";
-        const res = await axios.post(
-          `${API_BASE_URL}/api/v1/manufacturing/create/${companyId}`,
-          payload,
-        );
         Swal.fire({
           icon: "success",
-          title: "Saved Successfully",
-          text: "Manufacturing journal saved!",
-          showCancelButton: true,
-          confirmButtonText: "Download PDF",
-          cancelButtonText: "Close",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.open(
-              `${API_BASE_URL}/api/v1/manufacturing/download-pdf/${res.data.journalId}`,
-              "_blank",
-            );
-          }
-          navigate(basePath + "/manfacturinglist");
+          title: "Manufacturing Journal Updated Successfully",
+          timer: 1500,
+          showConfirmButton: false,
         });
+        navigate(listPath);
+        return;
       }
+
+      const res = await axios.post(
+        `${API_BASE_URL}/api/v1/manufacturing/create/${companyId}`,
+        payload,
+      );
+
+      const journalId = res.data?.journalId || res.data?.id;
+
+      const result = await Swal.fire({
+        icon: "success",
+        title: "Manufacturing Journal Created Successfully",
+        text: "The manufacturing journal has been saved. What would you like to do next?",
+        showCancelButton: true,
+        showDenyButton: !!journalId,
+        confirmButtonColor: "#00a651",
+        cancelButtonColor: "#6b7280",
+        denyButtonColor: "#2563eb",
+        confirmButtonText: "Create Another",
+        cancelButtonText: "Go to Manufacturing List",
+        denyButtonText: "Download PDF",
+      });
+
+      if (result.isDenied && journalId) {
+        window.open(
+          `${API_BASE_URL}/api/v1/manufacturing/download-pdf/${journalId}`,
+          "_blank",
+        );
+        const followUp = await Swal.fire({
+          icon: "info",
+          title: "What's Next?",
+          text: "Would you like to create another manufacturing journal or go to the list?",
+          showCancelButton: true,
+          confirmButtonColor: "#00a651",
+          cancelButtonColor: "#6b7280",
+          confirmButtonText: "Create Another",
+          cancelButtonText: "Go to Manufacturing List",
+        });
+        if (!followUp.isConfirmed) {
+          navigate(listPath);
+          return;
+        }
+      } else if (!result.isConfirmed) {
+        navigate(listPath);
+        return;
+      }
+
+      resetForm();
     } catch (err) {
       console.error(err);
       const errorMsg =
@@ -319,413 +367,556 @@ export default function ManufacturingJournal() {
     }
   };
 
+  const inputClass =
+    "app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium";
+
+  const tableInputClass =
+    "w-full border border-[#c8ddcd] bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] rounded-xl font-semibold py-2.25 px-3 text-xs outline-none transition-all";
+
+  const listPath = basePath + "/manfacturinglist";
+
   return (
-    <div className=" bg-slate-50 min-h-screen mt-5 p-5 font-sans text-sm">
-      <div className="bg-amber-50 border rounded shadow overflow-hidden">
-        <div className="bg-amber-100 px-4 py-2 text-center font-semibold">
-          Manufacture of Materials
+    <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans">
+      <div className="max-w-6xl mx-auto bg-white app-panel border border-[#e2f2e9]/80 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+        <div className="flex justify-between items-center border-b border-[#e2f2e9] pb-5 mb-8">
+          <div className="flex items-center gap-3">
+            <h2 className="app-title text-xl font-extrabold text-[#042f2e]">
+              {isEditMode
+                ? "Manufacturing Journal Alteration"
+                : "Manufacture of Materials"}
+            </h2>
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#f0fdf4] text-[#00a651] border border-[#c6f1d6]">
+              MFG
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => navigate(listPath)}
+            className="flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors text-sm font-medium cursor-pointer"
+          >
+            <ArrowLeft size={16} /> Back to Manufacturing List
+          </button>
         </div>
-        <div className="p-4">
-          <div className="grid grid-cols-3 gap-4 mb-3 text-xs">
+
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+            <Factory size={16} className="text-[#00a651]" /> Production &
+            Voucher Details
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
             <div>
-              <div className="text-gray-600">Voucher No / Date:</div>
-              <div className="flex gap-2">
-                <input
-                  className="w-1/3 border px-2 py-1 rounded"
-                  value={voucherNo}
-                  onChange={(e) => setVoucherNo(e.target.value)}
-                />
-                <input
-                  className="w-2/3 border px-2 py-1 rounded"
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                />
-              </div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Voucher No :
+              </label>
+              <input
+                className={inputClass}
+                value={voucherNo}
+                onChange={(e) => setVoucherNo(e.target.value)}
+              />
             </div>
             <div>
-              <div className="text-gray-600">Name of Product:</div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Date :
+              </label>
               <input
-                className="w-full border px-2 py-1 rounded"
+                className={inputClass}
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Name of Product :
+              </label>
+              <input
+                className={inputClass}
+                placeholder="Target manufactured item"
                 value={productName}
                 onChange={(e) => setProductName(e.target.value)}
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4">
             <div>
-              <div className="text-gray-600">Batch / MFG / EXP:</div>
-              <div className="flex gap-1">
-                <input
-                  className="w-1/3 border px-1 py-1 rounded text-[10px]"
-                  placeholder="Batch"
-                  value={batchName}
-                  onChange={(e) => setBatchName(e.target.value)}
-                />
-                <input
-                  className="w-1/3 border px-1 py-1 rounded text-[10px]"
-                  type="date"
-                  value={mfgDate}
-                  onChange={(e) => setMfgDate(e.target.value)}
-                />
-                <input
-                  className="w-1/3 border px-1 py-1 rounded text-[10px]"
-                  type="date"
-                  value={expDate}
-                  onChange={(e) => setExpDate(e.target.value)}
-                />
-              </div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Batch Name :
+              </label>
+              <input
+                className={inputClass}
+                placeholder="Batch ID"
+                value={batchName}
+                onChange={(e) => setBatchName(e.target.value)}
+              />
             </div>
             <div>
-              <div className="text-gray-600">Godown / Qty:</div>
-              <div className="flex gap-2">
-                <input
-                  className="w-2/3 border px-2 py-1 rounded"
-                  value={godown}
-                  onChange={(e) => setGodown(e.target.value)}
-                />
-                <input
-                  className="w-1/3 border px-2 py-1 rounded"
-                  type="number"
-                  value={finishedQty}
-                  onChange={(e) => setFinishedQty(Number(e.target.value))}
-                />
-              </div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                MFG Date :
+              </label>
+              <input
+                className={inputClass}
+                type="date"
+                value={mfgDate}
+                onChange={(e) => setMfgDate(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                EXP Date :
+              </label>
+              <input
+                className={inputClass}
+                type="date"
+                value={expDate}
+                onChange={(e) => setExpDate(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Godown Location :
+              </label>
+              <input
+                className={inputClass}
+                value={godown}
+                onChange={(e) => setGodown(e.target.value)}
+              />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-3 text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <div className="text-gray-600">% of Cost allocation:</div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Finished Quantity :
+              </label>
               <input
-                className="w-24 border px-2 py-1 rounded"
+                className={inputClass}
+                type="number"
+                placeholder="Qty"
+                value={finishedQty}
+                onChange={(e) => setFinishedQty(Number(e.target.value))}
+              />
+            </div>
+            <div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                % of Cost Allocation :
+              </label>
+              <input
+                className={inputClass}
+                placeholder="100"
                 value={costAllocation}
                 onChange={(e) => setCostAllocation(e.target.value)}
               />
             </div>
             <div>
-              <label className="text-gray-600 mr-2">Cost Tracking:</label>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Cost Tracking :
+              </label>
               <input
-                className="border px-2 py-1 rounded w-48"
+                className={inputClass}
+                placeholder="Cost track code"
                 value={costTracking}
                 onChange={(e) => setCostTracking(e.target.value)}
               />
             </div>
           </div>
+        </div>
 
-          <div className="grid grid-cols-2 gap-6">
-            <datalist id="stock-items">
-              {stockItems.map((s, idx) => (
-                <option key={idx} value={s.name || s.itemName || s.stockName} />
-              ))}
-            </datalist>
+        <datalist id="stock-items">
+          {stockItems.map((s, idx) => (
+            <option key={idx} value={s.name || s.itemName || s.stockName} />
+          ))}
+        </datalist>
 
-            <div>
-              <div className="text-sm font-semibold mb-2">
-                Components (Consumption)
-              </div>
-              <div className="border bg-white rounded">
-                <table className="w-full text-xs">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="p-2 border">Item</th>
-                      <th className="p-2 border">Godown</th>
-                      <th className="p-2 border">Qty</th>
-                      <th className="p-2 border">Rate</th>
-                      <th className="p-2 border">Amount</th>
-                      <th className="p-2 border"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {components.map((c, i) => (
-                      <tr key={i} className="odd:bg-white even:bg-slate-50">
-                        <td className="p-1 border">
-                          <input
-                            list="stock-items"
-                            className="w-full"
-                            value={c.itemName}
-                            onChange={(e) =>
-                              updateComponent(i, "itemName", e.target.value)
-                            }
-                          />
-                        </td>
-                        <td className="p-1 border">
-                          <input
-                            className="w-full"
-                            value={c.godown}
-                            onChange={(e) =>
-                              updateComponent(i, "godown", e.target.value)
-                            }
-                          />
-                        </td>
-                        <td className="p-1 border">
-                          <input
-                            className="w-20 text-right"
-                            type="number"
-                            value={c.qty}
-                            onChange={(e) =>
-                              updateComponent(i, "qty", e.target.value)
-                            }
-                          />
-                        </td>
-                        <td className="p-1 border">
-                          <input
-                            className="w-24 text-right"
-                            type="number"
-                            value={c.rate}
-                            onChange={(e) =>
-                              updateComponent(i, "rate", e.target.value)
-                            }
-                          />
-                        </td>
-                        <td className="p-1 border text-right">
-                          {Number(c.amount || 0).toFixed(2)}
-                        </td>
-                        <td className="p-1 border text-center">
-                          <button onClick={() => removeComponentRow(i)}>
-                            <Trash size={16} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div className="p-2 flex justify-between">
-                  <div>
-                    Total Components: ₹ {Number(totalComponents).toFixed(2)}
-                  </div>
-                  <button
-                    className="px-2 py-1 bg-blue-600 text-white text-xs rounded"
-                    onClick={addComponentRow}
-                  >
-                    + Add
-                  </button>
-                </div>
-              </div>
+        <div className="space-y-6 mb-6">
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)]">
+            <div className="flex justify-between items-center mb-4 border-b border-[#cbe0d2] pb-1.5">
+              <h3 className="text-xs font-bold text-[#042f2e] uppercase tracking-wider flex items-center gap-2">
+                <Package size={14} className="text-[#00a651]" /> Components
+                (Consumption)
+              </h3>
+              <button
+                type="button"
+                className="flex items-center gap-1 text-xs font-bold text-[#00a651] bg-white border border-[#cbe0d2] px-3 py-1.5 rounded-lg hover:bg-[#f0fdf4] transition-colors cursor-pointer"
+                onClick={addComponentRow}
+              >
+                <Plus size={14} /> Add Component
+              </button>
             </div>
 
-            <div>
-              <div className="text-sm font-semibold mb-2">
-                Co-Product / By-Product / Scrap
-              </div>
-              <div className="border bg-white rounded">
-                <table className="w-full text-xs">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="p-2 border">Item</th>
-                      <th className="p-2 border">Godown</th>
-                      <th className="p-2 border">Qty</th>
-                      <th className="p-2 border">Rate</th>
-                      <th className="p-2 border">Amount</th>
-                      <th className="p-2 border">% Cost</th>
-                      <th className="p-2 border"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {byProducts.map((b, i) => (
-                      <tr key={i} className="odd:bg-white even:bg-slate-50">
-                        <td className="p-1 border">
-                          <input
-                            list="stock-items"
-                            className="w-full"
-                            value={b.itemName}
-                            onChange={(e) =>
-                              updateByProduct(i, "itemName", e.target.value)
-                            }
-                          />
-                        </td>
-                        <td className="p-1 border">
-                          <input
-                            className="w-full"
-                            value={b.godown}
-                            onChange={(e) =>
-                              updateByProduct(i, "godown", e.target.value)
-                            }
-                          />
-                        </td>
-                        <td className="p-1 border">
-                          <input
-                            className="w-20 text-right"
-                            type="number"
-                            value={b.qty}
-                            onChange={(e) =>
-                              updateByProduct(i, "qty", e.target.value)
-                            }
-                          />
-                        </td>
-                        <td className="p-1 border">
-                          <input
-                            className="w-24 text-right"
-                            type="number"
-                            value={b.rate}
-                            onChange={(e) =>
-                              updateByProduct(i, "rate", e.target.value)
-                            }
-                          />
-                        </td>
-                        <td className="p-1 border text-right">
-                          {Number(b.amount || 0).toFixed(2)}
-                        </td>
-                        <td className="p-1 border">
-                          <input
-                            className="w-16 text-right"
-                            type="number"
-                            value={b.pctOfCost}
-                            onChange={(e) =>
-                              updateByProduct(i, "pctOfCost", e.target.value)
-                            }
-                          />
-                        </td>
-                        <td className="p-1 border text-center">
-                          <button onClick={() => removeByProductRow(i)}>
-                            <Trash size={16} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div className="p-2 flex justify-between">
-                  <div>
-                    Total By-Products: ₹ {Number(totalByProducts).toFixed(2)}
-                  </div>
-                  <button
-                    className="px-2 py-1 bg-blue-600 text-white text-xs rounded"
-                    onClick={addByProductRow}
-                  >
-                    + Add
-                  </button>
-                </div>
-              </div>
-              <div className="mt-3 border rounded bg-slate-50 p-3 text-xs">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-bold text-gray-800">
-                    Cost of components:
-                  </span>
-                  <span className="font-semibold text-gray-700">
-                    ₹ {Number(totalCostOfComponents).toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-12 gap-2 italic text-gray-600 mb-1 px-1">
-                  <span className="col-span-7">Type of Additional Cost</span>
-                  <span className="col-span-2 text-right">Percentage</span>
-                  <span className="col-span-3 text-right">Amount</span>
-                </div>
-
-                <div className="space-y-2">
-                  {additionalCosts.map((a, i) => (
-                    <div
+            <div className="overflow-x-auto rounded-xl border border-[#cbe0d2] bg-white mb-3">
+              <table className="w-full border-collapse text-xs">
+                <thead>
+                  <tr className="bg-[#f0fdf4] border-b border-[#cbe0d2]">
+                    <th className="px-4 py-2.5 text-left text-[11px] font-extrabold uppercase text-[#042f2e]">
+                      Item Description
+                    </th>
+                    <th className="px-4 py-2.5 text-left text-[11px] font-extrabold uppercase text-[#042f2e] w-48">
+                      Godown
+                    </th>
+                    <th className="px-4 py-2.5 text-right text-[11px] font-extrabold uppercase text-[#042f2e] w-28">
+                      Qty
+                    </th>
+                    <th className="px-4 py-2.5 text-right text-[11px] font-extrabold uppercase text-[#042f2e] w-32">
+                      Rate (₹)
+                    </th>
+                    <th className="px-4 py-2.5 text-right text-[11px] font-extrabold uppercase text-[#042f2e] w-36">
+                      Amount (₹)
+                    </th>
+                    <th className="px-2 py-2.5 text-center text-[11px] font-extrabold uppercase text-[#042f2e] w-14">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e2f2e9]">
+                  {components.map((c, i) => (
+                    <tr
                       key={i}
-                      className="grid grid-cols-12 gap-2 items-center"
+                      className="hover:bg-[#f8faf8] transition-colors"
                     >
-                      <div className="col-span-7">
+                      <td className="p-2">
                         <input
-                          type="text"
-                          className="w-full border px-2 py-1 rounded bg-white shadow-sm"
-                          placeholder="e.g. Wages, Freight"
-                          value={a.type}
+                          list="stock-items"
+                          className={tableInputClass}
+                          placeholder="Select / type item..."
+                          value={c.itemName}
                           onChange={(e) =>
-                            updateAdditionalCost(i, "type", e.target.value)
+                            updateComponent(i, "itemName", e.target.value)
                           }
                         />
-                      </div>
-                      <div className="col-span-2 flex items-center gap-1">
+                      </td>
+                      <td className="p-2">
                         <input
-                          type="number"
-                          className="w-full text-right border px-1 py-1 rounded bg-white shadow-sm"
-                          value={a.percentage}
+                          className={tableInputClass}
+                          placeholder="Godown"
+                          value={c.godown}
                           onChange={(e) =>
-                            updateAdditionalCost(
-                              i,
-                              "percentage",
-                              e.target.value,
-                            )
+                            updateComponent(i, "godown", e.target.value)
                           }
                         />
-                        <span className="text-gray-400">%</span>
-                      </div>
-                      <div className="col-span-3 flex items-center gap-1">
+                      </td>
+                      <td className="p-2">
                         <input
                           type="number"
-                          className="w-full text-right border px-1 py-1 rounded bg-white shadow-sm"
-                          value={a.amount}
+                          className={`${tableInputClass} text-right`}
+                          value={c.qty}
                           onChange={(e) =>
-                            updateAdditionalCost(i, "amount", e.target.value)
+                            updateComponent(i, "qty", e.target.value)
                           }
                         />
+                      </td>
+                      <td className="p-2">
+                        <input
+                          type="number"
+                          className={`${tableInputClass} text-right`}
+                          value={c.rate}
+                          onChange={(e) =>
+                            updateComponent(i, "rate", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2 text-right font-bold text-slate-800">
+                        ₹ {Number(c.amount || 0).toFixed(2)}
+                      </td>
+                      <td className="p-2 text-center">
                         <button
-                          onClick={() => removeAdditionalCostRow(i)}
-                          className="text-red-500 hover:text-red-700"
+                          type="button"
+                          onClick={() => removeComponentRow(i)}
+                          className="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg transition-colors cursor-pointer"
+                          title="Remove row"
                         >
                           <Trash size={14} />
                         </button>
-                      </div>
-                    </div>
+                      </td>
+                    </tr>
                   ))}
-                </div>
+                </tbody>
+              </table>
+            </div>
 
-                <div className="mt-3 flex justify-end">
-                  <button
-                    onClick={addAdditionalCostRow}
-                    className="flex items-center gap-1 text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200 transition"
+            <div className="pt-2 flex justify-between items-center text-xs font-bold text-slate-800">
+              <span>Total Components:</span>
+              <span className="text-[#00a651] text-sm">
+                ₹ {Number(totalComponents).toFixed(2)}
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)]">
+            <div className="flex justify-between items-center mb-4 border-b border-[#cbe0d2] pb-1.5">
+              <h3 className="text-xs font-bold text-[#042f2e] uppercase tracking-wider flex items-center gap-2">
+                <Package size={14} className="text-[#00a651]" /> Co-Product /
+                By-Product / Scrap
+              </h3>
+              <button
+                type="button"
+                className="flex items-center gap-1 text-xs font-bold text-[#00a651] bg-white border border-[#cbe0d2] px-3 py-1.5 rounded-lg hover:bg-[#f0fdf4] transition-colors cursor-pointer"
+                onClick={addByProductRow}
+              >
+                <Plus size={14} /> Add By-Product
+              </button>
+            </div>
+
+            <div className="overflow-x-auto rounded-xl border border-[#cbe0d2] bg-white mb-3">
+              <table className="w-full border-collapse text-xs">
+                <thead>
+                  <tr className="bg-[#f0fdf4] border-b border-[#cbe0d2]">
+                    <th className="px-4 py-2.5 text-left text-[11px] font-extrabold uppercase text-[#042f2e]">
+                      Item Description
+                    </th>
+                    <th className="px-4 py-2.5 text-left text-[11px] font-extrabold uppercase text-[#042f2e] w-44">
+                      Godown
+                    </th>
+                    <th className="px-4 py-2.5 text-right text-[11px] font-extrabold uppercase text-[#042f2e] w-24">
+                      Qty
+                    </th>
+                    <th className="px-4 py-2.5 text-right text-[11px] font-extrabold uppercase text-[#042f2e] w-28">
+                      Rate (₹)
+                    </th>
+                    <th className="px-4 py-2.5 text-right text-[11px] font-extrabold uppercase text-[#042f2e] w-32">
+                      Amount (₹)
+                    </th>
+                    <th className="px-4 py-2.5 text-right text-[11px] font-extrabold uppercase text-[#042f2e] w-24">
+                      % Cost
+                    </th>
+                    <th className="px-2 py-2.5 text-center text-[11px] font-extrabold uppercase text-[#042f2e] w-14">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e2f2e9]">
+                  {byProducts.map((b, i) => (
+                    <tr
+                      key={i}
+                      className="hover:bg-[#f8faf8] transition-colors"
+                    >
+                      <td className="p-2">
+                        <input
+                          list="stock-items"
+                          className={tableInputClass}
+                          placeholder="Select / type item..."
+                          value={b.itemName}
+                          onChange={(e) =>
+                            updateByProduct(i, "itemName", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2">
+                        <input
+                          className={tableInputClass}
+                          placeholder="Godown"
+                          value={b.godown}
+                          onChange={(e) =>
+                            updateByProduct(i, "godown", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2">
+                        <input
+                          type="number"
+                          className={`${tableInputClass} text-right`}
+                          value={b.qty}
+                          onChange={(e) =>
+                            updateByProduct(i, "qty", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2">
+                        <input
+                          type="number"
+                          className={`${tableInputClass} text-right`}
+                          value={b.rate}
+                          onChange={(e) =>
+                            updateByProduct(i, "rate", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2 text-right font-bold text-slate-800">
+                        ₹ {Number(b.amount || 0).toFixed(2)}
+                      </td>
+                      <td className="p-2">
+                        <input
+                          type="number"
+                          className={`${tableInputClass} text-right`}
+                          value={b.pctOfCost}
+                          onChange={(e) =>
+                            updateByProduct(i, "pctOfCost", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2 text-center">
+                        <button
+                          type="button"
+                          onClick={() => removeByProductRow(i)}
+                          className="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg transition-colors cursor-pointer"
+                          title="Remove row"
+                        >
+                          <Trash size={14} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="pt-2 flex justify-between items-center text-xs font-bold text-slate-800">
+              <span>Total By-Products:</span>
+              <span className="text-[#00a651] text-sm">
+                ₹ {Number(totalByProducts).toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+            <FileText size={16} className="text-[#00a651]" /> Additional Costs &
+            Production Valuation
+          </h3>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-xs font-bold text-slate-700">
+                  Type of Additional Cost
+                </span>
+                <button
+                  type="button"
+                  onClick={addAdditionalCostRow}
+                  className="flex items-center gap-1 text-xs font-bold text-[#00a651] bg-white border border-[#cbe0d2] px-3 py-1 rounded-lg hover:bg-[#f0fdf4] transition-colors cursor-pointer"
+                >
+                  <Plus size={12} /> Add Cost Item
+                </button>
+              </div>
+
+              <div className="space-y-3 mb-4">
+                {additionalCosts.map((a, i) => (
+                  <div
+                    key={i}
+                    className="grid grid-cols-12 gap-3 items-center bg-white p-2.5 rounded-xl border border-[#cbe0d2]"
                   >
-                    <Plus size={12} /> Add Cost
-                  </button>
-                </div>
+                    <div className="col-span-6">
+                      <input
+                        type="text"
+                        className={tableInputClass}
+                        placeholder="e.g. Labour, Freight, Electricity"
+                        value={a.type}
+                        onChange={(e) =>
+                          updateAdditionalCost(i, "type", e.target.value)
+                        }
+                      />
+                    </div>
+                    <div className="col-span-3 flex items-center gap-1">
+                      <input
+                        type="number"
+                        className={`${tableInputClass} text-right`}
+                        value={a.percentage}
+                        onChange={(e) =>
+                          updateAdditionalCost(i, "percentage", e.target.value)
+                        }
+                      />
+                      <span className="text-xs font-bold text-slate-500">
+                        %
+                      </span>
+                    </div>
+                    <div className="col-span-3 flex items-center gap-2">
+                      <input
+                        type="number"
+                        className={`${tableInputClass} text-right font-bold text-slate-800`}
+                        value={a.amount}
+                        onChange={(e) =>
+                          updateAdditionalCost(i, "amount", e.target.value)
+                        }
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeAdditionalCostRow(i)}
+                        className="text-rose-500 hover:bg-rose-50 p-1 rounded cursor-pointer"
+                      >
+                        <Trash size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-                <div className="flex justify-between items-center mt-4 pt-2 border-t border-gray-200">
-                  <span className="text-gray-700 font-medium">
-                    Total Addl. Cost :
-                  </span>
-                  <span className="font-semibold text-blue-700">
-                    ₹ {Number(totalAddlCost).toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center mt-1">
-                  <span className="font-bold text-gray-900">
-                    Effective Cost :
-                  </span>
-                  <span className="font-bold text-lg text-green-700">
-                    ₹ {Number(grandTotal).toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center mt-1">
-                  <span className="text-gray-600">
-                    Allocation to Primary Item :
-                  </span>
-                  <span className="text-gray-700 font-medium">
-                    {costAllocation || 100}%
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center mt-1 pt-1 border-t border-dashed border-gray-300">
-                  <span className="text-gray-500 italic">
-                    Effective rate of Primary Item :
-                  </span>
-                  <span className="text-gray-700 font-medium">
-                    ₹ {Number(effectiveRatePerFinished).toFixed(2)}
-                  </span>
-                </div>
+            <div className="bg-white border border-[#cbe0d2] rounded-xl p-5 shadow-xs text-xs space-y-2.5">
+              <div className="flex justify-between items-center pb-2 border-b border-[#e2f2e9]">
+                <span className="text-slate-600">Cost of Components :</span>
+                <span className="font-bold text-slate-800">
+                  ₹ {Number(totalCostOfComponents).toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center pb-2 border-b border-[#e2f2e9]">
+                <span className="text-slate-600">Total Additional Cost :</span>
+                <span className="font-bold text-emerald-700">
+                  ₹ {Number(totalAddlCost).toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-1.5 text-sm font-extrabold text-[#042f2e]">
+                <span>Effective Cost :</span>
+                <span className="text-[#00a651]">
+                  ₹ {Number(grandTotal).toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-[#e2f2e9]">
+                <span className="text-slate-600">
+                  Allocation to Primary Item :
+                </span>
+                <span className="font-bold text-slate-800">
+                  {costAllocation || 100}%
+                </span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-dashed border-[#cbe0d2] text-xs">
+                <span className="text-slate-500 font-bold">
+                  Effective Rate / Primary Unit :
+                </span>
+                <span className="font-extrabold text-[#042f2e]">
+                  ₹ {Number(effectiveRatePerFinished).toFixed(2)}
+                </span>
               </div>
             </div>
           </div>
-          <div className="mt-4">
-            <div className="text-gray-600 text-xs mb-1">Narration:</div>
-            <textarea
-              className="w-full border px-2 py-1 rounded text-xs min-h-15"
-              value={narration}
-              onChange={(e) => setNarration(e.target.value)}
-            />
-          </div>
-          <div className="mt-5 flex justify-end">
-            <button
-              className="px-4 py-2 bg-blue-600 text-white rounded font-semibold"
-              onClick={saveManufacturing}
-            >
-              {isEditMode ? "Update" : "Save"}
-            </button>
-          </div>
+        </div>
+
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+            Narration / Remarks :
+          </label>
+          <textarea
+            className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium resize-none h-20"
+            placeholder="Enter narration for this manufacturing journal..."
+            value={narration}
+            onChange={(e) => setNarration(e.target.value)}
+          />
+        </div>
+
+        <div className="mt-8 flex justify-end gap-4 border-t border-[#e2f2e9] pt-6">
+          <button
+            type="button"
+            onClick={saveManufacturing}
+            className="app-btn-primary flex items-center justify-center gap-2 cursor-pointer shadow-md min-w-36 transition-all hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <Save size={16} /> {isEditMode ? "Update Journal" : "Save Journal"}
+          </button>
+
+          <button
+            type="button"
+            onClick={resetForm}
+            className="app-btn-secondary flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl cursor-pointer hover:bg-slate-100 hover:text-slate-800 min-w-30 transition-all"
+          >
+            <RotateCcw size={16} /> Reset Form
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(listPath)}
+            className="app-btn-secondary flex items-center justify-center gap-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl cursor-pointer hover:bg-rose-100 hover:text-rose-800 hover:border-rose-300 min-w-30 transition-all"
+          >
+            <X size={16} /> Cancel
+          </button>
         </div>
       </div>
     </div>

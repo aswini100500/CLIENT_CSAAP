@@ -1,23 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
-import {
-  ChevronDown,
-  ChevronRight,
-  Printer,
-  FileSpreadsheet,
-  FileText,
-} from "lucide-react";
-import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import {
+  AlertCircle,
+  ChevronDown,
+  ChevronRight,
+  DollarSign,
+  FileSpreadsheet,
+  FileText,
+  Loader2,
+  Maximize2,
+  Minimize2,
+  Printer,
+  Scale,
+  Search,
+  X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
+import useAuth from "../../../hooks/useAuth";
 
 const TrialBalance = () => {
-  const { companyId, companyName } = useCompany();
+  const { companyId, companyName } = useAuth();
   const [data, setData] = useState({ groupWise: {}, summary: {} });
   const [plData, setPlData] = useState({ netProfit: 0 });
   const [loading, setLoading] = useState(true);
   const [expandedGroups, setExpandedGroups] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (companyId) {
@@ -77,6 +87,49 @@ const TrialBalance = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const { groupWise, summary } = data;
+
+  const handleExpandAll = () => {
+    const extractAllGroupNames = (groupsObj) => {
+      let names = {};
+      Object.values(groupsObj || {}).forEach((g) => {
+        names[g.groupName] = true;
+        if (g.subGroups) {
+          names = { ...names, ...extractAllGroupNames(g.subGroups) };
+        }
+      });
+      return names;
+    };
+    if (groupWise) {
+      setExpandedGroups(extractAllGroupNames(groupWise));
+    }
+  };
+
+  const handleCollapseAll = () => {
+    setExpandedGroups({});
+  };
+
+  const matchesSearch = (group, term) => {
+    if (!term) return true;
+    const lowerTerm = term.toLowerCase();
+    if (group.groupName.toLowerCase().includes(lowerTerm)) return true;
+
+    if (
+      group.ledgers &&
+      group.ledgers.some((l) => l.ledgerName.toLowerCase().includes(lowerTerm))
+    ) {
+      return true;
+    }
+
+    if (group.subGroups) {
+      return Object.values(group.subGroups).some((subG) =>
+        matchesSearch(subG, term),
+      );
+    }
+
+    return false;
   };
 
   const handleExportExcel = () => {
@@ -250,13 +303,10 @@ const TrialBalance = () => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(amount || 0);
-    return `Rs. ${formatted}`;
+    return `₹${formatted}`;
   };
 
-  const { groupWise, summary } = data;
-
   const netProfit = plData.netProfit || 0;
-
   const plDebit = netProfit < 0 ? Math.abs(netProfit) : 0;
   const plCredit = netProfit > 0 ? netProfit : 0;
   const hasPL = Math.abs(netProfit) > 0.005;
@@ -270,35 +320,43 @@ const TrialBalance = () => {
   const grandTotal = Math.max(totalDebit, totalCredit);
 
   const GroupNode = ({ group, depth = 0 }) => {
-    const isExpanded = expandedGroups[group.groupName];
-    const paddingLeft = depth * 1.5 + 0.5;
+    if (searchTerm && !matchesSearch(group, searchTerm)) {
+      return null;
+    }
+
+    const isExpanded = searchTerm ? true : !!expandedGroups[group.groupName];
+    const paddingLeft = depth * 1.5 + 0.75;
 
     return (
       <div key={group.groupName}>
         <div
-          className="grid grid-cols-12 bg-gray-50 p-2 hover:bg-gray-100 cursor-pointer transition-colors border-b border-gray-100"
+          className="grid grid-cols-12 bg-slate-50/80 hover:bg-slate-100/80 p-2.5 cursor-pointer transition-colors border-b border-(--border-soft) items-center"
           onClick={() => toggleGroup(group.groupName)}
         >
           <div
-            className="col-span-4 flex items-center gap-2 font-semibold text-gray-800"
+            className="col-span-4 flex items-center gap-2 font-bold text-(--text-strong) text-[13px]"
             style={{ paddingLeft: `${paddingLeft}rem` }}
           >
             {isExpanded ? (
-              <ChevronDown size={14} />
+              <ChevronDown size={15} className="text-(--brand) shrink-0" />
             ) : (
-              <ChevronRight size={14} />
+              <ChevronRight size={15} className="text-(--text-soft) shrink-0" />
             )}
-            {group.groupName}
+            <span className="truncate">{group.groupName}</span>
           </div>
 
-          <div className="col-span-2 text-right text-gray-500">-</div>
-          <div className="col-span-2 text-right font-semibold text-gray-600">
+          <div className="col-span-2 text-right text-gray-400 font-mono text-[12px]">
+            -
+          </div>
+          <div className="col-span-2 text-right font-bold text-(--text-strong) tabular-nums text-[13px]">
             {group.totalDebit > 0 ? formatCurrency(group.totalDebit) : ""}
           </div>
-          <div className="col-span-2 text-right font-semibold text-gray-600">
+          <div className="col-span-2 text-right font-bold text-(--text-strong) tabular-nums text-[13px]">
             {group.totalCredit > 0 ? formatCurrency(group.totalCredit) : ""}
           </div>
-          <div className="col-span-2 text-right text-gray-500 pr-4">-</div>
+          <div className="col-span-2 text-right text-gray-400 pr-4 font-mono text-[12px]">
+            -
+          </div>
         </div>
 
         {isExpanded && (
@@ -313,43 +371,77 @@ const TrialBalance = () => {
               ))}
 
             {group.ledgers &&
-              group.ledgers.map((ledger) => (
-                <div
-                  key={ledger.ledgerId}
-                  className="grid grid-cols-12 p-2 border-b border-gray-50 hover:bg-blue-50 transition-colors"
-                >
+              group.ledgers.map((ledger) => {
+                if (
+                  searchTerm &&
+                  !ledger.ledgerName
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return null;
+                }
+                return (
                   <div
-                    className="col-span-4 text-gray-700 truncate"
-                    title={ledger.ledgerName}
-                    style={{ paddingLeft: `${paddingLeft + 2}rem` }}
+                    key={ledger.ledgerId}
+                    className="grid grid-cols-12 p-2.5 border-b border-slate-100 hover:bg-(--bg-subtle)/60 transition-colors items-center text-[13px]"
                   >
-                    {ledger.ledgerName}
-                  </div>
+                    <div
+                      className="col-span-4 text-(--text-body) font-medium truncate"
+                      title={ledger.ledgerName}
+                      style={{ paddingLeft: `${paddingLeft + 1.75}rem` }}
+                    >
+                      {ledger.ledgerName}
+                    </div>
 
-                  <div className="col-span-2 text-right text-gray-600">
-                    {ledger.openingDebit > 0
-                      ? `${formatCurrency(ledger.openingDebit)} Dr`
-                      : ledger.openingCredit > 0
-                        ? `${formatCurrency(ledger.openingCredit)} Cr`
-                        : "-"}
-                  </div>
+                    <div className="col-span-2 text-right text-(--text-soft) font-medium tabular-nums">
+                      {ledger.openingDebit > 0 ? (
+                        <span className="inline-flex items-center gap-1 justify-end">
+                          {formatCurrency(ledger.openingDebit)}
+                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200 uppercase">
+                            Dr
+                          </span>
+                        </span>
+                      ) : ledger.openingCredit > 0 ? (
+                        <span className="inline-flex items-center gap-1 justify-end">
+                          {formatCurrency(ledger.openingCredit)}
+                          <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-1 py-0.2 rounded border border-rose-200 uppercase">
+                            Cr
+                          </span>
+                        </span>
+                      ) : (
+                        "-"
+                      )}
+                    </div>
 
-                  <div className="col-span-2 text-right text-gray-800">
-                    {ledger.debit > 0 ? formatCurrency(ledger.debit) : ""}
-                  </div>
-                  <div className="col-span-2 text-right text-gray-800">
-                    {ledger.credit > 0 ? formatCurrency(ledger.credit) : ""}
-                  </div>
+                    <div className="col-span-2 text-right text-(--text-strong) font-semibold tabular-nums">
+                      {ledger.debit > 0 ? formatCurrency(ledger.debit) : ""}
+                    </div>
+                    <div className="col-span-2 text-right text-(--text-strong) font-semibold tabular-nums">
+                      {ledger.credit > 0 ? formatCurrency(ledger.credit) : ""}
+                    </div>
 
-                  <div className="col-span-2 text-right font-semibold text-gray-900 pr-4">
-                    {ledger.closingDebit > 0
-                      ? `${formatCurrency(ledger.closingDebit)} Dr`
-                      : ledger.closingCredit > 0
-                        ? `${formatCurrency(ledger.closingCredit)} Cr`
-                        : "-"}
+                    <div className="col-span-2 text-right font-bold text-(--text-strong) pr-4 tabular-nums">
+                      {ledger.closingDebit > 0 ? (
+                        <span className="inline-flex items-center gap-1 justify-end">
+                          {formatCurrency(ledger.closingDebit)}
+                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200 uppercase">
+                            Dr
+                          </span>
+                        </span>
+                      ) : ledger.closingCredit > 0 ? (
+                        <span className="inline-flex items-center gap-1 justify-end">
+                          {formatCurrency(ledger.closingCredit)}
+                          <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-1 py-0.2 rounded border border-rose-200 uppercase">
+                            Cr
+                          </span>
+                        </span>
+                      ) : (
+                        "-"
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
           </div>
         )}
       </div>
@@ -358,103 +450,180 @@ const TrialBalance = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="erp-root app-shell min-h-screen p-4 md:p-6 flex items-center justify-center">
+        <div className="flex items-center gap-2.5 text-(--text-soft)">
+          <Loader2 className="size-6 animate-spin text-(--brand)" />
+          <span className="text-[14px] font-semibold">
+            Loading Trial Balance...
+          </span>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 font-mono text-sm print:bg-white print:p-0">
-      <div className="flex justify-between items-center mb-6 print:hidden">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">Trial Balance</h1>
-          <p className="text-gray-600">{companyName}</p>
-        </div>
-        <div className="flex gap-3">
-          <button
-            onClick={handlePrint}
-            className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition"
-          >
-            <Printer size={16} /> Print
-          </button>
-          <button
-            onClick={handleExportPDF}
-            className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-          >
-            <FileText size={16} /> Export PDF
-          </button>
-          <button
-            onClick={handleExportExcel}
-            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-          >
-            <FileSpreadsheet size={16} /> Export Excel
-          </button>
-        </div>
-      </div>
-
-      <div className="hidden print:block text-center mb-6">
-        <h1 className="text-xl font-bold">{companyName}</h1>
-        <h2 className="text-lg">Trial Balance</h2>
-        <p className="text-sm">As on {new Date().toLocaleDateString()}</p>
-      </div>
-
-      <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200 print:shadow-none print:border-none">
-        <div className="grid grid-cols-12 bg-blue-100 text-blue-900 font-bold p-3 border-b border-blue-200">
-          <div className="col-span-4 pl-4">Particulars</div>
-          <div className="col-span-2 text-right">Opening Balance</div>
-          <div className="col-span-2 text-right">Debit</div>
-          <div className="col-span-2 text-right">Credit</div>
-          <div className="col-span-2 text-right pr-4">Closing Balance</div>
-        </div>
-
-        <div className="divide-y divide-gray-100">
-          {groupWise &&
-            Object.values(groupWise).map((group) => (
-              <GroupNode key={group.groupName} group={group} depth={0} />
-            ))}
-
-          {hasPL && (
-            <div className="grid grid-cols-12 p-2 border-b border-gray-100 hover:bg-gray-50 text-gray-700">
-              <div className="col-span-4 pl-4">Profit &amp; Loss</div>
-              <div className="col-span-2 text-right">-</div>
-              <div className="col-span-2 text-right font-medium">
-                {plDebit > 0 ? formatCurrency(plDebit) : ""}
-              </div>
-              <div className="col-span-2 text-right font-medium">
-                {plCredit > 0 ? formatCurrency(plCredit) : ""}
-              </div>
-              <div className="col-span-2 text-right pr-4">-</div>
-            </div>
-          )}
-
-          {hasDiff && (
-            <div className="grid grid-cols-12 p-2 border-b border-gray-100 hover:bg-gray-50 italic text-gray-500">
-              <div className="col-span-4 pl-4 font-bold text-gray-700">
-                Difference in opening balances
-              </div>
-              <div className="col-span-2 text-right">-</div>
-              <div className="col-span-2 text-right not-italic text-gray-700">
-                {diffDebit > 0 ? formatCurrency(diffDebit) : ""}
-              </div>
-              <div className="col-span-2 text-right not-italic text-gray-700">
-                {diffCredit > 0 ? formatCurrency(diffCredit) : ""}
-              </div>
-              <div className="col-span-2 text-right pr-4">-</div>
-            </div>
-          )}
-        </div>
-
-        <div className="grid grid-cols-12 bg-blue-100 text-blue-900 font-bold p-3 border-t border-blue-200">
-          <div className="col-span-4 pl-4">Grand Total</div>
-          <div className="col-span-2 text-right">-</div>
-          <div className="col-span-2 text-right">
-            {formatCurrency(grandTotal)}
+    <div className="erp-root app-shell min-h-screen p-4 md:p-6 print:bg-white print:p-0">
+      <div className="max-w-7xl mx-auto space-y-4">
+        <div className="app-panel p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 print:hidden">
+          <div>
+            <h1 className="app-title">Trial Balance</h1>
+            <p className="app-subtitle mt-0.5">
+              {companyName || "Company Accounting"} • As on{" "}
+              {new Date().toLocaleDateString("en-IN")}
+            </p>
           </div>
-          <div className="col-span-2 text-right">
-            {formatCurrency(grandTotal)}
+
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handlePrint}
+              className="app-btn-secondary flex items-center gap-2 min-h-9 px-3 text-[13px]"
+            >
+              <Printer size={15} className="text-(--text-soft)" />
+              <span>Print</span>
+            </button>
+            <button
+              onClick={handleExportPDF}
+              className="app-btn-secondary flex items-center gap-2 min-h-9 px-3 text-[13px]"
+            >
+              <FileText size={15} className="text-rose-600" />
+              <span>Export PDF</span>
+            </button>
+            <button
+              onClick={handleExportExcel}
+              className="app-btn-primary flex items-center gap-2 min-h-9 px-3 text-[13px]"
+            >
+              <FileSpreadsheet size={15} className="text-white" />
+              <span>Export Excel</span>
+            </button>
           </div>
-          <div className="col-span-2 text-right pr-4">-</div>
+        </div>
+
+        <div className="hidden print:block text-center mb-6">
+          <h1 className="text-xl font-bold">{companyName}</h1>
+          <h2 className="text-lg font-semibold text-gray-700">
+            Trial Balance Report
+          </h2>
+          <p className="text-sm text-gray-500">
+            As on {new Date().toLocaleDateString()}
+          </p>
+        </div>
+
+        <div className="app-panel p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 print:hidden">
+          <div className="relative flex-1 max-w-md">
+            <input
+              type="text"
+              placeholder="Search group or ledger..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="app-input w-full pl-9 pr-8 py-1.5 text-[13px]"
+            />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-(--text-faint) size-4" />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-0.5 rounded-full"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExpandAll}
+              className="app-btn-secondary flex items-center gap-1.5 min-h-8 px-2.5 text-[12px]"
+            >
+              <Maximize2 size={13} className="text-(--text-soft)" />
+              <span>Expand All</span>
+            </button>
+            <button
+              onClick={handleCollapseAll}
+              className="app-btn-secondary flex items-center gap-1.5 min-h-8 px-2.5 text-[12px]"
+            >
+              <Minimize2 size={13} className="text-(--text-soft)" />
+              <span>Collapse All</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="app-panel overflow-hidden print:border-none print:shadow-none">
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-12 bg-(--bg-subtle)/70 text-(--text-soft) font-extrabold text-[11px] uppercase tracking-widest p-3 border-b border-(--border-soft) min-w-3xl">
+              <div className="col-span-4 pl-4">Particulars</div>
+              <div className="col-span-2 text-right">Opening Balance</div>
+              <div className="col-span-2 text-right">Debit</div>
+              <div className="col-span-2 text-right">Credit</div>
+              <div className="col-span-2 text-right pr-4">Closing Balance</div>
+            </div>
+
+            <div className="divide-y divide-(--border-soft) min-w-3xl">
+              {groupWise &&
+                Object.values(groupWise).map((group) => (
+                  <GroupNode key={group.groupName} group={group} depth={0} />
+                ))}
+
+              {hasPL && (
+                <div className="grid grid-cols-12 p-3 bg-sky-50/50 hover:bg-sky-50 border-b border-sky-100 text-sky-900 transition-colors items-center">
+                  <div className="col-span-4 pl-4 font-bold flex items-center gap-2 text-[13px]">
+                    <DollarSign className="size-4 text-sky-600 shrink-0" />
+                    Profit &amp; Loss
+                  </div>
+                  <div className="col-span-2 text-right text-gray-400 font-mono text-[12px]">
+                    -
+                  </div>
+                  <div className="col-span-2 text-right font-bold tabular-nums text-sky-800 text-[13px]">
+                    {plDebit > 0 ? formatCurrency(plDebit) : ""}
+                  </div>
+                  <div className="col-span-2 text-right font-bold tabular-nums text-sky-800 text-[13px]">
+                    {plCredit > 0 ? formatCurrency(plCredit) : ""}
+                  </div>
+                  <div className="col-span-2 text-right text-gray-400 pr-4 font-mono text-[12px]">
+                    -
+                  </div>
+                </div>
+              )}
+
+              {hasDiff && (
+                <div className="grid grid-cols-12 p-3 bg-amber-50/60 hover:bg-amber-50 border-b border-amber-100 italic text-amber-900 transition-colors items-center">
+                  <div className="col-span-4 pl-4 font-bold text-amber-950 flex items-center gap-2 text-[13px]">
+                    <AlertCircle className="size-4 text-amber-600 shrink-0 not-italic" />
+                    Difference in opening balances
+                  </div>
+                  <div className="col-span-2 text-right text-gray-400 font-mono text-[12px]">
+                    -
+                  </div>
+                  <div className="col-span-2 text-right not-italic font-bold tabular-nums text-amber-800 text-[13px]">
+                    {diffDebit > 0 ? formatCurrency(diffDebit) : ""}
+                  </div>
+                  <div className="col-span-2 text-right not-italic font-bold tabular-nums text-amber-800 text-[13px]">
+                    {diffCredit > 0 ? formatCurrency(diffCredit) : ""}
+                  </div>
+                  <div className="col-span-2 text-right text-gray-400 pr-4 font-mono text-[12px]">
+                    -
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-12 bg-(--bg-subtle) text-(--text-strong) font-extrabold p-3.5 border-t border-(--border-strong) text-[13.5px] min-w-3xl items-center">
+              <div className="col-span-4 pl-4 flex items-center gap-2 uppercase tracking-wide">
+                <Scale className="size-4 text-(--brand)" />
+                Grand Total
+              </div>
+              <div className="col-span-2 text-right text-gray-400 font-mono text-[12px]">
+                -
+              </div>
+              <div className="col-span-2 text-right tabular-nums text-emerald-700 font-black">
+                {formatCurrency(grandTotal)}
+              </div>
+              <div className="col-span-2 text-right tabular-nums text-emerald-700 font-black">
+                {formatCurrency(grandTotal)}
+              </div>
+              <div className="col-span-2 text-right pr-4 text-gray-400 font-mono text-[12px]">
+                -
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

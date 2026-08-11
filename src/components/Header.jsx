@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";
@@ -12,6 +13,7 @@ const Header = ({
   toggleSidebar,
   toggleMobileSidebar,
   isMobileSidebarOpen,
+  onOpenPalette,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -40,14 +42,14 @@ const Header = ({
   }, []);
 
   const handleLogout = async () => {
-    const API_BASE_URL =
-      import.meta.env.VITE_CSAAP_URL || "https://csaapnodeapi.csaap.com";
-
     try {
-      await fetch(`${API_BASE_URL}/api/builder-companies/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
+      await fetch(
+        "https://csaapnodeapi.csaap.com/api/builder-companies/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        },
+      );
     } catch (error) {
       console.error("API Logout failed:", error);
     }
@@ -96,16 +98,21 @@ const Header = ({
           </button>
         )}
 
-        <div className="relative hidden sm:block">
+        <div
+          onClick={onOpenPalette}
+          className="relative hidden sm:flex items-center gap-2 px-3 py-1.5 bg-[#f8faf8] hover:bg-[#f0fdf4] border border-[#e2f2e9] hover:border-[#c6f1d6] rounded-xl text-[13px] font-medium text-[#475569] cursor-pointer w-64 transition-all duration-200 shadow-2xs group"
+          title="Open Command Palette (Ctrl+K)"
+        >
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            className="text-[#94a3b8] group-hover:text-[#00a651] transition-colors"
             size={16}
           />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="pl-9 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-medium text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-green-500/20 focus:border-green-300 focus:bg-white outline-none w-56 transition-all duration-200"
-          />
+          <span className="truncate flex-1 text-[#94a3b8] font-medium text-xs">
+            Search accounting (Ctrl+K)...
+          </span>
+          <kbd className="px-1.5 py-0.5 text-[10px] font-bold text-[#475569] bg-white border border-[#e2f2e9] rounded-md shadow-2xs font-mono">
+            Ctrl+K
+          </kbd>
         </div>
       </div>
 

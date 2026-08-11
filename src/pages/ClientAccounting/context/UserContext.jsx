@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const UserContext = createContext();
@@ -27,6 +28,10 @@ export const UserProvider = ({ children }) => {
           setUserId(userData.id);
         }
       } catch (error) {
+        console.log(
+          "Not authenticated:",
+          error.response?.data?.message || error.message,
+        );
         setUser(null);
         setUserId(null);
       } finally {

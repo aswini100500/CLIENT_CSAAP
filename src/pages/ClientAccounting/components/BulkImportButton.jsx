@@ -1,10 +1,14 @@
-import React, { useRef } from "react";
+import React from "react";
+import { useRef } from "react";
 import * as XLSX from "xlsx";
 import { Upload } from "lucide-react";
 
 const BulkImportButton = ({
   onDataParsed,
-  buttonLabel = "Import Excel/CSV",
+  onImport,
+  buttonLabel,
+  buttonText,
+  className,
 }) => {
   const fileInputRef = useRef(null);
 
@@ -22,12 +26,16 @@ const BulkImportButton = ({
         raw: false,
         dateNF: "yyyy-mm-dd",
       });
-      onDataParsed(data);
-
+      if (onDataParsed) onDataParsed(data);
+      if (onImport) onImport(data);
       if (fileInputRef.current) fileInputRef.current.value = "";
     };
     reader.readAsBinaryString(file);
   };
+
+  const label = buttonLabel || buttonText || "Import Excel / CSV";
+  const defaultClass =
+    "flex items-center gap-1.5 bg-[#f0fdf4] hover:bg-[#e1f9eb] text-[#00a651] px-3 py-1.5 rounded-lg border border-[#c6f1d6] transition-colors text-sm font-medium cursor-pointer shadow-xs";
 
   return (
     <div>
@@ -39,11 +47,12 @@ const BulkImportButton = ({
         className="hidden"
       />
       <button
-        onClick={() => fileInputRef.current.click()}
-        className="flex items-center gap-2 bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition text-sm font-medium"
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        className={className || defaultClass}
       >
         <Upload size={16} />
-        {buttonLabel}
+        <span>{label}</span>
       </button>
     </div>
   );

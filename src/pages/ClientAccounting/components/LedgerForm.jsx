@@ -1,20 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Save, RotateCcw, X } from "lucide-react";
+import {
+  Save,
+  RotateCcw,
+  X,
+  ArrowLeft,
+  Mail,
+  Globe,
+  Landmark,
+  FileText,
+} from "lucide-react";
 import Swal from "sweetalert2";
-import { useCompany } from "../context/CompanyContext";
 import useAuth from "../../../hooks/useAuth";
 
 const API_URL = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/group`;
 
-const demoGroups = [];
-
 const LedgerForm = () => {
-  const { companyId } = useCompany();
-  const { user, role: userRole } = useAuth();
+  const { user, role: userRole, companyId } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const role = userRole || "admin";
+  const listPath =
+    role === "employee"
+      ? "/employee/hr/accounting/client/listOfLedgers"
+      : "/accounting/client/listOfLedgers";
 
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,20 +99,10 @@ const LedgerForm = () => {
     const fetchGroups = async () => {
       try {
         const res = await axios.get(`${API_URL}/all/${companyId}`);
-
-        if (res.data && res.data.length > 0) {
-          setGroups(res.data);
-        } else {
-          throw new Error("No backend data");
-        }
+        setGroups(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
-        const stored = JSON.parse(localStorage.getItem("tallyGroups"));
-
-        if (stored && stored.length > 0) {
-          setGroups(stored);
-        } else {
-          setGroups(demoGroups);
-        }
+        console.error("Error fetching groups:", err);
+        setGroups([]);
       } finally {
         setLoading(false);
       }
@@ -175,6 +177,7 @@ const LedgerForm = () => {
       }));
     }
   }, [id]);
+  console.log(groups);
 
   const handleSubmit = async () => {
     if (!ledger.name || !ledger.under) {
@@ -204,19 +207,49 @@ const LedgerForm = () => {
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/update/${companyId}/${id}`,
           payload,
         );
-        Swal.fire("Success!", "Ledger updated successfully!", "success");
-        navigate("/accounting/client/listOfLedgers");
+        Swal.fire({
+          icon: "success",
+          title: "Ledger Updated Successfully",
+          text: "The ledger has been updated.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        navigate(listPath);
+        return;
       } else {
+        console.log("Creating ledger with payload:", payload);
         await axios.post(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`,
           payload,
         );
-        Swal.fire("Success!", "Ledger created successfully!", "success");
 
         const params = new URLSearchParams(window.location.search);
         const redirect = params.get("redirect");
         if (redirect) {
+          Swal.fire({
+            icon: "success",
+            title: "Ledger Created Successfully",
+            text: "The ledger has been created.",
+            timer: 1500,
+            showConfirmButton: false,
+          });
           navigate(redirect);
+          return;
+        }
+
+        const result = await Swal.fire({
+          icon: "success",
+          title: "Ledger Created Successfully",
+          text: "The ledger has been saved. Would you like to create another ledger?",
+          showCancelButton: true,
+          confirmButtonColor: "#2563eb",
+          cancelButtonColor: "#6b7280",
+          confirmButtonText: "Create Another",
+          cancelButtonText: "Go to Ledger List",
+        });
+
+        if (!result.isConfirmed) {
+          navigate(listPath);
           return;
         }
       }
@@ -254,110 +287,148 @@ const LedgerForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f7fa] p-4 font-[monospace]">
-      <div className="max-w-6xl mx-auto bg-white shadow-md rounded-lg border border-gray-300 p-6">
-        <h2 className="text-center text-lg font-bold text-blue-800 mb-4">
-          {id ? "Ledger Alteration" : "Ledger Creation"}
-        </h2>
+    <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans">
+      <div className="max-w-6xl mx-auto bg-white app-panel border border-[#e2f2e9]/80 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+        <div className="flex justify-between items-center border-b border-[#e2f2e9] pb-5 mb-8">
+          <h2 className="app-title text-xl font-extrabold text-[#042f2e]">
+            {id ? "Ledger Alteration" : "Ledger Creation"}
+          </h2>
+          <button
+            onClick={() => navigate(listPath)}
+            className="flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors text-sm font-medium cursor-pointer"
+          >
+            <ArrowLeft size={16} /> Back to Ledger List
+          </button>
+        </div>
 
-        <div className="grid grid-cols-2 gap-6 border-b pb-4">
-          <div>
-            <label className="block text-sm mb-1">Name :</label>
-            <input
-              type="text"
-              value={ledger.name}
-              onChange={(e) => handleLedgerChange("name", e.target.value)}
-              className="border px-2 py-1 w-full"
-            />
-
-            <label className="block text-sm mt-2">(alias) :</label>
-            <input
-              type="text"
-              value={ledger.alias}
-              onChange={(e) => handleLedgerChange("alias", e.target.value)}
-              className="border px-2 py-1 w-full"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm mb-1">Opening Balance :</label>
-            <div className="flex gap-2">
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+            <FileText size={16} className="text-[#00a651]" /> Identity &
+            Grouping
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Name :
+              </label>
               <input
-                type="number"
-                value={ledger.openingBalance}
-                onChange={(e) =>
-                  handleLedgerChange("openingBalance", e.target.value)
-                }
-                className="border px-2 py-1 flex-1"
-                placeholder="0.00"
+                type="text"
+                value={ledger.name}
+                onChange={(e) => handleLedgerChange("name", e.target.value)}
+                className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium"
+                placeholder="Enter ledger name"
               />
-              <select
-                value={ledger.type}
-                onChange={(e) => handleLedgerChange("type", e.target.value)}
-                className="border px-2 py-1 w-24 bg-white"
-              >
-                <option value="Debit">Dr</option>
-                <option value="Credit">Cr</option>
-              </select>
+
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                (alias) :
+              </label>
+              <input
+                type="text"
+                value={ledger.alias}
+                onChange={(e) => handleLedgerChange("alias", e.target.value)}
+                className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium"
+                placeholder="Enter alias"
+              />
+            </div>
+
+            <div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Opening Balance :
+              </label>
+              <div className="flex gap-2 mt-1">
+                <input
+                  type="number"
+                  value={ledger.openingBalance}
+                  onChange={(e) =>
+                    handleLedgerChange("openingBalance", e.target.value)
+                  }
+                  className="app-input flex-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium"
+                  placeholder="0.00"
+                />
+                <select
+                  value={ledger.type}
+                  onChange={(e) => handleLedgerChange("type", e.target.value)}
+                  className="app-input w-28 bg-white border-[#c8ddcd]! text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] cursor-pointer font-medium"
+                >
+                  <option value="Debit">Dr</option>
+                  <option value="Credit">Cr</option>
+                </select>
+              </div>
             </div>
           </div>
+
+          <div className="mt-5 pt-5 border-t border-[#cbe0d2]">
+            <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+              Under Group :
+            </label>
+
+            {loading ? (
+              <p className="text-slate-500 text-sm italic mt-2">
+                Loading groups...
+              </p>
+            ) : (
+              <select
+                value={ledger.under}
+                onChange={(e) => handleLedgerChange("under", e.target.value)}
+                className="app-input w-full md:w-1/2 mt-1.5 bg-white border-[#c8ddcd]! text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] cursor-pointer font-medium"
+              >
+                <option value="">Select a group</option>
+
+                {groups.map((g) => (
+                  <option
+                    key={g.id}
+                    value={JSON.stringify({ id: g.id, name: g.groupName })}
+                  >
+                    {g.groupName}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
         </div>
 
-        <div className="mt-3 border-b pb-4">
-          <label className="block text-sm mb-1">Under :</label>
-
-          {loading ? (
-            <p className="text-gray-500 text-sm">Loading groups...</p>
-          ) : (
-            <select
-              value={ledger.under}
-              onChange={(e) => handleLedgerChange("under", e.target.value)}
-              className="border px-2 py-1 w-1/2"
-            >
-              <option value="">Select</option>
-
-              {groups.map((g) => (
-                <option
-                  key={g.id}
-                  value={JSON.stringify({ id: g.id, name: g.groupName })}
-                >
-                  {g.groupName}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 mt-4 gap-6 border-b pb-4">
-          <div>
-            <h3 className="font-semibold text-blue-700 mb-2">
-              Mailing Details
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)]">
+            <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+              <Mail size={16} className="text-[#00a651]" /> Mailing Details
             </h3>
 
-            <label className="block text-sm mb-1">Mailing Name :</label>
+            <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+              Mailing Name :
+            </label>
             <input
               type="text"
               value={ledger.mailingName}
               onChange={(e) =>
                 handleLedgerChange("mailingName", e.target.value)
               }
-              className="border px-2 py-1 w-full"
+              className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium"
+              placeholder="Enter mailing name"
             />
 
-            <label className="block text-sm mb-1 mt-2">Address :</label>
+            <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+              Address :
+            </label>
             <textarea
               value={ledger.address}
               onChange={(e) => handleLedgerChange("address", e.target.value)}
-              className="border px-2 py-1 w-full h-16"
+              className="app-input w-full mt-1 h-20 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium"
+              placeholder="Enter address details"
             />
           </div>
 
-          <div>
-            <label className="block text-sm mb-1">State :</label>
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)]">
+            <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+              <Globe size={16} className="text-[#00a651]" /> Location & Region
+            </h3>
+
+            <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+              State :
+            </label>
             <select
               value={ledger.state}
               onChange={(e) => handleLedgerChange("state", e.target.value)}
-              className="border px-2 py-1 w-full"
+              className="app-input w-full mt-1 bg-white border-[#c8ddcd]! text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] cursor-pointer font-medium"
             >
               <option>Not Applicable</option>
               <option>Andhra Pradesh</option>
@@ -398,74 +469,151 @@ const LedgerForm = () => {
               <option>Puducherry</option>
             </select>
 
-            <label className="block text-sm mb-1 mt-2">Country :</label>
+            <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+              Country :
+            </label>
             <input
               type="text"
               value={ledger.country}
               onChange={(e) => handleLedgerChange("country", e.target.value)}
-              className="border px-2 py-1 w-full"
+              className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium"
+              placeholder="Enter country"
             />
 
-            <label className="block text-sm mb-1 mt-2">Pincode :</label>
+            <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+              Pincode :
+            </label>
             <input
               type="text"
               value={ledger.pincode}
               onChange={(e) => handleLedgerChange("pincode", e.target.value)}
-              className="border px-2 py-1 w-full"
+              className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium"
+              placeholder="Enter pincode"
             />
           </div>
         </div>
 
-        <div className="mt-4 border-b pb-4">
-          <h3 className="font-semibold text-blue-700 mb-2">
-            Beneficiary Details
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+            <Landmark size={16} className="text-[#00a651]" /> Beneficiary
+            Details
           </h3>
 
-          <div className="flex items-center gap-2">
-            <label>Provide Beneficiary details :</label>
+          <div className="flex items-center gap-3 mt-2">
+            <label className="app-label block text-xs font-bold text-slate-800">
+              Provide Beneficiary details :
+            </label>
             <select
               value={ledger.provideBankDetails}
               onChange={(e) => {
-                handleLedgerChange("provideBankDetails", e.target.value);
-                if (e.target.value === "Yes") setShowBankPopup(true);
+                const val = e.target.value;
+                handleLedgerChange("provideBankDetails", val);
+                if (val === "Yes") {
+                  setShowBankPopup(true);
+                } else {
+                  setBankDetails({
+                    bankName: "",
+                    branch: "",
+                    accountNumber: "",
+                    ifsc: "",
+                  });
+                }
               }}
-              className="border px-2 py-1"
+              className="app-input bg-white border-[#c8ddcd]! text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] cursor-pointer py-1 px-3 min-h-9 font-medium"
             >
               <option>No</option>
               <option>Yes</option>
             </select>
           </div>
+
+          {ledger.provideBankDetails === "Yes" && (
+            <div className="mt-4 p-4 bg-white border border-[#cbe0d2] rounded-xl shadow-xs">
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-xs font-bold text-[#042f2e] uppercase tracking-wider flex items-center gap-1.5">
+                  Saved Bank Details
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowBankPopup(true)}
+                  className="text-xs font-bold text-[#00a651] hover:underline cursor-pointer flex items-center gap-1"
+                >
+                  Edit Bank Details
+                </button>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                <div>
+                  <span className="block text-[10px] font-bold text-slate-500 uppercase">
+                    Bank Name
+                  </span>
+                  <span className="font-semibold text-slate-800">
+                    {bankDetails.bankName || "—"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-slate-500 uppercase">
+                    Account Number
+                  </span>
+                  <span className="font-semibold text-slate-800">
+                    {bankDetails.accountNumber || "—"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-slate-500 uppercase">
+                    IFSC Code
+                  </span>
+                  <span className="font-semibold text-slate-800">
+                    {bankDetails.ifsc || "—"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-slate-500 uppercase">
+                    Branch
+                  </span>
+                  <span className="font-semibold text-slate-800">
+                    {bankDetails.branch || "—"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="mt-4">
-          <h3 className="font-semibold text-blue-700 mb-2">
-            Tax Registration Details
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+            <FileText size={16} className="text-[#00a651]" /> Tax Registration
+            Details
           </h3>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
             <div>
-              <label>PAN/IT No. :</label>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                PAN/IT No. :
+              </label>
               <input
                 type="text"
                 value={ledger.pan}
                 onChange={(e) => handleLedgerChange("pan", e.target.value)}
-                placeholder="eg:ABCDE1234F"
+                placeholder="eg: ABCDE1234F"
                 maxLength={10}
-                className={`border px-2 py-1 w-full ${errors.pan ? "border-red-500" : ""}`}
+                className={`app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium ${errors.pan ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
               />
               {errors.pan && (
-                <p className="text-red-500 text-[12px] mt-1">{errors.pan}</p>
+                <p className="text-red-500 text-[11px] mt-1 font-semibold">
+                  {errors.pan}
+                </p>
               )}
             </div>
 
             <div>
-              <label>Registration Type :</label>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Registration Type :
+              </label>
               <select
                 value={ledger.registrationType}
                 onChange={(e) =>
                   handleLedgerChange("registrationType", e.target.value)
                 }
-                className="border px-2 py-1 w-full"
+                className="app-input w-full mt-1 bg-white border-[#c8ddcd]! text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] cursor-pointer font-medium"
               >
                 <option>Regular</option>
                 <option>Composition</option>
@@ -474,26 +622,32 @@ const LedgerForm = () => {
             </div>
 
             <div>
-              <label>GSTIN/UIN :</label>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                GSTIN/UIN :
+              </label>
               <input
                 type="text"
                 value={ledger.gstin}
                 onChange={(e) => handleLedgerChange("gstin", e.target.value)}
-                placeholder="eg:27AAAAA0000A1Z5"
+                placeholder="eg: 27AAAAA0000A1Z5"
                 maxLength={15}
-                className={`border px-2 py-1 w-full ${errors.gstin ? "border-red-500" : ""}`}
+                className={`app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium ${errors.gstin ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
               />
               {errors.gstin && (
-                <p className="text-red-500 text-[10px] mt-1">{errors.gstin}</p>
+                <p className="text-red-500 text-[11px] mt-1 font-semibold">
+                  {errors.gstin}
+                </p>
               )}
             </div>
 
             <div>
-              <label>Alter additional GST details :</label>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Alter additional GST details :
+              </label>
               <select
                 value={ledger.alterGst}
                 onChange={(e) => handleLedgerChange("alterGst", e.target.value)}
-                className="border px-2 py-1 w-full bg-yellow-100"
+                className="app-input w-full mt-1 bg-[#fffdf5] border-[#c8ddcd]! text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] cursor-pointer font-medium"
               >
                 <option>No</option>
                 <option>Yes</option>
@@ -502,19 +656,19 @@ const LedgerForm = () => {
           </div>
         </div>
 
-        <div className="mt-6 flex justify-center gap-4">
+        <div className="mt-8 flex justify-end gap-4 border-t border-[#e2f2e9] pt-6">
           <button
             onClick={handleSubmit}
-            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 flex items-center gap-2"
+            className="app-btn-primary flex items-center justify-center gap-2 cursor-pointer shadow-md min-w-30 transition-all hover:scale-[1.01] active:scale-[0.99]"
           >
-            <Save size={16} /> Save
+            <Save size={16} /> Save Ledger
           </button>
 
           <button
             onClick={() => window.location.reload()}
-            className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 flex items-center gap-2"
+            className="app-btn-secondary flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl cursor-pointer hover:bg-slate-100 hover:text-slate-800 min-w-30 transition-all"
           >
-            <RotateCcw size={16} /> Reset
+            <RotateCcw size={16} /> Reset Form
           </button>
 
           <button
@@ -527,7 +681,7 @@ const LedgerForm = () => {
                 navigate(-1);
               }
             }}
-            className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 flex items-center gap-2"
+            className="app-btn-secondary flex items-center justify-center gap-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl cursor-pointer hover:bg-rose-100 hover:text-rose-800 hover:border-rose-300 min-w-30 transition-all"
           >
             <X size={16} /> Cancel
           </button>
@@ -535,56 +689,68 @@ const LedgerForm = () => {
       </div>
 
       {showBankPopup && (
-        <div className="fixed inset-0 backdrop-blur bg-black/30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-md shadow-xl w-100 p-6 border border-gray-300">
-            <h3 className="text-lg font-semibold text-blue-700 mb-3">
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 border border-[#e2f2e9]">
+            <h3 className="text-lg font-bold text-[#042f2e] border-b border-[#e2f2e9] pb-3 mb-4">
               Bank Details
             </h3>
 
-            <label>Bank Name :</label>
+            <label className="app-label block text-xs font-bold text-slate-700 mb-1">
+              Bank Name :
+            </label>
             <input
               type="text"
               value={bankDetails.bankName}
               onChange={(e) => handleBankChange("bankName", e.target.value)}
-              className="border w-full px-2 py-1 mb-2"
+              className="app-input w-full mt-1 border-[#e2f2e9] focus:border-[#00a651]"
+              placeholder="Enter bank name"
             />
 
-            <label>Account Number :</label>
+            <label className="app-label block text-xs font-bold text-slate-700 mb-1 mt-3">
+              Account Number :
+            </label>
             <input
               type="text"
               value={bankDetails.accountNumber}
               onChange={(e) =>
                 handleBankChange("accountNumber", e.target.value)
               }
-              className="border w-full px-2 py-1 mb-2"
+              className="app-input w-full mt-1 border-[#e2f2e9] focus:border-[#00a651]"
+              placeholder="Enter account number"
             />
 
-            <label>IFSC Code :</label>
+            <label className="app-label block text-xs font-bold text-slate-700 mb-1 mt-3">
+              IFSC Code :
+            </label>
             <input
               type="text"
               value={bankDetails.ifsc}
               onChange={(e) => handleBankChange("ifsc", e.target.value)}
-              className="border w-full px-2 py-1 mb-2"
+              className="app-input w-full mt-1 border-[#e2f2e9] focus:border-[#00a651]"
+              placeholder="Enter IFSC code"
             />
 
-            <label>Branch :</label>
+            <label className="app-label block text-xs font-bold text-slate-700 mb-1 mt-3">
+              Branch :
+            </label>
             <input
               type="text"
               value={bankDetails.branch}
               onChange={(e) => handleBankChange("branch", e.target.value)}
-              className="border w-full px-2 py-1 mb-6"
+              className="app-input w-full mt-1 mb-6 border-[#e2f2e9] focus:border-[#00a651]"
+              placeholder="Enter branch name"
             />
 
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-end gap-3 border-t border-[#e2f2e9] pt-4">
               <button
-                className="bg-green-600 text-white px-4 py-1 rounded"
+                className="app-btn-primary py-1 px-4 min-h-9 rounded-lg text-xs cursor-pointer shadow-sm"
                 onClick={() => setShowBankPopup(false)}
               >
                 Save
               </button>
 
               <button
-                className="bg-gray-500 text-white px-4 py-1 rounded"
+                className="app-btn-secondary py-1 px-4 min-h-9 rounded-lg text-xs bg-slate-50 border border-slate-200 text-slate-700 cursor-pointer hover:bg-slate-100 hover:text-slate-800"
                 onClick={() => {
                   setShowBankPopup(false);
                   handleLedgerChange("provideBankDetails", "No");

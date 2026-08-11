@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
+import { useState, useEffect } from "react";
 
 import {
   FaHome,
@@ -28,7 +30,6 @@ const HomeSection = ({
   attachment,
   setAttachment,
   onGenerate,
-
   isEditMode = false,
   editingProjectId = null,
   constants = {},
@@ -77,7 +78,6 @@ const HomeSection = ({
     const savedName = localStorage.getItem("latestProjectName");
     if (saved) setGeneratedProjectId(saved);
     if (savedName) setLastCreatedProjectName(savedName);
-
     if (revenuePlots && plotsData.length < revenuePlots) {
       const newPlots = [...plotsData];
       for (let i = plotsData.length; i < revenuePlots; i++) {
@@ -109,7 +109,6 @@ const HomeSection = ({
       setPlotsData(newPlots);
     } else if (target < plotsData.length) {
       setPlotsData(plotsData.slice(0, target));
-
       setPlotStatuses((prev) => {
         const next = {};
         for (let i = 0; i < target; i++) {
@@ -138,7 +137,6 @@ const HomeSection = ({
     const updatedPlotsData = [...plotsData];
     updatedPlotsData[index] = { ...updatedPlotsData[index], [field]: value };
     setPlotsData(updatedPlotsData);
-
     setPlotStatuses((prev) => ({
       ...prev,
       [index]: { status: "idle", message: "" },
@@ -585,6 +583,9 @@ const HomeSection = ({
         const projectExists = await checkProjectExists(generatedProjectId);
 
         if (!projectExists) {
+          console.log(
+            `Project ${generatedProjectId} not found, creating new project...`,
+          );
           try {
             const result = await createProjectAPI(projectData);
 

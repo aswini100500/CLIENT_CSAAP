@@ -1,4 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
+import {
+  Layers,
+  Plus,
+  Search,
+  Trash2,
+  X,
+  Boxes,
+} from "lucide-react";
 
 export default function ItemCategories() {
   const [categories, setCategories] = useState([
@@ -7,7 +16,7 @@ export default function ItemCategories() {
       name: "Raw Materials",
       description: "Primary materials used in production",
       items: 24,
-      value: "₹15,42,800",
+      value: "₹15,42,800.00",
       parent: null,
       isActive: true,
       products: [
@@ -15,7 +24,7 @@ export default function ItemCategories() {
           id: 1,
           name: "Steel Rods",
           code: "STM001",
-          price: "₹1,200",
+          price: "₹1,200.00",
           stock: 150,
           unit: "kg",
         },
@@ -23,7 +32,7 @@ export default function ItemCategories() {
           id: 2,
           name: "Copper Wires",
           code: "COP002",
-          price: "₹850",
+          price: "₹850.00",
           stock: 200,
           unit: "meters",
         },
@@ -34,7 +43,7 @@ export default function ItemCategories() {
       name: "Finished Goods",
       description: "Completed products ready for sale",
       items: 18,
-      value: "₹28,75,600",
+      value: "₹28,75,600.00",
       parent: null,
       isActive: true,
       products: [
@@ -42,7 +51,7 @@ export default function ItemCategories() {
           id: 3,
           name: "LED Bulbs",
           code: "LED001",
-          price: "₹250",
+          price: "₹250.00",
           stock: 500,
           unit: "pcs",
         },
@@ -50,7 +59,7 @@ export default function ItemCategories() {
           id: 4,
           name: "Switches",
           code: "SWT001",
-          price: "₹180",
+          price: "₹180.00",
           stock: 300,
           unit: "pcs",
         },
@@ -61,7 +70,7 @@ export default function ItemCategories() {
       name: "Semi-Finished Goods",
       description: "Partially completed products",
       items: 12,
-      value: "₹9,84,300",
+      value: "₹9,84,300.00",
       parent: null,
       isActive: true,
       products: [
@@ -69,7 +78,7 @@ export default function ItemCategories() {
           id: 5,
           name: "Circuit Boards",
           code: "CIR001",
-          price: "₹1,500",
+          price: "₹1,500.00",
           stock: 80,
           unit: "pcs",
         },
@@ -80,7 +89,7 @@ export default function ItemCategories() {
       name: "Consumables",
       description: "Items consumed during operations",
       items: 35,
-      value: "₹3,42,100",
+      value: "₹3,42,100.00",
       parent: null,
       isActive: true,
       products: [
@@ -88,7 +97,7 @@ export default function ItemCategories() {
           id: 6,
           name: "Lubricants",
           code: "LUB001",
-          price: "₹450",
+          price: "₹450.00",
           stock: 100,
           unit: "liters",
         },
@@ -99,7 +108,7 @@ export default function ItemCategories() {
       name: "Steel",
       description: "Various steel products and raw materials",
       items: 8,
-      value: "₹12,45,000",
+      value: "₹12,45,000.00",
       parent: 1,
       isActive: true,
       products: [
@@ -107,7 +116,7 @@ export default function ItemCategories() {
           id: 7,
           name: "Steel Sheets",
           code: "STS001",
-          price: "₹2,800",
+          price: "₹2,800.00",
           stock: 50,
           unit: "sheets",
         },
@@ -127,13 +136,10 @@ export default function ItemCategories() {
     categoryId: null,
   });
 
-  const mainCategories = categories.filter((cat) => cat.parent === null);
-  const subCategories = categories.filter((cat) => cat.parent !== null);
-
   const filteredCategories = categories.filter(
     (cat) =>
       cat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cat.description.toLowerCase().includes(searchTerm.toLowerCase()),
+      cat.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleAddProduct = () => {
@@ -144,8 +150,8 @@ export default function ItemCategories() {
             id: category.products.length + 1,
             name: newProduct.name,
             code: newProduct.code,
-            price: newProduct.price,
-            stock: parseInt(newProduct.stock),
+            price: newProduct.price.startsWith("₹") ? newProduct.price : `₹${newProduct.price}`,
+            stock: parseInt(newProduct.stock) || 0,
             unit: newProduct.unit,
           };
           return {
@@ -170,595 +176,301 @@ export default function ItemCategories() {
     }
   };
 
-  const toggleCategoryStatus = (id) => {
-    setCategories(
-      categories.map((cat) =>
-        cat.id === id ? { ...cat, isActive: !cat.isActive } : cat,
-      ),
-    );
-  };
-
-  const getSubCategories = (parentId) => {
-    return categories.filter((cat) => cat.parent === parentId);
-  };
-
-  const exportToCSV = () => {
-    const csvData = [];
-
-    csvData.push([
-      "Category Name",
-      "Product Name",
-      "Product Code",
-      "Price",
-      "Stock",
-      "Unit",
-    ]);
-
-    categories.forEach((category) => {
-      if (category.products.length > 0) {
-        category.products.forEach((product) => {
-          csvData.push([
-            category.name,
-            product.name,
-            product.code,
-            product.price,
-            product.stock,
-            product.unit,
-          ]);
-        });
-      } else {
-        csvData.push([category.name, "No Products", "", "", "", ""]);
+  const handleDeleteProduct = (categoryId, productId) => {
+    const updatedCategories = categories.map((category) => {
+      if (category.id === categoryId) {
+        return {
+          ...category,
+          products: category.products.filter((p) => p.id !== productId),
+          items: category.items - 1,
+        };
       }
+      return category;
     });
-
-    const csvContent = csvData.map((row) => row.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "categories_and_products.csv";
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
-
-  const printData = () => {
-    const printContent = document.getElementById("printable-content");
-    const printWindow = window.open("", "_blank");
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Categories and Products Report</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            .header { text-align: center; margin-bottom: 30px; }
-            .category { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; }
-            .category-name { font-weight: bold; font-size: 16px; margin-bottom: 10px; }
-            .product-table { width: 100%; border-collapse: collapse; }
-            .product-table th, .product-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-            .product-table th { background-color: #f5f5f5; }
-            .no-products { color: #666; font-style: italic; }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <h1>Categories and Products Report</h1>
-            <p>Generated on ${new Date().toLocaleDateString()}</p>
-          </div>
-          ${printContent.innerHTML}
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
+    setCategories(updatedCategories);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">
-                Item Categories
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Manage categories and their products
-              </p>
+    <div className="erp-root app-shell min-h-screen p-6 font-sans">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header Bar */}
+        <div className="bg-white app-panel border border-[#e2f2e9] rounded-2xl p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="size-11 rounded-2xl bg-[#ecfdf5] border border-[#c6f1d6] flex items-center justify-center shrink-0">
+              <Layers className="size-6 text-[#00a651]" />
             </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setIsAddingProduct(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Add Product
-              </button>
-              <button
-                onClick={printData}
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                  />
-                </svg>
-                Print
-              </button>
-              <button
-                onClick={exportToCSV}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                Export CSV
-              </button>
+            <div>
+              <h1 className="app-title text-xl font-extrabold text-[#042f2e]">
+                Stock Ledger & Categories
+              </h1>
+              <p className="app-subtitle text-xs md:text-sm text-[#475569] font-medium mt-0.5">
+                Manage item category hierarchy and linked product inventory catalog.
+              </p>
             </div>
           </div>
 
-          <div className="mt-6">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search categories or products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <svg
-                className="w-5 h-5 text-gray-400 absolute left-3 top-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                setNewProduct((prev) => ({
+                  ...prev,
+                  categoryId: categories[0]?.id || 1,
+                }));
+                setIsAddingProduct(true);
+              }}
+              className="app-btn-primary flex items-center gap-1.5 cursor-pointer"
+            >
+              <Plus className="size-4" /> Add Product
+            </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm border">
-              <div className="p-4 border-b bg-gray-50">
-                <h2 className="font-semibold text-gray-800">
-                  All Categories ({filteredCategories.length})
-                </h2>
-              </div>
-
-              <div className="divide-y">
-                {filteredCategories.map((category) => (
-                  <div
-                    key={category.id}
-                    className={`p-4 hover:bg-blue-50 cursor-pointer transition-colors ${
-                      selectedCategory?.id === category.id
-                        ? "bg-blue-50 border-l-4 border-l-blue-600"
-                        : ""
-                    }`}
-                    onClick={() => setSelectedCategory(category)}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex items-start gap-3">
-                        <div
-                          className={`w-3 h-3 rounded-full mt-2 ${
-                            category.isActive ? "bg-green-500" : "bg-gray-400"
-                          }`}
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-                            {category.name}
-                            {category.parent && (
-                              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                                Sub-category
-                              </span>
-                            )}
-                          </h3>
-                          <p className="text-gray-600 text-sm mt-1">
-                            {category.description}
-                          </p>
-
-                          {category.products.length > 0 && (
-                            <div className="mt-3">
-                              <div className="text-xs font-semibold text-gray-500 mb-2">
-                                PRODUCTS:
-                              </div>
-                              <div className="space-y-2">
-                                {category.products.map((product) => (
-                                  <div
-                                    key={product.id}
-                                    className="flex justify-between items-center bg-gray-50 p-2 rounded"
-                                  >
-                                    <div>
-                                      <div className="font-medium text-sm">
-                                        {product.name}
-                                      </div>
-                                      <div className="text-xs text-gray-500">
-                                        Code: {product.code}
-                                      </div>
-                                    </div>
-                                    <div className="text-right">
-                                      <div className="text-sm font-semibold">
-                                        {product.price}
-                                      </div>
-                                      <div className="text-xs text-gray-500">
-                                        Stock: {product.stock} {product.unit}
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {category.parent && (
-                            <p className="text-xs text-gray-500 mt-1">
-                              Parent:{" "}
-                              {
-                                categories.find((c) => c.id === category.parent)
-                                  ?.name
-                              }
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <div className="font-semibold text-gray-800">
-                              {category.items} items
-                            </div>
-                            <div className="text-green-600 font-medium">
-                              {category.value}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* Search Bar */}
+        <div className="app-panel p-4 border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+          <div className="relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8] size-4" />
+            <input
+              type="text"
+              placeholder="Search categories by name or description..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="app-input w-full pl-10 pr-4 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white placeholder-[#94a3b8] focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] outline-none"
+            />
           </div>
+        </div>
 
-          <div className="space-y-6">
-            {selectedCategory && (
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h3 className="font-semibold text-lg text-gray-800 mb-4">
-                  Category Details
-                </h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-sm text-gray-600">
-                      Category Name
-                    </label>
-                    <div className="font-medium text-gray-800">
-                      {selectedCategory.name}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">Description</label>
-                    <div className="font-medium text-gray-800">
-                      {selectedCategory.description}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm text-gray-600">
-                        Items Count
-                      </label>
-                      <div className="font-medium text-gray-800">
-                        {selectedCategory.items}
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-sm text-gray-600">
-                        Total Value
-                      </label>
-                      <div className="font-medium text-green-600">
-                        {selectedCategory.value}
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">Status</label>
-                    <div
-                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        selectedCategory.isActive
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {selectedCategory.isActive ? "Active" : "Inactive"}
-                    </div>
-                  </div>
+        {/* Categories Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCategories.map((category) => (
+            <div
+              key={category.id}
+              className={`app-panel overflow-hidden border rounded-2xl bg-white shadow-2xs transition-all duration-200 ${
+                selectedCategory?.id === category.id
+                  ? "border-[#00a651] ring-2 ring-[rgba(0,166,81,0.16)]"
+                  : "border-[#e2f2e9] hover:border-[#c6f1d6]"
+              }`}
+            >
+              <div className="app-section-bar px-5 py-4 bg-[#f0fdf4]/60 border-b border-[#e2f2e9] flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Boxes className="size-4 text-[#00a651]" />
+                  <h3 className="app-heading text-sm font-bold text-[#042f2e]">
+                    {category.name}
+                  </h3>
+                </div>
+                <span className="text-xs font-semibold text-[#00a651] bg-[#f0fdf4] px-2.5 py-1 rounded-lg border border-[#c6f1d6]">
+                  {category.items} items
+                </span>
+              </div>
+
+              <div className="p-5 space-y-4">
+                <p className="text-xs text-[#475569] font-medium leading-relaxed">
+                  {category.description}
+                </p>
+
+                <div className="flex items-center justify-between pt-3 border-t border-[#e2f2e9] text-xs">
+                  <span className="text-[#64748b] font-medium">Category Valuation:</span>
+                  <span className="font-bold text-[#042f2e] text-sm">{category.value}</span>
                 </div>
 
-                <div className="mt-6">
-                  <h4 className="font-semibold text-gray-800 mb-3">
-                    Products in this Category
-                  </h4>
-                  {selectedCategory.products.length > 0 ? (
+                {/* Sub Products List Preview */}
+                {category.products && category.products.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-[#e2f2e9] space-y-2">
+                    <p className="text-xs font-bold text-[#475569] uppercase tracking-wider">
+                      Linked Products
+                    </p>
                     <div className="space-y-2">
-                      {selectedCategory.products.map((product) => (
+                      {category.products.map((prod) => (
                         <div
-                          key={product.id}
-                          className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                          key={prod.id}
+                          className="flex items-center justify-between p-3 rounded-xl bg-[#f8faf8] border border-[#e2f2e9] text-xs"
                         >
                           <div>
-                            <div className="font-medium text-sm">
-                              {product.name}
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              {product.code}
-                            </div>
+                            <span className="font-semibold text-slate-900 block">{prod.name}</span>
+                            <span className="text-xs text-slate-500 font-medium mt-0.5 block">
+                              Code: {prod.code} | Stock: {prod.stock} {prod.unit}
+                            </span>
                           </div>
-                          <div className="text-right">
-                            <div className="text-sm font-semibold">
-                              {product.price}
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              {product.stock} {product.unit}
-                            </div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-[#00a651] text-xs">{prod.price}</span>
+                            <button
+                              onClick={() => handleDeleteProduct(category.id, prod.id)}
+                              className="text-slate-400 hover:text-rose-600 transition-colors p-1"
+                              title="Delete Product"
+                            >
+                              <Trash2 className="size-3.5" />
+                            </button>
                           </div>
                         </div>
                       ))}
                     </div>
-                  ) : (
-                    <div className="text-center py-4 text-gray-500">
-                      No products in this category
-                    </div>
-                  )}
-                </div>
+                  </div>
+                )}
 
-                <div className="mt-6 flex gap-2">
-                  <button
-                    onClick={() => {
-                      setNewProduct({
-                        ...newProduct,
-                        categoryId: selectedCategory.id,
-                      });
-                      setIsAddingProduct(true);
-                    }}
-                    className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    Add Product
-                  </button>
-                </div>
-              </div>
-            )}
-
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="font-semibold text-lg text-gray-800 mb-4">
-                Quick Stats
-              </h3>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total Categories</span>
-                  <span className="font-semibold">{categories.length}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Active Categories</span>
-                  <span className="font-semibold text-green-600">
-                    {categories.filter((c) => c.isActive).length}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total Products</span>
-                  <span className="font-semibold">
-                    {categories.reduce(
-                      (total, cat) => total + cat.products.length,
-                      0,
-                    )}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Main Categories</span>
-                  <span className="font-semibold">{mainCategories.length}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Sub-categories</span>
-                  <span className="font-semibold">{subCategories.length}</span>
-                </div>
+                <button
+                  onClick={() => {
+                    setNewProduct({
+                      name: "",
+                      code: "",
+                      price: "",
+                      stock: "",
+                      unit: "",
+                      categoryId: category.id,
+                    });
+                    setIsAddingProduct(true);
+                  }}
+                  className="w-full mt-3 py-2.5 text-xs font-bold text-[#00a651] bg-[#f0fdf4] border border-[#c6f1d6] rounded-xl hover:bg-[#00a651] hover:text-white transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <Plus className="size-4" /> Add Product to {category.name}
+                </button>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      </div>
 
-      <div id="printable-content" className="hidden">
-        {categories.map((category) => (
-          <div key={category.id} className="category">
-            <div className="category-name">{category.name}</div>
-            <div>{category.description}</div>
-            {category.products.length > 0 ? (
-              <table className="product-table">
-                <thead>
-                  <tr>
-                    <th>Product Name</th>
-                    <th>Code</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Unit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {category.products.map((product) => (
-                    <tr key={product.id}>
-                      <td>{product.name}</td>
-                      <td>{product.code}</td>
-                      <td>{product.price}</td>
-                      <td>{product.stock}</td>
-                      <td>{product.unit}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="no-products">No products in this category</div>
-            )}
-          </div>
-        ))}
-      </div>
+        {/* Modal Overlay */}
+        {isAddingProduct && (
+          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+            <div className="bg-white border border-[#e2f2e9] rounded-2xl shadow-xl w-full max-w-lg overflow-hidden space-y-4">
+              <div className="px-6 py-4 bg-[#f0fdf4]/60 border-b border-[#e2f2e9] flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="size-9 rounded-xl bg-[#ecfdf5] border border-[#c6f1d6] flex items-center justify-center">
+                    <Plus className="size-4 text-[#00a651]" />
+                  </div>
+                  <h3 className="text-sm font-bold text-[#042f2e]">
+                    Add New Product
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setIsAddingProduct(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-[#042f2e] hover:bg-slate-100 transition-all"
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
 
-      {isAddingProduct && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Add New Product
-              </h3>
-              <div className="space-y-4">
+              <div className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Product Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={newProduct.name}
-                    onChange={(e) =>
-                      setNewProduct({ ...newProduct, name: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter product name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Product Code
-                  </label>
-                  <input
-                    type="text"
-                    value={newProduct.code}
-                    onChange={(e) =>
-                      setNewProduct({ ...newProduct, code: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter product code"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Price
-                    </label>
-                    <input
-                      type="text"
-                      value={newProduct.price}
-                      onChange={(e) =>
-                        setNewProduct({ ...newProduct, price: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="₹0.00"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Stock
-                    </label>
-                    <input
-                      type="number"
-                      value={newProduct.stock}
-                      onChange={(e) =>
-                        setNewProduct({ ...newProduct, stock: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Unit
-                  </label>
-                  <input
-                    type="text"
-                    value={newProduct.unit}
-                    onChange={(e) =>
-                      setNewProduct({ ...newProduct, unit: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="pcs, kg, liters, etc."
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Category *
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                    Target Category
                   </label>
                   <select
                     value={newProduct.categoryId || ""}
                     onChange={(e) =>
                       setNewProduct({
                         ...newProduct,
-                        categoryId: e.target.value
-                          ? parseInt(e.target.value)
-                          : null,
+                        categoryId: Number(e.target.value),
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white outline-none cursor-pointer"
                   >
-                    <option value="">Select category</option>
-                    {categories.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
                       </option>
                     ))}
                   </select>
                 </div>
+
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                    Product Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Copper Cable 2.5mm"
+                    value={newProduct.name}
+                    onChange={(e) =>
+                      setNewProduct({ ...newProduct, name: e.target.value })
+                    }
+                    className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                      Product Code
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. COP003"
+                      value={newProduct.code}
+                      onChange={(e) =>
+                        setNewProduct({ ...newProduct, code: e.target.value })
+                      }
+                      className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                      Unit Price
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 950.00"
+                      value={newProduct.price}
+                      onChange={(e) =>
+                        setNewProduct({ ...newProduct, price: e.target.value })
+                      }
+                      className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                      Initial Stock Qty
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="0"
+                      value={newProduct.stock}
+                      onChange={(e) =>
+                        setNewProduct({ ...newProduct, stock: e.target.value })
+                      }
+                      className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="app-label block text-xs font-bold text-slate-800 mb-1.5">
+                      Unit
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. meters / pcs / kg"
+                      value={newProduct.unit}
+                      onChange={(e) =>
+                        setNewProduct({ ...newProduct, unit: e.target.value })
+                      }
+                      className="app-input w-full px-3.5 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white outline-none"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="mt-6 flex gap-3 justify-end">
+
+              <div className="px-6 py-4 bg-slate-50 border-t border-[#e2f2e9] flex items-center justify-end gap-3">
                 <button
+                  type="button"
                   onClick={() => setIsAddingProduct(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                  className="app-btn-secondary flex items-center gap-1.5 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
+                  type="button"
                   onClick={handleAddProduct}
-                  disabled={!newProduct.name.trim() || !newProduct.categoryId}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  className="app-btn-primary flex items-center gap-1.5 cursor-pointer"
                 >
-                  Add Product
+                  <Plus className="size-4" /> Save Product
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

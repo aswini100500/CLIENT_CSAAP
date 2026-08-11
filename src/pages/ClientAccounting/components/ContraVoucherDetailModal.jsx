@@ -1,13 +1,15 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import {
-  X,
-  Hash,
+  ArrowRight,
   Calendar,
-  User,
   Download,
   Edit,
-  ArrowRight,
+  Hash,
+  User,
+  X,
+  FileText,
 } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
   const overlayRef = useRef(null);
@@ -46,6 +48,7 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
   };
 
   const grandTotal =
+    voucher.totalAmount ??
     voucher.transactions?.reduce((sum, t) => sum + Number(t.amount || 0), 0) ??
     0;
 
@@ -53,76 +56,61 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
     <div
       ref={overlayRef}
       onClick={handleOverlayClick}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-sans"
       role="dialog"
       aria-modal="true"
       aria-labelledby="cv-modal-title"
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden border border-[#e2f2e9]"
         style={{ maxHeight: "90vh" }}
       >
-        <div className="px-6 py-5 border-b border-gray-100">
+        <div className="px-6 py-5 border-b border-[#e2f2e9] bg-white">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#2563eb"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
-                  <polyline points="10 9 9 9 8 9" />
-                </svg>
+              <div className="w-10 h-10 rounded-xl bg-[#f0fdf4] border border-[#c6f1d6] flex items-center justify-center shrink-0 text-[#00a651]">
+                <FileText size={20} />
               </div>
               <div>
                 <h2
                   id="cv-modal-title"
-                  className="text-base font-semibold text-gray-900 leading-tight"
+                  className="text-base/tight font-extrabold text-[#042f2e] "
                 >
-                  Contra voucher details
+                  Contra Voucher Details
                 </h2>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  Fund transfer between accounts
+                <p className="text-xs text-slate-500 mt-0.5 font-medium">
+                  Fund transfer between bank and cash accounts
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all shrink-0"
+              className="w-8 h-8 rounded-lg border border-[#e2f2e9] flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all shrink-0 cursor-pointer"
               aria-label="Close modal"
             >
-              <X size={15} />
+              <X size={16} />
             </button>
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-gray-600">
-              <Hash size={11} className="text-gray-400" />
-              Voucher no.{" "}
-              <span className="font-semibold text-gray-800">
+            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-[#f8faf8] border border-[#e2f2e9] text-slate-700 font-medium">
+              <Hash size={12} className="text-[#00a651]" />
+              Voucher No.{" "}
+              <span className="font-extrabold text-[#042f2e]">
                 {voucher.voucherNo || voucher.id}
               </span>
             </span>
-            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-gray-600">
-              <Calendar size={11} className="text-gray-400" />
-              <span className="font-semibold text-gray-800">
+            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-[#f8faf8] border border-[#e2f2e9] text-slate-700 font-medium">
+              <Calendar size={12} className="text-[#00a651]" />
+              <span className="font-extrabold text-[#042f2e]">
                 {formatDate(voucher.date)}
               </span>
             </span>
             {voucher.role && (
-              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-gray-600">
-                <User size={11} className="text-gray-400" />
+              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-[#f8faf8] border border-[#e2f2e9] text-slate-700 font-medium">
+                <User size={12} className="text-[#00a651]" />
                 Created by{" "}
-                <span className="font-semibold text-gray-800 capitalize">
+                <span className="font-bold text-[#042f2e] capitalize">
                   {voucher.role}
                 </span>
               </span>
@@ -130,100 +118,96 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
           </div>
         </div>
 
-        <div className="overflow-y-auto flex-1 px-6 py-5">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-            Transactions
+        <div className="overflow-y-auto flex-1 px-6 py-5 space-y-4">
+          <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+            Transaction Breakdown
           </p>
 
-          <div className="rounded-xl border border-gray-100 overflow-x-auto [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
-            <table className="w-full text-sm min-w-max">
-              <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 w-10">
+          <div className="rounded-xl border border-[#e2f2e9] overflow-hidden">
+            <table className="w-full text-sm border-collapse bg-white">
+              <thead className="bg-[#f0fdf4]/50 border-b border-[#e2f2e9]">
+                <tr className="text-left text-slate-700">
+                  <th className="py-2.5 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] w-10 text-center">
                     #
                   </th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">
-                    From account
+                  <th className="py-2.5 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    From Account
                   </th>
-                  <th className="w-8" />
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500">
-                    To account
+                  <th className="w-8 border-r border-[#e2f2e9]" />
+                  <th className="py-2.5 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    To Account
                   </th>
-                  <th className="text-right px-4 py-3 text-xs font-medium text-gray-500">
+                  <th className="py-2.5 px-4 text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-right">
                     Amount (₹)
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-[#e2f2e9]">
                 {voucher.transactions?.map((t, i) => (
                   <tr
                     key={i}
-                    className="border-b border-gray-50 hover:bg-blue-50/40 transition-colors duration-100"
+                    className="hover:bg-[#f0fdf4]/20 border-b border-[#e2f2e9] transition-colors duration-150"
                   >
-                    <td className="px-4 py-3 text-xs text-gray-400 font-mono">
+                    <td className="py-3 px-4 border-r border-[#e2f2e9] text-xs text-slate-400 font-mono text-center">
                       {String(i + 1).padStart(2, "0")}
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="font-medium text-gray-800 text-sm leading-tight">
+                    <td className="py-3 px-4 border-r border-[#e2f2e9]">
+                      <div className="font-bold text-[#042f2e] text-[13px] leading-tight">
                         {t.fromAccountName || t.fromAccount || "—"}
                       </div>
                     </td>
-                    <td className="py-3 text-gray-300">
-                      <ArrowRight size={14} />
+                    <td className="py-3 px-2 border-r border-[#e2f2e9] text-slate-400 text-center">
+                      <ArrowRight
+                        size={14}
+                        className="mx-auto text-[#00a651]"
+                      />
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="font-medium text-gray-800 text-sm leading-tight">
+                    <td className="py-3 px-4 border-r border-[#e2f2e9]">
+                      <div className="font-bold text-[#042f2e] text-[13px] leading-tight">
                         {t.toAccountName || t.toAccount || "—"}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-gray-900 tabular-nums">
+                    <td className="py-3 px-4 text-right font-bold text-[#042f2e] text-[13px] tabular-nums">
                       {formatAmount(t.amount)}
                     </td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
-                <tr className="bg-gray-50">
+                <tr className="bg-[#f0fdf4]/40 border-t border-[#e2f2e9]">
                   <td
                     colSpan={4}
-                    className="px-4 py-3 text-sm font-semibold text-gray-500 text-right"
+                    className="py-3 px-4 text-xs font-extrabold uppercase tracking-wider text-[#475569] text-right border-r border-[#e2f2e9]"
                   >
-                    Grand total
+                    Total Amount
                   </td>
-                  <td className="px-4 py-3 text-right font-bold text-blue-700 text-base tabular-nums">
-                    {formatAmount(grandTotal)}
+                  <td className="py-3 px-4 text-right font-extrabold text-[#042f2e] text-base tabular-nums">
+                    ₹ {formatAmount(grandTotal)}
                   </td>
                 </tr>
               </tfoot>
             </table>
           </div>
 
-          <div className="mt-4 flex gap-3 bg-blue-50 rounded-xl px-4 py-3 border border-blue-100">
-            <svg
-              className="shrink-0 mt-0.5"
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#2563eb"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-            <p className="text-sm text-blue-700 leading-relaxed">
-              {voucher.narration || (
-                <span className="italic text-blue-400">
-                  No narration provided.
+          <div className="flex gap-3 bg-[#f0fdf4] rounded-xl px-4 py-3 border border-[#c6f1d6]">
+            <FileText size={16} className="text-[#00a651] shrink-0 mt-0.5" />
+            <p className="text-xs/relaxed text-[#042f2e]  font-medium">
+              {voucher.narration ? (
+                <span>
+                  <strong className="font-extrabold">Narration:</strong>{" "}
+                  {voucher.narration}
+                </span>
+              ) : (
+                <span className="italic text-slate-500">
+                  No narration provided for this voucher.
                 </span>
               )}
             </p>
           </div>
         </div>
 
-        <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between gap-3">
-          <span className="text-xs px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 font-medium">
+        <div className="px-6 py-4 border-t border-[#e2f2e9] flex items-center justify-between gap-3 bg-white">
+          <span className="text-xs px-3 py-1 rounded-full bg-[#f0fdf4] text-[#00a651] border border-[#c6f1d6] font-bold">
             {voucher.transactions?.length ?? 0} transaction
             {voucher.transactions?.length !== 1 ? "s" : ""}
           </span>
@@ -232,7 +216,7 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
             {onDownload && (
               <button
                 onClick={() => onDownload(voucher)}
-                className="inline-flex items-center gap-1.5 text-sm px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all"
+                className="inline-flex items-center gap-1.5 text-xs px-3.5 py-2 rounded-xl border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all font-semibold cursor-pointer active:scale-[0.98]"
               >
                 <Download size={14} /> Download PDF
               </button>
@@ -240,14 +224,14 @@ const ContraVoucherDetailModal = ({ voucher, onClose, onEdit, onDownload }) => {
             {onEdit && (
               <button
                 onClick={() => onEdit(voucher.id)}
-                className="inline-flex items-center gap-1.5 text-sm px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all"
+                className="inline-flex items-center gap-1.5 text-xs px-3.5 py-2 rounded-xl border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-all font-semibold cursor-pointer active:scale-[0.98]"
               >
-                <Edit size={14} /> Edit
+                <Edit size={14} /> Edit Voucher
               </button>
             )}
             <button
               onClick={onClose}
-              className="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all font-medium"
+              className="inline-flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl bg-linear-to-r from-[#00a651] to-[#00c853] hover:from-[#008c44] hover:to-[#00a651] text-white transition-all font-bold cursor-pointer active:scale-[0.98] shadow-xs"
             >
               Close
             </button>

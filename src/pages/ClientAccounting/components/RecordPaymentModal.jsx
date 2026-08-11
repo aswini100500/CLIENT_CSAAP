@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import {
   X,
@@ -39,6 +40,75 @@ const RecordPaymentModal = ({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [receiptLedgers, setReceiptLedgers] = useState([]);
+  const [receiptAccountId, setReceiptAccountId] = useState("");
+  const [loadingLedgers, setLoadingLedgers] = useState(false);
+  const [voucherNo, setVoucherNo] = useState(() => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const hh = String(today.getHours()).padStart(2, "0");
+    const min = String(today.getMinutes()).padStart(2, "0");
+    const sec = String(today.getSeconds()).padStart(2, "0");
+    return `REC-${yyyy}${mm}${dd}-${hh}${min}${sec}`;
+  });
+
+  useEffect(() => {
+    const fetchReceiptLedgers = async () => {
+      if (!lead.company_id) return;
+      try {
+        setLoadingLedgers(true);
+        const ledgerResponse = await accountingApi.get(
+          `/api/v1/ledger/${lead.company_id}/all`,
+        );
+        const allLedgers = Array.isArray(ledgerResponse.data) ? ledgerResponse.data : ledgerResponse.data?.data || [];
+
+        let contraOptions = [];
+        try {
+          const bankResponse = await accountingApi.get(
+            `/api/v1/bank/${lead.company_id}/all`,
+          );
+          const banks = bankResponse.data.accounts || [];
+          contraOptions = banks.map((b) => ({
+            id: `bank_${b.id}`,
+            name: b.bankName
+              ? `${b.accountName} (${b.bankName})`
+              : b.accountName,
+          }));
+        } catch (bankErr) {
+          console.error("Error fetching bank accounts for modal:", bankErr);
+        }
+
+        const cashLedger = allLedgers.find(
+          (l) =>
+            l.name?.toLowerCase().includes("cash") ||
+            l.underGroup === "Cash-in-Hand" ||
+            l.under === "Cash-in-Hand",
+        );
+
+        if (cashLedger) {
+          contraOptions.push({
+            id: `ledger_${cashLedger.id}`,
+            name: cashLedger.name,
+          });
+        } else {
+          contraOptions.push({ id: "cash", name: "Cash" });
+        }
+
+        setReceiptLedgers(contraOptions);
+        if (contraOptions.length > 0) {
+          setReceiptAccountId(contraOptions[0].id);
+        }
+      } catch (err) {
+        console.error("Failed loading receipt accounts", err);
+      } finally {
+        setLoadingLedgers(false);
+      }
+    };
+
+    fetchReceiptLedgers();
+  }, [lead.company_id]);
 
   const selectedSlab = activeSlabs.find(
     (s) => String(s.db_slab_id) === String(selectedSlabId),
@@ -111,6 +181,16 @@ const RecordPaymentModal = ({
       return;
     }
 
+    if (!voucherNo || !voucherNo.trim()) {
+      setError("Please enter a voucher number.");
+      return;
+    }
+
+    if (!receiptAccountId) {
+      setError("Please select a deposit account.");
+      return;
+    }
+
     if (!paymentMode) {
       setError("Please select a payment mode.");
       return;
@@ -121,17 +201,29 @@ const RecordPaymentModal = ({
       setError("");
 
       const payload = {
-        company_id: lead.company_id,
-        payment_slab_id: Number(selectedSlabId),
-        amount: amtNum,
-        payment_mode: paymentMode,
-        reference_number: referenceNumber || null,
-        payment_date: paymentDate,
-        note: note || null,
+        voucherNo: voucherNo.trim(),
+        date: paymentDate,
+        receiptAccountId: receiptAccountId,
+        instrumentType: paymentMode,
+        referenceNo: referenceNumber || null,
+        narration:
+          note || `Slab Milestone Payment: ${selectedSlab?.name || ""}`,
+        items: [
+          {
+            ledgerId:
+              paymentPlan?.ledger_id ||
+              paymentPlan?.id ||
+              lead?.ledger_id ||
+              lead?.id,
+            amount: amtNum,
+          },
+        ],
       };
 
+      console.log("[RecordPaymentModal] Submitting payment payload:", payload);
+
       const response = await accountingApi.post(
-        `/api/v1/project-payment/${paymentPlan.ledger_id || paymentPlan.id}/record`,
+        `/api/v1/receive-voucher/createReciptVoucher/${lead.company_id}`,
         payload,
       );
 
@@ -159,7 +251,7 @@ const RecordPaymentModal = ({
 
   const modalContent = (
     <div className="app-modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-9999 backdrop-blur-md">
-      <div className="app-modal w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="app-modal w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-start bg-white">
           <div className="flex items-start gap-3 min-w-0">
             <div className="size-11 rounded-2xl flex items-center justify-center bg-(--brand-soft) border border-(--border-soft) shrink-0">
@@ -206,6 +298,23 @@ const RecordPaymentModal = ({
                   <AlertCircle className="size-4.5 text-red-500 mt-0.5 shrink-0" />
                   <div className="text-[12.5px] font-medium text-rose-800">
                     {error}
+                  </div>
+                </div>
+              )}
+
+              {(paymentPlan?.status === "pending_approval" ||
+                paymentPlan?.status === "rejected") && (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 flex items-start gap-2.5">
+                  <AlertCircle className="size-4.5 text-amber-600 mt-0.5 shrink-0" />
+                  <div className="text-[12.5px] font-medium text-amber-900">
+                    Payment recording is locked. This payment slab proposal is{" "}
+                    <strong>
+                      {paymentPlan?.status === "pending_approval"
+                        ? "Pending Accounting Approval"
+                        : "Rejected"}
+                    </strong>
+                    . Payments can only be recorded once Accounting approves the
+                    plan.
                   </div>
                 </div>
               )}
@@ -282,6 +391,97 @@ const RecordPaymentModal = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="modal-label block mb-1.5 uppercase">
+                    Voucher Number *
+                  </label>
+                  <div className="relative">
+                    <FileText className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="e.g. REC-001"
+                      value={voucherNo}
+                      onChange={(e) => setVoucherNo(e.target.value)}
+                      className={`${inputClass} pl-9`}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="modal-label block mb-1.5 uppercase">
+                    Payment Date *
+                  </label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                    <input
+                      type="date"
+                      value={paymentDate}
+                      onChange={(e) => setPaymentDate(e.target.value)}
+                      className={`${inputClass} pl-9`}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="modal-label block mb-1.5 uppercase">
+                    Deposit Account (Receipt Ledger) *
+                  </label>
+                  <div className="relative">
+                    <CreditCard className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                    <select
+                      value={receiptAccountId}
+                      onChange={(e) => setReceiptAccountId(e.target.value)}
+                      className={`${inputClass} pl-9 appearance-none cursor-pointer`}
+                      required
+                      disabled={loadingLedgers}
+                    >
+                      {receiptLedgers.map((l) => (
+                        <option key={l.id} value={l.id}>
+                          {l.name}
+                        </option>
+                      ))}
+                      {receiptLedgers.length === 0 && (
+                        <option value="" disabled>
+                          Loading ledgers...
+                        </option>
+                      )}
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 font-bold text-xs">
+                      ▼
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="modal-label block mb-1.5 uppercase">
+                    Payment Mode *
+                  </label>
+                  <div className="relative">
+                    <CreditCard className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                    <select
+                      value={paymentMode}
+                      onChange={(e) => setPaymentMode(e.target.value)}
+                      className={`${inputClass} pl-9 appearance-none cursor-pointer`}
+                      required
+                    >
+                      <option value="bank_transfer">Bank Transfer</option>
+                      <option value="upi">UPI</option>
+                      <option value="cash">Cash</option>
+                      <option value="cheque">Cheque</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 font-bold text-xs">
+                      ▼
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="modal-label block mb-1.5 uppercase">
                     Payment Amount (INR) *
                   </label>
                   <div className="relative">
@@ -316,32 +516,6 @@ const RecordPaymentModal = ({
 
                 <div>
                   <label className="modal-label block mb-1.5 uppercase">
-                    Payment Mode *
-                  </label>
-                  <div className="relative">
-                    <CreditCard className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-                    <select
-                      value={paymentMode}
-                      onChange={(e) => setPaymentMode(e.target.value)}
-                      className={`${inputClass} pl-9 appearance-none cursor-pointer`}
-                      required
-                    >
-                      <option value="bank_transfer">Bank Transfer</option>
-                      <option value="upi">UPI</option>
-                      <option value="cash">Cash</option>
-                      <option value="cheque">Cheque</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 font-bold text-xs">
-                      ▼
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="modal-label block mb-1.5 uppercase">
                     Reference / Transaction ID
                   </label>
                   <div className="relative">
@@ -352,22 +526,6 @@ const RecordPaymentModal = ({
                       value={referenceNumber}
                       onChange={(e) => setReferenceNumber(e.target.value)}
                       className={`${inputClass} pl-9`}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="modal-label block mb-1.5 uppercase">
-                    Payment Date *
-                  </label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-                    <input
-                      type="date"
-                      value={paymentDate}
-                      onChange={(e) => setPaymentDate(e.target.value)}
-                      className={`${inputClass} pl-9`}
-                      required
                     />
                   </div>
                 </div>
@@ -400,7 +558,12 @@ const RecordPaymentModal = ({
               <button
                 type="submit"
                 onClick={handleSubmit}
-                disabled={submitting || activeSlabs.length === 0}
+                disabled={
+                  submitting ||
+                  activeSlabs.length === 0 ||
+                  paymentPlan?.status === "pending_approval" ||
+                  paymentPlan?.status === "rejected"
+                }
                 className="app-btn-primary text-xs min-h-9.5 py-2 px-4 shadow-xs flex items-center gap-1.5"
               >
                 {submitting ? (

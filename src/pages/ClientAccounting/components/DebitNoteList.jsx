@@ -1,31 +1,27 @@
-<th className="border p-2 text-center">Actions</th>;
-
-import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import React from "react";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import {
   Download,
   Edit,
-  Trash2,
+  Eye,
   FileDown,
   FileSpreadsheet,
-  Printer,
-  Eye,
-  X,
-  Clock,
-  Calendar,
   FileText,
-  Building2,
-  CheckCircle,
-  XCircle,
-  UserRound,
+  Printer,
+  Search,
+  Trash2,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import useAuth from "../../../hooks/useAuth";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import useAuth from "../../../hooks/useAuth";
+
+import DebitNoteDetailModal from "./DebitNoteDetailModal";
 import {
   addReportHeader,
   addWorkbookHeader,
@@ -34,39 +30,114 @@ import {
 
 const API = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/getDebitnotes`;
 
-const NoteDetailModal = ({ note, items, onClose }) => {
-  if (!note) return null;
+const DebitNoteList = () => {
+  const { user, role, companyId, companyName } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debitNotes, setDebitNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedNote, setSelectedNote] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [companyDetails, setCompanyDetails] = useState(null);
+  const [sortOrder, setSortOrder] = useState("desc");
 
-  const fmt = (amount) =>
-    Number(amount || 0).toLocaleString("en-IN", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+  const navigate = useNavigate();
 
-  const statusBadgeStyle = (status) => {
-    switch (status) {
-      case "Accepted":
-        return "bg-green-50 text-green-700 border-green-200";
-      case "Rejected":
-        return "bg-red-50 text-red-700 border-red-200";
-      default:
-        return "bg-[#fbf7f0] text-[#a16207] border-[#f3e8d2]";
+  const fetchDebitNotes = async () => {
+    if (!companyId) return;
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API}/${companyId}`);
+      setDebitNotes(res.data?.data || []);
+    } catch (err) {
+      console.error("Failed to fetch debit notes", err);
+      setDebitNotes([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const statusIcon = (status) => {
-    switch (status) {
-      case "Accepted":
-        return <CheckCircle size={12} className="text-green-600" />;
-      case "Rejected":
-        return <XCircle size={12} className="text-red-600" />;
-      default:
-        return <Clock size={12} className="text-[#a16207]" />;
+  const fetchCompanyDetails = async () => {
+    if (!companyId) return;
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`,
+      );
+      setCompanyDetails(res.data);
+    } catch (err) {
+      console.error("Error fetching company details:", err);
     }
+  };
+
+  useEffect(() => {
+    if (companyId) {
+      fetchDebitNotes();
+      fetchCompanyDetails();
+    }
+  }, [companyId]);
+
+  const loggedInRole = role?.toLowerCase() || "admin";
+  const loggedInEmployeeId = user?.employee_id || null;
+
+  const filteredDebitNotes = debitNotes.filter((note) => {
+    if (loggedInRole === "employee") {
+      if (
+        note.employee_id != loggedInEmployeeId ||
+        note.role?.toLowerCase() !== "employee"
+      ) {
+        return false;
+      }
+    }
+
+    if (!searchQuery.trim()) return true;
+
+    const query = searchQuery.toLowerCase();
+    const party = (
+      note.PartyLedger ||
+      note.partyLedgerName ||
+      ""
+    ).toLowerCase();
+    const voucherNo = (note.voucherNo || note.id || "")
+      .toString()
+      .toLowerCase();
+    const amount = (note.grand_total || note.totalAmount || "")
+      .toString()
+      .toLowerCase();
+    const narration = (note.narration || "").toLowerCase();
+
+    return (
+      party.includes(query) ||
+      voucherNo.includes(query) ||
+      amount.includes(query) ||
+      narration.includes(query)
+    );
+  });
+
+  const sortedDebitNotes = [...filteredDebitNotes].sort((a, b) => {
+    const dateA = new Date(a.date || a.createdAt || 0).getTime();
+    const dateB = new Date(b.date || b.createdAt || 0).getTime();
+    if (dateA !== dateB) {
+      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+    }
+    return sortOrder === "desc"
+      ? Number(b.id || 0) - Number(a.id || 0)
+      : Number(a.id || 0) - Number(b.id || 0);
+  });
+
+  const totalAmount = sortedDebitNotes.reduce(
+    (acc, note) => acc + Number(note.grand_total || note.totalAmount || 0),
+    0,
+  );
+
+  const formatAmount = (amount) => {
+    const num = Number(amount || 0);
+    return `₹ ${num.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
   };
 
   const formatDate = (dateStr) => {
-    if (!dateStr) return "—";
+    if (!dateStr) return "-";
     try {
       return new Date(dateStr).toLocaleDateString("en-IN", {
         day: "2-digit",
@@ -78,639 +149,9 @@ const NoteDetailModal = ({ note, items, onClose }) => {
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 pt-10 overflow-y-auto">
-      <div className="bg-white rounded-xl border border-gray-200 w-full max-w-3xl shadow-xl my-8">
-        <div className="relative flex justify-between items-start px-6 py-6 border-b border-gray-100 bg-white">
-          <div className="absolute top-0 left-0 w-32 h-1 bg-linear-to-r from-blue-500 via-blue-400 to-transparent rounded-full"></div>
-
-          <div className="flex-1">
-            <div className="flex flex-wrap items-center gap-3 mb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-blue-50 rounded-lg">
-                  <FileText size={16} className="text-blue-600" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-800 tracking-tight">
-                  {note.note_type} Note Details
-                </h2>
-              </div>
-
-              <span
-                className={`
-        inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full 
-        backdrop-blur-sm shadow-sm
-        ${statusBadgeStyle(note.status)}
-      `}
-              >
-                <span className="relative flex h-2 w-2">
-                  {note.status === "Approved" && (
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  )}
-                  <span
-                    className={`relative inline-flex rounded-full h-2 w-2 ${
-                      note.status === "Approved"
-                        ? "bg-green-500"
-                        : note.status === "Rejected"
-                          ? "bg-red-500"
-                          : "bg-yellow-500"
-                    }`}
-                  ></span>
-                </span>
-                {statusIcon(note.status)}
-                <span className="capitalize">{note.status || "Pending"}</span>
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3 text-xs">
-              <div className="flex items-center gap-2 pr-3 border-r border-gray-200">
-                <div className="p-1 bg-blue-50 rounded-md">
-                  <FileText size={12} className="text-blue-500" />
-                </div>
-                <div>
-                  <p className="text-gray-400 text-[10px] uppercase tracking-wide">
-                    Voucher No.
-                  </p>
-                  <p className="text-gray-800 font-semibold text-sm">
-                    {note.voucherNo || `Note-${note.id}`}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 pr-3 border-r border-gray-200">
-                <div className="p-1 bg-blue-50 rounded-md">
-                  <Calendar size={12} className="text-blue-500" />
-                </div>
-                <div>
-                  <p className="text-gray-400 text-[10px] uppercase tracking-wide">
-                    Date
-                  </p>
-                  <p className="text-gray-800 font-medium text-sm">
-                    {note.date
-                      ? new Date(note.date).toLocaleDateString("en-IN", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })
-                      : "—"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="p-1 bg-blue-50 rounded-md">
-                  <Building2 size={12} className="text-blue-500" />
-                </div>
-                <div>
-                  <p className="text-gray-400 text-[10px] uppercase tracking-wide">
-                    Party Name
-                  </p>
-                  <p className="text-gray-800 font-medium text-sm max-w-md truncate">
-                    {note.partyLedgerName || note.PartyLedger || "—"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button
-            onClick={onClose}
-            className="relative flex items-center justify-center w-8 h-8 bg-white border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-200 transition-all duration-200 group shadow-sm"
-          >
-            <X
-              size={16}
-              className="text-gray-400 group-hover:text-red-500 transition-colors"
-            />
-            <span className="absolute -top-8 right-0 opacity-0 group-hover:opacity-100 bg-gray-800 text-white text-xs px-2 py-1 rounded pointer-events-none transition-opacity whitespace-nowrap">
-              Close
-            </span>
-          </button>
-        </div>
-
-        <div className="px-6 py-4">
-          <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2.5">
-            Billing & Dispatch
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">
-                Party / Billing Details
-              </h4>
-              <div className="space-y-2 text-xs leading-relaxed text-gray-800">
-                <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-medium">
-                    Mailing Name
-                  </span>
-                  <span className="font-semibold">
-                    {note.mailingName || "—"}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-medium">
-                    Address
-                  </span>
-                  <span className="font-semibold wrap-break-word">
-                    {note.address || "—"}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-medium">
-                    State
-                  </span>
-                  <span className="font-semibold">
-                    {note.state || "—"}{" "}
-                    {note.country ? `(${note.country})` : ""}
-                  </span>
-                </div>
-                {note.gstin && (
-                  <div>
-                    <span className="text-gray-400 block text-[10px] uppercase font-medium">
-                      GSTIN
-                    </span>
-                    <span className="font-semibold font-mono">
-                      {note.gstin}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">
-                Consignee (Ship To)
-              </h4>
-              <div className="space-y-2 text-xs leading-relaxed text-gray-800">
-                {note.consigneeSameAsBilling ? (
-                  <div className="text-gray-500 italic py-2">
-                    Same as Party / Billing Details
-                  </div>
-                ) : (
-                  <>
-                    <div>
-                      <span className="text-gray-400 block text-[10px] uppercase font-medium">
-                        Name
-                      </span>
-                      <span className="font-semibold">
-                        {note.consigneeName || "—"}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-gray-400 block text-[10px] uppercase font-medium">
-                        Address
-                      </span>
-                      <span className="font-semibold wrap-break-word">
-                        {note.consigneeAddress || "—"}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-gray-400 block text-[10px] uppercase font-medium">
-                        State
-                      </span>
-                      <span className="font-semibold">
-                        {note.consigneeState || "—"}
-                      </span>
-                    </div>
-                    {note.consigneeGSTIN && (
-                      <div>
-                        <span className="text-gray-400 block text-[10px] uppercase font-medium">
-                          GSTIN
-                        </span>
-                        <span className="font-semibold font-mono">
-                          {note.consigneeGSTIN}
-                        </span>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            </div>
-
-            <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">
-                Invoice & Order Info
-              </h4>
-              <div className="space-y-2 text-xs leading-relaxed text-gray-800">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Original Invoice No.</span>
-                  <span className="font-semibold">
-                    {note.paymentTerms || "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Original Invoice Date</span>
-                  <span className="font-semibold">
-                    {formatDate(note.deliveryNoteDate)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Buyer Order No.</span>
-                  <span className="font-semibold">
-                    {note.buyerOrderNo || "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Order Date</span>
-                  <span className="font-semibold">
-                    {formatDate(note.buyerOrderDate)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Reference No.</span>
-                  <span className="font-semibold">
-                    {note.referenceNo || "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Reference Date</span>
-                  <span className="font-semibold">
-                    {formatDate(note.referenceDate)}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50 lg:col-span-2">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">
-                Dispatch details
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs text-gray-800">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Delivery note</span>
-                  <span className="font-semibold">
-                    {note.deliveryNoteNo || "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Dispatch Doc No.</span>
-                  <span className="font-semibold">
-                    {note.dispatchDocNo || "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Dispatched Through</span>
-                  <span className="font-semibold">
-                    {note.dispatchedThrough || "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Destination</span>
-                  <span className="font-semibold">
-                    {note.destination || "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Vehicle no.</span>
-                  <span className="font-semibold">
-                    {note.motorVehicleNo || "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Other Reference</span>
-                  <span className="font-semibold">
-                    {note.otherReferences || "—"}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-[#faf9f5] rounded-xl p-4 border border-[#f3f0e8]/50">
-              <h4 className="text-xs font-semibold text-blue-600 mb-3">
-                Terms of Delivery
-              </h4>
-              <p className="text-xs text-gray-700 leading-relaxed font-medium">
-                {note.termsOfDelivery || "—"}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="px-6 py-4">
-          <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
-            Items
-          </h3>
-          <div className="overflow-hidden border border-gray-100 rounded-xl">
-            <table className="w-full text-xs text-left">
-              <thead className="bg-gray-50 border-b border-gray-100 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                <tr>
-                  <th className="px-4 py-3 text-center w-10">#</th>
-                  <th className="px-4 py-3">Item Name</th>
-                  <th className="px-4 py-3 text-center">HSN</th>
-                  <th className="px-4 py-3 text-center">Qty</th>
-                  <th className="px-4 py-3 text-right">Rate</th>
-                  <th className="px-4 py-3 text-right">Disc.</th>
-                  <th className="px-4 py-3 text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {items.map((item, i) => (
-                  <tr key={i} className="hover:bg-gray-50/80 transition">
-                    <td className="px-4 py-3 text-center text-gray-400 font-medium">
-                      {i + 1}
-                    </td>
-                    <td className="px-4 py-3 font-semibold text-gray-900">
-                      {item.itemName || "—"}
-                    </td>
-                    <td className="px-4 py-3 text-center text-gray-500 font-mono">
-                      {item.hsn_code || "—"}
-                    </td>
-                    <td className="px-4 py-3 text-center font-semibold text-gray-950">
-                      {item.qty} {item.per || "pcs"}
-                    </td>
-                    <td className="px-4 py-3 text-right font-mono text-gray-700">
-                      ₹{fmt(item.rate)}
-                    </td>
-                    <td className="px-4 py-3 text-right font-mono text-gray-500">
-                      {item.discount ? `${item.discount}%` : "—"}
-                    </td>
-                    <td className="px-4 py-3 text-right font-semibold font-mono text-gray-950">
-                      ₹{fmt(item.amount)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row justify-between gap-6">
-          <div className="flex-1 min-w-50">
-            <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
-              Narration
-            </p>
-            <p className="text-xs text-gray-600 bg-white p-3 rounded-lg border border-gray-100 italic leading-relaxed shadow-sm">
-              {note.narration || "No narration provided."}
-            </p>
-          </div>
-          <div className="w-full md:w-80 space-y-2.5 text-xs text-gray-700 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-500">Subtotal</span>
-              <span className="font-mono font-medium">
-                ₹{fmt(note.subtotal)}
-              </span>
-            </div>
-            {note.cgst_amount > 0 && (
-              <div className="flex justify-between">
-                <span className="text-gray-500">CGST ({note.cgst_rate}%)</span>
-                <span className="font-mono font-medium">
-                  ₹{fmt(note.cgst_amount)}
-                </span>
-              </div>
-            )}
-            {note.sgst_amount > 0 && (
-              <div className="flex justify-between">
-                <span className="text-gray-500">SGST ({note.sgst_rate}%)</span>
-                <span className="font-mono font-medium">
-                  ₹{fmt(note.sgst_amount)}
-                </span>
-              </div>
-            )}
-            {note.igst_amount > 0 && (
-              <div className="flex justify-between">
-                <span className="text-gray-500">IGST ({note.igst_rate}%)</span>
-                <span className="font-mono font-medium">
-                  ₹{fmt(note.igst_amount)}
-                </span>
-              </div>
-            )}
-            <div className="flex justify-between text-sm font-bold text-blue-600 border-t border-dashed border-gray-200 pt-2.5">
-              <span>Grand Total</span>
-              <span className="font-mono text-base">
-                ₹{fmt(note.grand_total)}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="px-6 py-4 border-t border-gray-100 flex justify-end bg-white rounded-b-xl">
-          <button
-            onClick={onClose}
-            className="px-5 py-2 border border-blue-200 bg-blue-50/50 hover:bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg transition shadow-sm"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const DebitNoteList = () => {
-  const { companyId, companyName, employees } = useCompany();
-
-  const getEmployeeName = (id) => {
-    const emp = employees?.find((e) => e.id == id);
-    return emp ? emp.name || emp.first_name || "Employee" : "Unknown Employee";
-  };
-
-  const navigate = useNavigate();
-
-  const finalCompanyId = companyId;
-
-  const [debitNotes, setDebitNotes] = useState([]);
-  const [showEmployeeActivity, setShowEmployeeActivity] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [companyDetails, setCompanyDetails] = useState(null);
-  const [selectedNote, setSelectedNote] = useState(null);
-  const [selectedItems, setSelectedItems] = useState([]);
-
-  const { user, role } = useAuth();
-  const loggedInRole = role?.toLowerCase() || "admin";
-  const loggedInEmployeeId = user?.employee_id || null;
-
-  const filteredDebitNotes = debitNotes.filter((n) => {
-    if (loggedInRole === "employee") {
-      if (
-        n.employee_id != loggedInEmployeeId ||
-        n.role?.toLowerCase() !== "employee"
-      )
-        return false;
-    } else {
-      const isCreatedByEmployee =
-        n.employee_id && n.role?.toLowerCase() === "employee";
-      if (showEmployeeActivity) {
-        if (!isCreatedByEmployee) return false;
-      } else {
-        if (isCreatedByEmployee) return false;
-      }
-    }
-    return true;
-  });
-
   const handlePrint = () => {
     if (filteredDebitNotes.length === 0) {
       Swal.fire("Info", "No data to print", "info");
-
-      return;
-    }
-
-    const doc = new jsPDF();
-
-    const today = new Date().toLocaleDateString("en-IN");
-
-    const companyNameForExport =
-      companyDetails?.name || companyName || "Company";
-
-    const companyAddress = getCompanyAddress(companyDetails);
-
-    const totalAmount = filteredDebitNotes.reduce(
-      (acc, n) => acc + Number(n.grand_total || 0),
-      0,
-    );
-
-    const formatAmount = (amount) =>
-      `Rs. ${Number(amount || 0).toLocaleString("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`;
-
-    const { company, summaryY, tableStartY } = addReportHeader(doc, {
-      companyName: companyNameForExport,
-
-      companyAddress,
-
-      reportTitle: "Debit Note Report",
-
-      generatedOn: today,
-    });
-
-    doc.setFontSize(10);
-
-    doc.setTextColor(40);
-
-    doc.text(`Total Notes: ${filteredDebitNotes.length}`, 14, summaryY);
-
-    doc.setFont("helvetica", "bold");
-
-    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, {
-      align: "right",
-    });
-
-    autoTable(doc, {
-      startY: tableStartY,
-
-      head: [["#", "Date", "Voucher No.", "Party", "Amount", "Status"]],
-
-      body: filteredDebitNotes.map((n, index) => [
-        index + 1,
-
-        n.date ? new Date(n.date).toLocaleDateString("en-IN") : "-",
-
-        n.voucherNo || n.id,
-
-        n.PartyLedger || "-",
-
-        formatAmount(n.grand_total),
-
-        n.status || "Pending",
-      ]),
-
-      foot: [["", "", "", "TOTAL", formatAmount(totalAmount), ""]],
-
-      theme: "striped",
-
-      styles: {
-        fontSize: 9,
-        cellPadding: 5,
-        valign: "middle",
-      },
-
-      headStyles: {
-        fillColor: [37, 99, 235],
-        textColor: [255, 255, 255],
-        fontStyle: "bold",
-        halign: "center",
-      },
-
-      footStyles: {
-        fillColor: [240, 240, 240],
-        textColor: [15, 23, 42],
-        fontStyle: "bold",
-      },
-
-      columnStyles: {
-        0: {
-          halign: "center",
-          cellWidth: 12,
-        },
-        4: {
-          halign: "right",
-          cellWidth: 35,
-        },
-      },
-    });
-
-    const pageCount = doc.internal.getNumberOfPages();
-
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
-
-      doc.setDrawColor(230);
-
-      doc.line(14, 285, 195, 285);
-
-      doc.setFontSize(8);
-
-      doc.setTextColor(120);
-
-      doc.text(`${company} - Debit Note Report`, 14, 290);
-
-      doc.text(`Page ${i} of ${pageCount}`, 195, 290, {
-        align: "right",
-      });
-    }
-
-    const blobURL = doc.output("bloburl");
-
-    const printWindow = window.open(blobURL);
-
-    printWindow.onload = () => {
-      printWindow.focus();
-
-      printWindow.print();
-    };
-  };
-
-  const fetchCompanyDetails = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${finalCompanyId}`,
-      );
-      setCompanyDetails(res.data);
-    } catch (err) {
-      console.error("Error fetching company details:", err);
-    }
-  };
-
-  const handleExportExcel = () => {
-    if (filteredDebitNotes.length === 0) {
-      Swal.fire("Info", "No data to export", "info");
-      return;
-    }
-    const today = new Date().toLocaleDateString("en-IN");
-    const companyNameForExport =
-      companyDetails?.name || companyName || "Company";
-    const companyAddress = getCompanyAddress(companyDetails);
-    const exportData = filteredDebitNotes.map((n) => ({
-      "Voucher No": n.voucherNo,
-      Date: n.date,
-      Party: n.PartyLedger,
-      Amount: n.grand_total,
-      Status: n.status || "Pending",
-    }));
-    const ws = XLSX.utils.json_to_sheet(exportData, { origin: "A6" });
-    addWorkbookHeader(XLSX, ws, {
-      companyName: companyNameForExport,
-      companyAddress,
-      reportTitle: "Debit Note Report",
-      generatedOn: today,
-    });
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "DebitNotes");
-    XLSX.writeFile(wb, "Debit_Notes_Report.xlsx");
-  };
-
-  const handleExportPDF = () => {
-    if (filteredDebitNotes.length === 0) {
-      Swal.fire("Info", "No data to export", "info");
       return;
     }
 
@@ -719,15 +160,6 @@ const DebitNoteList = () => {
     const companyNameForExport =
       companyDetails?.name || companyName || "Company";
     const companyAddress = getCompanyAddress(companyDetails);
-    const totalAmount = filteredDebitNotes.reduce(
-      (acc, n) => acc + Number(n.grand_total || 0),
-      0,
-    );
-    const formatAmount = (amount) =>
-      `Rs. ${Number(amount || 0).toLocaleString("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`;
 
     const { company, summaryY, tableStartY } = addReportHeader(doc, {
       companyName: companyNameForExport,
@@ -746,18 +178,18 @@ const DebitNoteList = () => {
 
     autoTable(doc, {
       startY: tableStartY,
-      head: [["#", "Date", "Voucher No.", "Party", "Amount", "Status"]],
+      head: [["#", "Date", "Voucher No.", "Party Ledger", "Amount", "Status"]],
       body: filteredDebitNotes.map((n, index) => [
         index + 1,
-        n.date ? new Date(n.date).toLocaleDateString("en-IN") : "-",
-        n.voucherNo || n.id,
-        n.PartyLedger || "-",
-        formatAmount(n.grand_total),
+        formatDate(n.date),
+        n.voucherNo || n.id || "-",
+        n.PartyLedger || n.partyLedgerName || "-",
+        formatAmount(n.grand_total || n.totalAmount),
         n.status || "Pending",
       ]),
       foot: [["", "", "", "TOTAL", formatAmount(totalAmount), ""]],
       theme: "striped",
-      styles: { fontSize: 9, cellPadding: 5, valign: "middle" },
+      styles: { fontSize: 9, cellPadding: 4, valign: "middle" },
       headStyles: {
         fillColor: [37, 99, 235],
         textColor: [255, 255, 255],
@@ -782,37 +214,142 @@ const DebitNoteList = () => {
       doc.line(14, 285, 195, 285);
       doc.setFontSize(8);
       doc.setTextColor(120);
-      doc.text(`${company} - Debit Note Report`, 14, 290);
+      doc.text(`${company} • Debit Note Report`, 14, 290);
+      doc.text(`Page ${i} of ${pageCount}`, 195, 290, { align: "right" });
+    }
+
+    const blobURL = doc.output("bloburl");
+    const printWindow = window.open(blobURL);
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+      };
+    }
+  };
+
+  const handleExportPDF = () => {
+    if (filteredDebitNotes.length === 0) {
+      Swal.fire("Info", "No data to export", "info");
+      return;
+    }
+
+    const doc = new jsPDF();
+    const today = new Date().toLocaleDateString("en-IN");
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
+    const companyAddress = getCompanyAddress(companyDetails);
+
+    const { company, summaryY, tableStartY } = addReportHeader(doc, {
+      companyName: companyNameForExport,
+      companyAddress,
+      reportTitle: "Debit Note Report",
+      generatedOn: today,
+    });
+
+    doc.setFontSize(10);
+    doc.setTextColor(40);
+    doc.text(`Total Notes: ${filteredDebitNotes.length}`, 14, summaryY);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, {
+      align: "right",
+    });
+
+    autoTable(doc, {
+      startY: tableStartY,
+      head: [["#", "Date", "Voucher No.", "Party Ledger", "Amount", "Status"]],
+      body: sortedDebitNotes.map((n, index) => [
+        index + 1,
+        formatDate(n.date),
+        n.voucherNo || n.id || "-",
+        n.PartyLedger || n.partyLedgerName || "-",
+        formatAmount(n.grand_total || n.totalAmount),
+        n.status || "Pending",
+      ]),
+      foot: [["", "", "", "TOTAL", formatAmount(totalAmount), ""]],
+      theme: "striped",
+      styles: { fontSize: 9, cellPadding: 4, valign: "middle" },
+      headStyles: {
+        fillColor: [37, 99, 235],
+        textColor: [255, 255, 255],
+        fontStyle: "bold",
+        halign: "center",
+      },
+      footStyles: {
+        fillColor: [240, 240, 240],
+        textColor: [15, 23, 42],
+        fontStyle: "bold",
+      },
+      columnStyles: {
+        0: { halign: "center", cellWidth: 12 },
+        4: { halign: "right", cellWidth: 35 },
+      },
+    });
+
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setDrawColor(230);
+      doc.line(14, 285, 195, 285);
+      doc.setFontSize(8);
+      doc.setTextColor(120);
+      doc.text(`${company} • Debit Note Report`, 14, 290);
       doc.text(`Page ${i} of ${pageCount}`, 195, 290, { align: "right" });
     }
 
     doc.save(`Debit_Notes_Report_${today}.pdf`);
   };
 
-  useEffect(() => {
-    if (!finalCompanyId) return;
+  const handleExportExcel = () => {
+    if (sortedDebitNotes.length === 0) {
+      Swal.fire("Info", "No data to export", "info");
+      return;
+    }
+    const today = new Date().toLocaleDateString("en-IN");
+    const companyNameForExport =
+      companyDetails?.name || companyName || "Company";
+    const companyAddress = getCompanyAddress(companyDetails);
+    const exportData = sortedDebitNotes.map((n, i) => ({
+      "S.No": i + 1,
+      "Voucher No": n.voucherNo || n.id,
+      Date: formatDate(n.date),
+      Party: n.PartyLedger || n.partyLedgerName || "-",
+      Amount: Number(n.grand_total || n.totalAmount || 0),
+      Status: n.status || "Pending",
+    }));
 
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${API}/${finalCompanyId}`);
-        setDebitNotes(res.data.data || []);
-      } catch (error) {
-        console.error("Error fetching debit notes:", error);
+    const ws = XLSX.utils.json_to_sheet(exportData, { origin: "A6" });
+    addWorkbookHeader(XLSX, ws, {
+      companyName: companyNameForExport,
+      companyAddress,
+      reportTitle: "Debit Note Report",
+      generatedOn: today,
+    });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Debit Notes");
+    XLSX.writeFile(wb, "Debit_Notes_Report.xlsx");
+  };
 
-        Swal.fire("Error", "Unable to load debit notes", "error");
-      } finally {
-        setLoading(false);
+  const handleViewDetails = async (id) => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/single/${id}`,
+      );
+      if (!res.data.success) {
+        throw new Error(res.data.message || "Failed to fetch details");
       }
-    };
-
-    fetchData();
-    fetchCompanyDetails();
-  }, [finalCompanyId]);
+      setSelectedNote(res.data.note);
+      setSelectedItems(res.data.items || []);
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", "Failed to fetch note details.", "error");
+    }
+  };
 
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
-      title: "Delete?",
-      text: "This action cannot be undone!",
+      title: "Delete Debit Note?",
+      text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#dc2626",
@@ -825,8 +362,14 @@ const DebitNoteList = () => {
         await axios.delete(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/delete/${id}`,
         );
-        setDebitNotes((prev) => prev.filter((n) => n.id !== id));
-        Swal.fire("Deleted!", "Debit Note has been removed.", "success");
+        Swal.fire({
+          icon: "success",
+          title: "Deleted Successfully",
+          text: "Debit Note has been removed.",
+          timer: 1800,
+          showConfirmButton: false,
+        });
+        fetchDebitNotes();
       } catch (error) {
         console.error("Delete Error:", error);
         Swal.fire("Error", "Could not delete debit note", "error");
@@ -834,169 +377,270 @@ const DebitNoteList = () => {
     }
   };
 
-  const handleViewDetails = async (id) => {
+  const handleDownloadPDF = async (note) => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/single/${id}`,
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/generate-pdf/${note.id}`,
       );
-      if (!res.data.success) {
-        throw new Error(res.data.message || "Failed to fetch details");
+      if (res.data.success) {
+        window.open(
+          `${import.meta.env.VITE_ACCOUNTING_URL}${res.data.pdfPath}`,
+          "_blank",
+        );
       }
-      setSelectedNote(res.data.note);
-      setSelectedItems(res.data.items);
     } catch (error) {
-      console.error(error);
-      Swal.fire("Error", "Failed to fetch note details.", "error");
+      console.error("Error generating PDF:", error);
+      Swal.fire("Error", "Could not generate PDF", "error");
     }
   };
 
+  const handleEdit = (id) => {
+    const editPath =
+      loggedInRole === "employee"
+        ? `/employee/hr/accounting/client/debitNote/${id}`
+        : `/accounting/client/debitNote/${id}`;
+    navigate(editPath);
+  };
+
+  const createPath =
+    loggedInRole === "employee"
+      ? "/employee/hr/accounting/client/debitNote"
+      : "/accounting/client/debitNote";
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="bg-white shadow-md rounded-lg p-4 border">
-        <div className="flex justify-between items-center border-b pb-2 mb-4">
-          <h1 className="text-2xl font-semibold">Debit Notes List</h1>
-          <div className="flex items-center gap-3">
+    <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans">
+      <div className="max-w-7xl mx-auto app-panel overflow-hidden border border-[#e2f2e9] bg-white">
+        <div className="flex flex-wrap justify-between items-center app-section-bar py-5 px-6 border-b border-[#e2f2e9] gap-4 bg-white">
+          <h2 className="app-title text-xl font-extrabold text-[#042f2e]">
+            List of Debit Notes
+          </h2>
+
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search Party / Voucher No / Amount..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-64 pl-9 pr-3 py-2 text-[13px] bg-white border border-[#e2f2e9] rounded-xl focus:outline-none focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] transition-all placeholder:text-slate-400"
+              />
+              <Search
+                size={16}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+            </div>
+
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white text-[12px] font-medium rounded hover:bg-gray-700 transition shadow-sm"
+              className="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 text-slate-700 px-4 h-10 rounded-xl border border-slate-200 transition-colors text-sm font-semibold cursor-pointer active:scale-[0.98]"
             >
               <Printer size={16} />
-              <span>Print</span>
+              Print
             </button>
+
             <button
               onClick={handleExportExcel}
-              className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-[12px] font-medium rounded hover:bg-blue-700 transition shadow-sm"
+              disabled={filteredDebitNotes.length === 0}
+              className="flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-4 h-10 rounded-xl border border-emerald-200 transition-colors text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98]"
             >
               <FileSpreadsheet size={16} />
-              <span>Export Excel</span>
+              Export Excel
             </button>
+
             <button
               onClick={handleExportPDF}
-              className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white text-[12px] font-medium rounded hover:bg-green-700 transition shadow-sm"
+              disabled={filteredDebitNotes.length === 0}
+              className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 h-10 rounded-xl border border-blue-200 transition-colors text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98]"
             >
               <FileDown size={16} />
-              <span>Export PDF</span>
+              Export PDF
             </button>
-            {loggedInRole !== "employee" && (
-              <button
-                onClick={() => setShowEmployeeActivity((prev) => !prev)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-all text-[12px] font-medium shadow-sm border ${
-                  showEmployeeActivity
-                    ? "bg-slate-900 text-white border-slate-900"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                }`}
-              >
-                <UserRound size={15} />
-                {showEmployeeActivity ? "Back to Notes" : "Employee Activity"}
-              </button>
-            )}
+
+            <Link
+              to={createPath}
+              className="flex items-center justify-center gap-2 bg-linear-to-r from-[#00a651] to-[#00c853] hover:from-[#008c44] hover:to-[#00a651] text-white px-5 h-10 rounded-xl text-sm font-bold shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer"
+            >
+              + Create Debit Note
+            </Link>
           </div>
         </div>
 
-        {loading ? (
-          <p className="text-center p-4">Loading...</p>
-        ) : (
-          <table className="w-full border text-sm">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="border p-2 text-left">Voucher No</th>
-                <th className="border p-2 text-left">Date</th>
-                <th className="border p-2 text-left">Party</th>
-                <th className="border p-2 text-right">Amount</th>
-                <th className="border p-2 text-center">Actions</th>
-              </tr>
-            </thead>
+        {!loading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-6 py-4 border-b border-[#e2f2e9] bg-[#f0fdf4]/30">
+            <div className="bg-white rounded-xl p-3.5 border border-[#e2f2e9]">
+              <p className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                Total Notes
+              </p>
+              <p className="text-xl font-extrabold text-[#042f2e] mt-0.5">
+                {filteredDebitNotes.length}
+              </p>
+            </div>
+            <div className="bg-white rounded-xl p-3.5 border border-[#e2f2e9]">
+              <p className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                Total Amount
+              </p>
+              <p className="text-xl font-extrabold text-[#00a651] mt-0.5">
+                {formatAmount(totalAmount)}
+              </p>
+            </div>
+            <div className="bg-white rounded-xl p-3.5 border border-[#e2f2e9]">
+              <p className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                Approved Notes
+              </p>
+              <p className="text-xl font-extrabold text-blue-600 mt-0.5">
+                {
+                  filteredDebitNotes.filter(
+                    (n) => n.status === "Approved" || n.status === "Accepted",
+                  ).length
+                }
+              </p>
+            </div>
+          </div>
+        )}
 
-            <tbody>
-              {filteredDebitNotes.length === 0 ? (
-                <tr>
-                  <td colSpan="5" className="text-center p-4">
-                    No Debit Notes Found
-                  </td>
+        {loading && (
+          <p className="text-center text-slate-500 py-10">
+            Loading debit notes...
+          </p>
+        )}
+
+        {!loading && filteredDebitNotes.length > 0 && (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse bg-white">
+              <thead className="bg-[#f0fdf4]/50 border-b border-[#e2f2e9]">
+                <tr className="text-left text-slate-700">
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-center w-12">
+                    #
+                  </th>
+                  <th
+                    onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
+                    className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] cursor-pointer select-none hover:bg-emerald-100/50 transition-colors"
+                    title="Click to toggle sort order"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Date</span>
+                      {sortOrder === "desc" ? (
+                        <ArrowDown size={14} className="text-[#00a651]" />
+                      ) : (
+                        <ArrowUp size={14} className="text-[#00a651]" />
+                      )}
+                    </div>
+                  </th>
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Voucher No.
+                  </th>
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Party Ledger
+                  </th>
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-right">
+                    Amount (₹)
+                  </th>
+                  <th className="py-3 px-4 text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-center w-36">
+                    Actions
+                  </th>
                 </tr>
-              ) : (
-                filteredDebitNotes.map((note) => (
-                  <tr key={note.id}>
-                    <td className="border p-2">{note.voucherNo}</td>
-                    <td className="border p-2">
-                      {note.date
-                        ? new Date(note.date).toLocaleDateString()
-                        : "-"}
+              </thead>
+              <tbody className="divide-y divide-[#e2f2e9]">
+                {sortedDebitNotes.map((note, index) => (
+                  <tr
+                    key={note.id}
+                    className="hover:bg-[#f0fdf4]/20 border-b border-[#e2f2e9] transition-colors duration-150"
+                  >
+                    <td className="py-3 px-4 border-r border-[#e2f2e9] text-xs text-slate-400 font-mono text-center">
+                      {String(index + 1).padStart(2, "0")}
                     </td>
-                    <td className="border p-2">{note.PartyLedger}</td>
-                    <td className="border p-2 text-right">
-                      ₹ {Number(note.grand_total || 0).toFixed(2)}
+                    <td className="py-3 px-4 border-r border-[#e2f2e9] text-xs font-semibold text-slate-700">
+                      {formatDate(note.date)}
                     </td>
-                    {showEmployeeActivity && (
-                      <td className="px-4 py-2 truncate max-w-37.5">
-                        {getEmployeeName(note.employee_id)}
-                      </td>
-                    )}
-                    <td className="border p-2 text-center flex items-center justify-center gap-3">
-                      <button
-                        onClick={() => handleViewDetails(note.id)}
-                        className="text-blue-600 hover:text-blue-800 transition"
-                        title="View Details"
-                      >
-                        <Eye size={18} />
-                      </button>
-                      <button
-                        onClick={async () => {
-                          try {
-                            const res = await axios.get(
-                              `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/notes/generate-pdf/${note.id}`,
-                            );
-                            if (res.data.success) {
-                              window.open(
-                                `${import.meta.env.VITE_ACCOUNTING_URL}${res.data.pdfPath}`,
-                                "_blank",
-                              );
-                            }
-                          } catch (error) {
-                            console.error("Error generating PDF:", error);
-                            Swal.fire(
-                              "Error",
-                              "Could not generate PDF",
-                              "error",
-                            );
-                          }
-                        }}
-                        className="text-green-600 hover:text-green-800 transition"
-                        title="Download PDF"
-                      >
-                        <Download size={18} />
-                      </button>
-                      <button
-                        onClick={() =>
-                          navigate(`/accounting/client/debitNote/${note.id}`)
-                        }
-                        className="text-yellow-600 hover:text-yellow-800 transition"
-                        title="Edit"
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(note.id)}
-                        className="text-red-600 hover:text-red-800 transition"
-                        title="Delete"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                    <td className="py-3 px-4 border-r border-[#e2f2e9]">
+                      <div className="font-bold text-[#042f2e] text-[13px]">
+                        {note.voucherNo || note.id}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 border-r border-[#e2f2e9]">
+                      <div className="font-bold text-[#042f2e] text-[13px]">
+                        {note.PartyLedger || note.partyLedgerName || "—"}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 border-r border-[#e2f2e9] text-right font-bold text-[#042f2e] text-[13px] tabular-nums">
+                      {Number(
+                        note.grand_total || note.totalAmount || 0,
+                      ).toLocaleString("en-IN", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleViewDetails(note.id)}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all cursor-pointer"
+                          title="View Details"
+                        >
+                          <Eye size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDownloadPDF(note)}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-green-600 hover:bg-green-50 transition-all cursor-pointer"
+                          title="Download PDF"
+                        >
+                          <Download size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleEdit(note.id)}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-all cursor-pointer"
+                          title="Edit Note"
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(note.id)}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all cursor-pointer"
+                          title="Delete Note"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {!loading && filteredDebitNotes.length === 0 && (
+          <div className="text-center py-16 px-4">
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3 text-slate-400">
+              <FileText size={24} />
+            </div>
+            <h3 className="text-base font-bold text-[#042f2e]">
+              No Debit Notes Found
+            </h3>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">
+              {searchQuery
+                ? `No debit notes match "${searchQuery}".`
+                : "No debit notes have been created yet."}
+            </p>
+            <Link
+              to={createPath}
+              className="inline-flex items-center gap-2 bg-[#00a651] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#008c44] transition-all cursor-pointer shadow-xs"
+            >
+              + Create First Debit Note
+            </Link>
+          </div>
         )}
       </div>
-      <NoteDetailModal
+
+      <DebitNoteDetailModal
         note={selectedNote}
         items={selectedItems}
         onClose={() => {
           setSelectedNote(null);
           setSelectedItems([]);
         }}
+        onEdit={handleEdit}
+        onDownload={handleDownloadPDF}
       />
     </div>
   );

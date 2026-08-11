@@ -1,26 +1,41 @@
+import React from "react";
 import {
   BookOpen,
   Calendar,
   ChevronRight,
+  ClipboardList,
+  CreditCard,
   FileText,
   Folder,
+  FolderOpen,
   IndianRupee,
-  Layers3,
   LayoutDashboard,
   ListChecks,
   LogOut,
   MessageSquare,
+  MessageCircle,
   PieChart,
   ReceiptIndianRupee,
   Upload,
   UserPlus,
+  HeadphonesIcon,
   Users,
   Wallet,
   Warehouse,
+  Wrench,
+  HardHat,
+  DollarSign,
+  FileCheck,
+  BarChart,
+  Layers,
+  AlertTriangle,
+  ShoppingCart,
+  TrendingUp,
+  Truck,
 } from "lucide-react";
 
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -89,7 +104,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
         if (response.data && response.data.success) {
           setCompanyData(response.data.data || response.data.company);
-
           setLogoError(false);
         } else if (response.data) {
           setCompanyData(response.data);
@@ -155,6 +169,9 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
   const companyLogoText = companyName.charAt(0).toUpperCase();
 
+  console.log("Company Data:", companyData);
+  console.log("Company Logo URL:", companyLogo);
+
   const toggleMenu = (id) => {
     setExpandedMenus((prev) => ({
       ...prev,
@@ -208,6 +225,227 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         exact: true,
       },
       {
+        id: "projects",
+        permission: "project",
+        label: "Projects",
+        icon: <FolderOpen size={20} className="text-green-700" />,
+        path: "/employee/projects",
+      },
+      {
+        id: "contractors",
+        permission: "contractors",
+        label: "Contractors",
+        icon: <Users size={20} className="text-green-700" />,
+        path: "/employee/contractors",
+      },
+      {
+        id: "brokers",
+        permission: "brokers",
+        label: "Brokers",
+        icon: <Users size={20} className="text-green-700" />,
+        path: "/employee/brokers",
+      },
+      {
+        id: "suppliers",
+        permission: "suppliers",
+        label: "Suppliers",
+        icon: <Users size={20} className="text-green-700" />,
+        path: "/employee/suppliers",
+      },
+    ];
+
+    const items = rawItems.filter((item) => hasPermission(item.permission));
+
+    const rawOperationCategories = [
+      {
+        id: "general",
+        label: "Engineering",
+        icon: <HardHat size={18} className="text-green-700" />,
+        children: [
+          {
+            id: "projectbudget",
+            permission: "operation.engineering.projectbudget",
+            label: "Project Budget",
+            path: "/employee/project-budget",
+            icon: <DollarSign size={16} className="text-green-700" />,
+          },
+          {
+            id: "bill",
+            permission: "operation.engineering.billofquantity",
+            label: "Bill Of Quantity",
+            path: "/employee/bill",
+            icon: <FileText size={16} className="text-green-700" />,
+          },
+          {
+            id: "work",
+            permission: "operation.engineering.workorder",
+            label: "Work Order",
+            path: "/employee/work-order",
+            icon: <ClipboardList size={16} className="text-green-700" />,
+          },
+          {
+            id: "bill_inward",
+            permission: "operation.engineering.billinward",
+            label: "Bill Inward",
+            path: "/employee/bill-inward",
+            icon: <FileCheck size={16} className="text-green-700" />,
+          },
+          {
+            id: "contract",
+            permission: "operation.engineering.contract",
+            label: "Contractor Management",
+            path: "/employee/contractor",
+            icon: <FileText size={16} className="text-green-700" />,
+          },
+          {
+            id: "labour",
+            permission: "operation.engineering.labourrates",
+            label: "Labour Rates & Analysis",
+            path: "/employee/labour-rates",
+            icon: <Users size={16} className="text-green-700" />,
+          },
+        ],
+      },
+      {
+        id: "tendering",
+        label: "Tendering",
+        icon: <FileText size={18} className="text-green-700 " />,
+        children: [
+          {
+            id: "vendor",
+            permission: "operation.tendering.vendoronboarding",
+            label: "Vendor Onboarding",
+            path: "/employee/vendor",
+            icon: <Users size={16} className="text-green-700 " />,
+          },
+          {
+            id: "Tendor",
+            permission: "operation.tendering.tendor",
+            label: "Tendor",
+            path: "/employee/tendering",
+            icon: <FileText size={16} className="text-green-700" />,
+          },
+        ],
+      },
+      {
+        id: "Equipment",
+        label: "Equipment Management",
+        icon: <Truck size={18} className="text-green-700" />,
+        children: [
+          {
+            id: "standard",
+            permission: "operation.equipmentmanagement.standardefficiencies",
+            label: "Standard Efficiency",
+            path: "/employee/equipment-standard",
+            icon: <BarChart size={16} className="text-green-700 " />,
+          },
+        ],
+      },
+      {
+        id: "material",
+        label: "Material Management",
+        icon: <Layers size={18} className="text-green-700" />,
+        children: [
+          {
+            id: "indent",
+            permission: "operation.materialmanagement.indententry",
+            label: "Indent Entry",
+            path: "/employee/indent-main",
+            icon: <ClipboardList size={16} className="text-green-700 " />,
+          },
+        ],
+      },
+      {
+        id: "work-diary",
+        permission: "operation.workdiary",
+        label: "Work Diary",
+        path: "/employee/work-diary",
+        icon: <BookOpen size={18} className="text-green-700" />,
+      },
+      {
+        id: "hindering",
+        permission: "operation.hinderingrecord",
+        label: "Hindering Record",
+        path: "/employee/hindering-report",
+        icon: <AlertTriangle size={18} className="text-green-700" />,
+      },
+    ];
+
+    const filteredOperationChildren = rawOperationCategories
+      .map((cat) => {
+        if (cat.children) {
+          const allowedSubChildren = cat.children.filter((child) =>
+            hasPermission(child.permission),
+          );
+          if (allowedSubChildren.length > 0) {
+            return { ...cat, children: allowedSubChildren };
+          }
+          return null;
+        }
+        return hasPermission(cat.permission) ? cat : null;
+      })
+      .filter(Boolean);
+
+    if (filteredOperationChildren.length > 0) {
+      items.push({
+        id: "operation",
+        label: "Operation",
+        icon: <Wrench size={20} className="text-green-700" />,
+        isMainFolder: true,
+        children: filteredOperationChildren,
+      });
+    }
+
+    const stockChildren = [
+      {
+        id: "purchase",
+        permission: "stockandinventory.purchase",
+        label: "Purchase",
+        icon: <ShoppingCart size={18} className="text-green-700" />,
+        path: "/employee/builder-erp/admin/purchase-main",
+      },
+      {
+        id: "stock-management",
+        permission: "stockandinventory.stockmanagement",
+        label: "Stock Management",
+        icon: <Warehouse size={18} className="text-green-700" />,
+        path: "/employee/builder-erp/admin/stock-entry",
+      },
+      {
+        id: "sale",
+        permission: "stockandinventory.sale",
+        label: "Sale",
+        icon: <TrendingUp size={18} className="text-green-700" />,
+        path: "/employee/builder-erp/admin/sale-main",
+      },
+      {
+        id: "inv_indent",
+        permission: "stockandinventory.indent",
+        label: "Indent",
+        icon: <FileText size={18} className="text-green-700" />,
+        path: "/employee/builder-erp/admin/indent-main",
+      },
+      {
+        id: "supplier-list",
+        permission: "stockandinventory.supplierlist",
+        label: "Supplier List",
+        icon: <Users size={18} className="text-green-700" />,
+        path: "/employee/builder-erp/admin/supplier-list",
+      },
+    ].filter((child) => hasPermission(child.permission));
+
+    if (stockChildren.length > 0) {
+      items.push({
+        id: "stock-inventory",
+        label: "Stock & Inventory",
+        icon: <Warehouse size={20} className="text-green-700" />,
+        isMainFolder: true,
+        children: stockChildren,
+      });
+    }
+
+    const remainingSelfServiceItems = [
+      {
         id: "tasks",
         permission: "hrms.self_service.tasks",
         label: "Task",
@@ -260,9 +498,28 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         icon: <Calendar size={20} className="text-green-700" />,
         path: "/employee/calendar",
       },
-    ];
+    ].filter((item) => hasPermission(item.permission));
 
-    const items = rawItems.filter((item) => hasPermission(item.permission));
+    items.push(...remainingSelfServiceItems);
+
+    items.push({
+      id: "support",
+      label: "Support",
+      icon: <HeadphonesIcon size={20} className="text-green-700" />,
+      path: "/employee/support",
+    });
+    items.push({
+      id: "meetings",
+      label: "Task & Meetings",
+      icon: <Calendar size={20} className="text-green-700" />,
+      path: "/employee/meetings",
+    });
+    items.push({
+      id: "feedback",
+      label: "Feedback",
+      icon: <MessageCircle size={20} className="text-green-700" />,
+      path: "/employee/feedback",
+    });
 
     const hrmsChildren = [
       {
@@ -362,32 +619,18 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       },
 
       {
-        id: "client-group-creation",
-        permission: "accounting.company",
-        label: "Group Creation",
-        path: "/employee/hr/accounting/client/groupCreation",
-        icon: <Layers3 size={16} className="text-green-700 " />,
-      },
-      {
         id: "client-list-groups",
         permission: "accounting.company",
-        label: "List Of Groups",
+        label: "Groups",
         path: "/employee/hr/accounting/client/listOfGroups",
         icon: <Folder size={16} className="text-green-700 " />,
       },
       {
-        id: "client-ledger",
-        permission: "accounting.masters",
-        label: "Ledger",
-        path: "/employee/hr/accounting/client/ledger",
-        icon: <BookOpen size={16} className="text-green-700 " />,
-      },
-      {
         id: "client-list-ledgers",
         permission: "accounting.masters",
-        label: "List of Ledger",
+        label: "Ledger",
         path: "/employee/hr/accounting/client/listOfLedgers",
-        icon: <ListChecks size={16} className="text-green-700 " />,
+        icon: <BookOpen size={16} className="text-green-700 " />,
       },
       {
         id: "client-statutory",
@@ -406,91 +649,46 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
           {
             id: "client-contra",
             label: "Contra Voucher",
-            path: "/employee/hr/accounting/client/contravoucher",
-          },
-          {
-            id: "client-contra-list",
-            label: "List Of Contra Voucher",
             path: "/employee/hr/accounting/client/listOfContraVoucher",
           },
           {
             id: "client-payment",
             label: "Payment Voucher",
-            path: "/employee/hr/accounting/client/paymentVoucher",
-          },
-          {
-            id: "client-payment-list",
-            label: "List Of Payment Voucher",
             path: "/employee/hr/accounting/client/listOfPaymentVoucher",
           },
           {
             id: "client-receipt",
             label: "Receipt Voucher",
-            path: "/employee/hr/accounting/client/receptVoucher",
-          },
-          {
-            id: "client-receipt-list",
-            label: "List Of Receipt Voucher",
             path: "/employee/hr/accounting/client/listOfReciptVoucher",
           },
           {
             id: "client-journal",
             label: "Journal Voucher",
-            path: "/employee/hr/accounting/client/journalvoucher",
-          },
-          {
-            id: "client-journal-list",
-            label: "List Of Journal Voucher",
             path: "/employee/hr/accounting/client/listOfJournalVoucher",
           },
           {
             id: "client-manufacturing",
             label: "Manufacturing",
-            path: "/employee/hr/accounting/client/manfacturing",
-          },
-          {
-            id: "client-manufacturing-list",
-            label: "Manufacturing List",
             path: "/employee/hr/accounting/client/manfacturinglist",
           },
           {
             id: "client-sale",
-            label: "Sale Voucher",
-            path: "/employee/hr/accounting/client/salevoucher",
-          },
-          {
-            id: "client-sale-list",
-            label: "List Of Sale Voucher",
+            label: "Sales Voucher",
             path: "/employee/hr/accounting/client/listOfSaleVoucher",
           },
           {
             id: "client-purchase",
             label: "Purchase Voucher",
-            path: "/employee/hr/accounting/client/purchasevoucher",
-          },
-          {
-            id: "client-purchase-list",
-            label: "List Of Purchase Voucher",
             path: "/employee/hr/accounting/client/listOfPurchaseVoucher",
           },
           {
             id: "client-debit",
             label: "Debit Note",
-            path: "/employee/hr/accounting/client/debitNote",
-          },
-          {
-            id: "client-debit-list",
-            label: "Debit Note List",
             path: "/employee/hr/accounting/client/debitNotesList",
           },
           {
             id: "client-credit",
             label: "Credit Note",
-            path: "/employee/hr/accounting/client/creditNote",
-          },
-          {
-            id: "client-credit-list",
-            label: "Credit Note List",
             path: "/employee/hr/accounting/client/creditNotesList",
           },
         ],
@@ -556,13 +754,8 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         icon: <Warehouse size={16} className="text-green-700" />,
         children: [
           {
-            id: "client-stock-item",
-            label: "Stock Item Creation",
-            path: "/employee/hr/accounting/client/stockItemCreation",
-          },
-          {
             id: "client-stock-group",
-            label: "Stock Group Summary",
+            label: "Stock Summary",
             path: "/employee/hr/accounting/client/stockGroupSummery",
           },
           {
@@ -612,6 +805,20 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
         label: "Customer List",
         icon: <Users size={18} className="text-green-700" />,
         path: "/employee/crm/customerlist",
+      },
+      {
+        id: "crm_escalation",
+        permission: "crm.escalation",
+        label: "Escalation Path",
+        icon: <TrendingUp size={18} className="text-green-700" />,
+        path: "/employee/crm/escalation-path",
+      },
+      {
+        id: "crm_payment",
+        permission: "crm.payment",
+        label: "Payment",
+        icon: <CreditCard size={18} className="text-green-700" />,
+        path: "/employee/crm/payment",
       },
     ].filter((child) => hasPermission(child.permission));
 
@@ -696,7 +903,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                   <span
                     className={`relative z-10 transition-colors duration-200 ${
                       isItemActive && !hasChildren
-                        ? "[&_svg]:text-white!"
+                        ? "text-white [&_svg]:text-white!"
                         : isFolderExpanded
                           ? "[&_svg]:text-green-600!"
                           : "text-slate-500 group-hover:text-green-600"
@@ -710,8 +917,8 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                       <div
                         className={`flex items-center justify-center font-bold uppercase ${
                           level > 0
-                            ? "w-4 h-4 text-[9px]"
-                            : "w-5 h-5 text-[10px]"
+                            ? "w-5 h-5 text-[11px]"
+                            : "size-6  text-[13px]"
                         }`}
                       >
                         {item.label.charAt(0)}
@@ -856,7 +1063,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
       <style>
         {`
         @keyframes tooltipAppear {
-          from { 
+          from {
             opacity: 0;
             transform: scale(0.9) translateY(-55%);
           }
@@ -906,6 +1113,9 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
                   console.error("Logo failed to load in expanded mode");
                   setLogoError(true);
                 }}
+                onLoad={() =>
+                  console.log("Logo loaded successfully in expanded mode")
+                }
               />
             ) : (
               <div className="w-10 h-10 rounded-lg bg-linear-to-br from-green-600 to-emerald-500 text-white flex items-center justify-center text-lg font-bold shadow-sm shrink-0">
@@ -976,7 +1186,6 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
           }}
         >
           {hoveredItem.label}
-
           <div className="absolute -left-1.75 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-white border-l border-b border-slate-200 rotate-45 rounded-sm" />
         </div>
       )}

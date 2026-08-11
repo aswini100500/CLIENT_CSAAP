@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   HiSearch,
@@ -24,7 +26,7 @@ import {
   BiPackage,
 } from "react-icons/bi";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
-import { useCompany } from "../context/CompanyContext";
+import useAuth from "../../../hooks/useAuth";
 
 const InvoiceManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,7 +49,7 @@ const InvoiceManagement = () => {
     pendingAmount: 0,
   });
 
-  const { companyId } = useCompany();
+  const { companyId } = useAuth();
 
   const statuses = [
     "All",
@@ -106,6 +108,7 @@ const InvoiceManagement = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/${companyId}`,
       );
+      console.log(response);
 
       const vouchersData = response.data;
       setVouchers(vouchersData);
@@ -147,10 +150,13 @@ const InvoiceManagement = () => {
   };
 
   const fetchVoucherItems = async (voucherId) => {
+    console.log(voucherId);
+
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher/getItems/${voucherId}`,
       );
+      console.log(response);
 
       setVoucherItems((prev) => ({
         ...prev,
@@ -171,7 +177,6 @@ const InvoiceManagement = () => {
       setLedgers(response.data);
     } catch (error) {
       console.error("Error fetching ledgers:", error);
-
       setLedgers([
         { id: 22, name: "Sundry Creditors" },
         { id: 23, name: "Cash Account" },
@@ -190,7 +195,6 @@ const InvoiceManagement = () => {
       setStocks(response.data);
     } catch (error) {
       console.error("Error fetching stocks:", error);
-
       setStocks([
         { id: 1, name: "Raw Materials" },
         { id: 2, name: "Office Supplies" },
@@ -282,14 +286,14 @@ const InvoiceManagement = () => {
             <h1>PURCHASE VOUCHER</h1>
             <h2>PV No: ${voucher.id}</h2>
           </div>
-          
+
           <div class="voucher-details">
             <p><strong>Date:</strong> ${formatDate(voucher.date)}</p>
             <p><strong>Supplier:</strong> ${voucher.customer || "Not specified"}</p>
             <p><strong>Ledger:</strong> ${ledgers.find((l) => l.id === voucher.ledgerId)?.name || "N/A"}</p>
             <p><strong>Company ID:</strong> ${companyId}</p>
           </div>
-          
+
           <table>
             <thead>
               <tr>
@@ -303,18 +307,18 @@ const InvoiceManagement = () => {
               ${itemsHtml}
             </tbody>
           </table>
-          
+
           <div class="total-section">
             <p><strong>Subtotal:</strong> ₹${parseFloat(voucher.subtotal || 0).toLocaleString("en-IN")}</p>
             <p><strong>GST (${voucher.gst_percentage || 0}%):</strong> ₹${parseFloat(voucher.gst_amount || 0).toLocaleString("en-IN")}</p>
             <h3><strong>Grand Total:</strong> ₹${parseFloat(voucher.grand_total || 0).toLocaleString("en-IN")}</h3>
           </div>
-          
+
           <div class="terms">
             <p><strong>Narration:</strong> ${voucher.narration || "No narration"}</p>
             <p><strong>Created:</strong> ${formatDate(voucher.created_at)}</p>
           </div>
-          
+
           <div class="signature">
             <div>
               <p>___________________</p>
@@ -1120,7 +1124,6 @@ const InvoiceManagement = () => {
           </div>
         </div>
       </div>
-
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
           <div className="flex items-center space-x-4">

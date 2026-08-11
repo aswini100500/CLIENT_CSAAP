@@ -1,8 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Trash2, Plus, Search, UserPlus } from "lucide-react";
+import React from "react";
+
+import { useState, useEffect, useRef } from "react";
+import {
+  Trash2,
+  Plus,
+  Search,
+  UserPlus,
+  ArrowLeft,
+  Save,
+  RotateCcw,
+  X,
+  FileText,
+  Layers,
+} from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
 import BulkImportButton from "./BulkImportButton";
 import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
@@ -41,7 +53,7 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew }) => {
       <div className="relative">
         <input
           type="text"
-          className="w-full rounded border border-slate-200 px-2 py-1.5 text-sm text-slate-800 outline-none focus:border-blue-400 focus:bg-white transition pr-8"
+          className="app-input w-full border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium pr-8 py-1.5 text-xs"
           placeholder="Search or add ledger..."
           value={searchTerm}
           onChange={(e) => {
@@ -50,18 +62,18 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew }) => {
           }}
           onFocus={() => setIsOpen(true)}
         />
-        <div className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400">
+        <div className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#00a651]">
           <Search size={14} />
         </div>
       </div>
 
       {isOpen && (
-        <div className="absolute z-100 mt-1 w-full bg-white border border-slate-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-9999 mt-1.5 w-full bg-white border border-[#cbe0d2] rounded-xl shadow-xl max-h-60 overflow-y-auto">
           {filtered.length > 0 ? (
             filtered.map((l) => (
               <div
                 key={l.id}
-                className="px-3 py-2 text-sm hover:bg-blue-50 cursor-pointer text-slate-700 border-b border-slate-50 last:border-b-0"
+                className="px-3.5 py-2 text-xs font-semibold hover:bg-[#f0fdf4] hover:text-[#00a651] cursor-pointer text-slate-700 border-b border-[#e2f2e9] last:border-b-0 text-left transition-colors"
                 onClick={() => {
                   onSelect(l.id);
                   setSearchTerm(l.name);
@@ -72,13 +84,13 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew }) => {
               </div>
             ))
           ) : (
-            <div className="px-3 py-2 text-sm text-slate-500 italic">
+            <div className="px-3.5 py-2 text-xs text-slate-400 italic text-left">
               No matches found
             </div>
           )}
 
           <div
-            className="px-3 py-2 text-sm bg-slate-50 hover:bg-blue-100 cursor-pointer text-blue-600 font-medium flex items-center gap-2 border-t border-slate-200"
+            className="px-3.5 py-2 text-xs bg-[#f0fdf4] hover:bg-[#e1f9eb] cursor-pointer text-[#00a651] font-bold flex items-center gap-1.5 border-t border-[#cbe0d2] text-left transition-colors"
             onClick={() => {
               onCreateNew(searchTerm);
               setIsOpen(false);
@@ -93,10 +105,15 @@ const SearchableLedgerSelect = ({ ledgers, value, onSelect, onCreateNew }) => {
 };
 
 const PaymentVoucher = () => {
-  const { user } = useAuth();
-  const { companyId } = useCompany();
+  const { user, role: userRole, companyId } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const userRoleStr = (userRole || user?.role || "admin").toLowerCase();
+  const listPath =
+    userRoleStr === "employee"
+      ? "/employee/hr/accounting/client/listOfPaymentVoucher"
+      : "/accounting/client/listOfPaymentVoucher";
 
   const [ledgers, setLedgers] = useState([]);
   const [bankCashLedgers, setBankCashLedgers] = useState([]);
@@ -125,7 +142,7 @@ const PaymentVoucher = () => {
         const res = await axios.get(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
         );
-        const allLedgers = res.data || [];
+        const allLedgers = Array.isArray(res.data) ? res.data : res.data?.data || [];
         setLedgers(allLedgers);
 
         const bankRes = await axios.get(
@@ -393,8 +410,7 @@ const PaymentVoucher = () => {
   );
 
   const resetForm = () => {
-    setVoucherNo(String(Number(voucherNo) + 1));
-    setDate("");
+    setDate(new Date().toISOString().split("T")[0]);
     setAccountType("");
     setEntries([
       {
@@ -407,6 +423,16 @@ const PaymentVoucher = () => {
       },
     ]);
     setNarration("");
+    if (companyId) {
+      axios
+        .get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/payment`,
+        )
+        .then((res) => {
+          if (res.data?.nextNumber) setVoucherNo(res.data.nextNumber);
+        })
+        .catch((e) => console.error(e));
+    }
   };
 
   const handleBulkImport = async (data) => {
@@ -423,7 +449,7 @@ const PaymentVoucher = () => {
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
       );
 
-      let latestLedgers = ledgerRes.data || [];
+      let latestLedgers = Array.isArray(ledgerRes.data) ? ledgerRes.data : ledgerRes.data?.data || [];
 
       const bankRes = await axios.get(
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`,
@@ -499,7 +525,9 @@ const PaymentVoucher = () => {
             };
 
             latestBankCash.push(matchedBank);
-          } catch (err) {}
+          } catch (err) {
+            console.log("Bank create failed", err);
+          }
         }
 
         selectedAccount = matchedBank?.id || "";
@@ -571,7 +599,9 @@ const PaymentVoucher = () => {
             };
 
             latestLedgers.push(matchedLedger);
-          } catch (err) {}
+          } catch (err) {
+            console.log("Ledger auto create failed", err);
+          }
         }
 
         const opening = parseFloat(matchedLedger?.openingBalance) || 0;
@@ -629,6 +659,8 @@ const PaymentVoucher = () => {
         text: "Imported data loaded successfully. Review and click Save Voucher.",
       });
     } catch (err) {
+      console.log(err);
+
       Swal.fire("Error", "Import failed", "error");
     }
   };
@@ -660,59 +692,84 @@ const PaymentVoucher = () => {
       role,
     };
 
+    const listPath =
+      role?.toLowerCase() === "employee"
+        ? "/employee/hr/accounting/client/listOfPaymentVoucher"
+        : "/accounting/client/listOfPaymentVoucher";
+
     try {
       if (isEditMode) {
         await axios.put(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/update/${id}`,
           payload,
         );
-        Swal.fire("Success", "Voucher updated successfully", "success");
-        if (role === "employee") {
-          navigate("/employee/hr/accounting/client/listOfPaymentVoucher");
-        } else {
-          navigate("/accounting/client/listOfPaymentVoucher");
-        }
-      } else {
-        const res = await axios.post(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/create/${companyId}`,
-          payload,
-        );
-
         Swal.fire({
-          title: "Saved",
-          text: "Voucher saved successfully",
           icon: "success",
-          showCancelButton: true,
-          confirmButtonText: "Download PDF",
-          cancelButtonText: "Close",
-        }).then((result) => {
-          if (result.isConfirmed && res.data?.pdf_path) {
-            const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
-
-            window.open(pdfUrl, "_blank");
-
-            fetch(pdfUrl)
-              .then((response) => response.blob())
-              .then((blob) => {
-                const blobUrl = window.URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = blobUrl;
-                link.download =
-                  res.data.pdf_path.split("/").pop() || "PaymentVoucher.pdf";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(blobUrl);
-              })
-              .catch((err) => console.error("Error downloading PDF:", err));
-          }
-          if (role === "employee") {
-            navigate("/employee/hr/accounting/client/listOfPaymentVoucher");
-          } else {
-            navigate("/accounting/client/listOfPaymentVoucher");
-          }
+          title: "Payment Voucher Updated Successfully",
+          timer: 1500,
+          showConfirmButton: false,
         });
+        navigate(listPath);
+        return;
       }
+
+      const res = await axios.post(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/create/${companyId}`,
+        payload,
+      );
+
+      const result = await Swal.fire({
+        icon: "success",
+        title: "Payment Voucher Created Successfully",
+        text: "The payment voucher has been saved. What would you like to do next?",
+        showCancelButton: true,
+        showDenyButton: !!res.data?.pdf_path,
+        confirmButtonColor: "#00a651",
+        cancelButtonColor: "#6b7280",
+        denyButtonColor: "#2563eb",
+        confirmButtonText: "Create Another",
+        cancelButtonText: "Go to Payment Voucher List",
+        denyButtonText: "Download PDF",
+      });
+
+      if (result.isDenied && res.data?.pdf_path) {
+        const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
+        window.open(pdfUrl, "_blank");
+        fetch(pdfUrl)
+          .then((response) => response.blob())
+          .then((blob) => {
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download =
+              res.data.pdf_path.split("/").pop() || "PaymentVoucher.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+          })
+          .catch((err) => console.error("Error downloading PDF:", err));
+
+        const followUp = await Swal.fire({
+          icon: "info",
+          title: "What's Next?",
+          text: "Would you like to create another payment voucher or go to the list?",
+          showCancelButton: true,
+          confirmButtonColor: "#00a651",
+          cancelButtonColor: "#6b7280",
+          confirmButtonText: "Create Another",
+          cancelButtonText: "Go to Payment Voucher List",
+        });
+        if (!followUp.isConfirmed) {
+          navigate(listPath);
+          return;
+        }
+      } else if (!result.isConfirmed) {
+        navigate(listPath);
+        return;
+      }
+
+      resetForm();
     } catch (err) {
       console.error(err);
       if (err.response && err.response.status === 409) {
@@ -728,211 +785,236 @@ const PaymentVoucher = () => {
   };
 
   const inputClass =
-    "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition bg-white";
+    "app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium";
 
   const tableInputClass =
-    "w-full rounded border border-transparent px-2 py-1.5 text-sm text-slate-800 outline-none focus:border-blue-400 focus:bg-white transition bg-transparent";
+    "w-full border border-[#c8ddcd] bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] rounded-xl font-semibold py-2.25 px-3 text-xs outline-none transition-all";
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 mx-auto">
-      <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
-        <div className="flex items-center gap-2">
-          <h1 className="text-base font-semibold text-slate-800">
-            Payment Voucher
-          </h1>
-          <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700">
-            PV
-          </span>
-        </div>
-        <BulkImportButton onImport={handleBulkImport} />
-      </div>
+    <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans">
+      <div className="max-w-6xl mx-auto bg-white app-panel border border-[#e2f2e9]/80 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+        <div className="flex justify-between items-center border-b border-[#e2f2e9] pb-5 mb-8">
+          <div className="flex items-center gap-3">
+            <h2 className="app-title text-xl font-extrabold text-[#042f2e]">
+              {isEditMode
+                ? "Payment Voucher Alteration"
+                : "Payment Voucher Creation"}
+            </h2>
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#f0fdf4] text-[#00a651] border border-[#c6f1d6]">
+              PV
+            </span>
+          </div>
 
-      <div className="flex flex-col gap-1 mb-5">
-        <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
-          Account Type (Bank / Cash)
-        </label>
-        <select
-          className={inputClass}
-          value={accountType}
-          onChange={(e) => setAccountType(e.target.value)}
-        >
-          <option value="">Select Bank / Cash Account</option>
-          {bankCashLedgers.map((l) => (
-            <option key={l.id} value={l.id}>
-              {l.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-5">
-        <div className="flex flex-col gap-1">
-          <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
-            Voucher Number
-          </label>
-          <input
-            type="text"
-            className={inputClass}
-            value={voucherNo}
-            onChange={(e) => setVoucherNo(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
-            Date
-          </label>
-          <input
-            type="date"
-            className={inputClass}
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-2">
-        Transaction Details
-      </p>
-
-      <div className="rounded-lg border border-slate-200 overflow-visible mb-3">
-        <table className="w-full text-sm border-collapse">
-          <thead>
-            <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-left">
-                Particulars
-              </th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
-                Opening
-              </th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
-                Closing
-              </th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
-                Amount (₹)
-              </th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-right">
-                Remaining
-              </th>
-              <th className="px-3 py-2 text-xs uppercase tracking-wide text-slate-400 font-medium text-center w-10"></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {entries.map((row, index) => (
-              <tr
-                key={index}
-                className="border-b border-slate-100 last:border-b-0 hover:bg-slate-50 transition-colors relative hover:z-50"
-              >
-                <td className="px-2 py-1">
-                  <SearchableLedgerSelect
-                    ledgers={ledgers}
-                    value={row.ledger}
-                    onSelect={(val) => onLedgerSelect(index, val)}
-                    onCreateNew={(name) => handleQuickCreateLedger(index, name)}
-                  />
-                </td>
-
-                <td className="px-3 py-2 text-right text-slate-500 text-sm">
-                  {row.ledger
-                    ? formatBalance(row.openingBalance, row.balanceType)
-                    : "0.00"}
-                </td>
-
-                <td className="px-3 py-2 text-right text-slate-500 text-sm">
-                  {row.ledger
-                    ? formatBalance(row.closingBalance, row.balanceType)
-                    : "0.00"}
-                </td>
-
-                <td className="px-2 py-1">
-                  <input
-                    type="number"
-                    placeholder="0.00"
-                    className={`${tableInputClass} text-right`}
-                    value={row.amount}
-                    onChange={(e) => updateAmount(index, e.target.value)}
-                  />
-                </td>
-
-                <td className="px-3 py-2 text-right text-slate-800 font-medium text-sm">
-                  {row.ledger
-                    ? formatBalance(row.remainingBalance, row.balanceType)
-                    : "0.00"}
-                </td>
-
-                <td className="px-2 py-1 text-center">
-                  {index > 0 && (
-                    <button
-                      onClick={() => removeRow(index)}
-                      className="text-slate-300 hover:text-red-400 hover:bg-red-50 rounded p-1 transition-colors"
-                    >
-                      <Trash2 size={13} />
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-
-          <tfoot>
-            <tr className="bg-slate-50 border-t border-slate-200">
-              <td className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                Total
-              </td>
-              <td />
-              <td />
-              <td className="px-3 py-2 text-right text-sm font-semibold text-slate-800">
-                ₹ {totalAmount.toFixed(2)}
-              </td>
-              <td />
-              <td />
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <button
-        onClick={addRow}
-        className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline transition-colors mb-5"
-      >
-        <Plus size={13} /> Add Row
-      </button>
-
-      <div className="flex justify-end mb-5">
-        <div className="bg-slate-50 rounded-lg px-5 py-3 flex flex-col items-end gap-1 min-w-48">
-          <div className="flex justify-between w-full text-sm font-semibold text-slate-800 gap-8">
-            <span>Grand Total</span>
-            <span>₹ {totalAmount.toFixed(2)}</span>
+          <div className="flex items-center gap-3">
+            <BulkImportButton onImport={handleBulkImport} />
+            <button
+              type="button"
+              onClick={() => navigate(listPath)}
+              className="flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors text-sm font-medium cursor-pointer"
+            >
+              <ArrowLeft size={16} /> Back to Payment List
+            </button>
           </div>
         </div>
-      </div>
 
-      <div className="flex flex-col gap-1 mb-5">
-        <label className="text-xs uppercase tracking-wide text-slate-400 font-medium">
-          Narration
-        </label>
-        <textarea
-          rows="2"
-          placeholder="Enter narration (optional)..."
-          className={`${inputClass} resize-none`}
-          value={narration}
-          onChange={(e) => setNarration(e.target.value)}
-        />
-      </div>
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+            <FileText size={16} className="text-[#00a651]" /> Basic Details
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-1">
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Account Type (Bank / Cash) :
+              </label>
+              <select
+                className={inputClass}
+                value={accountType}
+                onChange={(e) => setAccountType(e.target.value)}
+              >
+                <option value="">Select Bank / Cash Account</option>
+                {bankCashLedgers.map((l) => (
+                  <option key={l.id} value={l.id}>
+                    {l.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-      <div className="flex justify-end gap-2">
-        <button
-          onClick={resetForm}
-          className="px-4 py-2 rounded-lg text-sm text-slate-600 border border-slate-200 bg-white hover:bg-slate-50 transition-colors"
-        >
-          Reset
-        </button>
-        <button
-          onClick={saveVoucher}
-          className="px-5 py-2 rounded-lg text-sm text-white font-medium bg-blue-600 hover:bg-blue-700 transition-colors"
-        >
-          {isEditMode ? "Update Voucher" : "Save Voucher"}
-        </button>
+            <div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Voucher Number :
+              </label>
+              <input
+                type="text"
+                className={inputClass}
+                value={voucherNo}
+                onChange={(e) => setVoucherNo(e.target.value)}
+                placeholder="Enter voucher number"
+              />
+            </div>
+
+            <div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Date :
+              </label>
+              <input
+                type="date"
+                className={inputClass}
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <div className="flex justify-between items-center mb-4 border-b border-[#cbe0d2] pb-1.5">
+            <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider flex items-center gap-2">
+              <Layers size={16} className="text-[#00a651]" /> Transaction
+              Entries
+            </h3>
+            <button
+              type="button"
+              onClick={addRow}
+              className="flex items-center gap-1 text-xs font-bold text-[#00a651] bg-white border border-[#cbe0d2] px-3 py-1.5 rounded-lg hover:bg-[#f0fdf4] transition-colors cursor-pointer"
+            >
+              <Plus size={14} /> Add Row
+            </button>
+          </div>
+
+          <div className="rounded-xl border border-[#cbe0d2] bg-white overflow-visible mb-4">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="bg-[#f0fdf4] border-b border-[#cbe0d2]">
+                  <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e]">
+                    Particulars
+                  </th>
+                  <th className="px-4 py-3 text-right text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e]">
+                    Opening
+                  </th>
+                  <th className="px-4 py-3 text-right text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e]">
+                    Closing
+                  </th>
+                  <th className="px-4 py-3 text-right text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-36">
+                    Amount (₹)
+                  </th>
+                  <th className="px-4 py-3 text-right text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e]">
+                    Remaining
+                  </th>
+                  <th className="px-4 py-3 text-center text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-14">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className="divide-y divide-[#e2f2e9]">
+                {entries.map((row, index) => (
+                  <tr
+                    key={index}
+                    className="hover:bg-[#f8faf8] transition-colors relative hover:z-50"
+                  >
+                    <td className="p-2.5">
+                      <SearchableLedgerSelect
+                        ledgers={ledgers}
+                        value={row.ledger}
+                        onSelect={(val) => onLedgerSelect(index, val)}
+                        onCreateNew={(name) =>
+                          handleQuickCreateLedger(index, name)
+                        }
+                      />
+                    </td>
+                    <td className="p-2.5 text-right text-slate-600 font-medium text-xs">
+                      {row.ledger
+                        ? formatBalance(row.openingBalance, row.balanceType)
+                        : "0.00"}
+                    </td>
+                    <td className="p-2.5 text-right text-slate-600 font-medium text-xs">
+                      {row.ledger
+                        ? formatBalance(row.closingBalance, row.balanceType)
+                        : "0.00"}
+                    </td>
+                    <td className="p-2.5">
+                      <input
+                        type="number"
+                        placeholder="0.00"
+                        className={`${tableInputClass} text-right font-semibold`}
+                        value={row.amount}
+                        onChange={(e) => updateAmount(index, e.target.value)}
+                      />
+                    </td>
+                    <td className="p-2.5 text-right text-[#042f2e] font-bold text-xs">
+                      {row.ledger
+                        ? formatBalance(row.remainingBalance, row.balanceType)
+                        : "0.00"}
+                    </td>
+                    <td className="p-2.5 text-center">
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => removeRow(index)}
+                          className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded p-1 transition-colors cursor-pointer"
+                          title="Remove Row"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex justify-end mt-4">
+            <div className="bg-white border border-[#cbe0d2] rounded-xl p-4 min-w-64 text-right shadow-xs">
+              <div className="flex justify-between text-sm font-extrabold text-[#042f2e] gap-6">
+                <span>Grand Total:</span>
+                <span className="text-[#00a651]">
+                  ₹ {totalAmount.toFixed(2)}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+            Narration / Note :
+          </label>
+          <textarea
+            rows="2"
+            placeholder="Enter narration (optional)..."
+            className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium resize-none h-20"
+            value={narration}
+            onChange={(e) => setNarration(e.target.value)}
+          />
+        </div>
+
+        <div className="mt-8 flex justify-end gap-4 border-t border-[#e2f2e9] pt-6">
+          <button
+            type="button"
+            onClick={saveVoucher}
+            className="app-btn-primary flex items-center justify-center gap-2 cursor-pointer shadow-md min-w-36 transition-all hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <Save size={16} /> {isEditMode ? "Update Voucher" : "Save Voucher"}
+          </button>
+
+          <button
+            type="button"
+            onClick={resetForm}
+            className="app-btn-secondary flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl cursor-pointer hover:bg-slate-100 hover:text-slate-800 min-w-30 transition-all"
+          >
+            <RotateCcw size={16} /> Reset Form
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="app-btn-secondary flex items-center justify-center gap-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl cursor-pointer hover:bg-rose-100 hover:text-rose-800 hover:border-rose-300 min-w-30 transition-all"
+          >
+            <X size={16} /> Cancel
+          </button>
+        </div>
       </div>
     </div>
   );

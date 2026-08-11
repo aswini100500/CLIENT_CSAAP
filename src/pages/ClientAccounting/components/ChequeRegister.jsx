@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
+import { useState, useEffect } from "react";
 import {
   FileText,
   CheckCircle,
@@ -22,7 +24,7 @@ import {
 } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
+import useAuth from "../../../hooks/useAuth";
 
 const AddChequeModal = ({
   isOpen,
@@ -417,7 +419,7 @@ const ChequeRegister = () => {
   const [editingChequeId, setEditingChequeId] = useState(null);
   const [filterStatus, setFilterStatus] = useState("all");
   const [cheques, setCheques] = useState([]);
-  const { companyId } = useCompany();
+  const { companyId } = useAuth();
 
   const [chequeForm, setChequeForm] = useState({
     chequeNo: "",
@@ -498,16 +500,16 @@ const ChequeRegister = () => {
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/getAllcheque/${companyId}`,
       );
 
+      console.log("Fetched cheques:", response.data);
+
       if (response.data.success) {
         const transformedCheques = (response.data.data || []).map((cheque) => ({
           ...cheque,
-
           chequeNumber: cheque.chequeNo,
           dateIssued: cheque.date_issued,
-
           bankName: selectedAccount?.bankName || "Unknown Bank",
         }));
-
+        console.log("Transformed cheques:", transformedCheques);
         setCheques(transformedCheques);
       } else {
         Swal.fire(
@@ -542,6 +544,7 @@ const ChequeRegister = () => {
         .length,
     };
 
+    console.log("Updated stats:", newStats);
     setStats(newStats);
   };
 
@@ -599,7 +602,6 @@ const ChequeRegister = () => {
 
   const getAccountCheques = () => {
     if (!selectedAccount) return [];
-
     return cheques;
   };
 
@@ -668,11 +670,15 @@ const ChequeRegister = () => {
         amount: chequeForm.amount || "0.00",
       };
 
+      console.log("Saving cheque data:", chequeData);
+
       if (editingChequeId) {
         const response = await axios.put(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/updateCheque/${editingChequeId}`,
           chequeData,
         );
+
+        console.log("Update response:", response.data);
 
         if (response.data.success) {
           Swal.fire("Success", "Cheque updated successfully!", "success");
@@ -689,6 +695,8 @@ const ChequeRegister = () => {
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/addCheque/${companyId}`,
           chequeData,
         );
+
+        console.log("Add response:", response.data);
 
         if (response.data.success) {
           Swal.fire("Success", "Cheque added successfully!", "success");
@@ -715,6 +723,8 @@ const ChequeRegister = () => {
   };
 
   const handleDeleteCheque = async (chequeId) => {
+    console.log(chequeId);
+
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You want to delete this cheque?",
@@ -776,6 +786,7 @@ const ChequeRegister = () => {
           type: "",
         });
       }
+      console.log(chequesToAdd);
 
       let successCount = 0;
       for (const chequeData of chequesToAdd) {

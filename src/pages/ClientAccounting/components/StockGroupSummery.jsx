@@ -1,74 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import {
+  Package,
+  Plus,
+  Search,
+  RefreshCw,
+  FileSpreadsheet,
+  FileText,
+  Printer,
+  Edit3,
+  Trash2,
+  FolderKanban,
+  IndianRupee,
+  ShieldCheck,
+  ChevronDown,
+  Boxes,
+} from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
 
 const StockList = () => {
-  const { user } = useAuth();
+  const { companyId } = useAuth();
   const navigate = useNavigate();
   const [stocks, setStocks] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [showEmployeeActivity, setShowEmployeeActivity] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [selectedStock, setSelectedStock] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newStock, setNewStock] = useState(defaultStockForm());
-  const { companyId, employees } = useCompany();
-  const loggedInRole = user?.role?.toLowerCase() || "admin";
-  const loggedInEmployeeId = user?.employee_id || null;
-  const isEmployeeDashboard = loggedInRole === "employee";
-
-  const getEmployeeName = (id) => {
-    const emp = employees?.find((e) => e.id == id);
-    return emp ? emp.name : "Unknown Employee";
-  };
-
-  const categories = [
-    "Raw Materials",
-    "Finished Goods",
-    "Semi-Finished Goods",
-    "Consumables",
-    "Work in Progress",
-    "Trading Goods",
-  ];
-
-  const units = [
-    "Nos",
-    "Kg",
-    "Grams",
-    "Liters",
-    "Meters",
-    "Pieces",
-    "Boxes",
-    "Cartons",
-    "Bags",
-  ];
-
-  function defaultStockForm() {
-    return {
-      name: "",
-      alias: "",
-      under: "Raw Materials",
-      units: "Nos",
-      maintainInBatches: false,
-      trackDateOfManufacture: false,
-      expiryDateOfBatches: false,
-      rateOfDuty: "0.00",
-      gstApplicable: "Applicable",
-      hsn: "",
-      openingBalanceQty: "0.00",
-      openingBalanceRate: "0.00",
-      openingBalanceValue: "0.00",
-    };
-  }
 
   useEffect(() => {
     if (companyId) fetchStockData();
@@ -78,7 +43,7 @@ const StockList = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockData/${companyId}`,
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/getStockData/${companyId}`
       );
       if (response.data.message === "Data fetched successfully") {
         setStocks(response.data.data);
@@ -90,29 +55,6 @@ const StockList = () => {
       Swal.fire("Error", "Failed to load stock data: " + err.message, "error");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleUpdateStock = async () => {
-    if (!selectedStock) return;
-    try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/updateStock/${companyId}/${selectedStock.id}`,
-        newStock,
-      );
-      if (response.data.message === "Stock updated successfully") {
-        Swal.fire({
-          icon: "success",
-          title: "Updated",
-          text: `${newStock.name} updated successfully`,
-          timer: 1800,
-          showConfirmButton: false,
-        });
-        fetchStockData();
-        closeEditModal();
-      }
-    } catch (err) {
-      Swal.fire("Error", "Error updating stock: " + err.message, "error");
     }
   };
 
@@ -131,7 +73,7 @@ const StockList = () => {
     if (result.isConfirmed) {
       try {
         const response = await axios.delete(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/deleteStock/${companyId}/${id}`,
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/stock/deleteStock/${companyId}/${id}`
         );
         if (response.data.message === "Stock deleted successfully") {
           Swal.fire({
@@ -166,15 +108,9 @@ const StockList = () => {
     navigate(`${basePath}/stockItemCreation?id=${stock.id}`, { state: stock });
   };
 
-  const closeEditModal = () => {
-    setIsEditing(false);
-    setSelectedStock(null);
-    setNewStock(defaultStockForm());
-  };
-
   const fmt = (val) => {
     const num = parseFloat(val);
-    return isNaN(num) ? "0.00" : num.toFixed(2);
+    return isNaN(num) ? "0.00" : num.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
   const handleExportExcel = () => {
@@ -190,7 +126,7 @@ const StockList = () => {
         "Opening Qty": s.openingBalanceQty,
         "Opening Rate": s.openingBalanceRate,
         "Opening Value": s.openingBalanceValue,
-      })),
+      }))
     );
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "StockList");
@@ -199,9 +135,7 @@ const StockList = () => {
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
-
     doc.setFontSize(16);
-
     doc.text("Stock List Report", 14, 15);
 
     const tableData = filteredStocks.map((s) => [
@@ -218,7 +152,6 @@ const StockList = () => {
 
     autoTable(doc, {
       startY: 25,
-
       head: [
         [
           "Name",
@@ -232,27 +165,20 @@ const StockList = () => {
           "Value",
         ],
       ],
-
       body: tableData,
-
-      styles: {
-        fontSize: 8,
-      },
-
-      headStyles: {
-        fillColor: [37, 99, 235],
-      },
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [0, 166, 81] },
     });
 
     doc.save("Stock_List_Report.pdf");
   };
+
   const handlePrint = () => {
     const printWindow = window.open("", "", "width=1200,height=800");
 
     const rows = filteredStocks
       .map(
         (s) => `
-
       <tr>
         <td>${s.name}</td>
         <td>${s.alias || "-"}</td>
@@ -260,97 +186,32 @@ const StockList = () => {
         <td>${s.units}</td>
         <td>${s.hsn || "-"}</td>
         <td>${s.gstApplicable}</td>
-        <td style="text-align:right;">
-          ${fmt(s.openingBalanceQty)}
-        </td>
-        <td style="text-align:right;">
-          ₹${fmt(s.openingBalanceRate)}
-        </td>
-        <td style="text-align:right;">
-          ₹${fmt(s.openingBalanceValue)}
-        </td>
+        <td style="text-align:right;">${fmt(s.openingBalanceQty)}</td>
+        <td style="text-align:right;">₹${fmt(s.openingBalanceRate)}</td>
+        <td style="text-align:right;">₹${fmt(s.openingBalanceValue)}</td>
       </tr>
-
-    `,
+    `
       )
       .join("");
 
     printWindow.document.write(`
-
     <html>
-
       <head>
-
-        <title>
-          Stock List Report
-        </title>
-
+        <title>Stock List Report</title>
         <style>
-
-          body {
-
-            font-family:
-              Arial,
-              sans-serif;
-
-            padding: 24px;
-
-            color: #111827;
-          }
-
-          h1 {
-
-            margin-bottom: 20px;
-
-            color: #2563eb;
-          }
-
-          table {
-
-            width: 100%;
-
-            border-collapse: collapse;
-          }
-
-          th, td {
-
-            border: 1px solid #d1d5db;
-
-            padding: 10px;
-
-            font-size: 12px;
-          }
-
-          th {
-
-            background: #eff6ff;
-
-            text-align: left;
-          }
-
-          tfoot td {
-
-            font-weight: bold;
-
-            background: #f9fafb;
-          }
-
+          body { font-family: sans-serif; padding: 24px; color: #042f2e; }
+          h1 { margin-bottom: 20px; color: #00a651; }
+          table { width: 100%; border-collapse: collapse; }
+          th, td { border: 1px solid #e2f2e9; padding: 10px; font-size: 12px; }
+          th { background: #f0fdf4; text-align: left; }
+          tfoot td { font-weight: bold; background: #f8faf8; }
         </style>
-
       </head>
-
       <body>
-
-        <h1>
-          Stock List Report
-        </h1>
-
+        <h1>Stock List Report</h1>
         <table>
-
           <thead>
-
             <tr>
-
               <th>Name</th>
               <th>Alias</th>
               <th>Category</th>
@@ -360,50 +221,24 @@ const StockList = () => {
               <th>Qty</th>
               <th>Rate</th>
               <th>Value</th>
-
             </tr>
-
           </thead>
-
-          <tbody>
-
-            ${rows}
-
-          </tbody>
-
+          <tbody>${rows}</tbody>
           <tfoot>
-
             <tr>
-
-              <td colspan="8">
-                Total
-              </td>
-
-              <td style="text-align:right;">
-                ₹${filteredStocks
-                  .reduce(
-                    (s, i) => s + parseFloat(i.openingBalanceValue || 0),
-                    0,
-                  )
-                  .toFixed(2)}
-              </td>
-
+              <td colspan="8">Total</td>
+              <td style="text-align:right;">₹${filteredStocks
+                .reduce((s, i) => s + parseFloat(i.openingBalanceValue || 0), 0)
+                .toLocaleString("en-IN", { minimumFractionDigits: 2 })}</td>
             </tr>
-
           </tfoot>
-
         </table>
-
       </body>
-
     </html>
-
   `);
 
     printWindow.document.close();
-
     printWindow.focus();
-
     setTimeout(() => {
       printWindow.print();
     }, 500);
@@ -458,30 +293,10 @@ const StockList = () => {
 
   const totalValue = () =>
     stocks.reduce((sum, s) => sum + parseFloat(s.openingBalanceValue || 0), 0);
-  const avgRate = () =>
-    stocks.length
-      ? (
-          stocks.reduce(
-            (sum, s) => sum + parseFloat(s.openingBalanceRate || 0),
-            0,
-          ) / stocks.length
-        ).toFixed(2)
-      : "0.00";
+
   const uniqueCategories = () => new Set(stocks.map((s) => s.under)).size;
 
   const filteredStocks = stocks.filter((s) => {
-    if (isEmployeeDashboard) {
-      if (s.employee_id != loggedInEmployeeId) return false;
-    } else {
-      const isCreatedByEmployee =
-        s.employee_id && s.role?.toLowerCase() === "employee";
-      if (showEmployeeActivity) {
-        if (!isCreatedByEmployee) return false;
-      } else {
-        if (isCreatedByEmployee) return false;
-      }
-    }
-
     return (
       s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (s.alias || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -492,10 +307,10 @@ const StockList = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#005AB3] mx-auto"></div>
-          <p className="mt-3 text-sm text-gray-500">Loading stock data…</p>
+      <div className="erp-root app-shell min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#00a651] border-t-transparent mx-auto"></div>
+          <p className="text-xs font-semibold text-[#475569]">Loading stock data…</p>
         </div>
       </div>
     );
@@ -503,13 +318,13 @@ const StockList = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 font-medium mb-2">Failed to load</p>
-          <p className="text-gray-500 text-sm mb-4">{error}</p>
+      <div className="erp-root app-shell min-h-screen flex items-center justify-center p-4">
+        <div className="app-panel p-6 max-w-md text-center border border-rose-200 rounded-2xl bg-white space-y-3">
+          <p className="text-sm font-bold text-rose-700">Failed to load stock data</p>
+          <p className="text-xs text-[#475569]">{error}</p>
           <button
             onClick={fetchStockData}
-            className="bg-[#005AB3] text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
+            className="h-10 px-4 text-xs font-bold text-white bg-rose-600 rounded-xl hover:bg-rose-700 transition-all cursor-pointer inline-flex items-center justify-center"
           >
             Retry
           </button>
@@ -527,913 +342,334 @@ const StockList = () => {
         }
       `}</style>
 
-      <div className="min-h-screen bg-gray-100 p-5 font-[sans-serif]">
-        <div className="max-w-7xl mx-auto space-y-4">
-          <div className="bg-[#005AB3] text-white px-5 py-3 shadow rounded-xl">
-            <div className="flex items-center justify-between gap-4 flex-wrap">
-              <div className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"
-                  />
-                </svg>
-                <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
-                  Stock List
+      <div className="erp-root app-shell min-h-screen p-6 font-sans">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Header Card */}
+          <div className="bg-white app-panel border border-[#e2f2e9] rounded-2xl p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="size-11 rounded-2xl bg-[#ecfdf5] border border-[#c6f1d6] flex items-center justify-center shrink-0">
+                <Boxes className="size-6 text-[#00a651]" />
+              </div>
+              <div>
+                <h1 className="app-title text-xl font-extrabold text-[#042f2e]">
+                  Stock Summary
                 </h1>
+                <p className="app-subtitle text-xs md:text-sm text-[#475569] font-medium mt-0.5">
+                  Inventory items breakdown, category valuation, and stock group register.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 flex-wrap no-print">
+              <button
+                onClick={fetchStockData}
+                className="h-10 px-4 app-btn-secondary text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              >
+                <RefreshCw className="size-4" /> Refresh
+              </button>
+
+              <button
+                onClick={handlePrint}
+                className="h-10 px-4 app-btn-secondary text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              >
+                <Printer className="size-4" /> Print
+              </button>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  className="h-10 px-4 text-xs font-bold text-[#00a651] bg-[#f0fdf4] border border-[#c6f1d6] rounded-xl hover:bg-[#00a651] hover:text-white transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <FileSpreadsheet className="size-4" /> Export <ChevronDown className="size-4" />
+                </button>
+
+                {showExportMenu && (
+                  <div className="absolute right-0 mt-2 w-44 bg-white border border-[#e2f2e9] rounded-xl shadow-lg z-20 overflow-hidden py-1">
+                    <button
+                      onClick={() => {
+                        handleExportExcel();
+                        setShowExportMenu(false);
+                      }}
+                      className="w-full text-left px-4 py-2.5 text-xs font-semibold text-[#042f2e] hover:bg-[#f0fdf4] flex items-center gap-2"
+                    >
+                      <FileSpreadsheet className="size-4 text-[#00a651]" /> Excel Sheet
+                    </button>
+                    <button
+                      onClick={() => {
+                        exportToCSV();
+                        setShowExportMenu(false);
+                      }}
+                      className="w-full text-left px-4 py-2.5 text-xs font-semibold text-[#042f2e] hover:bg-[#f0fdf4] flex items-center gap-2"
+                    >
+                      <FileText className="size-4 text-sky-600" /> CSV File
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleExportPDF();
+                        setShowExportMenu(false);
+                      }}
+                      className="w-full text-left px-4 py-2.5 text-xs font-semibold text-[#042f2e] hover:bg-[#f0fdf4] flex items-center gap-2"
+                    >
+                      <Printer className="size-4 text-rose-600" /> PDF Document
+                    </button>
+                  </div>
+                )}
               </div>
 
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <div className="relative">
-                  <svg
-                    className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Search name, alias, HSN…"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="h-8.5 pl-8 pr-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg outline-none transition-all placeholder:text-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 w-56"
-                  />
-                </div>
+              <button
+                onClick={() => {
+                  const userStr = sessionStorage.getItem("user");
+                  let role = "admin";
+                  if (userStr) {
+                    try {
+                      const userObj = JSON.parse(userStr);
+                      role = userObj.role || "admin";
+                    } catch (e) {}
+                  }
+                  const basePath =
+                    role === "employee"
+                      ? "/employee/hr/accounting/client"
+                      : "/accounting/client";
+                  navigate(`${basePath}/stockItemCreation`);
+                }}
+                className="h-10 px-4 app-btn-primary text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus className="size-4" /> Add Stock Item
+              </button>
+            </div>
+          </div>
 
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={() => {
-                      const userStr = sessionStorage.getItem("user");
-                      let role = "admin";
-                      if (userStr) {
-                        try {
-                          const userObj = JSON.parse(userStr);
-                          role = userObj.role || "admin";
-                        } catch (e) {}
-                      }
-                      const basePath =
-                        role === "employee"
-                          ? "/employee/hr/accounting/client"
-                          : "/accounting/client";
-                      navigate(`${basePath}/stockItemCreation`);
-                    }}
-                    className="flex items-center gap-1.5 bg-[#1a56db] hover:bg-blue-600 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap"
-                  >
-                    <svg
-                      className="w-3.5 h-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
-                    Create
-                  </button>
-
-                  <button
-                    onClick={handlePrint}
-                    className="flex items-center gap-1.5 bg-gray-600 hover:bg-gray-700 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap"
-                  >
-                    <svg
-                      className="w-3.5 h-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                      />
-                    </svg>
-                    Print
-                  </button>
-
-                  <div className="relative">
-                    <button
-                      onClick={() => setShowExportMenu(!showExportMenu)}
-                      className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap"
-                    >
-                      <svg
-                        className="w-3.5 h-3.5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                      Export
-                      <svg
-                        className="w-3 h-3 ml-0.5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
-
-                    {showExportMenu && (
-                      <div className="absolute right-0 mt-1 w-28 bg-white rounded-md shadow-lg border border-gray-200 z-50 overflow-hidden">
-                        <button
-                          onClick={() => {
-                            handleExportExcel();
-                            setShowExportMenu(false);
-                          }}
-                          className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
-                        >
-                          <svg
-                            className="w-3.5 h-3.5 text-green-600"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                            />
-                          </svg>
-                          Excel
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleExportPDF();
-                            setShowExportMenu(false);
-                          }}
-                          className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
-                        >
-                          <svg
-                            className="w-3.5 h-3.5 text-red-600"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                            />
-                          </svg>
-                          PDF
-                        </button>
-                      </div>
-                    )}
+          {/* Metric Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="app-panel p-5 border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold text-[#475569]">Total Stock Items</p>
+                  <div className="mt-2 text-2xl font-extrabold text-[#042f2e]">
+                    {stocks.length}
                   </div>
+                  <p className="mt-2 text-xs font-medium text-[#94a3b8]">
+                    {filteredStocks.length} currently showing
+                  </p>
+                </div>
+                <div className="size-11 rounded-2xl bg-[#ecfdf5] border border-[#c6f1d6] flex items-center justify-center shrink-0">
+                  <Package className="size-5 text-[#00a651]" />
+                </div>
+              </div>
+            </div>
 
-                  {!isEmployeeDashboard && (
-                    <button
-                      onClick={() => setShowEmployeeActivity((prev) => !prev)}
-                      className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap border ${
-                        showEmployeeActivity
-                          ? "bg-slate-900 text-white border-slate-900"
-                          : "bg-white/10 text-white border-white/20 hover:bg-white/20"
-                      }`}
-                    >
-                      <svg
-                        className="w-3.5 h-3.5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                      </svg>
-                      {showEmployeeActivity
-                        ? "Back to Stock"
-                        : "Employee Activity"}
-                    </button>
-                  )}
+            <div className="app-panel p-5 border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold text-[#475569]">Stock Groups</p>
+                  <div className="mt-2 text-2xl font-extrabold text-[#042f2e]">
+                    {uniqueCategories()}
+                  </div>
+                  <p className="mt-2 text-xs font-medium text-[#94a3b8]">
+                    Active item categories
+                  </p>
+                </div>
+                <div className="size-11 rounded-2xl bg-sky-50 border border-sky-200 flex items-center justify-center shrink-0">
+                  <FolderKanban className="size-5 text-sky-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="app-panel p-5 border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold text-[#475569]">Total Opening Value</p>
+                  <div className="mt-2 text-2xl font-extrabold text-[#00a651]">
+                    ₹{totalValue().toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  </div>
+                  <p className="mt-2 text-xs font-medium text-[#94a3b8]">
+                    Asset stock valuation
+                  </p>
+                </div>
+                <div className="size-11 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0">
+                  <IndianRupee className="size-5 text-emerald-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="app-panel p-5 border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold text-[#475569]">GST Applicable</p>
+                  <div className="mt-2 text-2xl font-extrabold text-[#042f2e]">
+                    {stocks.filter((s) => s.gstApplicable === "Applicable").length}
+                  </div>
+                  <p className="mt-2 text-xs font-medium text-[#94a3b8]">
+                    Tax registered stock items
+                  </p>
+                </div>
+                <div className="size-11 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="size-5 text-purple-600" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 no-print">
-            {[
-              {
-                label: "Total items",
-                value: stocks.length,
-                color: "text-gray-800",
-              },
-              {
-                label: "Opening value",
-                value: `₹${totalValue().toLocaleString("en-IN", { minimumFractionDigits: 2 })}`,
-                color: "text-[#005AB3]",
-              },
-              {
-                label: "Categories",
-                value: uniqueCategories(),
-                color: "text-green-700",
-              },
-              {
-                label: "Avg. rate",
-                value: `₹${avgRate()}`,
-                color: "text-purple-600",
-              },
-            ].map(({ label, value, color }) => (
-              <div
-                key={label}
-                className="bg-white rounded-xl border border-gray-200 px-4 py-3"
-              >
-                <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">
-                  {label}
-                </p>
-                <p className={`text-2xl font-semibold ${color}`}>{value}</p>
-              </div>
-            ))}
+          {/* Search Filter Panel */}
+          <div className="app-panel p-4 border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs no-print">
+            <div className="relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8] size-4" />
+              <input
+                type="text"
+                placeholder="Search by stock item name, alias, HSN code, or group..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="app-input w-full pl-10 pr-4 py-2.5 border border-[#e2f2e9] rounded-xl text-sm font-medium text-slate-900 bg-white placeholder-[#94a3b8] focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] outline-none"
+              />
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
-              <span className="font-medium text-gray-800">Stock items</span>
-              <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
-                {filteredStocks.length} of {stocks.length}
+          {/* Table Panel */}
+          <div className="app-panel overflow-hidden border border-[#e2f2e9] rounded-2xl bg-white shadow-2xs">
+            <div className="app-section-bar px-6 py-4 bg-[#f0fdf4]/60 border-b border-[#e2f2e9] flex items-center justify-between">
+              <h3 className="app-heading text-sm font-bold text-[#042f2e]">
+                Stock Items Register ({filteredStocks.length} items)
+              </h3>
+              <span className="text-xs text-[#042f2e] font-bold">
+                Total Value: ₹{filteredStocks.reduce((sum, s) => sum + parseFloat(s.openingBalanceValue || 0), 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
               </span>
             </div>
+
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50 text-xs text-gray-400 uppercase tracking-wide">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-[#f8faf8] border-b border-[#e2f2e9]">
                   <tr>
-                    <th className="px-4 py-3 text-left font-medium">Name</th>
-                    <th className="px-4 py-3 text-left font-medium">Alias</th>
-                    <th className="px-4 py-3 text-left font-medium">
-                      Category
+                    <th className="px-4 py-3 text-center text-xs font-bold text-slate-700 uppercase tracking-wider w-12">
+                      S.No
                     </th>
-                    <th className="px-4 py-3 text-left font-medium">Unit</th>
-                    <th className="px-4 py-3 text-left font-medium">HSN</th>
-                    <th className="px-4 py-3 text-left font-medium">GST</th>
-                    <th className="px-4 py-3 text-right font-medium">Qty</th>
-                    <th className="px-4 py-3 text-right font-medium">
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Item Name & Alias
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Group / Category
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Units
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      HSN Code
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      GST Status
+                    </th>
+                    <th className="px-4 py-3 text-right text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Opening Qty
+                    </th>
+                    <th className="px-4 py-3 text-right text-xs font-bold text-slate-700 uppercase tracking-wider">
                       Rate (₹)
                     </th>
-                    <th className="px-4 py-3 text-right font-medium">
+                    <th className="px-4 py-3 text-right text-xs font-bold text-slate-700 uppercase tracking-wider">
                       Value (₹)
                     </th>
-                    <th className="px-4 py-3 text-center font-medium no-print">
+                    <th className="px-4 py-3 text-center text-xs font-bold text-slate-700 uppercase tracking-wider no-print">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {filteredStocks.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={10}
-                        className="text-center py-10 text-gray-400 text-sm"
-                      >
-                        No stock items found
-                      </td>
-                    </tr>
-                  ) : (
-                    filteredStocks.map((stock) => (
+                <tbody className="divide-y divide-[#e2f2e9] bg-white">
+                  {filteredStocks.length > 0 ? (
+                    filteredStocks.map((stock, index) => (
                       <tr
                         key={stock.id}
-                        className="hover:bg-gray-50 cursor-pointer transition"
-                        onClick={() => {
-                          setSelectedStock(stock);
-                          setIsEditing(false);
-                        }}
+                        className="hover:bg-[#f0fdf4]/50 transition-colors duration-150"
                       >
-                        <td className="px-4 py-3">
-                          <p className="font-medium text-gray-800">
-                            {stock.name}
-                            {stock.employee_id &&
-                              stock.role?.toLowerCase() === "employee" && (
-                                <span className="ml-2 text-xs text-gray-500 font-normal">
-                                  (Created by:{" "}
-                                  {getEmployeeName(stock.employee_id)})
+                        <td className="px-4 py-3.5 text-center text-xs font-medium text-slate-500">
+                          {index + 1}
+                        </td>
+                        <td className="px-4 py-3.5">
+                          <div className="flex items-center gap-3">
+                            <div className="size-9 rounded-xl bg-[#ecfdf5] border border-[#c6f1d6] flex items-center justify-center shrink-0 font-bold text-[#00a651] text-xs">
+                              {stock.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <span className="text-sm font-semibold text-slate-900 block leading-snug">
+                                {stock.name}
+                              </span>
+                              {stock.alias && (
+                                <span className="text-xs font-normal text-slate-500 block mt-0.5">
+                                  Alias: {stock.alias}
                                 </span>
                               )}
-                          </p>
-                          <div className="flex gap-1 mt-1 flex-wrap">
-                            {stock.maintainInBatches === 1 && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-medium">
-                                Batches
-                              </span>
-                            )}
-                            {stock.trackDateOfManufacture === 1 && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-green-50 text-green-700 font-medium">
-                                Mfg date
-                              </span>
-                            )}
-                            {stock.expiryDateOfBatches === 1 && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-red-50 text-red-600 font-medium">
-                                Expiry
-                              </span>
-                            )}
+                            </div>
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-gray-500">
-                          {stock.alias || "—"}
-                        </td>
-                        <td className="px-4 py-3 text-gray-500">
-                          {stock.under}
-                        </td>
-                        <td className="px-4 py-3 text-gray-500">
-                          {stock.units}
-                        </td>
-                        <td className="px-4 py-3 text-gray-500">
-                          {stock.hsn || "—"}
-                        </td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
-                              stock.gstApplicable === "Applicable"
-                                ? "bg-green-50 text-green-700"
-                                : "bg-gray-100 text-gray-500"
-                            }`}
-                          >
-                            {stock.gstApplicable === "Applicable"
-                              ? stock.gstApplicable
-                              : "—"}
+                        <td className="px-4 py-3.5">
+                          <span className="inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-50 text-sky-700 border border-sky-200">
+                            {stock.under}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-right text-gray-700 tabular-nums">
-                          {parseFloat(stock.openingBalanceQty).toFixed(2)}
+                        <td className="px-4 py-3.5 text-sm font-medium text-slate-800">
+                          {stock.units}
                         </td>
-                        <td className="px-4 py-3 text-right text-gray-700 tabular-nums">
-                          {parseFloat(stock.openingBalanceRate).toFixed(2)}
+                        <td className="px-4 py-3.5 text-sm font-semibold text-slate-900">
+                          {stock.hsn || "—"}
                         </td>
-                        <td className="px-4 py-3 text-right font-medium text-[#005AB3] tabular-nums">
-                          ₹{parseFloat(stock.openingBalanceValue).toFixed(2)}
+                        <td className="px-4 py-3.5">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-lg ${
+                              stock.gstApplicable === "Applicable"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : "bg-slate-100 text-slate-600 border border-slate-200"
+                            }`}
+                          >
+                            {stock.gstApplicable}
+                          </span>
                         </td>
-                        <td className="px-4 py-3 text-center no-print">
-                          <div className="flex items-center justify-center gap-2">
-                            {!(
-                              !isEmployeeDashboard &&
-                              stock.employee_id &&
-                              stock.role?.toLowerCase() === "employee"
-                            ) && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  e.preventDefault();
-                                  handleEditClick(stock);
-                                }}
-                                className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-600 transition"
-                                title="Edit"
-                              >
-                                <svg
-                                  className="w-4 h-4"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                  />
-                                </svg>
-                              </button>
-                            )}
+                        <td className="px-4 py-3.5 text-right text-sm font-medium text-slate-800">
+                          {fmt(stock.openingBalanceQty)}
+                        </td>
+                        <td className="px-4 py-3.5 text-right text-sm font-medium text-slate-800">
+                          ₹{fmt(stock.openingBalanceRate)}
+                        </td>
+                        <td className="px-4 py-3.5 text-right text-sm font-bold text-[#00a651]">
+                          ₹{fmt(stock.openingBalanceValue)}
+                        </td>
+                        <td className="px-4 py-3.5 text-center no-print">
+                          <div className="flex items-center justify-center gap-1">
                             <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                handleDeleteStock(stock.id);
-                              }}
-                              className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition"
-                              title="Delete"
+                              onClick={() => handleEditClick(stock)}
+                              className="p-1.5 rounded-lg text-slate-500 hover:text-[#00a651] hover:bg-[#f0fdf4] transition-all cursor-pointer"
+                              title="Edit Stock Item"
                             >
-                              <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
+                              <Edit3 className="size-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteStock(stock.id)}
+                              className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all cursor-pointer"
+                              title="Delete Stock Item"
+                            >
+                              <Trash2 className="size-4" />
                             </button>
                           </div>
                         </td>
                       </tr>
                     ))
+                  ) : (
+                    <tr>
+                      <td colSpan="10" className="px-4 py-12 text-center">
+                        <Package className="size-8 mx-auto mb-3 text-[#94a3b8]" />
+                        <p className="text-sm font-bold text-[#042f2e]">
+                          No stock items found
+                        </p>
+                        <p className="text-xs mt-1 font-medium text-[#475569]">
+                          {searchTerm
+                            ? "Try refining your search keyword."
+                            : "Click 'Add Stock Item' to register your first product."}
+                        </p>
+                      </td>
+                    </tr>
                   )}
                 </tbody>
-                <tfoot className="border-t-2 border-gray-200 bg-gray-50">
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="px-4 py-3 text-sm font-medium text-gray-500"
-                    >
-                      Total ({filteredStocks.length} items)
-                    </td>
-                    <td className="px-4 py-3 text-right font-semibold text-gray-800 tabular-nums">
-                      {filteredStocks
-                        .reduce(
-                          (s, i) => s + parseFloat(i.openingBalanceQty || 0),
-                          0,
-                        )
-                        .toFixed(2)}
-                    </td>
-                    <td className="px-4 py-3 text-right text-gray-400">—</td>
-                    <td className="px-4 py-3 text-right font-semibold text-[#005AB3] tabular-nums">
-                      ₹
-                      {filteredStocks
-                        .reduce(
-                          (s, i) => s + parseFloat(i.openingBalanceValue || 0),
-                          0,
-                        )
-                        .toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                    </td>
-                    <td className="no-print" />
-                  </tr>
-                </tfoot>
               </table>
             </div>
           </div>
         </div>
       </div>
-
-      {selectedStock && !isEditing && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 no-print"
-          onClick={() => setSelectedStock(null)}
-        >
-          <div
-            className="bg-white rounded-xl w-full max-w-lg overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="bg-[#005AB3] px-5 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-white font-semibold text-[15px] leading-tight">
-                    {selectedStock.name}
-                  </p>
-                  <p className="text-white/65 text-xs mt-0.5">
-                    {selectedStock.alias || "No alias"} · {selectedStock.under}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span
-                  className={`text-[11px] px-2.5 py-1 rounded-full font-medium ${
-                    selectedStock.gstApplicable === "Applicable"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-gray-100 text-gray-500"
-                  }`}
-                >
-                  {selectedStock.gstApplicable === "Applicable"
-                    ? selectedStock.gstApplicable
-                    : "—"}
-                </span>
-                <button
-                  onClick={() => setSelectedStock(null)}
-                  className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center text-white hover:bg-white/25 transition text-lg leading-none"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-
-            <div className="p-5 space-y-4">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-                  Basic details
-                </p>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-3">
-                  {[
-                    ["Category", selectedStock.under],
-                    ["Units", selectedStock.units],
-                    ["HSN code", selectedStock.hsn || "—"],
-                    ["Rate of duty", `${selectedStock.rateOfDuty}%`],
-                  ].map(([label, val]) => (
-                    <div key={label}>
-                      <p className="text-xs text-gray-400 mb-0.5">{label}</p>
-                      <p className="text-sm font-medium text-gray-800">{val}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-gray-50 rounded-xl p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-                  Opening balance
-                </p>
-                <div className="grid grid-cols-3 gap-3 text-center">
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Quantity</p>
-                    <p className="text-base font-semibold text-gray-800">
-                      {parseFloat(selectedStock.openingBalanceQty).toFixed(2)}
-                      <span className="text-xs text-gray-400 ml-1">
-                        {selectedStock.units}
-                      </span>
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Rate</p>
-                    <p className="text-base font-semibold text-gray-800">
-                      ₹{parseFloat(selectedStock.openingBalanceRate).toFixed(2)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Value</p>
-                    <p className="text-base font-semibold text-[#005AB3]">
-                      ₹
-                      {parseFloat(selectedStock.openingBalanceValue).toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gray-50 rounded-xl p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-                  Batch &amp; tracking
-                </p>
-                <div className="grid grid-cols-3 gap-3">
-                  {[
-                    [
-                      "Maintain batches",
-                      selectedStock.maintainInBatches === 1,
-                      "bg-blue-50 text-blue-700",
-                    ],
-                    [
-                      "Track mfg. date",
-                      selectedStock.trackDateOfManufacture === 1,
-                      "bg-green-50 text-green-700",
-                    ],
-                    [
-                      "Track expiry",
-                      selectedStock.expiryDateOfBatches === 1,
-                      "bg-red-50 text-red-600",
-                    ],
-                  ].map(([label, active, cls]) => (
-                    <div key={label}>
-                      <p className="text-xs text-gray-400 mb-1.5">{label}</p>
-                      <span
-                        className={`text-[11px] px-2.5 py-1 rounded-full font-medium ${active ? cls : "bg-gray-100 text-gray-400"}`}
-                      >
-                        {active ? "Yes" : "No"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="px-5 py-3 border-t border-gray-100 flex justify-end gap-2">
-              <button
-                onClick={() => setSelectedStock(null)}
-                className="px-4 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition text-gray-600"
-              >
-                Close
-              </button>
-              {!(
-                !isEmployeeDashboard &&
-                selectedStock.employee_id &&
-                selectedStock.role?.toLowerCase() === "employee"
-              ) && (
-                <button
-                  onClick={() => handleEditClick(selectedStock)}
-                  className="px-4 py-1.5 text-sm bg-[#005AB3] text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-1.5"
-                >
-                  <svg
-                    className="w-3.5 h-3.5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
-                  Edit stock
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isEditing && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 no-print"
-          onClick={closeEditModal}
-        >
-          <div
-            className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="bg-[#005AB3] px-5 py-4 flex items-center justify-between sticky top-0 z-10">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-white font-semibold text-[15px]">
-                    Edit stock item
-                  </p>
-                  <p className="text-white/65 text-xs">{selectedStock?.name}</p>
-                </div>
-              </div>
-              <button
-                onClick={closeEditModal}
-                className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center text-white hover:bg-white/25 transition text-lg leading-none"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="p-5 space-y-5">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-                  Basic details
-                </p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      Stock name <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={newStock.name}
-                      onChange={(e) =>
-                        setNewStock({ ...newStock, name: e.target.value })
-                      }
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005AB3]/30 focus:border-[#005AB3]"
-                      placeholder="Enter stock name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      Alias
-                    </label>
-                    <input
-                      type="text"
-                      value={newStock.alias}
-                      onChange={(e) =>
-                        setNewStock({ ...newStock, alias: e.target.value })
-                      }
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005AB3]/30 focus:border-[#005AB3]"
-                      placeholder="Optional alias"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      Category <span className="text-red-400">*</span>
-                    </label>
-                    <select
-                      value={newStock.under}
-                      onChange={(e) =>
-                        setNewStock({ ...newStock, under: e.target.value })
-                      }
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005AB3]/30 focus:border-[#005AB3]"
-                    >
-                      {categories.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      Units <span className="text-red-400">*</span>
-                    </label>
-                    <select
-                      value={newStock.units}
-                      onChange={(e) =>
-                        setNewStock({ ...newStock, units: e.target.value })
-                      }
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005AB3]/30 focus:border-[#005AB3]"
-                    >
-                      {units.map((u) => (
-                        <option key={u} value={u}>
-                          {u}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      HSN code
-                    </label>
-                    <input
-                      type="text"
-                      value={newStock.hsn}
-                      onChange={(e) =>
-                        setNewStock({ ...newStock, hsn: e.target.value })
-                      }
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005AB3]/30 focus:border-[#005AB3]"
-                      placeholder="e.g. 7213"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      GST applicable <span className="text-red-400">*</span>
-                    </label>
-                    <select
-                      value={newStock.gstApplicable}
-                      onChange={(e) =>
-                        setNewStock({
-                          ...newStock,
-                          gstApplicable: e.target.value,
-                        })
-                      }
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005AB3]/30 focus:border-[#005AB3]"
-                    >
-                      <option value="Applicable">Applicable</option>
-                      <option value="Not Applicable">Not Applicable</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gray-50 rounded-xl p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-                  Opening balance
-                </p>
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      Quantity
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={newStock.openingBalanceQty}
-                      onChange={(e) => {
-                        const qty = parseFloat(e.target.value) || 0;
-                        const rate =
-                          parseFloat(newStock.openingBalanceRate) || 0;
-                        setNewStock({
-                          ...newStock,
-                          openingBalanceQty: e.target.value,
-                          openingBalanceValue: (qty * rate).toFixed(2),
-                        });
-                      }}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005AB3]/30 focus:border-[#005AB3]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      Rate (₹)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={newStock.openingBalanceRate}
-                      onChange={(e) => {
-                        const rate = parseFloat(e.target.value) || 0;
-                        const qty = parseFloat(newStock.openingBalanceQty) || 0;
-                        setNewStock({
-                          ...newStock,
-                          openingBalanceRate: e.target.value,
-                          openingBalanceValue: (qty * rate).toFixed(2),
-                        });
-                      }}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005AB3]/30 focus:border-[#005AB3]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      Value (₹)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={newStock.openingBalanceValue}
-                      readOnly
-                      className="w-full px-3 py-2 text-sm border border-gray-100 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gray-50 rounded-xl p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-                  Batch &amp; tracking settings
-                </p>
-                <div className="grid grid-cols-3 gap-4">
-                  {[
-                    ["maintainInBatches", "Maintain batches"],
-                    ["trackDateOfManufacture", "Track mfg. date"],
-                    ["expiryDateOfBatches", "Track expiry date"],
-                  ].map(([key, label]) => (
-                    <label
-                      key={key}
-                      className="flex items-center gap-2 cursor-pointer select-none"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={newStock[key]}
-                        onChange={(e) =>
-                          setNewStock({ ...newStock, [key]: e.target.checked })
-                        }
-                        className="h-4 w-4 text-[#005AB3] rounded border-gray-300 focus:ring-[#005AB3]"
-                      />
-                      <span className="text-sm text-gray-600">{label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="px-5 py-3 border-t border-gray-100 flex justify-end gap-2 sticky bottom-0 bg-white">
-              <button
-                onClick={closeEditModal}
-                className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition text-gray-600"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleUpdateStock}
-                disabled={!newStock.name.trim()}
-                className="px-5 py-2 text-sm bg-[#005AB3] text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
-              >
-                <svg
-                  className="w-3.5 h-3.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                Update stock
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

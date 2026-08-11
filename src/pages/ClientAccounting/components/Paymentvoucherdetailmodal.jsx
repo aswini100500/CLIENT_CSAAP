@@ -1,5 +1,16 @@
-import React, { useEffect, useRef } from "react";
-import { X, Hash, Calendar, CreditCard, Download, Edit } from "lucide-react";
+import React from "react";
+import axios from "axios";
+import {
+  Calendar,
+  CreditCard,
+  Download,
+  Edit,
+  Hash,
+  User,
+  X,
+  FileText,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const PaymentVoucherDetailModal = ({
   voucher,
@@ -9,6 +20,8 @@ const PaymentVoucherDetailModal = ({
   ledgerMap = {},
 }) => {
   const overlayRef = useRef(null);
+  const [details, setDetails] = useState(voucher);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleKey = (e) => {
@@ -22,11 +35,32 @@ const PaymentVoucherDetailModal = ({
     };
   }, [onClose]);
 
+  useEffect(() => {
+    if (voucher?.id) {
+      setLoading(true);
+      axios
+        .get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/payment-voucher/get/${voucher.id}`,
+        )
+        .then((res) => {
+          if (res.data) {
+            setDetails(res.data);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching payment voucher details:", err);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [voucher]);
+
   const handleOverlayClick = (e) => {
     if (e.target === overlayRef.current) onClose();
   };
 
   if (!voucher) return null;
+
+  const currentData = details || voucher;
 
   const formatAmount = (amount) =>
     Number(amount || 0).toLocaleString("en-IN", {
@@ -43,10 +77,24 @@ const PaymentVoucherDetailModal = ({
     });
   };
 
-  const totalAmount = voucher.amount || voucher.totalCredit || 0;
+  const itemsList =
+    currentData.entries?.length > 0
+      ? currentData.entries
+      : currentData.items?.length > 0
+        ? currentData.items
+        : voucher?.items || voucher?.entries || [];
+
+  const grandTotal =
+    currentData.totalAmount ??
+    currentData.amount ??
+    currentData.totalCredit ??
+    itemsList.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+
   const paymentMode =
+    currentData.accountTypeName ||
     voucher.accountTypeName ||
-    ledgerMap[voucher.accountType] ||
+    ledgerMap[currentData.accountType || voucher.accountType] ||
+    currentData.accountType ||
     voucher.accountType ||
     "—";
 
@@ -54,156 +102,201 @@ const PaymentVoucherDetailModal = ({
     <div
       ref={overlayRef}
       onClick={handleOverlayClick}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-sans"
       role="dialog"
       aria-modal="true"
       aria-labelledby="pv-modal-title"
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col overflow-hidden">
-        <div className="px-6 py-5 border-b border-gray-100">
+      <div
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden border border-[#e2f2e9]"
+        style={{ maxHeight: "90vh" }}
+      >
+        <div className="px-6 py-5 border-b border-[#e2f2e9] bg-white">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#16a34a"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
-                  <line x1="1" y1="10" x2="23" y2="10" />
-                </svg>
+              <div className="w-10 h-10 rounded-xl bg-[#f0fdf4] border border-[#c6f1d6] flex items-center justify-center shrink-0 text-[#00a651]">
+                <CreditCard size={20} />
               </div>
               <div>
                 <h2
                   id="pv-modal-title"
-                  className="text-base font-semibold text-gray-900 leading-tight"
+                  className="text-base/tight font-extrabold text-[#042f2e] "
                 >
-                  Payment voucher details
+                  Payment Voucher Details
                 </h2>
-                <p className="text-xs text-gray-400 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5 font-medium">
                   Outgoing payment record
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all shrink-0"
+              className="w-8 h-8 rounded-lg border border-[#e2f2e9] flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all shrink-0 cursor-pointer"
               aria-label="Close modal"
             >
-              <X size={15} />
+              <X size={16} />
             </button>
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-gray-600">
-              <Hash size={11} className="text-gray-400" />
-              Voucher no.{" "}
-              <span className="font-semibold text-gray-800">
-                {voucher.voucherNo || voucher.id}
+            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-[#f8faf8] border border-[#e2f2e9] text-slate-700 font-medium">
+              <Hash size={12} className="text-[#00a651]" />
+              Voucher No.{" "}
+              <span className="font-extrabold text-[#042f2e]">
+                {currentData.voucherNo || currentData.id}
               </span>
             </span>
-            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-gray-600">
-              <Calendar size={11} className="text-gray-400" />
-              <span className="font-semibold text-gray-800">
-                {formatDate(voucher.date)}
+            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-[#f8faf8] border border-[#e2f2e9] text-slate-700 font-medium">
+              <Calendar size={12} className="text-[#00a651]" />
+              <span className="font-extrabold text-[#042f2e]">
+                {formatDate(currentData.date)}
               </span>
             </span>
-            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-gray-600 max-w-full">
-              <CreditCard size={11} className="text-gray-400 shrink-0" />
-              <span
-                className="font-semibold text-gray-800 truncate"
-                title={paymentMode}
-              >
+            <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-[#f8faf8] border border-[#e2f2e9] text-slate-700 font-medium max-w-full">
+              <CreditCard size={12} className="text-[#00a651] shrink-0" />
+              Payment Mode:{" "}
+              <span className="font-extrabold text-[#042f2e] truncate">
                 {paymentMode}
               </span>
             </span>
-          </div>
-        </div>
-
-        <div className="px-6 py-5 flex flex-col gap-4">
-          <div className="rounded-xl border border-gray-100 overflow-hidden">
-            <div className="bg-gray-50 px-4 py-2 border-b border-gray-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
-                Summary
-              </p>
-            </div>
-            <div className="px-4 py-4 flex flex-col gap-4">
-              <div>
-                <p className="text-xs text-gray-500 mb-0.5">
-                  Total amount paid
-                </p>
-                <p className="text-2xl font-bold text-gray-900 tabular-nums">
-                  ₹ {formatAmount(totalAmount)}
-                </p>
-              </div>
-              <div className="w-full">
-                <p className="text-xs text-gray-500 mb-0.5">Payment mode</p>
-                <span className="inline-flex items-start gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg bg-green-50 text-green-700 border border-green-100 wrap-break-word text-left max-w-full">
-                  <CreditCard size={13} className="shrink-0 mt-0.5" />
-                  <span style={{ wordBreak: "break-word" }}>{paymentMode}</span>
+            {currentData.role && (
+              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-[#f8faf8] border border-[#e2f2e9] text-slate-700 font-medium">
+                <User size={12} className="text-[#00a651]" />
+                Created by{" "}
+                <span className="font-bold text-[#042f2e] capitalize">
+                  {currentData.role}
                 </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-3 bg-blue-50 rounded-xl px-4 py-3 border border-blue-100">
-            <svg
-              className="shrink-0 mt-0.5"
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#2563eb"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-blue-400 mb-1">
-                Narration
-              </p>
-              <p className="text-sm text-blue-700 leading-relaxed">
-                {voucher.narration || (
-                  <span className="italic text-blue-400">
-                    No narration provided.
-                  </span>
-                )}
-              </p>
-            </div>
+              </span>
+            )}
           </div>
         </div>
 
-        <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between gap-3">
-          <span className="text-xs px-2.5 py-1 rounded-full bg-green-50 text-green-700 font-medium border border-green-100">
-            Payment voucher
+        <div className="overflow-y-auto flex-1 px-6 py-5 space-y-4">
+          <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+            Debit Ledger Breakdown
+          </p>
+
+          <div className="rounded-xl border border-[#e2f2e9] overflow-hidden">
+            <table className="w-full text-sm border-collapse bg-white">
+              <thead className="bg-[#f0fdf4]/50 border-b border-[#e2f2e9]">
+                <tr className="text-left text-slate-700">
+                  <th className="py-2.5 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] w-12 text-center">
+                    #
+                  </th>
+                  <th className="py-2.5 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Particulars / Ledger
+                  </th>
+                  <th className="py-2.5 px-4 text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-right">
+                    Amount (₹)
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#e2f2e9]">
+                {loading ? (
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="py-6 text-center text-xs text-slate-500 italic"
+                    >
+                      Loading breakdown details...
+                    </td>
+                  </tr>
+                ) : itemsList.length > 0 ? (
+                  itemsList.map((item, i) => {
+                    const ledgerName =
+                      item.ledgerName ||
+                      ledgerMap[item.ledgerId || item.ledger] ||
+                      item.ledger ||
+                      "—";
+                    return (
+                      <tr
+                        key={item.id || i}
+                        className="hover:bg-[#f0fdf4]/20 border-b border-[#e2f2e9] transition-colors duration-150"
+                      >
+                        <td className="py-3 px-4 border-r border-[#e2f2e9] text-xs text-slate-400 font-mono text-center">
+                          {String(i + 1).padStart(2, "0")}
+                        </td>
+                        <td className="py-3 px-4 border-r border-[#e2f2e9]">
+                          <div className="font-bold text-[#042f2e] text-[13px] leading-tight">
+                            {ledgerName}
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right font-bold text-[#042f2e] text-[13px] tabular-nums">
+                          {formatAmount(item.amount)}
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="py-4 text-center text-xs text-slate-500 italic"
+                    >
+                      No items recorded for this voucher.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+              <tfoot>
+                <tr className="bg-[#f0fdf4]/40 border-t border-[#e2f2e9]">
+                  <td
+                    colSpan={2}
+                    className="py-3 px-4 text-xs font-extrabold uppercase tracking-wider text-[#475569] text-right border-r border-[#e2f2e9]"
+                  >
+                    Total Amount Paid
+                  </td>
+                  <td className="py-3 px-4 text-right font-extrabold text-[#042f2e] text-base tabular-nums">
+                    ₹ {formatAmount(grandTotal)}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <div className="flex gap-3 bg-[#f0fdf4] rounded-xl px-4 py-3 border border-[#c6f1d6]">
+            <FileText size={16} className="text-[#00a651] shrink-0 mt-0.5" />
+            <p className="text-xs/relaxed text-[#042f2e]  font-medium">
+              {currentData.narration ? (
+                <span>
+                  <strong className="font-extrabold">Narration:</strong>{" "}
+                  {currentData.narration}
+                </span>
+              ) : (
+                <span className="italic text-slate-500">
+                  No narration provided for this voucher.
+                </span>
+              )}
+            </p>
+          </div>
+        </div>
+
+        <div className="px-6 py-4 border-t border-[#e2f2e9] flex items-center justify-between gap-3 bg-white">
+          <span className="text-xs px-3 py-1 rounded-full bg-[#f0fdf4] text-[#00a651] border border-[#c6f1d6] font-bold">
+            {itemsList.length} debit ledger entry
+            {itemsList.length !== 1 ? "s" : ""}
           </span>
+
           <div className="flex items-center gap-2">
             {onDownload && (
               <button
-                onClick={() => onDownload(voucher)}
-                className="inline-flex items-center gap-1.5 text-sm px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all"
+                onClick={() => onDownload(currentData)}
+                className="inline-flex items-center gap-1.5 text-xs px-3.5 py-2 rounded-xl border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all font-semibold cursor-pointer active:scale-[0.98]"
               >
                 <Download size={14} /> Download PDF
               </button>
             )}
             {onEdit && (
               <button
-                onClick={() => onEdit(voucher.id)}
-                className="inline-flex items-center gap-1.5 text-sm px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all"
+                onClick={() => onEdit(currentData.id)}
+                className="inline-flex items-center gap-1.5 text-xs px-3.5 py-2 rounded-xl border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-all font-semibold cursor-pointer active:scale-[0.98]"
               >
-                <Edit size={14} /> Edit
+                <Edit size={14} /> Edit Voucher
               </button>
             )}
             <button
               onClick={onClose}
-              className="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all font-medium"
+              className="inline-flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl bg-linear-to-r from-[#00a651] to-[#00c853] hover:from-[#008c44] hover:to-[#00a651] text-white transition-all font-bold cursor-pointer active:scale-[0.98] shadow-xs"
             >
               Close
             </button>

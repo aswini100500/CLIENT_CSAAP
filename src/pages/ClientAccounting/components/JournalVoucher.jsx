@@ -1,14 +1,22 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
 import BulkImportButton from "./BulkImportButton";
 import Swal from "sweetalert2";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
-import { Search, UserPlus } from "lucide-react";
+import {
+  Search,
+  UserPlus,
+  ArrowLeft,
+  Save,
+  X,
+  FileText,
+  Layers,
+} from "lucide-react";
 
 const SearchableLedgerSelect = ({
-  ledgers,
+  ledgers = [],
   value,
   onSelect,
   onCreateNew,
@@ -18,7 +26,8 @@ const SearchableLedgerSelect = ({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const selectedLedger = ledgers.find((l) => String(l.id) === String(value));
+  const ledgerList = Array.isArray(ledgers) ? ledgers : [];
+  const selectedLedger = ledgerList.find((l) => String(l.id) === String(value));
 
   useEffect(() => {
     if (selectedLedger) {
@@ -28,7 +37,7 @@ const SearchableLedgerSelect = ({
     }
   }, [selectedLedger]);
 
-  const filtered = ledgers.filter((l) =>
+  const filtered = ledgerList.filter((l) =>
     (l.name || l.ledgerName || "")
       .toLowerCase()
       .includes(searchTerm.toLowerCase()),
@@ -53,7 +62,7 @@ const SearchableLedgerSelect = ({
         <input
           type="text"
           disabled={disabled}
-          className={`w-full rounded border border-slate-200 px-2 py-1 text-sm outline-none transition pr-8 ${disabled ? "bg-slate-100 text-slate-500 cursor-not-allowed" : "text-slate-800 focus:border-blue-400 focus:bg-white"}`}
+          className={`app-input w-full border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium pr-8 py-1.5 text-xs ${disabled ? "bg-slate-100 text-slate-500 cursor-not-allowed" : ""}`}
           placeholder="Search or add ledger..."
           value={searchTerm}
           onChange={(e) => {
@@ -62,18 +71,18 @@ const SearchableLedgerSelect = ({
           }}
           onFocus={() => setIsOpen(true)}
         />
-        <div className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400">
+        <div className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#00a651]">
           <Search size={14} />
         </div>
       </div>
 
       {isOpen && (
-        <div className="absolute z-9999 mt-1 w-full bg-white border border-slate-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-9999 mt-1.5 w-full bg-white border border-[#cbe0d2] rounded-xl shadow-xl max-h-60 overflow-y-auto">
           {filtered.length > 0 ? (
             filtered.map((l) => (
               <div
                 key={l.id}
-                className="px-3 py-2 text-sm hover:bg-blue-50 cursor-pointer text-slate-700 border-b border-slate-50 last:border-b-0 text-left"
+                className="px-3.5 py-2 text-xs font-semibold hover:bg-[#f0fdf4] hover:text-[#00a651] cursor-pointer text-slate-700 border-b border-[#e2f2e9] last:border-b-0 text-left transition-colors"
                 onClick={() => {
                   onSelect(l.id);
                   setSearchTerm(l.name || l.ledgerName);
@@ -84,13 +93,13 @@ const SearchableLedgerSelect = ({
               </div>
             ))
           ) : (
-            <div className="px-3 py-2 text-sm text-slate-500 italic text-left">
+            <div className="px-3.5 py-2 text-xs text-slate-400 italic text-left">
               No matches found
             </div>
           )}
 
           <div
-            className="px-3 py-2 text-sm bg-slate-50 hover:bg-blue-100 cursor-pointer text-blue-600 font-medium flex items-center gap-2 border-t border-slate-200 text-left"
+            className="px-3.5 py-2 text-xs bg-[#f0fdf4] hover:bg-[#e1f9eb] cursor-pointer text-[#00a651] font-bold flex items-center gap-1.5 border-t border-[#cbe0d2] text-left transition-colors"
             onClick={() => {
               onCreateNew(searchTerm);
               setIsOpen(false);
@@ -105,8 +114,7 @@ const SearchableLedgerSelect = ({
 };
 
 const JournalVoucher = () => {
-  const { companyId } = useCompany();
-  const { user, role: userRole } = useAuth();
+  const { user, role: userRole, companyId } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -128,8 +136,8 @@ const JournalVoucher = () => {
         const res = await axios.get(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
         );
-
-        setLedgers(res.data.data || res.data || []);
+        const data = Array.isArray(res.data) ? res.data : res.data?.data || [];
+        setLedgers(data);
 
         const savedState = sessionStorage.getItem("journalVoucherState");
         if (savedState) {
@@ -238,6 +246,16 @@ const JournalVoucher = () => {
   const totalDebit = rows.reduce((sum, r) => sum + Number(r.debit || 0), 0);
   const totalCredit = rows.reduce((sum, r) => sum + Number(r.credit || 0), 0);
 
+  const fetchNextVoucherNo = () => {
+    if (!companyId) return;
+    axios
+      .get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/journal`,
+      )
+      .then((res) => setVoucherNo(res.data.nextNumber))
+      .catch((err) => console.error(err));
+  };
+
   const saveVoucher = async () => {
     if (rows.some((r) => !r.ledgerId)) {
       setMessage("❌ Please select all ledgers");
@@ -271,33 +289,68 @@ const JournalVoucher = () => {
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/update/${id}`,
           payload,
         );
-        setMessage("✔ Voucher Updated Successfully!");
-      } else {
-        await axios.post(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/create/${companyId}`,
-          payload,
-        );
-        setMessage("✔ Voucher Saved Successfully!");
-
-        try {
-          await axios.post(
-            `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher/createVoucher`,
-            payload,
-          );
-        } catch (error) {}
+        Swal.fire({
+          icon: "success",
+          title: "Journal Voucher Updated Successfully",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        navigate(listPath);
+        return;
       }
 
-      if (!isEditMode) {
+      const res = await axios.post(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/journal-voucher/create/${companyId}`,
+        payload,
+      );
+
+      try {
+        await axios.post(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher/createVoucher`,
+          payload,
+        );
+      } catch (error) {
+        console.log("Voucher table error:", error);
+      }
+
+      const result = await Swal.fire({
+        icon: "success",
+        title: "Journal Voucher Created Successfully",
+        text: "The journal voucher has been saved. What would you like to do next?",
+        showCancelButton: true,
+        showDenyButton: !!res.data?.pdf_path,
+        confirmButtonColor: "#00a651",
+        cancelButtonColor: "#6b7280",
+        denyButtonColor: "#2563eb",
+        confirmButtonText: "Create Another",
+        cancelButtonText: "Go to Journal Voucher List",
+        denyButtonText: "Download PDF",
+      });
+
+      if (result.isDenied && res.data?.pdf_path) {
+        const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
+        window.open(pdfUrl, "_blank");
         setNarration("");
         setRows([{ ledgerId: "", debit: "", credit: "" }]);
+        fetchNextVoucherNo();
+      } else if (result.isConfirmed) {
+        setNarration("");
+        setRows([{ ledgerId: "", debit: "", credit: "" }]);
+        fetchNextVoucherNo();
+      } else {
+        navigate(listPath);
       }
     } catch (error) {
       console.error(error);
       if (error.response && error.response.status === 409) {
         Swal.fire("Warning", "Voucher Number Already Exists!", "warning");
       } else {
-        setMessage(
-          isEditMode ? "❌ Error updating voucher" : "❌ Error saving voucher",
+        Swal.fire(
+          "Error",
+          isEditMode
+            ? "Failed to update journal voucher."
+            : "Failed to save journal voucher.",
+          "error",
         );
       }
     } finally {
@@ -345,7 +398,6 @@ const JournalVoucher = () => {
 
         return {
           voucherNo: v.voucherNo,
-
           date: v.date,
           narration: v.narration,
           items,
@@ -501,145 +553,236 @@ const JournalVoucher = () => {
     }
   };
 
+  const inputClass =
+    "app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium";
+
+  const tableInputClass =
+    "w-full border border-[#c8ddcd] bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] rounded-xl font-semibold py-2.25 px-3 text-xs outline-none transition-all";
+
+  const role = userRole || "admin";
+  const listPath =
+    role === "employee"
+      ? "/employee/hr/accounting/client/listOfJournalVoucher"
+      : "/accounting/client/listOfJournalVoucher";
+
   return (
-    <div className="min-h-screen bg-white p-4 font-[monospace]">
-      <h1 className="text-center text-xl text-blue-700 font-bold mb-4">
-        Journal Voucher
-      </h1>
-
-      {message && (
-        <div className="text-center text-red-600 font-semibold mb-2">
-          {message}
-        </div>
-      )}
-
-      <div className="max-w-4xl mx-auto border border-black rounded-md">
-        <div className="flex justify-between border-b border-black p-2 text-sm">
-          <div>
-            Voucher Type: <span className="font-semibold">Journal</span>
+    <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans">
+      <div className="max-w-6xl mx-auto bg-white app-panel border border-[#e2f2e9]/80 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+        <div className="flex justify-between items-center border-b border-[#e2f2e9] pb-5 mb-8">
+          <div className="flex items-center gap-3">
+            <h2 className="app-title text-xl font-extrabold text-[#042f2e]">
+              {isViewMode
+                ? "View Journal Voucher"
+                : isEditMode
+                  ? "Journal Voucher Alteration"
+                  : "Journal Voucher Creation"}
+            </h2>
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#f0fdf4] text-[#00a651] border border-[#c6f1d6]">
+              JV
+            </span>
           </div>
-          <BulkImportButton onDataParsed={handleBulkImport} />
-          <div className="flex items-center gap-4">
+
+          <div className="flex items-center gap-3">
+            {!isViewMode && (
+              <BulkImportButton onDataParsed={handleBulkImport} />
+            )}
+            <button
+              type="button"
+              onClick={() => navigate(listPath)}
+              className="flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors text-sm font-medium cursor-pointer"
+            >
+              <ArrowLeft size={16} /> Back to Journal List
+            </button>
+          </div>
+        </div>
+
+        {message && (
+          <div className="p-3 mb-6 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-sm font-semibold">
+            {message}
+          </div>
+        )}
+
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+            <FileText size={16} className="text-[#00a651]" /> Basic Details
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              Voucher No:
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Voucher Number :
+              </label>
               <input
                 type="text"
-                className="border px-2 py-1 ml-2 w-28 bg-transparent"
+                className={inputClass}
                 value={voucherno}
                 onChange={(e) => setVoucherNo(e.target.value)}
-                placeholder="Auto"
+                placeholder="Auto / Enter voucher number"
+                disabled={isViewMode}
+              />
+            </div>
+
+            <div>
+              <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                Date :
+              </label>
+              <input
+                type="date"
+                className={inputClass}
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
                 disabled={isViewMode}
               />
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center gap-2">
-            Date:
-            <input
-              type="date"
-              className="border px-2 py-1 bg-transparent"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              disabled={isViewMode}
-            />
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <div className="flex justify-between items-center mb-4 border-b border-[#cbe0d2] pb-1.5">
+            <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider flex items-center gap-2">
+              <Layers size={16} className="text-[#00a651]" /> Journal Entries
+            </h3>
+            {!isViewMode && (
+              <button
+                type="button"
+                className="flex items-center gap-1 text-xs font-bold text-[#00a651] bg-white border border-[#cbe0d2] px-3 py-1.5 rounded-lg hover:bg-[#f0fdf4] transition-colors cursor-pointer"
+                onClick={addRow}
+              >
+                + Add Entry
+              </button>
+            )}
+          </div>
+
+          <div className="rounded-xl border border-[#cbe0d2] bg-white overflow-visible mb-4">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="bg-[#f0fdf4] border-b border-[#cbe0d2]">
+                  <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e]">
+                    Particulars (Ledger)
+                  </th>
+                  <th className="px-4 py-3 text-right text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-44">
+                    Debit (₹)
+                  </th>
+                  <th className="px-4 py-3 text-right text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-44">
+                    Credit (₹)
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className="divide-y divide-[#e2f2e9]">
+                {rows.map((row, index) => (
+                  <tr
+                    key={index}
+                    className="hover:bg-[#f8faf8] transition-colors relative hover:z-50 focus-within:z-50"
+                  >
+                    <td className="p-2.5">
+                      <SearchableLedgerSelect
+                        ledgers={ledgers}
+                        value={row.ledgerId}
+                        onSelect={(val) => updateRow(index, "ledgerId", val)}
+                        onCreateNew={(name) =>
+                          handleQuickCreateLedger(index, name)
+                        }
+                        disabled={isViewMode}
+                      />
+                    </td>
+                    <td className="p-2.5">
+                      <input
+                        type="number"
+                        className={`${tableInputClass} text-right font-semibold`}
+                        placeholder="0.00"
+                        value={row.debit}
+                        onChange={(e) =>
+                          updateRow(index, "debit", e.target.value)
+                        }
+                        disabled={isViewMode}
+                      />
+                    </td>
+                    <td className="p-2.5">
+                      <input
+                        type="number"
+                        className={`${tableInputClass} text-right font-semibold`}
+                        placeholder="0.00"
+                        value={row.credit}
+                        onChange={(e) =>
+                          updateRow(index, "credit", e.target.value)
+                        }
+                        disabled={isViewMode}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex justify-end mt-4">
+            <div className="bg-white border border-[#cbe0d2] rounded-xl p-4 min-w-72 shadow-xs space-y-1.5">
+              <div className="flex justify-between text-xs font-semibold text-slate-600">
+                <span>Total Debit:</span>
+                <span className="font-bold text-slate-800">
+                  ₹ {totalDebit.toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between text-xs font-semibold text-slate-600">
+                <span>Total Credit:</span>
+                <span className="font-bold text-slate-800">
+                  ₹ {totalCredit.toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm font-extrabold text-[#042f2e] border-t border-[#e2f2e9] pt-2">
+                <span>Difference:</span>
+                <span
+                  className={
+                    Math.abs(totalDebit - totalCredit) < 0.01
+                      ? "text-[#00a651]"
+                      : "text-rose-600"
+                  }
+                >
+                  ₹ {Math.abs(totalDebit - totalCredit).toFixed(2)}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="border-b border-black p-2">
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-400 bg-transparent"
-            placeholder="Enter narration..."
+        <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+          <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+            Narration / Note :
+          </label>
+          <textarea
+            className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium resize-none h-20"
+            placeholder="Enter narration for this journal voucher..."
             value={narration}
             onChange={(e) => setNarration(e.target.value)}
             disabled={isViewMode}
           />
         </div>
 
-        <div className="p-2 overflow-visible">
-          <div className="grid grid-cols-12 border-b border-black text-sm font-semibold">
-            <div className="col-span-6 p-1 border-r border-black">
-              Particulars
-            </div>
-            <div className="col-span-3 p-1 border-r border-black text-right">
-              Debit
-            </div>
-            <div className="col-span-3 p-1 text-right">Credit</div>
-          </div>
-
-          {rows.map((row, index) => (
-            <div
-              key={index}
-              className="grid grid-cols-12 border-b border-gray-400 text-sm relative hover:z-50 focus-within:z-50 bg-white"
-            >
-              <div className="col-span-6 p-1 border-r border-gray-400">
-                <SearchableLedgerSelect
-                  ledgers={ledgers}
-                  value={row.ledgerId}
-                  onSelect={(val) => updateRow(index, "ledgerId", val)}
-                  onCreateNew={(name) => handleQuickCreateLedger(index, name)}
-                  disabled={isViewMode}
-                />
-              </div>
-
-              <input
-                type="number"
-                className="col-span-3 p-1 border-r border-gray-400 text-right focus:outline-none bg-transparent"
-                placeholder="0.00"
-                value={row.debit}
-                onChange={(e) => updateRow(index, "debit", e.target.value)}
-                disabled={isViewMode}
-              />
-
-              <input
-                type="number"
-                className="col-span-3 p-1 text-right focus:outline-none bg-transparent"
-                placeholder="0.00"
-                value={row.credit}
-                onChange={(e) => updateRow(index, "credit", e.target.value)}
-                disabled={isViewMode}
-              />
-            </div>
-          ))}
-
+        <div className="mt-8 flex justify-end gap-4 border-t border-[#e2f2e9] pt-6">
           {!isViewMode && (
             <button
-              className="w-full text-left p-2 text-blue-700 hover:bg-blue-100"
-              onClick={addRow}
+              type="button"
+              onClick={saveVoucher}
+              disabled={loading}
+              className="app-btn-primary flex items-center justify-center gap-2 cursor-pointer shadow-md min-w-36 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
             >
-              + Add Entry
+              <Save size={16} />{" "}
+              {loading
+                ? "Saving..."
+                : isEditMode
+                  ? "Update Voucher"
+                  : "Save Voucher"}
             </button>
           )}
-        </div>
 
-        <div className="grid grid-cols-12 border-t border-black text-sm font-semibold">
-          <div className="col-span-6 p-2 border-r border-black">Total</div>
-          <div className="col-span-3 p-2 border-r border-black text-right">
-            {totalDebit.toFixed(2)}
-          </div>
-          <div className="col-span-3 p-2 text-right">
-            {totalCredit.toFixed(2)}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-center gap-6 mt-6">
-        {!isViewMode && (
           <button
-            onClick={saveVoucher}
-            disabled={loading}
-            className="bg-green-600 text-white px-6 py-2 rounded-sm hover:bg-green-700 disabled:bg-gray-400"
+            type="button"
+            onClick={() => navigate(listPath)}
+            className="app-btn-secondary flex items-center justify-center gap-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl cursor-pointer hover:bg-rose-100 hover:text-rose-800 hover:border-rose-300 min-w-30 transition-all"
           >
-            {loading ? "Saving..." : isEditMode ? "Update" : "Yes (Save)"}
+            <X size={16} /> {isViewMode ? "Close" : "Cancel"}
           </button>
-        )}
-
-        <button
-          className="bg-red-600 text-white px-6 py-2 rounded-sm hover:bg-red-700"
-          onClick={() => window.history.back()}
-        >
-          No (Cancel)
-        </button>
+        </div>
       </div>
     </div>
   );

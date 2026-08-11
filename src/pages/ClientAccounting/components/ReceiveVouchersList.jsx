@@ -1,47 +1,120 @@
-import React, { useState, useEffect } from "react";
-import {
-  Eye,
-  Edit,
-  Trash2,
-  Download,
-  Printer,
-  Search,
-  UserRound,
-  FileSpreadsheet,
-  FileDown,
-} from "lucide-react";
-import * as XLSX from "xlsx";
+import React from "react";
+import axios from "axios";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import {
+  Eye,
+  FileDown,
+  FileSpreadsheet,
+  Pencil,
+  Printer,
+  Search,
+  SearchX,
+  Trash2,
+  FileText,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
-import { useNavigate } from "react-router-dom";
-import ReceiveVoucherDetailModal from "./Receivevoucherdetailmodal";
+import * as XLSX from "xlsx";
 import useAuth from "../../../hooks/useAuth";
+import ReceiveVoucherDetailModal from "./Receivevoucherdetailmodal";
 
-const ReciptVouchersList = () => {
-  const { user } = useAuth();
-  const [vouchers, setVouchers] = useState([]);
-  const [showEmployeeActivity, setShowEmployeeActivity] = useState(false);
-  const [showExportMenu, setShowExportMenu] = useState(false);
-  const [ledgerMap, setLedgerMap] = useState({});
+const ReceiveVouchersList = () => {
+  const { user, role, companyId, companyName } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [companyDetails, setCompanyDetails] = useState(null);
+  const [vouchers, setVouchers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedVoucher, setSelectedVoucher] = useState(null);
-
-  const { companyId, companyName, employees } = useCompany();
-
-  const getEmployeeName = (id) => {
-    const emp = employees?.find((e) => e.id == id);
-    return emp ? emp.name || emp.first_name || "Employee" : "Unknown Employee";
-  };
-
-  const loggedInRole = user?.role?.toLowerCase() || "admin";
-  const loggedInEmployeeId = user?.employee_id || null;
+  const [companyDetails, setCompanyDetails] = useState(null);
+  const [ledgerMap, setLedgerMap] = useState({});
+  const [sortOrder, setSortOrder] = useState("desc");
 
   const navigate = useNavigate();
+
+  const loggedInRole =
+    role?.toLowerCase() || user?.role?.toLowerCase() || "admin";
+  const loggedInEmployeeId = user?.employee_id || null;
+
+  const fetchVouchers = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/getReceiptVoucher/${companyId}`,
+      );
+
+      const sortedVouchers = (res.data?.data || []).slice().sort((a, b) => {
+        const dateA = new Date(a.date || 0).getTime();
+        const dateB = new Date(b.date || 0).getTime();
+
+        if (dateA !== dateB) {
+          return dateB - dateA;
+        }
+
+        const voucherA = Number(a.voucherId || a.id) || 0;
+        const voucherB = Number(b.voucherId || b.id) || 0;
+
+        return voucherB - voucherA;
+      });
+
+      setVouchers(sortedVouchers);
+    } catch (err) {
+      console.error("Failed to fetch receipt vouchers", err);
+      setVouchers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCompanyDetails = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`,
+      );
+      setCompanyDetails(res.data);
+    } catch (err) {
+      console.error("Error fetching company details:", err);
+    }
+  };
+
+  const fetchLedgers = async () => {
+    try {
+      const [ledgersRes, banksRes] = await Promise.all([
+        axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
+        ),
+        axios.get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`,
+        ),
+      ]);
+
+      const map = {};
+      const ledgers = Array.isArray(ledgersRes.data)
+        ? ledgersRes.data
+        : ledgersRes.data?.data || [];
+      ledgers.forEach((l) => {
+        map[l.id] = l.name;
+        map[`ledger_${l.id}`] = l.name;
+      });
+
+      const banks = banksRes.data?.accounts || [];
+      banks.forEach((b) => {
+        map[b.id] = b.bankName
+          ? `${b.accountName} (${b.bankName})`
+          : b.accountName;
+        map[`bank_${b.id}`] = b.bankName
+          ? `${b.accountName} (${b.bankName})`
+          : b.accountName;
+      });
+
+      map["cash"] = "Cash";
+      setLedgerMap(map);
+    } catch (err) {
+      console.error("Error fetching ledgers:", err);
+    }
+  };
 
   useEffect(() => {
     if (!companyId) {
@@ -59,82 +132,6 @@ const ReciptVouchersList = () => {
       fetchCompanyDetails();
     }
   }, [companyId]);
-
-  const fetchCompanyDetails = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${companyId}`,
-      );
-      setCompanyDetails(res.data);
-    } catch (err) {
-      console.error("Error fetching company details:", err);
-    }
-  };
-
-  const fetchVouchers = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/getReceiptVoucher/${companyId}`,
-      );
-
-      const sortedVouchers = (res.data.data || []).slice().sort((a, b) => {
-        const dateA = new Date(a.date || 0).getTime();
-        const dateB = new Date(b.date || 0).getTime();
-
-        if (dateA !== dateB) {
-          return dateB - dateA;
-        }
-
-        const voucherA = Number(a.voucherId) || 0;
-        const voucherB = Number(b.voucherId) || 0;
-
-        return voucherB - voucherA;
-      });
-
-      setVouchers(sortedVouchers);
-    } catch {
-      Swal.fire("Error", "Failed to fetch vouchers.", "error");
-    }
-    setLoading(false);
-  };
-
-  const fetchLedgers = async () => {
-    try {
-      const [ledgersRes, banksRes] = await Promise.all([
-        axios.get(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
-        ),
-        axios.get(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/bank/${companyId}/all`,
-        ),
-      ]);
-
-      const map = {};
-      const ledgers = Array.isArray(ledgersRes.data)
-        ? ledgersRes.data
-        : ledgersRes.data.data || [];
-      ledgers.forEach((l) => {
-        map[l.id] = l.name;
-        map[`ledger_${l.id}`] = l.name;
-      });
-
-      const banks = banksRes.data.accounts || [];
-      banks.forEach((b) => {
-        map[b.id] = b.bankName
-          ? `${b.accountName} (${b.bankName})`
-          : b.accountName;
-        map[`bank_${b.id}`] = b.bankName
-          ? `${b.accountName} (${b.bankName})`
-          : b.accountName;
-      });
-
-      map["cash"] = "Cash";
-      setLedgerMap(map);
-    } catch (err) {
-      console.error("Error fetching ledgers:", err);
-    }
-  };
 
   const getReceiptInto = (receiptAccountId) => {
     if (
@@ -162,102 +159,58 @@ const ReciptVouchersList = () => {
       return ledgerMap[value] || "Bank";
     }
 
-    if (/^\d+$/.test(normalized)) {
-      return ledgerMap[value] || "Bank";
-    }
-
     return ledgerMap[value] || "Bank";
   };
 
-  const handleEdit = (voucherId) => {
+  const filteredVouchers = vouchers.filter((v) => {
     if (loggedInRole === "employee") {
-      navigate(
-        `/employee/hr/accounting/client/receptVoucher/${encodeURIComponent(voucherId)}`,
-      );
-    } else {
-      navigate(
-        `/accounting/client/receptVoucher/${encodeURIComponent(voucherId)}`,
-      );
-    }
-  };
-
-  const handleViewDetails = async (voucherId) => {
-    try {
-      setLoading(true);
-      const res = await axios.get(
-        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/${voucherId}?companyId=${companyId}`,
-      );
-      setSelectedVoucher(res.data);
-    } catch (error) {
-      console.error(error);
-      Swal.fire("Error", "Failed to fetch voucher details.", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        await axios.delete(
-          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/delete/${encodeURIComponent(id)}?companyId=${companyId}`,
-        );
-        Swal.fire("Deleted!", "Voucher has been deleted.", "success");
-        fetchVouchers();
-      } catch {
-        Swal.fire("Error", "Failed to delete voucher.", "error");
+      if (
+        v.employee_id != loggedInEmployeeId ||
+        v.role?.toLowerCase() !== "employee"
+      ) {
+        return false;
       }
     }
-  };
 
-  const handleExportExcel = () => {
-    if (filteredVouchers.length === 0) return;
-    const company = companyDetails?.name || companyName || "Company";
-    const today = new Date().toLocaleDateString("en-IN");
-    const exportData = [];
+    if (!searchQuery.trim()) return true;
 
-    filteredVouchers.forEach((v, index) => {
-      exportData.push({
-        "S.No": index + 1,
-        Date: v.date ? new Date(v.date).toLocaleDateString("en-IN") : "-",
-        "Voucher No": v.voucherId || v.id,
-        Customer: ledgerMap[v.customer] || v.customer || "-",
-        "Receipt Into": getReceiptInto(v.receiptAccountId),
-        Amount: Number(v.totalDebit || v.amount || 0),
-      });
-    });
+    const query = searchQuery.toLowerCase();
+    const narrationStr = (v.narration || "").toString().toLowerCase();
+    const voucherNoStr = (v.voucherId || v.voucherNo || v.id || "")
+      .toString()
+      .toLowerCase();
+    const customerStr = (ledgerMap[v.customer] || v.customer || "")
+      .toString()
+      .toLowerCase();
+    const receiptIntoStr = getReceiptInto(v.receiptAccountId).toLowerCase();
+    const amountStr = (v.totalDebit || v.amount || v.totalAmount || "")
+      .toString()
+      .toLowerCase();
 
-    const headerRows = [
-      [`Company Name: ${company}`],
-      [`Report: Receipt Vouchers`],
-      [`Generated On: ${today}`],
-      [],
-    ];
-    const ws = XLSX.utils.aoa_to_sheet(headerRows);
-    XLSX.utils.sheet_add_json(ws, exportData, { origin: "A5" });
-    ws["!cols"] = [
-      { wch: 8 },
-      { wch: 14 },
-      { wch: 16 },
-      { wch: 25 },
-      { wch: 25 },
-      { wch: 14 },
-    ];
+    return (
+      narrationStr.includes(query) ||
+      voucherNoStr.includes(query) ||
+      customerStr.includes(query) ||
+      receiptIntoStr.includes(query) ||
+      amountStr.includes(query)
+    );
+  });
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Receipts");
-    XLSX.writeFile(wb, "Receipt_Vouchers_Report.xlsx");
-  };
+  const sortedVouchers = [...filteredVouchers].sort((a, b) => {
+    const dateA = new Date(a.date || a.createdAt || 0).getTime();
+    const dateB = new Date(b.date || b.createdAt || 0).getTime();
+    if (dateA !== dateB) {
+      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+    }
+    const voucherA = Number(a.voucherId || a.id) || 0;
+    const voucherB = Number(b.voucherId || b.id) || 0;
+    return sortOrder === "desc" ? voucherB - voucherA : voucherA - voucherB;
+  });
+
+  const totalAmount = sortedVouchers.reduce((acc, v) => {
+    const amt = parseFloat(v.totalDebit || v.amount || v.totalAmount || 0);
+    return acc + amt;
+  }, 0);
 
   const generatePDF = (shouldPrint = false) => {
     if (filteredVouchers.length === 0) return;
@@ -311,39 +264,43 @@ const ReciptVouchersList = () => {
     doc.setDrawColor(220);
     doc.line(14, headerBottomY, 195, headerBottomY);
 
-    const totalAmount = filteredVouchers.reduce(
-      (acc, v) => acc + Number(v.totalDebit || v.amount || 0),
-      0,
-    );
-
+    const summaryY = headerBottomY + 8;
     doc.setFontSize(10);
     doc.setTextColor(40);
-    const summaryY = headerBottomY + 8;
-    doc.text(`Total Vouchers: ${filteredVouchers.length}`, 14, summaryY);
+    doc.text(`Total Vouchers: ${sortedVouchers.length}`, 14, summaryY);
 
     doc.setFont("helvetica", "bold");
     doc.text(`Total Amount: ${formatAmount(totalAmount)}`, 195, summaryY, {
       align: "right",
     });
 
-    const tableData = filteredVouchers.map((v, i) => [
+    const tableData = sortedVouchers.map((v, i) => [
       i + 1,
       formatDate(v.date),
-      v.voucherId || v.id || "-",
+      v.voucherId || v.voucherNo || v.id || "-",
       ledgerMap[v.customer] || v.customer || "-",
       getReceiptInto(v.receiptAccountId),
-      formatAmount(v.totalDebit || v.amount || 0),
+      formatAmount(v.totalDebit || v.amount || v.totalAmount || 0),
+      v.narration || "-",
     ]);
 
     autoTable(doc, {
       startY: summaryY + 8,
       head: [
-        ["#", "Date", "Voucher No.", "Customer", "Receipt Into", "Amount"],
+        [
+          "#",
+          "Date",
+          "Voucher No.",
+          "Customer",
+          "Receipt Into",
+          "Amount",
+          "Narration",
+        ],
       ],
       body: tableData,
-      foot: [["", "", "", "", "TOTAL", formatAmount(totalAmount)]],
+      foot: [["", "", "", "", "TOTAL", formatAmount(totalAmount), ""]],
       theme: "striped",
-      styles: { fontSize: 9, cellPadding: 5, valign: "middle" },
+      styles: { fontSize: 9, cellPadding: 4, valign: "middle" },
       headStyles: {
         fillColor: [37, 99, 235],
         textColor: [255, 255, 255],
@@ -358,11 +315,12 @@ const ReciptVouchersList = () => {
       },
       columnStyles: {
         0: { halign: "center", cellWidth: 10 },
-        1: { cellWidth: 25 },
+        1: { cellWidth: 22 },
         2: { cellWidth: 25 },
-        3: { cellWidth: 45 },
-        4: { cellWidth: 45 },
-        5: { halign: "right", cellWidth: 35 },
+        3: { cellWidth: 35 },
+        4: { cellWidth: 35 },
+        5: { halign: "right", cellWidth: 28 },
+        6: { cellWidth: 26 },
       },
     });
 
@@ -378,284 +336,357 @@ const ReciptVouchersList = () => {
     }
 
     if (shouldPrint) {
-      doc.autoPrint();
-      const iframe = document.createElement("iframe");
-      iframe.style.display = "none";
-      iframe.src = doc.output("bloburl");
-      document.body.appendChild(iframe);
-      iframe.contentWindow.print();
+      const blobURL = doc.output("bloburl");
+      const printWindow = window.open(blobURL);
+      if (printWindow) {
+        printWindow.onload = () => {
+          printWindow.focus();
+          printWindow.print();
+        };
+      }
     } else {
       doc.save(`Receipt_Voucher_Report_${today}.pdf`);
     }
   };
 
-  const handleExportPDF = () => {
-    generatePDF(false);
+  const handleExportPDF = () => generatePDF(false);
+  const handlePrint = () => generatePDF(true);
+
+  const handleExportExcel = () => {
+    if (sortedVouchers.length === 0) return;
+    const company = companyDetails?.name || companyName || "Company";
+    const today = new Date().toLocaleDateString("en-IN");
+    const exportData = [];
+
+    sortedVouchers.forEach((v, index) => {
+      exportData.push({
+        "S.No": index + 1,
+        Date: v.date ? new Date(v.date).toLocaleDateString("en-IN") : "-",
+        "Voucher No": v.voucherId || v.voucherNo || v.id,
+        Customer: ledgerMap[v.customer] || v.customer || "-",
+        "Receipt Into": getReceiptInto(v.receiptAccountId),
+        Amount: Number(v.totalDebit || v.amount || v.totalAmount || 0),
+        Narration: v.narration || "-",
+      });
+    });
+
+    const headerRows = [
+      [`Company Name: ${company}`],
+      [`Report: Receipt Vouchers`],
+      [`Generated On: ${today}`],
+      [],
+    ];
+    const ws = XLSX.utils.aoa_to_sheet(headerRows);
+    XLSX.utils.sheet_add_json(ws, exportData, { origin: "A5" });
+    ws["!cols"] = [
+      { wch: 8 },
+      { wch: 14 },
+      { wch: 16 },
+      { wch: 28 },
+      { wch: 28 },
+      { wch: 16 },
+      { wch: 30 },
+    ];
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Receipt Vouchers");
+    XLSX.writeFile(wb, "Receipt_Vouchers_Report.xlsx");
   };
 
-  const handlePrint = () => {
-    generatePDF(true);
+  const handleEdit = (id) => {
+    const editPath =
+      loggedInRole === "employee"
+        ? `/employee/hr/accounting/client/receptVoucher/${encodeURIComponent(id)}`
+        : `/accounting/client/receptVoucher/${encodeURIComponent(id)}`;
+    navigate(editPath);
   };
 
-  const filteredVouchers = vouchers.filter((v) => {
-    if (loggedInRole === "employee") {
-      if (
-        v.employee_id != loggedInEmployeeId ||
-        v.role?.toLowerCase() !== "employee"
-      )
-        return false;
-    } else {
-      const isCreatedByEmployee =
-        v.employee_id && v.role?.toLowerCase() === "employee";
-      if (showEmployeeActivity) {
-        if (!isCreatedByEmployee) return false;
-      } else {
-        if (isCreatedByEmployee) return false;
+  const handleViewDetails = async (voucherId) => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/${voucherId}?companyId=${companyId}`,
+      );
+      setSelectedVoucher(res.data);
+    } catch (error) {
+      console.error("Error fetching voucher details:", error);
+      Swal.fire("Error", "Failed to fetch voucher details.", "error");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "Delete Receipt Voucher?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Delete",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/delete/${encodeURIComponent(id)}?companyId=${companyId}`,
+        );
+        Swal.fire({
+          icon: "success",
+          title: "Deleted Successfully",
+          text: "Receipt voucher has been deleted.",
+          timer: 1800,
+          showConfirmButton: false,
+        });
+        fetchVouchers();
+      } catch (err) {
+        console.error("Delete error:", err);
+        Swal.fire("Error", "Failed to delete receipt voucher.", "error");
       }
     }
+  };
 
-    const narration = v.narration?.toLowerCase() || "";
-    const voucherNo = v.voucherNo?.toString() || "";
-    const customer = (ledgerMap[v.customer] || v.customer || "")
-      .toString()
-      .toLowerCase();
-    const query = searchQuery.toLowerCase();
+  const handleDownloadPDF = (v) => {
+    const url = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/download/${v.id}?companyId=${companyId}`;
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = `Receipt_Voucher_${v.voucherId || v.voucherNo || v.id}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      })
+      .catch((err) => {
+        console.error("Error downloading PDF:", err);
+        window.open(url, "_blank");
+      });
+  };
 
-    return (
-      narration.includes(query) ||
-      voucherNo.includes(query) ||
-      customer.includes(query)
-    );
-  });
+  const createPath =
+    loggedInRole === "employee"
+      ? "/employee/hr/accounting/client/receptVoucher"
+      : "/accounting/client/receptVoucher";
 
   return (
-    <div className="min-h-screen bg-[#F4F6F8] font-[monospace]">
-      <div className="bg-[#005AB3] text-white px-5 py-3 shadow">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <h1 className="text-sm font-bold uppercase tracking-wide whitespace-nowrap">
+    <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans">
+      <div className="max-w-7xl mx-auto app-panel overflow-hidden border border-[#e2f2e9] bg-white">
+        <div className="flex flex-wrap justify-between items-center app-section-bar py-5 px-6 border-b border-[#e2f2e9] gap-4 bg-white">
+          <h2 className="app-title text-xl font-extrabold text-[#042f2e]">
             List of Receipt Vouchers
-          </h1>
+          </h2>
 
-          <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-3 flex-wrap">
             <div className="relative">
-              <Search
-                size={15}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
-              />
               <input
                 type="text"
-                placeholder="Search Narration / Voucher No."
+                placeholder="Search Customer / Amount..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-8.5 pl-8 pr-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg outline-none transition-all placeholder:text-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 w-56"
+                className="w-60 pl-9 pr-3 py-2 text-[13px] bg-white border border-[#e2f2e9] rounded-xl focus:outline-none focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] transition-all placeholder:text-slate-400"
+              />
+              <Search
+                size={16}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
               />
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => {
-                  const basePath =
-                    loggedInRole === "employee"
-                      ? "/employee/hr/accounting/client"
-                      : "/accounting/client";
-                  navigate(`${basePath}/receptVoucher`);
-                }}
-                className="flex items-center gap-1.5 bg-[#1a56db] hover:bg-blue-600 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap"
-              >
-                <svg
-                  className="w-3.5 h-3.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Create
-              </button>
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 text-slate-700 px-4 h-10 rounded-xl border border-slate-200 transition-colors text-sm font-semibold cursor-pointer active:scale-[0.98]"
+            >
+              <Printer size={16} />
+              Print
+            </button>
 
-              <button
-                onClick={handlePrint}
-                className="flex items-center gap-1.5 bg-gray-600 hover:bg-gray-700 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap"
-              >
-                <Printer size={14} /> Print
-              </button>
+            <button
+              onClick={handleExportExcel}
+              disabled={filteredVouchers.length === 0}
+              className="flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-4 h-10 rounded-xl border border-emerald-200 transition-colors text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98]"
+            >
+              <FileSpreadsheet size={16} />
+              Export Excel
+            </button>
 
-              <div className="relative">
-                <button
-                  onClick={() => setShowExportMenu(!showExportMenu)}
-                  disabled={filteredVouchers.length === 0}
-                  className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <FileDown size={14} /> Export
-                  <svg
-                    className="w-3 h-3 ml-0.5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
+            <button
+              onClick={handleExportPDF}
+              disabled={filteredVouchers.length === 0}
+              className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 h-10 rounded-xl border border-blue-200 transition-colors text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98]"
+            >
+              <FileDown size={16} />
+              Export PDF
+            </button>
 
-                {showExportMenu && (
-                  <div className="absolute right-0 mt-1 w-28 bg-white rounded-md shadow-lg border border-gray-200 z-50 overflow-hidden">
-                    <button
-                      onClick={() => {
-                        handleExportExcel();
-                        setShowExportMenu(false);
-                      }}
-                      className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
-                    >
-                      <FileSpreadsheet size={14} className="text-green-600" />{" "}
-                      Excel
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleExportPDF();
-                        setShowExportMenu(false);
-                      }}
-                      className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
-                    >
-                      <FileDown size={14} className="text-red-600" /> PDF
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {loggedInRole !== "employee" && (
-                <button
-                  onClick={() => setShowEmployeeActivity((prev) => !prev)}
-                  className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-medium transition-all whitespace-nowrap border ${
-                    showEmployeeActivity
-                      ? "bg-slate-900 text-white border-slate-900"
-                      : "bg-white/10 text-white border-white/20 hover:bg-white/20"
-                  }`}
-                >
-                  <UserRound size={14} />
-                  {showEmployeeActivity
-                    ? "Back to Vouchers"
-                    : "Employee Activity"}
-                </button>
-              )}
-            </div>
+            <Link
+              to={createPath}
+              className="flex items-center justify-center gap-2 bg-linear-to-r from-[#00a651] to-[#00c853] hover:from-[#008c44] hover:to-[#00a651] text-white px-5 h-10 rounded-xl text-sm font-bold shadow-md hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer"
+            >
+              + Create Receipt Voucher
+            </Link>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-6xl mx-auto mt-6 bg-white shadow rounded-lg border border-gray-300">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead className="bg-[#E6EEF8] border-b border-gray-300">
-              <tr className="text-left text-gray-700">
-                <th className="px-4 py-2 border-r">Date</th>
-                <th className="px-4 py-2 border-r">Voucher No.</th>
-                <th className="px-4 py-2 border-r">Customer</th>
-                <th className="px-4 py-2 border-r">Receipt Into</th>
-                <th className="px-4 py-2 border-r text-right">Amount (₹)</th>
-                {showEmployeeActivity && (
-                  <th className="px-4 py-2 border-r text-left">
-                    Employee Name
+        {loading && (
+          <p className="text-center text-slate-500 py-10">
+            Loading receipt vouchers...
+          </p>
+        )}
+
+        {!loading && filteredVouchers.length > 0 && (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse bg-white">
+              <thead className="bg-[#f0fdf4]/50 border-b border-[#e2f2e9]">
+                <tr className="text-left text-slate-700">
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-center w-12">
+                    #
                   </th>
-                )}
-                <th className="px-4 py-2 border-r text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td
-                    colSpan={showEmployeeActivity ? 7 : 6}
-                    className="text-center py-6 text-gray-500 italic"
+                  <th
+                    onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
+                    className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] cursor-pointer select-none hover:bg-emerald-100/50 transition-colors"
+                    title="Click to toggle sort order"
                   >
-                    Loading vouchers...
-                  </td>
+                    <div className="flex items-center gap-1.5">
+                      <span>Date</span>
+                      {sortOrder === "desc" ? (
+                        <ArrowDown size={14} className="text-[#00a651]" />
+                      ) : (
+                        <ArrowUp size={14} className="text-[#00a651]" />
+                      )}
+                    </div>
+                  </th>
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Voucher No.
+                  </th>
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Customer
+                  </th>
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Receipt Into
+                  </th>
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-right">
+                    Amount (₹)
+                  </th>
+                  <th className="py-3 px-4 border-r border-[#e2f2e9] text-[11px] font-extrabold uppercase tracking-widest text-[#475569]">
+                    Narration
+                  </th>
+                  <th className="py-3 px-4 text-[11px] font-extrabold uppercase tracking-widest text-[#475569] text-center w-32">
+                    Action
+                  </th>
                 </tr>
-              ) : filteredVouchers.length > 0 ? (
-                filteredVouchers.map((voucher, index) => (
-                  <tr
-                    key={index}
-                    className={`border-b border-gray-200 hover:bg-[#F9FCFF] transition ${
-                      index % 2 === 0 ? "bg-white" : "bg-[#F7F9FB]"
-                    }`}
-                  >
-                    <td className="px-4 py-2">
-                      {new Date(voucher.date).toLocaleDateString("en-IN")}
-                    </td>
-                    <td className="px-4 py-2">{voucher.voucherId}</td>
-                    <td className="px-4 py-2">
-                      {ledgerMap[voucher.customer] || voucher.customer}
-                    </td>
-                    <td className="px-4 py-2">
-                      {getReceiptInto(voucher.receiptAccountId)}
-                    </td>
+              </thead>
 
-                    <td className="px-4 py-2 text-right">
-                      {(voucher.totalDebit || voucher.amount || 0).toString()}
-                    </td>
-                    {showEmployeeActivity && (
-                      <td className="px-4 py-2 truncate max-w-37.5">
-                        {getEmployeeName(voucher.employee_id)}
+              <tbody className="divide-y divide-[#e2f2e9]">
+                {sortedVouchers.map((v, idx) => {
+                  const voucherNum = v.voucherId || v.voucherNo || v.id;
+                  const customerName =
+                    ledgerMap[v.customer] || v.customer || "—";
+                  const receiptAccount = getReceiptInto(v.receiptAccountId);
+                  const voucherAmt = Number(
+                    v.totalDebit || v.amount || v.totalAmount || 0,
+                  );
+
+                  return (
+                    <tr
+                      key={v.id || idx}
+                      className="hover:bg-[#f0fdf4]/20 border-b border-[#e2f2e9] transition-colors duration-200"
+                    >
+                      <td className="py-3 px-4 border-r border-[#e2f2e9] text-center text-[#475569] text-[13px]">
+                        {idx + 1}
                       </td>
-                    )}
+                      <td className="py-3 px-4 border-r border-[#e2f2e9] text-slate-600 text-[13px] whitespace-nowrap">
+                        {v.date
+                          ? new Date(v.date).toLocaleDateString("en-IN")
+                          : "-"}
+                      </td>
+                      <td className="py-3 px-4 border-r border-[#e2f2e9] font-bold text-[#042f2e] text-[13px] whitespace-nowrap">
+                        {voucherNum}
+                      </td>
+                      <td className="py-3 px-4 border-r border-[#e2f2e9] text-slate-700 font-bold text-[13px]">
+                        {customerName}
+                      </td>
+                      <td className="py-3 px-4 border-r border-[#e2f2e9] text-slate-600 text-[13px] whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#f0fdf4] text-[#00a651] border border-[#c6f1d6] font-semibold text-xs">
+                          {receiptAccount}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 border-r border-[#e2f2e9] text-right font-bold text-[#042f2e] text-[13px] whitespace-nowrap">
+                        {voucherAmt.toLocaleString("en-IN", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </td>
+                      <td className="py-3 px-4 border-r border-[#e2f2e9] text-slate-600 text-[13px] max-w-xs truncate">
+                        {v.narration || "-"}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <div className="flex items-center justify-center gap-1.5">
+                          <button
+                            onClick={() => handleViewDetails(v.id)}
+                            title="View Voucher Details"
+                            className="text-slate-400 hover:text-[#00a651] p-1.5 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
+                          >
+                            <Eye size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleEdit(v.id)}
+                            title="Edit Receipt Voucher"
+                            className="text-slate-400 hover:text-amber-600 p-1.5 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
+                          >
+                            <Pencil size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(v.id)}
+                            title="Delete Receipt Voucher"
+                            className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleDownloadPDF(v)}
+                            title="Download PDF"
+                            className="text-slate-400 hover:text-blue-600 p-1.5 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
+                          >
+                            <FileDown size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
 
-                    <td className="px-4 py-2 text-center flex items-center justify-center gap-3">
-                      <button
-                        onClick={() => handleViewDetails(voucher.id)}
-                        className="text-blue-600 hover:text-blue-800 transition"
-                        title="View Details"
-                      >
-                        <Eye size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleEdit(voucher.id)}
-                        className="text-yellow-600 hover:text-yellow-800 transition"
-                        title="Edit Voucher"
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(voucher.id)}
-                        className="text-red-600 hover:text-red-800 transition"
-                        title="Delete Voucher"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                      <button
-                        onClick={() => {
-                          const url = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/download/${voucher.id}?companyId=${companyId}`;
-                          window.open(url, "_blank");
-                        }}
-                        className="text-green-600 hover:text-green-800 transition"
-                        title="Download PDF"
-                      >
-                        <Download size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={showEmployeeActivity ? 7 : 6}
-                    className="text-center py-6 text-gray-500 italic"
-                  >
-                    No vouchers found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        {!loading && filteredVouchers.length === 0 && (
+          <div className="px-4 py-12 text-center">
+            <SearchX className="size-10 mx-auto mb-3 text-slate-400" />
+            <p className="text-[14px] font-bold text-[#042f2e]">
+              No receipt vouchers found
+            </p>
+            <p className="text-[13px] mt-1 text-slate-500">
+              Try adjusting your search criteria or create a new receipt
+              voucher.
+            </p>
+          </div>
+        )}
+
+        {!loading && filteredVouchers.length > 0 && (
+          <div className="flex flex-wrap justify-between items-center py-4 px-6 bg-[#f0fdf4]/30 border-t border-[#e2f2e9] text-sm gap-4">
+            <div className="flex items-center gap-2 text-[#042f2e] font-extrabold">
+              <FileText size={18} className="text-[#00a651]" />
+              <span>TOTAL VOUCHERS: {filteredVouchers.length}</span>
+            </div>
+            <div className="text-base font-extrabold text-[#042f2e] tracking-wide">
+              TOTAL AMOUNT: ₹{" "}
+              {totalAmount.toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {selectedVoucher && (
@@ -667,14 +698,11 @@ const ReciptVouchersList = () => {
             setSelectedVoucher(null);
             handleEdit(id);
           }}
-          onDownload={(v) => {
-            const url = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/receive-voucher/download/${v.id}?companyId=${companyId}`;
-            window.open(url, "_blank");
-          }}
+          onDownload={handleDownloadPDF}
         />
       )}
     </div>
   );
 };
 
-export default ReciptVouchersList;
+export default ReceiveVouchersList;

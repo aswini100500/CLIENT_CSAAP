@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
+
+import { useState, useEffect, useRef } from "react";
 import {
   Search,
   Building2,
@@ -56,10 +58,14 @@ const Navbar = () => {
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${userId}`,
       );
 
+      console.log("API Response:", res);
+
       const companies = res.data;
+      console.log("Companies Data:", companies);
 
       setCompanies(companies);
     } catch (err) {
+      console.log(err);
       console.error("Error fetching companies:", err);
     }
   };
@@ -69,6 +75,8 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
+    console.log(selectedCompany);
+
     if (selectedCompanyId) {
       sessionStorage.setItem("selectedCompanyId", selectedCompanyId.toString());
       setCompanyId(selectedCompanyId);
@@ -120,6 +128,7 @@ const Navbar = () => {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+  console.log(companies);
 
   const handleCompanySelect = (company) => {
     setSelectedCompanyId(company.id);
@@ -144,7 +153,7 @@ const Navbar = () => {
       </div>
 
       <div
-        className={`px-4 py-3 space-y-4 lg:space-y-0 
+        className={`px-4 py-3 space-y-4 lg:space-y-0
         ${mobileMenuOpen ? "block" : "hidden lg:flex lg:items-center lg:justify-between"}`}
       >
         <div className="flex items-center gap-3">
@@ -165,7 +174,7 @@ const Navbar = () => {
         >
           <div
             onClick={() => setShowCompanyDropdown(!showCompanyDropdown)}
-            className="flex items-center gap-3 px-4 py-2 bg-white/10 rounded-xl 
+            className="flex items-center gap-3 px-4 py-2 bg-white/10 rounded-xl
             cursor-pointer hover:bg-white/20 transition"
           >
             <User size={20} className="text-blue-200" />
@@ -200,7 +209,7 @@ const Navbar = () => {
                 <div
                   key={c.id}
                   onClick={() => handleCompanySelect(c)}
-                  className={`p-3 cursor-pointer hover:bg-gray-100 flex justify-between items-center 
+                  className={`p-3 cursor-pointer hover:bg-gray-100 flex justify-between items-center
                   ${selectedCompany === c.name ? "bg-blue-50 border-l-4 border-blue-600" : ""}`}
                 >
                   <div>
@@ -226,7 +235,7 @@ const Navbar = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsSearchFocused(true)}
-            className="w-full bg-white/10 border border-blue-300/40 text-white 
+            className="w-full bg-white/10 border border-blue-300/40 text-white
             rounded-xl pl-10 pr-10 py-2 focus:ring-2 focus:ring-blue-400
             placeholder-blue-300"
           />
@@ -242,7 +251,7 @@ const Navbar = () => {
 
           {isSearchFocused && filteredCompanies.length > 0 && (
             <div
-              className="absolute text-blue-800 left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border 
+              className="absolute text-blue-800 left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border
             max-h-72 overflow-y-auto z-50 scrollbar-thin scrollbar-thumb-gray-300"
             >
               {filteredCompanies.map((c) => (

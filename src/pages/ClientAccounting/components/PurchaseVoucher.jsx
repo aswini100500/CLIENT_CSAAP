@@ -1,16 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
-import Swal from "sweetalert2";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useCompany } from "../context/CompanyContext";
-import BulkImportButton from "./BulkImportButton";
-import { useParams, useNavigate } from "react-router-dom";
-import { Search, UserPlus } from "lucide-react";
+import {
+  ArrowLeft,
+  Building,
+  FileText,
+  Layers,
+  Plus,
+  Save,
+  Search,
+  Trash2,
+  Truck,
+  User,
+  UserPlus,
+  X,
+} from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
+import { normalizeUnits } from "../../../submodules/crm/admin/pages/telemarketing/leads/leadUtils";
+import api from "../../../submodules/crm/api";
+import BulkImportButton from "./BulkImportButton";
 
 const API = `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/purchase-voucher`;
 
 const SearchableLedgerSelect = ({
-  ledgers,
+  ledgers = [],
   value,
   onSelect,
   onCreateNew,
@@ -20,15 +36,18 @@ const SearchableLedgerSelect = ({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const selectedLedger = ledgers.find((l) => String(l.id) === String(value));
+  const ledgerList = Array.isArray(ledgers) ? ledgers : [];
+  const selectedLedger = ledgerList.find((l) => String(l.id) === String(value));
 
   useEffect(() => {
     if (selectedLedger) {
-      setSearchTerm(selectedLedger.name || selectedLedger.ledgerName);
+      setSearchTerm(selectedLedger.name || selectedLedger.ledgerName || "");
+    } else if (!value) {
+      setSearchTerm("");
     }
-  }, [selectedLedger]);
+  }, [selectedLedger, value]);
 
-  const filtered = ledgers.filter((l) =>
+  const filtered = ledgerList.filter((l) =>
     (l.name || l.ledgerName || "")
       .toLowerCase()
       .includes(searchTerm.toLowerCase()),
@@ -38,41 +57,66 @@ const SearchableLedgerSelect = ({
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
-        if (selectedLedger)
-          setSearchTerm(selectedLedger.name || selectedLedger.ledgerName);
-        else setSearchTerm("");
+        if (!searchTerm.trim()) {
+          onSelect("");
+          setSearchTerm("");
+        } else if (selectedLedger) {
+          setSearchTerm(selectedLedger.name || selectedLedger.ledgerName || "");
+        }
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [selectedLedger]);
+  }, [selectedLedger, searchTerm, onSelect]);
+
+  const handleClear = (e) => {
+    e.stopPropagation();
+    setSearchTerm("");
+    onSelect("");
+    setIsOpen(false);
+  };
 
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <div className="relative">
         <input
           type="text"
-          className="pv-input pr-10"
+          className="app-input w-full border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium pr-8 py-1.5 text-xs"
           placeholder={placeholder}
           value={searchTerm}
           onChange={(e) => {
-            setSearchTerm(e.target.value);
+            const val = e.target.value;
+            setSearchTerm(val);
+            if (val === "") {
+              onSelect("");
+            }
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}
         />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-          <Search size={18} />
+        <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[#00a651]">
+          {searchTerm ? (
+            <button
+              type="button"
+              className="p-0.5 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-colors cursor-pointer"
+              onClick={handleClear}
+              title="Clear selection"
+            >
+              <X size={14} />
+            </button>
+          ) : (
+            <Search size={14} />
+          )}
         </div>
       </div>
 
       {isOpen && (
-        <div className="absolute z-100 mt-1 w-full bg-white border border-[#e2e2dc] rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-9999 mt-1.5 w-full bg-white border border-[#cbe0d2] rounded-xl shadow-xl max-h-60 overflow-y-auto">
           {filtered.length > 0 ? (
             filtered.map((l) => (
               <div
                 key={l.id}
-                className="px-4 py-2.5 text-sm hover:bg-blue-50 cursor-pointer text-gray-700 border-b border-gray-50 last:border-b-0"
+                className="px-3.5 py-2 text-xs font-semibold hover:bg-[#f0fdf4] hover:text-[#00a651] cursor-pointer text-slate-700 border-b border-[#e2f2e9] last:border-b-0 text-left transition-colors"
                 onClick={() => {
                   onSelect(l.id);
                   setSearchTerm(l.name || l.ledgerName);
@@ -83,19 +127,19 @@ const SearchableLedgerSelect = ({
               </div>
             ))
           ) : (
-            <div className="px-4 py-2.5 text-sm text-gray-500 italic">
+            <div className="px-3.5 py-2 text-xs text-slate-400 italic text-left">
               No matches found
             </div>
           )}
 
           <div
-            className="px-4 py-2.5 text-sm bg-gray-50 hover:bg-blue-100 cursor-pointer text-blue-600 font-medium flex items-center gap-2 border-t border-[#e2e2dc]"
+            className="px-3.5 py-2 text-xs bg-[#f0fdf4] hover:bg-[#e1f9eb] cursor-pointer text-[#00a651] font-bold flex items-center gap-1.5 border-t border-[#cbe0d2] text-left transition-colors"
             onClick={() => {
               onCreateNew(searchTerm);
               setIsOpen(false);
             }}
           >
-            <UserPlus size={18} /> Add "{searchTerm || "New Ledger"}"
+            <UserPlus size={14} /> Add "{searchTerm || "New Ledger"}"
           </div>
         </div>
       )}
@@ -103,350 +147,10 @@ const SearchableLedgerSelect = ({
   );
 };
 
-const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
-
-  :root {
-    --ink: #0f1117;
-    --ink-muted: #5c6070;
-    --ink-faint: #9ca3af;
-    --surface: #f7f7f5;
-    --surface-card: #ffffff;
-    --surface-hover: #f0f0ee;
-    --border: #e2e2dc;
-    --border-strong: #c8c8c0;
-    --accent: #1a56db;
-    --accent-light: #eff4ff;
-    --accent-hover: #1648c0;
-    --green: #0d7448;
-    --green-light: #ecfdf5;
-    --amber: #b45309;
-    --amber-light: #fffbeb;
-    --red: #c0392b;
-    --red-light: #fef2f2;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-    --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
-    --radius: 10px;
-    --radius-sm: 6px;
-  }
-
-  .pv-wrap * { font-family: 'DM Sans', sans-serif; box-sizing: border-box; }
-
-  .pv-wrap {
-    background: var(--surface);
-    min-height: 100vh;
-    padding: 32px 24px 80px;
-  }
-
-  /* ── Page header ── */
-  .pv-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 28px;
-    padding-bottom: 20px;
-    border-bottom: 1.5px solid var(--border);
-  }
-  .pv-header-left {}
-  .pv-eyebrow {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 4px;
-  }
-  .pv-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 30px;
-    color: var(--ink);
-    margin: 0;
-    line-height: 1.15;
-  }
-
-  /* ── Cards ── */
-  .pv-card {
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-  .pv-card-title {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .pv-card-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* ── Grid layouts ── */
-  .pv-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-  .pv-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-  @media (max-width: 768px) {
-    .pv-grid-3, .pv-grid-2 { grid-template-columns: 1fr; }
-  }
-
-  /* ── Field ── */
-  .pv-field { display: flex; flex-direction: column; gap: 5px; }
-  .pv-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--ink-muted);
-    letter-spacing: .01em;
-  }
-  .pv-label .req { color: var(--red); margin-left: 2px; }
-
-  .pv-input, .pv-select, .pv-textarea {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    color: var(--ink);
-    background: var(--surface-card);
-    transition: border-color .15s, box-shadow .15s;
-    outline: none;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .pv-input:focus, .pv-select:focus, .pv-textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(26,86,219,.1);
-  }
-  .pv-input.readonly {
-    background: var(--surface);
-    color: var(--ink-muted);
-    cursor: default;
-  }
-  .pv-select { cursor: pointer; }
-  .pv-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
-
-  /* ── Items table ── */
-  .pv-table-wrap {
-    overflow: visible;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-  }
-  .pv-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-  .pv-table thead { background: var(--surface); }
-  .pv-table th {
-    padding: 10px 12px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    border-bottom: 1.5px solid var(--border);
-    white-space: nowrap;
-  }
-  .pv-table th.right, .pv-table td.right { text-align: right; }
-  .pv-table th.center, .pv-table td.center { text-align: center; }
-  .pv-table tbody tr { transition: background .1s; }
-  .pv-table tbody tr:hover { background: var(--surface-hover); }
-  .pv-table td {
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-  .pv-table tbody tr:last-child td { border-bottom: none; }
-
-  .pv-table-input {
-    width: 100%;
-    padding: 6px 10px;
-    border: 1.5px solid transparent;
-    border-radius: 5px;
-    font-size: 13.5px;
-    color: var(--ink);
-    background: transparent;
-    outline: none;
-    font-family: 'DM Sans', sans-serif;
-    transition: border-color .15s, background .15s;
-  }
-  .pv-table-input:focus {
-    border-color: var(--accent);
-    background: var(--surface-card);
-  }
-  .pv-table-input.number { text-align: right; }
-
-  .pv-amount-cell {
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
-    color: var(--ink);
-    white-space: nowrap;
-    text-align: right;
-    padding-right: 14px;
-  }
-
-  /* ── Remove row btn ── */
-  .pv-remove-btn {
-    display: flex; align-items: center; justify-content: center;
-    width: 26px; height: 26px;
-    border: none; border-radius: 50%; cursor: pointer;
-    background: transparent; color: var(--ink-faint);
-    transition: background .15s, color .15s;
-    margin: auto;
-  }
-  .pv-remove-btn:hover { background: var(--red-light); color: var(--red); }
-
-  /* ── Add row ── */
-  .pv-add-row {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 14px;
-    border: 1.5px dashed var(--border-strong);
-    border-radius: var(--radius-sm);
-    background: transparent; cursor: pointer;
-    font-size: 13px; font-weight: 500; color: var(--accent);
-    transition: border-color .15s, background .15s;
-    font-family: 'DM Sans', sans-serif;
-    margin-top: 12px;
-  }
-  .pv-add-row:hover { border-color: var(--accent); background: var(--accent-light); }
-
-  /* ── GST Buttons ── */
-  .pv-gst-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
-
-  .pv-btn {
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 9px 18px;
-    border: none; border-radius: var(--radius-sm);
-    font-size: 13.5px; font-weight: 500; cursor: pointer;
-    transition: opacity .15s, transform .1s;
-    font-family: 'DM Sans', sans-serif;
-    letter-spacing: .01em;
-  }
-  .pv-btn:active { transform: scale(.97); }
-  .pv-btn-green { background: var(--green); color: #fff; }
-  .pv-btn-green:hover { opacity: .88; }
-  .pv-btn-amber { background: var(--amber); color: #fff; }
-  .pv-btn-amber:hover { opacity: .88; }
-  .pv-btn-primary {
-    background: var(--accent); color: #fff;
-    padding: 11px 28px; font-size: 14.5px; font-weight: 600;
-    border-radius: var(--radius-sm);
-  }
-  .pv-btn-primary:hover { background: var(--accent-hover); }
-
-  /* ── GST breakdown ── */
-  .pv-gst-row {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 13px;
-  }
-  .pv-gst-label { color: var(--ink-muted); min-width: 42px; }
-  .pv-gst-input {
-    width: 90px;
-    padding: 6px 10px;
-    border: 1.5px solid var(--border);
-    border-radius: 5px;
-    font-size: 13px; font-family: 'DM Sans', sans-serif;
-    text-align: right; color: var(--ink); outline: none;
-    transition: border-color .15s;
-  }
-  .pv-gst-input:focus { border-color: var(--accent); }
-
-  /* ── Totals panel ── */
-  .pv-totals {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 18px 20px;
-    min-width: 260px;
-  }
-  .pv-totals-row {
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 13.5px; padding: 4px 0; color: var(--ink-muted);
-  }
-  .pv-totals-row.grand {
-    font-size: 17px; font-weight: 700;
-    color: var(--ink); border-top: 1.5px solid var(--border-strong);
-    margin-top: 8px; padding-top: 12px;
-  }
-  .pv-totals-row .val { font-variant-numeric: tabular-nums; font-weight: 500; color: var(--ink); }
-  .pv-totals-row.grand .val { color: var(--accent); }
-  .pv-totals-row.gst-line .val { color: var(--green); }
-
-  /* ── Party/Dispatch detail grid ── */
-  .pv-detail-label {
-    font-size: 12px; font-weight: 500; color: var(--ink-muted);
-    padding-top: 9px;
-  }
-
-  /* ── Status badge ── */
-  .pv-badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 3px 10px; border-radius: 20px;
-    font-size: 11.5px; font-weight: 600; letter-spacing: .04em;
-  }
-  .pv-badge-edit { background: var(--amber-light); color: var(--amber); }
-  .pv-badge-new { background: var(--green-light); color: var(--green); }
-
-  /* ── Footer action bar ── */
-  .pv-footer {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 12px;
-    padding: 20px 24px;
-    background: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-md);
-    margin-top: 8px;
-  }
-
-  /* ── Section divider ── */
-  .pv-divider {
-    height: 1px; background: var(--border);
-    margin: 4px 0 20px;
-  }
-
-  /* ── Pill tabs (Party / Dispatch) ── */
-  .pv-tabs { display: flex; gap: 4px; margin-bottom: 20px; }
-  .pv-tab {
-    padding: 6px 14px; border-radius: 20px;
-    font-size: 12.5px; font-weight: 500; cursor: pointer;
-    border: 1.5px solid var(--border);
-    background: transparent; color: var(--ink-muted);
-    transition: all .15s; font-family: 'DM Sans', sans-serif;
-  }
-  .pv-tab.active {
-    background: var(--accent); color: #fff; border-color: var(--accent);
-  }
-
-  /* Separator line in totals */
-  hr.pv-hr { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
-`;
-
-const FieldRow = ({ label, children }) => (
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "120px 1fr",
-      alignItems: "center",
-      gap: "10px",
-      marginBottom: "10px",
-    }}
-  >
-    <span className="pv-detail-label">{label}</span>
-    <div>{children}</div>
-  </div>
-);
-
 const PurchaseVoucher = () => {
-  const { user } = useAuth();
+  const { user, companyId } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
-  const { companyId } = useCompany();
   const [activeDetailTab, setActiveDetailTab] = useState("party");
   const [states, setStates] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -457,6 +161,7 @@ const PurchaseVoucher = () => {
     customer: "",
     ledger: "",
     narration: "",
+    project_unit_ref: "",
     mailingName: "",
     address: "",
     state: "Not Applicable",
@@ -504,6 +209,191 @@ const PurchaseVoucher = () => {
   });
   const [ledgers, setLedgers] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
+  const token = localStorage.getItem("token") || user?.token;
+
+  const set = (field, value) => {
+    setVoucher((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleQuickCreateLedger = (initialName) => {
+    const stateToSave = {
+      voucher,
+      gst,
+    };
+    sessionStorage.setItem("purchaseVoucherState", JSON.stringify(stateToSave));
+
+    const role = user?.role || "admin";
+    const basePath =
+      role === "employee"
+        ? "/employee/hr/accounting/client"
+        : "/accounting/client";
+    const redirectPath = id
+      ? `${basePath}/purchasevoucher/${id}`
+      : `${basePath}/purchasevoucher`;
+    navigate(
+      `${basePath}/ledger?redirect=${encodeURIComponent(redirectPath)}&name=${encodeURIComponent(initialName || "")}`,
+    );
+  };
+
+  const { data: projectOptions = [] } = useQuery({
+    queryKey: ["project-options", token],
+    queryFn: async () => {
+      if (!token) return [];
+      try {
+        const response = await api.get("/api/projects/options", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        return response.data?.data || [];
+      } catch (err) {
+        console.warn("Failed to fetch project options:", err);
+        return [];
+      }
+    },
+    enabled: !!token,
+  });
+
+  const parsedProjectAndUnit = useMemo(() => {
+    if (!voucher.project_unit_ref)
+      return { projectCompositeKey: "", unitId: "" };
+    let str = String(voucher.project_unit_ref).trim();
+    if (str.startsWith("unit:")) str = str.substring(5);
+    else if (str.startsWith("project:")) str = str.substring(8);
+
+    const parts = str.split(":");
+    if (parts.length >= 3) {
+      const compositeKey = `${parts[0]}:${parts[1]}`;
+      const uId = parts.slice(2).join(":");
+      return { projectCompositeKey: compositeKey, unitId: uId };
+    } else if (parts.length === 2) {
+      return { projectCompositeKey: str, unitId: "" };
+    } else if (parts.length === 1 && parts[0]) {
+      const found = projectOptions.find(
+        (p) =>
+          p.id === parts[0] ||
+          p.project_id === parts[0] ||
+          (p.project_id && p.project_id.endsWith(`:${parts[0]}`)),
+      );
+      return {
+        projectCompositeKey: found ? found.project_id : parts[0],
+        unitId: "",
+      };
+    }
+    return { projectCompositeKey: "", unitId: "" };
+  }, [voucher.project_unit_ref, projectOptions]);
+
+  const selectedProjectObj = useMemo(
+    () =>
+      projectOptions.find(
+        (p) => p.project_id === parsedProjectAndUnit.projectCompositeKey,
+      ) || null,
+    [projectOptions, parsedProjectAndUnit.projectCompositeKey],
+  );
+
+  const { data: projectDetails } = useQuery({
+    queryKey: [
+      "project-details",
+      parsedProjectAndUnit.projectCompositeKey,
+      token,
+    ],
+    queryFn: async () => {
+      if (!parsedProjectAndUnit.projectCompositeKey || !token) return [];
+      let projectType = "apartment";
+      let projectId = parsedProjectAndUnit.projectCompositeKey;
+      if (typeof projectId === "string" && projectId.includes(":")) {
+        const parts = projectId.split(":");
+        projectType = parts[0];
+        projectId = parts[1];
+      }
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_CSAAP_URL}/api/tenant/type/${projectType}/${projectId}`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        return response.data?.data || [];
+      } catch (err) {
+        console.warn("Failed to fetch project details:", err);
+        return [];
+      }
+    },
+    enabled: !!parsedProjectAndUnit.projectCompositeKey && !!token,
+  });
+
+  const availableUnits = useMemo(() => {
+    if (!projectDetails || !selectedProjectObj) return [];
+    try {
+      return normalizeUnits(
+        projectDetails,
+        selectedProjectObj.property_type || "apartment",
+      );
+    } catch (e) {
+      return [];
+    }
+  }, [projectDetails, selectedProjectObj]);
+
+  const handleProjectSelect = (compositeKey) => {
+    if (!compositeKey) {
+      setVoucher((prev) => ({ ...prev, project_unit_ref: "" }));
+    } else {
+      setVoucher((prev) => ({
+        ...prev,
+        project_unit_ref: compositeKey,
+      }));
+    }
+  };
+
+  const handleUnitSelect = (uId) => {
+    const key = parsedProjectAndUnit.projectCompositeKey;
+    if (!uId) {
+      setVoucher((prev) => ({
+        ...prev,
+        project_unit_ref: key || "",
+      }));
+    } else {
+      setVoucher((prev) => ({
+        ...prev,
+        project_unit_ref: key ? `${key}:${uId}` : String(uId),
+      }));
+    }
+  };
+
+  const DEFAULT_INDIAN_STATES = [
+    { name: "Andhra Pradesh" },
+    { name: "Arunachal Pradesh" },
+    { name: "Assam" },
+    { name: "Bihar" },
+    { name: "Chhattisgarh" },
+    { name: "Goa" },
+    { name: "Gujarat" },
+    { name: "Haryana" },
+    { name: "Himachal Pradesh" },
+    { name: "Jharkhand" },
+    { name: "Karnataka" },
+    { name: "Kerala" },
+    { name: "Madhya Pradesh" },
+    { name: "Maharashtra" },
+    { name: "Manipur" },
+    { name: "Meghalaya" },
+    { name: "Mizoram" },
+    { name: "Nagaland" },
+    { name: "Odisha" },
+    { name: "Punjab" },
+    { name: "Rajasthan" },
+    { name: "Sikkim" },
+    { name: "Tamil Nadu" },
+    { name: "Telangana" },
+    { name: "Tripura" },
+    { name: "Uttar Pradesh" },
+    { name: "Uttarakhand" },
+    { name: "West Bengal" },
+    { name: "Andaman and Nicobar Islands" },
+    { name: "Chandigarh" },
+    { name: "Dadra and Nagar Haveli and Daman and Diu" },
+    { name: "Delhi" },
+    { name: "Jammu and Kashmir" },
+    { name: "Ladakh" },
+    { name: "Lakshadweep" },
+    { name: "Puducherry" },
+  ];
 
   const fetchStates = async () => {
     try {
@@ -521,8 +411,15 @@ const PurchaseVoucher = () => {
       );
 
       const data = await res.json();
-      setStates(data.data.states);
-    } catch (err) {}
+      if (data?.data?.states?.length > 0) {
+        setStates(data.data.states);
+      } else {
+        setStates(DEFAULT_INDIAN_STATES);
+      }
+    } catch (err) {
+      console.warn("Failed to fetch states, using fallback:", err);
+      setStates(DEFAULT_INDIAN_STATES);
+    }
   };
 
   const fetchCountries = async () => {
@@ -542,7 +439,9 @@ const PurchaseVoucher = () => {
         .sort((a, b) => a.name.localeCompare(b.name));
 
       setCountries(formatted);
-    } catch (err) {}
+    } catch (err) {
+      console.warn("Failed to fetch countries:", err);
+    }
   };
 
   useEffect(() => {
@@ -553,7 +452,8 @@ const PurchaseVoucher = () => {
         const res2 = await axios.get(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
         );
-        setLedgers(res2.data);
+        const data = Array.isArray(res2.data) ? res2.data : res2.data?.data || [];
+        setLedgers(data);
 
         const savedState = sessionStorage.getItem("purchaseVoucherState");
         if (savedState) {
@@ -623,6 +523,13 @@ const PurchaseVoucher = () => {
               supplierInvoiceDate: v.supplierInvoiceDate
                 ? new Date(v.supplierInvoiceDate).toISOString().split("T")[0]
                 : "",
+              project_unit_ref:
+                v.project_unit_ref ||
+                (v.unitId && v.projectId
+                  ? `${v.projectId}:${v.unitId}`
+                  : v.projectId
+                    ? `${v.projectId}`
+                    : ""),
               termsOfDelivery: v.termsOfDelivery || v.delivery_terms || "",
               consigneeSameAsBilling:
                 v.consigneeSameAsBilling !== undefined
@@ -752,7 +659,6 @@ const PurchaseVoucher = () => {
     });
     if (value) {
       const rate = parseFloat(value);
-
       const { value: type } = await Swal.fire({
         title: "Tax Type",
         input: "select",
@@ -937,7 +843,8 @@ const PurchaseVoucher = () => {
               const ledgerRes = await axios.get(
                 `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/all`,
               );
-              finalLedgerList = ledgerRes.data || [];
+              const ledgersData = Array.isArray(ledgerRes.data) ? ledgerRes.data : ledgerRes.data?.data || [];
+              finalLedgerList = ledgersData;
               setLedgers(finalLedgerList);
 
               const newLedger = finalLedgerList.find(
@@ -1032,13 +939,87 @@ const PurchaseVoucher = () => {
     }
   };
 
+  const resetForm = () => {
+    setVoucher({
+      date: new Date().toISOString().split("T")[0],
+      invoiceNo: "",
+      customer: "",
+      ledger: "",
+      narration: "",
+      project_unit_ref: "",
+      mailingName: "",
+      address: "",
+      state: "Not Applicable",
+      country: "India",
+      gstRegistrationType: "Unregistered/Consumer",
+      gstin: "",
+      placeOfSupply: "Not Applicable",
+      deliveryNoteNo: "",
+      deliveryNoteDate: "",
+      paymentTerms: "",
+      otherReferences: "",
+      referenceNo: "",
+      referenceDate: "",
+      buyerOrderNo: "",
+      buyerOrderDate: "",
+      dispatchDocNo: "",
+      dispatchedThrough: "",
+      destination: "",
+      carrierName: "",
+      billOfLading: "",
+      billOfLadingDate: "",
+      dispatchDate: "",
+      receiptNoteNo: "",
+      receiptDate: "",
+      receiptDocNo: "",
+      supplierInvoiceNo: "",
+      supplierInvoiceDate: "",
+      termsOfDelivery: "",
+      consigneeSameAsBilling: true,
+      consigneeName: "",
+      consigneeGSTIN: "",
+      consigneeAddress: "",
+      consigneeState: "Not Applicable",
+      consigneePincode: "",
+      items: [
+        { itemName: "", hsn_code: "", qty: 1, per: "Nos", rate: 0, amount: 0 },
+      ],
+    });
+    setGst({
+      applied: false,
+      percentage: 0,
+      amount: 0,
+      igst: 0,
+      cgst: 0,
+      sgst: 0,
+    });
+    if (companyId) {
+      axios
+        .get(
+          `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/voucher-util/next/${companyId}/purchase`,
+        )
+        .then((res) =>
+          setVoucher((prev) => ({ ...prev, invoiceNo: res.data.nextNumber })),
+        )
+        .catch(console.error);
+    }
+  };
+
   const saveVoucher = async () => {
+    if (!voucher.date || !voucher.customer || !voucher.ledger) {
+      return Swal.fire(
+        "Error",
+        "Please fill required fields (Date, Party Name, Purchase Ledger)",
+        "error",
+      );
+    }
     try {
       const employeeId = user?.employee_id || null;
       const role = user?.role || "admin";
 
       const payload = {
         ...voucher,
+        voucherNo: voucher.invoiceNo || voucher.voucherNo || "",
         companyId,
         subtotal: totalAmount,
         gst_percentage: gst.percentage || effectiveGstRate,
@@ -1062,39 +1043,73 @@ const PurchaseVoucher = () => {
         ...(employeeId && { employee_id: employeeId }),
         role,
       };
+
       if (isEditMode) {
         await axios.put(`${API}/${id}`, payload);
-        Swal.fire("Success", "Voucher updated successfully", "success");
-        navigate("/accounting/client/listOfPurchaseVoucher");
-      } else {
-        const res = await axios.post(API, payload);
         Swal.fire({
           icon: "success",
-          title: "Saved Successfully",
-          showCancelButton: true,
-          confirmButtonText: "Download PDF",
-          cancelButtonText: "Close",
-        }).then((r) => {
-          if (r.isConfirmed && res.data?.pdf_path) {
-            const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
-            window.open(pdfUrl, "_blank");
-            fetch(pdfUrl)
-              .then((response) => response.blob())
-              .then((blob) => {
-                const blobUrl = window.URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = blobUrl;
-                link.download =
-                  res.data.pdf_path.split("/").pop() || "PurchaseVoucher.pdf";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(blobUrl);
-              })
-              .catch((err) => console.error("Error downloading PDF:", err));
-          }
+          title: "Purchase Voucher Updated Successfully",
+          timer: 1500,
+          showConfirmButton: false,
         });
+        navigate(listPath);
+        return;
       }
+
+      const res = await axios.post(API, payload);
+
+      const result = await Swal.fire({
+        icon: "success",
+        title: "Purchase Voucher Created Successfully",
+        text: "The purchase voucher has been saved. What would you like to do next?",
+        showCancelButton: true,
+        showDenyButton: !!res.data?.pdf_path,
+        confirmButtonColor: "#00a651",
+        cancelButtonColor: "#6b7280",
+        denyButtonColor: "#2563eb",
+        confirmButtonText: "Create Another",
+        cancelButtonText: "Go to Purchase Voucher List",
+        denyButtonText: "Download PDF",
+      });
+
+      if (result.isDenied && res.data?.pdf_path) {
+        const pdfUrl = `${import.meta.env.VITE_ACCOUNTING_URL}/${res.data.pdf_path}`;
+        window.open(pdfUrl, "_blank");
+        fetch(pdfUrl)
+          .then((response) => response.blob())
+          .then((blob) => {
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download =
+              res.data.pdf_path.split("/").pop() || "PurchaseVoucher.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+          })
+          .catch((err) => console.error("Error downloading PDF:", err));
+
+        const followUp = await Swal.fire({
+          icon: "info",
+          title: "What's Next?",
+          text: "Would you like to create another purchase voucher or go to the list?",
+          showCancelButton: true,
+          confirmButtonColor: "#00a651",
+          cancelButtonColor: "#6b7280",
+          confirmButtonText: "Create Another",
+          cancelButtonText: "Go to Purchase Voucher List",
+        });
+        if (!followUp.isConfirmed) {
+          navigate(listPath);
+          return;
+        }
+      } else if (!result.isConfirmed) {
+        navigate(listPath);
+        return;
+      }
+
+      resetForm();
     } catch (err) {
       if (err.response && err.response.status === 409) {
         Swal.fire("Warning", "Invoice Number Already Exists!", "warning");
@@ -1110,194 +1125,238 @@ const PurchaseVoucher = () => {
     }
   };
 
-  const handleQuickCreateLedger = async (initialName) => {
-    const stateToSave = {
-      voucher,
-      gst,
-    };
-    sessionStorage.setItem("purchaseVoucherState", JSON.stringify(stateToSave));
-    navigate(
-      `/accounting/client/ledger?redirect=/accounting/client/purchasevoucher&name=${encodeURIComponent(initialName)}`,
-    );
-  };
+  const inputClass =
+    "app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium";
 
-  const set = (key, val) => setVoucher((v) => ({ ...v, [key]: val }));
+  const tableInputClass =
+    "w-full border border-[#c8ddcd] bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] rounded-xl font-semibold py-2.25 px-3 text-xs outline-none transition-all";
+
+  const role = user?.role || "admin";
+  const listPath =
+    role === "employee"
+      ? "/employee/hr/accounting/client/listOfPurchaseVoucher"
+      : "/accounting/client/listOfPurchaseVoucher";
 
   return (
     <>
-      <style>{styles}</style>
-
-      <div className="pv-wrap">
-        <div className="pv-header">
-          <div className="pv-header-left">
-            <p className="pv-eyebrow">Accounts Payable</p>
-
-            <h1 className="pv-title">Purchase Voucher</h1>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              flexWrap: "wrap",
-            }}
-          >
-            <span
-              className={`pv-badge ${
-                isEditMode ? "pv-badge-edit" : "pv-badge-new"
-              }`}
-            >
-              <span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "currentColor",
-                  display: "inline-block",
-                }}
-              />
-
-              {isEditMode ? "Edit Mode" : "New Voucher"}
-            </span>
-
-            <BulkImportButton
-              onImport={handleBulkImport}
-              buttonLabel="Import Excel / CSV"
-            />
-          </div>
-        </div>
-
-        <div className="pv-card">
-          <p className="pv-card-title">Voucher Details</p>
-          <div className="pv-grid-3">
-            <div className="pv-field">
-              <label className="pv-label">Voucher No</label>
-              <input
-                className="pv-input"
-                placeholder="e.g. PUR-001"
-                value={voucher.invoiceNo}
-                onChange={(e) => set("invoiceNo", e.target.value)}
-              />
+      <div className="min-h-screen bg-[#f8faf8] p-6 erp-root font-sans">
+        <div className="max-w-6xl mx-auto bg-white app-panel border border-[#e2f2e9]/80 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+          <div className="flex justify-between items-center border-b border-[#e2f2e9] pb-5 mb-8">
+            <div className="flex items-center gap-3">
+              <h2 className="app-title text-xl font-extrabold text-[#042f2e]">
+                {isEditMode
+                  ? "Purchase Voucher Alteration"
+                  : "Purchase Voucher Creation"}
+              </h2>
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#f0fdf4] text-[#00a651] border border-[#c6f1d6]">
+                PUR
+              </span>
             </div>
-            <div className="pv-field">
-              <label className="pv-label">
-                Date <span className="req">*</span>
-              </label>
-              <input
-                type="date"
-                className="pv-input"
-                value={voucher.date}
-                onChange={(e) => set("date", e.target.value)}
-              />
-            </div>
-            <div className="pv-field">
-              <label className="pv-label">
-                Party Name <span className="req">*</span>
-              </label>
-              <input
-                className="pv-input"
-                placeholder="Enter supplier / party"
-                value={voucher.customer}
-                onChange={(e) => set("customer", e.target.value)}
-              />
+
+            <div className="flex items-center gap-3">
+              <BulkImportButton onImport={handleBulkImport} />
+              <button
+                type="button"
+                onClick={() => navigate(listPath)}
+                className="flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors text-sm font-medium cursor-pointer"
+              >
+                <ArrowLeft size={16} /> Back to Purchase Vouchers
+              </button>
             </div>
           </div>
 
-          <div className="pv-grid-3" style={{ marginTop: 14 }}>
-            <div className="pv-field">
-              <label className="pv-label">Supplier Invoice No.</label>
-              <input
-                className="pv-input"
-                placeholder="e.g. ABC/123"
-                value={voucher.supplierInvoiceNo}
-                onChange={(e) => set("supplierInvoiceNo", e.target.value)}
-              />
-            </div>
-            <div className="pv-field">
-              <label className="pv-label">Supplier Invoice Date</label>
-              <input
-                type="date"
-                className="pv-input"
-                value={voucher.supplierInvoiceDate}
-                onChange={(e) => set("supplierInvoiceDate", e.target.value)}
-              />
-            </div>
-            <div className="pv-field">
-              <label className="pv-label">
-                Purchase Ledger <span className="req">*</span>
-              </label>
-
-              <SearchableLedgerSelect
-                ledgers={ledgers}
-                value={voucher.ledger}
-                onSelect={(ledgerId) => {
-                  const selectedLedger = ledgers.find(
-                    (l) => String(l.id) === String(ledgerId),
-                  );
-                  setVoucher((prev) => ({
-                    ...prev,
-                    ledger: ledgerId,
-                    customer: selectedLedger?.name || "",
-                    mailingName: selectedLedger?.mailingName || "",
-                    address: selectedLedger?.address || "",
-                    state: selectedLedger?.state || "Not Applicable",
-                    country: selectedLedger?.country || "India",
-                    gstRegistrationType:
-                      selectedLedger?.registrationType ||
-                      "Unregistered/Consumer",
-                    gstin: selectedLedger?.gstin || "",
-                    placeOfSupply: selectedLedger?.state || "Not Applicable",
-                  }));
-                }}
-                onCreateNew={(name) => handleQuickCreateLedger(name)}
-                placeholder="— Select ledger —"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="pv-card">
-          <div className="pv-tabs">
-            <button
-              className={`pv-tab ${activeDetailTab === "party" ? "active" : ""}`}
-              onClick={() => setActiveDetailTab("party")}
-            >
-              Party Details
-            </button>
-            <button
-              className={`pv-tab ${activeDetailTab === "receipt" ? "active" : ""}`}
-              onClick={() => setActiveDetailTab("receipt")}
-            >
-              Purchase Details
-            </button>
-          </div>
-
-          {activeDetailTab === "party" && (
-            <div className="pv-grid-2">
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+              <FileText size={16} className="text-[#00a651]" /> Voucher &
+              Supplier Details
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
               <div>
-                <FieldRow label="Supplier (Bill from)">
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Voucher No :
+                </label>
+                <input
+                  className={inputClass}
+                  placeholder="e.g. PUR-001"
+                  value={voucher.invoiceNo}
+                  onChange={(e) => set("invoiceNo", e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Date * :
+                </label>
+                <input
+                  type="date"
+                  className={inputClass}
+                  value={voucher.date}
+                  onChange={(e) => set("date", e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Party Name * :
+                </label>
+                <input
+                  className={inputClass}
+                  placeholder="Enter supplier / party"
+                  value={voucher.customer}
+                  onChange={(e) => set("customer", e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Supplier Invoice No :
+                </label>
+                <input
+                  className={inputClass}
+                  placeholder="e.g. ABC/123"
+                  value={voucher.supplierInvoiceNo}
+                  onChange={(e) => set("supplierInvoiceNo", e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Supplier Invoice Date :
+                </label>
+                <input
+                  type="date"
+                  className={inputClass}
+                  value={voucher.supplierInvoiceDate}
+                  onChange={(e) => set("supplierInvoiceDate", e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                  Purchase Ledger * :
+                </label>
+                <SearchableLedgerSelect
+                  ledgers={ledgers}
+                  value={voucher.ledger}
+                  onSelect={(ledgerId) => {
+                    const selectedLedger = ledgers.find(
+                      (l) => String(l.id) === String(ledgerId),
+                    );
+                    setVoucher((prev) => ({
+                      ...prev,
+                      ledger: ledgerId,
+                      customer: selectedLedger?.name || "",
+                      mailingName: selectedLedger?.mailingName || "",
+                      address: selectedLedger?.address || "",
+                      state: selectedLedger?.state || "Not Applicable",
+                      country: selectedLedger?.country || "India",
+                      gstRegistrationType:
+                        selectedLedger?.registrationType ||
+                        "Unregistered/Consumer",
+                      gstin: selectedLedger?.gstin || "",
+                      placeOfSupply: selectedLedger?.state || "Not Applicable",
+                    }));
+                  }}
+                  onCreateNew={(name) => handleQuickCreateLedger(name)}
+                  placeholder="— Select ledger —"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 pt-4 border-t border-[#e2f2e9]">
+              <div>
+                <label className="app-label flex items-center gap-1.5 text-xs font-bold text-slate-800 mb-1 h-5">
+                  <Building size={14} className="text-[#00a651] shrink-0" />
+                  <span>Project :</span>
+                </label>
+                <select
+                  className={inputClass}
+                  value={parsedProjectAndUnit.projectCompositeKey}
+                  onChange={(e) => handleProjectSelect(e.target.value)}
+                >
+                  <option value="">— No Project Selected —</option>
+                  {projectOptions.map((p) => (
+                    <option
+                      key={p.project_id || p.composite_key || p.id}
+                      value={p.project_id}
+                    >
+                      {p.name || p.project_name}{" "}
+                      {p.location ? `- ${p.location}` : ""}{" "}
+                      {p.display_type || p.property_type
+                        ? `(${p.display_type || p.property_type})`
+                        : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="app-label flex items-center gap-1.5 text-xs font-bold text-slate-800 mb-1 h-5">
+                  <Layers size={14} className="text-[#00a651] shrink-0" />
+                  <span>Unit / Flat :</span>
+                </label>
+                <select
+                  className={inputClass}
+                  disabled={!parsedProjectAndUnit.projectCompositeKey}
+                  value={parsedProjectAndUnit.unitId}
+                  onChange={(e) => handleUnitSelect(e.target.value)}
+                >
+                  <option value="">— All Units / General Site —</option>
+                  {availableUnits.map((u) => {
+                    const uId = String(u.unit_id || u.id || "");
+                    const uName = u.unit_name || u.name || `Unit ${uId}`;
+                    return (
+                      <option key={uId} value={uId}>
+                        {uName} {u.block ? `(${u.block})` : ""}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <div className="flex gap-2 border-b border-[#cbe0d2] pb-3 mb-5">
+              <button
+                type="button"
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${activeDetailTab === "party" ? "bg-[#00a651] text-white shadow-sm" : "bg-white text-slate-700 border border-[#cbe0d2] hover:bg-[#f0fdf4]"}`}
+                onClick={() => setActiveDetailTab("party")}
+              >
+                <User size={14} /> Party Details
+              </button>
+              <button
+                type="button"
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${activeDetailTab === "receipt" ? "bg-[#00a651] text-white shadow-sm" : "bg-white text-slate-700 border border-[#cbe0d2] hover:bg-[#f0fdf4]"}`}
+                onClick={() => setActiveDetailTab("receipt")}
+              >
+                <Truck size={14} /> Purchase & Dispatch Details
+              </button>
+            </div>
+
+            {activeDetailTab === "party" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                    Mailing Name :
+                  </label>
                   <input
-                    className="pv-input readonly"
-                    readOnly
-                    value={
-                      ledgers.find(
-                        (l) => String(l.id) === String(voucher.ledger),
-                      )?.name || ""
-                    }
-                    placeholder="Auto-filled from ledger"
-                  />
-                </FieldRow>
-                <FieldRow label="Mailing Name">
-                  <input
-                    className="pv-input"
+                    className={inputClass}
                     value={voucher.mailingName}
                     onChange={(e) => set("mailingName", e.target.value)}
                   />
-                </FieldRow>
-                <FieldRow label="State">
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    Address :
+                  </label>
+                  <textarea
+                    className={`${inputClass} h-20 resize-none`}
+                    value={voucher.address}
+                    onChange={(e) => set("address", e.target.value)}
+                  />
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    State :
+                  </label>
                   <select
-                    className="pv-select"
+                    className={inputClass}
                     value={voucher.state}
                     onChange={(e) => set("state", e.target.value)}
                   >
@@ -1308,10 +1367,14 @@ const PurchaseVoucher = () => {
                       </option>
                     ))}
                   </select>
-                </FieldRow>
-                <FieldRow label="Country">
+                </div>
+
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                    Country :
+                  </label>
                   <select
-                    className="pv-select"
+                    className={inputClass}
                     value={voucher.country}
                     onChange={(e) => set("country", e.target.value)}
                   >
@@ -1322,20 +1385,12 @@ const PurchaseVoucher = () => {
                       </option>
                     ))}
                   </select>
-                </FieldRow>
-              </div>
-              <div>
-                <FieldRow label="Address">
-                  <textarea
-                    className="pv-textarea"
-                    rows={3}
-                    value={voucher.address}
-                    onChange={(e) => set("address", e.target.value)}
-                  />
-                </FieldRow>
-                <FieldRow label="GST Reg. Type">
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    GST Registration Type :
+                  </label>
                   <select
-                    className="pv-select"
+                    className={inputClass}
                     value={voucher.gstRegistrationType}
                     onChange={(e) => set("gstRegistrationType", e.target.value)}
                   >
@@ -1343,18 +1398,22 @@ const PurchaseVoucher = () => {
                     <option>Regular</option>
                     <option>Composition</option>
                   </select>
-                </FieldRow>
-                <FieldRow label="GSTIN/UIN">
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    GSTIN/UIN :
+                  </label>
                   <input
-                    className="pv-input"
+                    className={`${inputClass} uppercase`}
                     placeholder="22AAAAA0000A1Z5"
                     value={voucher.gstin}
                     onChange={(e) => set("gstin", e.target.value)}
                   />
-                </FieldRow>
-                <FieldRow label="Place of Supply">
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    Place of Supply :
+                  </label>
                   <select
-                    className="pv-select"
+                    className={inputClass}
                     value={voucher.placeOfSupply}
                     onChange={(e) => set("placeOfSupply", e.target.value)}
                   >
@@ -1365,689 +1424,322 @@ const PurchaseVoucher = () => {
                       </option>
                     ))}
                   </select>
-                </FieldRow>
-              </div>
-            </div>
-          )}
-
-          {activeDetailTab === "receipt" && (
-            <div className="animate-in fade-in duration-300">
-              <div className="pv-grid-3">
-                <div>
-                  <FieldRow label="Purchase Note No(s)">
-                    <input
-                      className="pv-input"
-                      value={voucher.receiptNoteNo}
-                      onChange={(e) => set("receiptNoteNo", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Purchase Date">
-                    <input
-                      type="date"
-                      className="pv-input"
-                      value={voucher.receiptDate}
-                      onChange={(e) => set("receiptDate", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Purchase Doc No.">
-                    <input
-                      className="pv-input"
-                      value={voucher.receiptDocNo}
-                      onChange={(e) => set("receiptDocNo", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Delivery Note">
-                    <input
-                      className="pv-input"
-                      value={voucher.deliveryNoteNo}
-                      onChange={(e) => set("deliveryNoteNo", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Delivery Date">
-                    <input
-                      type="date"
-                      className="pv-input"
-                      value={voucher.deliveryNoteDate}
-                      onChange={(e) => set("deliveryNoteDate", e.target.value)}
-                    />
-                  </FieldRow>
-                </div>
-
-                <div>
-                  <FieldRow label="Dispatched through">
-                    <input
-                      className="pv-input"
-                      value={voucher.dispatchedThrough}
-                      onChange={(e) => set("dispatchedThrough", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Destination">
-                    <input
-                      className="pv-input"
-                      value={voucher.destination}
-                      onChange={(e) => set("destination", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Carrier Name/Agent">
-                    <input
-                      className="pv-input"
-                      value={voucher.carrierName}
-                      onChange={(e) => set("carrierName", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Bill of Lading">
-                    <input
-                      className="pv-input"
-                      value={voucher.billOfLading}
-                      onChange={(e) => set("billOfLading", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Lading Date">
-                    <input
-                      type="date"
-                      className="pv-input"
-                      value={voucher.billOfLadingDate}
-                      onChange={(e) => set("billOfLadingDate", e.target.value)}
-                    />
-                  </FieldRow>
-                </div>
-
-                <div>
-                  <FieldRow label="Motor Vehicle No.">
-                    <input
-                      className="pv-input"
-                      value={voucher.motorVehicleNo}
-                      onChange={(e) => set("motorVehicleNo", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Reference No.">
-                    <input
-                      className="pv-input"
-                      value={voucher.referenceNo}
-                      onChange={(e) => set("referenceNo", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Reference Date">
-                    <input
-                      type="date"
-                      className="pv-input"
-                      value={voucher.referenceDate}
-                      onChange={(e) => set("referenceDate", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Order No.">
-                    <input
-                      className="pv-input"
-                      value={voucher.buyerOrderNo}
-                      onChange={(e) => set("buyerOrderNo", e.target.value)}
-                    />
-                  </FieldRow>
-                  <FieldRow label="Order Date">
-                    <input
-                      type="date"
-                      className="pv-input"
-                      value={voucher.buyerOrderDate}
-                      onChange={(e) => set("buyerOrderDate", e.target.value)}
-                    />
-                  </FieldRow>
                 </div>
               </div>
+            )}
 
-              <div className="pv-grid-2 mt-4 pt-4 border-t border-gray-100">
-                <FieldRow label="Payment Terms">
-                  <input
-                    className="pv-input"
-                    placeholder="e.g. Net 30"
-                    value={voucher.paymentTerms}
-                    onChange={(e) => set("paymentTerms", e.target.value)}
-                  />
-                </FieldRow>
-                <FieldRow label="Other References">
-                  <input
-                    className="pv-input"
-                    value={voucher.otherReferences}
-                    onChange={(e) => set("otherReferences", e.target.value)}
-                  />
-                </FieldRow>
-                <FieldRow label="Terms of Delivery">
-                  <textarea
-                    className="pv-input"
-                    rows={2}
-                    value={voucher.termsOfDelivery}
-                    onChange={(e) => set("termsOfDelivery", e.target.value)}
-                    style={{ resize: "none" }}
-                  />
-                </FieldRow>
-              </div>
-
-              <div className="mt-8 pt-8 border-t border-dashed border-gray-200">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: 16,
-                  }}
-                >
-                  <h4
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 700,
-                      color: "var(--ink-muted)",
-                      textTransform: "uppercase",
-                      letterSpacing: ".1em",
-                      margin: 0,
-                    }}
-                  >
-                    Consignee (Ship To)
-                  </h4>
-                  <label
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                      cursor: "pointer",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        color: "var(--ink-muted)",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      Same as Billing?
-                    </span>
-                    <input
-                      type="checkbox"
-                      checked={voucher.consigneeSameAsBilling}
-                      onChange={(e) =>
-                        set("consigneeSameAsBilling", e.target.checked)
-                      }
-                      style={{ width: 14, height: 14 }}
-                    />
+            {activeDetailTab === "receipt" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                    Receipt Doc No :
                   </label>
-                </div>
+                  <input
+                    className={inputClass}
+                    value={voucher.receiptDocNo}
+                    onChange={(e) => set("receiptDocNo", e.target.value)}
+                  />
 
-                {!voucher.consigneeSameAsBilling && (
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns:
-                        "repeat(auto-fit, minmax(280px, 1fr))",
-                      gap: "12px 24px",
-                      padding: 20,
-                      background: "var(--bg-faint)",
-                      borderRadius: "var(--radius-md)",
-                      border: "1px solid var(--border-faint)",
-                    }}
-                  >
-                    <FieldRow label="Name">
-                      <input
-                        className="pv-input"
-                        value={voucher.consigneeName}
-                        onChange={(e) => set("consigneeName", e.target.value)}
-                      />
-                    </FieldRow>
-                    <FieldRow label="GSTIN">
-                      <input
-                        className="pv-input uppercase"
-                        value={voucher.consigneeGSTIN}
-                        onChange={(e) => set("consigneeGSTIN", e.target.value)}
-                      />
-                    </FieldRow>
-                    <FieldRow label="State">
-                      <select
-                        className="pv-select"
-                        value={voucher.consigneeState}
-                        onChange={(e) => set("consigneeState", e.target.value)}
-                      >
-                        <option value="Not Applicable">Not Applicable</option>
-                        {states.map((s, idx) => (
-                          <option key={idx} value={s.name}>
-                            {s.name}
-                          </option>
-                        ))}
-                      </select>
-                    </FieldRow>
-                    <FieldRow label="Address">
-                      <textarea
-                        className="pv-input"
-                        rows={2}
-                        value={voucher.consigneeAddress}
-                        onChange={(e) =>
-                          set("consigneeAddress", e.target.value)
-                        }
-                        style={{ resize: "none" }}
-                      />
-                    </FieldRow>
-                  </div>
-                )}
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    Dispatched Through :
+                  </label>
+                  <input
+                    className={inputClass}
+                    value={voucher.dispatchedThrough}
+                    onChange={(e) => set("dispatchedThrough", e.target.value)}
+                  />
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    Destination :
+                  </label>
+                  <input
+                    className={inputClass}
+                    value={voucher.destination}
+                    onChange={(e) => set("destination", e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+                    Carrier Name / Agent :
+                  </label>
+                  <input
+                    className={inputClass}
+                    value={voucher.carrierName}
+                    onChange={(e) => set("carrierName", e.target.value)}
+                  />
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    Bill of Lading / LR No :
+                  </label>
+                  <input
+                    className={inputClass}
+                    value={voucher.billOfLading}
+                    onChange={(e) => set("billOfLading", e.target.value)}
+                  />
+
+                  <label className="app-label block text-xs font-bold text-slate-800 mb-1 mt-4">
+                    Motor Vehicle No :
+                  </label>
+                  <input
+                    className={`${inputClass} uppercase`}
+                    value={voucher.motorVehicleNo}
+                    onChange={(e) => set("motorVehicleNo", e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-
-        <div className="pv-card">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 16,
-            }}
-          >
-            <p className="pv-card-title" style={{ margin: 0 }}>
-              Line Items
-            </p>
-            <div style={{ display: "flex", gap: 8 }}>
-              <BulkImportButton onDataParsed={handleBulkImport} />
-            </div>
-          </div>
-
-          <div className="pv-table-wrap">
-            <table className="pv-table">
-              <thead>
-                <tr>
-                  <th style={{ width: "36%", paddingLeft: 14 }}>Item Name</th>
-                  <th style={{ width: "14%" }}>HSN Code</th>
-                  <th className="right" style={{ width: "12%" }}>
-                    Qty
-                  </th>
-                  <th className="center" style={{ width: "8%" }}>
-                    Unit
-                  </th>
-                  <th className="right" style={{ width: "16%" }}>
-                    Rate (₹)
-                  </th>
-                  <th
-                    className="right"
-                    style={{ width: "16%", paddingRight: 14 }}
-                  >
-                    Amount (₹)
-                  </th>
-                  <th style={{ width: "6%" }}></th>
-                </tr>
-              </thead>
-              <tbody>
-                <datalist id="unit-options">
-                  <option value="Nos" />
-                  <option value="Piece" />
-                  <option value="Pair" />
-                  <option value="Set" />
-                  <option value="Dozen" />
-                  <option value="Kg" />
-                  <option value="Gram" />
-                  <option value="Quintal" />
-                  <option value="Ton" />
-                  <option value="Litre" />
-                  <option value="ML" />
-                  <option value="Meter" />
-                  <option value="Feet" />
-                  <option value="Inch" />
-                  <option value="CM" />
-                  <option value="Box" />
-                  <option value="Bag" />
-                  <option value="Packet" />
-                  <option value="Bottle" />
-                  <option value="Carton" />
-                  <option value="Bundle" />
-                  <option value="Roll" />
-                  <option value="Tray" />
-                  <option value="Can" />
-                  <option value="Drum" />
-                  <option value="Sheet" />
-                  <option value="Rod" />
-                  <option value="Pipe" />
-                  <option value="Block" />
-                </datalist>
-                {voucher.items.map((row, index) => (
-                  <tr key={index} className="relative hover:z-50">
-                    <td style={{ paddingLeft: 10 }}>
-                      <input
-                        className="pv-table-input"
-                        placeholder="Item description"
-                        value={row.itemName}
-                        onChange={(e) =>
-                          handleItemChange(index, "itemName", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        className="pv-table-input"
-                        placeholder="0000"
-                        value={row.hsn_code}
-                        onChange={(e) =>
-                          handleItemChange(index, "hsn_code", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="pv-table-input number"
-                        value={row.qty}
-                        onChange={(e) =>
-                          handleItemChange(index, "qty", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        list="unit-options"
-                        className="pv-table-input"
-                        style={{ textAlign: "center" }}
-                        value={row.per}
-                        onChange={(e) =>
-                          handleItemChange(index, "per", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="pv-table-input number"
-                        value={row.rate}
-                        onChange={(e) =>
-                          handleItemChange(index, "rate", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td className="pv-amount-cell">
-                      {Number(row.amount).toFixed(2)}
-                    </td>
-                    <td>
-                      <button
-                        className="pv-remove-btn"
-                        onClick={() => removeRow(index)}
-                        title="Remove item"
-                      >
-                        <svg
-                          width="14"
-                          height="14"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M18 6L6 18M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <button className="pv-add-row" onClick={addRow}>
-            <svg
-              width="13"
-              height="13"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-            Add line item
-          </button>
-        </div>
-
-        <div className="pv-card">
-          <p className="pv-card-title">Tax & Totals</p>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              gap: 24,
-              flexWrap: "wrap",
-            }}
-          >
-            <div style={{ flex: "1 1 320px" }}>
-              <p
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "var(--ink-muted)",
-                  letterSpacing: ".08em",
-                  textTransform: "uppercase",
-                  marginBottom: 12,
-                }}
-              >
-                Apply GST
-              </p>
-              <div className="pv-gst-buttons" style={{ marginBottom: 20 }}>
-                <button className="pv-btn pv-btn-green" onClick={handleAutoGST}>
-                  <svg
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                  </svg>
-                  Auto GST
-                </button>
-                <button
-                  className="pv-btn pv-btn-amber"
-                  onClick={handleManualGST}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-                  </svg>
-                  Manual GST
-                </button>
-              </div>
-
-              {gst.applied && (
-                <div
-                  style={{
-                    background: "var(--green-light)",
-                    border: "1px solid #a7f3d0",
-                    borderRadius: "var(--radius-sm)",
-                    padding: "10px 14px",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontSize: 13,
-                    color: "var(--green)",
-                    fontWeight: 500,
-                    marginBottom: 16,
-                  }}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    viewBox="0 0 24 24"
-                  >
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  {gst.percentage}% GST applied — ₹
-                  {Number(gst.amount || 0).toFixed(2)}
-                </div>
-              )}
-
-              <p
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "var(--ink-muted)",
-                  letterSpacing: ".08em",
-                  textTransform: "uppercase",
-                  marginBottom: 10,
-                }}
-              >
-                Component Breakdown
-              </p>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                {[
-                  ["IGST", "igst"],
-                  ["CGST", "cgst"],
-                  ["SGST", "sgst"],
-                ].map(([label, key]) => (
-                  <div
-                    key={key}
-                    style={{ display: "flex", flexDirection: "column", gap: 4 }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: 11,
-                          fontWeight: 600,
-                          color: "var(--ink-muted)",
-                          letterSpacing: ".06em",
-                        }}
-                      >
-                        {label} (%)
-                      </span>
-                      <span
-                        style={{
-                          fontSize: 10,
-                          fontWeight: 700,
-                          color: "var(--accent)",
-                        }}
-                      >
-                        ₹{" "}
-                        {((totalAmount * Number(gst[key] || 0)) / 100).toFixed(
-                          2,
-                        )}
-                      </span>
-                    </div>
-                    <input
-                      type="number"
-                      className="pv-gst-input"
-                      placeholder="Rate %"
-                      value={gst[key]}
-                      onChange={(e) =>
-                        setGst((g) => ({ ...g, [key]: e.target.value }))
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="pv-totals" style={{ flex: "0 0 auto" }}>
-              <div className="pv-totals-row">
-                <span>Subtotal</span>
-                <span className="val">₹ {totalAmount.toFixed(2)}</span>
-              </div>
-              {gst.applied && (
-                <div className="pv-totals-row gst-line">
-                  <span>GST ({gst.percentage}%)</span>
-                  <span className="val">
-                    ₹ {Number(gst.amount || 0).toFixed(2)}
-                  </span>
-                </div>
-              )}
-              {Number(gst.igst) > 0 && (
-                <div className="pv-totals-row">
-                  <span>IGST ({gst.igst}%)</span>
-                  <span className="val">
-                    ₹ {((totalAmount * Number(gst.igst)) / 100).toFixed(2)}
-                  </span>
-                </div>
-              )}
-              {Number(gst.cgst) > 0 && (
-                <div className="pv-totals-row">
-                  <span>CGST ({gst.cgst}%)</span>
-                  <span className="val">
-                    ₹ {((totalAmount * Number(gst.cgst)) / 100).toFixed(2)}
-                  </span>
-                </div>
-              )}
-              {Number(gst.sgst) > 0 && (
-                <div className="pv-totals-row">
-                  <span>SGST ({gst.sgst}%)</span>
-                  <span className="val">
-                    ₹ {((totalAmount * Number(gst.sgst)) / 100).toFixed(2)}
-                  </span>
-                </div>
-              )}
-              <div className="pv-totals-row grand">
-                <span>Grand Total</span>
-                <span className="val">₹ {grandTotal.toFixed(2)}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="pv-card">
-          <p className="pv-card-title">Narration</p>
-          <textarea
-            className="pv-textarea"
-            rows={3}
-            placeholder="Add internal notes or narration for this voucher…"
-            value={voucher.narration}
-            onChange={(e) => set("narration", e.target.value)}
-          />
-        </div>
-
-        <div className="pv-footer">
-          <div style={{ fontSize: 13, color: "var(--ink-muted)" }}>
-            {isEditMode ? (
-              <span>
-                Editing voucher{" "}
-                <strong style={{ color: "var(--ink)" }}>
-                  {voucher.invoiceNo || id}
-                </strong>
-              </span>
-            ) : (
-              <span>
-                All fields marked <span style={{ color: "var(--red)" }}>*</span>{" "}
-                are required
-              </span>
             )}
           </div>
-          <button className="pv-btn pv-btn-primary" onClick={saveVoucher}>
-            <svg
-              width="15"
-              height="15"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              viewBox="0 0 24 24"
+
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <div className="flex justify-between items-center mb-4 border-b border-[#cbe0d2] pb-1.5">
+              <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider flex items-center gap-2">
+                <Layers size={16} className="text-[#00a651]" /> Line Items
+              </h3>
+              <button
+                type="button"
+                className="flex items-center gap-1 text-xs font-bold text-[#00a651] bg-white border border-[#cbe0d2] px-3 py-1.5 rounded-lg hover:bg-[#f0fdf4] transition-colors cursor-pointer"
+                onClick={addRow}
+              >
+                <Plus size={14} /> Add Line Item
+              </button>
+            </div>
+
+            <div className="overflow-x-auto rounded-xl border border-[#cbe0d2] bg-white mb-4">
+              <table className="w-full border-collapse text-xs">
+                <thead>
+                  <tr className="bg-[#f0fdf4] border-b border-[#cbe0d2]">
+                    <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e]">
+                      Item Name
+                    </th>
+                    <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-28">
+                      HSN Code
+                    </th>
+                    <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-24">
+                      Qty
+                    </th>
+                    <th className="px-4 py-3 text-left text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-28">
+                      Rate (₹)
+                    </th>
+                    <th className="px-4 py-3 text-right text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-32">
+                      Amount (₹)
+                    </th>
+                    <th className="px-4 py-3 text-center text-[11px] font-extrabold uppercase tracking-wider text-[#042f2e] w-16">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e2f2e9]">
+                  {voucher.items.map((row, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-[#f8faf8] transition-colors"
+                    >
+                      <td className="p-2">
+                        <input
+                          className={tableInputClass}
+                          placeholder="Item description"
+                          value={row.itemName}
+                          onChange={(e) =>
+                            handleItemChange(index, "itemName", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2">
+                        <input
+                          className={tableInputClass}
+                          placeholder="0000"
+                          value={row.hsn_code}
+                          onChange={(e) =>
+                            handleItemChange(index, "hsn_code", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2">
+                        <input
+                          type="number"
+                          className={tableInputClass}
+                          value={row.qty}
+                          onChange={(e) =>
+                            handleItemChange(index, "qty", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2">
+                        <input
+                          type="number"
+                          className={tableInputClass}
+                          value={row.rate}
+                          onChange={(e) =>
+                            handleItemChange(index, "rate", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td className="p-2 text-right font-bold text-slate-800">
+                        ₹ {Number(row.amount || 0).toFixed(2)}
+                      </td>
+                      <td className="p-2 text-center">
+                        <button
+                          type="button"
+                          className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                          onClick={() => removeRow(index)}
+                          title="Remove item"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <h3 className="text-sm font-bold text-[#042f2e] uppercase tracking-wider mb-4 border-b border-[#cbe0d2] pb-1.5 flex items-center gap-2">
+              <FileText size={16} className="text-[#00a651]" /> Tax & Totals
+            </h3>
+            <div className="flex justify-between items-start gap-6 flex-wrap">
+              <div className="flex-1 min-w-80">
+                <label className="app-label block text-xs font-bold text-slate-800 mb-2">
+                  Apply GST :
+                </label>
+                <div className="flex gap-3 mb-4">
+                  <button
+                    type="button"
+                    className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-xs ${gst.applied ? "bg-[#00a651] text-white" : "bg-white text-slate-700 border border-[#cbe0d2]"}`}
+                    onClick={handleAutoGST}
+                  >
+                    Auto GST
+                  </button>
+                  <button
+                    type="button"
+                    className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-xs ${!gst.applied && (gst.igst > 0 || gst.cgst > 0 || gst.sgst > 0) ? "bg-amber-600 text-white" : "bg-white text-slate-700 border border-[#cbe0d2]"}`}
+                    onClick={handleManualGST}
+                  >
+                    Manual GST
+                  </button>
+                </div>
+                {gst.applied && (
+                  <div className="inline-flex items-center gap-2 px-3 py-2 mb-4 rounded-xl text-xs font-bold bg-[#f0fdf4] border border-[#c6f1d6] text-[#00a651]">
+                    {gst.percentage}% GST applied — ₹{" "}
+                    {Number(gstAmount).toFixed(2)}
+                  </div>
+                )}
+                <label className="app-label block text-xs font-bold text-slate-800 mb-2">
+                  Component Breakdown :
+                </label>
+                <div className="flex gap-3 flex-wrap">
+                  {[
+                    ["IGST", "igst"],
+                    ["CGST", "cgst"],
+                    ["SGST", "sgst"],
+                  ].map(([label, key]) => (
+                    <div key={key} className="flex flex-col gap-1">
+                      <span className="text-[11px] font-bold text-slate-700">
+                        {label} (%)
+                      </span>
+                      <input
+                        type="number"
+                        className="app-input w-24 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] font-medium py-1 px-2 text-xs"
+                        placeholder="Rate %"
+                        value={gst[key]}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setGst((g) => {
+                            const updated = { ...g, [key]: val };
+                            const newEffective =
+                              Number(updated.igst || 0) +
+                              Number(updated.cgst || 0) +
+                              Number(updated.sgst || 0);
+                            return {
+                              ...updated,
+                              percentage: newEffective,
+                              applied: newEffective > 0,
+                            };
+                          });
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white border border-[#cbe0d2] rounded-xl p-5 shrink-0 w-full md:w-72 shadow-xs">
+                <div className="flex justify-between items-center py-1.5 text-xs text-slate-600 border-b border-[#e2f2e9]">
+                  <span>Subtotal</span>
+                  <span className="font-bold text-slate-800">
+                    ₹ {totalAmount.toFixed(2)}
+                  </span>
+                </div>
+                {gst.applied && (
+                  <div className="flex justify-between items-center py-1.5 text-xs text-emerald-700 border-b border-[#e2f2e9]">
+                    <span>GST ({gst.percentage}%)</span>
+                    <span>₹ {Number(gstAmount).toFixed(2)}</span>
+                  </div>
+                )}
+                {Number(gst.igst) > 0 && (
+                  <div className="flex justify-between items-center py-1.5 text-xs text-slate-600 border-b border-[#e2f2e9]">
+                    <span>IGST ({gst.igst}%)</span>
+                    <span>
+                      ₹ {((totalAmount * Number(gst.igst)) / 100).toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                {Number(gst.cgst) > 0 && (
+                  <div className="flex justify-between items-center py-1.5 text-xs text-slate-600 border-b border-[#e2f2e9]">
+                    <span>CGST ({gst.cgst}%)</span>
+                    <span>
+                      ₹ {((totalAmount * Number(gst.cgst)) / 100).toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                {Number(gst.sgst) > 0 && (
+                  <div className="flex justify-between items-center py-1.5 text-xs text-slate-600 border-b border-[#e2f2e9]">
+                    <span>SGST ({gst.sgst}%)</span>
+                    <span>
+                      ₹ {((totalAmount * Number(gst.sgst)) / 100).toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center py-2 text-sm font-extrabold text-[#042f2e] mt-1">
+                  <span>Grand Total</span>
+                  <span className="text-[#00a651]">
+                    ₹ {grandTotal.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#f6faf7] border border-[#cbe0d2] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,166,81,0.01)] mb-6">
+            <label className="app-label block text-xs font-bold text-slate-800 mb-1">
+              Narration / Note :
+            </label>
+            <textarea
+              className="app-input w-full mt-1 border-[#c8ddcd]! bg-white text-slate-900 focus:border-[#00a651] focus:ring-4 focus:ring-[rgba(0,166,81,0.16)] font-medium resize-none h-20"
+              placeholder="Add internal notes or narration for this purchase voucher…"
+              value={voucher.narration}
+              onChange={(e) => set("narration", e.target.value)}
+            />
+          </div>
+
+          <div className="mt-8 flex justify-end gap-4 border-t border-[#e2f2e9] pt-6">
+            <button
+              type="button"
+              onClick={saveVoucher}
+              className="app-btn-primary flex items-center justify-center gap-2 cursor-pointer shadow-md min-w-36 transition-all hover:scale-[1.01] active:scale-[0.99]"
             >
-              {isEditMode ? (
-                <>
-                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-                </>
-              ) : (
-                <>
-                  <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
-                  <polyline points="17 21 17 13 7 13 7 21" />
-                  <polyline points="7 3 7 8 15 8" />
-                </>
-              )}
-            </svg>
-            {isEditMode ? "Update Voucher" : "Save Voucher"}
-          </button>
+              <Save size={16} />{" "}
+              {isEditMode ? "Update Purchase Voucher" : "Save Purchase Voucher"}
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate(listPath)}
+              className="app-btn-secondary flex items-center justify-center gap-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl cursor-pointer hover:bg-rose-100 hover:text-rose-800 hover:border-rose-300 min-w-30 transition-all"
+            >
+              <X size={16} /> Cancel
+            </button>
+          </div>
         </div>
       </div>
     </>
