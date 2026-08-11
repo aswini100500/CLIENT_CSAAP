@@ -375,7 +375,7 @@ const AddChequesModal = ({
                   <p className="font-medium text-green-600">
                     {selectedAccount
                       ? stats.totalCheques +
-                        parseInt(addChequesData.numberOfLeaves)
+                      parseInt(addChequesData.numberOfLeaves)
                       : 0}
                   </p>
                 </div>
@@ -500,7 +500,7 @@ const ChequeRegister = () => {
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/cheque/getAllcheque/${companyId}`,
       );
 
-      console.log("Fetched cheques:", response.data);
+
 
       if (response.data.success) {
         const transformedCheques = (response.data.data || []).map((cheque) => ({
@@ -544,7 +544,7 @@ const ChequeRegister = () => {
         .length,
     };
 
-    console.log("Updated stats:", newStats);
+
     setStats(newStats);
   };
 
@@ -678,7 +678,7 @@ const ChequeRegister = () => {
           chequeData,
         );
 
-        console.log("Update response:", response.data);
+
 
         if (response.data.success) {
           Swal.fire("Success", "Cheque updated successfully!", "success");
@@ -696,7 +696,7 @@ const ChequeRegister = () => {
           chequeData,
         );
 
-        console.log("Add response:", response.data);
+
 
         if (response.data.success) {
           Swal.fire("Success", "Cheque added successfully!", "success");
@@ -723,7 +723,7 @@ const ChequeRegister = () => {
   };
 
   const handleDeleteCheque = async (chequeId) => {
-    console.log(chequeId);
+    // console.log(chequeId);
 
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -786,7 +786,7 @@ const ChequeRegister = () => {
           type: "",
         });
       }
-      console.log(chequesToAdd);
+      // console.log(chequesToAdd);
 
       let successCount = 0;
       for (const chequeData of chequesToAdd) {
@@ -884,11 +884,10 @@ const ChequeRegister = () => {
               <button
                 onClick={handleAddCheque}
                 disabled={!selectedAccount}
-                className={`px-6 py-2 rounded-lg transition-colors flex items-center ${
-                  selectedAccount
-                    ? "bg-blue-600 text-white hover:bg-blue-700"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
+                className={`px-6 py-2 rounded-lg transition-colors flex items-center ${selectedAccount
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Add Single Cheque
@@ -943,11 +942,10 @@ const ChequeRegister = () => {
                   {bankAccounts.map((account) => (
                     <div
                       key={account.id}
-                      className={`p-4 hover:bg-gray-50 cursor-pointer transition-colors ${
-                        selectedAccount?.id === account.id
-                          ? "bg-blue-50 border-l-4 border-blue-600"
-                          : ""
-                      }`}
+                      className={`p-4 hover:bg-gray-50 cursor-pointer transition-colors ${selectedAccount?.id === account.id
+                        ? "bg-blue-50 border-l-4 border-blue-600"
+                        : ""
+                        }`}
                       onClick={() => handleAccountSelect(account)}
                     >
                       <div className="flex items-start justify-between">
@@ -1201,16 +1199,15 @@ const ChequeRegister = () => {
                           <button
                             key={status}
                             onClick={() => setFilterStatus(status)}
-                            className={`px-3 py-1 text-sm rounded-full ${
-                              filterStatus === status
-                                ? "bg-blue-100 text-blue-800 border border-blue-300"
-                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                            }`}
+                            className={`px-3 py-1 text-sm rounded-full ${filterStatus === status
+                              ? "bg-blue-100 text-blue-800 border border-blue-300"
+                              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                              }`}
                           >
                             {status === "all"
                               ? "All"
                               : status.charAt(0).toUpperCase() +
-                                status.slice(1)}
+                              status.slice(1)}
                           </button>
                         ))}
                       </div>
@@ -1301,8 +1298,8 @@ const ChequeRegister = () => {
                                   <div className="text-sm text-gray-500">
                                     {cheque.date_issued
                                       ? new Date(
-                                          cheque.date_issued,
-                                        ).toLocaleDateString("en-IN")
+                                        cheque.date_issued,
+                                      ).toLocaleDateString("en-IN")
                                       : "-"}
                                   </div>
                                 </td>

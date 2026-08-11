@@ -582,11 +582,7 @@ const HomeSection = ({
       if (generatedProjectId) {
         const projectExists = await checkProjectExists(generatedProjectId);
 
-        if (!projectExists) {
-          console.log(
-            `Project ${generatedProjectId} not found, creating new project...`,
-          );
-          try {
+        if (!projectExists) {try {
             const result = await createProjectAPI(projectData);
 
             const newId =

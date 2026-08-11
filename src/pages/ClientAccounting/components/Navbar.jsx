@@ -56,17 +56,8 @@ const Navbar = () => {
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/company/${userId}`,
-      );
-
-      console.log("API Response:", res);
-
-      const companies = res.data;
-      console.log("Companies Data:", companies);
-
-      setCompanies(companies);
-    } catch (err) {
-      console.log(err);
-      console.error("Error fetching companies:", err);
+      );const companies = res.data;setCompanies(companies);
+    } catch (err) {console.error("Error fetching companies:", err);
     }
   };
 
@@ -74,10 +65,7 @@ const Navbar = () => {
     getCompanies();
   }, []);
 
-  useEffect(() => {
-    console.log(selectedCompany);
-
-    if (selectedCompanyId) {
+  useEffect(() => {if (selectedCompanyId) {
       sessionStorage.setItem("selectedCompanyId", selectedCompanyId.toString());
       setCompanyId(selectedCompanyId);
       setcompanyName(selectedCompany);
@@ -127,10 +115,7 @@ const Navbar = () => {
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
-  }, []);
-  console.log(companies);
-
-  const handleCompanySelect = (company) => {
+  }, []);const handleCompanySelect = (company) => {
     setSelectedCompanyId(company.id);
 
     setSearchQuery("");

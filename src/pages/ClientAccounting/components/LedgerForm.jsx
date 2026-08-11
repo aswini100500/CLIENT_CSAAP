@@ -176,10 +176,7 @@ const LedgerForm = () => {
         mailingName: name,
       }));
     }
-  }, [id]);
-  console.log(groups);
-
-  const handleSubmit = async () => {
+  }, [id]);const handleSubmit = async () => {
     if (!ledger.name || !ledger.under) {
       Swal.fire("Error", "Name & Under Group are required!", "error");
       return;
@@ -216,9 +213,7 @@ const LedgerForm = () => {
         });
         navigate(listPath);
         return;
-      } else {
-        console.log("Creating ledger with payload:", payload);
-        await axios.post(
+      } else {await axios.post(
           `${import.meta.env.VITE_ACCOUNTING_URL}/api/v1/ledger/${companyId}/create`,
           payload,
         );

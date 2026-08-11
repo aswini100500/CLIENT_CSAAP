@@ -749,13 +749,7 @@ const MainInfoSection = ({
 
   // Enhanced debug logging
   useEffect(() => {
-    console.log('MainInfoSection Debug:', {
-      isEditMode,
-      projectId,
-      selectedProject: selectedProject?.id,
-      unitsCount: units.length,
-      shouldFetch: isEditMode && projectId
-    });
+ 
   }, [isEditMode, projectId, units.length, selectedProject]);
 
   // Fetch existing units when in edit mode and projectId is available
@@ -1022,7 +1016,7 @@ const MainInfoSection = ({
       }
 
       const result = await response.json();
-      console.log('Unit created successfully:', result);
+ 
       return result;
 
     } catch (error) {
