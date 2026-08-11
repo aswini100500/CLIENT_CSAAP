@@ -1,3 +1,16 @@
+import {
+  UploadCloud,
+  X,
+  Search,
+  Download,
+  Trash2,
+  FolderOpen,
+  FileText,
+  Image as ImageIcon,
+  FileSpreadsheet,
+  FileArchive,
+  File,
+} from "lucide-react";
 import React, { useState, useRef } from "react";
 
 const AttachmentPage = () => {
@@ -11,26 +24,28 @@ const AttachmentPage = () => {
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef(null);
 
-  const fileIcons = {
-    pdf: "📄",
-    doc: "📝",
-    docx: "📝",
-    xls: "📊",
-    xlsx: "📊",
-    ppt: "📽️",
-    pptx: "📽️",
-    jpg: "🖼️",
-    jpeg: "🖼️",
-    png: "🖼️",
-    gif: "🖼️",
-    txt: "📃",
-    zip: "📦",
-    default: "📎",
-  };
-
   const getFileIcon = (fileName) => {
     const extension = fileName.split(".").pop().toLowerCase();
-    return fileIcons[extension] || fileIcons.default;
+    switch (extension) {
+      case "pdf":
+      case "doc":
+      case "docx":
+      case "txt":
+        return <FileText className="w-6 h-6 text-amber-500" />;
+      case "xls":
+      case "xlsx":
+        return <FileSpreadsheet className="w-6 h-6 text-green-600" />;
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "gif":
+        return <ImageIcon className="w-6 h-6 text-emerald-500" />;
+      case "zip":
+      case "rar":
+        return <FileArchive className="w-6 h-6 text-purple-500" />;
+      default:
+        return <File className="w-6 h-6 text-gray-400" />;
+    }
   };
 
   const formatFileSize = (bytes) => {
@@ -194,7 +209,7 @@ const AttachmentPage = () => {
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               dragActive
-                ? "border-blue-500 bg-blue-50"
+                ? "border-green-500 bg-green-50/50"
                 : "border-gray-300 hover:border-gray-400"
             }`}
             onDragEnter={handleDrag}
@@ -203,7 +218,7 @@ const AttachmentPage = () => {
             onDrop={handleDrop}
           >
             <div className="max-w-md mx-auto">
-              <div className="text-4xl mb-4">📁</div>
+              <UploadCloud className="w-12 h-12 text-green-500 mx-auto mb-4" />
               <p className="text-lg font-medium text-gray-700 mb-2">
                 Drag and drop your files here
               </p>
@@ -221,7 +236,7 @@ const AttachmentPage = () => {
               />
               <label
                 htmlFor="file-upload"
-                className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 cursor-pointer transition-colors"
+                className="app-btn-primary inline-flex items-center justify-center cursor-pointer"
               >
                 Choose File
               </label>
@@ -233,7 +248,7 @@ const AttachmentPage = () => {
               {file && (
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{getFileIcon(file.name)}</span>
+                    <span>{getFileIcon(file.name)}</span>
                     <div>
                       <p className="font-medium text-gray-800">{file.name}</p>
                       <p className="text-sm text-gray-500">
@@ -248,7 +263,7 @@ const AttachmentPage = () => {
                     }}
                     className="text-red-500 hover:text-red-700"
                   >
-                    ✕
+                    <X size={18} />
                   </button>
                 </div>
               )}
@@ -261,7 +276,7 @@ const AttachmentPage = () => {
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="bg-green-600 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${uploadProgress}%` }}
                     ></div>
                   </div>
@@ -274,13 +289,13 @@ const AttachmentPage = () => {
                   value={remark}
                   onChange={(e) => setRemark(e.target.value)}
                   placeholder="Add a remark or description..."
-                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   disabled={isUploading}
                 />
                 <button
                   onClick={handleUpload}
                   disabled={isUploading || !file || !remark.trim()}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                  className="app-btn-primary"
                 >
                   {isUploading ? "Uploading..." : "Upload"}
                 </button>
@@ -301,17 +316,17 @@ const AttachmentPage = () => {
                 placeholder="Search files..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                🔍
+                <Search size={18} />
               </span>
             </div>
 
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
             >
               <option value="date">Sort by Date</option>
               <option value="name">Sort by Name</option>
@@ -351,9 +366,7 @@ const AttachmentPage = () => {
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-3">
-                          <span className="text-xl">
-                            {getFileIcon(att.name)}
-                          </span>
+                          <span>{getFileIcon(att.name)}</span>
                           <span className="font-medium text-gray-800">
                             {att.name}
                           </span>
@@ -373,17 +386,17 @@ const AttachmentPage = () => {
                           <a
                             href={att.url}
                             download={att.name}
-                            className="text-blue-600 hover:text-blue-800 transition-colors"
+                            className="text-green-600 hover:text-green-800 transition-colors"
                             title="Download"
                           >
-                            ⬇️
+                            <Download size={18} />
                           </a>
                           <button
                             onClick={() => handleDelete(att.id)}
                             className="text-red-500 hover:text-red-700 transition-colors"
                             title="Delete"
                           >
-                            🗑️
+                            <Trash2 size={18} />
                           </button>
                         </div>
                       </td>
@@ -394,7 +407,7 @@ const AttachmentPage = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">📁</div>
+              <FolderOpen className="w-12 h-12 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 text-lg mb-2">
                 {attachments.length === 0
                   ? "No attachments yet"

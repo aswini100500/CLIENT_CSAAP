@@ -194,7 +194,7 @@ const DepartmentRoleManager = () => {
       />
 
       <div className="mb-8">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
           <Building2 className="text-blue-600" size={32} />
           Corporate Structure
         </h1>

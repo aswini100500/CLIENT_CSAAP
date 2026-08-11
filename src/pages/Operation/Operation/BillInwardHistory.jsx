@@ -78,7 +78,7 @@ const BillInwardHistory = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-          <FileText className="text-blue-500" /> Bill Inward History
+          <FileText className="text-green-500" /> Bill Inward History
         </h2>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -89,14 +89,14 @@ const BillInwardHistory = () => {
               placeholder="Search bills..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 transition-all text-sm w-full md:w-64"
+              className="pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-green-500 transition-all text-sm w-full md:w-64"
             />
           </div>
 
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-sm focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-sm focus:ring-2 focus:ring-green-500"
           >
             <option value="all">All Types</option>
             <option value="Tax Invoice">Tax Invoice</option>
@@ -144,7 +144,7 @@ const BillInwardHistory = () => {
                     className="px-6 py-10 text-center text-gray-500"
                   >
                     <div className="flex flex-col items-center gap-2">
-                      <div className="animate-spin h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+                      <div className="animate-spin h-6 w-6 border-2 border-green-500 border-t-transparent rounded-full"></div>
                       <p>Loading history...</p>
                     </div>
                   </td>
@@ -201,7 +201,7 @@ const BillInwardHistory = () => {
                             ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                             : bill.status === "pending"
                               ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-                              : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                              : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                         }`}
                       >
                         {bill.status || "draft"}
@@ -210,7 +210,7 @@ const BillInwardHistory = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-center gap-2">
                         <button
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition-all"
+                          className="p-1.5 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-md transition-all"
                           title="View Details"
                         >
                           <Eye size={16} />

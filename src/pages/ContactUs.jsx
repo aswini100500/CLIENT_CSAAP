@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   FaFacebookF,
@@ -97,7 +98,7 @@ const ContactUs = () => {
                 <p className="text-sm font-semibold text-(--text-strong)">
                   Gurugram Office
                 </p>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                <p className="text-xs/relaxed text-slate-500 mt-1 ">
                   H No-511, Sarahah Tower, Subhash Nagar, Gurugram, India,
                   122006
                 </p>
@@ -118,7 +119,7 @@ const ContactUs = () => {
                 <p className="text-sm font-semibold text-(--text-strong)">
                   Bhubaneswar Office
                 </p>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                <p className="text-xs/relaxed text-slate-500 mt-1 ">
                   3rd Floor, BMC Panchadeep Market Complex, Unit 4, Bhouma
                   Nagar, Bhubaneswar, Odisha, 751001
                 </p>

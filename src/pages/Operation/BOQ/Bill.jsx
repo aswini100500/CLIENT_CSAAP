@@ -218,11 +218,10 @@ const DocumentForm = () => {
               <button
                 key={item}
                 onClick={() => setActiveTab(item)}
-                className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
-                  activeTab === item
-                    ? "bg-white text-blue-700 border-t-2 border-blue-500"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-white"
-                }`}
+                className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${activeTab === item
+                  ? "bg-white text-green-800 border-t-2 border-green-600"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-white"
+                  }`}
               >
                 {item}
               </button>
@@ -415,7 +414,7 @@ const DocumentForm = () => {
                   <button className="px-6 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium">
                     Cancel
                   </button>
-                  <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm font-medium">
+                  <button className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm font-medium">
                     Submit
                   </button>
                 </div>

@@ -459,7 +459,7 @@ Tender Management System
               onClick={() => setActiveTab("create")}
               className={`flex-1 py-4 px-6 text-center font-medium transition-all ${
                 activeTab === "create"
-                  ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                  ? "text-green-800 border-b-2 border-green-600 bg-green-50 font-semibold"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -469,7 +469,7 @@ Tender Management System
               onClick={() => setActiveTab("view")}
               className={`flex-1 py-4 px-6 text-center font-medium transition-all ${
                 activeTab === "view"
-                  ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                  ? "text-green-800 border-b-2 border-green-600 bg-green-50 font-semibold"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -479,7 +479,7 @@ Tender Management System
               onClick={() => setActiveTab("work-orders")}
               className={`flex-1 py-4 px-6 text-center font-medium transition-all ${
                 activeTab === "work-orders"
-                  ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                  ? "text-green-800 border-b-2 border-green-600 bg-green-50 font-semibold"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -576,13 +576,15 @@ Tender Management System
                   />
                 </div>
 
-                <button
-                  onClick={addApplicant}
-                  className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition duration-200 font-medium flex items-center gap-2"
-                >
-                  <FaPlus className="w-5 h-5" />
-                  <span>Add Applicant</span>
-                </button>
+                <div className="erp-root">
+                  <button
+                    onClick={addApplicant}
+                    className="app-btn-primary flex items-center gap-2"
+                  >
+                    <FaPlus className="w-5 h-5" />
+                    <span>Add Applicant</span>
+                  </button>
+                </div>
               </div>
 
               {currentTender.applicants.length > 0 && (
@@ -619,7 +621,7 @@ Tender Management System
                 </div>
               )}
 
-              <div className="flex justify-end mt-6">
+              <div className="erp-root flex justify-end mt-6">
                 <button
                   onClick={saveTender}
                   disabled={
@@ -627,7 +629,7 @@ Tender Management System
                     !currentTender.start_date ||
                     !currentTender.end_date
                   }
-                  className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="app-btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Save Tender
                 </button>
@@ -649,12 +651,14 @@ Tender Management System
                 <p className="text-gray-500 mb-4">
                   Get started by creating your first tender
                 </p>
-                <button
-                  onClick={() => setActiveTab("create")}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-                >
-                  Create Tender
-                </button>
+                <div className="erp-root">
+                  <button
+                    onClick={() => setActiveTab("create")}
+                    className="app-btn-primary"
+                  >
+                    Create Tender
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="grid gap-6">
@@ -798,12 +802,14 @@ Tender Management System
                 <p className="text-gray-500 mb-4">
                   Work orders will appear here after issuance
                 </p>
-                <button
-                  onClick={() => setActiveTab("view")}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-                >
-                  View Tenders
-                </button>
+                <div className="erp-root">
+                  <button
+                    onClick={() => setActiveTab("view")}
+                    className="app-btn-primary"
+                  >
+                    View Tenders
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="grid gap-6">
@@ -864,16 +870,18 @@ Tender Management System
                         </div>
                       </div>
                       <div className="flex gap-3">
-                        <button
-                          onClick={() => {
-                            setRecentWorkOrder(workOrder);
-                            downloadWorkOrder();
-                          }}
-                          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center gap-2"
-                        >
-                          <FaDownload className="w-4 h-4" />
-                          Download
-                        </button>
+                        <div className="erp-root">
+                          <button
+                            onClick={() => {
+                              setRecentWorkOrder(workOrder);
+                              downloadWorkOrder();
+                            }}
+                            className="app-btn-primary flex items-center gap-2"
+                          >
+                            <FaDownload className="w-4 h-4" />
+                            Download
+                          </button>
+                        </div>
                         <button
                           onClick={() => {
                             setRecentWorkOrder(workOrder);
@@ -1045,13 +1053,15 @@ Tender Management System
                           Scope of Work
                         </h4>
                       </div>
-                      <button
-                        onClick={addScopeOfWork}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center gap-2"
-                      >
-                        <FaPlus className="w-4 h-4" />
-                        Add Item
-                      </button>
+                      <div className="erp-root">
+                        <button
+                          onClick={addScopeOfWork}
+                          className="app-btn-primary flex items-center gap-2"
+                        >
+                          <FaPlus className="w-4 h-4" />
+                          Add Item
+                        </button>
+                      </div>
                     </div>
 
                     <div className="overflow-x-auto border border-gray-200 rounded-lg">
@@ -1292,10 +1302,10 @@ Tender Management System
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-4 pt-6 border-t">
+                  <div className="erp-root flex justify-end gap-4 pt-6 border-t">
                     <button
                       onClick={() => setShowWorkOrderModal(false)}
-                      className="px-8 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-200 font-medium"
+                      className="app-btn-secondary"
                     >
                       Cancel
                     </button>
@@ -1307,7 +1317,7 @@ Tender Management System
                         !workOrderForm.terms ||
                         !workOrderForm.paymentTerms
                       }
-                      className="px-8 py-3 bg-linear-to-r from-blue-600 to-purple-700 text-white rounded-lg hover:from-blue-700 hover:to-purple-800 transition duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                      className="app-btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <span className="flex items-center gap-2">
                         <HiCheckCircle className="w-5 h-5" />
@@ -1338,32 +1348,34 @@ Tender Management System
                 been successfully issued to {recentWorkOrder.applicant}.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+              <div className="erp-root grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                 <button
                   onClick={downloadWorkOrder}
-                  className="bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center gap-2"
+                  className="app-btn-primary flex items-center justify-center gap-2"
                 >
                   <FaDownload className="w-5 h-5" />
                   Download
                 </button>
                 <button
                   onClick={shareWorkOrder}
-                  className="bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition duration-200 flex items-center justify-center gap-2"
+                  className="bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                 >
                   <FaShare className="w-5 h-5" />
                   Share
                 </button>
               </div>
 
-              <button
-                onClick={() => {
-                  setShowSuccessModal(false);
-                  setActiveTab("work-orders");
-                }}
-                className="w-full bg-gray-600 text-white px-4 py-3 rounded-lg hover:bg-gray-700 transition duration-200"
-              >
-                View All Work Orders
-              </button>
+              <div className="erp-root">
+                <button
+                  onClick={() => {
+                    setShowSuccessModal(false);
+                    setActiveTab("work-orders");
+                  }}
+                  className="app-btn-secondary w-full"
+                >
+                  View All Work Orders
+                </button>
+              </div>
             </div>
           </div>
         </div>

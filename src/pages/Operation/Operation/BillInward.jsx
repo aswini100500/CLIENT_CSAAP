@@ -102,29 +102,32 @@ const BillInward = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-slate-100 rounded-lg shadow-sm border border-gray-200 mb-6">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex ">
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setActiveTab("inward")}
-                  className={`px-3 py-1 rounded ${activeTab === "inward" ? "bg-white text-blue-500 border-t-2" : "bg-transparent text-gray-700 hover:bg-gray-100"}`}
-                >
-                  Bill Inwarding
-                </button>
-                <button
-                  onClick={() => setActiveTab("history")}
-                  className={`px-3 py-1 rounded ${activeTab === "history" ? "bg-white text-blue-500 border-t-2" : "bg-transparent text-gray-700 hover:bg-gray-100"}`}
-                >
-                  Bill Inward History
-                </button>
-              </div>
-            </div>
-          </div>
+    <div className=" min-h-screen bg-gray-50">
+      <div className="bg-gray-200">
+        <div className="max-w-6xl mx-auto flex space-x-1 px-6">
+          <button
+            type="button"
+            onClick={() => setActiveTab("inward")}
+            className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${activeTab === "inward"
+              ? "bg-white text-green-800 border-t-2 border-green-600 font-semibold"
+              : "text-gray-600 hover:text-gray-900 hover:bg-white"
+              }`}
+          >
+            Bill Inwarding
+          </button>
+          <button
+            onClick={() => setActiveTab("history")}
+            className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${activeTab === "history"
+              ? "bg-white text-green-800 border-t-2 border-green-600 font-semibold"
+              : "text-gray-600 hover:text-gray-900 hover:bg-white"
+              }`}
+          >
+            Bill Inward History
+          </button>
         </div>
+      </div>
 
+      <div className="max-w-6xl mx-auto p-6">
         <div>
           {activeTab === "inward" ? (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -138,7 +141,7 @@ const BillInward = () => {
                       name="businessUnit"
                       value={formData.businessUnit}
                       onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                     >
                       <option value="">Select Business Unit</option>
                       {businessUnits.map((unit, index) => (
@@ -156,7 +159,7 @@ const BillInward = () => {
                       name="documentType"
                       value={formData.documentType}
                       onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                     >
                       <option value="">Select Document Type</option>
                       {documentTypes.map((type, index) => (
@@ -180,7 +183,7 @@ const BillInward = () => {
                       name="documentNo"
                       value={formData.documentNo}
                       onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Enter document number"
                     />
                   </div>
@@ -192,7 +195,7 @@ const BillInward = () => {
                       name="supplier_id"
                       value={formData.supplier_id}
                       onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                     >
                       <option value="">Select Supplier</option>
                       {suppliers.map((s) => (
@@ -211,7 +214,7 @@ const BillInward = () => {
                       name="partyBillNo"
                       value={formData.partyBillNo}
                       onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Enter party bill number"
                     />
                   </div>
@@ -231,7 +234,7 @@ const BillInward = () => {
                         name="billAmount"
                         value={formData.billAmount}
                         onChange={handleInputChange}
-                        className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                         placeholder="0.00"
                         step="0.01"
                       />
@@ -246,7 +249,7 @@ const BillInward = () => {
                       name="remarks"
                       value={formData.remarks}
                       onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="Enter remarks"
                     />
                   </div>
@@ -258,7 +261,7 @@ const BillInward = () => {
                       type="date"
                       value={partyBillDate}
                       onChange={(e) => setPartyBillDate(e.target.value)}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pl-4 pr-10"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 pl-4 pr-10"
                     />
                     <FaCalendarAlt className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
                   </div>
@@ -279,7 +282,7 @@ const BillInward = () => {
                         name="financialYear"
                         value={formData.financialYear}
                         onChange={handleInputChange}
-                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                       >
                         <option value="">Select Financial Year</option>
                         {financialYears.map((fy) => (
@@ -298,7 +301,7 @@ const BillInward = () => {
                           type="date"
                           value={documentDate}
                           onChange={(e) => setDocumentDate(e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pl-4 pr-10"
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 pl-4 pr-10"
                         />
                         <FaCalendarAlt className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
                       </div>
@@ -314,7 +317,7 @@ const BillInward = () => {
                     name="parentAccountHead"
                     value={formData.parentAccountHead}
                     onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                   >
                     <option value="">Select</option>
                     {parentAccountHeads.map((head) => (
@@ -331,7 +334,7 @@ const BillInward = () => {
                   <select
                     value={assignTo}
                     onChange={(e) => setAssignTo(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                   >
                     <option value="">Select</option>
                     {users.map((user, index) => (
@@ -348,7 +351,7 @@ const BillInward = () => {
                   <select
                     value={searchUser}
                     onChange={(e) => setSearchUser(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                   >
                     <option value="">Select</option>
                     {users.map((user, index) => (
@@ -359,14 +362,14 @@ const BillInward = () => {
                   </select>
                 </div>
 
-                <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
-                  <button className="px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium">
+                <div className="erp-root flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
+                  <button className="app-btn-secondary">
                     Cancel
                   </button>
                   <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium disabled:opacity-50"
+                    className="app-btn-primary"
                   >
                     {loading ? "Submitting..." : "Submit"}
                   </button>

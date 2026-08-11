@@ -155,7 +155,7 @@ const DashboardHome = () => {
     <div className="erp-root">
       <div className="space-y-6">
         <div>
-          <h1 className="app-title max-w-3xl">Superadmin Overview</h1>
+          <h1 className="app-title text-2xl font-bold max-w-3xl">Superadmin Overview</h1>
           <p className="app-subtitle mt-1">
             {loading
               ? "Loading dashboard data..."
@@ -170,6 +170,7 @@ const DashboardHome = () => {
               <p className="font-bold text-[14px]">Unable to load statistics</p>
               <p className="text-[13px] mt-1 text-rose-700">{error}</p>
               <button
+                type="button"
                 onClick={() => window.location.reload()}
                 className="mt-2 text-[12px] font-bold text-rose-800 hover:text-rose-950 underline"
               >
