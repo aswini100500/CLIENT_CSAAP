@@ -16,6 +16,8 @@ import {
   ChevronUp,
   Search,
   Eye,
+  Sparkles,
+  Loader2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -64,6 +66,8 @@ const MonthlyWorkReport = () => {
     description: "",
     nextMonthPlan: "",
   });
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const [hasGeneratedAI, setHasGeneratedAI] = useState(false);
   const { user, token, companyId } = useAuth();
 
   const slug = user?.slug;
@@ -428,6 +432,78 @@ const MonthlyWorkReport = () => {
     });
     setEditingReport(null);
     setShowForm(false);
+    setIsGeneratingAI(false);
+    setHasGeneratedAI(false);
+  };
+
+  const handleGenerateReportAI = async () => {
+    if (!formData.month || !formData.year) {
+      Swal.fire("Selection Required", "Please select both Month and Year first.", "info");
+      return;
+    }
+
+    if (formData.description && formData.description.trim().length > 0) {
+      const result = await Swal.fire({
+        title: "Replace Description?",
+        text: "Generating with AI will replace your current description. Do you want to proceed?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, replace it",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#3b82f6",
+      });
+      if (!result.isConfirmed) return;
+    }
+
+    setIsGeneratingAI(true);
+    try {
+      const activeCompanyId = companyId || user?.company_id || user?.companyId || null;
+      const res = await axios.post(
+        `${API_BASE}/api/monthly-reports/generate-ai`,
+        {
+          employee_id: employeeId,
+          month: formData.month,
+          year: formData.year,
+          company_id: activeCompanyId,
+          slug: slug || "",
+        },
+        token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+      );
+
+      if (res.data?.success && res.data?.description) {
+        setFormData((prev) => ({
+          ...prev,
+          description: res.data.description,
+        }));
+        setHasGeneratedAI(true);
+        Swal.fire({
+          icon: "success",
+          title: "Report Generated!",
+          text: "AI has compiled your monthly work description from daily timesheets.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } else {
+        Swal.fire("Error", res.data?.error || "Failed to generate report description.", "error");
+      }
+    } catch (error) {
+      if (error.response?.status === 404) {
+        Swal.fire({
+          icon: "warning",
+          title: "No Timesheet Entries Found",
+          text: error.response?.data?.message || error.response?.data?.error || "No timesheet entries were found for the selected month.",
+          confirmButtonColor: "#3b82f6",
+        });
+      } else {
+        Swal.fire(
+          "Generation Failed",
+          error.response?.data?.error || error.response?.data?.message || "Failed to generate AI report. Please try again.",
+          "error"
+        );
+      }
+    } finally {
+      setIsGeneratingAI(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -1004,9 +1080,33 @@ const MonthlyWorkReport = () => {
                     </div>
 
                     <div className="mb-4">
-                      <label className="block text-xs font-bold text-(--text-soft) uppercase tracking-wider mb-2">
-                        Description *
-                      </label>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-xs font-bold text-(--text-soft) uppercase tracking-wider">
+                          Description *
+                        </label>
+                        {Boolean(formData.month && formData.year) && (
+                          <button
+                            type="button"
+                            onClick={handleGenerateReportAI}
+                            disabled={isGeneratingAI}
+                            className="relative inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-linear-to-r from-(--brand) via-(--brand-strong) to-(--brand) hover:opacity-95 active:scale-95 transition-all duration-200 shadow-sm shadow-(--brand)/20 hover:shadow-md hover:shadow-(--brand)/30 focus:outline-none focus:ring-2 focus:ring-(--brand-ring) disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer"
+                          >
+                            {isGeneratingAI ? (
+                              <>
+                                <Loader2 size={14} className="animate-spin text-white/80" />
+                                <span className="tracking-wide">Generating AI Report...</span>
+                              </>
+                            ) : (
+                              <>
+                                <Sparkles size={14} className="text-amber-300 animate-pulse" />
+                                <span className="tracking-wide">
+                                  {hasGeneratedAI ? "Re-generate with AI" : "Generate Report with AI"}
+                                </span>
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </div>
                       <textarea
                         name="description"
                         value={formData.description}
