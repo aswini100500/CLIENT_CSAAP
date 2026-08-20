@@ -52,6 +52,7 @@ const BasicInfoTab = ({
   salaryEffectiveDateExists,
   departmentsList = [],
   designationsList = [],
+  branchesList = [],
 }) => {
   const getFilteredDesignations = () => {
     if (!formData.department) return [];
@@ -84,6 +85,13 @@ const BasicInfoTab = ({
 
           if (field.name === "postApplied") {
             field.options = filteredDesignations;
+          }
+
+          if (field.name === "branch_id") {
+            field.options = (branchesList || []).map((b) => ({
+              value: b.id,
+              label: `${b.branch_name} (${b.branch_code})`,
+            }));
           }
 
           if (field.name === "postApplied" && !formData.department) {
@@ -163,15 +171,21 @@ const BasicInfoTab = ({
                         ? "Please select department first"
                         : `Select ${field.label}`}
                     </option>
-                    {field.options.map((option, idx) => (
-                      <option
-                        key={idx}
-                        value={option}
-                        className="text-gray-900"
-                      >
-                        {option}
-                      </option>
-                    ))}
+                    {field.options.map((option, idx) => {
+                      const optValue =
+                        typeof option === "object" ? option.value : option;
+                      const optLabel =
+                        typeof option === "object" ? option.label : option;
+                      return (
+                        <option
+                          key={idx}
+                          value={optValue}
+                          className="text-gray-900"
+                        >
+                          {optLabel}
+                        </option>
+                      );
+                    })}
                   </select>
                   <ChevronDown
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"

@@ -199,6 +199,8 @@ const useEmployeeForm = ({ mode = "create", basePath = "/hrms" } = {}) => {
     accountnumber: "",
     ifsc_code: "",
     branch: "",
+    branch_id: "",
+    branch_name: "",
     mode_of_payment: "",
     registered_emp_id: "",
   });
@@ -377,6 +379,8 @@ const useEmployeeForm = ({ mode = "create", basePath = "/hrms" } = {}) => {
   const [departmentsList, setDepartmentsList] = useState([]);
 
   const [designationsList, setDesignationsList] = useState([]);
+
+  const [branchesList, setBranchesList] = useState([]);
 
   useEffect(() => {
     salaryPolicyRef.current = salaryPolicy;
@@ -598,6 +602,28 @@ const useEmployeeForm = ({ mode = "create", basePath = "/hrms" } = {}) => {
   }, [csaapToken, hrmsToken]);
 
   useEffect(() => {
+    const fetchBranches = async () => {
+      const companySlug = user?.slug;
+      if (!companyId && !companySlug) return;
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_HRMS_BASE_URL}/api/branch`,
+          {
+            params: { company_id: companyId, company_slug: companySlug },
+            headers: { Authorization: `Bearer ${hrmsToken || csaapToken}` },
+          },
+        );
+        if (response.data?.success && Array.isArray(response.data.data)) {
+          setBranchesList(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      }
+    };
+    fetchBranches();
+  }, [companyId, user?.slug, hrmsToken, csaapToken]);
+
+  useEffect(() => {
     if (mode !== "edit") {
       setIsInitialLoading(false);
       return;
@@ -672,6 +698,8 @@ const useEmployeeForm = ({ mode = "create", basePath = "/hrms" } = {}) => {
           ifsc_code:
             employee.ifsc_code || employee.ifscCode || employee.ifsc || "",
           branch: employee.branch || employee.branchName || "",
+          branch_id: employee.branch_id || employee.branchId || "",
+          branch_name: employee.branch_name || employee.branchName || "",
           mode_of_payment:
             employee.mode_of_payment || employee.modeOfPayment || "",
           registered_emp_id: employee.registered_emp_id || "",
@@ -881,6 +909,18 @@ const useEmployeeForm = ({ mode = "create", basePath = "/hrms" } = {}) => {
         ...prev,
         department: nextValue,
         postApplied: "",
+      }));
+      return;
+    }
+
+    if (name === "branch_id") {
+      const selectedBranch = branchesList.find(
+        (b) => String(b.id) === String(nextValue),
+      );
+      setFormData((prev) => ({
+        ...prev,
+        branch_id: nextValue,
+        branch_name: selectedBranch ? selectedBranch.branch_name : "",
       }));
       return;
     }
@@ -1651,6 +1691,7 @@ const useEmployeeForm = ({ mode = "create", basePath = "/hrms" } = {}) => {
     projectsList,
     departmentsList,
     designationsList,
+    branchesList,
   };
 };
 

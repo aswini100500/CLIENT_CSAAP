@@ -100,6 +100,7 @@ const EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
     projectsList,
     departmentsList,
     designationsList,
+    branchesList,
   } = useEmployeeForm({ mode, basePath });
 
   const isEditMode = mode === "edit";
@@ -238,6 +239,7 @@ const EmployeeForm = ({ mode = "create", basePath = "/hrms" }) => {
                   projectsList={projectsList}
                   departmentsList={departmentsList}
                   designationsList={designationsList}
+                  branchesList={branchesList}
                 />
               )}
               {activeTab === "address" && (

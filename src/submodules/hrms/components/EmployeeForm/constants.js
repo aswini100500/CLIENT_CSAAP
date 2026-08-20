@@ -118,6 +118,14 @@ export const BASIC_INFO_FIELDS = [
     placeholder: "Select Designation",
   },
   {
+    label: "Assigned Branch",
+    name: "branch_id",
+    type: "select",
+    required: true,
+    options: [],
+    placeholder: "Select Branch",
+  },
+  {
     label: "Probation Period",
     name: "probation_period",
     placeholder: "1 month",
