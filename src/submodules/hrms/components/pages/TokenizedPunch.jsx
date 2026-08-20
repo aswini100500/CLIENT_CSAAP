@@ -271,10 +271,10 @@ export default function TokenizedPunch() {
   const employeeId =
     user?.employee_id ||
     user?.employeeProfileId ||
-    user?.user_id ||
-    user?.id ||
+    (user?.isEmployee ? user?.user_id || user?.id : null) ||
     sessionUser?.employee_id ||
-    sessionUser?.id;
+    (sessionUser?.isEmployee ? sessionUser?.id : null) ||
+    "";
 
   // QR Checkpoint State
   const [loadingQr, setLoadingQr] = useState(true);
@@ -486,7 +486,7 @@ export default function TokenizedPunch() {
         if (slug || companyId) {
           try {
             const hRes = await axios.get(
-              `${import.meta.env.VITE_HRMS_BASE_URL}/api/holidays/attendance/holidays/${slug || companyId}`,
+              `${import.meta.env.VITE_HRMS_BASE_URL}/api/holiday?slug=${slug || ""}&company_id=${companyId || ""}`,
               { headers: { Authorization: `Bearer ${token}` } },
             );
             if (isActive && Array.isArray(hRes.data)) {
@@ -498,6 +498,13 @@ export default function TokenizedPunch() {
         }
 
         // Fetch Employee Details
+        if (!employeeId) {
+          if (isActive) {
+            setConnectionError("Employee profile not found in active session. If you are signed in with an administrative account, please sign in with your employee credentials to mark attendance.");
+          }
+          return;
+        }
+
         if (employeeId) {
           try {
             const empRes = await axios.get(
@@ -538,7 +545,7 @@ export default function TokenizedPunch() {
               `${import.meta.env.VITE_HRMS_BASE_URL}/api/attendance/submit`,
               {
                 action: "FETCH",
-                employee_id: Number(employeeId),
+                employee_id: employeeId,
                 company_id: Number(companyId),
                 slug,
                 attendance_date: todayStr,
@@ -672,7 +679,7 @@ export default function TokenizedPunch() {
     try {
       const payload = {
         action: actionType,
-        employee_id: Number(employeeId),
+        employee_id: employeeId,
         company_id: Number(qrMetadata.company_id || user?.company_id),
         company: user?.companyName || user?.company_name || qrMetadata.branch_name,
         slug: qrMetadata.company_slug || user?.slug,
@@ -812,7 +819,7 @@ export default function TokenizedPunch() {
         try {
           const payload = {
             action: "PUNCH_IN",
-            employee_id: Number(employeeId),
+            employee_id: employeeId,
             employee_name: formData.employeeName || user?.name,
             department: formData.department || user?.department,
             post_applied: formData.postApplied || user?.designation,
@@ -907,7 +914,7 @@ export default function TokenizedPunch() {
         try {
           const payload = {
             action: "PUNCH_OUT",
-            employee_id: Number(employeeId),
+            employee_id: employeeId,
             company_id: Number(qrMetadata.company_id || user?.company_id),
             company: user?.company_name || qrMetadata.branch_name,
             slug: qrMetadata.company_slug || user?.slug,
@@ -1038,16 +1045,26 @@ export default function TokenizedPunch() {
             </ul>
           </div>
           <div className="space-y-2.5">
-            <button
-              type="button"
-              onClick={() => {
-                setConnectionError(null);
-                setReloadTrigger((prev) => prev + 1);
-              }}
-              className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 active:scale-[0.99] transition font-medium rounded-xl text-white text-sm shadow-xs cursor-pointer"
-            >
-              Retry Connection
-            </button>
+            {!employeeId ? (
+              <button
+                type="button"
+                onClick={() => navigate("/employee/login", { state: { from: location } })}
+                className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] transition font-medium rounded-xl text-white text-sm shadow-xs cursor-pointer"
+              >
+                Sign In as Employee
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setConnectionError(null);
+                  setReloadTrigger((prev) => prev + 1);
+                }}
+                className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 active:scale-[0.99] transition font-medium rounded-xl text-white text-sm shadow-xs cursor-pointer"
+              >
+                Retry Connection
+              </button>
+            )}
             <button
               type="button"
               onClick={() => navigate("/employee/dashboard")}
