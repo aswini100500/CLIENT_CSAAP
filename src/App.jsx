@@ -5,10 +5,12 @@ import {
   Navigate,
   Route,
   Routes,
+  useLocation,
   useSearchParams,
   useParams,
 } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import useAuth from "./hooks/useAuth";
 
 import { CompanyProvider } from "./pages/ClientAccounting/context/CompanyContext";
 import { UserProvider } from "./pages/ClientAccounting/context/UserContext";
@@ -93,6 +95,25 @@ import SuperAdminAccountingStocks from "./pages/SuperAdmin/Accounting/SuperAdmin
 import SuperAdminAccountingVouchers from "./pages/SuperAdmin/Accounting/SuperAdminAccountingVouchers";
 import GstDetails from "./pages/SuperAdmin/Accounting/GstDetails";
 import CompanyProfilePage from "./pages/CompanyProfile";
+
+const TokenizedPunch = React.lazy(() => import("./submodules/hrms/components/pages/TokenizedPunch"));
+
+const TokenizedPunchRoute = () => {
+  const location = useLocation();
+  const token = useSelector((state) => state.user.token) || sessionStorage.getItem("token") || sessionStorage.getItem("employeeToken") || sessionStorage.getItem("hrmsUserToken");
+
+  if (!token) {
+    return (
+      <Navigate
+        to="/employee/login"
+        state={{ from: location }}
+        replace
+      />
+    );
+  }
+
+  return <TokenizedPunch />;
+};
 
 const XYZRedirect = () => {
   const [searchParams] = useSearchParams();
@@ -317,6 +338,8 @@ const App = () => {
           <Route path="/employee/login" element={<Login key="employee" />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/employee/*" element={<HRMSEmployeeRoutes />} />
+          <Route path="/punch/:qrToken" element={<TokenizedPunchRoute />} />
+          <Route path="/employee/punch/:qrToken" element={<TokenizedPunchRoute />} />
           <Route path="/xyz" element={<XYZRedirect />} />
           <Route path="/xyz/:company_id" element={<XYZRedirect />} />
 

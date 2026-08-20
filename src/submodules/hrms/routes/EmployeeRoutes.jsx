@@ -37,6 +37,7 @@ import TaskTabs from "../Employee dashboard/pages/TaskTabs";
 import Timesheet from "../Employee dashboard/pages/Timesheet";
 import WorkReportTabs from "../Employee dashboard/pages/WorkReportTabs";
 import XYZ from "../components/pages/Xyz";
+import TokenizedPunch from "../components/pages/TokenizedPunch";
 
 import ClientCompanyForm from "../../../pages/ClientAccounting/components/CompanyForm";
 import ClientDashboard from "../../../pages/ClientAccounting/components/Dashboard";
@@ -104,6 +105,7 @@ export default function EmployeeRoutes() {
     <Routes>
       <Route element={<EmployeeProtectedRoute />}>
         <Route path="xyz/:company_id" element={<XYZ />} />
+        <Route path="punch/:qrToken" element={<TokenizedPunch />} />
         <Route element={<Layout />}>
           <Route index element={<Navigate to="dashboard" replace />} />
 
