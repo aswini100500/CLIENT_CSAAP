@@ -1032,7 +1032,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
   if (companyLoading) {
     return (
       <aside
-        className={`${isCollapsed ? "w-20" : "w-64"} bg-white text-slate-900 flex flex-col h-screen sticky top-0 transition-all duration-300 z-50 border-r border-slate-100`}
+        className={`${isCollapsed ? "w-20" : "w-64"} bg-white text-slate-900 flex flex-col h-screen sticky top-0 transition-all duration-300 z-30 border-r border-slate-100`}
       >
         <div className="flex-1 flex items-center justify-center">
           <div className="animate-pulse flex flex-col items-center">
@@ -1046,7 +1046,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
 
   return (
     <aside
-      className={`${isCollapsed ? "w-20" : "w-64"} bg-white text-slate-900 flex flex-col h-screen sticky top-0 transition-all duration-300 z-50 border-r border-slate-100`}
+      className={`${isCollapsed ? "w-20" : "w-64"} bg-white text-slate-900 flex flex-col h-screen sticky top-0 transition-all duration-300 z-30 border-r border-slate-100`}
     >
       <style>
         {`

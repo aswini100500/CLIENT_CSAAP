@@ -1,4 +1,5 @@
 import axios from "axios";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Building2,
@@ -150,10 +151,10 @@ const AttendanceQRModal = ({ isOpen, onClose }) => {
     }
   };
 
-  return (
+  const modalContent = (
     <AnimatePresence>
       {isOpen && (
-        <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="app-modal-backdrop fixed inset-0 z-[99999] flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -168,7 +169,7 @@ const AttendanceQRModal = ({ isOpen, onClose }) => {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="app-modal relative w-full max-w-lg overflow-hidden"
           >
-            <div className="flex items-center justify-between border-b border-(--border-soft) bg-white px-8 py-6">
+            <div className="flex items-center justify-between border-b border-(--border-soft) bg-white px-8, py-6">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-(--border-soft) bg-(--brand-soft) text-(--brand)">
                   <QrCode className="h-6 w-6" />
@@ -179,7 +180,7 @@ const AttendanceQRModal = ({ isOpen, onClose }) => {
               </div>
               <button
                 onClick={onClose}
-                className="app-icon-button flex h-10 w-10 items-center justify-center bg-(--bg-subtle) text-(--text-soft) hover:bg-white hover:text-(--text-strong)"
+                className="rounded-full p-2 text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -187,16 +188,16 @@ const AttendanceQRModal = ({ isOpen, onClose }) => {
 
             <div className="p-8">
               {fetching ? (
-                <div className="flex min-h-75 flex-col items-center justify-center text-slate-400">
-                  <LoaderCircle className="h-10 w-10 animate-spin text-(--brand)" />
-                  <p className="mt-4 font-medium">Fetching QR from server...</p>
+                <div className="flex flex-col items-center justify-center py-12 text-slate-400">
+                  <LoaderCircle className="h-8 w-8 animate-spin text-(--brand)" />
+                  <p className="mt-4 text-sm font-medium">Loading QR code...</p>
                 </div>
               ) : error ? (
-                <div className="flex min-h-75 flex-col items-center justify-center rounded-3xl bg-rose-50 p-8 text-center">
-                  <div className="mb-4 rounded-full bg-rose-100 p-4 text-rose-600">
-                    <TriangleAlert className="h-8 w-8" />
+                <div className="flex flex-col items-center justify-center rounded-2xl bg-rose-50 p-6 text-center border border-rose-100">
+                  <div className="mb-3 rounded-full bg-rose-100 p-3 text-rose-600">
+                    <TriangleAlert className="h-6 w-6" />
                   </div>
-                  <h3 className="text-lg font-bold text-rose-900">
+                  <h3 className="text-base font-bold text-rose-900">
                     Couldn't Load QR
                   </h3>
                   <p className="mt-2 text-sm text-rose-600/80">{error}</p>
@@ -312,6 +313,12 @@ const AttendanceQRModal = ({ isOpen, onClose }) => {
       )}
     </AnimatePresence>
   );
+
+  if (typeof document !== "undefined") {
+    return createPortal(modalContent, document.body);
+  }
+
+  return modalContent;
 };
 
 export default AttendanceQRModal;

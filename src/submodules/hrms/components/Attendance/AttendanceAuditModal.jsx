@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import axios from "axios";
 import {
   AlertCircle,
@@ -506,8 +507,8 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
     }
   };
 
-  return (
-    <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+  const modalContent = (
+    <div className="app-modal-backdrop fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4">
       <div className="app-modal flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden">
         <div className="flex shrink-0 items-start justify-between border-b border-(--border-soft) bg-white px-5 py-4">
           <div className="flex min-w-0 items-start gap-3">
@@ -1077,6 +1078,12 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
       </div>
     </div>
   );
+
+  if (typeof document !== "undefined") {
+    return createPortal(modalContent, document.body);
+  }
+
+  return modalContent;
 };
 
 export default AttendanceAuditModal;

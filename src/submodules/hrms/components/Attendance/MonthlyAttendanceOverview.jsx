@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { Eye, NotebookText, XCircle } from "lucide-react";
 
 const MonthlyAttendanceOverview = ({
@@ -19,8 +20,8 @@ const MonthlyAttendanceOverview = ({
   onViewRecord,
   onClose,
 }) => {
-  return (
-    <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 transition-all sm:p-4">
+  const modalContent = (
+    <div className="app-modal-backdrop fixed inset-0 z-[99999] flex items-center justify-center p-3 transition-all sm:p-4">
       <div className="app-modal flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden">
         <div className="flex shrink-0 items-center justify-between border-b border-(--border-soft) bg-white px-6 py-5">
           <div className="flex items-center gap-4">
@@ -343,6 +344,12 @@ const MonthlyAttendanceOverview = ({
       </div>
     </div>
   );
+
+  if (typeof document !== "undefined") {
+    return createPortal(modalContent, document.body);
+  }
+
+  return modalContent;
 };
 
 export default MonthlyAttendanceOverview;
