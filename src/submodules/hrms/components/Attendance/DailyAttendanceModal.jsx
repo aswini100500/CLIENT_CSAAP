@@ -1,3 +1,4 @@
+import React from "react";
 import {
   CalendarDays,
   CheckCircle,
@@ -10,7 +11,6 @@ import {
   User,
   XCircle,
 } from "lucide-react";
-import React from "react";
 
 const DailyAttendanceModal = ({
   selectedAttendanceRecord,
@@ -30,6 +30,18 @@ const DailyAttendanceModal = ({
   onRecordTimesheetAction,
   onOpenAudit,
 }) => {
+  const totalBreakSeconds = Number(
+    selectedAttendanceRecord.rawData?.total_break_seconds ??
+    selectedAttendanceRecord.total_break_seconds ??
+    0
+  );
+  const breakDurationFormatted = (() => {
+    if (!totalBreakSeconds) return "0h 0m";
+    const h = Math.floor(totalBreakSeconds / 3600);
+    const m = Math.floor((totalBreakSeconds % 3600) / 60);
+    return `${h}h ${m}m`;
+  })();
+
   const punchRows = [
     {
       label: "In",
@@ -42,7 +54,12 @@ const DailyAttendanceModal = ({
       tone: "text-rose-600",
     },
     {
-      label: "Total",
+      label: "Break",
+      value: breakDurationFormatted,
+      tone: "text-amber-700",
+    },
+    {
+      label: "Net Hours",
       value: selectedAttendanceRecord.totalHours || "--:--",
       tone: "text-slate-900",
     },
@@ -165,6 +182,16 @@ const DailyAttendanceModal = ({
                           {selectedAttendanceEmployee?.postApplied ||
                             selectedAttendanceRecord.rawData?.post_applied ||
                             "N/A"}
+                        </span>
+                      </p>
+                      <p className="flex items-start gap-2">
+                        <span className="w-14 shrink-0 font-semibold text-slate-500">
+                          Branch
+                        </span>
+                        <span className="min-w-0 font-medium text-indigo-700 font-semibold">
+                          {selectedAttendanceRecord.rawData?.branch_name ||
+                            selectedAttendanceEmployee?.branch_name ||
+                            "Unassigned"}
                         </span>
                       </p>
                     </div>
@@ -319,7 +346,7 @@ const DailyAttendanceModal = ({
                     <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
                       Timesheet description
                     </p>
-                    <p className="mt-2 text-sm font-medium leading-6 text-slate-700">
+                    <p className="mt-2 text-sm/6 font-medium  text-slate-700">
                       {selectedAttendanceRecord.timesheetDetails || (
                         <span className="italic text-slate-400">
                           No timesheet description recorded.
@@ -331,7 +358,7 @@ const DailyAttendanceModal = ({
                     <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
                       Late reason
                     </p>
-                    <p className="mt-2 text-sm font-medium leading-6 text-slate-700">
+                    <p className="mt-2 text-sm/6 font-medium  text-slate-700">
                       {selectedAttendanceRecord.reason || (
                         <span className="italic text-slate-400">
                           No late reason added.

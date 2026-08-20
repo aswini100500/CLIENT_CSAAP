@@ -1,10 +1,13 @@
+import React from "react";
 import axios from "axios";
 import {
+  Building2,
   Calendar,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   Download,
+  FileSpreadsheet,
   FileText,
   Filter,
   Gift,
@@ -13,7 +16,7 @@ import {
   Search,
   Users,
 } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuth from "../../../../hooks/useAuth";
 import {
   calculateAttendanceDuration,
@@ -21,6 +24,10 @@ import {
   getAttendanceDateValue,
   getCurrentIndiaDate,
 } from "../../utils/attendanceTime";
+import {
+  exportAttendanceToCsv,
+  exportAttendanceToExcel,
+} from "../../utils/attendanceExportUtils";
 import DailyAttendanceModal from "../Attendance/DailyAttendanceModal";
 import AttendanceAuditModal from "../Attendance/AttendanceAuditModal";
 import MonthlyAttendanceOverview from "../Attendance/MonthlyAttendanceOverview";
@@ -35,6 +42,8 @@ const EmployeeAttendance = () => {
   const [loading, setLoading] = useState(true);
   const [filteredData, setFilteredData] = useState([]);
   const [holidayDates, setHolidayDates] = useState([]);
+  const [branches, setBranches] = useState([]);
+  const [selectedBranchId, setSelectedBranchId] = useState("all");
   const [selectedMonth, setSelectedMonth] = useState(currentIndiaMonth - 1);
   const [selectedYear, setSelectedYear] = useState(currentIndiaYear);
   const [searchTerm, setSearchTerm] = useState("");
@@ -108,6 +117,8 @@ const EmployeeAttendance = () => {
     employee_id: employee.id ?? employee.employee_id,
     employee_name: employee.name || employee.employee_name || "Unknown",
     department: employee.department || "N/A",
+    branch_id: employee.branch_id || employee.branchId || null,
+    branch_name: employee.branch_name || employee.branchName || "",
     company_id: Number(
       employee.company_id ?? employee.companyId ?? user.company_id ?? user.id,
     ),
@@ -200,6 +211,9 @@ const EmployeeAttendance = () => {
       attendance_id: record.id,
       status: isHalfDay ? "Half Day" : "Present",
       shift: record.shift_name || "General",
+      branch_id: record.branch_id || null,
+      branch_name: record.branch_name || "",
+      total_break_seconds: Number(record.total_break_seconds || 0),
       checkInTime:
         formatAttendanceTime24(record.mispunch_time) !== "N/A"
           ? formatAttendanceTime24(record.mispunch_time)
@@ -236,6 +250,9 @@ const EmployeeAttendance = () => {
     attendance_id: null,
     status: "Absent",
     shift: employee.shiftName || "General",
+    branch_id: employee.branch_id || null,
+    branch_name: employee.branch_name || "",
+    total_break_seconds: 0,
     checkInTime: "",
     checkOutTime: "",
     totalHours: "",
@@ -315,11 +332,35 @@ const EmployeeAttendance = () => {
     setSelectedAttendanceRecord(updatedEntry);
   };
 
+  const fetchBranches = async () => {
+    if (!companyScopeId && !slug) return;
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_HRMS_BASE_URL}/api/branch`,
+        {
+          params: {
+            company_id: companyScopeId || undefined,
+            company_slug: slug || undefined,
+          },
+        },
+      );
+      if (response.data?.success && Array.isArray(response.data.data)) {
+        setBranches(response.data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch branches:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBranches();
+  }, [slug, companyScopeId]);
+
   useEffect(() => {
     if (slug) {
       fetchAttendanceData(selectedYear, selectedMonth);
     }
-  }, [selectedYear, selectedMonth, slug]);
+  }, [selectedYear, selectedMonth, slug, selectedBranchId]);
 
   useEffect(() => {
     let filtered = [...attendanceData];
@@ -330,6 +371,19 @@ const EmployeeAttendance = () => {
           emp.employee_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           emp.employee_id.toString().includes(searchTerm),
       );
+    }
+
+    if (selectedBranchId !== "all") {
+      filtered = filtered.filter((emp) => {
+        const empBranchMatch =
+          String(emp.branch_id) === String(selectedBranchId);
+        const dayBranchMatch = Object.values(emp.attendance).some(
+          (d) =>
+            String(d.branch_id || d.rawData?.branch_id) ===
+            String(selectedBranchId),
+        );
+        return empBranchMatch || dayBranchMatch;
+      });
     }
 
     if (selectedStatus !== "all") {
@@ -363,6 +417,7 @@ const EmployeeAttendance = () => {
   }, [
     searchTerm,
     attendanceData,
+    selectedBranchId,
     selectedStatus,
     selectedShift,
     selectedPostApplied,
@@ -390,10 +445,13 @@ const EmployeeAttendance = () => {
     try {
       setLoading(true);
       const monthValue = `${year}-${String(month + 1).padStart(2, "0")}`;
+      const branchQueryParam =
+        selectedBranchId !== "all" ? `&branch_id=${selectedBranchId}` : "";
+
       const [attendanceRes, employeesRes, qrRes, holidaysRes] =
         await Promise.all([
           axios.get(
-            `${import.meta.env.VITE_HRMS_BASE_URL}/api/attendance/${slug}?month=${monthValue}`,
+            `${import.meta.env.VITE_HRMS_BASE_URL}/api/attendance/${slug}?month=${monthValue}${branchQueryParam}`,
           ),
           axios.get(
             "https://csaapnodeapi.csaap.com/api/tenant/hrms/all-employees",
@@ -1022,40 +1080,37 @@ const EmployeeAttendance = () => {
     : [];
 
   const exportToCSV = () => {
-    const csvContent = [
-      [
-        "Employee ID",
-        "Employee Name",
-        "Date",
-        "Status",
-        "Shift",
-        "Check-in",
-        "Check-out",
-        "Total Hours",
-        "Timesheet Description",
-      ],
-      ...attendanceData.flatMap((emp) =>
-        Object.entries(emp.attendance).map(([date, att]) => [
-          emp.employee_id,
-          emp.employee_name,
-          date,
-          att.status,
-          att.shift,
-          att.checkInTime,
-          att.checkOutTime,
-          att.totalHours,
-          att.timesheetDetails,
-        ]),
-      ),
-    ]
-      .map((row) => row.join(","))
-      .join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `attendance_${selectedYear}_${monthNames[selectedMonth]}.csv`;
-    a.click();
+    const recordsToExport = filteredData.flatMap((emp) =>
+      Object.values(emp.attendance).map((att) => ({
+        ...att,
+        employee_id: emp.employee_id,
+        name: emp.employee_name,
+        department: emp.department,
+        branch_name: att.branch_name || emp.branch_name || "Unassigned",
+        total_break_seconds: att.total_break_seconds || 0,
+      })),
+    );
+    exportAttendanceToCsv(
+      recordsToExport,
+      `attendance_${selectedYear}_${monthNames[selectedMonth]}.csv`,
+    );
+  };
+
+  const exportToExcel = () => {
+    const recordsToExport = filteredData.flatMap((emp) =>
+      Object.values(emp.attendance).map((att) => ({
+        ...att,
+        employee_id: emp.employee_id,
+        name: emp.employee_name,
+        department: emp.department,
+        branch_name: att.branch_name || emp.branch_name || "Unassigned",
+        total_break_seconds: att.total_break_seconds || 0,
+      })),
+    );
+    exportAttendanceToExcel(
+      recordsToExport,
+      `attendance_${selectedYear}_${monthNames[selectedMonth]}.xlsx`,
+    );
   };
 
   const refreshData = () => {
@@ -1181,6 +1236,24 @@ const EmployeeAttendance = () => {
                 <ChevronDown className="absolute right-3 w-4 h-4 text-(--text-faint) pointer-events-none" />
               </div>
 
+              {/* Branch Filter Dropdown */}
+              <div className="relative flex items-center rounded-xl border border-(--border-soft) bg-white px-3 transition-all focus-within:border-(--brand) focus-within:ring-4 focus-within:ring-(--brand-ring)">
+                <Building2 className="w-4 h-4 text-(--text-faint)" />
+                <select
+                  value={selectedBranchId}
+                  onChange={(e) => setSelectedBranchId(e.target.value)}
+                  className="h-11 flex-1 appearance-none bg-transparent pr-8 text-[13px] font-medium text-(--text-body) outline-none cursor-pointer"
+                >
+                  <option value="all">All Branches</option>
+                  {branches.map((branch) => (
+                    <option key={branch.id} value={branch.id}>
+                      {branch.branch_name} {branch.branch_code ? `(${branch.branch_code})` : ""}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 w-4 h-4 text-(--text-faint) pointer-events-none" />
+              </div>
+
               <button
                 ref={filterButtonRef}
                 onClick={() => setShowFilter(!showFilter)}
@@ -1202,17 +1275,19 @@ const EmployeeAttendance = () => {
                 <span>Filters</span>
                 {(selectedStatus !== "all" ||
                   selectedShift !== "all" ||
+                  selectedBranchId !== "all" ||
                   selectedPostApplied !== "all") && (
                   <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[10px] font-bold text-current ring-1 ring-current/20">
                     {(selectedStatus !== "all" ? 1 : 0) +
                       (selectedShift !== "all" ? 1 : 0) +
+                      (selectedBranchId !== "all" ? 1 : 0) +
                       (selectedPostApplied !== "all" ? 1 : 0)}
                   </span>
                 )}
               </button>
             </div>
 
-            <div className="flex flex-1 flex-col gap-3 lg:max-w-xl lg:flex-row lg:items-center lg:justify-end">
+            <div className="flex flex-1 flex-col gap-3 lg:max-w-2xl lg:flex-row lg:items-center lg:justify-end">
               <div className="relative flex-1 lg:max-w-sm">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
@@ -1224,7 +1299,7 @@ const EmployeeAttendance = () => {
                 />
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={refreshData}
                   className="app-icon-button inline-flex h-11 w-11 shrink-0 items-center justify-center border-(--border-soft) bg-white text-(--text-soft) hover:bg-(--bg-subtle) hover:text-(--text-strong)"
@@ -1234,10 +1309,19 @@ const EmployeeAttendance = () => {
                 </button>
                 <button
                   onClick={exportToCSV}
-                  className="app-btn-primary inline-flex h-11 items-center gap-2 active:scale-[0.98]"
+                  className="inline-flex h-11 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 transition active:scale-[0.98]"
+                  title="Export records to CSV"
                 >
-                  <Download className="w-4 h-4" />
-                  <span>Export</span>
+                  <Download className="w-3.5 h-3.5 text-slate-500" />
+                  <span>CSV</span>
+                </button>
+                <button
+                  onClick={exportToExcel}
+                  className="app-btn-primary inline-flex h-11 items-center gap-1.5 px-3 text-xs font-bold active:scale-[0.98]"
+                  title="Export records to Excel"
+                >
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-white" />
+                  <span>Excel</span>
                 </button>
               </div>
             </div>
@@ -1248,7 +1332,44 @@ const EmployeeAttendance = () => {
               ref={filterPanelRef}
               className="app-panel-muted mt-5 p-5 animate-in fade-in slide-in-from-top-2 duration-200"
             >
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="space-y-3">
+                  <label className="modal-section-title block uppercase tracking-wider">
+                    Branch Scope
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => {
+                        setSelectedBranchId("all");
+                        setShowFilter(false);
+                      }}
+                      className={`${filterChipBase} ${
+                        selectedBranchId === "all"
+                          ? "border-transparent bg-(--brand) text-white shadow-[0_10px_20px_rgba(0,166,81,0.16)]"
+                          : "border-(--border-soft) bg-white text-(--text-soft) hover:border-(--border-strong) hover:text-(--brand)"
+                      }`}
+                    >
+                      All Branches
+                    </button>
+                    {branches.map((b) => (
+                      <button
+                        key={b.id}
+                        onClick={() => {
+                          setSelectedBranchId(String(b.id));
+                          setShowFilter(false);
+                        }}
+                        className={`${filterChipBase} ${
+                          String(selectedBranchId) === String(b.id)
+                            ? "border-transparent bg-(--brand) text-white shadow-[0_10px_20px_rgba(0,166,81,0.16)]"
+                            : "border-(--border-soft) bg-white text-(--text-soft) hover:border-(--border-strong) hover:text-(--brand)"
+                        }`}
+                      >
+                        {b.branch_name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="space-y-3">
                   <label className="modal-section-title block uppercase tracking-wider">
                     Attendance Status
@@ -1343,6 +1464,7 @@ const EmployeeAttendance = () => {
               <div className="mt-5 flex justify-end border-t border-slate-200 pt-4">
                 <button
                   onClick={() => {
+                    setSelectedBranchId("all");
                     setSelectedStatus("all");
                     setSelectedShift("all");
                     setSelectedPostApplied("all");
@@ -1397,6 +1519,7 @@ const EmployeeAttendance = () => {
                 onClick={() => {
                   setSelectedYear(currentIndiaYear);
                   setSelectedMonth(currentIndiaMonth - 1);
+                  setSelectedBranchId("all");
                   setSelectedStatus("all");
                   setSelectedShift("all");
                   setSelectedPostApplied("all");
@@ -1486,13 +1609,21 @@ const EmployeeAttendance = () => {
                                 <h4 className="truncate text-[14px] font-bold text-(--text-strong)">
                                   {employee.employee_name}
                                 </h4>
-                                <p
-                                  className={`mt-1 inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-bold tracking-wider ${getDesignationBadgeClass(
-                                    employee.postApplied,
-                                  )}`}
-                                >
-                                  {employee.postApplied}
-                                </p>
+                                <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                                  <p
+                                    className={`inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-bold tracking-wider ${getDesignationBadgeClass(
+                                      employee.postApplied,
+                                    )}`}
+                                  >
+                                    {employee.postApplied}
+                                  </p>
+                                  {employee.branch_name && (
+                                    <span className="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-[9px] font-bold text-indigo-700">
+                                      <Building2 className="h-2.5 w-2.5" />
+                                      {employee.branch_name}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </td>

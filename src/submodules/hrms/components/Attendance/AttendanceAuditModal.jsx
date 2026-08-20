@@ -1,15 +1,24 @@
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import {
+  AlertCircle,
+  Building2,
   CalendarDays,
   CheckCircle,
+  Clock,
+  Laptop,
   Loader2,
+  LogIn,
+  LogOut,
+  PauseCircle,
+  PlayCircle,
   RefreshCw,
   ShieldCheck,
+  Smartphone,
   Trash2,
   TriangleAlert,
   XCircle,
 } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 import useAuth from "../../../../hooks/useAuth";
 import {
@@ -17,19 +26,14 @@ import {
   getAttendanceDateValue,
   parseIndiaDateTime,
 } from "../../utils/attendanceTime";
+import {
+  validateBreakLogSequence,
+  calculateBreakSecondsFromLogs,
+  computeAuditPreview,
+  secondsToDurationLabel,
+} from "../../utils/attendanceAuditUtils";
 
 const API_BASE = import.meta.env.VITE_HRMS_BASE_URL;
-
-function secondsToDurationLabel(totalSeconds) {
-  if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) {
-    return "0h 0m";
-  }
-
-  const safeSeconds = Math.floor(totalSeconds);
-  const hours = Math.floor(safeSeconds / 3600);
-  const minutes = Math.floor((safeSeconds % 3600) / 60);
-  return `${hours}h ${minutes}m`;
-}
 
 function buildDateTimeValue(dateValue, timeValue) {
   if (!dateValue || !timeValue) return "";
@@ -40,92 +44,6 @@ function buildDateTimeValue(dateValue, timeValue) {
   const timePart =
     normalizedTime.length === 5 ? `${normalizedTime}:00` : normalizedTime;
   return `${dateValue} ${timePart}`;
-}
-
-function computeAuditPreview({
-  attendanceDate,
-  punchInTime,
-  punchOutTime,
-  shiftStart,
-  shiftEnd,
-}) {
-  const defaultPreview = {
-    workedSeconds: 0,
-    shiftSeconds: 0,
-    overtimeSeconds: 0,
-    overtime: "0h 0m",
-    isLate: 0,
-    isEarlyLeave: 0,
-    isHalfDay: 0,
-    otEligible: false,
-  };
-
-  if (!attendanceDate || !punchInTime) {
-    return defaultPreview;
-  }
-
-  const punchInDateTime = parseIndiaDateTime(attendanceDate, punchInTime);
-  const punchOutDateTime = punchOutTime
-    ? parseIndiaDateTime(attendanceDate, punchOutTime)
-    : null;
-
-  if (!punchInDateTime) {
-    return defaultPreview;
-  }
-
-  const workedSeconds = punchOutDateTime
-    ? Math.max(Math.floor((punchOutDateTime - punchInDateTime) / 1000), 0)
-    : 0;
-
-  let shiftSeconds = 0;
-  let overtimeSeconds = 0;
-  let isLate = 0;
-  let isEarlyLeave = 0;
-
-  const shiftStartDateTime = shiftStart
-    ? parseIndiaDateTime(attendanceDate, shiftStart)
-    : null;
-  const shiftEndDateTime = shiftEnd
-    ? parseIndiaDateTime(attendanceDate, shiftEnd)
-    : null;
-
-  if (shiftStartDateTime && shiftEndDateTime) {
-    if (shiftEndDateTime <= shiftStartDateTime) {
-      shiftEndDateTime.setDate(shiftEndDateTime.getDate() + 1);
-    }
-
-    shiftSeconds = Math.max(
-      Math.floor((shiftEndDateTime - shiftStartDateTime) / 1000),
-      0,
-    );
-
-    const lateThreshold = new Date(
-      shiftStartDateTime.getTime() + 16 * 60 * 1000,
-    );
-    isLate = punchInDateTime > lateThreshold ? 1 : 0;
-
-    if (punchOutDateTime) {
-      const projectedEnd = new Date(
-        punchInDateTime.getTime() + shiftSeconds * 1000,
-      );
-      isEarlyLeave = punchOutDateTime < projectedEnd ? 1 : 0;
-    }
-
-    overtimeSeconds = Math.max(workedSeconds - shiftSeconds, 0);
-  }
-
-  const isHalfDay = workedSeconds < 7 * 60 * 60 ? 1 : 0;
-
-  return {
-    workedSeconds,
-    shiftSeconds,
-    overtimeSeconds,
-    overtime: secondsToDurationLabel(overtimeSeconds),
-    isLate,
-    isEarlyLeave,
-    isHalfDay,
-    otEligible: overtimeSeconds >= 30 * 60,
-  };
 }
 
 const emptyForm = {
@@ -147,13 +65,18 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
     null;
   const isCreateMode = !attendanceId;
   const { token: authToken } = useAuth();
-  const token = authToken || "";
+  const token =
+    authToken ||
+    sessionStorage.getItem("token") ||
+    sessionStorage.getItem("hrmsUserToken") ||
+    "";
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [record, setRecord] = useState(attendanceRecord?.rawData || null);
   const [form, setForm] = useState(emptyForm);
+  const [breakLogs, setBreakLogs] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -179,6 +102,16 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
         attendanceRecord?.postApplied ||
         attendanceRecord?.rawData?.post_applied ||
         "N/A",
+      branch_id:
+        nextRecord?.branch_id ??
+        attendanceRecord?.branch_id ??
+        attendanceRecord?.rawData?.branch_id ??
+        null,
+      branch_name:
+        nextRecord?.branch_name ||
+        attendanceRecord?.branch_name ||
+        attendanceRecord?.rawData?.branch_name ||
+        "",
       shift_name:
         nextRecord?.shift_name ||
         attendanceRecord?.shift_name ||
@@ -218,19 +151,6 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
         Number(nextRecord?.longitude ?? attendanceRecord?.longitude ?? 0) || 0,
     });
 
-    const fetchEmployeeDetails = async (employeeId) => {
-      if (!employeeId || !token) return null;
-
-      const response = await axios.get(
-        `${import.meta.env.VITE_CSAAP_URL}/api/tenant/hrms/get-employee/${employeeId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-
-      return response.data?.data || null;
-    };
-
     const fetchAuditRecord = async () => {
       if (!attendanceId && !attendanceRecord?.employee_id) {
         setLoading(false);
@@ -243,6 +163,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
         setError("");
 
         let nextRecord = attendanceRecord?.rawData || attendanceRecord || null;
+        let fetchedLogs = [];
 
         if (attendanceId) {
           const response = await axios.get(
@@ -253,59 +174,14 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
           );
 
           nextRecord = response.data?.data || nextRecord;
-        } else {
-          try {
-            const employeeDetails = await fetchEmployeeDetails(
-              attendanceRecord?.employee_id,
-            );
-
-            if (employeeDetails) {
-              nextRecord = {
-                ...nextRecord,
-                employee_name:
-                  employeeDetails.name ||
-                  employeeDetails.employee_name ||
-                  nextRecord?.employee_name ||
-                  "Unknown",
-                post_applied:
-                  employeeDetails.postApplied ||
-                  employeeDetails.post_applied ||
-                  nextRecord?.post_applied ||
-                  "N/A",
-                shift_name:
-                  employeeDetails.employeeShift ||
-                  employeeDetails.shift_name ||
-                  nextRecord?.shift_name ||
-                  "General",
-                shift_start:
-                  employeeDetails.shift_start ||
-                  employeeDetails.shiftStart ||
-                  nextRecord?.shift_start ||
-                  "",
-                shift_end:
-                  employeeDetails.shift_end ||
-                  employeeDetails.shiftEnd ||
-                  nextRecord?.shift_end ||
-                  "",
-                company:
-                  employeeDetails.companyName ||
-                  employeeDetails.company ||
-                  nextRecord?.company ||
-                  "",
-              };
-            }
-          } catch (employeeError) {
-            console.warn(
-              "Failed to fetch employee details for audit",
-              employeeError,
-            );
-          }
+          fetchedLogs = response.data?.logs || [];
         }
 
         if (!isMounted) return;
 
         const mergedRecord = buildBaseRecord(nextRecord || {});
         setRecord(mergedRecord);
+        setBreakLogs(fetchedLogs);
         setForm({
           attendanceDate:
             getAttendanceDateValue(mergedRecord) ||
@@ -351,15 +227,65 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
         punchOutTime: form.punchOutTime,
         shiftStart: form.shiftStart,
         shiftEnd: form.shiftEnd,
+        breakLogs,
       }),
-    [
-      form.attendanceDate,
-      form.punchInTime,
-      form.punchOutTime,
-      form.shiftStart,
-      form.shiftEnd,
-    ],
+    [form.attendanceDate, form.punchInTime, form.punchOutTime, form.shiftStart, form.shiftEnd, breakLogs],
   );
+
+  const openBreakStartLog = useMemo(() => {
+    let activeStart = null;
+    for (const log of breakLogs) {
+      if (log.log_type === "BREAK_START") activeStart = log;
+      else if (log.log_type === "BREAK_END") activeStart = null;
+    }
+    return activeStart;
+  }, [breakLogs]);
+
+  const handleAddBreakLog = (logType) => {
+    const defaultTime = form.attendanceDate
+      ? `${form.attendanceDate} 12:00:00`
+      : "";
+    setBreakLogs((prev) => [
+      ...prev,
+      {
+        log_type: logType,
+        timestamp: defaultTime,
+        branch_name: record?.branch_name || "",
+        device: "audit-admin",
+        notes: "",
+      },
+    ]);
+  };
+
+  const handleUpdateBreakLog = (index, field, value) => {
+    setBreakLogs((prev) =>
+      prev.map((item, idx) =>
+        idx === index ? { ...item, [field]: value } : item,
+      ),
+    );
+  };
+
+  const handleDeleteBreakLog = (index) => {
+    setBreakLogs((prev) => prev.filter((_, idx) => idx !== index));
+  };
+
+  const handleCloseOpenBreak = () => {
+    if (!openBreakStartLog) return;
+    const shiftEndTime = form.shiftEnd
+      ? buildDateTimeValue(form.attendanceDate, form.shiftEnd)
+      : buildDateTimeValue(form.attendanceDate, "17:00:00");
+
+    setBreakLogs((prev) => [
+      ...prev,
+      {
+        log_type: "BREAK_END",
+        timestamp: shiftEndTime,
+        branch_name: record?.branch_name || "",
+        device: "audit-admin",
+        notes: "Closed by Admin at Shift End",
+      },
+    ]);
+  };
 
   const isPunchOutMissing = !form.punchOutTime || form.punchOutTime === "N/A";
 
@@ -376,40 +302,21 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
     });
   };
 
+  const breakSequenceErrors = useMemo(
+    () => validateBreakLogSequence(breakLogs),
+    [breakLogs],
+  );
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (
-      !form.attendanceDate ||
-      !form.punchInTime ||
-      form.punchInTime === "N/A"
-    ) {
-      Swal.fire({
-        icon: "warning",
-        title: "Missing information",
-        text: "Attendance date and punch-in time are required for audit.",
-        confirmButtonColor: "#065f46",
-      });
+    if (!form.attendanceDate || !form.punchInTime || form.punchInTime === "N/A") {
+      setError("Attendance date and punch-in time are required.");
       return;
     }
 
-    if (!isPunchOutMissing && !form.timesheetDetails.trim()) {
-      Swal.fire({
-        icon: "warning",
-        title: "Timesheet required",
-        text: "Timesheet details are required when a punch-out time is provided.",
-        confirmButtonColor: "#065f46",
-      });
-      return;
-    }
-
-    if (preview.isLate && !form.reason.trim()) {
-      Swal.fire({
-        icon: "warning",
-        title: "Reason required",
-        text: "Late attendance requires a reason before the audit can be saved.",
-        confirmButtonColor: "#065f46",
-      });
+    if (breakSequenceErrors.length > 0) {
+      setError("Please resolve break timeline sequence errors before saving.");
       return;
     }
 
@@ -417,33 +324,31 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
     setError("");
 
     try {
-      const employeeId =
-        record?.employee_id || attendanceRecord?.employee_id || 0;
       const payload = {
-        employee_id: employeeId,
+        employee_id:
+          record?.employee_id ||
+          attendanceRecord?.employee_id ||
+          attendanceRecord?.id,
         employee_name:
-          record?.employee_name || attendanceRecord?.employee_name || "Unknown",
-        post_applied:
-          record?.post_applied ||
-          attendanceRecord?.post_applied ||
-          attendanceRecord?.postApplied ||
-          "N/A",
-        company_id: Number(
+          record?.employee_name ||
+          attendanceRecord?.employeeName ||
+          attendanceRecord?.employee_name,
+        company_id:
           record?.company_id ||
-            attendanceRecord?.company_id ||
-            attendanceRecord?.rawData?.company_id ||
-            0,
-        ),
+          attendanceRecord?.company_id ||
+          attendanceRecord?.companyId,
         company:
           record?.company ||
           attendanceRecord?.company ||
-          attendanceRecord?.rawData?.company ||
-          "",
-        slug:
-          record?.slug ||
-          attendanceRecord?.slug ||
-          attendanceRecord?.rawData?.slug ||
-          "",
+          attendanceRecord?.companyName,
+        slug: record?.slug || attendanceRecord?.slug,
+        branch_id: record?.branch_id || attendanceRecord?.branch_id || null,
+        branch_name: record?.branch_name || attendanceRecord?.branch_name || null,
+        department: record?.department || attendanceRecord?.department,
+        post_applied:
+          record?.post_applied ||
+          attendanceRecord?.post_applied ||
+          attendanceRecord?.postApplied,
         attendance_date: form.attendanceDate,
         mispunch_time: buildDateTimeValue(
           form.attendanceDate,
@@ -469,7 +374,8 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
         longitude: Number(
           record?.longitude || attendanceRecord?.longitude || 0,
         ),
-        device: "audit",
+        device: "audit-admin",
+        logs: breakLogs,
       };
 
       const response = await axios[attendanceId ? "put" : "post"](
@@ -490,7 +396,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
         icon: "success",
         title: "Audit saved",
         text: response.data?.message || "Attendance audit has been updated.",
-        confirmButtonColor: "#065f46",
+        confirmButtonColor: "#00a651",
       });
 
       onClose();
@@ -503,7 +409,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
         icon: "error",
         title: "Audit failed",
         text: message,
-        confirmButtonColor: "#065f46",
+        confirmButtonColor: "#00a651",
       });
     } finally {
       setSaving(false);
@@ -542,7 +448,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
           icon: "success",
           title: "Deleted!",
           text: "The attendance record has been deleted.",
-          confirmButtonColor: "#065f46",
+          confirmButtonColor: "#00a651",
         });
         onSaved?.({ isDeleted: true, id: attendanceId });
         onClose();
@@ -555,7 +461,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
         icon: "error",
         title: "Delete failed",
         text: message,
-        confirmButtonColor: "#065f46",
+        confirmButtonColor: "#00a651",
       });
     } finally {
       setSaving(false);
@@ -564,6 +470,41 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
 
   const punchInLabel = formatAttendanceTime24(record?.mispunch_time);
   const punchOutLabel = formatAttendanceTime24(record?.leave_time);
+
+  const getLogTypeBadge = (logType) => {
+    switch (logType) {
+      case "PUNCH_IN":
+        return {
+          icon: LogIn,
+          className: "bg-emerald-50 text-emerald-700 border-emerald-200",
+          label: "PUNCH IN",
+        };
+      case "BREAK_START":
+        return {
+          icon: PauseCircle,
+          className: "bg-amber-50 text-amber-700 border-amber-200",
+          label: "BREAK START",
+        };
+      case "BREAK_END":
+        return {
+          icon: PlayCircle,
+          className: "bg-blue-50 text-blue-700 border-blue-200",
+          label: "BREAK END",
+        };
+      case "PUNCH_OUT":
+        return {
+          icon: LogOut,
+          className: "bg-rose-50 text-rose-700 border-rose-200",
+          label: "PUNCH OUT",
+        };
+      default:
+        return {
+          icon: Clock,
+          className: "bg-slate-50 text-slate-700 border-slate-200",
+          label: logType || "EVENT",
+        };
+    }
+  };
 
   return (
     <div className="app-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
@@ -575,11 +516,12 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
             </div>
             <div className="min-w-0">
               <h2 className="text-lg font-bold text-slate-900">
-                {isCreateMode ? "Create attendance audit" : "Attendance audit"}
+                {isCreateMode ? "Create Attendance Audit" : "Attendance Audit & Event Trail"}
               </h2>
               <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
                 <span className="truncate text-slate-900 normal-case tracking-normal">
-                  {attendanceRecord?.employeeName ||
+                  {record?.employee_name ||
+                    attendanceRecord?.employeeName ||
                     attendanceRecord?.employee_name ||
                     "Employee"}
                 </span>
@@ -589,6 +531,15 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                 </span>
                 <span className="text-slate-300">|</span>
                 <span className="font-mono">ID {attendanceId || "--"}</span>
+                {record?.branch_name && (
+                  <>
+                    <span className="text-slate-300">|</span>
+                    <span className="inline-flex items-center gap-1 text-indigo-700 font-bold">
+                      <Building2 className="h-3 w-3" />
+                      {record.branch_name}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -601,12 +552,12 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto bg-(--bg-subtle)/45 p-4 sm:p-5 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto bg-slate-50/60 p-4 sm:p-5">
           {loading ? (
-            <div className="app-panel flex min-h-105 items-center justify-center">
+            <div className="flex min-h-105 items-center justify-center rounded-2xl border border-slate-200 bg-white">
               <div className="flex items-center gap-3 text-slate-500">
-                <Loader2 className="h-5 w-5 animate-spin" />
-                Loading audit record...
+                <Loader2 className="h-5 w-5 animate-spin text-(--brand)" />
+                Loading audit record and event trail...
               </div>
             </div>
           ) : (
@@ -620,16 +571,17 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
 
               <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
                 <div className="space-y-4">
+                  {/* Attendance Timing Section */}
                   <section className="app-panel overflow-hidden">
                     <div className="app-section-bar px-4 py-3">
                       <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
-                        Attendence timing
+                        Attendance Timing
                       </p>
                     </div>
                     <div className="grid divide-slate-100 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:divide-x sm:divide-y-0 divide-y">
                       <div className="bg-white p-4">
                         <label className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                          Attendance date
+                          Attendance Date
                         </label>
                         <input
                           type="text"
@@ -640,7 +592,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                       </div>
                       <div className="bg-white p-4">
                         <label className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                          Punch-in time*
+                          Punch-in Time *
                         </label>
                         <input
                           type="time"
@@ -652,7 +604,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                       </div>
                       <div className="bg-white p-4">
                         <label className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                          Punch-out time
+                          Punch-out Time
                         </label>
                         <input
                           type="time"
@@ -665,16 +617,217 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                     </div>
                   </section>
 
+                  {/* Unclosed Break Alert */}
+                  {openBreakStartLog ? (
+                    <div className="rounded-2xl border border-amber-300 bg-amber-50 p-4 text-amber-900 shadow-xs">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-3">
+                          <TriangleAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-wider text-amber-800">
+                              Unclosed Break Session
+                            </p>
+                            <p className="mt-1 text-xs text-amber-700">
+                              Employee started a break at{" "}
+                              <span className="font-mono font-bold">
+                                {openBreakStartLog.timestamp?.slice(11, 16) || "N/A"}
+                              </span>{" "}
+                              without a recorded Break End.
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleCloseOpenBreak}
+                          className="shrink-0 rounded-xl bg-amber-600 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-amber-700 transition"
+                        >
+                          Close Break at Shift End
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {/* Interim Break Timeline & Management Section */}
+                  <section className="app-panel overflow-hidden">
+                    <div className="app-section-bar flex items-center justify-between px-4 py-3">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
+                        Interim Break Timeline ({breakLogs.filter(l => l.log_type === 'BREAK_START' || l.log_type === 'BREAK_END').length} Events)
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleAddBreakLog("BREAK_START")}
+                          className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-slate-700 hover:bg-slate-50 transition shadow-2xs"
+                        >
+                          + Add Break Start
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleAddBreakLog("BREAK_END")}
+                          className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-slate-700 hover:bg-slate-50 transition shadow-2xs"
+                        >
+                          + Add Break End
+                        </button>
+                      </div>
+                    </div>
+
+                    {breakSequenceErrors.length > 0 ? (
+                      <div className="border-b border-rose-100 bg-rose-50/80 px-4 py-3 text-rose-800 text-xs flex items-start gap-2.5">
+                        <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-rose-600" />
+                        <div className="space-y-1">
+                          <p className="font-bold uppercase tracking-wider text-[10px] text-rose-900">
+                            Break Timeline Sequence Error
+                          </p>
+                          {breakSequenceErrors.map((err, i) => (
+                            <p key={i}>• {err}</p>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    <div className="p-4 space-y-3">
+                      {breakLogs.filter(l => l.log_type === 'BREAK_START' || l.log_type === 'BREAK_END').length === 0 ? (
+                        <p className="text-xs italic text-slate-400">
+                          No interim breaks recorded for this session.
+                        </p>
+                      ) : (
+                        breakLogs
+                          .map((log, originalIdx) => ({ log, originalIdx }))
+                          .filter(({ log }) => log.log_type === 'BREAK_START' || log.log_type === 'BREAK_END')
+                          .map(({ log, originalIdx }) => (
+                            <div
+                              key={originalIdx}
+                              className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50/70 p-2.5 text-xs"
+                            >
+                              <div className="flex items-center gap-2">
+                                <select
+                                  value={log.log_type}
+                                  onChange={(e) =>
+                                    handleUpdateBreakLog(originalIdx, "log_type", e.target.value)
+                                  }
+                                  className="rounded-lg border border-slate-300 bg-white px-2 py-1 font-bold text-slate-800 text-xs outline-none"
+                                >
+                                  <option value="BREAK_START">BREAK START</option>
+                                  <option value="BREAK_END">BREAK END</option>
+                                </select>
+                                <input
+                                  type="datetime-local"
+                                  step="1"
+                                  value={(log.timestamp || "").replace(" ", "T").slice(0, 19)}
+                                  onChange={(e) => {
+                                    const val = e.target.value.replace("T", " ");
+                                    const formatted = val && val.length === 16 ? `${val}:00` : val;
+                                    handleUpdateBreakLog(originalIdx, "timestamp", formatted);
+                                  }}
+                                  className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-xs text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                                />
+                              </div>
+                              <div className="flex items-center gap-2 flex-1 min-w-48">
+                                <input
+                                  type="text"
+                                  value={log.notes || ""}
+                                  onChange={(e) =>
+                                    handleUpdateBreakLog(originalIdx, "notes", e.target.value)
+                                  }
+                                  placeholder="Break Reason / Note"
+                                  className="w-full rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs text-slate-700 outline-none"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteBreakLog(originalIdx)}
+                                  className="rounded-lg p-1.5 text-rose-500 hover:bg-rose-50 transition"
+                                  title="Delete Event"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                      )}
+                    </div>
+                  </section>
+
+                  {/* Audit Trail Complete History Table */}
+                  {breakLogs.length > 0 && (
+                    <section className="app-panel overflow-hidden">
+                      <div className="app-section-bar px-4 py-3 flex items-center justify-between">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
+                          Chronological Audit Trail ({breakLogs.length} Events)
+                        </p>
+                        <span className="text-[11px] text-slate-400 font-semibold">
+                          Immutable System Logs
+                        </span>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs border-collapse">
+                          <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                            <tr>
+                              <th className="px-3 py-2">Event</th>
+                              <th className="px-3 py-2">Timestamp</th>
+                              <th className="px-3 py-2">Branch</th>
+                              <th className="px-3 py-2">Device</th>
+                              <th className="px-3 py-2">Notes</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100 bg-white font-medium text-slate-700">
+                            {breakLogs.map((log, idx) => {
+                              const badge = getLogTypeBadge(log.log_type);
+                              const Icon = badge.icon;
+
+                              return (
+                                <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                                  <td className="px-3 py-2.5 whitespace-nowrap">
+                                    <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold border ${badge.className}`}>
+                                      <Icon className="h-3 w-3 shrink-0" />
+                                      {badge.label}
+                                    </span>
+                                  </td>
+                                  <td className="px-3 py-2.5 font-mono whitespace-nowrap text-slate-900">
+                                    {log.timestamp || "--:--:--"}
+                                  </td>
+                                  <td className="px-3 py-2.5 whitespace-nowrap">
+                                    {log.branch_name || record?.branch_name ? (
+                                      <span className="inline-flex items-center gap-1 rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-100">
+                                        <Building2 className="h-2.5 w-2.5" />
+                                        {log.branch_name || record?.branch_name}
+                                      </span>
+                                    ) : (
+                                      <span className="text-slate-400 text-[11px]">Unassigned</span>
+                                    )}
+                                  </td>
+                                  <td className="px-3 py-2.5 whitespace-nowrap text-slate-500">
+                                    <span className="inline-flex items-center gap-1">
+                                      {String(log.device || "").toLowerCase().includes("mobile") ? (
+                                        <Smartphone className="h-3 w-3 text-slate-400" />
+                                      ) : (
+                                        <Laptop className="h-3 w-3 text-slate-400" />
+                                      )}
+                                      <span>{log.device || "desktop"}</span>
+                                    </span>
+                                  </td>
+                                  <td className="px-3 py-2.5 text-slate-600 max-w-xs truncate">
+                                    {log.notes || <span className="text-slate-300 italic">None</span>}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  )}
+
+                  {/* Shift Info */}
                   <section className="app-panel overflow-hidden">
                     <div className="app-section-bar px-4 py-3">
                       <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
-                        Shift info
+                        Shift Configuration
                       </p>
                     </div>
                     <div className="grid divide-slate-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0 divide-y">
                       <div className="bg-white p-4">
                         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                          Shift name
+                          Shift Name
                         </p>
                         <p className="mt-2 text-sm font-semibold text-slate-900">
                           {record?.shift_name || "General"}
@@ -682,16 +835,15 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                       </div>
                       <div className="bg-white p-4">
                         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                          Shift start
+                          Shift Start
                         </p>
                         <p className="mt-2 font-mono text-sm font-semibold text-slate-900">
-                          {formatAttendanceTime24(record?.shift_start) ||
-                            "--:--"}
+                          {formatAttendanceTime24(record?.shift_start) || "--:--"}
                         </p>
                       </div>
                       <div className="bg-white p-4">
                         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                          Shift end
+                          Shift End
                         </p>
                         <p className="mt-2 font-mono text-sm font-semibold text-slate-900">
                           {formatAttendanceTime24(record?.shift_end) || "--:--"}
@@ -700,10 +852,11 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                     </div>
                   </section>
 
+                  {/* Notes & Timesheet */}
                   <section className="app-panel overflow-hidden">
                     <div className="app-section-bar px-4 py-3">
                       <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
-                        Notes
+                        Notes & Timesheet
                       </p>
                     </div>
                     <div
@@ -715,14 +868,14 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                     >
                       <div className="bg-white p-4">
                         <label className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                          Timesheet details
+                          Timesheet Details
                         </label>
                         <textarea
                           name="timesheetDetails"
                           value={form.timesheetDetails}
                           onChange={handleChange}
                           disabled={isPunchOutMissing}
-                          rows={5}
+                          rows={4}
                           className={`mt-2 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium leading-6 outline-none transition placeholder:text-slate-400 ${
                             isPunchOutMissing
                               ? "bg-slate-50 cursor-not-allowed text-slate-400"
@@ -738,15 +891,15 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                       {preview.isLate ? (
                         <div className="bg-white p-4">
                           <label className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                            Late reason*
+                            Late Reason *
                           </label>
                           <textarea
                             name="reason"
                             value={form.reason}
                             onChange={handleChange}
-                            rows={5}
+                            rows={4}
                             className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-300 focus:ring-4 focus:ring-emerald-100"
-                            placeholder="Keep the original reason without re-entry..."
+                            placeholder="Reason for late check-in..."
                           />
                         </div>
                       ) : null}
@@ -754,6 +907,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                   </section>
                 </div>
 
+                {/* Sidebar Summary & Derived Preview */}
                 <div className="space-y-4">
                   <section className="rounded-2xl border border-emerald-200/70 bg-emerald-50/80 p-4">
                     <div className="flex items-start gap-3">
@@ -762,11 +916,10 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                       </div>
                       <div className="min-w-0">
                         <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-emerald-700">
-                          Current record
+                          Current Record
                         </p>
                         <p className="mt-1 text-sm text-slate-600">
-                          Review the current punches here and update them as
-                          needed.
+                          Review current registered metrics for this attendance session.
                         </p>
                       </div>
                     </div>
@@ -790,35 +943,34 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                       </div>
                       <div className="rounded-xl border border-white bg-white p-3 ring-1 ring-slate-200">
                         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">
-                          Total Hours
+                          Total Break Duration
+                        </p>
+                        <p className="mt-1 font-mono text-sm font-semibold text-amber-700">
+                          {secondsToDurationLabel(record?.total_break_seconds || 0)}
+                        </p>
+                      </div>
+                      <div className="rounded-xl border border-white bg-white p-3 ring-1 ring-slate-200">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">
+                          Net Worked Hours
                         </p>
                         <p className="mt-1 font-mono text-sm font-semibold text-slate-900">
                           {record?.total_hours || "--:--"}
                         </p>
                       </div>
-                      <div className="rounded-xl border border-white bg-white p-3 ring-1 ring-slate-200">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">
-                          Shift
-                        </p>
-                        <p className="mt-1 text-sm font-semibold text-slate-900">
-                          {record?.shift_name || "General"}
-                        </p>
-                      </div>
                     </div>
                   </section>
 
-                  <section className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <section className="app-panel p-4">
                     <div className="flex items-start gap-3">
                       <div className="rounded-lg border border-slate-200 bg-slate-50 p-2 text-slate-700">
                         <RefreshCw className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
                         <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
-                          Derived preview
+                          Recalculated Preview
                         </p>
                         <p className="mt-1 text-sm text-slate-600">
-                          These values are recalculated from the raw times on
-                          save.
+                          Preview of net values computed deducting break durations.
                         </p>
                       </div>
                     </div>
@@ -826,23 +978,23 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                     <div className="mt-4 grid grid-cols-2 gap-3">
                       <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">
-                          Worked
+                          Net Worked
                         </p>
-                        <p className="mt-1 text-sm font-semibold text-slate-900">
+                        <p className="mt-1 text-sm font-bold text-slate-900 font-mono">
                           {secondsToDurationLabel(preview.workedSeconds)}
                         </p>
                       </div>
                       <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">
-                          Overtime
+                          Total Break
                         </p>
-                        <p className="mt-1 text-sm font-semibold text-slate-900">
-                          {preview.overtime}
+                        <p className="mt-1 text-sm font-bold text-amber-700 font-mono">
+                          {secondsToDurationLabel(preview.totalBreakSeconds)}
                         </p>
                       </div>
                       <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">
-                          Late
+                          Late Arrival
                         </p>
                         <p className="mt-1 text-sm font-semibold text-slate-900">
                           {preview.isLate ? "Yes" : "No"}
@@ -856,12 +1008,9 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                           {preview.isHalfDay ? "Yes" : "No"}
                         </p>
                       </div>
-                    </div>
-
-                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
                       <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">
-                          Early leave
+                          Early Leave
                         </p>
                         <p className="mt-1 text-sm font-semibold text-slate-900">
                           {preview.isEarlyLeave ? "Yes" : "No"}
@@ -869,10 +1018,10 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
                       </div>
                       <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">
-                          OT eligible
+                          Overtime
                         </p>
-                        <p className="mt-1 text-sm font-semibold text-slate-900">
-                          {preview.otEligible ? "Yes" : "No"}
+                        <p className="mt-1 text-sm font-semibold text-slate-900 font-mono">
+                          {preview.overtime}
                         </p>
                       </div>
                     </div>
@@ -883,7 +1032,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
           )}
         </div>
 
-        <div className="flex shrink-0 items-center justify-between border-t border-slate-200 bg-white px-5 py-3">
+        <div className="flex shrink-0 items-center justify-between border-t border-(--border-soft) bg-white px-5 py-3">
           <div>
             {!isCreateMode && (
               <button
@@ -901,7 +1050,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
             <button
               type="button"
               onClick={onClose}
-              className="app-btn-secondary inline-flex h-10 items-center px-4"
+              className="inline-flex h-10 items-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 transition-all hover:bg-slate-50"
             >
               Cancel
             </button>
@@ -909,7 +1058,7 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
               type="button"
               onClick={handleSubmit}
               disabled={loading || saving}
-              className="app-btn-primary inline-flex h-10 items-center gap-2 px-5 disabled:cursor-not-allowed disabled:opacity-50"
+              className="app-btn-primary inline-flex h-10 items-center gap-2 px-5 text-sm font-bold"
             >
               {saving ? (
                 <>

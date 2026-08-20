@@ -1,5 +1,5 @@
-import { Eye, NotebookText, XCircle } from "lucide-react";
 import React from "react";
+import { Eye, NotebookText, XCircle } from "lucide-react";
 
 const MonthlyAttendanceOverview = ({
   selectedEmployee,
@@ -50,6 +50,11 @@ const MonthlyAttendanceOverview = ({
                   <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-400 ring-1 ring-inset ring-slate-100">
                     {selectedEmployee.department}
                   </span>
+                  {(selectedEmployee.branch_name || selectedEmployee.rawData?.branch_name) && (
+                    <span className="rounded-md bg-indigo-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-indigo-700 ring-1 ring-inset ring-indigo-200">
+                      {selectedEmployee.branch_name || selectedEmployee.rawData?.branch_name}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -268,7 +273,13 @@ const MonthlyAttendanceOverview = ({
                           <p className="font-mono text-sm font-semibold text-slate-900">
                             {data.totalHours || "--"}
                           </p>
-                          <p className="mt-1 text-[10px] font-bold text-slate-400">
+                          <p className="mt-0.5 text-[10px] font-bold text-amber-700">
+                            Break:{" "}
+                            {data.rawData?.total_break_seconds
+                              ? formatDurationLabel(data.rawData.total_break_seconds)
+                              : "0h 0m"}
+                          </p>
+                          <p className="mt-0.5 text-[10px] font-bold text-slate-400">
                             Overtime:{" "}
                             {data.rawData?.overtime
                               ? formatDurationLabel(data.rawData.overtime)
@@ -276,7 +287,7 @@ const MonthlyAttendanceOverview = ({
                           </p>
                         </td>
                         <td className="px-4 py-3 align-top">
-                          <div className="space-y-1.5 text-xs font-medium leading-5 text-slate-600">
+                          <div className="space-y-1.5 text-xs/5 font-medium  text-slate-600">
                             <p>
                               {data.timesheetDetails || (
                                 <span className="italic text-slate-400">
