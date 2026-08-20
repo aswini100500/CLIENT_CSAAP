@@ -196,6 +196,7 @@ const XYZ = () => {
   const companyName = params.get("company") || user?.companyName || "";
   const employeeProfileId = user?.employeeProfileId;
 
+  const isSubmittingRef = useRef(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAutofilling, setIsAutofilling] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
@@ -622,6 +623,8 @@ const XYZ = () => {
       return;
     }
 
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
 
     try {
@@ -642,6 +645,7 @@ const XYZ = () => {
         device: /Mobi|Android/i.test(navigator.userAgent)
           ? "mobile"
           : "desktop",
+        action: hasPunchedIn ? "PUNCH_OUT" : "PUNCH_IN",
         shift_name: !hasPunchedIn ? shiftName : undefined,
         shift_start: !hasPunchedIn
           ? shiftStart?.includes(":") && shiftStart.length === 5
@@ -722,12 +726,14 @@ const XYZ = () => {
         confirmButtonColor: "#4f46e5",
       });
     } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   };
 
   const handleBreakAction = async (actionType, reasonOverride) => {
-    if (isSubmitting) return;
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
 
     try {
@@ -788,6 +794,7 @@ const XYZ = () => {
         confirmButtonColor: "#4f46e5",
       });
     } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   };

@@ -1369,8 +1369,8 @@ export default function TokenizedPunch() {
               </div>
             )}
 
-            {/* ── 4. Work Summary & Timesheet (When Working) ── */}
-            {isWorking && (
+            {/* ── 4. Work Summary & Timesheet (When Working or On Break) ── */}
+            {(isWorking || isOnBreak) && (
               <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3">
                 <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
                   <div className="min-w-0">
@@ -1472,18 +1472,29 @@ export default function TokenizedPunch() {
                 </div>
 
                 <p className="text-xs text-amber-900/90 leading-relaxed">
-                  When you return to your workstation, click <strong>Resume Work</strong> to restart your work timer.
+                  When you return to your workstation, click <strong>Resume Work</strong> to restart your work timer, or click <strong>Punch Out</strong> to end your workday directly (active break will be auto-closed).
                 </p>
 
-                <button
-                  type="button"
-                  onClick={() => handleBreakAction("BREAK_END")}
-                  disabled={isSubmitting}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 hover:bg-amber-700 active:scale-[0.99] px-4 py-3 text-sm font-semibold text-white shadow-xs transition duration-150 cursor-pointer disabled:opacity-60"
-                >
-                  <Play className="h-4 w-4 fill-current" />
-                  {isSubmitting ? "Resuming Work..." : "Resume Work (Break In)"}
-                </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => handleBreakAction("BREAK_END")}
+                    disabled={isSubmitting}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 hover:bg-amber-700 active:scale-[0.99] px-4 py-3 text-sm font-semibold text-white shadow-xs transition duration-150 cursor-pointer disabled:opacity-60"
+                  >
+                    <Play className="h-4 w-4 fill-current" />
+                    {isSubmitting ? "Resuming Work..." : "Resume Work (Break In)"}
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 hover:bg-rose-700 active:scale-[0.99] px-4 py-3 text-sm font-semibold text-white shadow-xs transition duration-150 cursor-pointer disabled:opacity-60"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Punch Out (End Day)</span>
+                  </button>
+                </div>
               </div>
             )}
 
