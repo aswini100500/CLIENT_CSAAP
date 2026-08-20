@@ -54,7 +54,7 @@ const SideBar = () => {
       if (import.meta.env.VITE_LOCAL_AUTH === "true") {
         localStorage.setItem("explicit_logout", "true");
       }
-      navigate("/");
+      navigate("/admin/login");
     }
   };
   const { user } = useAuth();

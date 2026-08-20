@@ -210,7 +210,7 @@ const EmployeeSidebar = ({ isCollapsed, toggleSidebar, onItemClick }) => {
           .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
       });
 
-      navigate("/");
+      navigate("/employee/login");
     }
   };
 
