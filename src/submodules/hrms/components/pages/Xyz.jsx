@@ -424,7 +424,7 @@ const XYZ = () => {
   const reasonRequiredForPunchIn = (() => {
     if (hasPunchedIn || hasPunchedOut || !shiftStartDateTime) return false;
     const threshold = new Date(shiftStartDateTime.getTime() + 16 * 60 * 1000);
-    return Date.now() > threshold.getTime();
+    return Date.now() >= threshold.getTime();
   })();
   const liveOtMetrics = getOtMetrics({
     dateValue: activeSessionDate,
@@ -645,6 +645,7 @@ const XYZ = () => {
         device: /Mobi|Android/i.test(navigator.userAgent)
           ? "mobile"
           : "desktop",
+        source: "PORTAL",
         action: hasPunchedIn ? "PUNCH_OUT" : "PUNCH_IN",
         shift_name: !hasPunchedIn ? shiftName : undefined,
         shift_start: !hasPunchedIn

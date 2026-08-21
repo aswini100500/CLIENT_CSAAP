@@ -371,11 +371,10 @@ const AttendanceAuditModal = ({ attendanceRecord, onClose, onSaved }) => {
           const e = record?.shift_end || attendanceRecord?.shift_end || null;
           return e?.includes(":") && e.length === 5 ? `${e}:00` : e;
         })(),
-        latitude: Number(record?.latitude || attendanceRecord?.latitude || 0),
-        longitude: Number(
-          record?.longitude || attendanceRecord?.longitude || 0,
-        ),
-        device: "audit-admin",
+        latitude: null,
+        longitude: null,
+        device: "desktop",
+        source: "AUDIT",
         logs: breakLogs,
       };
 

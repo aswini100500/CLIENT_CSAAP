@@ -62,7 +62,16 @@ const DailyAttendanceModal = ({
     {
       label: "Net Hours",
       value: selectedAttendanceRecord.totalHours || "--:--",
-      tone: "text-slate-900",
+      tone:
+        Number(
+          selectedAttendanceRecord.is_early_leave ||
+            selectedAttendanceRecord.rawData?.is_early_leave ||
+            0,
+        ) === 1 ||
+        selectedAttendanceRecord.is_early_leave === true ||
+        selectedAttendanceRecord.rawData?.is_early_leave === true
+          ? "text-rose-600 font-bold"
+          : "text-slate-900",
     },
     {
       label: "OT",
@@ -208,9 +217,10 @@ const DailyAttendanceModal = ({
                         <span className="w-14 shrink-0 font-semibold text-slate-500">
                           Device
                         </span>
-                        <span className="min-w-0 font-medium text-slate-900">
-                          {selectedAttendanceRecord.rawData?.device ||
-                            "desktop"}
+                        <span className="min-w-0 font-medium capitalize text-slate-900">
+                          {selectedAttendanceRecord.rawData?.device === "mobile"
+                            ? "Mobile"
+                            : "Desktop"}
                         </span>
                       </p>
                       <p className="flex items-start gap-2 font-mono text-[13px]">
@@ -238,10 +248,16 @@ const DailyAttendanceModal = ({
                           Source
                         </span>
                         <span className="min-w-0 font-medium text-slate-900">
-                          {selectedAttendanceRecord.rawData?.device ===
-                          "desktop"
-                            ? "Fixed terminal"
-                            : "Mobile capture"}
+                          {(() => {
+                            const rawSource = String(
+                              selectedAttendanceRecord.rawData?.source || "",
+                            ).toUpperCase();
+                            if (rawSource === "PORTAL") return "QR Checkpoint";
+                            if (rawSource === "REQUEST")
+                              return "Regularization Request";
+                            if (rawSource === "AUDIT") return "HR Audit";
+                            return "QR Checkpoint";
+                          })()}
                         </span>
                       </p>
                     </div>

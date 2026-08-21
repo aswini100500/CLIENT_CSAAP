@@ -419,6 +419,7 @@ const AddAttendance = () => {
       latitude: Number(deviceLat || 0),
       longitude: Number(deviceLon || 0),
       device: /Mobi|Android/i.test(navigator.userAgent) ? "mobile" : "desktop",
+      source: "REQUEST",
       employee_ot_claim: preview.otEligible ? (employeeOtClaim ? 1 : 0) : 0,
     };
 

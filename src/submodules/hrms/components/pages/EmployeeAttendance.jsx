@@ -653,10 +653,37 @@ const EmployeeAttendance = () => {
     return generateMonthDatesFor(selectedYear, selectedMonth);
   };
 
-  const getStatusBadge = (status, totalHours = "") => {
+  const getStatusBadge = (status, totalHours = "", isEarlyLeave = false) => {
+    const earlyLeaveFlag =
+      typeof isEarlyLeave === "object" && isEarlyLeave !== null
+        ? Boolean(
+            isEarlyLeave.is_early_leave === 1 ||
+              isEarlyLeave.is_early_leave === true ||
+              isEarlyLeave.isEarlyLeave === true ||
+              isEarlyLeave.rawData?.is_early_leave === 1 ||
+              isEarlyLeave.rawData?.is_early_leave === true,
+          )
+        : Boolean(
+            isEarlyLeave === true ||
+              isEarlyLeave === 1 ||
+              isEarlyLeave === "1",
+          );
+
+    const isZeroHours =
+      !totalHours ||
+      totalHours === "N/A" ||
+      totalHours === "00:00:00" ||
+      totalHours === "00:00" ||
+      totalHours === "0h 0m" ||
+      totalHours === "0m";
+
     const hoursLabel =
-      totalHours && totalHours !== "N/A" ? (
-        <span className="text-[10px] font-bold text-slate-500 font-mono">
+      !isZeroHours ? (
+        <span
+          className={`text-[10px] font-bold font-mono ${
+            earlyLeaveFlag ? "text-rose-600" : "text-slate-500"
+          }`}
+        >
           {totalHours}
         </span>
       ) : null;
@@ -1660,6 +1687,8 @@ const EmployeeAttendance = () => {
                                       {getStatusBadge(
                                         dayData.status || "Absent",
                                         dayData.totalHours || "",
+                                        dayData.is_early_leave ||
+                                          dayData.rawData?.is_early_leave,
                                       )}
                                     </button>
                                   ) : (

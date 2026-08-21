@@ -634,13 +634,13 @@ export default function TokenizedPunch() {
   const isCompleted = hasPunchedOut;
   const isShiftAssigned = Boolean(shiftName && shiftStart && shiftEnd);
 
-  // Late Arrival Check (15 mins grace period)
+  // Late Arrival Check (16 mins grace period)
   const reasonRequiredForPunchIn = useMemo(() => {
     if (!isIdle || !shiftStart) return false;
     const shiftStartTime = parseIndiaDateTime(todayIndiaDate, shiftStart);
     if (!shiftStartTime) return false;
-    const graceMs = 15 * 60 * 1000;
-    return currentTimeTick > shiftStartTime.getTime() + graceMs;
+    const graceMs = 16 * 60 * 1000;
+    return currentTimeTick >= shiftStartTime.getTime() + graceMs;
   }, [isIdle, todayIndiaDate, shiftStart, currentTimeTick]);
 
   // OT Eligibility Calculation
@@ -690,6 +690,7 @@ export default function TokenizedPunch() {
         latitude: deviceLat,
         longitude: deviceLon,
         device: /Mobi|Android/i.test(navigator.userAgent) ? "mobile" : "desktop",
+        source: "PORTAL",
         reason: breakReasonText || undefined,
       };
 
@@ -925,6 +926,7 @@ export default function TokenizedPunch() {
             latitude: deviceLat,
             longitude: deviceLon,
             device: /Mobi|Android/i.test(navigator.userAgent) ? "mobile" : "desktop",
+            source: "PORTAL",
             timesheet_details: timesheetDetails.trim(),
             employee_ot_claim: employeeOtClaim ? 1 : 0,
           };

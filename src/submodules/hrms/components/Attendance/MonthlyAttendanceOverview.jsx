@@ -271,7 +271,19 @@ const MonthlyAttendanceOverview = ({
                           </div>
                         </td>
                         <td className="px-4 py-3 align-top whitespace-nowrap">
-                          <p className="font-mono text-sm font-semibold text-slate-900">
+                          <p
+                            className={`font-mono text-sm font-semibold ${
+                              Number(
+                                data.is_early_leave ||
+                                  data.rawData?.is_early_leave ||
+                                  0,
+                              ) === 1 ||
+                              data.is_early_leave === true ||
+                              data.rawData?.is_early_leave === true
+                                ? "text-rose-600 font-bold"
+                                : "text-slate-900"
+                            }`}
+                          >
                             {data.totalHours || "--"}
                           </p>
                           <p className="mt-0.5 text-[10px] font-bold text-amber-700">

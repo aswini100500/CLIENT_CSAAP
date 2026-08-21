@@ -459,10 +459,29 @@ const EmployeeYearlyAttendance = () => {
     };
   };
 
-  const getStatusBadge = (status, totalHours = "") => {
+  const getStatusBadge = (status, totalHours = "", isEarlyLeave = false) => {
+    const earlyLeaveFlag =
+      typeof isEarlyLeave === "object" && isEarlyLeave !== null
+        ? Boolean(
+            isEarlyLeave.is_early_leave === 1 ||
+              isEarlyLeave.is_early_leave === true ||
+              isEarlyLeave.isEarlyLeave === true ||
+              isEarlyLeave.rawData?.is_early_leave === 1 ||
+              isEarlyLeave.rawData?.is_early_leave === true,
+          )
+        : Boolean(
+            isEarlyLeave === true ||
+              isEarlyLeave === 1 ||
+              isEarlyLeave === "1",
+          );
+
     const hoursLabel =
       totalHours && totalHours !== "N/A" ? (
-        <span className="text-[10px] font-bold text-slate-500 font-mono">
+        <span
+          className={`text-[10px] font-bold font-mono ${
+            earlyLeaveFlag ? "text-rose-600" : "text-slate-500"
+          }`}
+        >
           {totalHours}
         </span>
       ) : null;
@@ -843,6 +862,8 @@ const EmployeeYearlyAttendance = () => {
                                     ? getStatusBadge(
                                         dayRecord.status,
                                         dayRecord.totalHours,
+                                        dayRecord.is_early_leave ||
+                                          dayRecord.rawData?.is_early_leave,
                                       )
                                     : getStatusBadge("Absent")}
                                 </div>
@@ -856,6 +877,8 @@ const EmployeeYearlyAttendance = () => {
                                   {getStatusBadge(
                                     dayRecord.status,
                                     dayRecord.totalHours,
+                                    dayRecord.is_early_leave ||
+                                      dayRecord.rawData?.is_early_leave,
                                   )}
                                 </button>
                               ) : (
