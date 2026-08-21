@@ -1563,16 +1563,16 @@ const EmployeeAttendance = () => {
                 <table className="min-w-full border-separate border-spacing-0">
                   <thead className="sticky top-0 z-30 bg-white">
                     <tr>
-                      <th className="sticky left-0 z-40 min-w-15 border-b border-r border-(--border-soft) bg-white px-4 py-2.5 text-center text-[11px] font-extrabold uppercase tracking-widest text-(--text-soft) shadow-sm">
+                      <th className="sticky left-0 z-40 min-w-15 border-b border-r border-slate-200 bg-white px-4 py-2.5 text-center text-[11px] font-extrabold uppercase tracking-widest text-(--text-soft) shadow-sm">
                         #
                       </th>
-                      <th className="sticky left-15 z-40 min-w-70 border-b border-r border-(--border-soft) bg-white px-5 py-2.5 text-left text-[11px] font-extrabold uppercase tracking-widest text-(--text-soft) shadow-sm">
+                      <th className="sticky left-15 z-40 min-w-70 border-b border-r border-slate-200 bg-white px-5 py-2.5 text-left text-[11px] font-extrabold uppercase tracking-widest text-(--text-soft) shadow-sm">
                         Employee Info
                       </th>
                       {generateMonthDates().map((date) => (
                         <th
                           key={date}
-                          className="min-w-17.5 border-b border-(--border-soft) bg-white px-3 py-2.5 text-center"
+                          className="min-w-17.5 border-b border-slate-200 bg-white px-3 py-2.5 text-center"
                         >
                           <div className="flex flex-col items-center">
                             <span className="mb-0.5 text-sm font-bold text-(--text-strong)">
@@ -1584,7 +1584,7 @@ const EmployeeAttendance = () => {
                           </div>
                         </th>
                       ))}
-                      <th className="sticky right-0 z-40 border-b border-l border-(--border-soft) bg-white px-5 py-2.5 text-center text-[11px] font-extrabold uppercase tracking-widest text-(--text-soft) shadow-sm">
+                      <th className="sticky right-0 z-40 border-b border-l border-slate-200 bg-white px-5 py-2.5 text-center text-[11px] font-extrabold uppercase tracking-widest text-(--text-soft) shadow-sm">
                         Actions
                       </th>
                     </tr>
@@ -1606,15 +1606,15 @@ const EmployeeAttendance = () => {
                           aria-selected={selectedRowId === employee.employee_id}
                           className={`group cursor-pointer transition-colors ${
                             selectedRowId === employee.employee_id
-                              ? "bg-(--bg-subtle)"
-                              : "hover:bg-(--bg-subtle)/70"
+                              ? "bg-emerald-50"
+                              : "hover:bg-slate-50"
                           }`}
                         >
                           <td
-                            className={`sticky left-0 z-20 min-w-15 whitespace-nowrap border-b border-r border-(--bg-subtle) px-4 py-3 text-center transition-colors ${
+                            className={`sticky left-0 z-20 min-w-15 whitespace-nowrap border-b border-r border-slate-200 px-4 py-3 text-center transition-colors ${
                               selectedRowId === employee.employee_id
-                                ? "bg-(--bg-subtle)"
-                                : "bg-white group-hover:bg-(--bg-subtle)/70"
+                                ? "bg-emerald-50"
+                                : "bg-white group-hover:bg-slate-50"
                             }`}
                           >
                             <span className="text-[13px] font-medium text-(--text-soft)">
@@ -1622,14 +1622,14 @@ const EmployeeAttendance = () => {
                             </span>
                           </td>
                           <td
-                            className={`sticky left-15 z-20 min-w-70 whitespace-nowrap border-b border-r border-(--bg-subtle) px-5 py-3 transition-colors ${
+                            className={`sticky left-15 z-20 min-w-70 whitespace-nowrap border-b border-r border-slate-200 px-5 py-3 transition-colors ${
                               selectedRowId === employee.employee_id
-                                ? "bg-(--bg-subtle)"
-                                : "bg-white group-hover:bg-(--bg-subtle)/70"
+                                ? "bg-emerald-50"
+                                : "bg-white group-hover:bg-slate-50"
                             }`}
                           >
                             <div className="flex items-center gap-4">
-                              <div className="w-9 h-9 rounded-xl border border-(--border-soft) bg-(--bg-subtle) flex items-center justify-center text-(--brand) font-bold text-sm shrink-0">
+                              <div className="w-9 h-9 rounded-xl border border-(--border-soft) bg-white flex items-center justify-center text-(--brand) font-bold text-sm shrink-0 shadow-2xs">
                                 {employee.employee_name.charAt(0)}
                               </div>
                               <div className="min-w-0">
@@ -1664,7 +1664,7 @@ const EmployeeAttendance = () => {
                             return (
                               <td
                                 key={date}
-                                className="min-w-17.5 border-b border-r border-(--bg-subtle) px-1 py-3 text-center last:border-r-0"
+                                className="min-w-17.5 border-b border-r border-slate-100 px-1 py-3 text-center last:border-r-0"
                               >
                                 <div className="flex flex-col items-center justify-center gap-1.5 h-full min-h-10">
                                   {sunday || futureDate ? (
@@ -1681,7 +1681,7 @@ const EmployeeAttendance = () => {
                                           dayData,
                                         );
                                       }}
-                                      className="rounded-xl p-1 transition-all hover:bg-(--bg-subtle) focus:outline-none focus:ring-2 focus:ring-(--brand-ring)"
+                                      className="rounded-xl p-1 transition-all hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-(--brand-ring)"
                                       title={`View ${employee.employee_name}'s attendance for ${date}`}
                                     >
                                       {getStatusBadge(
@@ -1698,7 +1698,7 @@ const EmployeeAttendance = () => {
                                         e.stopPropagation();
                                         handleOpenAbsentAudit(employee, date);
                                       }}
-                                      className="rounded-xl p-1 transition-all hover:bg-(--bg-subtle) focus:outline-none focus:ring-2 focus:ring-(--brand-ring)"
+                                      className="rounded-xl p-1 transition-all hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-(--brand-ring)"
                                       title={`Create attendance audit for ${employee.employee_name} on ${date}`}
                                     >
                                       {getStatusBadge("Absent")}
@@ -1710,10 +1710,10 @@ const EmployeeAttendance = () => {
                           })}
 
                           <td
-                            className={`sticky right-0 z-20 whitespace-nowrap border-b border-l border-(--bg-subtle) px-5 py-3 transition-colors ${
+                            className={`sticky right-0 z-20 whitespace-nowrap border-b border-l border-slate-200 px-5 py-3 transition-colors ${
                               selectedRowId === employee.employee_id
-                                ? "bg-(--bg-subtle)"
-                                : "bg-white group-hover:bg-(--bg-subtle)/70"
+                                ? "bg-emerald-50"
+                                : "bg-white group-hover:bg-slate-50"
                             }`}
                           >
                             <div className="flex items-center justify-center gap-2">
@@ -1722,7 +1722,7 @@ const EmployeeAttendance = () => {
                                   e.stopPropagation();
                                   handleViewTimesheet(employee);
                                 }}
-                                className="app-icon-button flex h-10 w-10 items-center justify-center text-(--text-soft) hover:border-(--border-soft) hover:bg-(--bg-subtle) hover:text-(--text-strong)"
+                                className="app-icon-button flex h-10 w-10 items-center justify-center text-(--text-soft) hover:border-(--border-soft) hover:bg-slate-100 hover:text-(--text-strong)"
                                 title="Monthly Report"
                               >
                                 <FileText className="w-4 h-4" />
@@ -1736,7 +1736,7 @@ const EmployeeAttendance = () => {
                 </table>
               </div>
 
-              <div className="app-section-bar border-t border-(--border-soft) px-4 py-3">
+              <div className="sticky bottom-0 z-20 border-t border-slate-200 bg-white px-4 py-3 shadow-xs">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="flex flex-col gap-1">
                     <p className="text-[11px] font-bold uppercase tracking-wider text-(--text-soft)">
